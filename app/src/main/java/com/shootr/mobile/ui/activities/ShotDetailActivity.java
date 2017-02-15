@@ -114,9 +114,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     private LinearLayoutManager linearLayoutManager;
     private int overallYScroll;
     private int screenHeight;
-    private int containerHeight;
-    private int barHeight;
-    private int replies = 0;
     private String idUser;
 
     public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
@@ -212,24 +209,15 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         if (item.getItemId() == android.R.id.home) {
             backStackHandler.handleBackStack(this);
             return true;
-        } else if (item.getItemId() == R.id.menu_share) {
-            openContextualMenu();
+        } else if (item.getItemId() == R.id.menu_reshoot) {
+            reshoot();
+        }
+        else if (item.getItemId() == R.id.menu_share_via) {
+            externalShare();
         } else if (item.getItemId() == R.id.menu_copy_text) {
             Clipboard.copyShotComment(this, extractShotFromIntent());
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void openContextualMenu() {
-        new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
-            @Override public void run() {
-                reshoot();
-            }
-        }).addAction(R.string.menu_share_shot_via, new Runnable() {
-            @Override public void run() {
-                externalShare();
-            }
-        }).show();
     }
 
     private void externalShare() {
@@ -318,7 +306,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             }
         }, new OnParentShownListener() {
             @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
-                replies = repliesNumber;
                 linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
                 if (repliesNumber == 0) {
                     detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET_WITH_REPLIES));

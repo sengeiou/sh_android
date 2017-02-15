@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-      android:id="@+id/menu_share"
-      android:icon="@drawable/ic_share"
-      android:title="@string/menu_share_shot_via"
-      android:visible="true"
-      app:showAsAction="always" />
 
     <item
-      android:id="@+id/menu_copy_text"
-      android:title="@string/menu_copy_text"
+      android:id="@+id/menu_reshoot"
+      android:title="@string/menu_share_shot_via_shootr"
       android:visible="true"
       app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_share_via"
+        android:title="@string/menu_share_shot_via"
+        android:visible="true"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_copy_text"
+        android:title="@string/menu_copy_text"
+        android:visible="true"
+        app:showAsAction="never" />
+
 </menu>
