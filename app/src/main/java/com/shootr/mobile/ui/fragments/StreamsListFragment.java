@@ -153,10 +153,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 
-  @OnClick(R.id.streams_add_stream) public void onAddStream() {
-    startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
-  }
-
   //region Activity methods
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.streams_list, menu);
