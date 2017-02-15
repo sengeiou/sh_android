@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +59,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.shot_reply_count) TextView replyCount;
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
-  @BindView(R.id.open_menu) ImageView openImageMenu;
+  @BindView(R.id.open_menu) LinearLayout openImageMenu;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @Nullable @BindView(R.id.reshoot_container) FrameLayout reshootContainer;
 

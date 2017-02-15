@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import com.daimajia.swipe.SwipeLayout;
@@ -33,7 +34,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
-  @BindView(R.id.open_menu) ImageView openHighlightedMenu;
+  @BindView(R.id.open_menu) LinearLayout openHighlightedMenu;
 
   public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
