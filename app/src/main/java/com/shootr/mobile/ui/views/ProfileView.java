@@ -125,4 +125,10 @@ public interface ProfileView {
     void goToChannelsList();
 
     void goToChannelTimeline(String idTargetUser);
+
+    void hideFollowButton();
+
+    void hideEditMenu();
+
+    void showEditMenu();
 }

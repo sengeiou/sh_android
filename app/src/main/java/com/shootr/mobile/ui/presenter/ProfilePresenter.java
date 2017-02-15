@@ -142,8 +142,11 @@ public class ProfilePresenter implements Presenter {
     if (isCurrentUser) {
       profileView.showFriendsButton();
       profileView.hideChannelButton();
+      profileView.hideFollowButton();
+      profileView.showEditMenu();
     } else {
       profileView.hideFriendsButton();
+      profileView.hideEditMenu();
     }
 
   }

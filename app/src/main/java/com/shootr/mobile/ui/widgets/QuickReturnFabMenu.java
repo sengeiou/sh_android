@@ -42,9 +42,6 @@ public class QuickReturnFabMenu extends CoordinatorLayout.Behavior<View> {
     } else {
       ((FloatingActionMenu) child).showMenu(true);
     }
-
-    Log.d("scroll","scroll "+ dy);
-
   }
 
 }

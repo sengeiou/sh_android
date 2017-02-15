@@ -257,21 +257,6 @@ public class ProfileActivity extends BaseActivity
         reportShotPresenter.onShotLongPressed(shot);
       }
     });
-
-
-
-    /*profileContainer.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
-      @Override
-      public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX,
-          int oldScrollY) {
-          if (oldScrollY > 0) {
-            floatingMenu.hideMenu(true);
-          } else {
-            floatingMenu.showMenu(true);
-          }
-        }
-    });*/
-
   }
 
   private void sendAnalytics(ShotModel shot) {
@@ -319,6 +304,18 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void goToChannelTimeline(String idTargetUser) {
     startActivity(PrivateMessageTimelineActivity.newIntent(this, idTargetUser));
+  }
+
+  @Override public void hideFollowButton() {
+    followButton.setVisibility(View.GONE);
+  }
+
+  @Override public void hideEditMenu() {
+    floatingMenu.setVisibility(View.GONE);
+  }
+
+  @Override public void showEditMenu() {
+    floatingMenu.setVisibility(View.VISIBLE);
   }
 
   @Override protected void initializePresenter() {
