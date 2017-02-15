@@ -60,6 +60,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
   @BindView(R.id.open_menu) LinearLayout openImageMenu;
+  @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @Nullable @BindView(R.id.reshoot_container) FrameLayout reshootContainer;
 
@@ -245,9 +246,11 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void setupShotMediaContentVisibility(ShotModel shotModel) {
     if (shotModel.hasVideo() || shotModel.getImage().getImageUrl() != null) {
+      openMenuContainer.setVisibility(View.VISIBLE);
       shotMediaContent.setVisibility(View.VISIBLE);
       openImageMenu.setVisibility(View.VISIBLE);
     } else {
+      openMenuContainer.setVisibility(View.GONE);
       shotMediaContent.setVisibility(View.GONE);
       openImageMenu.setVisibility(View.GONE);
     }

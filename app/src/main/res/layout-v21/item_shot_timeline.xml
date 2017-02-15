@@ -239,7 +239,8 @@
         app:small_shine_offset_angle="20"
         />
     </LinearLayout>
-    <FrameLayout android:layout_width="match_parent"
+    <FrameLayout android:id="@+id/open_menu_container"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_marginTop="24dp"
         android:layout_alignBaseline="@+id/linearLayout2"
