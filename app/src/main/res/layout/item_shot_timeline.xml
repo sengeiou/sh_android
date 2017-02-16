@@ -78,7 +78,7 @@
               android:layout_height="14dp"
               android:layout_gravity="center"
               android:layout_marginTop="0dp"
-              android:src="@drawable/ic_holder_contributor"
+              android:src="@drawable/ic_stars"
               android:visibility="gone"
               tools:visibility="visible"
           />
