@@ -112,6 +112,7 @@
       fab:menu_backgroundColor="#70000000"
       fab:menu_fab_show_animation="@anim/show_from_bottom"
       fab:menu_fab_hide_animation="@anim/hide_to_bottom"
+      fab:menu_icon="@drawable/ic_edit_24_white"
      >
 
     <com.github.clans.fab.FloatingActionButton
