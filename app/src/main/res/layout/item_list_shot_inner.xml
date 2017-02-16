@@ -71,7 +71,7 @@
                 android:layout_height="12dp"
                 android:layout_marginLeft="2dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_holder_contributor"
+                android:src="@drawable/ic_stars"
                 android:layout_toEndOf="@+id/shot_user_name"
                 android:visibility="gone"
                 tools:visibility="visible"

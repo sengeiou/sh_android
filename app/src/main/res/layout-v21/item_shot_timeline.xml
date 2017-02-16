@@ -79,7 +79,7 @@
             android:layout_gravity="bottom"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="2dp"
-            android:src="@drawable/ic_holder_contributor"
+            android:src="@drawable/ic_stars"
             android:visibility="gone"
             tools:visibility="visible"
         />
