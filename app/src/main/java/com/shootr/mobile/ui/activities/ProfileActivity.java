@@ -1219,9 +1219,9 @@ public class ProfileActivity extends BaseActivity
     profilePresenter.onChannelClick();
   }
 
-  @OnClick(R.id.fab_edit_profile) public void onFabEditClick() {
+  @OnClick(R.id.fab_edit_photo) public void onFabEditClick() {
     closeFabMenu();
-    editProfile();
+    profilePresenter.avatarClicked();
   }
 
   @OnClick(R.id.fab_new_stream) public void onAddStream() {

@@ -112,14 +112,15 @@
       fab:menu_backgroundColor="#70000000"
       fab:menu_fab_show_animation="@anim/show_from_bottom"
       fab:menu_fab_hide_animation="@anim/hide_to_bottom"
+      fab:menu_icon="@drawable/ic_edit_24_white"
      >
 
     <com.github.clans.fab.FloatingActionButton
-        android:id="@+id/fab_edit_profile"
+        android:id="@+id/fab_edit_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_edit_24_blue"
-        fab:fab_label="@string/profile_edit_profile"
+        android:src="@drawable/ic_photo_blue_24"
+        fab:fab_label="@string/change_photo"
         fab:fab_colorNormal="@color/white"
         fab:fab_colorPressed="@color/primary_disabled"
         fab:fab_size="mini"/>

@@ -227,9 +227,13 @@
     <style name="FollowButtonText">
         <item name="android:textColor">@color/primary</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:drawableLeft">@drawable/ic_person_add</item>
         <item name="android:drawablePadding">4dp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:text">@string/profile_follow</item>
+    </style>
+
+    <style name="FollowButtonText.Follow">
+        <item name="android:drawableLeft">@drawable/ic_person_add</item>
         <item name="android:text">@string/profile_follow</item>
     </style>
 
@@ -257,12 +261,12 @@
     </style>
 
     <style name="FollowButtonText.Edit">
-        <item name="android:drawableLeft">@drawable/ic_edit_primary</item>
         <item name="android:text">@string/profile_edit_profile</item>
     </style>
 
     <!-- Add Contributor -->
     <style name="FollowButton.Add">
+        <item name="android:drawableLeft">@drawable/ic_person_add</item>
         <item name="android:background">@drawable/btn_follow</item>
     </style>
 
