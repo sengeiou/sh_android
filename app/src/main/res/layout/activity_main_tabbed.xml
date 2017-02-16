@@ -1,9 +1,38 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+  <!-- This could be your fragment container, or something -->
+
   <FrameLayout
       android:id="@+id/container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
-</FrameLayout>
+      android:layout_height="match_parent">
+  </FrameLayout>
+
+    <include
+        layout="@layout/include_connect_controller"
+        android:id="@+id/connect_controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        android:layout_gravity="bottom"
+        app:layout_behavior="com.shootr.mobile.ui.widgets.ConnectControllerBehavior"
+
+        />
+  <com.roughike.bottombar.BottomBar
+      android:id="@+id/bottomBar"
+      android:layout_width="match_parent"
+      android:layout_height="60dp"
+      android:layout_gravity="bottom"
+      app:bb_inActiveTabColor="#ffffff"
+      app:bb_activeTabColor="#ffffff"
+      android:layout_alignParentBottom="true"
+      app:bb_showShadow="false"
+      app:bb_inActiveTabAlpha=".5"
+      app:bb_tabXmlResource="@xml/bottombar_menu"
+      app:bb_behavior="shy"/>
+
+</android.support.design.widget.CoordinatorLayout>
+

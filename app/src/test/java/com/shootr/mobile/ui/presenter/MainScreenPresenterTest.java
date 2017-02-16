@@ -5,6 +5,8 @@ import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
@@ -16,6 +18,7 @@ import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
 import com.squareup.otto.Bus;
@@ -39,6 +42,7 @@ public class MainScreenPresenterTest {
     private static final int ONE_ACTIVITY = 1;
     private static final int ZERO_ACTIVITY = 0;
     public static final String ID_USER = "idUser";
+    private static final String ID_STREAM = "streamId";
     @Mock DateRangeTextProvider dateRangeTextProvider;
     @Mock TimeUtils timeUtils;
     @Mock GetCurrentUserInteractor getCurrentUserInteractor;
@@ -53,6 +57,9 @@ public class MainScreenPresenterTest {
     @Mock Bus bus;
     @Mock BusPublisher busPublisher;
     @Mock MainScreenView view;
+    @Mock UnwatchStreamInteractor unwatchStreamInteractor;
+    @Mock GetLocalStreamInteractor getStreamInteractor;
+    @Mock StreamModelMapper streamModelMapper;
     private MainScreenPresenter mainScreenPresenter;
 
     @Before public void setUp() throws Exception {
@@ -61,11 +68,15 @@ public class MainScreenPresenterTest {
           new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         mainScreenPresenter =
           new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
-              sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor, sessionRepository,
+              sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor,
+              unwatchStreamInteractor, sessionRepository,
               userModelMapper, badgeCount, getFollowingInteractor,
               getPrivateMessagesChannelsInteractor,
-              getFollowingIdsInteractor, bus, busPublisher);
+              getFollowingIdsInteractor, getStreamInteractor, streamModelMapper, bus, busPublisher);
         mainScreenPresenter.setView(view);
+        User user = new User();
+        user.setIdWatchingStream(ID_STREAM);
+        when(sessionRepository.getCurrentUser()).thenReturn(user);
     }
 
     @Test public void shouldSetUserDataWhenLoadCurrentUserOnInitialize() throws Exception {

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,6 +16,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -35,6 +37,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   private final OnVideoClickListener videoClickListener;
   private final OnNiceShotListener onNiceShotListener;
   private final OnUsernameClickListener onUsernameClickListener;
+  private final OnOpenShotMenuListener onOpenShotMenuListener;
   private final AndroidTimeUtils timeUtils;
   private final ImageLoader imageLoader;
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -56,6 +59,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.shot_reply_count) TextView replyCount;
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
+  @BindView(R.id.open_menu) LinearLayout openImageMenu;
+  @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @Nullable @BindView(R.id.reshoot_container) FrameLayout reshootContainer;
 
@@ -64,6 +69,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   public ShotTimelineViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnOpenShotMenuListener onOpenShotMenuListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
       ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
@@ -73,6 +79,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
     this.onNiceShotListener = onNiceShotListener;
+    this.onOpenShotMenuListener = onOpenShotMenuListener;
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.imageLoader = imageLoader;
@@ -83,7 +90,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener) {
+      OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener,
+      OnOpenShotMenuListener onOpenShotMenuListener) {
     bindUsername(shot);
     setupVerified(shot);
     setupIsHolderOrContributor(shot);
@@ -95,14 +103,15 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindVideoInfo(shot);
     bindNiceInfo(shot);
     bindReplyCount(shot);
-    setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener);
+    setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener,
+        onOpenShotMenuListener);
     setupSwipeLayout();
   }
 
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnUrlClickListener onUrlClickListener) {
+      OnUrlClickListener onUrlClickListener, OnOpenShotMenuListener onOpenShotMenuListener) {
     bindUsername(shot);
     setupVerified(shot);
     setupIsHolderOrContributor(shot);
@@ -114,7 +123,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindVideoInfo(shot);
     bindNiceInfo(shot);
     bindReplyCount(shot);
-    setupListeners(shot, shotClickListener, onShotLongClick, null);
+    setupListeners(shot, shotClickListener, onShotLongClick, null, onOpenShotMenuListener);
     setupSwipeLayout();
   }
 
@@ -125,7 +134,8 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void setupListeners(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick,
-      @Nullable final OnReshootClickListener reshootClickListener) {
+      @Nullable final OnReshootClickListener reshootClickListener,
+      final OnOpenShotMenuListener onOpenShotMenuListener) {
     shotContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         shotClickListener.onClick(shot);
@@ -143,6 +153,15 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
           if (reshootClickListener != null) {
             reshootClickListener.onReshootClick(shot);
             swipeLayout.close(true);
+          }
+        }
+      });
+    }
+    if (openImageMenu != null) {
+      openImageMenu.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          if (onOpenShotMenuListener != null) {
+            onOpenShotMenuListener.openMenu(shot);
           }
         }
       });
@@ -227,9 +246,13 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void setupShotMediaContentVisibility(ShotModel shotModel) {
     if (shotModel.hasVideo() || shotModel.getImage().getImageUrl() != null) {
+      openMenuContainer.setVisibility(View.VISIBLE);
       shotMediaContent.setVisibility(View.VISIBLE);
+      openImageMenu.setVisibility(View.VISIBLE);
     } else {
+      openMenuContainer.setVisibility(View.GONE);
       shotMediaContent.setVisibility(View.GONE);
+      openImageMenu.setVisibility(View.GONE);
     }
   }
 

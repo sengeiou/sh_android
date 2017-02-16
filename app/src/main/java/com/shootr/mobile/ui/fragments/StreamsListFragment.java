@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
@@ -153,10 +152,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 
-  @OnClick(R.id.streams_add_stream) public void onAddStream() {
-    startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
-  }
-
   //region Activity methods
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.streams_list, menu);
@@ -288,7 +283,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void setCurrentWatchingStreamId(StreamResultModel streamId) {
-    adapter.setCurrentWatchingStream(streamId);
+    /* no-op */
   }
 
   @Override public void showContent() {

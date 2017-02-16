@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    >
+
+  <View android:id="@+id/activity_tab_layout_shadow"
+      android:layout_width="match_parent"
+      android:layout_height="6dp"
+      android:background="@drawable/shadow_down_top" />
+  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:orientation="horizontal"
+      android:paddingTop="8dp"
+      android:paddingRight="8dp"
+      android:paddingBottom="8dp"
+      android:paddingLeft="16dp"
+      android:background="#E3F2FD"
+      >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/stream_image"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:layout_gravity="center"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+    <ImageView
+        android:id="@+id/stream_image_without_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        android:visibility="gone"
+        />
+    <LinearLayout
+        android:id="@+id/stream_info_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_weight="2"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        >
+      <TextView
+          android:id="@+id/stream_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="16sp"
+          android:fontFamily="sans-serif-medium"
+          tools:text="MON RAC 1"
+          android:textColor="@color/black"
+          />
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="12sp"
+          android:text="Connected"
+          android:textColor="#90000000"
+          />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/close_button"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:gravity="center"
+        >
+      <ImageView
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:src="@drawable/ic_action_close_gray60_24_nopadding"
+          android:layout_marginLeft="16dp"
+          />
+    </LinearLayout>
+
+
+  </LinearLayout>
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="0.3dp"
+      android:background="@color/material_black"
+      />
+</LinearLayout>

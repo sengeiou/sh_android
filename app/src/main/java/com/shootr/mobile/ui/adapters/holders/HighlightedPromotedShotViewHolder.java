@@ -11,6 +11,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnHideHighlightShot;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -31,11 +32,12 @@ public class HighlightedPromotedShotViewHolder extends HighLightedShotViewHolder
 
   public HighlightedPromotedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnOpenShotMenuListener onOpenShotMenuListener,
       OnHideHighlightShot onHideHighlightClickListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
       ImageLoader imageLoader, ShotTextSpannableBuilder shotTextSpannableBuilder,
       NumberFormatUtil numberFormatUtil) {
-    super(view, avatarClickListener, videoClickListener, onNiceShotListener,
+    super(view, avatarClickListener, videoClickListener, onNiceShotListener, onOpenShotMenuListener,
         onHideHighlightClickListener, onUsernameClickListener, timeUtils, imageLoader,
         shotTextSpannableBuilder, numberFormatUtil);
   }
@@ -44,9 +46,11 @@ public class HighlightedPromotedShotViewHolder extends HighLightedShotViewHolder
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
       OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
-      final Boolean isAdmin, final OnCtaClickListener onCtaClickListener) {
+      OnOpenShotMenuListener onOpenShotMenuListener, final Boolean isAdmin,
+      final OnCtaClickListener onCtaClickListener) {
     super.renderHighLight(highlightedShotModel, shotModel, shotClickListener, onShotLongClick,
-        onLongClickListener, onTouchListener, onImageClickListener, onUrlClickListener, isAdmin);
+        onLongClickListener, onTouchListener, onImageClickListener, onUrlClickListener,
+        onOpenShotMenuListener, isAdmin);
     setupCaption(shotModel);
     setupButton(shotModel);
     checkInButton.setOnClickListener(new View.OnClickListener() {
@@ -75,13 +79,10 @@ public class HighlightedPromotedShotViewHolder extends HighLightedShotViewHolder
   private void setupPromotedVisibility(ShotModel shotModel) {
     if (shotModel.getPromoted() == 1L) {
       promotedShot.setVisibility(View.VISIBLE);
-      if (timestamp != null)
-        timestamp.setVisibility(View.GONE);
+      if (timestamp != null) timestamp.setVisibility(View.GONE);
     } else {
       promotedShot.setVisibility(View.GONE);
-      if (timestamp != null)
-        timestamp.setVisibility(View.VISIBLE);
+      if (timestamp != null) timestamp.setVisibility(View.VISIBLE);
     }
   }
-
 }
