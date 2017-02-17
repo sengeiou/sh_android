@@ -165,9 +165,17 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
         return true;
       case R.id.menu_channel:
         navigateToChannelsList();
+        return true;
+      case R.id.menu_add_stream:
+        openCreateStream();
+        return true;
       default:
         return super.onOptionsItemSelected(item);
     }
+  }
+
+  private void openCreateStream() {
+    startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
   }
 
   public void navigateToChannelsList() {
