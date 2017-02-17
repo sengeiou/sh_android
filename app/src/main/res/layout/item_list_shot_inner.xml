@@ -67,8 +67,8 @@
                 />
             <ImageView
                 android:id="@+id/holder_or_contributor_user"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
                 android:layout_marginLeft="2dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/ic_stars"
