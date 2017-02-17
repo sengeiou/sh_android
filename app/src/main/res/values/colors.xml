@@ -64,4 +64,5 @@
     <color name="poll_vote">#0277BD</color>
     <color name="poll_view">#039BE5</color>
     <color name="poll_results">#039BE5</color>
+    <color name="connect_controller">#ECEFF1</color>
 </resources>
