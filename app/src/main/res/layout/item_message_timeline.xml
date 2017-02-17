@@ -73,10 +73,10 @@
             />
         <ImageView
             android:id="@+id/holder_or_contributor_user"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginLeft="0dp"
-            android:src="@drawable/ic_holder_contributor"
+            android:src="@drawable/ic_stars"
             android:visibility="gone"
             tools:visibility="visible"
         />

@@ -43,11 +43,13 @@ public class QueueRepositoryImpl implements QueueRepository {
   }
 
   @Override public void remove(QueuedShot queuedShot) {
-    if (queuedShot.getBaseMessage() instanceof Shot) {
-      shotQueueManager.deleteShotQueue(mapper.transformShotQueue(queuedShot));
-    } else {
-      privateQueueManager.deleteMessageQueue(
-          privateMessageMapper.transformPrivateMessageQueue(queuedShot));
+    if (queuedShot != null) {
+      if (queuedShot.getBaseMessage() instanceof Shot) {
+        shotQueueManager.deleteShotQueue(mapper.transformShotQueue(queuedShot));
+      } else {
+        privateQueueManager.deleteMessageQueue(
+            privateMessageMapper.transformPrivateMessageQueue(queuedShot));
+      }
     }
   }
 

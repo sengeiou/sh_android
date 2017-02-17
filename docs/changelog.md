@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.26.0] - 2017-02-17
+
+### Added
+- Connect controller
+- New stream from profile
+- Easy reshoot highlight
+- New stream from menu in hot
+
+### Removed
+
+- Connected stream
+- New stream in hot
+
 ## [1.25.0] - 2017-02-06
 
 ### Added

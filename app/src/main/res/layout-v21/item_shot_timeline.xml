@@ -74,12 +74,12 @@
             />
         <ImageView
             android:id="@+id/holder_or_contributor_user"
-            android:layout_width="14dp"
-            android:layout_height="14dp"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="2dp"
-            android:src="@drawable/ic_holder_contributor"
+            android:src="@drawable/ic_stars"
             android:visibility="gone"
             tools:visibility="visible"
         />
@@ -186,7 +186,6 @@
               />
         </FrameLayout>
       </FrameLayout>
-
       <TextView
           android:id="@+id/shot_reply_count"
           android:layout_width="wrap_content"
@@ -240,21 +239,27 @@
         app:small_shine_offset_angle="20"
         />
     </LinearLayout>
+    <FrameLayout android:id="@+id/open_menu_container"
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:layout_alignBaseline="@+id/linearLayout2"
+        >
+      <LinearLayout
+          android:id="@+id/open_menu"
+          android:layout_width="24dp"
+          android:layout_height="24dp"
+          android:layout_gravity="center|end"
+          android:visibility="gone"
+          tools:visibility="visible"
+          >
+      <ImageView
+          android:layout_width="16dp"
+          android:layout_height="16dp"
+          android:layout_marginLeft="6dp"
+          android:src="@drawable/ic_more_vert"
+          />
+      </LinearLayout>
+    </FrameLayout>
   </RelativeLayout>
-  <LinearLayout
-      android:layout_weight=".1"
-      android:layout_width="2.1dp"
-      android:layout_marginRight="2dp"
-      android:layout_height="24dp"
-      android:background="@color/gray_92"
-      android:layout_gravity="center"
-      />
-  <LinearLayout
-      android:layout_weight=".1"
-      android:layout_width="2.3dp"
-      android:layout_marginRight="4dp"
-      android:layout_height="24dp"
-      android:background="@color/gray_92"
-      android:layout_gravity="center"
-      />
 </LinearLayout>

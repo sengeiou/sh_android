@@ -9,6 +9,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnCtaClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
 import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
@@ -29,10 +30,11 @@ public class PromotedShotViewHolder extends ShotTimelineViewHolder {
 
   public PromotedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
+      OnOpenShotMenuListener onOpenShotMenuListener,
       OnUsernameClickListener onUsernameClickListener, AndroidTimeUtils timeUtils,
       ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
       ShotTextSpannableBuilder shotTextSpannableBuilder) {
-    super(view, avatarClickListener, videoClickListener, onNiceShotListener,
+    super(view, avatarClickListener, videoClickListener, onNiceShotListener, onOpenShotMenuListener,
         onUsernameClickListener, timeUtils, imageLoader, numberFormatUtil,
         shotTextSpannableBuilder);
   }
@@ -41,10 +43,11 @@ public class PromotedShotViewHolder extends ShotTimelineViewHolder {
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
       OnReshootClickListener onReshootClickListener, OnUrlClickListener onUrlClickListener,
-      final OnCtaClickListener onCtaClickListener) {
+      OnOpenShotMenuListener onOpenShotMenuListener, final OnCtaClickListener onCtaClickListener) {
 
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
-        onTouchListener, onImageClickListener, onReshootClickListener, onUrlClickListener);
+        onTouchListener, onImageClickListener, onReshootClickListener, onUrlClickListener,
+        onOpenShotMenuListener);
 
     setupCaption(shotModel);
     setupButton(shotModel);
@@ -71,13 +74,10 @@ public class PromotedShotViewHolder extends ShotTimelineViewHolder {
   private void setupPromotedVisibility(ShotModel shotModel) {
     if (shotModel.getPromoted() == 1L) {
       promotedShot.setVisibility(View.VISIBLE);
-      if (timestamp != null)
-        timestamp.setVisibility(View.GONE);
+      if (timestamp != null) timestamp.setVisibility(View.GONE);
     } else {
       promotedShot.setVisibility(View.GONE);
-      if (timestamp != null)
-        timestamp.setVisibility(View.VISIBLE);
+      if (timestamp != null) timestamp.setVisibility(View.VISIBLE);
     }
   }
-
 }

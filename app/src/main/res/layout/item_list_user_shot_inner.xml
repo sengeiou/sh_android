@@ -65,11 +65,11 @@
           />
       <ImageView
           android:id="@+id/holder_or_contributor_user"
-          android:layout_width="14dp"
-          android:layout_height="14dp"
+          android:layout_width="16dp"
+          android:layout_height="16dp"
           android:layout_marginLeft="2dp"
           android:layout_centerVertical="true"
-          android:src="@drawable/ic_holder_contributor"
+          android:src="@drawable/ic_stars"
           android:layout_toEndOf="@+id/shot_user_name"
           android:visibility="gone"
           tools:visibility="visible"

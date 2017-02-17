@@ -24,15 +24,6 @@ public class WatchableStreamsAdapter extends StreamsListAdapter {
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
     StreamResultViewHolder streamViewHolder = (StreamResultViewHolder) viewHolder;
     streamViewHolder.setMutedStreamIds(getMutedStreamIds());
-    if (isWatchingStream(position)) {
-      streamViewHolder.enableWatchingState(getOnUnwatchClickListener());
-    } else {
-      streamViewHolder.disableWatchingState();
-    }
     super.onBindItemViewHolder(viewHolder, position);
-  }
-
-  private boolean isWatchingStream(int position) {
-    return getItem(position).isWatching();
   }
 }
