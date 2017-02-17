@@ -34,6 +34,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @BindView(R.id.open_menu) LinearLayout openHighlightedMenu;
+  @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
 
   public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
@@ -71,6 +72,7 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
   private void setupHighlightedMenu() {
     openImageMenu.setVisibility(View.GONE);
+    openMenuContainer.setVisibility(View.VISIBLE);
     openHighlightedMenu.setVisibility(View.VISIBLE);
   }
 
