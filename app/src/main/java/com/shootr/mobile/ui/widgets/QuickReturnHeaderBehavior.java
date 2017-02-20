@@ -51,7 +51,6 @@ public class QuickReturnHeaderBehavior extends CoordinatorLayout.Behavior<View> 
 
       @Override public void onAnimationEnd(Animator animator) {
         isHiding = false;
-        //view.setVisibility(View.GONE);
       }
 
       @Override public void onAnimationCancel(Animator animator) {
