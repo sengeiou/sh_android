@@ -13,6 +13,11 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.26.1] - 2017-02-20
+
+### Fixed
+- Poll and Pinned Message QuickReturn
+
 ## [1.26.0] - 2017-02-17
 
 ### Added
