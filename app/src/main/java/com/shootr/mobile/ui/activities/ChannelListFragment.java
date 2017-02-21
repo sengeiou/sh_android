@@ -25,8 +25,7 @@ import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ChannelListFragment extends BaseFragment implements
-    PrivateMessageChannelListView {
+public class ChannelListFragment extends BaseFragment implements PrivateMessageChannelListView {
 
   private static final int MARGIN_DIVIDER = 80;
 
@@ -61,11 +60,12 @@ public class ChannelListFragment extends BaseFragment implements
   }
 
   private void initializeViews() {
-    adapter = new MessageChannelListAdapter(imageLoader, initialsLoader, new ChannelClickListener() {
-      @Override public void onChannelClick(String channelId, String targetUserId) {
-        navigateToChannelTimeline(channelId, targetUserId);
-      }
-    }, timeUtils);
+    adapter =
+        new MessageChannelListAdapter(imageLoader, initialsLoader, new ChannelClickListener() {
+          @Override public void onChannelClick(String channelId, String targetUserId) {
+            navigateToChannelTimeline(channelId, targetUserId);
+          }
+        }, timeUtils);
     listingList.setAdapter(adapter);
     listingList.setLayoutManager(new LinearLayoutManager(getContext()));
     listingList.addItemDecoration(new DividerItemDecoration(getContext(), MARGIN_DIVIDER,
@@ -120,7 +120,11 @@ public class ChannelListFragment extends BaseFragment implements
   }
 
   @Override public void updateTitle(int unreads) {
-    ((ChannelsContainerActivity) getActivity()).setTabTitle(this, unreads);
+    try {
+      ((ChannelsContainerActivity) getActivity()).setTabTitle(this, unreads);
+    } catch (Exception error) {
+      /* no-op */
+    }
   }
 
   @Override public void onResume() {
