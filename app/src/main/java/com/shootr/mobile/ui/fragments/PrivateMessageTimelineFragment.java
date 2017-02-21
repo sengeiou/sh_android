@@ -439,7 +439,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void showShots() {
     hideEmpty();
-    messageRecycler.setVisibility(View.VISIBLE);
+    if(messageRecycler != null) {
+      messageRecycler.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void addOldMessages(List<PrivateMessageModel> oldMessages) {
