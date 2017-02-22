@@ -62,8 +62,10 @@ import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.InitialsLoaderTool;
 import com.shootr.mobile.util.LogTreeFactory;
 import com.shootr.mobile.util.LogTreeFactoryImpl;
+import com.shootr.mobile.util.LoginTypeUtils;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.PercentageUtils;
+import com.shootr.mobile.util.RandomUtils;
 import com.shootr.mobile.util.ResourcesLocaleProvider;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.ShareManagerUtil;
@@ -271,5 +273,9 @@ import static android.content.Context.MODE_PRIVATE;
   @Provides @Singleton StringHashUtils provideStringHashUtils(
       DefaultTabUtils defaultTabUtils) {
     return defaultTabUtils;
+  }
+
+  @Provides @Singleton RandomUtils providesRandomUtils(LoginTypeUtils loginTypeUtils) {
+    return loginTypeUtils;
   }
 }

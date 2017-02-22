@@ -37,6 +37,10 @@ import javax.inject.Singleton;
         return new BooleanPreference(preferences, "should_show_intro", true);
     }
 
+    @Provides @Singleton @LoginType StringPreference provideLoginType(SharedPreferences preferences) {
+        return new StringPreference(preferences, "login_type", null);
+    }
+
     @Provides @Singleton @TimelineFilterActivated
     BooleanPreference provideIsTimelineFilterActivated(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "timeline_filter", false);

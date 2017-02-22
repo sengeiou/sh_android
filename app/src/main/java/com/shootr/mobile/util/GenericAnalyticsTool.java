@@ -33,6 +33,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String NOTIFICATION_NAME = "notificationName";
   private static final String PUSH_REDIRECTION = "pushRedirection";
   private static final String ID_POLL = "idPoll";
+  private static final String LOGIN_TYPE = "loginType";
   private static final String FAVORITES = "Favorites";
   private static final String FOLLOWING = "Following";
   private static final String FOLLOWERS = "Followers";
@@ -66,13 +67,48 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   private void storeUserMixPanel() {
-    mixpanel.identify(user.getIdUser());
-    mixpanel.getPeople().identify(user.getIdUser());
     mixpanel.getPeople().set(SIGNUP_METHOD, user.isSocialLogin() ? "Facebook" : "Email");
     mixpanel.getPeople().set(EMAIL, user.getEmail());
     mixpanel.getPeople().set(FIRST_NAME, user.getUsername());
     mixpanel.getPeople().set(ACTIVATED, user.getReceivedReactions() == 1L);
     mixpanel.getPeople().set(TYPE, user.getAnalyticsUserType());
+    mixpanel.getPeople().set(DISTINCT_ID, user.getIdUser());
+    mixpanel.getPeople().set(FOLLOWERS, user.getNumFollowers());
+    mixpanel.getPeople().set(FOLLOWING, user.getNumFollowings());
+    mixpanel.getPeople().set(FAVORITES, user.getFavoritedStreamsCount());
+  }
+
+  @Override public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
+    try {
+      JSONObject props = new JSONObject();
+      mixpanel = MixpanelAPI.
+          getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+      props.put(LOGIN_TYPE, loginType);
+      mixpanel.track(actionId, props);
+    } catch (NullPointerException error) {
+      Log.e("Shootr", "Unable to build mixPanel object", error);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+  }
+
+  @Override public void sendSignUpEvent(User newUser, String actionId, String loginType, Context context) {
+    try {
+      JSONObject props = new JSONObject();
+      mixpanel = MixpanelAPI.
+          getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+      mixpanel.alias(newUser.getIdUser(), mixpanel.getDistinctId());
+      mixpanel.getPeople().identify(newUser.getIdUser());
+      mixpanel.getPeople().set(DISTINCT_ID, newUser.getIdUser());
+      mixpanel.getPeople().set(LOGIN_TYPE, loginType);
+      props.put(LOGIN_TYPE, loginType);
+      mixpanel.track(actionId, props);
+    } catch (NullPointerException error) {
+      Log.e("Shootr", "Unable to build mixPanel object", error);
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
   }
 
   @Override public void setUser(User user) {
@@ -104,11 +140,12 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String idStream = builder.getIdStream();
     String stream = builder.getStreamName();
     String idPoll = builder.getIdPoll();
+    String loginType = builder.getLoginType();
     User user = builder.getUser();
 
     sendGoogleAnalytics(context, action, actionId, labelId);
     sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
-        pushRedirection, idStream, stream, idPoll, context);
+        pushRedirection, idStream, stream, idPoll, loginType, context);
   }
 
   @Override public void appsFlyerSendAction(Builder builder) {
@@ -155,50 +192,61 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     }
   }
 
+  @Override public void reset() {
+    mixpanel.clearSuperProperties();
+    mixpanel.reset();
+  }
+
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
       String targetUsername, String notificationName, String pushRedirection, String idStream,
-      String streamName, String idPoll, Context context) {
+      String streamName, String idPoll, String loginType, Context context) {
+    mixpanel.identify(this.user.getIdUser());
+    mixpanel.getPeople().identify(this.user.getIdUser());
     try {
+      JSONObject props = new JSONObject();
       if (user != null) {
-        JSONObject props = new JSONObject();
         props.put(DISTINCT_ID, user.getIdUser());
-        if (idStream != null) {
-          props.put(ID_STREAM, idStream);
-        }
-        if (streamName != null) {
-          props.put(STREAM_TITLE, streamName);
-        }
         props.put(ACTIVATED_USER, user.getReceivedReactions() == 1L);
         props.put(USER_TYPE, user.getAnalyticsUserType());
-        if (source != null) {
-          props.put(SOURCE, source);
-        }
-        if (idTargetUser != null) {
-          props.put(ID_TARGET_USER, idTargetUser);
-        }
-        if (targetUsername != null) {
-          props.put(TARGET_USERNAME, targetUsername);
-        }
-        if (notificationName != null) {
-          props.put(NOTIFICATION_NAME, notificationName);
-        }
-        if (pushRedirection != null) {
-          props.put(PUSH_REDIRECTION, pushRedirection);
-        }
-        if (idPoll != null) {
-          props.put(ID_POLL, idPoll);
-        }
         props.put(FAVORITES, user.getFavoritedStreamsCount());
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
+      }
 
-        try {
-          mixpanel.track(actionId, props);
-        } catch (Exception error) {
-          mixpanel = MixpanelAPI.
-              getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
-          mixpanel.track(actionId, props);
-        }
+      if (idStream != null) {
+        props.put(ID_STREAM, idStream);
+      }
+      if (streamName != null) {
+        props.put(STREAM_TITLE, streamName);
+      }
+
+      if (source != null) {
+        props.put(SOURCE, source);
+      }
+      if (idTargetUser != null) {
+        props.put(ID_TARGET_USER, idTargetUser);
+      }
+      if (targetUsername != null) {
+        props.put(TARGET_USERNAME, targetUsername);
+      }
+      if (notificationName != null) {
+        props.put(NOTIFICATION_NAME, notificationName);
+      }
+      if (pushRedirection != null) {
+        props.put(PUSH_REDIRECTION, pushRedirection);
+      }
+      if (idPoll != null) {
+        props.put(ID_POLL, idPoll);
+      }
+      if (loginType != null) {
+        props.put(LOGIN_TYPE, loginType);
+      }
+      try {
+        mixpanel.track(actionId, props);
+      } catch (Exception error) {
+        mixpanel = MixpanelAPI.
+            getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
+        mixpanel.track(actionId, props);
       }
     } catch (JSONException e) {
       Log.e("Shootr", "Unable to add properties to JSONObject", e);
