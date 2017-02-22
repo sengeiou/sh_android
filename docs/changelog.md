@@ -13,6 +13,11 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.27.0] - 2017-02-22
+
+### Added
+- Testing ab in signup
+
 ## [1.26.1] - 2017-02-20
 
 ### Fixed
