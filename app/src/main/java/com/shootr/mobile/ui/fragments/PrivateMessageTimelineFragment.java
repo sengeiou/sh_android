@@ -370,10 +370,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   private void setupNewShotBarDelegate() {
-    newShotBar.init(getActivity(), photoPickerController, imageLoader,
-        feedbackMessage, new MessageBox.OnActionsClick() {
-          @Override
-          public void onTopicClick() {
+    newShotBar.init(getActivity(), photoPickerController, imageLoader, feedbackMessage,
+        new MessageBox.OnActionsClick() {
+          @Override public void onTopicClick() {
             /* no-op */
           }
 
@@ -403,7 +402,6 @@ public class PrivateMessageTimelineFragment extends BaseFragment
             sendPrivateMessageToMixPanel();
           }
         }, true, idTargetUser);
-
   }
 
   private void sendPrivateMessageToMixPanel() {
@@ -418,7 +416,6 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
-
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
     messageRecycler.scrollToPosition(0);

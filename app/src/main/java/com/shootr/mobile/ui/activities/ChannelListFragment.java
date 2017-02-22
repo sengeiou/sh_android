@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.presenter.PrivateMessagesChannelListPresenter;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
 import com.shootr.mobile.ui.widgets.DividerItemDecoration;
 import com.shootr.mobile.util.AndroidTimeUtils;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
@@ -38,6 +39,7 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
   @Inject FeedbackMessage feedbackMessage;
   @Inject AndroidTimeUtils timeUtils;
   @Inject ImageLoader imageLoader;
+  @Inject CrashReportTool crashReportTool;
 
   private MessageChannelListAdapter adapter;
   private Unbinder unbinder;
@@ -122,8 +124,8 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
   @Override public void updateTitle(int unreads) {
     try {
       ((ChannelsContainerActivity) getActivity()).setTabTitle(this, unreads);
-    } catch (Exception error) {
-      /* no-op */
+    } catch (NullPointerException error) {
+      crashReportTool.logException(error);
     }
   }
 
