@@ -211,7 +211,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       String labelId) {
     try {
       tracker = getTracker(context, APP_TRACKER);
-      tracker.enableAdvertisingIdCollection(true);
       tracker.send(new HitBuilders.EventBuilder().setCategory(ACTION)
           .setAction(actionId + ((action != null) ? action : ""))
           .setLabel((labelId != null) ? labelId : "")
