@@ -68,6 +68,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     this.idTargetUser = idTargetUser;
     this.newShotsNumber = 0;
     this.privateMessageModels = new ArrayList<>();
+    this.privateMessageChannelModel = new PrivateMessageChannelModel();
     this.setView(streamTimelineView);
     this.loadTimeline(streamTimelineView, idChannel, idTargetUser);
     setupPoller();

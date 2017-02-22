@@ -77,6 +77,7 @@ public class SessionRepositoryImpl implements SessionRepository {
         sessionTokenPreference.delete();
         lastTimeFilteredPreference.delete();
         timelineFilterPreference.delete();
+        analyticsTool.reset();
         currentUser = null;
     }
 

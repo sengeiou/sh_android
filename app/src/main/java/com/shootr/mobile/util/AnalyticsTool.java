@@ -8,6 +8,10 @@ public interface AnalyticsTool {
 
   void init(Application application);
 
+  void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context);
+
+  void sendSignUpEvent(User newUser, String actionId, String loginType, Context context);
+
   void setUser(User user);
 
   void analyticsStart(Context context, String name);
@@ -15,6 +19,8 @@ public interface AnalyticsTool {
   void analyticsSendAction(Builder builder);
 
   void appsFlyerSendAction(Builder builder);
+
+  void reset();
 
   class Builder {
 
@@ -30,6 +36,7 @@ public interface AnalyticsTool {
     String streamName;
     String idStream;
     String idPoll;
+    String loginType;
     User user;
 
     public Context getContext() {
@@ -134,6 +141,14 @@ public interface AnalyticsTool {
 
     public void setIdPoll(String idPoll) {
       this.idPoll = idPoll;
+    }
+
+    public String getLoginType() {
+      return loginType;
+    }
+
+    public void setLoginType(String loginType) {
+      this.loginType = loginType;
     }
   }
 }

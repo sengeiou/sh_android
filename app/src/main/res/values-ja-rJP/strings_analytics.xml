@@ -106,4 +106,6 @@
     <string name="analytics_push_redirection_discard">discard</string>
     <string name="analytics_push_redirection_private_messages">privateMessage</string>
     <string name="appflyer_key">FEg6kuUpkGTE3FrD2BdHPg</string>
+    <string name="analytics_action_long_login">LongLogin</string>
+    <string name="analytics_action_short_login">ShortLogin</string>
 </resources>

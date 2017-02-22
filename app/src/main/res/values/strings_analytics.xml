@@ -108,4 +108,6 @@
     <string name="appflyer_key">FEg6kuUpkGTE3FrD2BdHPg</string>
     <string name="analytics_action_open_cta_link">Ad</string>
     <string name="analytics_label_open_cta_link">Ad</string>
+    <string name="analytics_action_long_login">LongLogin</string>
+    <string name="analytics_action_short_login">ShortLogin</string>
 </resources>
