@@ -83,7 +83,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   private void loadMutedStreamIds() {
-    getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+    getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
       @Override public void onLoaded(List<String> mutedStreamsIds) {
         mutedStreamIds = mutedStreamsIds;
       }
@@ -231,7 +231,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void onStreamLongClicked(final StreamResultModel stream) {
-    getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+    getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
       @Override public void onLoaded(List<String> mutedStreamIds) {
         if (mutedStreamIds.contains(stream.getStreamModel().getIdStream())) {
           streamsListView.showContextMenuWithUnmute(stream);

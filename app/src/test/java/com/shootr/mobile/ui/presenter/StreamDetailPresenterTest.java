@@ -355,7 +355,7 @@ public class StreamDetailPresenterTest {
         callback.onLoaded(Collections.<String>emptyList());
         return null;
       }
-    }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+    }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
   }
 
   public void setupMutedStreamCallback() {
@@ -366,7 +366,7 @@ public class StreamDetailPresenterTest {
         callback.onLoaded(Arrays.asList(ID_STREAM));
         return null;
       }
-    }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+    }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
   }
 
   private void setupStreamWithoutPictureInfoCallback() {

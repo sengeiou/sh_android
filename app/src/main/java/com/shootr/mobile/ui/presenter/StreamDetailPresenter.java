@@ -99,7 +99,7 @@ public class StreamDetailPresenter implements Presenter {
   }
 
   public void loadMutedStatus() {
-    getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+    getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
       @Override public void onLoaded(List<String> ids) {
         streamDetailView.setMuteStatus(ids.contains(idStream));
       }

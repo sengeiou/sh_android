@@ -16,7 +16,7 @@ public class GetMutedStreamsInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final MuteRepository localMuteRepository;
   private final MuteRepository remoteMuteRepository;
-
+  private boolean onlyLocal = false;
   private Callback<List<String>> callback;
 
   @Inject public GetMutedStreamsInteractor(InteractorHandler interactorHandler,
@@ -28,8 +28,13 @@ public class GetMutedStreamsInteractor implements Interactor {
     this.remoteMuteRepository = remoteMuteRepository;
   }
 
-  public void loadMutedStreamIds(Callback<List<String>> callback) {
+  public void loadMutedStreamsIdsFromLocal(Callback<List<String>> callback) {
+    this.onlyLocal = true;
     this.callback = callback;
+    interactorHandler.execute(this);
+  }
+
+  public void loadMutedStreamIds() {
     interactorHandler.execute(this);
   }
 
@@ -39,7 +44,7 @@ public class GetMutedStreamsInteractor implements Interactor {
 
   private void tryLoadingLocalMutesAndThenRemote() {
     List<String> mutedIdStreams = localMuteRepository.getMutedIdStreams();
-    if (mutedIdStreams.isEmpty()) {
+    if (!onlyLocal) {
       loadRemoteMutes();
     } else {
       notifyResult(mutedIdStreams);
@@ -48,7 +53,7 @@ public class GetMutedStreamsInteractor implements Interactor {
 
   private void loadRemoteMutes() {
     try {
-      notifyResult(remoteMuteRepository.getMutedIdStreams());
+      remoteMuteRepository.getMutedIdStreams();
     } catch (ServerCommunicationException error) {
             /* swallow silently */
     }

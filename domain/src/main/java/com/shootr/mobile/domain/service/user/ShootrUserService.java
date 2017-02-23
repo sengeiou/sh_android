@@ -23,6 +23,7 @@ import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,143 +32,153 @@ import javax.inject.Inject;
 
 public class ShootrUserService {
 
-    private final UserRepository localUserRepository;
-    private final SessionRepository sessionRepository;
-    private final CreateAccountGateway createAccountGateway;
-    private final LoginGateway loginGateway;
-    private final ResetPasswordGateway resetPasswordGateway;
-    private final ConfirmEmailGateway confirmEmailGateway;
-    private final ExternalStreamRepository remoteStreamRepository;
-    private final ChangePasswordGateway changePasswordGateway;
-    private final UserRepository remoteUserRepository;
-    private final ResetPasswordEmailGateway resetPasswordEmailGateway;
-    private final DatabaseUtils databaseUtils;
-    private final NicerRepository nicerRepository;
-    private final InternalNiceShotRepository localNiceShotRepository;
-    private final ExternalFavoriteRepository favoriteRepository;
+  private final UserRepository localUserRepository;
+  private final SessionRepository sessionRepository;
+  private final CreateAccountGateway createAccountGateway;
+  private final LoginGateway loginGateway;
+  private final ResetPasswordGateway resetPasswordGateway;
+  private final ConfirmEmailGateway confirmEmailGateway;
+  private final ExternalStreamRepository remoteStreamRepository;
+  private final ChangePasswordGateway changePasswordGateway;
+  private final UserRepository remoteUserRepository;
+  private final ResetPasswordEmailGateway resetPasswordEmailGateway;
+  private final DatabaseUtils databaseUtils;
+  private final NicerRepository nicerRepository;
+  private final MuteRepository muteRepository;
+  private final InternalNiceShotRepository localNiceShotRepository;
+  private final ExternalFavoriteRepository favoriteRepository;
 
-    @Inject
-    public ShootrUserService(@Local UserRepository localUserRepository, SessionRepository sessionRepository,
-        CreateAccountGateway createAccountGateway, LoginGateway loginGateway, ResetPasswordGateway resetPasswordGateway,
-        ChangePasswordGateway changePasswordGateway, ConfirmEmailGateway confirmEmailGateway,
-        ExternalStreamRepository remoteStreamRepository, @Remote UserRepository remoteUserRepository,
-        ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils,
-        NicerRepository nicerRepository, InternalNiceShotRepository localNiceShotRepository,
-        ExternalFavoriteRepository favoriteRepository) {
-        this.localUserRepository = localUserRepository;
-        this.sessionRepository = sessionRepository;
-        this.createAccountGateway = createAccountGateway;
-        this.loginGateway = loginGateway;
-        this.resetPasswordGateway = resetPasswordGateway;
-        this.confirmEmailGateway = confirmEmailGateway;
-        this.remoteStreamRepository = remoteStreamRepository;
-        this.changePasswordGateway = changePasswordGateway;
-        this.remoteUserRepository = remoteUserRepository;
-        this.resetPasswordEmailGateway = resetPasswordEmailGateway;
-        this.databaseUtils = databaseUtils;
-        this.nicerRepository = nicerRepository;
-        this.localNiceShotRepository = localNiceShotRepository;
-        this.favoriteRepository = favoriteRepository;
-    }
+  @Inject public ShootrUserService(@Local UserRepository localUserRepository,
+      SessionRepository sessionRepository, CreateAccountGateway createAccountGateway,
+      LoginGateway loginGateway, ResetPasswordGateway resetPasswordGateway,
+      ChangePasswordGateway changePasswordGateway, ConfirmEmailGateway confirmEmailGateway,
+      ExternalStreamRepository remoteStreamRepository, @Remote UserRepository remoteUserRepository,
+      ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils,
+      NicerRepository nicerRepository, @Remote MuteRepository muteRepository,
+      InternalNiceShotRepository localNiceShotRepository,
+      ExternalFavoriteRepository favoriteRepository) {
+    this.localUserRepository = localUserRepository;
+    this.sessionRepository = sessionRepository;
+    this.createAccountGateway = createAccountGateway;
+    this.loginGateway = loginGateway;
+    this.resetPasswordGateway = resetPasswordGateway;
+    this.confirmEmailGateway = confirmEmailGateway;
+    this.remoteStreamRepository = remoteStreamRepository;
+    this.changePasswordGateway = changePasswordGateway;
+    this.remoteUserRepository = remoteUserRepository;
+    this.resetPasswordEmailGateway = resetPasswordEmailGateway;
+    this.databaseUtils = databaseUtils;
+    this.nicerRepository = nicerRepository;
+    this.muteRepository = muteRepository;
+    this.localNiceShotRepository = localNiceShotRepository;
+    this.favoriteRepository = favoriteRepository;
+  }
 
-    public void createAccount(String username, String email, String password, String locale)
+  public void createAccount(String username, String email, String password, String locale)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
-        LoginResult loginResult = createAccountGateway.performCreateAccount(username, email, password, locale);
-        retrievePostLoginInformation(loginResult);
-    }
+    LoginResult loginResult =
+        createAccountGateway.performCreateAccount(username, email, password, locale);
+    retrievePostLoginInformation(loginResult);
+  }
 
-    public void performLogin(String usernameOrEmail, String password) throws InvalidLoginException,
-        InvalidLoginMethodForShootrException {
-        LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
-        retrievePostLoginInformation(loginResult);
-    }
+  public void performLogin(String usernameOrEmail, String password)
+      throws InvalidLoginException, InvalidLoginMethodForShootrException {
+    LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
+    retrievePostLoginInformation(loginResult);
+  }
 
-    public Boolean performFacebookLogin(String facebookToken, String locale) throws InvalidLoginException,
-        InvalidLoginMethodForFacebookException {
-        LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, locale);
-        retrievePostLoginInformation(loginResult);
-        return loginResult.isNewUser();
-    }
+  public Boolean performFacebookLogin(String facebookToken, String locale)
+      throws InvalidLoginException, InvalidLoginMethodForFacebookException {
+    LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, locale);
+    retrievePostLoginInformation(loginResult);
+    return loginResult.isNewUser();
+  }
 
-    private void retrievePostLoginInformation(LoginResult loginResult) {
-        storeSession(loginResult);
-        String visibleEventId = loginResult.getUser().getIdWatchingStream();
-        if (visibleEventId != null) {
-            remoteStreamRepository.getStreamById(visibleEventId, StreamMode.TYPES_STREAM);
-        }
-        storeNicedShots(loginResult);
-        storeFavoritesStreams(loginResult);
-        remoteUserRepository.getPeople();
+  private void retrievePostLoginInformation(LoginResult loginResult) {
+    storeSession(loginResult);
+    String visibleEventId = loginResult.getUser().getIdWatchingStream();
+    if (visibleEventId != null) {
+      remoteStreamRepository.getStreamById(visibleEventId, StreamMode.TYPES_STREAM);
     }
+    storeNicedShots(loginResult);
+    storeFavoritesStreams(loginResult);
+    storeMuteStreams();
+    remoteUserRepository.getPeople();
+  }
 
-    private void storeNicedShots(LoginResult loginResult) {
-        List<Nicer> nices = nicerRepository.getNices(loginResult.getUser().getIdUser());
-        List<String> nicedIdShots = new ArrayList<>(nices.size());
-        for (Nicer nice : nices) {
-            nicedIdShots.add(nice.getIdShot());
-        }
-        localNiceShotRepository.markAll(nicedIdShots);
+  private void storeNicedShots(LoginResult loginResult) {
+    List<Nicer> nices = nicerRepository.getNices(loginResult.getUser().getIdUser());
+    List<String> nicedIdShots = new ArrayList<>(nices.size());
+    for (Nicer nice : nices) {
+      nicedIdShots.add(nice.getIdShot());
     }
+    localNiceShotRepository.markAll(nicedIdShots);
+  }
 
-    private void storeFavoritesStreams(LoginResult loginResult) {
-        favoriteRepository.getFavorites(loginResult.getUser().getIdUser());
-    }
+  private void storeFavoritesStreams(LoginResult loginResult) {
+    favoriteRepository.getFavorites(loginResult.getUser().getIdUser());
+  }
 
-    private void storeSession(LoginResult loginResult) {
-        String idUser = loginResult.getUser().getIdUser();
-        String sessionToken = loginResult.getSessionToken();
-        User user = loginResult.getUser();
-        sessionRepository.createSession(idUser, sessionToken, user);
-        localUserRepository.putUser(loginResult.getUser());
-    }
+  private void storeMuteStreams() {
+    muteRepository.getMutedIdStreams();
+  }
 
-    public ForgotPasswordResult performResetPassword(String usernameOrEmail)
+  private void storeSession(LoginResult loginResult) {
+    String idUser = loginResult.getUser().getIdUser();
+    String sessionToken = loginResult.getSessionToken();
+    User user = loginResult.getUser();
+    sessionRepository.createSession(idUser, sessionToken, user);
+    localUserRepository.putUser(loginResult.getUser());
+  }
+
+  public ForgotPasswordResult performResetPassword(String usernameOrEmail)
       throws InvalidForgotPasswordException, IOException {
-        return resetPasswordGateway.performPasswordReset(usernameOrEmail);
-    }
+    return resetPasswordGateway.performPasswordReset(usernameOrEmail);
+  }
 
-    public void sendPasswordResetEmail(String idUser, String loacale) throws IOException {
-        resetPasswordEmailGateway.sendPasswordResetEmail(idUser, loacale);
-    }
+  public void sendPasswordResetEmail(String idUser, String loacale) throws IOException {
+    resetPasswordEmailGateway.sendPasswordResetEmail(idUser, loacale);
+  }
 
-    public void performLogout() {
-        User currentUser = sessionRepository.getCurrentUser();
-        loginGateway.performLogout(currentUser.getIdUser());
-        removeSession();
-        databaseUtils.clearDataOnLogout();
-    }
+  public void performLogout() {
+    User currentUser = sessionRepository.getCurrentUser();
+    loginGateway.performLogout(currentUser.getIdUser());
+    removeSession();
+    databaseUtils.clearDataOnLogout();
+  }
 
-    private void removeSession() {
-        sessionRepository.destroySession();
-    }
+  private void removeSession() {
+    sessionRepository.destroySession();
+  }
 
-    public void requestEmailConfirmation() {
-        try {
-            confirmEmailGateway.confirmEmail();
-        } catch (InvalidEmailConfirmationException e) {
+  public void requestEmailConfirmation() {
+    try {
+      confirmEmailGateway.confirmEmail();
+    } catch (InvalidEmailConfirmationException e) {
             /* no-op */
-        }
     }
+  }
 
-    public void changeEmail(String email)
-      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException, UnauthorizedRequestException {
-        String currentUserId = sessionRepository.getCurrentUserId();
-        User user = localUserRepository.getUserById(currentUserId);
-        user.setEmail(email);
-        user.setEmailConfirmed(false);
-        sessionRepository.setCurrentUser(user);
-        localUserRepository.putUser(user);
+  public void changeEmail(String email)
+      throws EmailAlreadyExistsException, EmailAlreadyConfirmedException,
+      UnauthorizedRequestException {
+    String currentUserId = sessionRepository.getCurrentUserId();
+    User user = localUserRepository.getUserById(currentUserId);
+    user.setEmail(email);
+    user.setEmailConfirmed(false);
+    sessionRepository.setCurrentUser(user);
+    localUserRepository.putUser(user);
 
-        confirmEmailGateway.changeEmail(email);
-    }
+    confirmEmailGateway.changeEmail(email);
+  }
 
-    public void changePassword(String currentPassword, String newPassword, String locale)
+  public void changePassword(String currentPassword, String newPassword, String locale)
       throws InvalidPasswordException {
-        changePasswordGateway.changePassword(currentPassword, newPassword, locale);
-    }
+    changePasswordGateway.changePassword(currentPassword, newPassword, locale);
+  }
 
-    public void removeSessionData() {
-        removeSession();
-        databaseUtils.clearDataOnLogout();
-    }
+  public void removeSessionData() {
+    removeSession();
+    databaseUtils.clearDataOnLogout();
+  }
 }
