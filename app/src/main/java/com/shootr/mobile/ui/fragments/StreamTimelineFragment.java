@@ -32,6 +32,7 @@ import butterknife.Unbinder;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
@@ -224,6 +225,7 @@ public class StreamTimelineFragment extends BaseFragment
   private boolean scrollMoved;
   private String idStream;
   private String streamTitle;
+  private String streamAuthorIdUser;
   private Menu menu;
   //endregion
 
@@ -270,8 +272,8 @@ public class StreamTimelineFragment extends BaseFragment
     super.onActivityCreated(savedInstanceState);
     initializeViews();
     setHasOptionsMenu(true);
+    streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     idStream = getArguments().getString(EXTRA_STREAM_ID);
-    String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idStream);
@@ -559,12 +561,10 @@ public class StreamTimelineFragment extends BaseFragment
       }
     }, new OnShotLongClick() {
       @Override public void onShotLongClick(ShotModel shot) {
-        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
       }
     }, new OnOpenShotMenuListener() {
       @Override public void openMenu(ShotModel shot) {
-        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         reportShotPresenter.onShotLongPressedWithStreamAuthor(shot, streamAuthorIdUser);
       }
     }, new OnImageLongClickListener() {
@@ -600,7 +600,6 @@ public class StreamTimelineFragment extends BaseFragment
       }
     }, new OnHideHighlightShot() {
       @Override public void onHideClick(HighlightedShotModel highlightedShotModel) {
-        String streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
         highlightedShotPresenter.onDismissHighlightShot(highlightedShotModel.getIdHighlightedShot(),
             streamAuthorIdUser);
       }
@@ -1332,7 +1331,8 @@ public class StreamTimelineFragment extends BaseFragment
     analyticsTool.analyticsSendAction(builder);
   }
 
-  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel) {
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel,
+      final HighlightedShot highlightedShot) {
     new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
@@ -1341,7 +1341,8 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }).addAction(R.string.remove_highlight, new Runnable() {
       @Override public void run() {
-        highlightedShotPresenter.onMenuDismissHighlightShot();
+        highlightedShotPresenter.onDismissHighlightShot(highlightedShot.getIdHighlightedShot(),
+            streamAuthorIdUser);
       }
     }).addAction(R.string.menu_pin_shot, new Runnable() {
       @Override public void run() {

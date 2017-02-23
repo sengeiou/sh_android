@@ -34,6 +34,7 @@ import com.cocosw.bottomsheet.BottomSheet;
 import com.github.clans.fab.FloatingActionMenu;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
@@ -1120,7 +1121,8 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
-  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot,
+      HighlightedShot highlightedShot) {
     /* no-op */
   }
 

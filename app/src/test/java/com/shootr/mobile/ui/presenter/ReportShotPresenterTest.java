@@ -47,6 +47,7 @@ public class ReportShotPresenterTest {
     private static final String EN_LOCALE = "en";
     private static final String ID_STREAM = "idStream";
     private static final String ID_SHOT = "idShot";
+    private static final String ID_HIGHLIGHTED_SHOT = "idHighLightedShot";
     private static final String ANOTHER_ID_SHOT = "anotherIdShot";
     public static final Long HIDE = 0L;
     @Mock ReportShotView reportShotView;
@@ -285,7 +286,9 @@ public class ReportShotPresenterTest {
                 Interactor.Callback<HighlightedShot> callback =
                     (Interactor.Callback<HighlightedShot>) invocation.getArguments()[1];
                 HighlightedShot highlightedShot = new HighlightedShot();
+                highlightedShot.setIdHighlightedShot(ID_HIGHLIGHTED_SHOT);
                 highlightedShot.setShot(shotWithIdShot());
+                highlightedShot.setVisible(false);
                 callback.onLoaded(highlightedShot);
                 return null;
             }
@@ -373,6 +376,7 @@ public class ReportShotPresenterTest {
 
     private ShotModel anotherUserShot() {
         ShotModel shotModel = new ShotModel();
+        shotModel.setIdShot(ID_SHOT);
         shotModel.setIdUser(ANOTHER_ID_USER);
         shotModel.setHide(1L);
         return shotModel;

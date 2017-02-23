@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
@@ -175,7 +176,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     OnNiceShotListener onNiceShotListener = new OnNiceShotListener() {
       @Override public void markNice(ShotModel shot) {
         presenter.markNiceShot(shot.getIdShot());
-          sendNiceAnalytics(shot);
+        sendNiceAnalytics(shot);
       }
 
       @Override public void unmarkNice(String idShot) {
@@ -306,7 +307,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     /* no-op */
   }
 
-  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot,
+      HighlightedShot highlightedShot) {
     /* no-op */
   }
 
