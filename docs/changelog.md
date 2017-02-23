@@ -13,6 +13,12 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.27.1] - 2017-02-23
+
+### Fixed
+- Mixpanel null user
+
+
 ## [1.27.0] - 2017-02-22
 
 ### Added
