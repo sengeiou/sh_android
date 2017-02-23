@@ -723,12 +723,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     startActivity(ContributorsActivity.newIntent(this, idStream, false));
   }
 
-  @Override public void hideContributorsNumber() {
-    adapter.setContributorsNumber(NO_CONTRIBUTORS);
+  @Override public void hideContributorsNumber(boolean isStreamAuthor) {
+    adapter.setContributorsNumber(NO_CONTRIBUTORS, isStreamAuthor);
   }
 
-  @Override public void showContributorsNumber(Integer contributorsNumber) {
-    adapter.setContributorsNumber(contributorsNumber);
+  @Override public void showContributorsNumber(Integer contributorsNumber, boolean isStreamAuthor) {
+    adapter.setContributorsNumber(contributorsNumber, isStreamAuthor);
   }
 
   @Override public void showPhotoPicker() {
@@ -789,10 +789,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             streamDetailPresenter.restoreStream();
           }
         });
-  }
-
-  @Override public void disableContributors() {
-    adapter.disableContributors();
   }
 
   @Override public void showLoading() {

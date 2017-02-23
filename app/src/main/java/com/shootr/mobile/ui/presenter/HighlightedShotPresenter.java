@@ -1,22 +1,19 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.DismissHighlightShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetHighlightedShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.HighlightShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewHighlightedShotEventInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
-import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.HighlightedShotModel;
 import com.shootr.mobile.ui.model.mappers.HighlightedShotModelMapper;
 import com.shootr.mobile.ui.views.HighlightedShotsView;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 public class HighlightedShotPresenter implements Presenter {
@@ -25,9 +22,9 @@ public class HighlightedShotPresenter implements Presenter {
   private final GetHighlightedShotInteractor getHighlightedShotsInteractor;
   private final HighlightShotInteractor highlightShotInteractor;
   private final DismissHighlightShotInteractor dismissHighlightShotInteractor;
-  private final GetContributorsInteractor getContributorsInteractor;
   private final ViewHighlightedShotEventInteractor viewHighlightedShotEventInteractor;
   private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
+  private final GetLocalStreamInteractor getLocalStreamInteractor;
   private final SessionRepository sessionRepository;
   private final HighlightedShotModelMapper mapper;
   private final Poller poller;
@@ -36,23 +33,23 @@ public class HighlightedShotPresenter implements Presenter {
   private String idStream;
   private HighlightedShotModel highlightedShotModel;
   private HighlightedShotModel currentHighlightShot;
-  private ArrayList<String> contributorsIds = new ArrayList<>();
   private String streamAuthorId;
+  private boolean isCurrentUserStreamContributor;
 
   @Inject
   public HighlightedShotPresenter(GetHighlightedShotInteractor getHighlightedShotsInteractor,
       HighlightShotInteractor highlightShotInteractor,
       DismissHighlightShotInteractor dismissHighlightShotInteractor,
-      GetContributorsInteractor getContributorsInteractor,
       ViewHighlightedShotEventInteractor viewHighlightedShotEventInteractor,
-      ClickShotLinkEventInteractor clickShotLinkEventInteractor, SessionRepository sessionRepository,
+      ClickShotLinkEventInteractor clickShotLinkEventInteractor,
+      GetLocalStreamInteractor getLocalStreamInteractor, SessionRepository sessionRepository,
       HighlightedShotModelMapper mapper, Poller poller) {
     this.getHighlightedShotsInteractor = getHighlightedShotsInteractor;
     this.highlightShotInteractor = highlightShotInteractor;
     this.dismissHighlightShotInteractor = dismissHighlightShotInteractor;
-    this.getContributorsInteractor = getContributorsInteractor;
     this.viewHighlightedShotEventInteractor = viewHighlightedShotEventInteractor;
     this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
+    this.getLocalStreamInteractor = getLocalStreamInteractor;
     this.sessionRepository = sessionRepository;
     this.mapper = mapper;
     this.poller = poller;
@@ -195,16 +192,10 @@ public class HighlightedShotPresenter implements Presenter {
   }
 
   private void getContributorsIds() {
-    getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
-      @Override public void onLoaded(List<Contributor> contributors) {
-        for (Contributor contributor : contributors) {
-          contributorsIds.add(contributor.getIdUser());
-        }
+    getLocalStreamInteractor.loadStream(idStream, new GetLocalStreamInteractor.Callback() {
+      @Override public void onLoaded(Stream stream) {
+        isCurrentUserStreamContributor = stream.isCurrentUserContributor();
         view.setHighlightShotBackground(currentUserIsAdmin(streamAuthorId));
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-                /* no-op */
       }
     });
   }
@@ -214,7 +205,7 @@ public class HighlightedShotPresenter implements Presenter {
   }
 
   private boolean currentUserIsStreamContributor() {
-    return contributorsIds.contains(sessionRepository.getCurrentUserId());
+    return isCurrentUserStreamContributor;
   }
 
   @Override public void resume() {

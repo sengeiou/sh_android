@@ -27,6 +27,8 @@ public class Stream {
     private Long uniqueShots;
     private String readWriteMode;
     private boolean verifiedUser;
+    private Long contributorCount;
+    private boolean isCurrentUserContributor;
 
     public Boolean isRemoved() {
         return removed;
@@ -248,5 +250,21 @@ public class Stream {
 
     public void setVerifiedUser(boolean verifiedUser) {
         this.verifiedUser = verifiedUser;
+    }
+
+    public Long getContributorCount() {
+        return contributorCount;
+    }
+
+    public void setContributorCount(Long contributorCount) {
+        this.contributorCount = contributorCount;
+    }
+
+    public boolean isCurrentUserContributor() {
+        return isCurrentUserContributor;
+    }
+
+    public void setCurrentUserContributor(boolean currentUserContributor) {
+        isCurrentUserContributor = currentUserContributor;
     }
 }

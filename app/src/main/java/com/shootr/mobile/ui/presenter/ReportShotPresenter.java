@@ -4,15 +4,15 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
-import com.shootr.mobile.domain.model.user.Contributor;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -20,7 +20,6 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -37,14 +36,14 @@ public class ReportShotPresenter implements Presenter {
     private final GetFollowingInteractor getFollowingInteractor;
     private final BanUserInteractor banUserInteractor;
     private final UnbanUserInteractor unbanUserInteractor;
-    private final GetContributorsInteractor getContributorsInteractor;
     private final GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
+    private final GetLocalStreamInteractor getLocalStreamInteractor;
 
     private ReportShotView reportShotView;
     private String idUserToBlock;
     private String idStream;
-    private ArrayList<String> contributorsIds = new ArrayList<>();
     private HighlightedShot currentHighlightedShot;
+    private boolean isCurrentUserContributor;
 
     @Inject
     public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor, ErrorMessageFactory errorMessageFactory,
@@ -52,8 +51,8 @@ public class ReportShotPresenter implements Presenter {
         GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
         UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
         BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
-        GetContributorsInteractor getContributorsInteractor,
-        GetLocalHighlightedShotInteractor getHighlightedShotInteractor) {
+        GetLocalHighlightedShotInteractor getHighlightedShotInteractor,
+        GetLocalStreamInteractor getLocalStreamInteractor) {
         this.deleteShotInteractor = deleteShotInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.sessionRepository = sessionRepository;
@@ -64,8 +63,8 @@ public class ReportShotPresenter implements Presenter {
         this.getFollowingInteractor = getFollowingInteractor;
         this.banUserInteractor = banUserInteractor;
         this.unbanUserInteractor = unbanUserInteractor;
-        this.getContributorsInteractor = getContributorsInteractor;
         this.getHighlightedShotInteractor = getHighlightedShotInteractor;
+        this.getLocalStreamInteractor = getLocalStreamInteractor;
     }
 
     protected void setView(ReportShotView reportShotView) {
@@ -87,15 +86,9 @@ public class ReportShotPresenter implements Presenter {
     }
 
     private void getContributorsIds() {
-        getContributorsInteractor.obtainContributors(idStream, false, new Interactor.Callback<List<Contributor>>() {
-            @Override public void onLoaded(List<Contributor> contributors) {
-                for (Contributor contributor : contributors) {
-                    contributorsIds.add(contributor.getIdUser());
-                }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                /* no-op */
+        getLocalStreamInteractor.loadStream(idStream, new GetLocalStreamInteractor.Callback() {
+            @Override public void onLoaded(Stream stream) {
+                isCurrentUserContributor = stream.isCurrentUserContributor();
             }
         });
     }
@@ -207,7 +200,7 @@ public class ReportShotPresenter implements Presenter {
     }
 
     private boolean currentUserIsStreamContributor() {
-        return contributorsIds.contains(sessionRepository.getCurrentUserId());
+        return isCurrentUserContributor;
     }
 
     public boolean currentUserIsShotAuthor(ShotModel shotModel) {

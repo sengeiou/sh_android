@@ -4,13 +4,13 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
@@ -62,7 +62,7 @@ public class ReportShotPresenterTest {
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock BanUserInteractor banUserInteractor;
     @Mock UnbanUserInteractor unbanUserInteractor;
-    @Mock GetContributorsInteractor getContributorsInteractor;
+    @Mock GetLocalStreamInteractor getLocalStreamInteractor;
     @Mock GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
 
     private ReportShotPresenter presenter;
@@ -78,7 +78,7 @@ public class ReportShotPresenterTest {
           unblockUserInteractor,
           getFollowingInteractor,
           banUserInteractor,
-          unbanUserInteractor, getContributorsInteractor, getHighlightedShotInteractor);
+          unbanUserInteractor, getHighlightedShotInteractor, getLocalStreamInteractor);
         presenter.setView(reportShotView);
     }
 

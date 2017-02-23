@@ -5,8 +5,16 @@ import android.database.Cursor;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.db.DatabaseContract;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import javax.inject.Inject;
 
 public class StreamEntityDBMapper extends GenericDBMapper {
+
+    private final SessionRepository sessionRepository;
+
+    @Inject public StreamEntityDBMapper(SessionRepository sessionRepository) {
+        this.sessionRepository = sessionRepository;
+    }
 
     public ContentValues toContentValues(StreamEntity streamEntity) {
         ContentValues contentValues = new ContentValues();
@@ -33,6 +41,14 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         contentValues.put(DatabaseContract.StreamTable.UNIQUE_SHOTS, streamEntity.getUniqueShots());
         contentValues.put(DatabaseContract.StreamTable.READ_WRITE_MODE, streamEntity.getReadWriteMode());
         contentValues.put(DatabaseContract.StreamTable.VERIFIED_USER, streamEntity.getVerifiedUser());
+        contentValues.put(DatabaseContract.StreamTable.CONTRIBUTORS_COUNT, streamEntity.getContributorCount());
+        if (streamEntity.getIdUserContributors() != null) {
+            contentValues.put(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR,
+                streamEntity.getIdUserContributors().contains(sessionRepository.getCurrentUserId())
+                    ? 1 : 0);
+        } else {
+            contentValues.put(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR, 0);
+        }
         setSynchronizedtoContentValues(streamEntity, contentValues);
     }
 
@@ -61,6 +77,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setUniqueShots(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.UNIQUE_SHOTS)));
         streamEntity.setReadWriteMode(c.getString(c.getColumnIndex(DatabaseContract.StreamTable.READ_WRITE_MODE)));
         streamEntity.setVerifiedUser(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.VERIFIED_USER)));
+        streamEntity.setContributorCount(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.CONTRIBUTORS_COUNT)));
+        streamEntity.setiAmContributor(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

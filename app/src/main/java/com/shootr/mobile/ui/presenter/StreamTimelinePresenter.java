@@ -13,12 +13,10 @@ import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -59,7 +57,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final Poller poller;
   private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
   private final CreateStreamInteractor createStreamInteractor;
-  private final GetContributorsInteractor getContributorsInteractor;
   private final GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private final SessionRepository sessionRepository;
 
@@ -86,6 +83,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private StreamModel streamModel;
   private Integer streamMode;
   private boolean isReadOnly;
+  private boolean isCurrentUserContirbutor;
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -96,7 +94,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       CreateStreamInteractor createStreamInteractor,
-      GetContributorsInteractor getContributorsInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor, SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
     this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
@@ -113,7 +110,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.poller = poller;
     this.updateWatchNumberInteractor = updateWatchNumberInteractor;
     this.createStreamInteractor = createStreamInteractor;
-    this.getContributorsInteractor = getContributorsInteractor;
     this.getNewFilteredShotsInteractor = getNewFilteredShotsInteractor;
     this.sessionRepository = sessionRepository;
   }
@@ -230,6 +226,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         setStreamTitle(stream.getTitle());
         setStreamDescription(stream.getDescription());
         setStreamTopic(stream.getTopic());
+        isCurrentUserContirbutor = stream.isCurrentUserContributor();
         streamTimelineView.setTitle(stream.getTitle());
         if (streamTopic != null && !streamTopic.isEmpty()) {
           streamTimelineView.showPinnedMessage(streamTopic);
@@ -308,35 +305,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void loadStreamMode() {
-    getContributorsInteractor.obtainContributors(streamId, false,
-        new Interactor.Callback<List<Contributor>>() {
-          @Override public void onLoaded(List<Contributor> contributors) {
-            String idUser = sessionRepository.getCurrentUserId();
-            if (isCurrentUserContributor(contributors, idUser) || isCurrentUserStreamAuthor(
-                idUser)) {
-              streamTimelineView.hideStreamViewOnlyIndicator();
-            } else {
-              streamTimelineView.showStreamViewOnlyIndicator();
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-
-          }
-        });
+    String idUser = sessionRepository.getCurrentUserId();
+    if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(
+        idUser)) {
+      streamTimelineView.hideStreamViewOnlyIndicator();
+    } else {
+      streamTimelineView.showStreamViewOnlyIndicator();
+    }
   }
 
   private boolean isCurrentUserStreamAuthor(String idUser) {
     return idAuthor != null && idAuthor.equals(idUser);
-  }
-
-  private boolean isCurrentUserContributor(List<Contributor> contributors, String idUser) {
-    for (Contributor contributor : contributors) {
-      if (contributor.getIdUser().equals(idUser)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private void showShotsInView(Timeline timeline) {

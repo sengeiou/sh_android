@@ -14,11 +14,9 @@ import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamInfo;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -46,7 +44,6 @@ public class StreamDetailPresenter implements Presenter {
   private final GetMutedStreamsInteractor getMutedStreamsInteractor;
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInteractor;
-  private final GetContributorsInteractor getContributorsInteractor;
   private final RemoveStreamInteractor removeStreamInteractor;
   private final RestoreStreamInteractor restoreStreamInteractor;
 
@@ -69,7 +66,7 @@ public class StreamDetailPresenter implements Presenter {
       ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor,
       UnfollowInteractor unfollowInteractor, SelectStreamInteractor selectStreamInteractor,
       GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
-      UnmuteInteractor unmuteInteractor, GetContributorsInteractor getContributorsInteractor,
+      UnmuteInteractor unmuteInteractor,
       RemoveStreamInteractor removeStreamInteractor,
       RestoreStreamInteractor restoreStreamInteractor, StreamModelMapper streamModelMapper,
       UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
@@ -82,7 +79,6 @@ public class StreamDetailPresenter implements Presenter {
     this.getMutedStreamsInteractor = getMutedStreamsInteractor;
     this.muteInteractor = muteInteractor;
     this.unmuteInteractor = unmuteInteractor;
-    this.getContributorsInteractor = getContributorsInteractor;
     this.removeStreamInteractor = removeStreamInteractor;
     this.restoreStreamInteractor = restoreStreamInteractor;
     this.streamModelMapper = streamModelMapper;
@@ -151,24 +147,12 @@ public class StreamDetailPresenter implements Presenter {
   }
 
   public void getContributorsNumber() {
-    getContributorsInteractor.obtainContributors(idStream, false,
-        new Interactor.Callback<List<Contributor>>() {
-          @Override public void onLoaded(List<Contributor> contributors) {
-            if (contributors.size() > 0) {
-              streamDetailView.showContributorsNumber(contributors.size());
-            } else {
-              streamDetailView.hideContributorsNumber();
-              if (!streamModel.amIAuthor()) {
-                streamDetailView.disableContributors();
-              }
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            String errorMessage = errorMessageFactory.getMessageForError(error);
-            streamDetailView.showError(errorMessage);
-          }
-        });
+    Long contributorsCount = streamModel.getContributorCount();
+    if (contributorsCount > 0) {
+      streamDetailView.showContributorsNumber(contributorsCount.intValue(), streamModel.amIAuthor());
+    } else {
+      streamDetailView.hideContributorsNumber(streamModel.amIAuthor());
+    }
   }
 
   public void getStreamInfo() {
@@ -452,7 +436,6 @@ public class StreamDetailPresenter implements Presenter {
     if (hasBeenPaused) {
       selectStream();
       getStreamInfo();
-      getContributorsNumber();
     }
   }
 
