@@ -200,11 +200,11 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
       String targetUsername, String notificationName, String pushRedirection, String idStream,
       String streamName, String idPoll, String loginType, Context context) {
-    mixpanel.identify(this.user.getIdUser());
-    mixpanel.getPeople().identify(this.user.getIdUser());
     try {
       JSONObject props = new JSONObject();
       if (user != null) {
+        mixpanel.identify(user.getIdUser());
+        mixpanel.getPeople().identify(user.getIdUser());
         props.put(DISTINCT_ID, user.getIdUser());
         props.put(ACTIVATED_USER, user.getReceivedReactions() == 1L);
         props.put(USER_TYPE, user.getAnalyticsUserType());
