@@ -320,6 +320,8 @@
     <activity android:name=".ui.activities.ChannelsContainerActivity"
         android:label="@string/title_activity_channels">
     </activity>
+    <activity android:name="com.mixpanel.android.surveys.SurveyActivity"
+        android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
   </application>
 
 </manifest>
