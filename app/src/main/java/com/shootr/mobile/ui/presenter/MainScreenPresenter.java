@@ -33,7 +33,8 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, UnwatchDone.Receiver {
+public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, UnwatchDone.Receiver,
+    ChannelsBadgeChanged.Receiver {
 
   private final GetCurrentUserInteractor getCurrentUserInteractor;
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
@@ -164,17 +165,17 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     }
   }
 
-  private void loadChannelsForBadge() {
+  public void loadChannelsForBadge(final boolean localOnly) {
     getFollowingIdsInteractor.loadFollowingsIds(sessionRepository.getCurrentUserId(),
         new Interactor.Callback<List<String>>() {
           @Override public void onLoaded(final List<String> results) {
-            getChannels(results);
+            getChannels(results, localOnly);
           }
         });
   }
 
-  private void getChannels(final List<String> results) {
-    getPrivateMessagesChannelsInteractor.loadChannels(
+  private void getChannels(final List<String> results, boolean localOnly) {
+    getPrivateMessagesChannelsInteractor.loadChannels(localOnly,
         new Interactor.Callback<List<PrivateMessageChannel>>() {
           @Override public void onLoaded(List<PrivateMessageChannel> privateMessageChannels) {
             countUnreadsChannels(privateMessageChannels, results);
@@ -214,7 +215,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   @Override public void resume() {
     updateActivityBadge();
-    loadChannelsForBadge();
+    loadChannelsForBadge(false);
     loadConnectedStream();
     bus.register(this);
     if (hasBeenPaused) {
@@ -246,5 +247,13 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   public void onControllerClick() {
     mainScreenView.goToTimeline(streamModel);
+  }
+
+  @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
+    if (event.getUnreadFollowChannels() > 0) {
+      mainScreenView.updateChannelBadge(event.getUnreadFollowChannels(), true);
+    } else {
+      mainScreenView.updateChannelBadge(event.getUnreadChannels(), false);
+    }
   }
 }

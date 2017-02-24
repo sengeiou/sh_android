@@ -21,6 +21,7 @@ public class GetPrivateMessagesChannelsInteractor implements Interactor {
 
   private Callback<List<PrivateMessageChannel>> callback;
   private ErrorCallback errorCallback;
+  private boolean localOnly;
 
   @Inject public GetPrivateMessagesChannelsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -32,14 +33,23 @@ public class GetPrivateMessagesChannelsInteractor implements Interactor {
     this.privateMessageChannelRepository = privateMessageChannelRepository;
   }
 
-  public void loadChannels(Callback<List<PrivateMessageChannel>> callback,
+  public void loadChannels(boolean localOnly, Callback<List<PrivateMessageChannel>> callback,
       ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
+    this.localOnly = localOnly;
   }
 
   @Override public void execute() throws Exception {
+    if (localOnly) {
+      loadLocalPrivateChannels();
+    } else {
+      loadRemoteChannels();
+    }
+  }
+
+  private void loadRemoteChannels() {
     loadLocalPrivateChannels();
     try {
       loadRemotePrivateChannels();

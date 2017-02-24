@@ -38,6 +38,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
     public static final int RESULT_EXIT_STREAM = 3;
     public static final String KEY_STREAM_ID = "stream_id";
+    public static final String SOURCE = "source";
 
     private static final String EXTRA_EDITED_TITLE = "title";
 
@@ -226,6 +227,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     private void sendAnalytics(String streamId, String streamName) {
+        String source = getIntent().getStringExtra(SOURCE);
         AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
         builder.setContext(getBaseContext());
         builder.setActionId(analyticsActionCreateStream);
@@ -233,6 +235,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         builder.setUser(sessionRepository.getCurrentUser());
         builder.setStreamName(streamName);
         builder.setIdStream(streamId);
+        if (source != null) {
+            builder.setSource(source);
+        }
         analyticsTool.analyticsSendAction(builder);
     }
 

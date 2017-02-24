@@ -1228,7 +1228,9 @@ public class ProfileActivity extends BaseActivity
 
   @OnClick(R.id.fab_new_stream) public void onAddStream() {
     closeFabMenu();
-    startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
+    Intent intent = new Intent(this, NewStreamActivity.class);
+    intent.putExtra(NewStreamActivity.SOURCE, profileSource);
+    startActivityForResult(intent, REQUEST_NEW_STREAM);
   }
 
   private void closeFabMenu() {

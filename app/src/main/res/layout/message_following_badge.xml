@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    >
+
+  <ImageView
+      android:id="@+id/menu_badge_icon"
+      android:layout_width="32dp"
+      android:layout_height="wrap_content"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="8dp"
+      android:src="@drawable/ic_action_communication_forum"
+      android:layout_gravity="center_vertical|end" />
+
+  <TextView
+      android:id="@+id/menu_badge"
+      android:layout_width="16dp"
+      android:layout_height="16dp"
+      android:layout_gravity="top|end"
+      android:layout_marginTop="8dp"
+      android:layout_marginRight="4dp"
+      android:visibility="gone"
+      android:textColor="@android:color/white"
+      android:textSize="12sp"
+      android:gravity="center"
+      android:background="@drawable/background_unread_messages"/>
+</FrameLayout>

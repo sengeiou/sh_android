@@ -1,14 +1,11 @@
 package com.shootr.mobile.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -86,45 +83,6 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
     super.onActivityCreated(savedInstanceState);
     initializePresenter();
     initializeViews();
-  }
-
-  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.menu_discover, menu);
-    this.menu = menu;
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_search:
-        navigateToDiscoverSearch();
-        return true;
-      case R.id.menu_channel:
-        navigateToChannelsList();
-      default:
-        return super.onOptionsItemSelected(item);
-    }
-  }
-
-  private void navigateToDiscoverSearch() {
-    Intent intent = new Intent(getActivity(), DiscoverSearchActivity.class);
-    startActivity(intent);
-    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-  }
-
-  public void navigateToChannelsList() {
-    sendToMixPanel();
-    Intent intent = new Intent(getContext(), ChannelsContainerActivity.class);
-    startActivity(intent);
-  }
-
-  private void sendToMixPanel() {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
-    builder.setActionId(analyticsActionInbox);
-    builder.setLabelId(analyticsLabelInbox);
-    builder.setSource(discoverSource);
-    builder.setUser(sessionRepository.getCurrentUser());
-    analyticsTool.analyticsSendAction(builder);
   }
 
   private void initializeViews() {
