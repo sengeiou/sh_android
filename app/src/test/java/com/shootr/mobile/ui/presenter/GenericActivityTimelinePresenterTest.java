@@ -49,7 +49,7 @@ public class GenericActivityTimelinePresenterTest {
         ActivityModelMapper activityModelMapper = new ActivityModelMapper(shotModelMapper);
         genericActivityTimelinePresenter = new GenericActivityTimelinePresenter(activityTimelineInteractorWrapper,
           activityModelMapper, addToFavoritesInteractor, removeFromFavoritesInteractor,
-            followInteractor, unfollowInteractor, bus,
+            getFollowingIdsInteractor, followInteractor, unfollowInteractor, bus,
           errorMessageFactory,
           poller,
           badgeCount,

@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -18,6 +19,7 @@ import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteract
 import com.shootr.mobile.ui.views.GenericActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -29,6 +31,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private final ActivityModelMapper activityModelMapper;
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    private final GetFollowingIdsInteractor getFollowingIdsInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
     private final Bus bus;
@@ -42,18 +45,21 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private boolean mightHaveMoreActivities = true;
     private boolean isEmpty;
     private Boolean isUserActivityTimeline;
+    private ArrayList<String> followingIds = new ArrayList<>();
 
     @Inject
     public GenericActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
         ActivityModelMapper activityModelMapper, AddToFavoritesInteractor addToFavoritesInteractor,
         RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-        FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, @Main Bus bus,
+        GetFollowingIdsInteractor getFollowingIdsInteractor, FollowInteractor followInteractor,
+        UnfollowInteractor unfollowInteractor, @Main Bus bus,
         ErrorMessageFactory errorMessageFactory, Poller poller, @ActivityBadgeCount IntPreference badgeCount,
         SessionRepository sessionRepository) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+        this.getFollowingIdsInteractor = getFollowingIdsInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.bus = bus;
@@ -70,12 +76,22 @@ public class GenericActivityTimelinePresenter implements Presenter {
     public void initialize(GenericActivityTimelineView timelineView, Boolean isUserActivityTimeline) {
         this.setView(timelineView);
         this.isUserActivityTimeline = isUserActivityTimeline;
-        this.loadTimeline();
+        getFollowingIds();
         poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
             @Override public void run() {
                 loadNewActivities(badgeCount.get());
             }
         });
+    }
+
+    private void getFollowingIds() {
+        getFollowingIdsInteractor.loadFollowingsIds(sessionRepository.getCurrentUserId(),
+            new Interactor.Callback<List<String>>() {
+                @Override public void onLoaded(List<String> strings) {
+                    followingIds.addAll(strings);
+                    loadTimeline();
+                }
+            });
     }
 
     private void clearActivityBadge() {
@@ -95,7 +111,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
           new Interactor.Callback<ActivityTimeline>() {
               @Override public void onLoaded(ActivityTimeline timeline) {
                   List<ActivityModel> activityModels =
-                      (List<ActivityModel>) activityModelMapper.map(timeline.getActivities());
+                      activityModelMapper.mapWithFollowings(timeline.getActivities(), followingIds);
                   timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
                   isEmpty = activityModels.isEmpty();
                   if (isEmpty) {
@@ -134,7 +150,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
           new Interactor.Callback<ActivityTimeline>() {
               @Override public void onLoaded(ActivityTimeline timeline) {
                   List<ActivityModel> newActivity =
-                      (List<ActivityModel>) activityModelMapper.map(timeline.getActivities());
+                      activityModelMapper.mapWithFollowings(timeline.getActivities(), followingIds);
                   boolean hasNewActivity = !newActivity.isEmpty();
                   if (isEmpty && hasNewActivity) {
                       isEmpty = false;
@@ -169,7 +185,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
                   isLoadingOlderActivities = false;
                   timelineView.hideLoadingOldActivities();
                   List<ActivityModel> activityModels =
-                      (List<ActivityModel>) activityModelMapper.map(timeline.getActivities());
+                      activityModelMapper.mapWithFollowings(timeline.getActivities(), followingIds);
                   if (!activityModels.isEmpty()) {
                       timelineView.addOldActivities(activityModels);
                   } else {
