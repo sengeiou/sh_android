@@ -2,10 +2,8 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -46,7 +44,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
     protected void renderFollowButton(final ActivityModel activity, String currentUserId) {
         image.setVisibility(View.GONE);
         if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
-            followButton.setFollowing(activity.isAmIFollowing());
+            followButton.setFollowing(activity.amIFollowing());
             followButton.setVisibility(View.VISIBLE);
             setupFollowListener(activity);
         } else {

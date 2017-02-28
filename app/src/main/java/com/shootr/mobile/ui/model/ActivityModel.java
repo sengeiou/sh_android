@@ -133,7 +133,7 @@ public class ActivityModel {
         this.pollQuestion = pollQuestion;
     }
 
-    public boolean isAmIFollowing() {
+    public boolean amIFollowing() {
         return amIFollowing;
     }
 

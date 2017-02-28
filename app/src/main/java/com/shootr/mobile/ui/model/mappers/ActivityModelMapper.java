@@ -45,13 +45,15 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
         return activityModel;
     }
 
-    public List<ActivityModel> mapWithFollowings(List<Activity> activities,
-        ArrayList<String> followingsIds) {
+    public List<ActivityModel> mapWithFollowingsAndFavorites(List<Activity> activities,
+        ArrayList<String> followingsIds, ArrayList<String> favoritesIds) {
         ArrayList<ActivityModel> activityModels = new ArrayList<>();
         for (Activity activity : activities) {
             ActivityModel activityModel = map(activity);
             if (activityModel.getType().equals(ActivityType.START_FOLLOW)) {
                 activityModel.setAmIFollowing(followingsIds.contains(activityModel.getIdUser()));
+            } else if (activityModel.getType().equals(ActivityType.STARTED_SHOOTING)) {
+                activityModel.setFavorite(favoritesIds.contains(activityModel.getIdStream()));
             }
             activityModels.add(activityModel);
         }

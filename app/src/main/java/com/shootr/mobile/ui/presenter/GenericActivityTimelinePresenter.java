@@ -6,6 +6,7 @@ import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoritesIdsInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
@@ -32,6 +33,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private final AddToFavoritesInteractor addToFavoritesInteractor;
     private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
     private final GetFollowingIdsInteractor getFollowingIdsInteractor;
+    private final GetFavoritesIdsInteractor getFavoritesIdsInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
     private final Bus bus;
@@ -46,12 +48,14 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private boolean isEmpty;
     private Boolean isUserActivityTimeline;
     private ArrayList<String> followingIds = new ArrayList<>();
+    private ArrayList<String> favortiesIds = new ArrayList<>();
 
     @Inject
     public GenericActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
         ActivityModelMapper activityModelMapper, AddToFavoritesInteractor addToFavoritesInteractor,
         RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-        GetFollowingIdsInteractor getFollowingIdsInteractor, FollowInteractor followInteractor,
+        GetFollowingIdsInteractor getFollowingIdsInteractor,
+        GetFavoritesIdsInteractor getFavoritesIdsInteractor, FollowInteractor followInteractor,
         UnfollowInteractor unfollowInteractor, @Main Bus bus,
         ErrorMessageFactory errorMessageFactory, Poller poller, @ActivityBadgeCount IntPreference badgeCount,
         SessionRepository sessionRepository) {
@@ -60,6 +64,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
         this.addToFavoritesInteractor = addToFavoritesInteractor;
         this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
         this.getFollowingIdsInteractor = getFollowingIdsInteractor;
+        this.getFavoritesIdsInteractor = getFavoritesIdsInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.bus = bus;
@@ -88,10 +93,21 @@ public class GenericActivityTimelinePresenter implements Presenter {
         getFollowingIdsInteractor.loadFollowingsIds(sessionRepository.getCurrentUserId(),
             new Interactor.Callback<List<String>>() {
                 @Override public void onLoaded(List<String> strings) {
+                    followingIds.clear();
                     followingIds.addAll(strings);
-                    loadTimeline();
+                    loadFavoritesIds();
                 }
             });
+    }
+
+    private void loadFavoritesIds() {
+        getFavoritesIdsInteractor.loadFavoriteStreams(new Interactor.Callback<List<String>>() {
+            @Override public void onLoaded(List<String> strings) {
+                favortiesIds.clear();
+                favortiesIds.addAll(strings);
+                loadTimeline();
+            }
+        });
     }
 
     private void clearActivityBadge() {
@@ -111,7 +127,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
           new Interactor.Callback<ActivityTimeline>() {
               @Override public void onLoaded(ActivityTimeline timeline) {
                   List<ActivityModel> activityModels =
-                      activityModelMapper.mapWithFollowings(timeline.getActivities(), followingIds);
+                      activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(), followingIds, favortiesIds);
                   timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
                   isEmpty = activityModels.isEmpty();
                   if (isEmpty) {
@@ -150,7 +166,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
           new Interactor.Callback<ActivityTimeline>() {
               @Override public void onLoaded(ActivityTimeline timeline) {
                   List<ActivityModel> newActivity =
-                      activityModelMapper.mapWithFollowings(timeline.getActivities(), followingIds);
+                      activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(), followingIds, favortiesIds);
                   boolean hasNewActivity = !newActivity.isEmpty();
                   if (isEmpty && hasNewActivity) {
                       isEmpty = false;
@@ -185,7 +201,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
                   isLoadingOlderActivities = false;
                   timelineView.hideLoadingOldActivities();
                   List<ActivityModel> activityModels =
-                      activityModelMapper.mapWithFollowings(timeline.getActivities(), followingIds);
+                      activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(), followingIds, favortiesIds);
                   if (!activityModels.isEmpty()) {
                       timelineView.addOldActivities(activityModels);
                   } else {
@@ -234,9 +250,10 @@ public class GenericActivityTimelinePresenter implements Presenter {
         });
     }
 
-    public void addFavorite(String idStream) {
+    public void addFavorite(final String idStream) {
         addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
+                favortiesIds.add(idStream);
                 loadTimeline();
             }
         }, new Interactor.ErrorCallback() {
@@ -246,9 +263,10 @@ public class GenericActivityTimelinePresenter implements Presenter {
         });
     }
 
-    public void removeFavorite(String idStream) {
+    public void removeFavorite(final String idStream) {
         removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
+                favortiesIds.remove(idStream);
                 loadTimeline();
             }
         });
