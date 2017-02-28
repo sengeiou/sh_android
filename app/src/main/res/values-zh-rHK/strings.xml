@@ -455,8 +455,8 @@
   <string name="title_pin_message_notification" formatted="false">通知訊息？</string>
   <string name="topic" formatted="false">訊息</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="other">%d個參與者</item>
-    <item quantity="zero">%d個參與者</item>
+    <item quantity="other">%s個參與者</item>
+    <item quantity="zero">%s個參與者</item>
   </plurals>
   <string name="unfollow_dialog_message">取消對%s的關注?</string>
   <string name="unfollow_dialog_no">不用了</string>

@@ -463,8 +463,8 @@
   <string name="title_pin_message_notification" formatted="false">Notificar el missatge?</string>
   <string name="topic" formatted="false">Missatge</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">%d participant</item>
-    <item quantity="other">%d participants</item>
+    <item quantity="one">%s participant</item>
+    <item quantity="other">%s participants</item>
   </plurals>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">No</string>
