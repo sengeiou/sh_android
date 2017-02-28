@@ -5,6 +5,10 @@ import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
@@ -23,6 +27,10 @@ public class GenericActivityTimelinePresenter implements Presenter {
 
     private final ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper;
     private final ActivityModelMapper activityModelMapper;
+    private final AddToFavoritesInteractor addToFavoritesInteractor;
+    private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    private final FollowInteractor followInteractor;
+    private final UnfollowInteractor unfollowInteractor;
     private final Bus bus;
     private final ErrorMessageFactory errorMessageFactory;
     private final Poller poller;
@@ -37,10 +45,17 @@ public class GenericActivityTimelinePresenter implements Presenter {
 
     @Inject
     public GenericActivityTimelinePresenter(ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-      ActivityModelMapper activityModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory, Poller poller,
-      @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
+        ActivityModelMapper activityModelMapper, AddToFavoritesInteractor addToFavoritesInteractor,
+        RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+        FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor, @Main Bus bus,
+        ErrorMessageFactory errorMessageFactory, Poller poller, @ActivityBadgeCount IntPreference badgeCount,
+        SessionRepository sessionRepository) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
+        this.addToFavoritesInteractor = addToFavoritesInteractor;
+        this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+        this.followInteractor = followInteractor;
+        this.unfollowInteractor = unfollowInteractor;
         this.bus = bus;
         this.errorMessageFactory = errorMessageFactory;
         this.poller = poller;
@@ -179,5 +194,45 @@ public class GenericActivityTimelinePresenter implements Presenter {
     @Override public void pause() {
         bus.unregister(this);
         stopPollingActivities();
+    }
+
+    public void followUser(String idUser) {
+        followInteractor.follow(idUser, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadTimeline();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+            }
+        });
+    }
+
+    public void unFollowUser(String idUser) {
+        unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadTimeline();
+            }
+        });
+    }
+
+    public void addFavorite(String idStream) {
+        addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadTimeline();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+            }
+        });
+    }
+
+    public void removeFavorite(String idStream) {
+        removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                loadTimeline();
+            }
+        });
     }
 }

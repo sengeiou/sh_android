@@ -48,8 +48,8 @@ public class GenericActivityTimelinePresenterTest {
         MockitoAnnotations.initMocks(this);
         ActivityModelMapper activityModelMapper = new ActivityModelMapper(shotModelMapper);
         genericActivityTimelinePresenter = new GenericActivityTimelinePresenter(activityTimelineInteractorWrapper,
-          activityModelMapper,
-          bus,
+          activityModelMapper, addToFavoritesInteractor, removeFromFavoritesInteractor,
+            followInteractor, unfollowInteractor, bus,
           errorMessageFactory,
           poller,
           badgeCount,
