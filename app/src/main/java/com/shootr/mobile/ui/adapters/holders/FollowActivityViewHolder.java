@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
@@ -34,6 +35,15 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
         checkNotNull(currentUserId,
           "Follow ViewHolder must know the current user's id. Use setCurrentUser(String) before rendering");
         text.setText(formatActivityComment(activity, currentUserId));
+        renderFollowButton(activity, currentUserId);
+    }
+
+    protected void renderFollowButton(ActivityModel activity, String currentUserId) {
+        if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
+            image.setVisibility(View.GONE);
+            followButton.setFollowing(activity.isAmIFollowing());
+            followButton.setVisibility(View.VISIBLE);
+        }
     }
 
     protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {

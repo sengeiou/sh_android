@@ -8,9 +8,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 
@@ -25,6 +27,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.activity_timestamp) TextView elapsedTime;
     @BindView(R.id.activity_text) ClickableTextView text;
     @BindView(R.id.shot_image) ImageView image;
+    @BindView(R.id.activity_follow_button) FollowButton followButton;
 
     public GenericActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener) {
