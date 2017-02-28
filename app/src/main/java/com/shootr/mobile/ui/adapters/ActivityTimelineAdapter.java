@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.adapters.holders.StartedShootingViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StreamCheckInViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StreamFavoritedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.WakeUpShotActivityViewHolder;
+import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -68,6 +69,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     private final PollQuestionSpannableBuilder pollQuestionSpannableBuilder;
     private final PollVotedSpannableBuilder pollVotedSpannableBuilder;
     private final OnPollQuestionClickListener onPollQuestionClickListener;
+    private final ActivityFollowUnfollowListener followUnfollowListener;
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private List<ActivityModel> activities = Collections.emptyList();
@@ -77,7 +79,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     public ActivityTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
         OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
         OnStreamTitleClickListener streamTitleClickListener, OnShotClick onShotClick,
-        OnPollQuestionClickListener onPollQuestionClickListener) {
+        OnPollQuestionClickListener onPollQuestionClickListener,
+        ActivityFollowUnfollowListener followUnfollowListener) {
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
@@ -85,6 +88,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         this.streamTitleClickListener = streamTitleClickListener;
         this.onShotClick = onShotClick;
         this.onPollQuestionClickListener = onPollQuestionClickListener;
+        this.followUnfollowListener = followUnfollowListener;
         this.pollQuestionSpannableBuilder = new PollQuestionSpannableBuilder();
         this.pollVotedSpannableBuilder = new PollVotedSpannableBuilder();
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
@@ -285,7 +289,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           timeUtils,
           shotTextSpannableBuilder,
           avatarClickListener,
-          onUsernameClickListener);
+          onUsernameClickListener, followUnfollowListener);
         viewHolder.setCurrentUserId(currentUserId);
         return viewHolder;
     }

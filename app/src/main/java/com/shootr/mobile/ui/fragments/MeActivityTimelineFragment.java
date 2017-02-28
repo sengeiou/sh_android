@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
+import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -154,6 +155,14 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
             }, new OnPollQuestionClickListener() {
             @Override public void onPollQuestionClick(String idPoll, String streamTitle) {
                 openPollVote(idPoll, streamTitle);
+            }
+        }, new ActivityFollowUnfollowListener() {
+            @Override public void onFollow(String idUser) {
+                timelinePresenter.followUser(idUser);
+            }
+
+            @Override public void onUnfollow(String idUser) {
+                timelinePresenter.unFollowUser(idUser);
             }
         });
         activityList.setAdapter(adapter);

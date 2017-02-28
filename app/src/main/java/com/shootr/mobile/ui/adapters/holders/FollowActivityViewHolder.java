@@ -3,7 +3,9 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.view.View;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.activity.ActivityType;
+import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -16,15 +18,18 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
 
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
     private final OnUsernameClickListener onUsernameClickListener;
+    private final ActivityFollowUnfollowListener onFollowUnfollowListener;
 
     private String currentUserId;
 
     public FollowActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
-      ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
-      OnUsernameClickListener onUsernameClickListener) {
+        ShotTextSpannableBuilder shotTextSpannableBuilder, OnAvatarClickListener onAvatarClickListener,
+        OnUsernameClickListener onUsernameClickListener,
+        ActivityFollowUnfollowListener onFollowUnfollowListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.onUsernameClickListener = onUsernameClickListener;
+        this.onFollowUnfollowListener = onFollowUnfollowListener;
     }
 
     public void setCurrentUserId(String currentUserId) {
@@ -38,12 +43,29 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
         renderFollowButton(activity, currentUserId);
     }
 
-    protected void renderFollowButton(ActivityModel activity, String currentUserId) {
+    protected void renderFollowButton(final ActivityModel activity, String currentUserId) {
+        image.setVisibility(View.GONE);
         if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
-            image.setVisibility(View.GONE);
             followButton.setFollowing(activity.isAmIFollowing());
             followButton.setVisibility(View.VISIBLE);
+            setupFollowListener(activity);
+        } else {
+            followButton.setVisibility(View.GONE);
         }
+    }
+
+    private void setupFollowListener(final ActivityModel activity) {
+        followButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (followButton.isFollowing()) {
+                    onFollowUnfollowListener.onUnfollow(activity.getIdUser());
+                    followButton.setFollowing(false);
+                } else {
+                    onFollowUnfollowListener.onFollow(activity.getIdUser());
+                    followButton.setFollowing(true);
+                }
+            }
+        });
     }
 
     protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {

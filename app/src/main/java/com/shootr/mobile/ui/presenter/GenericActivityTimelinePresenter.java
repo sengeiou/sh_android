@@ -202,7 +202,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
     }
 
     @Override public void resume() {
-        loadTimeline();
+        getFollowingIds();
         bus.register(this);
         startPollingActivities();
     }
@@ -212,9 +212,10 @@ public class GenericActivityTimelinePresenter implements Presenter {
         stopPollingActivities();
     }
 
-    public void followUser(String idUser) {
+    public void followUser(final String idUser) {
         followInteractor.follow(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
+                followingIds.add(idUser);
                 loadTimeline();
             }
         }, new Interactor.ErrorCallback() {
@@ -224,9 +225,10 @@ public class GenericActivityTimelinePresenter implements Presenter {
         });
     }
 
-    public void unFollowUser(String idUser) {
+    public void unFollowUser(final String idUser) {
         unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
+                followingIds.remove(idUser);
                 loadTimeline();
             }
         });
