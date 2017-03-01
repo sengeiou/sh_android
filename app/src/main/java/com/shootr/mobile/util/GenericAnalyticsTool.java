@@ -42,6 +42,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String FIRST_NAME = "$first_name";
   private static final String ACTIVATED = "Activated";
   private static final String TYPE = "Type";
+  private static final String PLATFORM_TYPE = "shootrPlatform";
+  private static final String ANDROID_PLATFORM = "shootrAndroid";
   private final String ACTION = "action";
   private Tracker tracker;
   private MixpanelAPI mixpanel;
@@ -240,6 +242,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       }
       if (loginType != null) {
         props.put(LOGIN_TYPE, loginType);
+      }
+      if (loginType != null) {
+        props.put(PLATFORM_TYPE, ANDROID_PLATFORM);
       }
       try {
         mixpanel.track(actionId, props);
