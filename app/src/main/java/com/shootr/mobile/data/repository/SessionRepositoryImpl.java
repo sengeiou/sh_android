@@ -98,7 +98,11 @@ public class SessionRepositoryImpl implements SessionRepository {
   }
 
   @Override public int getSynchroTime() {
-    return synchroTime;
+    try {
+      return synchroTime;
+    } catch (Exception e) {
+      return 10;
+    }
   }
 
   @Override public void setSynchroTime(String synchroTime) {
