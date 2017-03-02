@@ -3,6 +3,9 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.FavoriteAdded;
+import com.shootr.mobile.domain.bus.FollowUnfollow;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
@@ -20,11 +23,12 @@ import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteract
 import com.shootr.mobile.ui.views.GenericActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GenericActivityTimelinePresenter implements Presenter {
+public class GenericActivityTimelinePresenter implements Presenter, FollowUnfollow.Receiver {
 
     private static final long REFRESH_INTERVAL_MILLISECONDS = 5 * 1000;
 
@@ -41,6 +45,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
     private final Poller poller;
     private final IntPreference badgeCount;
     private final SessionRepository sessionRepository;
+    private final BusPublisher busPublisher;
 
     private GenericActivityTimelineView timelineView;
     private boolean isLoadingOlderActivities;
@@ -58,7 +63,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
         GetFavoritesIdsInteractor getFavoritesIdsInteractor, FollowInteractor followInteractor,
         UnfollowInteractor unfollowInteractor, @Main Bus bus,
         ErrorMessageFactory errorMessageFactory, Poller poller, @ActivityBadgeCount IntPreference badgeCount,
-        SessionRepository sessionRepository) {
+        SessionRepository sessionRepository, BusPublisher busPublisher) {
         this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
         this.activityModelMapper = activityModelMapper;
         this.addToFavoritesInteractor = addToFavoritesInteractor;
@@ -72,6 +77,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
         this.poller = poller;
         this.badgeCount = badgeCount;
         this.sessionRepository = sessionRepository;
+        this.busPublisher = busPublisher;
     }
 
     public void setView(GenericActivityTimelineView timelineView) {
@@ -231,8 +237,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
     public void followUser(final String idUser) {
         followInteractor.follow(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                followingIds.add(idUser);
-                loadTimeline();
+                busPublisher.post(new FollowUnfollow.Event(idUser, true));
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -245,7 +250,7 @@ public class GenericActivityTimelinePresenter implements Presenter {
         unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
                 followingIds.remove(idUser);
-                loadTimeline();
+                busPublisher.post(new FollowUnfollow.Event(idUser, false));
             }
         });
     }
@@ -270,5 +275,15 @@ public class GenericActivityTimelinePresenter implements Presenter {
                 loadTimeline();
             }
         });
+    }
+
+    @Subscribe @Override public void onFollowUnfollow(FollowUnfollow.Event event) {
+        if (event.isFollow()) {
+            followingIds.add(event.getIdUser());
+            loadTimeline();
+        } else {
+            followingIds.remove(event.getIdUser());
+            loadTimeline();
+        }
     }
 }

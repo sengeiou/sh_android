@@ -53,7 +53,7 @@ public class GenericActivityTimelinePresenterTest {
           errorMessageFactory,
           poller,
           badgeCount,
-          sessionRepository);
+          sessionRepository, busPublisher);
         genericActivityTimelinePresenter.setView(view);
     }
 
