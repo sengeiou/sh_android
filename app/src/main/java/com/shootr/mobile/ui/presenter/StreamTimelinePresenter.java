@@ -39,6 +39,7 @@ import javax.inject.Inject;
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+  private static final long MAX_REFRESH_INTERVAL_MILLISECONDS = 60 * 1000;
   private static final int MAX_LENGTH = 40;
   private static final String SCHEMA = "shootr://";
 
@@ -94,7 +95,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       CreateStreamInteractor createStreamInteractor,
-      GetNewFilteredShotsInteractor getNewFilteredShotsInteractor, SessionRepository sessionRepository) {
+      GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
+      SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
     this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
     this.selectStreamInteractor = selectStreamInteractor;
@@ -189,12 +191,37 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void setupPoller() {
-    this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
+    long intervalSynchroServerResponse = setupIntervalSynchroToInit();
+    this.poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
         loadNewShots();
         postWatchNumberEvent();
+        changeSynchroTimePoller();
       }
     });
+  }
+
+  private long setupIntervalSynchroToInit() {
+    int actualSynchroInterval = sessionRepository.getSynchroTime();
+    long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+    if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
+    } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = MAX_REFRESH_INTERVAL_MILLISECONDS;
+    }
+    return intervalSynchroServerResponse;
+  }
+
+  private void changeSynchroTimePoller() {
+    if (poller.isPolling()) {
+      int actualSynchroInterval = sessionRepository.getSynchroTime();
+      long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+      if (intervalSynchroServerResponse != poller.getIntervalMilliseconds()) {
+        poller.stopPolling();
+        poller.setIntervalMilliseconds(intervalSynchroServerResponse);
+        poller.startPolling();
+      }
+    }
   }
 
   private void hasNewFilteredShots() {
@@ -280,8 +307,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void manageCallImportantShots() {
-    if (filterActivated
-        && !calledForImportant) {
+    if (filterActivated && !calledForImportant) {
       calledForImportant = true;
       timelineInteractorWrapper.obtainImportantShotsTimeline(streamId,
           new Interactor.Callback<Timeline>() {
@@ -306,8 +332,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void loadStreamMode() {
     String idUser = sessionRepository.getCurrentUserId();
-    if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(
-        idUser)) {
+    if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(idUser)) {
       streamTimelineView.hideStreamViewOnlyIndicator();
     } else {
       streamTimelineView.showStreamViewOnlyIndicator();
