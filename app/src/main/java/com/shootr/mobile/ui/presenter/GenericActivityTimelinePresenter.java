@@ -88,7 +88,6 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
     this.setView(timelineView);
     this.isUserActivityTimeline = isUserActivityTimeline;
     getFollowingIds();
-    this.loadTimeline();
     long intervalSynchroServerResponse = handleIntervalSynchro();
     poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
