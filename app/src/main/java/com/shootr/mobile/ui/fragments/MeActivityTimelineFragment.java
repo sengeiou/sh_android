@@ -58,6 +58,8 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     @BindView(R.id.me_activity_timeline_loading_activity) TextView loadingActivityView;
     @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
     @BindString(R.string.analytics_source_activity) String activitySource;
+    @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+    @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -174,8 +176,9 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
                 timelinePresenter.unFollowUser(idUser);
             }
         }, new ActivityFavoriteClickListener() {
-            @Override public void onFavoriteClick(String idStream) {
+            @Override public void onFavoriteClick(String idStream, String streamTitle) {
                 timelinePresenter.addFavorite(idStream);
+                sendFavoriteAnalytics(idStream, streamTitle);
             }
 
             @Override public void onRemoveFavoriteClick(String idStream) {
@@ -197,6 +200,18 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         analyticsTool.appsFlyerSendAction(builder);
     }
 
+    private void sendFavoriteAnalytics(String idStream, String streamTitle) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getContext());
+        builder.setActionId(analyticsActionFavoriteStream);
+        builder.setLabelId(analyticsLabelFavoriteStream);
+        builder.setSource(activitySource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setStreamName(streamTitle);
+        builder.setIdStream(idStream);
+        analyticsTool.analyticsSendAction(builder);
+        analyticsTool.appsFlyerSendAction(builder);
+    }
 
     private void openPollVote(String idPoll, String streamTitle) {
         Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll, streamTitle);

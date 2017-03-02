@@ -62,6 +62,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_source_activity) String activitySource;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
 
   private ActivityTimelineAdapter adapter;
   private LinearLayoutManager layoutManager;
@@ -157,8 +159,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         timelinePresenter.unFollowUser(idUser);
       }
     }, new ActivityFavoriteClickListener() {
-      @Override public void onFavoriteClick(String idStream) {
+      @Override public void onFavoriteClick(String idStream, String streamTitle) {
         timelinePresenter.addFavorite(idStream);
+        sendFavoriteAnalytics(idStream, streamTitle);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
@@ -176,6 +179,19 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idTargetUser);
     builder.setTargetUsername(targetUsername);
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendFavoriteAnalytics(String idStream, String streamTitle) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFavoriteStream);
+    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(activitySource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setStreamName(streamTitle);
+    builder.setIdStream(idStream);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }

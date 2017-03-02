@@ -35,7 +35,8 @@ public class StartedShootingViewHolder extends StreamActivityViewHolder {
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {
                     if (((ShineButton) view).isChecked()) {
-                        activityFavoriteClickListener.onFavoriteClick(activityModel.getIdStream());
+                        activityFavoriteClickListener.onFavoriteClick(activityModel.getIdStream(),
+                            activityModel.getStreamTitle());
                     } else {
                         activityFavoriteClickListener.onRemoveFavoriteClick(
                             activityModel.getIdStream());
