@@ -4,58 +4,62 @@ import android.os.Handler;
 
 public class Poller {
 
-    private final Handler handler;
-    private long intervalMilliseconds;
-    private Runnable polledRunnable;
-    private Runnable recursiveRunnable;
-    private boolean isPolling;
+  private final Handler handler;
+  private long intervalMilliseconds;
+  private Runnable polledRunnable;
+  private Runnable recursiveRunnable;
+  private boolean isPolling;
 
-    public Poller(Handler handler) {
-        this.handler = handler;
-    }
+  public Poller(Handler handler) {
+    this.handler = handler;
+  }
 
-    public void init(long intervalMilliseconds, Runnable polledRunnable) {
-        this.intervalMilliseconds = intervalMilliseconds;
-        this.polledRunnable = polledRunnable;
-        recursiveRunnable = new Runnable() {
-            @Override public void run() {
-                if (isPolling) {
-                    pollNow();
-                    scheduleNextPoll();
-                }
-            }
-        };
-    }
-
-    public void scheduleNextPoll() {
+  public void init(long intervalMilliseconds, Runnable polledRunnable) {
+    this.intervalMilliseconds = intervalMilliseconds;
+    this.polledRunnable = polledRunnable;
+    recursiveRunnable = new Runnable() {
+      @Override public void run() {
         if (isPolling) {
-            handler.postDelayed(recursiveRunnable, intervalMilliseconds);
+          pollNow();
+          scheduleNextPoll();
         }
-    }
+      }
+    };
+  }
 
-    protected void pollNow() {
-        polledRunnable.run();
+  public void scheduleNextPoll() {
+    if (isPolling) {
+      handler.postDelayed(recursiveRunnable, intervalMilliseconds);
     }
+  }
 
-    public void startPolling() {
-        if (!isPolling) {
-            isPolling = true;
-            scheduleNextPoll();
-        }
-    }
+  protected void pollNow() {
+    polledRunnable.run();
+  }
 
-    public void stopPolling() {
-        if (isPolling) {
-            isPolling = false;
-            handler.removeCallbacks(recursiveRunnable);
-        }
+  public void startPolling() {
+    if (!isPolling) {
+      isPolling = true;
+      scheduleNextPoll();
     }
+  }
 
-    public long getIntervalMilliseconds() {
-        return intervalMilliseconds;
+  public void stopPolling() {
+    if (isPolling) {
+      isPolling = false;
+      handler.removeCallbacks(recursiveRunnable);
     }
+  }
 
-    public boolean isPolling() {
-        return isPolling;
-    }
+  public long getIntervalMilliseconds() {
+    return intervalMilliseconds;
+  }
+
+  public void setIntervalMilliseconds(long intervalMilliseconds) {
+    this.intervalMilliseconds = intervalMilliseconds;
+  }
+
+  public boolean isPolling() {
+    return isPolling;
+  }
 }
