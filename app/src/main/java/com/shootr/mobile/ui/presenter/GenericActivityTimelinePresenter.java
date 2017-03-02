@@ -89,7 +89,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
     this.isUserActivityTimeline = isUserActivityTimeline;
     getFollowingIds();
     this.loadTimeline();
-    long intervalSynchroServerResponse = setupIntervalSynchroToInit();
+    long intervalSynchroServerResponse = handleIntervalSynchro();
     poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
         loadNewActivities(badgeCount.get());
@@ -119,21 +119,10 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
     });
   }
 
-  private long setupIntervalSynchroToInit() {
-    int actualSynchroInterval = sessionRepository.getSynchroTime();
-    long intervalSynchroServerResponse = actualSynchroInterval * 1000;
-    if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
-      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
-    } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
-      intervalSynchroServerResponse = MAX_REFRESH_INTERVAL_MILLISECONDS;
-    }
-    return intervalSynchroServerResponse;
-  }
 
   private void changeSynchroTimePoller() {
     if (poller.isPolling()) {
-      int actualSynchroInterval = sessionRepository.getSynchroTime();
-      long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+      long intervalSynchroServerResponse = handleIntervalSynchro();
       if (intervalSynchroServerResponse != poller.getIntervalMilliseconds()) {
         poller.stopPolling();
         poller.setIntervalMilliseconds(intervalSynchroServerResponse);
@@ -141,6 +130,16 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
       }
     }
   }
+    private long handleIntervalSynchro() {
+        int actualSynchroInterval = sessionRepository.getSynchroTime();
+        long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+        if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
+            intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
+        } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
+            intervalSynchroServerResponse = MAX_REFRESH_INTERVAL_MILLISECONDS;
+        }
+        return intervalSynchroServerResponse;
+    }
 
   private void clearActivityBadge() {
     badgeCount.delete();

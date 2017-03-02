@@ -191,7 +191,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void setupPoller() {
-    long intervalSynchroServerResponse = setupIntervalSynchroToInit();
+    long intervalSynchroServerResponse = handleIntervalSynchro();
     this.poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
         loadNewShots();
@@ -201,7 +201,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     });
   }
 
-  private long setupIntervalSynchroToInit() {
+  private long handleIntervalSynchro() {
     int actualSynchroInterval = sessionRepository.getSynchroTime();
     long intervalSynchroServerResponse = actualSynchroInterval * 1000;
     if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
@@ -214,8 +214,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void changeSynchroTimePoller() {
     if (poller.isPolling()) {
-      int actualSynchroInterval = sessionRepository.getSynchroTime();
-      long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+      long intervalSynchroServerResponse = handleIntervalSynchro();
       if (intervalSynchroServerResponse != poller.getIntervalMilliseconds()) {
         poller.stopPolling();
         poller.setIntervalMilliseconds(intervalSynchroServerResponse);
