@@ -59,7 +59,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
                     onFollowUnfollowListener.onUnfollow(activity.getIdUser());
                     followButton.setFollowing(false);
                 } else {
-                    onFollowUnfollowListener.onFollow(activity.getIdUser());
+                    onFollowUnfollowListener.onFollow(activity.getIdUser(), activity.getUsername());
                     followButton.setFollowing(true);
                 }
             }

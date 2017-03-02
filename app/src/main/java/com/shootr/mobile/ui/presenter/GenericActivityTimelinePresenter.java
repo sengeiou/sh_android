@@ -280,10 +280,9 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
     @Subscribe @Override public void onFollowUnfollow(FollowUnfollow.Event event) {
         if (event.isFollow()) {
             followingIds.add(event.getIdUser());
-            loadTimeline();
         } else {
             followingIds.remove(event.getIdUser());
-            loadTimeline();
         }
+        loadTimeline();
     }
 }

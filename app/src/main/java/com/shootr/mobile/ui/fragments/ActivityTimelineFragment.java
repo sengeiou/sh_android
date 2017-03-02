@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -48,8 +49,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
   @Inject ImageLoader imageLoader;
   @Inject AndroidTimeUtils timeUtils;
-  @Inject AnalyticsTool analyticsTool;
   @Inject FeedbackMessage feedbackMessage;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.timeline_activity_list) RecyclerView activityList;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -58,6 +60,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @BindView(R.id.timeline_loading_activity) TextView loadingActivityView;
 
   @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
+  @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_source_activity) String activitySource;
+
   private ActivityTimelineAdapter adapter;
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
@@ -143,8 +148,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         openPollVote(idPoll, streamTitle);
       }
     }, new ActivityFollowUnfollowListener() {
-      @Override public void onFollow(String idUser) {
+      @Override public void onFollow(String idUser, String username) {
         timelinePresenter.followUser(idUser);
+        sendFollowAnalytics(idUser, username);
       }
 
       @Override public void onUnfollow(String idUser) {
@@ -160,6 +166,18 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
       }
     });
     activityList.setAdapter(adapter);
+  }
+
+  private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setSource(activitySource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(idTargetUser);
+    builder.setTargetUsername(targetUsername);
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void setupSwipeRefreshLayout() {

@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -32,6 +34,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.GenericActivityTimelinePresenter;
 import com.shootr.mobile.ui.views.MeActivityTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullMeActivityTimelineView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
@@ -46,11 +49,15 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
 
     @Inject ImageLoader imageLoader;
     @Inject AndroidTimeUtils timeUtils;
+    @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     @BindView(R.id.timeline_me_activity_list) RecyclerView activityList;
     @BindView(R.id.timeline_me_activity_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.me_activity_timeline_empty) View emptyView;
     @BindView(R.id.me_activity_timeline_loading_activity) TextView loadingActivityView;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_source_activity) String activitySource;
 
     private ActivityTimelineAdapter adapter;
     private LinearLayoutManager layoutManager;
@@ -158,8 +165,9 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
                 openPollVote(idPoll, streamTitle);
             }
         }, new ActivityFollowUnfollowListener() {
-            @Override public void onFollow(String idUser) {
+            @Override public void onFollow(String idUser, String username) {
                 timelinePresenter.followUser(idUser);
+                sendFollowAnalytics(idUser, username);
             }
 
             @Override public void onUnfollow(String idUser) {
@@ -176,6 +184,19 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         });
         activityList.setAdapter(adapter);
     }
+
+    private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getContext());
+        builder.setActionId(analyticsActionFollow);
+        builder.setSource(activitySource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(idTargetUser);
+        builder.setTargetUsername(targetUsername);
+        analyticsTool.analyticsSendAction(builder);
+        analyticsTool.appsFlyerSendAction(builder);
+    }
+
 
     private void openPollVote(String idPoll, String streamTitle) {
         Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll, streamTitle);
