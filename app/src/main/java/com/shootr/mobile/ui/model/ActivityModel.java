@@ -18,6 +18,8 @@ public class ActivityModel {
     private String idStreamAuthor;
     private String idPoll;
     private String pollQuestion;
+    private boolean amIFollowing;
+    private boolean isFavorite;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -129,5 +131,21 @@ public class ActivityModel {
 
     public void setPollQuestion(String pollQuestion) {
         this.pollQuestion = pollQuestion;
+    }
+
+    public boolean amIFollowing() {
+        return amIFollowing;
+    }
+
+    public void setAmIFollowing(boolean amIFollowing) {
+        this.amIFollowing = amIFollowing;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }
