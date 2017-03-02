@@ -1,9 +1,17 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoritesIdsInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
+import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ActivityModel;
@@ -13,6 +21,7 @@ import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteract
 import com.shootr.mobile.ui.views.GenericActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -43,6 +52,15 @@ public class GenericActivityTimelinePresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock SessionRepository sessionRepository;
     @Mock GenericActivityTimelineView view;
+    @Mock AddToFavoritesInteractor addToFavoritesInteractor;
+    @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+    @Mock GetFollowingIdsInteractor getFollowingIdsInteractor;
+    @Mock GetFavoritesIdsInteractor getFavoritesIdsInteractor;
+    @Mock FollowInteractor followInteractor;
+    @Mock UnfollowInteractor unfollowInteractor;
+    @Mock BusPublisher busPublisher;
+
+
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -55,6 +73,8 @@ public class GenericActivityTimelinePresenterTest {
           badgeCount,
           sessionRepository, busPublisher);
         genericActivityTimelinePresenter.setView(view);
+        setupGetFollowingIdsInteractorCallback();
+        setupGetFavoritesIdsInteractorCallback();
     }
 
     @Test public void shouldSetActivitiesInViewWhenInitializeAllActivitiesAndTimelineNotEmptyCallback()
@@ -223,6 +243,30 @@ public class GenericActivityTimelinePresenterTest {
         }).when(activityTimelineInteractorWrapper).loadTimeline(anyBoolean(), any(Interactor.Callback.class));
     }
 
+    private void setupGetFollowingIdsInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                    (Interactor.Callback<List<String>>) invocation.getArguments()[1];
+                callback.onLoaded(new ArrayList<String>());
+                return null;
+            }
+        }).when(getFollowingIdsInteractor).loadFollowingsIds(anyString(), any(Interactor.Callback.class));
+    }
+
+    private void setupGetFavoritesIdsInteractorCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<List<String>> callback =
+                    (Interactor.Callback<List<String>>) invocation.getArguments()[0];
+                callback.onLoaded(new ArrayList<String>());
+                return null;
+            }
+        }).when(getFavoritesIdsInteractor).loadFavoriteStreams(any(Interactor.Callback.class));
+    }
+
+
+
     private ActivityTimeline emptyTimeline() {
         ActivityTimeline timeline = new ActivityTimeline();
         timeline.setActivities(Collections.<Activity>emptyList());
@@ -237,6 +281,7 @@ public class GenericActivityTimelinePresenterTest {
 
     private List<Activity> activities() {
         Activity activity = new Activity();
+        activity.setType(ActivityType.CHECKIN);
         activity.setComment("comment");
         activity.setIdActivity("idActivity");
         activity.setIdAuthorStream("idAuthor");

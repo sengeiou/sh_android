@@ -4,7 +4,6 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BusPublisher;
-import com.shootr.mobile.domain.bus.FavoriteAdded;
 import com.shootr.mobile.domain.bus.FollowUnfollow;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -130,23 +129,25 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
 
     protected void loadTimeline() {
         activityTimelineInteractorWrapper.loadTimeline(isUserActivityTimeline,
-          new Interactor.Callback<ActivityTimeline>() {
-              @Override public void onLoaded(ActivityTimeline timeline) {
-                  List<ActivityModel> activityModels =
-                      activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(), followingIds, favortiesIds);
-                  timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
-                  isEmpty = activityModels.isEmpty();
-                  if (isEmpty) {
-                      timelineView.showEmpty();
-                      timelineView.hideActivities();
-                  } else {
-                      timelineView.hideEmpty();
-                      timelineView.showActivities();
-                  }
-                  loadNewActivities(badgeCount.get());
-                  clearActivityBadge();
-              }
-          });
+            new Interactor.Callback<ActivityTimeline>() {
+                @Override public void onLoaded(ActivityTimeline timeline) {
+                    List<ActivityModel> activityModels =
+                        activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
+                            followingIds, favortiesIds);
+                    timelineView.setActivities(activityModels,
+                        sessionRepository.getCurrentUserId());
+                    isEmpty = activityModels.isEmpty();
+                    if (isEmpty) {
+                        timelineView.showEmpty();
+                        timelineView.hideActivities();
+                    } else {
+                        timelineView.hideEmpty();
+                        timelineView.showActivities();
+                    }
+                    loadNewActivities(badgeCount.get());
+                    clearActivityBadge();
+                }
+            });
     }
 
     public void refresh() {
@@ -169,58 +170,57 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
             timelineView.showLoadingActivity();
         }
         activityTimelineInteractorWrapper.refreshTimeline(isUserActivityTimeline,
-          new Interactor.Callback<ActivityTimeline>() {
-              @Override public void onLoaded(ActivityTimeline timeline) {
-                  List<ActivityModel> newActivity =
-                      activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(), followingIds, favortiesIds);
-                  boolean hasNewActivity = !newActivity.isEmpty();
-                  if (isEmpty && hasNewActivity) {
-                      isEmpty = false;
-                  } else if (isEmpty && !hasNewActivity) {
-                      timelineView.showEmpty();
-                  }
-                  if (hasNewActivity) {
-                      timelineView.addNewActivities(newActivity);
-                      timelineView.hideEmpty();
-                      timelineView.showActivities();
-                  }
-                  timelineView.hideLoading();
-                  timelineView.hideLoadingActivity();
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-                  timelineView.hideLoading();
-                  timelineView.hideLoadingActivity();
-              }
-          });
+            new Interactor.Callback<ActivityTimeline>() {
+                @Override public void onLoaded(ActivityTimeline timeline) {
+                    List<ActivityModel> newActivity =
+                        activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
+                            followingIds, favortiesIds);
+                    boolean hasNewActivity = !newActivity.isEmpty();
+                    if (isEmpty && hasNewActivity) {
+                        isEmpty = false;
+                    } else if (isEmpty && !hasNewActivity) {
+                        timelineView.showEmpty();
+                    }
+                    if (hasNewActivity) {
+                        timelineView.addNewActivities(newActivity);
+                        timelineView.hideEmpty();
+                        timelineView.showActivities();
+                    }
+                    timelineView.hideLoading();
+                    timelineView.hideLoadingActivity();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                    timelineView.hideLoading();
+                    timelineView.hideLoadingActivity();
+                }
+            });
     }
 
     private void loadOlderActivities(long lastActivityInScreenDate) {
         isLoadingOlderActivities = true;
         timelineView.showLoadingOldActivities();
         activityTimelineInteractorWrapper.obtainOlderTimeline(isUserActivityTimeline,
-          lastActivityInScreenDate,
-          new Interactor.Callback<ActivityTimeline>() {
-              @Override public void onLoaded(ActivityTimeline timeline) {
-                  isLoadingOlderActivities = false;
-                  timelineView.hideLoadingOldActivities();
-                  List<ActivityModel> activityModels =
-                      activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(), followingIds, favortiesIds);
-                  if (!activityModels.isEmpty()) {
-                      timelineView.addOldActivities(activityModels);
-                  } else {
-                      mightHaveMoreActivities = false;
-                  }
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  timelineView.hideLoadingOldActivities();
-                  timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-              }
-          });
+            lastActivityInScreenDate, new Interactor.Callback<ActivityTimeline>() {
+                @Override public void onLoaded(ActivityTimeline timeline) {
+                    isLoadingOlderActivities = false;
+                    timelineView.hideLoadingOldActivities();
+                    List<ActivityModel> activityModels =
+                        activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
+                            followingIds, favortiesIds);
+                    if (!activityModels.isEmpty()) {
+                        timelineView.addOldActivities(activityModels);
+                    } else {
+                        mightHaveMoreActivities = false;
+                    }
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    timelineView.hideLoadingOldActivities();
+                    timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                }
+            });
     }
 
     @Override public void resume() {
