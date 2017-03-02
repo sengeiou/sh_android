@@ -63,6 +63,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
@@ -122,6 +123,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Inject CrashReportTool crashReportTool;
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
+  @Inject NumberFormatUtil numberFormatUtil;
 
   private StreamDetailAdapter adapter;
   private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
@@ -671,18 +673,18 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
       if (totalWatchers == 1) {
         String participants =
             getResources().getQuantityString(R.plurals.total_watchers_pattern, totalWatchers,
-                totalWatchers);
+                numberFormatUtil.formatNumbers(totalWatchers.longValue()));
         streamSubtitle.setText(participants);
       } else {
         String participants =
             getResources().getQuantityString(R.plurals.total_watchers_pattern, totalWatchers,
-                totalWatchers);
+                numberFormatUtil.formatNumbers(totalWatchers.longValue()));
         streamSubtitle.setText(participants);
       }
     } else {
-      streamSubtitle.setText(
-          getString(R.string.stream_subtitle_pattern_multiple_participants, numberOfFollowing,
-              totalWatchers));
+      streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants,
+          numberFormatUtil.formatNumbers(numberOfFollowing.longValue()),
+          numberFormatUtil.formatNumbers(totalWatchers.longValue())));
     }
   }
 

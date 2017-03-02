@@ -434,7 +434,7 @@
   <string name="title_pin_message_notification" formatted="false">メッセージを通知しますか？</string>
   <string name="topic" formatted="false">メッセージ</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="other">参加者: %d人</item>
+    <item quantity="other">参加者: %s人</item>
   </plurals>
   <string name="unfollow_dialog_message">%sのフォローを解除しますか？</string>
   <string name="unfollow_dialog_no">いいえ</string>

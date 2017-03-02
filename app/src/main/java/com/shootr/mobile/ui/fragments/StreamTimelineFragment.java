@@ -95,6 +95,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -149,6 +150,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject CrashReportTool crashReportTool;
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject SessionRepository sessionRepository;
+  @Inject FormatNumberUtils formatNumberUtils;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -868,7 +870,8 @@ public class StreamTimelineFragment extends BaseFragment
     if (watchNumberCount != null) {
       toolbarDecorator.setSubtitle(
           getContext().getString(R.string.stream_subtitle_pattern_multiple_participants,
-              watchNumberCount[FOLLOWINGS], watchNumberCount[PARTICIPANTS]));
+              formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWINGS].longValue()),
+              formatNumberUtils.formatNumbers(watchNumberCount[PARTICIPANTS].longValue())));
     }
   }
 
@@ -876,7 +879,7 @@ public class StreamTimelineFragment extends BaseFragment
     if (watchNumberCount != null) {
       toolbarDecorator.setSubtitle(getContext().getResources()
           .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[1],
-              watchNumberCount[1]));
+              formatNumberUtils.formatNumbers(watchNumberCount[1].longValue())));
     }
   }
 
