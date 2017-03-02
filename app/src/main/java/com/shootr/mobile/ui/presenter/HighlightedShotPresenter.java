@@ -19,6 +19,7 @@ import javax.inject.Inject;
 public class HighlightedShotPresenter implements Presenter {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+  private static final long MAX_REFRESH_INTERVAL_MILLISECONDS = 60 * 1000;
   private final GetHighlightedShotInteractor getHighlightedShotsInteractor;
   private final HighlightShotInteractor highlightShotInteractor;
   private final DismissHighlightShotInteractor dismissHighlightShotInteractor;
@@ -71,8 +72,31 @@ public class HighlightedShotPresenter implements Presenter {
     this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
       @Override public void run() {
         loadHighlightedShots();
+        changeSynchroTimePoller();
       }
     });
+  }
+
+  private long handleIntervalSynchro() {
+    int actualSynchroInterval = sessionRepository.getSynchroTime();
+    long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+    if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
+    } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = MAX_REFRESH_INTERVAL_MILLISECONDS;
+    }
+    return intervalSynchroServerResponse;
+  }
+
+  private void changeSynchroTimePoller() {
+    if (poller.isPolling()) {
+      long intervalSynchroServerResponse = handleIntervalSynchro();
+      if (intervalSynchroServerResponse != poller.getIntervalMilliseconds()) {
+        poller.stopPolling();
+        poller.setIntervalMilliseconds(intervalSynchroServerResponse);
+        poller.startPolling();
+      }
+    }
   }
 
   private void startPollingShots() {
