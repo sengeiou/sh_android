@@ -1,7 +1,6 @@
 package com.shootr.mobile.data;
 
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.Interceptor;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -21,10 +20,6 @@ class AuthHeaderInterceptor implements Interceptor {
         if (sessionToken != null) {
             Request originalRequest = chain.request();
             Request authenticatedRequest = originalRequest.newBuilder().header("X-Auth-Token", sessionToken).build();
-            Response response = chain.proceed(authenticatedRequest);
-            Headers allHeaders = response.headers();
-            String synchroTime = allHeaders.get("Sync");
-            sessionRepository.setSynchroTime(synchroTime);
             return chain.proceed(authenticatedRequest);
         } else {
             return chain.proceed(chain.request());
