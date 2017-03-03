@@ -111,7 +111,22 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     } catch (JSONException e) {
       e.printStackTrace();
     }
+    sendSignupToApsFlyer(actionId, loginType, context);
+  }
 
+  private void sendSignupToApsFlyer(String actionId, String loginType, Context context) {
+    if (appsFlyerLib != null) {
+      try {
+        if (user != null) {
+          Map<String, Object> eventData = new HashMap<>();
+          eventData.put(DISTINCT_ID, user.getIdUser());
+          eventData.put(LOGIN_TYPE, loginType);
+          appsFlyerLib.trackEvent(context, actionId, eventData);
+        }
+      }  catch (NullPointerException error) {
+        Log.e("Shootr", "Unable to build appsflyer object", error);
+      }
+    }
   }
 
   @Override public void setUser(User user) {
