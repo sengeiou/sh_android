@@ -207,7 +207,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
       intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
     } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
-      intervalSynchroServerResponse = MAX_REFRESH_INTERVAL_MILLISECONDS;
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
     }
     return intervalSynchroServerResponse;
   }

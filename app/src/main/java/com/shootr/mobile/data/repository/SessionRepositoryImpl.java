@@ -14,8 +14,8 @@ import javax.inject.Inject;
 
 public class SessionRepositoryImpl implements SessionRepository {
 
+  private static final int REFRESH_INTERVAL_SECONDS = 10;
   private final StringPreference sessionTokenPreference;
-
   private final StringPreference currentUserIdPreference;
   private final BooleanPreference timelineFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
@@ -35,7 +35,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
-    this.synchroTime = 10;
+    this.synchroTime = REFRESH_INTERVAL_SECONDS;
   }
 
   @Override public User getCurrentUser() {
@@ -101,7 +101,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     try {
       return synchroTime;
     } catch (Exception e) {
-      return 10;
+      return REFRESH_INTERVAL_SECONDS;
     }
   }
 
@@ -109,7 +109,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     try {
       this.synchroTime = Integer.parseInt(synchroTime);
     } catch (Exception e) {
-      this.synchroTime = 10;
+      this.synchroTime = REFRESH_INTERVAL_SECONDS;
     }
   }
 }
