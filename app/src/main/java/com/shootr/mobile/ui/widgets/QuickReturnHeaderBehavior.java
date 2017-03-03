@@ -30,7 +30,7 @@ public class QuickReturnHeaderBehavior extends CoordinatorLayout.Behavior<View> 
   @Override
   public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target,
       int horitzontalScroll, int verticalScroll, int[] consumed) {
-    if (verticalScroll > 0) {
+    if (verticalScroll > 12) {
       hide(child);
     } else {
       show(child);
