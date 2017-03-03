@@ -65,4 +65,7 @@
     <color name="poll_view">#039BE5</color>
     <color name="poll_results">#039BE5</color>
     <color name="connect_controller">#ECEFF1</color>
+    <color name="onboarding_background">#dfdfdf</color>
+    <color name="onboarding_card_background">#ededed</color>
+
 </resources>
