@@ -78,6 +78,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     mixpanel.getPeople().set(FOLLOWERS, user.getNumFollowers());
     mixpanel.getPeople().set(FOLLOWING, user.getNumFollowings());
     mixpanel.getPeople().set(FAVORITES, user.getFavoritedStreamsCount());
+    mixpanel.getPeople().set(PLATFORM_TYPE, ANDROID_PLATFORM);
   }
 
   @Override public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
@@ -243,9 +244,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       if (loginType != null) {
         props.put(LOGIN_TYPE, loginType);
       }
-      if (loginType != null) {
-        props.put(PLATFORM_TYPE, ANDROID_PLATFORM);
-      }
+      props.put(PLATFORM_TYPE, ANDROID_PLATFORM);
       try {
         mixpanel.track(actionId, props);
       } catch (Exception error) {
