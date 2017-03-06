@@ -13,6 +13,26 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.28.0] - 2017-03-06
+
+### Added
+- Login AB
+- Google demographics
+- Generic top menu in MainTabedActivity
+- Participants format
+- Favorite and follow in activity
+- Synchro time in headers
+- Signup onBoarding
+
+### Fixed
+- Mute connections
+- Easy dismiss highlight
+- Obtención del locale
+
+### Changed
+
+- Contributors refactor
+
 ## [1.27.1] - 2017-02-23
 
 ### Fixed
