@@ -53,7 +53,7 @@ public class StreamTimelineOptionsPresenter implements Presenter {
     }
 
     private void loadMuteStatus() {
-        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+        getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
             @Override public void onLoaded(List<String> ids) {
                 if (ids.contains(idStream)) {
                     streamTimelineOptionsView.showUnmuteButton();

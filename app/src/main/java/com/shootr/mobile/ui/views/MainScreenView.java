@@ -14,4 +14,6 @@ public interface MainScreenView {
     void hideConnectController();
 
     void goToTimeline(StreamModel streamModel);
+
+    void updateChannelBadge(int unreadFollowChannels, boolean isFollowing);
 }

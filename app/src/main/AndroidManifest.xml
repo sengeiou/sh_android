@@ -317,8 +317,14 @@
         android:name=".ui.activities.PrivateMessageTimelineActivity"
         android:theme="@style/ShootrTheme">
     </activity>
-    <activity android:name=".ui.activities.ChannelsContainerActivity"
+    <activity
+        android:name=".ui.activities.ChannelsContainerActivity"
         android:label="@string/title_activity_channels">
+    </activity>
+    <activity
+        android:name="com.mixpanel.android.surveys.SurveyActivity"
+        android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
+    <activity android:name=".ui.activities.OnBoardingStreamActivity">
     </activity>
   </application>
 

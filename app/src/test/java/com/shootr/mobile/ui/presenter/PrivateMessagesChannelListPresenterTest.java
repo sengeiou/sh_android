@@ -18,6 +18,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -61,24 +62,24 @@ public class PrivateMessagesChannelListPresenterTest {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<List<PrivateMessageChannel>> callback =
-            (Interactor.Callback<List<PrivateMessageChannel>>) invocation.getArguments()[0];
+            (Interactor.Callback<List<PrivateMessageChannel>>) invocation.getArguments()[1];
         callback.onLoaded(privateMessageChannels());
         return null;
       }
     }).when(getPrivateMessagesChannelsInteractor)
-        .loadChannels(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadChannels(anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupEmptyMessagesChannelInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<List<PrivateMessageChannel>> callback =
-            (Interactor.Callback<List<PrivateMessageChannel>>) invocation.getArguments()[0];
+            (Interactor.Callback<List<PrivateMessageChannel>>) invocation.getArguments()[1];
         callback.onLoaded(Collections.EMPTY_LIST);
         return null;
       }
     }).when(getPrivateMessagesChannelsInteractor)
-        .loadChannels(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadChannels(anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private List<PrivateMessageChannel> privateMessageChannels() {

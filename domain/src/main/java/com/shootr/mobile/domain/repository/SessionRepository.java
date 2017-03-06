@@ -27,4 +27,8 @@ public interface SessionRepository {
     String getLastTimeFiltered();
 
     void setLastTimeFiltered(String lastTimeFiltered);
+
+    int getSynchroTime();
+
+    void setSynchroTime(String synchroTime);
 }

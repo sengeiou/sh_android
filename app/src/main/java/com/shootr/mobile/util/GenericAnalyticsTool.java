@@ -42,6 +42,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String FIRST_NAME = "$first_name";
   private static final String ACTIVATED = "Activated";
   private static final String TYPE = "Type";
+  private static final String PLATFORM_TYPE = "shootrPlatform";
+  private static final String ANDROID_PLATFORM = "shootrAndroid";
   private final String ACTION = "action";
   private Tracker tracker;
   private MixpanelAPI mixpanel;
@@ -76,6 +78,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     mixpanel.getPeople().set(FOLLOWERS, user.getNumFollowers());
     mixpanel.getPeople().set(FOLLOWING, user.getNumFollowings());
     mixpanel.getPeople().set(FAVORITES, user.getFavoritedStreamsCount());
+    mixpanel.getPeople().set(PLATFORM_TYPE, ANDROID_PLATFORM);
   }
 
   @Override public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
@@ -108,7 +111,22 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     } catch (JSONException e) {
       e.printStackTrace();
     }
+    sendSignupToApsFlyer(actionId, loginType, context);
+  }
 
+  private void sendSignupToApsFlyer(String actionId, String loginType, Context context) {
+    if (appsFlyerLib != null) {
+      try {
+        if (user != null) {
+          Map<String, Object> eventData = new HashMap<>();
+          eventData.put(DISTINCT_ID, user.getIdUser());
+          eventData.put(LOGIN_TYPE, loginType);
+          appsFlyerLib.trackEvent(context, actionId, eventData);
+        }
+      }  catch (NullPointerException error) {
+        Log.e("Shootr", "Unable to build appsflyer object", error);
+      }
+    }
   }
 
   @Override public void setUser(User user) {
@@ -241,6 +259,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       if (loginType != null) {
         props.put(LOGIN_TYPE, loginType);
       }
+      props.put(PLATFORM_TYPE, ANDROID_PLATFORM);
       try {
         mixpanel.track(actionId, props);
       } catch (Exception error) {
@@ -259,6 +278,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       String labelId) {
     try {
       tracker = getTracker(context, APP_TRACKER);
+      tracker.enableAdvertisingIdCollection(true);
       tracker.send(new HitBuilders.EventBuilder().setCategory(ACTION)
           .setAction(actionId + ((action != null) ? action : ""))
           .setLabel((labelId != null) ? labelId : "")

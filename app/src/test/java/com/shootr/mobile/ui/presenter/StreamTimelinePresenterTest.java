@@ -13,7 +13,6 @@ import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -99,7 +98,6 @@ public class StreamTimelinePresenterTest {
   @Mock CreateStreamInteractor createStreamInteractor;
   @Captor ArgumentCaptor<Boolean> booleanArgumentCaptor;
   @Mock SessionRepository sessionRepository;
-  @Mock GetContributorsInteractor getContributorsInteractor;
   @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
   @Mock GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private StreamTimelinePresenter presenter;
@@ -115,7 +113,7 @@ public class StreamTimelinePresenterTest {
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
         createStreamInteractor,
-        getContributorsInteractor, getNewFilteredShotsInteractor, sessionRepository);
+        getNewFilteredShotsInteractor, sessionRepository);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
   }
@@ -560,7 +558,6 @@ public class StreamTimelinePresenterTest {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_AUTHOR);
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
-    setupContributorsCallback();
     setupFirstShotPosition();
     setupOldListSize();
     setupNewShotsNumbers();
@@ -956,7 +953,6 @@ public class StreamTimelinePresenterTest {
       throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
     setupSelectViewOnlyStreamInteractorCallbacksStream();
-    setupContributorsCallback();
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
     presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
@@ -967,7 +963,6 @@ public class StreamTimelinePresenterTest {
   @Test public void shouldHideStreamViewOnlyIndicatorWhenInitializeAndIAmAuthor() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_AUTHOR);
     setupSelectViewOnlyStreamInteractorCallbacksStream();
-    setupContributorsCallback();
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
 
     presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
@@ -1138,19 +1133,6 @@ public class StreamTimelinePresenterTest {
       }
     }).when(selectStreamInteractor)
         .selectStream(anyString(), any(Interactor.Callback.class), anyErrorCallback());
-  }
-
-  private void setupContributorsCallback() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<Contributor>> callback =
-            (Interactor.Callback<List<Contributor>>) invocation.getArguments()[2];
-        callback.onLoaded(contributors());
-        return null;
-      }
-    }).when(getContributorsInteractor).
-        obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class),
-            anyErrorCallback());
   }
 
   private List<Contributor> contributors() {

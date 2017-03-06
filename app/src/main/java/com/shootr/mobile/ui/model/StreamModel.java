@@ -22,6 +22,8 @@ public class StreamModel implements Serializable {
     private Long uniqueShots;
     private Integer readWriteMode;
     private boolean verifiedUser;
+    private Long contributorCount;
+    private boolean isCurrentUserContributor;
 
     public Boolean isRemoved() {
         return removed;
@@ -183,5 +185,21 @@ public class StreamModel implements Serializable {
 
     public void setVerifiedUser(boolean verifiedUser) {
         this.verifiedUser = verifiedUser;
+    }
+
+    public Long getContributorCount() {
+        return contributorCount;
+    }
+
+    public void setContributorCount(Long contributorCount) {
+        this.contributorCount = contributorCount;
+    }
+
+    public boolean isCurrentUserContributor() {
+        return isCurrentUserContributor;
+    }
+
+    public void setCurrentUserContributor(boolean currentUserContributor) {
+        isCurrentUserContributor = currentUserContributor;
     }
 }

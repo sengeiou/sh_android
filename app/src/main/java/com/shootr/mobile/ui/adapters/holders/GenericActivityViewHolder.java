@@ -7,10 +7,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 
@@ -25,6 +27,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.activity_timestamp) TextView elapsedTime;
     @BindView(R.id.activity_text) ClickableTextView text;
     @BindView(R.id.shot_image) ImageView image;
+    @BindView(R.id.activity_follow_button) FollowButton followButton;
+    @BindView(R.id.favorite_stream_indicator) ShineButton favoriteButton;
 
     public GenericActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener) {
@@ -41,6 +45,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         renderElapsedTime(activity);
         renderAvatar(activity);
         renderImage(activity);
+        renderFavorite(activity);
     }
 
     protected void renderText(ActivityModel activity) {
@@ -72,5 +77,9 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
     protected Context getContext() {
         return itemView.getContext();
+    }
+
+    protected void renderFavorite(ActivityModel activityModel) {
+        favoriteButton.setVisibility(View.GONE);
     }
 }

@@ -50,7 +50,7 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
 
   public void loadChannels() {
     view.showLoading();
-    getPrivateMessagesChannelsInteractor.loadChannels(
+    getPrivateMessagesChannelsInteractor.loadChannels(false,
         new Interactor.Callback<List<PrivateMessageChannel>>() {
           @Override public void onLoaded(List<PrivateMessageChannel> result) {
             onLoadResults(result);

@@ -16,7 +16,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
-import com.shootr.mobile.ui.activities.WelcomePageActivity;
+import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
 import com.shootr.mobile.ui.presenter.EmailRegistrationPresenter;
 import com.shootr.mobile.ui.views.EmailRegistrationView;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -174,7 +174,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Override public void navigateToWelcomePage() {
         analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(), analyticsActionSignup, loginType, this);
         finish();
-        Intent navigateToWelcomePageIntent = new Intent(this, WelcomePageActivity.class);
+        Intent navigateToWelcomePageIntent = new Intent(this, OnBoardingStreamActivity.class);
         navigateToWelcomePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(navigateToWelcomePageIntent);
     }

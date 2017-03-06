@@ -13,12 +13,10 @@ import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -41,6 +39,7 @@ import javax.inject.Inject;
 public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
+  private static final long MAX_REFRESH_INTERVAL_MILLISECONDS = 60 * 1000;
   private static final int MAX_LENGTH = 40;
   private static final String SCHEMA = "shootr://";
 
@@ -59,7 +58,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final Poller poller;
   private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
   private final CreateStreamInteractor createStreamInteractor;
-  private final GetContributorsInteractor getContributorsInteractor;
   private final GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private final SessionRepository sessionRepository;
 
@@ -86,6 +84,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private StreamModel streamModel;
   private Integer streamMode;
   private boolean isReadOnly;
+  private boolean isCurrentUserContirbutor;
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -96,8 +95,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       CreateStreamInteractor createStreamInteractor,
-      GetContributorsInteractor getContributorsInteractor,
-      GetNewFilteredShotsInteractor getNewFilteredShotsInteractor, SessionRepository sessionRepository) {
+      GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
+      SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
     this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
     this.selectStreamInteractor = selectStreamInteractor;
@@ -113,7 +112,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.poller = poller;
     this.updateWatchNumberInteractor = updateWatchNumberInteractor;
     this.createStreamInteractor = createStreamInteractor;
-    this.getContributorsInteractor = getContributorsInteractor;
     this.getNewFilteredShotsInteractor = getNewFilteredShotsInteractor;
     this.sessionRepository = sessionRepository;
   }
@@ -193,12 +191,36 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void setupPoller() {
-    this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
+    long intervalSynchroServerResponse = handleIntervalSynchro();
+    this.poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
         loadNewShots();
         postWatchNumberEvent();
+        changeSynchroTimePoller();
       }
     });
+  }
+
+  private long handleIntervalSynchro() {
+    int actualSynchroInterval = sessionRepository.getSynchroTime();
+    long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+    if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
+    } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
+    }
+    return intervalSynchroServerResponse;
+  }
+
+  private void changeSynchroTimePoller() {
+    if (poller.isPolling()) {
+      long intervalSynchroServerResponse = handleIntervalSynchro();
+      if (intervalSynchroServerResponse != poller.getIntervalMilliseconds()) {
+        poller.stopPolling();
+        poller.setIntervalMilliseconds(intervalSynchroServerResponse);
+        poller.startPolling();
+      }
+    }
   }
 
   private void hasNewFilteredShots() {
@@ -230,6 +252,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         setStreamTitle(stream.getTitle());
         setStreamDescription(stream.getDescription());
         setStreamTopic(stream.getTopic());
+        isCurrentUserContirbutor = stream.isCurrentUserContributor();
         streamTimelineView.setTitle(stream.getTitle());
         if (streamTopic != null && !streamTopic.isEmpty()) {
           streamTimelineView.showPinnedMessage(streamTopic);
@@ -283,8 +306,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void manageCallImportantShots() {
-    if (filterActivated
-        && !calledForImportant) {
+    if (filterActivated && !calledForImportant) {
       calledForImportant = true;
       timelineInteractorWrapper.obtainImportantShotsTimeline(streamId,
           new Interactor.Callback<Timeline>() {
@@ -308,35 +330,16 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void loadStreamMode() {
-    getContributorsInteractor.obtainContributors(streamId, false,
-        new Interactor.Callback<List<Contributor>>() {
-          @Override public void onLoaded(List<Contributor> contributors) {
-            String idUser = sessionRepository.getCurrentUserId();
-            if (isCurrentUserContributor(contributors, idUser) || isCurrentUserStreamAuthor(
-                idUser)) {
-              streamTimelineView.hideStreamViewOnlyIndicator();
-            } else {
-              streamTimelineView.showStreamViewOnlyIndicator();
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-
-          }
-        });
+    String idUser = sessionRepository.getCurrentUserId();
+    if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(idUser)) {
+      streamTimelineView.hideStreamViewOnlyIndicator();
+    } else {
+      streamTimelineView.showStreamViewOnlyIndicator();
+    }
   }
 
   private boolean isCurrentUserStreamAuthor(String idUser) {
     return idAuthor != null && idAuthor.equals(idUser);
-  }
-
-  private boolean isCurrentUserContributor(List<Contributor> contributors, String idUser) {
-    for (Contributor contributor : contributors) {
-      if (contributor.getIdUser().equals(idUser)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   private void showShotsInView(Timeline timeline) {

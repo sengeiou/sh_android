@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
@@ -32,12 +33,14 @@ import com.squareup.otto.Subscribe;
 import java.util.List;
 import javax.inject.Inject;
 
-public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, UnwatchDone.Receiver {
+public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, UnwatchDone.Receiver,
+    ChannelsBadgeChanged.Receiver {
 
   private final GetCurrentUserInteractor getCurrentUserInteractor;
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
   private final SendShotEventStatsIneteractor sendShotEventStatsIneteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
+  private final GetMutedStreamsInteractor getMutedStreamsInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
@@ -61,16 +64,19 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
       SendShotEventStatsIneteractor sendShotEventStatsIneteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
+      GetMutedStreamsInteractor getMutedStreamsInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
       UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
       GetFollowingInteractor followingInteractor,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
-      GetFollowingIdsInteractor getFollowingIdsInteractor, GetLocalStreamInteractor getStreamInteractor,
-      StreamModelMapper streamModelMapper, @Main Bus bus, BusPublisher busPublisher) {
+      GetFollowingIdsInteractor getFollowingIdsInteractor,
+      GetLocalStreamInteractor getStreamInteractor, StreamModelMapper streamModelMapper,
+      @Main Bus bus, BusPublisher busPublisher) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
+    this.getMutedStreamsInteractor = getMutedStreamsInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.sessionRepository = sessionRepository;
     this.userModelMapper = userModelMapper;
@@ -92,6 +98,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     setView(mainScreenView);
     this.loadCurrentUser();
     this.getFollows();
+    this.getMuted();
     this.sendDeviceInfo();
     this.sendShotEventStats();
     this.updateActivityBadge();
@@ -104,6 +111,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   private void getFollows() {
     followingInteractor.synchronizeFollow();
+  }
+
+  private void getMuted() {
+    getMutedStreamsInteractor.loadMutedStreamIds();
   }
 
   private void sendShotEventStats() {
@@ -126,8 +137,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
           new Interactor.Callback<User>() {
             @Override public void onLoaded(User user) {
               if (sessionRepository.getCurrentUser() != null) {
-                sessionRepository.getCurrentUser().setAnalyticsUserType(user.getAnalyticsUserType());
-                sessionRepository.getCurrentUser().setReceivedReactions(user.getReceivedReactions());
+                sessionRepository.getCurrentUser()
+                    .setAnalyticsUserType(user.getAnalyticsUserType());
+                sessionRepository.getCurrentUser()
+                    .setReceivedReactions(user.getReceivedReactions());
               }
             }
           }, new Interactor.ErrorCallback() {
@@ -152,26 +165,27 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     }
   }
 
-  private void loadChannelsForBadge() {
+  public void loadChannelsForBadge(final boolean localOnly) {
     getFollowingIdsInteractor.loadFollowingsIds(sessionRepository.getCurrentUserId(),
         new Interactor.Callback<List<String>>() {
           @Override public void onLoaded(final List<String> results) {
-            getChannels(results);
+            getChannels(results, localOnly);
           }
         });
   }
 
-  private void getChannels(final List<String> results) {
-    getPrivateMessagesChannelsInteractor.loadChannels(new Interactor.Callback<List<PrivateMessageChannel>>() {
-      @Override public void onLoaded(List<PrivateMessageChannel> privateMessageChannels) {
-        countUnreadsChannels(privateMessageChannels, results);
-        publishChannelBadge();
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
+  private void getChannels(final List<String> results, boolean localOnly) {
+    getPrivateMessagesChannelsInteractor.loadChannels(localOnly,
+        new Interactor.Callback<List<PrivateMessageChannel>>() {
+          @Override public void onLoaded(List<PrivateMessageChannel> privateMessageChannels) {
+            countUnreadsChannels(privateMessageChannels, results);
+            publishChannelBadge();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
         /* no-op */
-      }
-    });
+          }
+        });
   }
 
   private void countUnreadsChannels(List<PrivateMessageChannel> privateMessageChannels,
@@ -201,7 +215,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   @Override public void resume() {
     updateActivityBadge();
-    loadChannelsForBadge();
+    loadChannelsForBadge(false);
     loadConnectedStream();
     bus.register(this);
     if (hasBeenPaused) {
@@ -233,5 +247,13 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   public void onControllerClick() {
     mainScreenView.goToTimeline(streamModel);
+  }
+
+  @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
+    if (event.getUnreadFollowChannels() > 0) {
+      mainScreenView.updateChannelBadge(event.getUnreadFollowChannels(), true);
+    } else {
+      mainScreenView.updateChannelBadge(event.getUnreadChannels(), false);
+    }
   }
 }

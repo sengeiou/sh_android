@@ -371,6 +371,10 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.VERIFIED_USER
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.CONTRIBUTORS_COUNT
+      + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.I_AM_CONTRIBUTOR
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -420,6 +424,10 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.READ_WRITE_MODE
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.VERIFIED_USER
+      + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.CONTRIBUTORS_COUNT
+      + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.I_AM_CONTRIBUTOR
       + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"

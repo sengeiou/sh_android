@@ -4,13 +4,13 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
@@ -47,6 +47,7 @@ public class ReportShotPresenterTest {
     private static final String EN_LOCALE = "en";
     private static final String ID_STREAM = "idStream";
     private static final String ID_SHOT = "idShot";
+    private static final String ID_HIGHLIGHTED_SHOT = "idHighLightedShot";
     private static final String ANOTHER_ID_SHOT = "anotherIdShot";
     public static final Long HIDE = 0L;
     @Mock ReportShotView reportShotView;
@@ -62,7 +63,7 @@ public class ReportShotPresenterTest {
     @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock BanUserInteractor banUserInteractor;
     @Mock UnbanUserInteractor unbanUserInteractor;
-    @Mock GetContributorsInteractor getContributorsInteractor;
+    @Mock GetLocalStreamInteractor getLocalStreamInteractor;
     @Mock GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
 
     private ReportShotPresenter presenter;
@@ -78,7 +79,7 @@ public class ReportShotPresenterTest {
           unblockUserInteractor,
           getFollowingInteractor,
           banUserInteractor,
-          unbanUserInteractor, getContributorsInteractor, getHighlightedShotInteractor);
+          unbanUserInteractor, getHighlightedShotInteractor, getLocalStreamInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -285,7 +286,9 @@ public class ReportShotPresenterTest {
                 Interactor.Callback<HighlightedShot> callback =
                     (Interactor.Callback<HighlightedShot>) invocation.getArguments()[1];
                 HighlightedShot highlightedShot = new HighlightedShot();
+                highlightedShot.setIdHighlightedShot(ID_HIGHLIGHTED_SHOT);
                 highlightedShot.setShot(shotWithIdShot());
+                highlightedShot.setVisible(false);
                 callback.onLoaded(highlightedShot);
                 return null;
             }
@@ -373,6 +376,7 @@ public class ReportShotPresenterTest {
 
     private ShotModel anotherUserShot() {
         ShotModel shotModel = new ShotModel();
+        shotModel.setIdShot(ID_SHOT);
         shotModel.setIdUser(ANOTHER_ID_USER);
         shotModel.setHide(1L);
         return shotModel;

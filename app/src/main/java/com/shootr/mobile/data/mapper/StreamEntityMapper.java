@@ -3,6 +3,7 @@ package com.shootr.mobile.data.mapper;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -10,9 +11,12 @@ import javax.inject.Inject;
 public class StreamEntityMapper {
 
   private final UserEntityMapper userEntityMapper;
+  private final SessionRepository sessionRepository;
 
-  @Inject public StreamEntityMapper(UserEntityMapper userEntityMapper) {
+  @Inject public StreamEntityMapper(UserEntityMapper userEntityMapper,
+      SessionRepository sessionRepository) {
     this.userEntityMapper = userEntityMapper;
+    this.sessionRepository = sessionRepository;
   }
 
   public Stream transform(StreamEntity streamEntity) {
@@ -46,6 +50,13 @@ public class StreamEntityMapper {
     stream.setReadWriteMode(streamEntity.getReadWriteMode());
     stream.setVerifiedUser(
         (streamEntity.getVerifiedUser() != null) ? (streamEntity.getVerifiedUser() == 1) : false);
+    stream.setContributorCount(streamEntity.getContributorCount());
+    if (streamEntity.getIdUserContributors() != null) {
+      stream.setCurrentUserContributor(
+          streamEntity.getIdUserContributors().contains(sessionRepository.getCurrentUserId()));
+    } else {
+      stream.setCurrentUserContributor(false);
+    }
     return stream;
   }
 
@@ -84,5 +95,7 @@ public class StreamEntityMapper {
     entityTemplate.setUniqueShots(stream.getUniqueShots());
     entityTemplate.setReadWriteMode(stream.getReadWriteMode());
     entityTemplate.setVerifiedUser((stream.isVerifiedUser()) ? 1L : 0L);
+    entityTemplate.setiAmContributor(stream.isCurrentUserContributor() ? 1 : 0);
+    entityTemplate.setContributorCount(stream.getContributorCount());
   }
 }

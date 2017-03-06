@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_on_boarding_stream"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="#fafafa"
+    tools:context="com.shootr.mobile.ui.activities.OnBoardingStreamActivity"
+    >
+
+  <ProgressBar android:id="@+id/get_started_progress"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerVertical="true"
+      android:layout_centerHorizontal="true"
+      android:visibility="gone"
+      tools:visibility="visible" />
+  <TextView
+      android:id="@+id/title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColor="@color/material_black"
+      android:text="@string/on_boarding_add_favorites"
+      android:textSize="20sp"
+      android:fontFamily="sans-serif-medium"
+      android:paddingRight="16dp"
+      android:paddingLeft="16dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginTop="32dp"
+      />
+
+  <android.support.v7.widget.RecyclerView
+      android:id="@+id/streams_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_below="@+id/title"
+      android:layout_above="@+id/get_started_button"
+      />
+
+  <Button
+      android:id="@+id/get_started_button"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:layout_alignParentBottom="true"
+      android:text="@string/on_boarding_enter_shootr"
+      android:layout_marginTop="8dp"
+      android:layout_marginLeft="@dimen/activity_horizontal_margin"
+      android:layout_marginRight="@dimen/activity_horizontal_margin"
+      android:visibility="visible"
+      />
+</RelativeLayout>

@@ -71,7 +71,7 @@ public class FavoritesListPresenter
     }
 
     private void loadMutedStreamIds() {
-        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+        getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
             @Override public void onLoaded(List<String> mutedStreamsIds) {
                 mutedStreamIds = mutedStreamsIds;
             }
@@ -108,7 +108,7 @@ public class FavoritesListPresenter
     }
 
     public void onFavoriteLongClicked(final StreamResultModel stream) {
-        getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+        getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
             @Override public void onLoaded(List<String> mutedStreamIds) {
                 if (mutedStreamIds.contains(stream.getStreamModel().getIdStream())) {
                     favoritesListView.showContextMenuWithUnmute(stream);

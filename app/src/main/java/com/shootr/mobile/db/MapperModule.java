@@ -8,6 +8,7 @@ import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import com.shootr.mobile.db.mappers.StreamEntityDBMapper;
 import com.shootr.mobile.db.mappers.SuggestedPeopleDBMapper;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserEntityModelMapper;
 import dagger.Module;
@@ -45,8 +46,8 @@ import dagger.Provides;
     return new SuggestedPeopleDBMapper(userEntityDBMapper);
   }
 
-  @Provides StreamEntityDBMapper provideEntityMapper() {
-    return new StreamEntityDBMapper();
+  @Provides StreamEntityDBMapper provideEntityMapper(SessionRepository sessionRepository) {
+    return new StreamEntityDBMapper(sessionRepository);
   }
 
   @Provides BlockEntityDBMapper provideBlockMapper() {

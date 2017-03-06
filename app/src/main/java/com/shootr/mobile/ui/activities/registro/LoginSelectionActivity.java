@@ -45,7 +45,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.activities.IntroActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
-import com.shootr.mobile.ui.activities.WelcomePageActivity;
+import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -285,7 +285,7 @@ public class LoginSelectionActivity extends BaseActivity {
                 Intent intent;
                 if (isNewUser) {
                   sendSignUpAnalythics();
-                  intent = new Intent(LoginSelectionActivity.this, WelcomePageActivity.class);
+                  intent = new Intent(LoginSelectionActivity.this, OnBoardingStreamActivity.class);
                 } else {
                   intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
                 }

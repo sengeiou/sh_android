@@ -50,4 +50,10 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
         container.setEnabled(false);
         name.setTextColor(context.getResources().getColor(R.color.gray_60));
     }
+
+    public void enable() {
+        Context context = name.getContext();
+        container.setEnabled(true);
+        name.setTextColor(context.getResources().getColor(R.color.material_black));
+    }
 }

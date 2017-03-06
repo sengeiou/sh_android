@@ -34,6 +34,7 @@ import com.cocosw.bottomsheet.BottomSheet;
 import com.github.clans.fab.FloatingActionMenu;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
@@ -1120,7 +1121,8 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
-  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot) {
+  @Override public void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot,
+      HighlightedShot highlightedShot) {
     /* no-op */
   }
 
@@ -1226,7 +1228,9 @@ public class ProfileActivity extends BaseActivity
 
   @OnClick(R.id.fab_new_stream) public void onAddStream() {
     closeFabMenu();
-    startActivityForResult(new Intent(this, NewStreamActivity.class), REQUEST_NEW_STREAM);
+    Intent intent = new Intent(this, NewStreamActivity.class);
+    intent.putExtra(NewStreamActivity.SOURCE, profileSource);
+    startActivityForResult(intent, REQUEST_NEW_STREAM);
   }
 
   private void closeFabMenu() {

@@ -56,6 +56,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private String authorName;
     private String description;
+    private int contributorsNumber;
+    private boolean isCurrentUserStreamAuthor;
 
     private final Set<String> keepFollowButtonIds = new HashSet<>();
     private boolean isAllParticipantsVisible = false;
@@ -231,6 +233,12 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_CONTRIBUTOR:
                 contributorViewHolder.setIcon(R.drawable.ic_contributors);
                 contributorViewHolder.setName(R.string.title_activity_contributors);
+                contributorViewHolder.setNumber(contributorsNumber);
+                if (contributorsNumber == 0 && !isCurrentUserStreamAuthor) {
+                    contributorViewHolder.disable();
+                } else {
+                    contributorViewHolder.enable();
+                }
                 break;
             case TYPE_MEDIA:
                 mediaViewHolder.setIcon(R.drawable.ic_action_stream_gallery_gray_24);
@@ -271,13 +279,18 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    public void setContributorsNumber(Integer contributorsNumber) {
+    public void setContributorsNumber(Integer contributorsNumber, boolean isCurrentUserStreamAuthor) {
+        this.contributorsNumber = contributorsNumber;
+        this.isCurrentUserStreamAuthor = isCurrentUserStreamAuthor;
         if (contributorViewHolder != null) {
             contributorViewHolder.setNumber(contributorsNumber);
         }
     }
 
-    public void disableContributors() {
-        contributorViewHolder.disable();
+    public void disableContributors(boolean isCurrentUserStreamAuthor) {
+        this.isCurrentUserStreamAuthor = isCurrentUserStreamAuthor;
+        if (contributorViewHolder != null) {
+            contributorViewHolder.disable();
+        }
     }
 }

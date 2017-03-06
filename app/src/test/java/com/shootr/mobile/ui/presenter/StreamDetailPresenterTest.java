@@ -13,7 +13,6 @@ import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamInfo;
 import com.shootr.mobile.domain.model.user.Contributor;
@@ -57,6 +56,7 @@ public class StreamDetailPresenterTest {
   public static final int THREE_WATCHERS = 3;
   public static final String ID_STREAM = "id_stream";
   public static final int NO_WATCHERS = 0;
+  public static final long CONTRIBUTORS_COUNT = 0;
   public static final String PICTURE_URL = "picture_url";
 
   private StreamDetailPresenter presenter;
@@ -74,7 +74,6 @@ public class StreamDetailPresenterTest {
   @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
   @Mock MuteInteractor muteInteractor;
   @Mock UnmuteInteractor unmuteInteractor;
-  @Mock GetContributorsInteractor getContributorsInteractor;
   @Mock RemoveStreamInteractor removeStreamInteractor;
   @Mock RestoreStreamInteractor restoreStreamInteractor;
 
@@ -85,7 +84,7 @@ public class StreamDetailPresenterTest {
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
     presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor,
         shareStreamInteractor, followInteractor, unfollowInteractor, selectStreamInteractor,
-        getMutedStreamsInteractor, muteInteractor, unmuteInteractor, getContributorsInteractor,
+        getMutedStreamsInteractor, muteInteractor, unmuteInteractor,
         removeStreamInteractor, restoreStreamInteractor, streamModelMapper, userModelMapper,
         errorMessageFactory);
     presenter.setView(streamDetailView);
@@ -249,43 +248,19 @@ public class StreamDetailPresenterTest {
       throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     setupStreamInfoCallback();
-    setupContributorsCallBackWithContributors();
 
     presenter.initialize(streamDetailView, ID_STREAM);
 
-    verify(streamDetailView).showContributorsNumber(anyInt());
+    verify(streamDetailView).showContributorsNumber(anyInt(), anyBoolean());
   }
 
   @Test public void shouldHideContributorsNumberWhenContributorsListSizeIsZero() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-    setupStreamInfoCallback();
-    setupContributorsCallBackWithoutContributors();
+    setupStreamInfoWithoutContributorsCallback();
 
     presenter.initialize(streamDetailView, ID_STREAM);
 
-    verify(streamDetailView).hideContributorsNumber();
-  }
-
-  @Test public void shouldDisableContributorsWhenContributorsListIsZeroAndIamNotHolder()
-      throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-    setupStreamInfoCallback();
-    setupContributorsCallBackWithoutContributors();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-
-    verify(streamDetailView).disableContributors();
-  }
-
-  @Test public void shouldNotDisableContributorsWhenContributorsListIsZeroAndIamHolder()
-      throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-    setupStreamInfoCallback();
-    setupContributorsCallBackWithoutContributors();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-
-    verify(streamDetailView, never()).disableContributors();
+    verify(streamDetailView).hideContributorsNumber(anyBoolean());
   }
 
   @Test public void shouldShowRemoveStreamIfStreamNotRemoved() throws Exception {
@@ -380,7 +355,7 @@ public class StreamDetailPresenterTest {
         callback.onLoaded(Collections.<String>emptyList());
         return null;
       }
-    }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+    }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
   }
 
   public void setupMutedStreamCallback() {
@@ -391,7 +366,7 @@ public class StreamDetailPresenterTest {
         callback.onLoaded(Arrays.asList(ID_STREAM));
         return null;
       }
-    }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+    }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
   }
 
   private void setupStreamWithoutPictureInfoCallback() {
@@ -421,6 +396,23 @@ public class StreamDetailPresenterTest {
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
   }
+
+  private void setupStreamInfoWithoutContributorsCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        GetStreamInfoInteractor.Callback callback =
+            (GetStreamInfoInteractor.Callback) invocation.getArguments()[1];
+        StreamInfo streamInfo = streamInfoWith3Participants();
+        streamInfo.getStream().setContributorCount(0L);
+        callback.onLoaded(streamInfo);
+        return null;
+      }
+    }).when(streamInfoInteractor)
+        .obtainStreamInfo(anyString(),
+            (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
+  }
+
 
   public void setupStreamInfoCallbackWithPhoto() {
     doAnswer(new Answer() {
@@ -462,32 +454,6 @@ public class StreamDetailPresenterTest {
     }).when(streamInfoInteractor)
         .obtainStreamInfo(anyString(),
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
-            any(Interactor.ErrorCallback.class));
-  }
-
-  private void setupContributorsCallBackWithContributors() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        GetContributorsInteractor.Callback callback =
-            (GetContributorsInteractor.Callback) invocation.getArguments()[2];
-        callback.onLoaded(contributorList());
-        return null;
-      }
-    }).when(getContributorsInteractor)
-        .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class),
-            any(Interactor.ErrorCallback.class));
-  }
-
-  private void setupContributorsCallBackWithoutContributors() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        GetContributorsInteractor.Callback callback =
-            (GetContributorsInteractor.Callback) invocation.getArguments()[2];
-        callback.onLoaded(Collections.emptyList());
-        return null;
-      }
-    }).when(getContributorsInteractor)
-        .obtainContributors(anyString(), anyBoolean(), any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
   }
 
@@ -578,6 +544,7 @@ public class StreamDetailPresenterTest {
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
     stream.setPicture(PICTURE_URL);
+    stream.setContributorCount(1L);
     return stream;
   }
 
@@ -588,6 +555,7 @@ public class StreamDetailPresenterTest {
     streamModel.setAuthorId(STREAM_AUTHOR_ID);
     streamModel.setTotalWatchers(NO_WATCHERS);
     streamModel.setPicture(PICTURE_URL);
+    streamModel.setContributorCount(CONTRIBUTORS_COUNT);
     return streamModel;
   }
 
@@ -598,6 +566,7 @@ public class StreamDetailPresenterTest {
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
     stream.setPicture(PICTURE_URL);
+    stream.setContributorCount(CONTRIBUTORS_COUNT);
     return stream;
   }
 
@@ -607,6 +576,7 @@ public class StreamDetailPresenterTest {
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
+    stream.setContributorCount(CONTRIBUTORS_COUNT);
     return stream;
   }
 
@@ -616,6 +586,7 @@ public class StreamDetailPresenterTest {
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(FIFTY_PLUS_WATCHERS);
+    stream.setContributorCount(CONTRIBUTORS_COUNT);
     return stream;
   }
 

@@ -15,11 +15,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
+import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -46,8 +49,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
   @Inject ImageLoader imageLoader;
   @Inject AndroidTimeUtils timeUtils;
-  @Inject AnalyticsTool analyticsTool;
   @Inject FeedbackMessage feedbackMessage;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.timeline_activity_list) RecyclerView activityList;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -56,6 +60,11 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @BindView(R.id.timeline_loading_activity) TextView loadingActivityView;
 
   @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
+  @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_source_activity) String activitySource;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+
   private ActivityTimelineAdapter adapter;
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
@@ -140,8 +149,51 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
       @Override public void onPollQuestionClick(String idPoll, String streamTitle) {
         openPollVote(idPoll, streamTitle);
       }
+    }, new ActivityFollowUnfollowListener() {
+      @Override public void onFollow(String idUser, String username) {
+        timelinePresenter.followUser(idUser);
+        sendFollowAnalytics(idUser, username);
+      }
+
+      @Override public void onUnfollow(String idUser) {
+        timelinePresenter.unFollowUser(idUser);
+      }
+    }, new ActivityFavoriteClickListener() {
+      @Override public void onFavoriteClick(String idStream, String streamTitle) {
+        timelinePresenter.addFavorite(idStream);
+        sendFavoriteAnalytics(idStream, streamTitle);
+      }
+
+      @Override public void onRemoveFavoriteClick(String idStream) {
+        timelinePresenter.removeFavorite(idStream);
+      }
     });
     activityList.setAdapter(adapter);
+  }
+
+  private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setSource(activitySource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(idTargetUser);
+    builder.setTargetUsername(targetUsername);
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendFavoriteAnalytics(String idStream, String streamTitle) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFavoriteStream);
+    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(activitySource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setStreamName(streamTitle);
+    builder.setIdStream(idStream);
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void setupSwipeRefreshLayout() {

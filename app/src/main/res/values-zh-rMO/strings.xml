@@ -456,8 +456,8 @@
   <string name="title_pin_message_notification" formatted="false">通知信息？</string>
   <string name="topic" formatted="false">信息</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="other">%d个参与者</item>
-    <item quantity="zero">%d个参与者</item>
+    <item quantity="other">%s个参与者</item>
+    <item quantity="zero">%s个参与者</item>
   </plurals>
   <string name="unfollow_dialog_message">取消关注 %s？</string>
   <string name="unfollow_dialog_no">不</string>
@@ -489,4 +489,6 @@
   <string name="new_messages_notification">%d new messages</string>
   <string name="filtered_by_important">Filtered by: Important</string>
   <string name="analytics_action_open_app">OpenApp</string>
+  <string name="on_boarding_add_favorites">添加到喜爱</string>
+  <string name="on_boarding_enter_shootr">进入Shootr</string>
 </resources>

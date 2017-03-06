@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -28,8 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver,
-    ChannelsBadgeChanged.Receiver {
+public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
 
   private final StreamsListInteractor streamsListInteractor;
   private final AddToFavoritesInteractor addToFavoritesInteractor;
@@ -83,7 +81,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   private void loadMutedStreamIds() {
-    getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+    getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
       @Override public void onLoaded(List<String> mutedStreamsIds) {
         mutedStreamIds = mutedStreamsIds;
       }
@@ -231,7 +229,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void onStreamLongClicked(final StreamResultModel stream) {
-    getMutedStreamsInteractor.loadMutedStreamIds(new Interactor.Callback<List<String>>() {
+    getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
       @Override public void onLoaded(List<String> mutedStreamIds) {
         if (mutedStreamIds.contains(stream.getStreamModel().getIdStream())) {
           streamsListView.showContextMenuWithUnmute(stream);
@@ -278,14 +276,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   @Override public void pause() {
     bus.unregister(this);
     hasBeenPaused = true;
-  }
-
-  @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
-    if (event.getUnreadFollowChannels() > 0) {
-      streamsListView.updateChannelBadge(event.getUnreadFollowChannels(), true);
-    } else {
-      streamsListView.updateChannelBadge(event.getUnreadChannels(), false);
-    }
   }
   //endregion
 }

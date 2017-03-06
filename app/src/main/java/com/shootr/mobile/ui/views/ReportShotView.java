@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.views;
 
+import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.ui.model.ShotModel;
 
 public interface ReportShotView {
@@ -44,7 +45,7 @@ public interface ReportShotView {
 
     void showAuthorContextMenuWithPinAndHighlight(ShotModel shot);
 
-    void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot);
+    void showAuthorContextMenuWithPinAndDismissHighlight(ShotModel shot, HighlightedShot highlightedShot);
 
     void showAuthorContextMenuWithoutPinAndHighlight(ShotModel shot);
 

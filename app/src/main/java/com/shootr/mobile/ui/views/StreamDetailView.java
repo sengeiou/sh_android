@@ -57,9 +57,9 @@ public interface StreamDetailView extends DataTransferView {
 
     void goToContributorsActivity(String idStream);
 
-    void hideContributorsNumber();
+    void hideContributorsNumber(boolean isAuthorStream);
 
-    void showContributorsNumber(Integer contributorsNumber);
+    void showContributorsNumber(Integer contributorsNumber, boolean isAuthorStream);
 
     void showPhotoPicker();
 
@@ -76,8 +76,6 @@ public interface StreamDetailView extends DataTransferView {
     void showRestoreStreamFeedback();
 
     void showRemovedFeedback();
-
-    void disableContributors();
 
     void setupStreamInitials(StreamModel streamModel);
 

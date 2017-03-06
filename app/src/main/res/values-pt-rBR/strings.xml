@@ -463,8 +463,8 @@
   <string name="title_pin_message_notification" formatted="false">Notificar mensagem?</string>
   <string name="topic" formatted="false">mensagem</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">%d participante</item>
-    <item quantity="other">%d participantes</item>
+    <item quantity="one">%s participante</item>
+    <item quantity="other">%s participantes</item>
   </plurals>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">Não</string>
@@ -497,4 +497,6 @@
   <string name="new_messages_notification">%d novos mensagens</string>
   <string name="filtered_by_important">Filtered by: Important</string>
   <string name="analytics_action_open_app">OpenApp</string>
+  <string name="on_boarding_add_favorites">Adicionar aos Favoritos</string>
+  <string name="on_boarding_enter_shootr">Entrar em Shootr</string>
 </resources>

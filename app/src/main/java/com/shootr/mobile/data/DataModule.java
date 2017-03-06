@@ -175,7 +175,8 @@ import static android.content.Context.MODE_PRIVATE;
       VersionHeaderInterceptor versionHeaderInterceptor,
       ServerDownErrorInterceptor serverDownErrorInterceptor,
       UnauthorizedErrorInterceptor unauthorizedErrorInterceptor,
-      VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor) {
+      VersionOutdatedErrorInterceptor versionOutdatedErrorInterceptor,
+      SynchroTimeInterceptor synchroTimeInterceptor) {
 
     OkHttpClient client = new OkHttpClient();
 
@@ -198,6 +199,7 @@ import static android.content.Context.MODE_PRIVATE;
     client.interceptors().add(unauthorizedErrorInterceptor);
     client.interceptors().add(versionOutdatedErrorInterceptor);
     client.interceptors().add(ResponseFaker.interceptor());
+    client.interceptors().add(synchroTimeInterceptor);
 
     return client;
   }

@@ -188,7 +188,7 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(mutedStreams());
                 return null;
             }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+        }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
     }
 
     public void setupNoMutedStreamsCallback() {
@@ -199,7 +199,7 @@ public class StreamsListPresenterTest {
                 callback.onLoaded(Collections.<String>emptyList());
                 return null;
             }
-        }).when(getMutedStreamsInteractor).loadMutedStreamIds(any(Interactor.Callback.class));
+        }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
     }
 
     @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {

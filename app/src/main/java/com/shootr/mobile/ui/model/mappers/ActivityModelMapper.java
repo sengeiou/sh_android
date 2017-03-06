@@ -1,8 +1,11 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.infraestructure.Mapper;
 import com.shootr.mobile.ui.model.ActivityModel;
+import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 
 public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
@@ -40,6 +43,21 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
         activityModel.setIdPoll(activity.getIdPoll());
         activityModel.setPollQuestion(activity.getPollQuestion());
         return activityModel;
+    }
+
+    public List<ActivityModel> mapWithFollowingsAndFavorites(List<Activity> activities,
+        ArrayList<String> followingsIds, ArrayList<String> favoritesIds) {
+        ArrayList<ActivityModel> activityModels = new ArrayList<>();
+        for (Activity activity : activities) {
+            ActivityModel activityModel = map(activity);
+            if (activityModel.getType().equals(ActivityType.START_FOLLOW)) {
+                activityModel.setAmIFollowing(followingsIds.contains(activityModel.getIdUser()));
+            } else if (activityModel.getType().equals(ActivityType.STARTED_SHOOTING)) {
+                activityModel.setFavorite(favoritesIds.contains(activityModel.getIdStream()));
+            }
+            activityModels.add(activityModel);
+        }
+        return activityModels;
     }
 
     @Override public Activity reverseMap(ActivityModel value) {

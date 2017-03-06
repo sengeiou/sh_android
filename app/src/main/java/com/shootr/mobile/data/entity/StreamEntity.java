@@ -24,6 +24,9 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Long uniqueShots;
     private String readWriteMode;
     private Long verifiedUser;
+    private Long contributorCount;
+    private List<String> idUserContributors;
+    private int iAmContributor;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -211,5 +214,29 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setVerifiedUser(Long verifiedUser) {
         this.verifiedUser = verifiedUser;
+    }
+
+    public Long getContributorCount() {
+        return contributorCount;
+    }
+
+    public void setContributorCount(Long contributorCount) {
+        this.contributorCount = contributorCount;
+    }
+
+    public List<String> getIdUserContributors() {
+        return idUserContributors;
+    }
+
+    public void setIdUserContributors(List<String> idUserContributors) {
+        this.idUserContributors = idUserContributors;
+    }
+
+    public int getiAmContributor() {
+        return iAmContributor;
+    }
+
+    public void setiAmContributor(int iAmContributor) {
+        this.iAmContributor = iAmContributor;
     }
 }

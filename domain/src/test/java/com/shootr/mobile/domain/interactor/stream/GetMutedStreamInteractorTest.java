@@ -40,7 +40,7 @@ public class GetMutedStreamInteractorTest {
   @Test public void shouldNotifyLocalResultsWhenLoadLocalMutedStreams() throws Exception {
     when(localMuteRepository.getMutedIdStreams()).thenReturn(mutedStreams());
 
-    interactor.loadMutedStreamIds(callback);
+    interactor.loadMutedStreamsIdsFromLocal(callback);
 
     verify(callback).onLoaded(anyList());
   }
@@ -49,7 +49,7 @@ public class GetMutedStreamInteractorTest {
     when(localMuteRepository.getMutedIdStreams()).thenReturn(new ArrayList<String>());
     when(remoteMuteRepository.getMutedIdStreams()).thenReturn(mutedStreams());
 
-    interactor.loadMutedStreamIds(callback);
+    interactor.loadMutedStreamsIdsFromLocal(callback);
 
     verify(callback).onLoaded(anyList());
   }

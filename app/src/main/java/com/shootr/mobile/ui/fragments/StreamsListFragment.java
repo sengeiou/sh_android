@@ -9,19 +9,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
-import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -34,7 +29,6 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.ui.views.nullview.NullStreamListView;
-import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -144,54 +138,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
   protected void initializePresenter() {
     presenter.initialize(this);
-  }
-
-  private void navigateToDiscoverSearch() {
-    Intent intent = new Intent(getActivity(), DiscoverSearchActivity.class);
-    startActivity(intent);
-    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
-  }
-
-  //region Activity methods
-  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.streams_list, menu);
-    this.menu = menu;
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_search:
-        navigateToDiscoverSearch();
-        return true;
-      case R.id.menu_channel:
-        navigateToChannelsList();
-        return true;
-      case R.id.menu_add_stream:
-        openCreateStream();
-        return true;
-      default:
-        return super.onOptionsItemSelected(item);
-    }
-  }
-
-  private void openCreateStream() {
-    startActivityForResult(new Intent(getActivity(), NewStreamActivity.class), REQUEST_NEW_STREAM);
-  }
-
-  public void navigateToChannelsList() {
-    sendToMixPanel();
-    Intent intent = new Intent(getContext(), ChannelsContainerActivity.class);
-    startActivity(intent);
-  }
-
-  private void sendToMixPanel() {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
-    builder.setActionId(analyticsActionInbox);
-    builder.setLabelId(analyticsLabelInbox);
-    builder.setSource(streamsSource);
-    builder.setUser(sessionRepository.getCurrentUser());
-    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void onResume() {
@@ -361,15 +307,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {
-    if (menu != null) {
-      if (unreadChannels > 0) {
-        CustomActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), isFollowingChannels, unreadChannels);
-      } else {
-        ActionItemBadge.update(getActivity(), menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
-      }
-    }
+    /* no -op */
   }
 
   @Override public void showEmpty() {
