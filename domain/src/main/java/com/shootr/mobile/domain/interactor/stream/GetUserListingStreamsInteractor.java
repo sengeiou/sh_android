@@ -62,6 +62,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
+      loadRemoteFavoriteIds();
       loadUserListingStreamsFromLocal();
       loadUserListingStreamsFromRemote();
     } catch (ServerCommunicationException error) {
@@ -79,12 +80,8 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
   private void loadUserListingStreamsFromRemote() throws ServerCommunicationException {
     try {
-      loadRemoteFavoriteIds();
       List<Stream> favoriteStreams = new ArrayList<>();
-      if (!favoriteIds.isEmpty()) {
-        favoriteStreams =
-            remoteStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
-      }
+      favoriteStreams = loadStreams(favoriteStreams);
       List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
 
@@ -96,8 +93,19 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
   }
 
+  private List<Stream> loadStreams(List<Stream> favoriteStreams) {
+    if (!favoriteIds.isEmpty()) {
+      favoriteStreams =
+          localStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
+      if (favoriteStreams.isEmpty()) {
+        favoriteStreams =
+            remoteStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
+      }
+    }
+    return favoriteStreams;
+  }
+
   private void loadUserListingStreamsFromLocal() {
-    loadRemoteFavoriteIds();
     List<Stream> favoriteStreams =
         localStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
     List<StreamSearchResult> holdingStreamResults =
