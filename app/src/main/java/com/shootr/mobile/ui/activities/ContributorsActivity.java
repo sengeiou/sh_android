@@ -200,5 +200,13 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @Override public void remove(int position) {
         presenter.removeContributor(adapter.getItem(position));
     }
+
+    @Override public void follow(int position) {
+        //TODO
+    }
+
+    @Override public void unFollow(int position) {
+        //TODO
+    }
     //endregion
 }

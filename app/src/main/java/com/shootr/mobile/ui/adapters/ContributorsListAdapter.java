@@ -97,18 +97,20 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
             viewHolder.followButton.setVisibility(View.VISIBLE);
             viewHolder.followButton.setFollowing(false);
         }
+
+        setupContributorButtonListener(position, viewHolder);
     }
 
     private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
         viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                if (!isAdding) {
+            @Override public void onClick(View v) {
+                if (viewHolder.followButton.isFollowing()) {
                     if (callback != null) {
-                        callback.remove(position);
+                        callback.unFollow(position);
                     }
                 } else {
                     if (callback != null) {
-                        callback.add(position);
+                        callback.follow(position);
                     }
                 }
             }
@@ -151,5 +153,9 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         void add(int position);
 
         void remove(int position);
+
+        void follow(int position);
+
+        void unFollow(int position);
     }
 }
