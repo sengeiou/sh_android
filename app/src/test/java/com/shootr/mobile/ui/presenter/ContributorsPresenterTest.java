@@ -48,7 +48,7 @@ public class ContributorsPresenterTest {
         presenter = new ContributorsPresenter(getContributorsInteractor,
             manageContributorsInteractor,
           errorMessageFactory,
-          userModelMapper);
+          userModelMapper, followInteractor, unfollowInteractor);
     }
 
     @Test public void shouldHideAddContributorButtonWhenIsNotHolder() throws Exception {

@@ -202,11 +202,11 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void follow(int position) {
-        //TODO
+        presenter.followContributor(adapter.getItem(position).getIdUser());
     }
 
     @Override public void unFollow(int position) {
-        //TODO
+        presenter.unfollowContributor(adapter.getItem(position).getIdUser());
     }
     //endregion
 }

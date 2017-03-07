@@ -204,10 +204,10 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void follow(int position) {
-        //TODO
+        /* no-op */
     }
 
     @Override public void unFollow(int position) {
-        //TODO
+        /* no-op */
     }
 }
