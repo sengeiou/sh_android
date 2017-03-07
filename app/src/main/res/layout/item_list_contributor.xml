@@ -23,7 +23,7 @@
     android:layout_alignBottom="@+id/user_avatar"
     android:layout_alignTop="@+id/user_avatar"
     android:layout_marginLeft="16dp"
-    android:layout_toLeftOf="@+id/contributor_button"
+    android:layout_toLeftOf="@+id/contributor_follow_button"
     android:layout_toRightOf="@+id/user_avatar"
     android:gravity="center_vertical"
     android:orientation="vertical">
@@ -58,6 +58,7 @@
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"
       android:layout_marginRight="16dp"
+      android:visibility="gone"
       />
 
 </RelativeLayout>

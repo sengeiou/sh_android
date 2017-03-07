@@ -68,6 +68,27 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     @Override public void bindView(UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
+        setupTitle(item, viewHolder);
+        setupSubtitle(item, viewHolder);
+        setupAvatar(item, viewHolder);
+        setupFollowButton(item, position, viewHolder);
+    }
+
+    private void setupAvatar(UserModel item, ViewHolder viewHolder) {
+        String photo = item.getPhoto();
+        imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
+    }
+
+    private void setupSubtitle(UserModel item, ViewHolder viewHolder) {
+        if (showSubtitle(item)) {
+            viewHolder.subtitle.setText(getSubtitle(item));
+            viewHolder.subtitle.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.subtitle.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupTitle(UserModel item, ViewHolder viewHolder) {
         viewHolder.title.setText(item.getName());
 
         if (verifiedUser(item)) {
@@ -76,32 +97,28 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         } else {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-
-        if (showSubtitle(item)) {
-            viewHolder.subtitle.setText(getSubtitle(item));
-            viewHolder.subtitle.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.subtitle.setVisibility(View.GONE);
-        }
-
-        String photo = item.getPhoto();
-        imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
-
-        if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
-            viewHolder.followButton.setVisibility(View.VISIBLE);
-            viewHolder.followButton.setFollowing(true);
-        } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
-            viewHolder.followButton.setVisibility(View.GONE);
-            viewHolder.followButton.setEditProfile();
-        } else {
-            viewHolder.followButton.setVisibility(View.VISIBLE);
-            viewHolder.followButton.setFollowing(false);
-        }
-
-        setupContributorButtonListener(position, viewHolder);
     }
 
-    private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
+    private void setupFollowButton(UserModel item, int position, ViewHolder viewHolder) {
+        if (!isAdding) {
+            if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(true);
+            } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+                viewHolder.followButton.setVisibility(View.GONE);
+                viewHolder.followButton.setEditProfile();
+            } else {
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(false);
+            }
+
+            setupFollowButtonListener(position, viewHolder);
+        } else {
+            viewHolder.followButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupFollowButtonListener(final int position, final ViewHolder viewHolder) {
         viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (viewHolder.followButton.isFollowing()) {
