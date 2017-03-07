@@ -9,8 +9,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.model.UserModel;
-import com.shootr.mobile.ui.widgets.ContributorButton;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,11 +87,20 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         String photo = item.getPhoto();
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
 
-        viewHolder.contributorButton.setVisibility(View.GONE);
+        if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
+            viewHolder.followButton.setVisibility(View.VISIBLE);
+            viewHolder.followButton.setFollowing(true);
+        } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+            viewHolder.followButton.setVisibility(View.GONE);
+            viewHolder.followButton.setEditProfile();
+        } else {
+            viewHolder.followButton.setVisibility(View.VISIBLE);
+            viewHolder.followButton.setFollowing(false);
+        }
     }
 
     private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
-        viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
+        viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
                 if (!isAdding) {
                     if (callback != null) {
@@ -129,7 +139,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         @BindView(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
         @BindView(R.id.user_name) TextView title;
         @BindView(R.id.user_username) TextView subtitle;
-        @BindView(R.id.contributor_button) ContributorButton contributorButton;
+        @BindView(R.id.contributor_follow_button) FollowButton followButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

@@ -51,10 +51,13 @@
 
   </LinearLayout>
 
-  <com.shootr.mobile.ui.widgets.ContributorButton android:id="@+id/contributor_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentRight="true"
-    android:layout_centerVertical="true"
-    android:layout_marginRight="16dp" />
+  <com.shootr.mobile.ui.widgets.FollowButton
+      android:id="@+id/contributor_follow_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="16dp"
+      />
+
 </RelativeLayout>
