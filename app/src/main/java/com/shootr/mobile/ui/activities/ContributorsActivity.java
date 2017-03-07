@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -17,11 +19,13 @@ import butterknife.ButterKnife;
 import butterknife.OnItemClick;
 import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ContributorsListAdapter;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.ContributorsPresenter;
 import com.shootr.mobile.ui.views.ContributorsView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -43,11 +47,17 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @BindView(R.id.contributors_progress) ProgressBar progressBar;
     @BindView(R.id.contributors_empty) TextView emptyTextView;
     @BindView(R.id.add_contributor_text) TextView addContributorText;
+    @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+    @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+    @BindString(R.string.analytics_source_contributors) String contributorsSource;
+
 
     @BindString(R.string.error_adding_contributor) String limitContributorsText;
 
     @Inject ContributorsPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject SessionRepository sessionRepository;
+    @Inject AnalyticsTool analyticsTool;
 
     private MenuItemValueHolder addContributorMenu = new MenuItemValueHolder();
 
@@ -193,6 +203,14 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
         }).show();
     }
 
+    @Override public void renderFollow(UserModel userModel) {
+        adapter.followUser(userModel);
+    }
+
+    @Override public void renderUnfollow(UserModel userModel) {
+        adapter.unfollowUser(userModel);
+    }
+
     @Override public void add(int position) {
         presenter.addContributor(adapter.getItem(position));
     }
@@ -200,5 +218,40 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     @Override public void remove(int position) {
         presenter.removeContributor(adapter.getItem(position));
     }
+
+    @Override public void follow(int position) {
+        UserModel userModel = adapter.getItem(position);
+        presenter.followContributor(userModel);
+        sendAnalytics(userModel);
+    }
+
+    @Override public void unFollow(int position) {
+        final UserModel userModel = adapter.getItem(position);
+        new AlertDialog.Builder(this).setMessage(
+            String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+            .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        presenter.unfollowContributor(userModel);
+                    }
+                })
+            .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
+            .create()
+            .show();
+    }
+
+    private void sendAnalytics(UserModel user) {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId(analyticsActionFollow);
+        builder.setLabelId(analyticsLabelFollow);
+        builder.setSource(contributorsSource);
+        builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIdTargetUser(user.getIdUser());
+        builder.setTargetUsername(user.getUsername());
+        analyticsTool.analyticsSendAction(builder);
+        analyticsTool.appsFlyerSendAction(builder);
+    }
+
     //endregion
 }

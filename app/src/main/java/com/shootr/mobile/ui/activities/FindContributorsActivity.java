@@ -202,4 +202,12 @@ public class FindContributorsActivity extends BaseToolbarDecoratedActivity
     @Override public void remove(int position) {
         findContributorsPresenter.removeContributor(adapter.getItem(position));
     }
+
+    @Override public void follow(int position) {
+        /* no-op */
+    }
+
+    @Override public void unFollow(int position) {
+        /* no-op */
+    }
 }

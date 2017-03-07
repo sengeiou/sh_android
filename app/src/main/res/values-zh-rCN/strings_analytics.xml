@@ -90,6 +90,7 @@
     <string name="analytics_source_nicers">nicers</string>
     <string name="analytics_source_stream_detail">streamDetail</string>
     <string name="analytics_source_pin_message">pinMessage</string>
+    <string name="analytics_source_contributors">contributors</string>
     <string name="analytics_notification_disabled_started_shooting">startedShooting</string>
     <string name="analytics_notification_disabled_nice">niceShot</string>
     <string name="analytics_notification_disabled_reshoot">reshoot</string>

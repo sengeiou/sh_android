@@ -9,8 +9,9 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.model.UserModel;
-import com.shootr.mobile.ui.widgets.ContributorButton;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,6 +44,18 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         notifyDataSetChanged();
     }
 
+    public void followUser(UserModel user) {
+        int index = users.indexOf(user);
+        users.get(index).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
+        notifyDataSetChanged();
+    }
+
+    public void unfollowUser(UserModel user) {
+        int index = users.indexOf(user);
+        users.get(index).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+        notifyDataSetChanged();
+    }
+
     public void removeItems() {
         this.users = Collections.emptyList();
     }
@@ -67,6 +80,27 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     @Override public void bindView(UserModel item, final int position, View view) {
         final ViewHolder viewHolder = (ViewHolder) view.getTag();
+        setupTitle(item, viewHolder);
+        setupSubtitle(item, viewHolder);
+        setupAvatar(item, viewHolder);
+        setupFollowButton(item, position, viewHolder);
+    }
+
+    private void setupAvatar(UserModel item, ViewHolder viewHolder) {
+        String photo = item.getPhoto();
+        imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
+    }
+
+    private void setupSubtitle(UserModel item, ViewHolder viewHolder) {
+        if (showSubtitle(item)) {
+            viewHolder.subtitle.setText(getSubtitle(item));
+            viewHolder.subtitle.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.subtitle.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupTitle(UserModel item, ViewHolder viewHolder) {
         viewHolder.title.setText(item.getName());
 
         if (verifiedUser(item)) {
@@ -75,30 +109,37 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         } else {
             viewHolder.title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
-
-        if (showSubtitle(item)) {
-            viewHolder.subtitle.setText(getSubtitle(item));
-            viewHolder.subtitle.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.subtitle.setVisibility(View.GONE);
-        }
-
-        String photo = item.getPhoto();
-        imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
-
-        viewHolder.contributorButton.setVisibility(View.GONE);
     }
 
-    private void setupContributorButtonListener(final int position, final ViewHolder viewHolder) {
-        viewHolder.contributorButton.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                if (!isAdding) {
+    private void setupFollowButton(UserModel item, int position, ViewHolder viewHolder) {
+        if (!isAdding) {
+            if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(true);
+            } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+                viewHolder.followButton.setVisibility(View.GONE);
+                viewHolder.followButton.setEditProfile();
+            } else {
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(false);
+            }
+
+            setupFollowButtonListener(position, viewHolder);
+        } else {
+            viewHolder.followButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void setupFollowButtonListener(final int position, final ViewHolder viewHolder) {
+        viewHolder.followButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                if (viewHolder.followButton.isFollowing()) {
                     if (callback != null) {
-                        callback.remove(position);
+                        callback.unFollow(position);
                     }
                 } else {
                     if (callback != null) {
-                        callback.add(position);
+                        callback.follow(position);
                     }
                 }
             }
@@ -129,7 +170,7 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         @BindView(com.shootr.mobile.R.id.user_avatar) ImageView avatar;
         @BindView(R.id.user_name) TextView title;
         @BindView(R.id.user_username) TextView subtitle;
-        @BindView(R.id.contributor_button) ContributorButton contributorButton;
+        @BindView(R.id.contributor_follow_button) FollowButton followButton;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
@@ -141,5 +182,9 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         void add(int position);
 
         void remove(int position);
+
+        void follow(int position);
+
+        void unFollow(int position);
     }
 }

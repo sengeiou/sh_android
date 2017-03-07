@@ -2,6 +2,8 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
 import com.shootr.mobile.domain.model.user.Contributor;
@@ -20,6 +22,8 @@ public class ContributorsPresenter implements Presenter {
     private final ErrorMessageFactory errorMessageFactory;
     private final UserModelMapper userModelMapper;
     private final ManageContributorsInteractor manageContributorsInteractor;
+    private final FollowInteractor followInteractor;
+    private final UnfollowInteractor unfollowInteractor;
 
     private Boolean hasBeenPaused = false;
     private ContributorsView view;
@@ -27,12 +31,15 @@ public class ContributorsPresenter implements Presenter {
     private Boolean isHolder;
 
     @Inject public ContributorsPresenter(GetContributorsInteractor getContributorsInteractor,
-      ManageContributorsInteractor manageContributorsInteractor, ErrorMessageFactory errorMessageFactory,
-      UserModelMapper userModelMapper) {
+        ManageContributorsInteractor manageContributorsInteractor, ErrorMessageFactory errorMessageFactory,
+        UserModelMapper userModelMapper, FollowInteractor followInteractor,
+        UnfollowInteractor unfollowInteractor) {
         this.getContributorsInteractor = getContributorsInteractor;
         this.manageContributorsInteractor = manageContributorsInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.userModelMapper = userModelMapper;
+        this.followInteractor = followInteractor;
+        this.unfollowInteractor = unfollowInteractor;
     }
 
     protected void setView(ContributorsView contributorsView) {
@@ -135,6 +142,26 @@ public class ContributorsPresenter implements Presenter {
                   view.showError(errorMessageFactory.getMessageForError(error));
               }
           });
+    }
+
+    public void followContributor(final UserModel userModel) {
+        followInteractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                view.renderFollow(userModel);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                view.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void unfollowContributor(final UserModel userModel) {
+        unfollowInteractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                view.renderUnfollow(userModel);
+            }
+        });
     }
 
     @Override public void resume() {
