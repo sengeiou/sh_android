@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @BindView(R.id.streams_list) RecyclerView streamsList;
   @BindView(R.id.get_started_button) Button getStartedButton;
   @BindView(R.id.get_started_progress) ProgressBar progressBar;
+  @BindView(R.id.activity_on_boarding_stream) RelativeLayout container;
   @BindString(R.string.analytics_source_on_boarding) String onBoardingSource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
@@ -95,6 +97,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @Override public void renderOnBoardingList(List<OnBoardingStreamModel> onBoardingStreamModels) {
+    container.setVisibility(View.VISIBLE);
     adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
     adapter.notifyDataSetChanged();
   }
