@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 public class ShotManager extends AbstractManager {
 
+  private static final String DEFAULT_SHOTS_LIMIT = "100";
   @Inject ShotEntityDBMapper shotEntityMapper;
 
   private static final String SHOT_TABLE = ShotTable.TABLE;
@@ -102,14 +103,14 @@ public class ShotManager extends AbstractManager {
     String[] whereArguments = new String[1];
     whereArguments[0] = String.valueOf(parameters.getStreamId());
     String whereClause = streamSelection;
+    String limit =
+        (parameters.getLimit() != null) ? parameters.getLimit().toString() : DEFAULT_SHOTS_LIMIT;
 
-    return readShots(whereClause, whereArguments);
+    return readShots(whereClause, whereArguments, limit);
   }
 
   public List<ShotEntity> getShotsByStreamParametersFiltered(StreamTimelineParameters parameters) {
-    String streamSelection =
-        ShotTable.ID_STREAM + " = ? AND " +
-        ShotTable.IS_PADDING + " = 0";
+    String streamSelection = ShotTable.ID_STREAM + " = ? AND " + ShotTable.IS_PADDING + " = 0";
 
     String[] whereArguments = new String[1];
     whereArguments[0] = String.valueOf(parameters.getStreamId());
