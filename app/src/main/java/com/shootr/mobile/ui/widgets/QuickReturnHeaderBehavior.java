@@ -14,6 +14,8 @@ public class QuickReturnHeaderBehavior extends CoordinatorLayout.Behavior<View> 
 
   private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
   private static final int ANIMATION_DURATION = 200;
+  private static final int POSITIVE_SCROLL = 10;
+  private static final int NEGATIVE_SCROLL = -50;
 
   private boolean isShowing;
   private boolean isHiding;
@@ -30,9 +32,9 @@ public class QuickReturnHeaderBehavior extends CoordinatorLayout.Behavior<View> 
   @Override
   public void onNestedPreScroll(CoordinatorLayout coordinatorLayout, View child, View target,
       int horitzontalScroll, int verticalScroll, int[] consumed) {
-    if (verticalScroll > 12) {
+    if (verticalScroll > POSITIVE_SCROLL && !isHiding) {
       hide(child);
-    } else {
+    } else if (verticalScroll < NEGATIVE_SCROLL && !isShowing) {
       show(child);
     }
   }
@@ -54,10 +56,7 @@ public class QuickReturnHeaderBehavior extends CoordinatorLayout.Behavior<View> 
       }
 
       @Override public void onAnimationCancel(Animator animator) {
-        isHiding = false;
-        if (!isShowing) {
-          show(view);
-        }
+        /* no-op */
       }
 
       @Override public void onAnimationRepeat(Animator animator) {
@@ -83,10 +82,7 @@ public class QuickReturnHeaderBehavior extends CoordinatorLayout.Behavior<View> 
       }
 
       @Override public void onAnimationCancel(Animator animator) {
-        isShowing = false;
-        if (!isHiding) {
-          hide(view);
-        }
+        /* no-op */
       }
 
       @Override public void onAnimationRepeat(Animator animator) {
