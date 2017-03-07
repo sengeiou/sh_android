@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.FollowInteractor;
+import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.GetContributorsInteractor;
 import com.shootr.mobile.domain.interactor.user.contributor.ManageContributorsInteractor;
 import com.shootr.mobile.domain.model.user.Contributor;
@@ -39,6 +41,8 @@ public class ContributorsPresenterTest {
     @Mock ContributorsView contributorsView;
     @Mock StreamJoinDateFormatter streamJoinDateFormatter;
     @Mock ManageContributorsInteractor manageContributorsInteractor;
+    @Mock FollowInteractor followInteractor;
+    @Mock UnfollowInteractor unfollowInteractor;
 
     private ContributorsPresenter presenter;
 
