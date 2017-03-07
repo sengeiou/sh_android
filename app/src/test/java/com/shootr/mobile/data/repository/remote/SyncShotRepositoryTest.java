@@ -131,10 +131,10 @@ public class SyncShotRepositoryTest {
   }
 
   @Test public void shouldGetRemoteStreamMediaShotsWhenCallGetMediaByIdStream() throws Exception {
-    syncShotRepository.getMediaByIdStream(ID_SHOT, Collections.singletonList(ID_USER), TIMESTAMP,
+    syncShotRepository.getMediaByIdStream(ID_SHOT, TIMESTAMP,
         STREAM_TYPES, SHOT_TYPES);
 
-    verify(remoteShotDataSource).getStreamMediaShots(anyString(), anyList(), anyLong(), anyArray(),
+    verify(remoteShotDataSource).getStreamMediaShots(anyString(), anyLong(), anyArray(),
         anyArray());
   }
 

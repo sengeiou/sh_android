@@ -23,7 +23,7 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   List<ShotEntity> getReplies(String shotId, String[] streamTypes, String[] shotTypes);
 
-  List<ShotEntity> getStreamMediaShots(String idStream, List<String> userId, Long maxTimestamp,
+  List<ShotEntity> getStreamMediaShots(String idStream, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes);
 
   List<ShotEntity> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,

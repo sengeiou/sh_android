@@ -133,21 +133,13 @@ public class ShotManager extends AbstractManager {
     return readShots(whereClause, whereArguments);
   }
 
-  public List<ShotEntity> getStreamMediaShots(String idStream, List<String> idUsers) {
-    String usersSelection =
-        ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
+  public List<ShotEntity> getStreamMediaShots(String idStream) {
+
     String streamSelection = ShotTable.ID_STREAM + " = ?";
     String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
+    String[] whereArguments = new String[] { idStream };
 
-    String[] whereArguments = new String[idUsers.size() + 1];
-
-    for (int i = 0; i < idUsers.size(); i++) {
-      whereArguments[i] = String.valueOf(idUsers.get(i));
-    }
-
-    whereArguments[idUsers.size()] = String.valueOf(idStream);
-
-    String whereClause = usersSelection + " AND " + streamSelection + " AND " + imageSelection;
+    String whereClause = streamSelection + " AND " + imageSelection;
 
     return readShots(whereClause, whereArguments);
   }

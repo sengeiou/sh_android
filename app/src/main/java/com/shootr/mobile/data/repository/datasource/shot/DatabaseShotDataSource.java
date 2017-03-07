@@ -47,9 +47,9 @@ public class DatabaseShotDataSource implements ShotDataSource {
     return shotManager.getRepliesTo(shotId);
   }
 
-  @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds,
+  @Override public List<ShotEntity> getStreamMediaShots(String idStream,
       Long maxTimestamp, String[] streamTypes, String[] shotTypes) {
-    return shotManager.getStreamMediaShots(idStream, userIds);
+    return shotManager.getStreamMediaShots(idStream);
   }
 
   @Override

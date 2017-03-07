@@ -8,15 +8,9 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import com.shootr.mobile.domain.repository.shot.ShotRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -26,26 +20,18 @@ public class GetStreamMediaInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final ExternalShotRepository remoteShotRepository;
   private final InternalShotRepository localShotRepository;
-  private final UserRepository remoteUserRepository;
-  private final UserRepository localUserRepository;
-  private final SessionRepository sessionRepository;
   private ErrorCallback errorCallback;
 
   private String idStream;
   private Callback<List<Shot>> callback;
-  private String currentidUser;
 
   @Inject public GetStreamMediaInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository,
-      InternalShotRepository localShotRepository, @Remote UserRepository remoteUserRepository,
-      @Local UserRepository localUserRepository, SessionRepository sessionRepository) {
+      InternalShotRepository localShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteShotRepository = remoteShotRepository;
     this.localShotRepository = localShotRepository;
-    this.remoteUserRepository = remoteUserRepository;
-    this.localUserRepository = localUserRepository;
-    this.sessionRepository = sessionRepository;
   }
 
   public void getStreamMedia(String idStream, Callback<List<Shot>> callback,
@@ -53,7 +39,6 @@ public class GetStreamMediaInteractor implements Interactor {
     this.idStream = idStream;
     this.callback = callback;
     this.errorCallback = errorCallback;
-    this.currentidUser = sessionRepository.getCurrentUserId();
     interactorHandler.execute(this);
   }
 
@@ -67,32 +52,19 @@ public class GetStreamMediaInteractor implements Interactor {
   }
 
   private void getMediaFromLocal() {
-    List<User> people = localUserRepository.getPeople();
-    List<String> peopleIds = getPeopleInStream(people);
-    List<Shot> shots = getShotsFromRepository(peopleIds, localShotRepository, Long.MAX_VALUE);
+    List<Shot> shots = getShotsFromRepository(localShotRepository, Long.MAX_VALUE);
     notifyLoaded(shots);
   }
 
   private void getMediaFromRemote() {
-    List<User> people = remoteUserRepository.getPeople();
-    List<String> peopleIds = getPeopleInStream(people);
-    List<Shot> shots = getShotsFromRepository(peopleIds, remoteShotRepository, Long.MAX_VALUE);
+    List<Shot> shots = getShotsFromRepository(remoteShotRepository, Long.MAX_VALUE);
     notifyLoaded(shots);
   }
 
-  private List<Shot> getShotsFromRepository(List<String> peopleIds, ShotRepository shotRepository,
+  private List<Shot> getShotsFromRepository(ShotRepository shotRepository,
       Long maxTimestamp) {
-    return shotRepository.getMediaByIdStream(idStream, peopleIds, maxTimestamp,
+    return shotRepository.getMediaByIdStream(idStream, maxTimestamp,
         StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
-  }
-
-  private List<String> getPeopleInStream(List<User> people) {
-    List<String> peopleIds = new ArrayList<>();
-    for (User user : people) {
-      peopleIds.add(user.getIdUser());
-    }
-    peopleIds.add(currentidUser);
-    return peopleIds;
   }
 
   private void notifyLoaded(final List<Shot> shots) {

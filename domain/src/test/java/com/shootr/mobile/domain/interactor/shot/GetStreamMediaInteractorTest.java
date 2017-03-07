@@ -1,6 +1,5 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -18,10 +17,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -45,8 +42,7 @@ public class GetStreamMediaInteractorTest {
 
     interactor =
         new com.shootr.mobile.domain.interactor.shot.GetStreamMediaInteractor(interactorHandler,
-            postExecutionThread, remoteShotRepository, localShotRepository, remoteUserRepository,
-            localUserRepository, sessionRepository);
+            postExecutionThread, remoteShotRepository, localShotRepository);
   }
 
   @Test public void shouldNotifyMediaWhenGetShotsFromRepository() throws Exception {
@@ -56,17 +52,6 @@ public class GetStreamMediaInteractorTest {
     interactor.getStreamMedia(ID_STREAM, callback, errorCallback);
 
     verify(callback, atLeastOnce()).onLoaded(anyList());
-  }
-
-  @Test public void shouldNotifyErrorWhenUserRemoteRepositoryThrowsServerComunicationException()
-      throws Exception {
-    when(localUserRepository.getPeople()).thenReturn(users());
-    doThrow(ServerCommunicationException.class).
-        when(remoteUserRepository).getPeople();
-
-    interactor.getStreamMedia(ID_STREAM, callback, errorCallback);
-
-    verify(errorCallback).onError(any(ServerCommunicationException.class));
   }
 
   private List<User> users() {

@@ -95,10 +95,10 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   }
 
   @Override
-  public List<Shot> getMediaByIdStream(String idEvent, List<String> userId, Long maxTimestamp,
+  public List<Shot> getMediaByIdStream(String idEvent, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes) {
     List<ShotEntity> shotEntitiesWithMedia =
-        remoteShotDataSource.getStreamMediaShots(idEvent, userId, maxTimestamp, streamTypes,
+        remoteShotDataSource.getStreamMediaShots(idEvent, maxTimestamp, streamTypes,
             shotTypes);
     return shotEntityMapper.transform(shotEntitiesWithMedia);
   }
