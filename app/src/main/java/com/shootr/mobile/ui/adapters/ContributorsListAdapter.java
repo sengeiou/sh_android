@@ -44,6 +44,18 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
         notifyDataSetChanged();
     }
 
+    public void followUser(UserModel user) {
+        int index = users.indexOf(user);
+        users.get(index).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
+        notifyDataSetChanged();
+    }
+
+    public void unfollowUser(UserModel user) {
+        int index = users.indexOf(user);
+        users.get(index).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+        notifyDataSetChanged();
+    }
+
     public void removeItems() {
         this.users = Collections.emptyList();
     }

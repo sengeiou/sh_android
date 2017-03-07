@@ -144,10 +144,10 @@ public class ContributorsPresenter implements Presenter {
           });
     }
 
-    public void followContributor(String idUser) {
-        followInteractor.follow(idUser, new Interactor.CompletedCallback() {
+    public void followContributor(final UserModel userModel) {
+        followInteractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadContributors();
+                view.renderFollow(userModel);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -156,10 +156,10 @@ public class ContributorsPresenter implements Presenter {
         });
     }
 
-    public void unfollowContributor(String idUser) {
-        unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
+    public void unfollowContributor(final UserModel userModel) {
+        unfollowInteractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                loadContributors();
+                view.renderUnfollow(userModel);
             }
         });
     }

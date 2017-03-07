@@ -21,4 +21,8 @@ public interface ContributorsView extends LoadDataView {
     void removeContributorFromList(UserModel userModel);
 
     void showContextMenu(UserModel userModel);
+
+    void renderFollow(UserModel userModel);
+
+    void renderUnfollow(UserModel userModel);
 }

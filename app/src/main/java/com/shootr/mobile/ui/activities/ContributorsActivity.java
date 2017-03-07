@@ -193,6 +193,14 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
         }).show();
     }
 
+    @Override public void renderFollow(UserModel userModel) {
+        adapter.followUser(userModel);
+    }
+
+    @Override public void renderUnfollow(UserModel userModel) {
+        adapter.unfollowUser(userModel);
+    }
+
     @Override public void add(int position) {
         presenter.addContributor(adapter.getItem(position));
     }
@@ -202,11 +210,11 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
     }
 
     @Override public void follow(int position) {
-        presenter.followContributor(adapter.getItem(position).getIdUser());
+        presenter.followContributor(adapter.getItem(position));
     }
 
     @Override public void unFollow(int position) {
-        presenter.unfollowContributor(adapter.getItem(position).getIdUser());
+        presenter.unfollowContributor(adapter.getItem(position));
     }
     //endregion
 }
