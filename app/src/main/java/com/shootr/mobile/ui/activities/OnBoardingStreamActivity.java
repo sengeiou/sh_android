@@ -51,7 +51,6 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
 
-
   private OnBoardingStreamsAdapter adapter;
 
   @Override protected int getLayoutResource() {
@@ -61,8 +60,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
     animateView(getStartedButton);
-    LinearLayoutManager layoutManager =
-        new LinearLayoutManager(this);
+    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     streamsList.setLayoutManager(layoutManager);
     streamsList.setAdapter(getOnBoardingAdapter());
   }
@@ -70,12 +68,15 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   private OnBoardingStreamsAdapter getOnBoardingAdapter() {
     if (adapter == null) {
       adapter = new OnBoardingStreamsAdapter(new OnBoardingFavoriteClickListener() {
-        @Override public void onFavoriteClick(String idStream, String streamTitle) {
-          presenter.putFavorite(idStream, streamTitle);
+        @Override public void onFavoriteClick(OnBoardingStreamModel onBoardingStream) {
+          presenter.putFavorite(onBoardingStream.getStreamModel().getIdStream(),
+              onBoardingStream.getStreamModel().getTitle());
+          adapter.updateFavorite(onBoardingStream);
         }
 
-        @Override public void onRemoveFavoriteClick(String idStream) {
-          presenter.removeFavorite(idStream);
+        @Override public void onRemoveFavoriteClick(OnBoardingStreamModel onBoardingStream) {
+          presenter.removeFavorite(onBoardingStream.getStreamModel().getIdStream());
+          adapter.updateFavorite(onBoardingStream);
         }
       }, imageLoader, initialsLoader);
     }

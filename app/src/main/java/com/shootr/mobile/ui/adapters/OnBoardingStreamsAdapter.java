@@ -27,9 +27,8 @@ public class OnBoardingStreamsAdapter extends RecyclerView.Adapter<RecyclerView.
   private int lastAnimatedPosition = -1;
   private int screenHeight;
 
-  public OnBoardingStreamsAdapter(
-      OnBoardingFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
-      InitialsLoader initialsLoader) {
+  public OnBoardingStreamsAdapter(OnBoardingFavoriteClickListener onFavoriteClickListener,
+      ImageLoader imageLoader, InitialsLoader initialsLoader) {
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
     this.onFavoriteClickListener = onFavoriteClickListener;
@@ -40,10 +39,10 @@ public class OnBoardingStreamsAdapter extends RecyclerView.Adapter<RecyclerView.
   }
 
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.onboard_stream_card, parent, false);
-    return new OnBoardingStreamViewHolder(view, onFavoriteClickListener,
-        imageLoader, initialsLoader);
+    View view = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.onboard_stream_card, parent, false);
+    return new OnBoardingStreamViewHolder(view, onFavoriteClickListener, imageLoader,
+        initialsLoader);
   }
 
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -80,5 +79,10 @@ public class OnBoardingStreamsAdapter extends RecyclerView.Adapter<RecyclerView.
       screenHeight = size.y;
     }
     return screenHeight;
+  }
+
+  public void updateFavorite(OnBoardingStreamModel onBoardingStreamModel) {
+    int position = onBoardingStreamModelList.indexOf(onBoardingStreamModel);
+    onBoardingStreamModelList.get(position).setFavorite(!onBoardingStreamModel.isFavorite());
   }
 }

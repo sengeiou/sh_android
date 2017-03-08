@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.annotation.Nullable;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_title) TextView title;
   @BindView(R.id.stream_muted) ImageView mute;
   @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
+  @BindView(R.id.stream_card) CardView favoriteCardview;
   @BindView(R.id.stream_watchers) TextView watchers;
   @BindView(R.id.stream_verified) ImageView streamVerified;
   @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
@@ -122,18 +124,26 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
 
   private void setupFavoriteClickListener(final OnBoardingStreamModel onBoardingStreamModel) {
     if (onFavoriteClickListener != null) {
-      favorite.setOnClickListener(new View.OnClickListener() {
+      favoriteCardview.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          if (onBoardingStreamModel.isFavorite()) {
-            onFavoriteClickListener.onRemoveFavoriteClick(
-                onBoardingStreamModel.getStreamModel().getIdStream());
-          } else {
-            onFavoriteClickListener.onFavoriteClick(
-                onBoardingStreamModel.getStreamModel().getIdStream(),
-                onBoardingStreamModel.getStreamModel().getTitle());
-          }
+          handleFavoriteStatus(onBoardingStreamModel);
         }
       });
+      favorite.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          handleFavoriteStatus(onBoardingStreamModel);
+        }
+      });
+    }
+  }
+
+  private void handleFavoriteStatus(OnBoardingStreamModel onBoardingStreamModel) {
+    if (onBoardingStreamModel.isFavorite()) {
+      onFavoriteClickListener.onRemoveFavoriteClick(onBoardingStreamModel);
+      favorite.setChecked(false);
+    } else {
+      onFavoriteClickListener.onFavoriteClick(onBoardingStreamModel);
+      favorite.setChecked(true);
     }
   }
 }
