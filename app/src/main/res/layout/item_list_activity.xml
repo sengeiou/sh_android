@@ -71,6 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
+            android:layout_alignBottom="@+id/activity_text"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:paddingTop="8dp"
