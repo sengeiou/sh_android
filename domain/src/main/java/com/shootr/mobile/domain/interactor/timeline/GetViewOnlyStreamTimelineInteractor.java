@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.ContributorRepository;
 import com.shootr.mobile.domain.repository.Local;
@@ -78,7 +77,7 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
       TreeSet<String> visibleIdUsers) {
     List<Shot> filteredShots = new ArrayList<>();
     for (Shot shot : shotsForStreamTimeline) {
-      if (visibleIdUsers.contains(shot.getUserInfo().getIdUser())) {
+      if (visibleIdUsers.contains(shot.getUserInfo().getIdUser()) || shot.isFromContributor()) {
         filteredShots.add(shot);
       }
     }
@@ -87,16 +86,12 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
 
   private TreeSet<String> getVisibleIdUsers() {
     List<User> people = localUserRepository.getPeople();
-    List<Contributor> contributors = localContributorRepository.getContributors(idStream);
     Stream stream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
     TreeSet<String> visibleIdUsers = new TreeSet<>();
     visibleIdUsers.add(stream.getAuthorId());
     visibleIdUsers.add(sessionRepository.getCurrentUserId());
     for (User user : people) {
       visibleIdUsers.add(user.getIdUser());
-    }
-    for (Contributor contributor : contributors) {
-      visibleIdUsers.add(contributor.getIdUser());
     }
     return visibleIdUsers;
   }
