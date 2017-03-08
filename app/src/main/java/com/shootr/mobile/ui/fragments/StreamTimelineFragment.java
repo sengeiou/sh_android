@@ -8,8 +8,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -254,6 +256,18 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }
         return false;
+      }
+    });
+    shotsTimeline.setItemAnimator(new DefaultItemAnimator() {
+      @Override
+      public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
+        return true;
+      }
+
+      @Override
+      public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
+          @NonNull List<Object> payloads) {
+        return true;
       }
     });
     newShotBarContainer.setVisibility(View.GONE);
@@ -544,7 +558,7 @@ public class StreamTimelineFragment extends BaseFragment
         }, //
         new OnNiceShotListener() {
           @Override public void markNice(ShotModel shot) {
-            streamTimelinePresenter.markNiceShot(shot.getIdShot());
+            streamTimelinePresenter.markNiceShot(shot);
             sendNiceAnalytics(shot);
           }
 
@@ -1099,6 +1113,14 @@ public class StreamTimelineFragment extends BaseFragment
       CustomActionItemBadge.updateFilterAlert(getActivity(), showHoldingShotsMenuItem,
           showHoldingShotsMenuItem.getIcon(), " ");
     }
+  }
+
+  @Override public void renderNice(ShotModel shotModel) {
+    adapter.markNice(shotModel);
+  }
+
+  @Override public void renderUnnice(String idShot) {
+    adapter.unmarkNice(idShot);
   }
 
   private void hideFilterAlert() {

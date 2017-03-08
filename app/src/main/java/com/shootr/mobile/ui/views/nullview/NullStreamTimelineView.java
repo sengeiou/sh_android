@@ -134,6 +134,14 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void renderNice(ShotModel shotModel) {
+        /* no-op */
+    }
+
+    @Override public void renderUnnice(String shotModel) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }
