@@ -294,6 +294,9 @@ public class StreamTimelineFragment extends BaseFragment
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idStream);
     setupPresentersInitialization(idStream, streamAuthorIdUser, streamMode);
+  }
+
+  @Override public void sendAnalythicsEnterTimeline() {
     sendTimelineAnalytics();
   }
 
@@ -389,7 +392,7 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(idStream);
     builder.setStreamName((streamTitle != null) ? streamTitle
-        : streamTimelinePresenter.getStreamTitle());
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }

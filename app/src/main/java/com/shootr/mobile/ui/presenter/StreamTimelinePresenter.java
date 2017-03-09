@@ -254,6 +254,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         setStreamTopic(stream.getTopic());
         isCurrentUserContirbutor = stream.isCurrentUserContributor();
         streamTimelineView.setTitle(stream.getTitle());
+        streamTimelineView.sendAnalythicsEnterTimeline();
         if (streamTopic != null && !streamTopic.isEmpty()) {
           streamTimelineView.showPinnedMessage(streamTopic);
         } else {
@@ -757,7 +758,4 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
   }
 
-  public String getStreamTitle() {
-    return this.streamTitle;
-  }
 }
