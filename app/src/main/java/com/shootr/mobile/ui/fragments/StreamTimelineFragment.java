@@ -294,6 +294,9 @@ public class StreamTimelineFragment extends BaseFragment
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idStream);
     setupPresentersInitialization(idStream, streamAuthorIdUser, streamMode);
+  }
+
+  @Override public void sendAnalythicsEnterTimeline() {
     sendTimelineAnalytics();
   }
 
