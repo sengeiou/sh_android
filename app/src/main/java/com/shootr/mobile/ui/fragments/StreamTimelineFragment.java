@@ -389,7 +389,7 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(idStream);
     builder.setStreamName((streamTitle != null) ? streamTitle
-        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
+        : streamTimelinePresenter.getStreamTitle());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }

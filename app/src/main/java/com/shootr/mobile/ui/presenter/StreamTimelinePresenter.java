@@ -756,4 +756,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       streamTimelineView.openCtaAction(shotModel.getCtaButtonLink());
     }
   }
+
+  public String getStreamTitle() {
+    return this.streamTitle;
+  }
 }
