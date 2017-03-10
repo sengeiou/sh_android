@@ -4,5 +4,5 @@ public interface ActivityFollowUnfollowListener {
 
   void onFollow(String idUser, String username);
 
-  void onUnfollow(String idUser);
+  void onUnfollow(String idUser, String username);
 }

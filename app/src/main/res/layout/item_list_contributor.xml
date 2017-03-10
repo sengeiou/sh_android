@@ -23,7 +23,7 @@
     android:layout_alignBottom="@+id/user_avatar"
     android:layout_alignTop="@+id/user_avatar"
     android:layout_marginLeft="16dp"
-    android:layout_toLeftOf="@+id/contributor_button"
+    android:layout_toLeftOf="@+id/contributor_follow_button"
     android:layout_toRightOf="@+id/user_avatar"
     android:gravity="center_vertical"
     android:orientation="vertical">
@@ -51,10 +51,14 @@
 
   </LinearLayout>
 
-  <com.shootr.mobile.ui.widgets.ContributorButton android:id="@+id/contributor_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentRight="true"
-    android:layout_centerVertical="true"
-    android:layout_marginRight="16dp" />
+  <com.shootr.mobile.ui.widgets.FollowButton
+      android:id="@+id/contributor_follow_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="16dp"
+      android:visibility="gone"
+      />
+
 </RelativeLayout>

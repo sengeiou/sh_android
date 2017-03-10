@@ -467,6 +467,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     setStreamTitle(title);
   }
 
+  @Override public void sendAnalythicsEnterTimeline() {
+    /*no-op*/
+  }
+
   @Override public void setImage(String avatarImage) {
     setAvatarImage(avatarImage);
   }

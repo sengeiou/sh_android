@@ -1,8 +1,10 @@
 package com.shootr.mobile.ui.adapters.listeners;
 
+import com.shootr.mobile.ui.model.OnBoardingStreamModel;
+
 public interface OnBoardingFavoriteClickListener {
 
-  void onFavoriteClick(String idStream, String streamTitle);
+  void onFavoriteClick(OnBoardingStreamModel onBoardingStream);
 
-  void onRemoveFavoriteClick(String idStream);
+  void onRemoveFavoriteClick(OnBoardingStreamModel onBoardingStream);
 }

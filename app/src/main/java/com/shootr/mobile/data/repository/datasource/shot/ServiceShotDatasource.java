@@ -119,7 +119,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
-  @Override public List<ShotEntity> getStreamMediaShots(String idStream, List<String> userIds,
+  @Override public List<ShotEntity> getStreamMediaShots(String idStream,
       Long maxTimestamp, String[] streamTypes, String[] shotTypes) {
     try {
       List<ShotApiEntity> mediaApiShots =

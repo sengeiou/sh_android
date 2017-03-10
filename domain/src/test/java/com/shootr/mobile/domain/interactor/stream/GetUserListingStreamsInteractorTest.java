@@ -35,6 +35,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -147,7 +148,7 @@ public class GetUserListingStreamsInteractorTest {
     when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
-    verify(localStreamRepository).getStreamsByIds(anyList(), anyArray());
+    verify(localStreamRepository, times(2)).getStreamsByIds(anyList(), anyArray());
   }
 
   @Test public void shouldLoadFavoritesFromRemote() throws Exception {

@@ -29,7 +29,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -78,14 +77,6 @@ public class GetViewOnlyStreamTimelineInteractorTest {
     getViewOnlyStreamTimelineInteractor.loadStreamTimeline(ID_STREAM, true, callback);
 
     verify(localUserRepository).getPeople();
-  }
-
-  @Test public void shouldGetContributorsFromLocalRepository() throws Exception {
-    when(localShotRepository.getShotsForStreamTimeline(parameters())).thenReturn(shots());
-
-    getViewOnlyStreamTimelineInteractor.loadStreamTimeline(ID_STREAM, true, callback);
-
-    verify(localContributorRepository).getContributors(anyString());
   }
 
   @Test public void shouldReturnShotsFromVisibleUsersOnly() throws Exception {

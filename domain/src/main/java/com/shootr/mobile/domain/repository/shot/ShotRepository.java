@@ -18,7 +18,7 @@ public interface ShotRepository {
 
   List<Shot> getReplies(String shot, String[] streamTypes, String[] shotTypes);
 
-  List<Shot> getMediaByIdStream(String idEvent, List<String> userId, Long maxTimestamp,
+  List<Shot> getMediaByIdStream(String idEvent, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes);
 
   List<Shot> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,

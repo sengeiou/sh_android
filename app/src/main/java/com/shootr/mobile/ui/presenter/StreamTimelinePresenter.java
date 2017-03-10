@@ -254,6 +254,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         setStreamTopic(stream.getTopic());
         isCurrentUserContirbutor = stream.isCurrentUserContributor();
         streamTimelineView.setTitle(stream.getTitle());
+        streamTimelineView.sendAnalythicsEnterTimeline();
         if (streamTopic != null && !streamTopic.isEmpty()) {
           streamTimelineView.showPinnedMessage(streamTopic);
         } else {
@@ -540,10 +541,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
   }
 
-  public void markNiceShot(String idShot) {
-    markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
+  public void markNiceShot(final ShotModel shotModel) {
+    markNiceShotInteractor.markNiceShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        refreshForUpdatingShotsInfo();
+        streamTimelineView.renderNice(shotModel);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -552,10 +553,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     });
   }
 
-  public void unmarkNiceShot(String idShot) {
+  public void unmarkNiceShot(final String idShot) {
     unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        refreshForUpdatingShotsInfo();
+        streamTimelineView.renderUnnice(idShot);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -756,4 +757,5 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       streamTimelineView.openCtaAction(shotModel.getCtaButtonLink());
     }
   }
+
 }

@@ -118,15 +118,19 @@ public class StreamsListInteractor implements Interactor {
       idUser = sessionRepository.getCurrentUser().getIdUser();
     }
     User currentUser = localUserRepository.getUserById(idUser);
-    String idWatchingStream = currentUser.getIdWatchingStream();
-    if (idWatchingStream != null) {
-      Stream stream =
-          localStreamRepository.getStreamById(idWatchingStream, StreamMode.TYPES_STREAM);
-      Integer watchers = watchersRepository.getWatchers(idWatchingStream);
-      StreamSearchResult streamSearchResult = new StreamSearchResult();
-      streamSearchResult.setStream(stream);
-      streamSearchResult.setFollowingWatchersNumber(watchers);
-      return streamSearchResult;
+    if (currentUser != null) {
+      String idWatchingStream = currentUser.getIdWatchingStream();
+      if (idWatchingStream != null) {
+        Stream stream =
+            localStreamRepository.getStreamById(idWatchingStream, StreamMode.TYPES_STREAM);
+        Integer watchers = watchersRepository.getWatchers(idWatchingStream);
+        StreamSearchResult streamSearchResult = new StreamSearchResult();
+        streamSearchResult.setStream(stream);
+        streamSearchResult.setFollowingWatchersNumber(watchers);
+        return streamSearchResult;
+      } else {
+        return null;
+      }
     } else {
       return null;
     }

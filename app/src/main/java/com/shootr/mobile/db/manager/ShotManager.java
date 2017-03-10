@@ -17,6 +17,7 @@ import javax.inject.Inject;
 
 public class ShotManager extends AbstractManager {
 
+  private static final String DEFAULT_SHOTS_LIMIT = "100";
   @Inject ShotEntityDBMapper shotEntityMapper;
 
   private static final String SHOT_TABLE = ShotTable.TABLE;
@@ -102,14 +103,14 @@ public class ShotManager extends AbstractManager {
     String[] whereArguments = new String[1];
     whereArguments[0] = String.valueOf(parameters.getStreamId());
     String whereClause = streamSelection;
+    String limit =
+        (parameters.getLimit() != null) ? parameters.getLimit().toString() : DEFAULT_SHOTS_LIMIT;
 
-    return readShots(whereClause, whereArguments);
+    return readShots(whereClause, whereArguments, limit);
   }
 
   public List<ShotEntity> getShotsByStreamParametersFiltered(StreamTimelineParameters parameters) {
-    String streamSelection =
-        ShotTable.ID_STREAM + " = ? AND " +
-        ShotTable.IS_PADDING + " = 0";
+    String streamSelection = ShotTable.ID_STREAM + " = ? AND " + ShotTable.IS_PADDING + " = 0";
 
     String[] whereArguments = new String[1];
     whereArguments[0] = String.valueOf(parameters.getStreamId());
@@ -132,21 +133,13 @@ public class ShotManager extends AbstractManager {
     return readShots(whereClause, whereArguments);
   }
 
-  public List<ShotEntity> getStreamMediaShots(String idStream, List<String> idUsers) {
-    String usersSelection =
-        ShotTable.ID_USER + " IN (" + createListPlaceholders(idUsers.size()) + ")";
+  public List<ShotEntity> getStreamMediaShots(String idStream) {
+
     String streamSelection = ShotTable.ID_STREAM + " = ?";
     String imageSelection = ShotTable.IMAGE + " IS NOT NULL ";
+    String[] whereArguments = new String[] { idStream };
 
-    String[] whereArguments = new String[idUsers.size() + 1];
-
-    for (int i = 0; i < idUsers.size(); i++) {
-      whereArguments[i] = String.valueOf(idUsers.get(i));
-    }
-
-    whereArguments[idUsers.size()] = String.valueOf(idStream);
-
-    String whereClause = usersSelection + " AND " + streamSelection + " AND " + imageSelection;
+    String whereClause = streamSelection + " AND " + imageSelection;
 
     return readShots(whereClause, whereArguments);
   }

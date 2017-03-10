@@ -13,6 +13,18 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.29.0] - 2017-03-10
+
+### Added
+- Contributor easy follow
+
+### Changed
+- Render nice in timeline
+
+### Removed
+- Some requests on server
+
+
 ## [1.28.0] - 2017-03-06
 
 ### Added

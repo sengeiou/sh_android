@@ -56,13 +56,12 @@ public class LocalShotRepository implements InternalShotRepository {
   }
 
   @Override
-  public List<Shot> getMediaByIdStream(String idEvent, List<String> userIds, Long maxTimestamp,
+  public List<Shot> getMediaByIdStream(String idEvent, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes) {
     List<ShotEntity> shotEntitiesWithMedia =
-        localShotDataSource.getStreamMediaShots(idEvent, userIds, maxTimestamp, streamTypes,
+        localShotDataSource.getStreamMediaShots(idEvent, maxTimestamp, streamTypes,
             shotTypes);
-    List<Shot> shotsWithMedia = shotEntityMapper.transform(shotEntitiesWithMedia);
-    return shotsWithMedia;
+    return shotEntityMapper.transform(shotEntitiesWithMedia);
   }
 
   @Override public List<Shot> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,

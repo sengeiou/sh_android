@@ -355,4 +355,31 @@ public class ShotsTimelineAdapter
       }
     }
   }
+
+  public void markNice(ShotModel shotModel) {
+    int index = 0;
+    for (ShotModel shot : shots) {
+      if (shot.getIdShot().equals(shotModel.getIdShot())) {
+        int niceCount = shot.getNiceCount() + 1;
+        shot.setNiceCount(niceCount);
+        shot.setIsMarkedAsNice(true);
+        notifyItemChanged(index);
+      }
+      index++;
+    }
+
+  }
+
+  public void unmarkNice(String idShot) {
+    int index = 0;
+    for (ShotModel shot : shots) {
+      if (shot.getIdShot().equals(idShot)) {
+        int niceCount = shot.getNiceCount() - 1;
+        shot.setNiceCount(niceCount);
+        shot.setIsMarkedAsNice(false);
+        notifyItemChanged(index);
+      }
+      index++;
+    }
+  }
 }

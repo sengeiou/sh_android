@@ -42,4 +42,8 @@ public interface StreamTimelineView extends TimelineView  {
     void storeCtaClickLink(ShotModel shotModel);
 
     void showFilterAlert();
+
+    void renderNice(ShotModel shotModel);
+
+    void renderUnnice(String idShot);
 }

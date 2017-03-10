@@ -1,6 +1,5 @@
 package com.shootr.mobile.domain.interactor.shot;
 
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -17,7 +16,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -40,8 +38,7 @@ public class GetOlderStreamMediaInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
     interactor = new com.shootr.mobile.domain.interactor.shot.GetOlderStreamMediaInteractor(
-        interactorHandler, postExecutionThread, remoteShotRepository, remoteUserRepository,
-        sessionRepository);
+        interactorHandler, postExecutionThread, remoteShotRepository);
   }
 
   @Test public void shouldNotifyResultsWhenGetMediaFromRemote() throws Exception {
@@ -50,15 +47,6 @@ public class GetOlderStreamMediaInteractorTest {
     interactor.getOlderStreamMedia(ID_STREAM, TIME, callback, errorCallback);
 
     verify(callback).onLoaded(anyList());
-  }
-
-  @Test public void shouldNotifyErrorWhenRemoteUserRepositoryThrowsServerComunicationException()
-      throws Exception {
-    when(remoteUserRepository.getPeople()).thenThrow(ServerCommunicationException.class);
-
-    interactor.getOlderStreamMedia(ID_STREAM, TIME, callback, errorCallback);
-
-    verify(errorCallback).onError(any(ServerCommunicationException.class));
   }
 
   private List<User> users() {

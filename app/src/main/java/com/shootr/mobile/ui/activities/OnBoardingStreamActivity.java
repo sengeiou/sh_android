@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @BindView(R.id.streams_list) RecyclerView streamsList;
   @BindView(R.id.get_started_button) Button getStartedButton;
   @BindView(R.id.get_started_progress) ProgressBar progressBar;
+  @BindView(R.id.activity_on_boarding_stream) RelativeLayout container;
   @BindString(R.string.analytics_source_on_boarding) String onBoardingSource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
@@ -49,7 +51,6 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
 
-
   private OnBoardingStreamsAdapter adapter;
 
   @Override protected int getLayoutResource() {
@@ -59,8 +60,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
     animateView(getStartedButton);
-    LinearLayoutManager layoutManager =
-        new LinearLayoutManager(this);
+    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     streamsList.setLayoutManager(layoutManager);
     streamsList.setAdapter(getOnBoardingAdapter());
   }
@@ -68,12 +68,15 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   private OnBoardingStreamsAdapter getOnBoardingAdapter() {
     if (adapter == null) {
       adapter = new OnBoardingStreamsAdapter(new OnBoardingFavoriteClickListener() {
-        @Override public void onFavoriteClick(String idStream, String streamTitle) {
-          presenter.putFavorite(idStream, streamTitle);
+        @Override public void onFavoriteClick(OnBoardingStreamModel onBoardingStream) {
+          presenter.putFavorite(onBoardingStream.getStreamModel().getIdStream(),
+              onBoardingStream.getStreamModel().getTitle());
+          adapter.updateFavorite(onBoardingStream);
         }
 
-        @Override public void onRemoveFavoriteClick(String idStream) {
-          presenter.removeFavorite(idStream);
+        @Override public void onRemoveFavoriteClick(OnBoardingStreamModel onBoardingStream) {
+          presenter.removeFavorite(onBoardingStream.getStreamModel().getIdStream());
+          adapter.updateFavorite(onBoardingStream);
         }
       }, imageLoader, initialsLoader);
     }
@@ -95,6 +98,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @Override public void renderOnBoardingList(List<OnBoardingStreamModel> onBoardingStreamModels) {
+    container.setVisibility(View.VISIBLE);
     adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
     adapter.notifyDataSetChanged();
   }

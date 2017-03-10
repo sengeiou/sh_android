@@ -62,6 +62,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void sendAnalythicsEnterTimeline() {
+        /* no-op */
+    }
+
     @Override public void setImage(String imageAvatar) {
         /* no-op */
     }
@@ -131,6 +135,14 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void showFilterAlert() {
+        /* no-op */
+    }
+
+    @Override public void renderNice(ShotModel shotModel) {
+        /* no-op */
+    }
+
+    @Override public void renderUnnice(String shotModel) {
         /* no-op */
     }
 
