@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -172,8 +174,8 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
                 sendFollowAnalytics(idUser, username);
             }
 
-            @Override public void onUnfollow(String idUser) {
-                timelinePresenter.unFollowUser(idUser);
+            @Override public void onUnfollow(String idUser, String username) {
+                setupUnFollowDialog(idUser, username);
             }
         }, new ActivityFavoriteClickListener() {
             @Override public void onFavoriteClick(String idStream, String streamTitle) {
@@ -187,6 +189,21 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         });
         activityList.setAdapter(adapter);
     }
+
+    private void setupUnFollowDialog(final String idUser, String username) {
+        new AlertDialog.Builder(getContext()).setMessage(
+            String.format(getString(R.string.unfollow_dialog_message), username))
+            .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        timelinePresenter.unFollowUser(idUser);
+                    }
+                })
+            .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
+            .create()
+            .show();
+    }
+
 
     private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
         AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
