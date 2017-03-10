@@ -56,7 +56,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 if (followButton.isFollowing()) {
-                    onFollowUnfollowListener.onUnfollow(activity.getIdUser());
+                    onFollowUnfollowListener.onUnfollow(activity.getIdUser(), activity.getUsername());
                     followButton.setFollowing(false);
                 } else {
                     onFollowUnfollowListener.onFollow(activity.getIdUser(), activity.getUsername());
