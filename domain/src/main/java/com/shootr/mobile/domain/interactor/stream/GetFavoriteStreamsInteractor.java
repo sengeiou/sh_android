@@ -11,7 +11,6 @@ import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -19,7 +18,6 @@ import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class GetFavoriteStreamsInteractor implements Interactor {
@@ -29,7 +27,6 @@ public class GetFavoriteStreamsInteractor implements Interactor {
   private final InternalFavoriteRepository localFavoriteRepository;
   private final ExternalFavoriteRepository remoteFavoriteRepository;
   private final StreamRepository localStreamRepository;
-  private final WatchersRepository watchersRepository;
   private final SessionRepository sessionRepository;
   private final UserRepository localUserRepository;
 
@@ -39,14 +36,13 @@ public class GetFavoriteStreamsInteractor implements Interactor {
   @Inject public GetFavoriteStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, InternalFavoriteRepository localFavoriteRepository,
       ExternalFavoriteRepository remoteFavoriteRepository,
-      @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
+      @Local StreamRepository localStreamRepository,
       SessionRepository sessionRepository, @Local UserRepository localUserRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localFavoriteRepository = localFavoriteRepository;
     this.remoteFavoriteRepository = remoteFavoriteRepository;
     this.localStreamRepository = localStreamRepository;
-    this.watchersRepository = watchersRepository;
     this.sessionRepository = sessionRepository;
     this.localUserRepository = localUserRepository;
   }
@@ -86,7 +82,7 @@ public class GetFavoriteStreamsInteractor implements Interactor {
   private void mapFavorites(List<Favorite> favorites) {
     List<Stream> favoriteStreams = streamsFromFavorites(favorites);
     favoriteStreams = sortStreamsByName(favoriteStreams);
-    List<StreamSearchResult> favoriteStreamsWithWatchers = addWatchersToStreams(favoriteStreams);
+    List<StreamSearchResult> favoriteStreamsWithWatchers = transformStreamtoSearchResult(favoriteStreams);
     markWatchingStream(favoriteStreamsWithWatchers);
     notifyLoaded(favoriteStreamsWithWatchers);
   }
@@ -126,12 +122,10 @@ public class GetFavoriteStreamsInteractor implements Interactor {
     return localStreamRepository.getStreamsByIds(idStreams, StreamMode.TYPES_STREAM);
   }
 
-  private List<StreamSearchResult> addWatchersToStreams(List<Stream> streams) {
-    Map<String, Integer> watchersInStreams = watchersRepository.getWatchers();
+  private List<StreamSearchResult> transformStreamtoSearchResult(List<Stream> streams) {
     List<StreamSearchResult> streamsWithWatchers = new ArrayList<>(streams.size());
     for (Stream stream : streams) {
-      Integer streamsWatchers = watchersInStreams.get(stream.getId());
-      streamsWithWatchers.add(new StreamSearchResult(stream, streamsWatchers));
+      streamsWithWatchers.add(new StreamSearchResult(stream));
     }
     return streamsWithWatchers;
   }

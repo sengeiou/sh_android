@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class StreamResultModel implements Serializable {
 
     private StreamModel streamModel;
-    private int watchers;
     private boolean isWatching;
     private Boolean isFavorited;
 
@@ -15,14 +14,6 @@ public class StreamResultModel implements Serializable {
 
     public void setStreamModel(StreamModel streamModel) {
         this.streamModel = streamModel;
-    }
-
-    public int getWatchers() {
-        return watchers;
-    }
-
-    public void setWatchers(int watchers) {
-        this.watchers = watchers;
     }
 
     public boolean isWatching() {
@@ -59,7 +50,6 @@ public class StreamResultModel implements Serializable {
 
     @Override public int hashCode() {
         int result = streamModel != null ? streamModel.hashCode() : 0;
-        result = 31 * result + watchers;
         result = 31 * result + (isWatching ? 1 : 0);
         return result;
     }

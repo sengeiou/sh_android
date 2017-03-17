@@ -13,7 +13,6 @@ import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -60,7 +59,6 @@ public class StreamsListInteractorTest {
   @Mock Interactor.ErrorCallback dummyErrorCallback;
   @Mock LocaleProvider localeProvider;
   @Mock StreamRepository localStreamRepository;
-  @Mock WatchersRepository watchersRepository;
 
   private StreamsListInteractor interactor;
 
@@ -71,7 +69,7 @@ public class StreamsListInteractorTest {
 
     interactor = new StreamsListInteractor(interactorHandler, postExecutionThread,
         remoteStreamSearchRepository, localStreamSearchRepository,
-        streamListSynchronizationRepository, localStreamRepository, watchersRepository,
+        streamListSynchronizationRepository, localStreamRepository,
         sessionRepository, localUserRepository, timeUtils, localeProvider);
 
     when(timeUtils.getCurrentTime()).thenReturn(NOW);
@@ -243,12 +241,7 @@ public class StreamsListInteractorTest {
     return result;
   }
 
-  private StreamSearchResultList streamResultList() {
-    List<StreamSearchResult> result = Arrays.asList(streamResult());
-    return new StreamSearchResultList(result);
-  }
-
-  private void setupLocalRepositoryReturnsCurrentUser() {
+ private void setupLocalRepositoryReturnsCurrentUser() {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
     when(localUserRepository.getUserById(ID_CURRENT_USER)).thenReturn(currentUser());
   }

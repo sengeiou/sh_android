@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import butterknife.BindView;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
@@ -21,6 +22,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
   private final OnFavoriteClickListener onFavoriteClickListener;
 
   @BindView(R.id.favorite_stream_indicator) ImageView favoriteIndicator;
+  @BindView(R.id.stream_rank) TextView rankNumber;
   private Boolean isFavorite;
 
   public ListingStreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
@@ -30,15 +32,17 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
     this.onFavoriteClickListener = onFavoriteClickListener;
   }
 
-  @Override public void render(StreamResultModel streamResultModel, boolean showSeparator,
-      boolean hasToShowIsFavorite) {
-    super.render(streamResultModel, showSeparator, hasToShowIsFavorite);
+  @Override public void render(StreamResultModel streamResultModel, boolean hasToShowIsFavorite,
+      Integer position, boolean hasToShowRankNumber) {
+    super.render(streamResultModel, hasToShowIsFavorite, position, hasToShowRankNumber);
     setupFavoriteIndicator(streamResultModel);
   }
 
-  @Override public void render(StreamResultModel streamResultModel, boolean showSeparator,
-      List<StreamResultModel> favoritedStreams, boolean hasToShowIsFavorite) {
-    super.render(streamResultModel, showSeparator, favoritedStreams, hasToShowIsFavorite);
+  @Override
+  public void render(StreamResultModel streamResultModel, List<StreamResultModel> favoritedStreams,
+      boolean hasToShowIsFavorite, Integer position, boolean hasToShowRankNumber) {
+    super.render(streamResultModel, favoritedStreams, hasToShowIsFavorite, position,
+        hasToShowRankNumber);
     setupFavoriteIndicator(streamResultModel);
   }
 

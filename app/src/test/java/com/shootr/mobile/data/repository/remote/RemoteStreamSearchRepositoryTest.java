@@ -6,11 +6,8 @@ import com.shootr.mobile.data.repository.datasource.stream.DatabaseMemoryStreamS
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.stream.StreamListDataSource;
 import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -32,7 +29,6 @@ public class RemoteStreamSearchRepositoryTest {
   private static final String USER_ID = "userId";
   @Mock DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource;
   @Mock StreamListDataSource remoteStreamListDataSource;
-  @Mock WatchersRepository localWatchersRepository;
   @Mock StreamEntityMapper streamEntityMapper;
   @Mock StreamDataSource localStreamDataSource;
   @Mock StreamDataSource remoteStreamDataSource;
@@ -44,14 +40,13 @@ public class RemoteStreamSearchRepositoryTest {
 
     repository =
         new RemoteStreamSearchRepository(localStreamSearchDataSource, remoteStreamListDataSource,
-            localWatchersRepository, streamEntityMapper, localStreamDataSource,
+            streamEntityMapper, localStreamDataSource,
             remoteStreamDataSource);
   }
 
   @Test public void shouldPutInLocalStreamListWhenAreObtainedFromRemote() throws Exception {
     when(remoteStreamListDataSource.getStreamList(anyString(), any(String[].class))).thenReturn(
         streamEntityList());
-    when(localWatchersRepository.getWatchers()).thenReturn(watchers());
     when(streamEntityMapper.transform(any(StreamEntity.class))).thenReturn(stream());
 
     repository.getDefaultStreams(LOCALE, TYPES);
@@ -62,7 +57,6 @@ public class RemoteStreamSearchRepositoryTest {
   @Test public void shouldSetLastSearchResultsInLocalWhenGetStreams() throws Exception {
     when(remoteStreamListDataSource.getStreams(anyString(), anyString(),
         any(String[].class))).thenReturn(streamEntityList());
-    when(localWatchersRepository.getWatchers()).thenReturn(watchers());
     when(streamEntityMapper.transform(any(StreamEntity.class))).thenReturn(stream());
 
     repository.getStreams(QUERY, LOCALE, TYPES);
@@ -74,12 +68,6 @@ public class RemoteStreamSearchRepositoryTest {
     repository.getStreamsListing(USER_ID, TYPES);
 
     verify(localStreamDataSource).putStreams(anyList());
-  }
-
-  private Map<String, Integer> watchers() {
-    Map<String, Integer> watcher = new HashMap<>();
-    watcher.put(STREAM_ID, WATCHERS_COUNT);
-    return watcher;
   }
 
   private List<StreamEntity> streamEntityList() {

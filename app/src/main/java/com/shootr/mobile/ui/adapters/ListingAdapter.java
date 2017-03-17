@@ -95,11 +95,10 @@ public class ListingAdapter extends SectionedRecyclerViewAdapter<HeaderViewHolde
     @Override protected void onBindItemViewHolder(StreamResultViewHolder holder, int section, int position) {
         ((ListingStreamResultViewHolder) holder).setFavorite(isFavorite(section, position));
         StreamResultModel stream = getItem(section, position);
-        boolean showSeparator = position != 0;
         if (isCurrentUser) {
-            holder.render(stream, showSeparator, favoritedStreams, true);
+            holder.render(stream, favoritedStreams, true, position, false);
         } else {
-            holder.render(stream, showSeparator, true);
+            holder.render(stream, true, position, false);
         }
     }
 

@@ -103,7 +103,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
         favoritesListPresenter.onFavoriteLongClicked(stream);
         return true;
       }
-    }, null, false);
+    }, null, false, false);
     adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
       @Override public void onUnwatchClick() {
         favoritesListPresenter.unwatchStream();

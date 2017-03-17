@@ -10,99 +10,93 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 
 public class RemoteStreamSearchRepository implements StreamSearchRepository {
 
-    @Deprecated private final DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource;
-    private final StreamListDataSource remoteStreamListDataSource;
-    private final WatchersRepository localWatchersRepository;
-    private final StreamEntityMapper streamEntityMapper;
-    private final StreamDataSource localStreamDataSource;
-    private final StreamDataSource remoteStreamDataSource;
+  @Deprecated private final DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource;
+  private final StreamListDataSource remoteStreamListDataSource;
+  private final StreamEntityMapper streamEntityMapper;
+  private final StreamDataSource localStreamDataSource;
+  private final StreamDataSource remoteStreamDataSource;
 
-    @Inject public RemoteStreamSearchRepository(DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource,
-      @Remote StreamListDataSource remoteStreamListDataSource, @Local WatchersRepository localWatchersRepository,
+  @Inject public RemoteStreamSearchRepository(
+      DatabaseMemoryStreamSearchDataSource localStreamSearchDataSource,
+      @Remote StreamListDataSource remoteStreamListDataSource,
       StreamEntityMapper streamEntityMapper, @Local StreamDataSource localStreamDataSource,
       @Remote StreamDataSource remoteStreamDataSource) {
-        this.localStreamSearchDataSource = localStreamSearchDataSource;
-        this.remoteStreamListDataSource = remoteStreamListDataSource;
-        this.localWatchersRepository = localWatchersRepository;
-        this.streamEntityMapper = streamEntityMapper;
-        this.localStreamDataSource = localStreamDataSource;
-        this.remoteStreamDataSource = remoteStreamDataSource;
-    }
+    this.localStreamSearchDataSource = localStreamSearchDataSource;
+    this.remoteStreamListDataSource = remoteStreamListDataSource;
+    this.streamEntityMapper = streamEntityMapper;
+    this.localStreamDataSource = localStreamDataSource;
+    this.remoteStreamDataSource = remoteStreamDataSource;
+  }
 
-    @Override public List<StreamSearchResult> getDefaultStreams(String locale, String[] types) {
-        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale, types);
-        localStreamDataSource.putStreams(streamEntityList);
-        Map<String, Integer> watchers = localWatchersRepository.getWatchers();
-        return transformStreamEntitiesWithWatchers(streamEntityList, watchers);
-    }
+  @Override public List<StreamSearchResult> getDefaultStreams(String locale, String[] types) {
+    List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale, types);
+    localStreamDataSource.putStreams(streamEntityList);
+    return transformStreamEntitiesWithWatchers(streamEntityList);
+  }
 
-    private List<StreamSearchResult> transformStreamEntitiesWithWatchers(List<StreamEntity> streamEntities,
-      Map<String, Integer> watchers) {
-        List<StreamSearchResult> results = new ArrayList<>(streamEntities.size());
-        for (StreamEntity streamEntity : streamEntities) {
-            Stream stream = streamEntityMapper.transform(streamEntity);
-            Integer streamWatchers = watchers.get(stream.getId());
-            StreamSearchResult streamSearchResult =
-              new StreamSearchResult(stream, streamWatchers != null ? streamWatchers : 0);
-            results.add(streamSearchResult);
-        }
-        return results;
+  private List<StreamSearchResult> transformStreamEntitiesWithWatchers(
+      List<StreamEntity> streamEntities) {
+    List<StreamSearchResult> results = new ArrayList<>(streamEntities.size());
+    for (StreamEntity streamEntity : streamEntities) {
+      Stream stream = streamEntityMapper.transform(streamEntity);
+      StreamSearchResult streamSearchResult = new StreamSearchResult(stream);
+      results.add(streamSearchResult);
     }
+    return results;
+  }
 
-    private List<StreamSearchEntity> transformStreamEntitiesInStreamSearchEntities(List<StreamEntity> streamEntities,
-      Map<String, Integer> watchers) {
-        List<StreamSearchEntity> results = new ArrayList<>(streamEntities.size());
-        for (StreamEntity streamEntity : streamEntities) {
-            StreamSearchEntity streamSearchEntity = transformStreamEntityInStreamSearchEntity(watchers, streamEntity);
-            results.add(streamSearchEntity);
-        }
-        return results;
+  private List<StreamSearchEntity> transformStreamEntitiesInStreamSearchEntities(
+      List<StreamEntity> streamEntities) {
+    List<StreamSearchEntity> results = new ArrayList<>(streamEntities.size());
+    for (StreamEntity streamEntity : streamEntities) {
+      StreamSearchEntity streamSearchEntity =
+          transformStreamEntityInStreamSearchEntity(streamEntity);
+      results.add(streamSearchEntity);
     }
+    return results;
+  }
 
-    private StreamSearchEntity transformStreamEntityInStreamSearchEntity(Map<String, Integer> watchers,
-      StreamEntity streamEntity) {
-        StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
-        streamSearchEntity.setIdStream(streamEntity.getIdStream());
-        streamSearchEntity.setIdUser(streamEntity.getIdUser());
-        streamSearchEntity.setUserName(streamEntity.getUserName());
-        streamSearchEntity.setTitle(streamEntity.getTitle());
-        streamSearchEntity.setPhoto(streamEntity.getPhoto());
-        streamSearchEntity.setNotifyCreation(streamEntity.getNotifyCreation());
-        streamSearchEntity.setRemoved(streamEntity.getRemoved());
-        streamSearchEntity.setCountry(streamEntity.getCountry());
-        streamSearchEntity.setBirth(streamEntity.getBirth());
-        streamSearchEntity.setDeleted(streamEntity.getDeleted());
-        streamSearchEntity.setModified(streamEntity.getModified());
-        streamEntity.setRevision(streamEntity.getRevision());
-        if (watchers.get(streamEntity.getIdStream()) != null) {
-            streamSearchEntity.setTotalFollowingWatchers(watchers.get(streamEntity.getIdStream()));
-        }
-        return streamSearchEntity;
-    }
+  private StreamSearchEntity transformStreamEntityInStreamSearchEntity(StreamEntity streamEntity) {
+    StreamSearchEntity streamSearchEntity = new StreamSearchEntity();
+    streamSearchEntity.setIdStream(streamEntity.getIdStream());
+    streamSearchEntity.setIdUser(streamEntity.getIdUser());
+    streamSearchEntity.setUserName(streamEntity.getUserName());
+    streamSearchEntity.setTitle(streamEntity.getTitle());
+    streamSearchEntity.setPhoto(streamEntity.getPhoto());
+    streamSearchEntity.setNotifyCreation(streamEntity.getNotifyCreation());
+    streamSearchEntity.setRemoved(streamEntity.getRemoved());
+    streamSearchEntity.setCountry(streamEntity.getCountry());
+    streamSearchEntity.setBirth(streamEntity.getBirth());
+    streamSearchEntity.setDeleted(streamEntity.getDeleted());
+    streamSearchEntity.setModified(streamEntity.getModified());
+    streamEntity.setRevision(streamEntity.getRevision());
 
-    @Override public List<StreamSearchResult> getStreams(String query, String locale, String[] types) {
-        List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreams(query, locale, types);
-        localStreamDataSource.putStreams(streamEntityList);
-        Map<String, Integer> watchers = localWatchersRepository.getWatchers();
+    return streamSearchEntity;
+  }
 
-        localStreamSearchDataSource.setLastSearchResults(transformStreamEntitiesInStreamSearchEntities(streamEntityList,
-          watchers));
-        return transformStreamEntitiesWithWatchers(streamEntityList, watchers);
-    }
+  @Override
+  public List<StreamSearchResult> getStreams(String query, String locale, String[] types) {
+    List<StreamEntity> streamEntityList =
+        remoteStreamListDataSource.getStreams(query, locale, types);
+    localStreamDataSource.putStreams(streamEntityList);
 
-    @Override public List<StreamSearchResult> getStreamsListing(String listingIdUser, String[] types) {
-        List<StreamEntity> streamEntitiesListing = remoteStreamDataSource.getStreamsListing(listingIdUser, types);
-        localStreamDataSource.putStreams(streamEntitiesListing);
-        Map<String, Integer> watchers = localWatchersRepository.getWatchers();
-        return transformStreamEntitiesWithWatchers(streamEntitiesListing, watchers);
-    }
+    localStreamSearchDataSource.setLastSearchResults(
+        transformStreamEntitiesInStreamSearchEntities(streamEntityList));
+    return transformStreamEntitiesWithWatchers(streamEntityList);
+  }
+
+  @Override
+  public List<StreamSearchResult> getStreamsListing(String listingIdUser, String[] types) {
+    List<StreamEntity> streamEntitiesListing =
+        remoteStreamDataSource.getStreamsListing(listingIdUser, types);
+    localStreamDataSource.putStreams(streamEntitiesListing);
+    return transformStreamEntitiesWithWatchers(streamEntitiesListing);
+  }
 }

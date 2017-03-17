@@ -27,7 +27,6 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
     StreamResultModel resultModel = new StreamResultModel();
     resultModel.setStreamModel(streamModel);
-    resultModel.setWatchers(streamSearchResult.getFollowingWatchersNumber());
     resultModel.setIsWatching(streamSearchResult.isWatching());
     return resultModel;
   }

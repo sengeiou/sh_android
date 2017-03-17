@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -36,7 +35,6 @@ public class StreamsListInteractor implements Interactor {
   private final UserRepository localUserRepository;
   private final TimeUtils timeUtils;
   private final LocaleProvider localeProvider;
-  private final WatchersRepository watchersRepository;
   private final StreamRepository localStreamRepository;
 
   private Callback<StreamSearchResultList> callback;
@@ -47,7 +45,7 @@ public class StreamsListInteractor implements Interactor {
       @Remote StreamSearchRepository remoteStreamSearchRepository,
       InternalStreamSearchRepository localStreamSearchRepository,
       StreamListSynchronizationRepository streamListSynchronizationRepository,
-      @Local StreamRepository localStreamRepository, @Local WatchersRepository watchersRepository,
+      @Local StreamRepository localStreamRepository,
       SessionRepository sessionRepository, @Local UserRepository localUserRepository,
       TimeUtils timeUtils, LocaleProvider localeProvider) {
     this.interactorHandler = interactorHandler;
@@ -59,7 +57,6 @@ public class StreamsListInteractor implements Interactor {
     this.localUserRepository = localUserRepository;
     this.timeUtils = timeUtils;
     this.localeProvider = localeProvider;
-    this.watchersRepository = watchersRepository;
     this.localStreamRepository = localStreamRepository;
   }
 
@@ -123,10 +120,8 @@ public class StreamsListInteractor implements Interactor {
       if (idWatchingStream != null) {
         Stream stream =
             localStreamRepository.getStreamById(idWatchingStream, StreamMode.TYPES_STREAM);
-        Integer watchers = watchersRepository.getWatchers(idWatchingStream);
         StreamSearchResult streamSearchResult = new StreamSearchResult();
         streamSearchResult.setStream(stream);
-        streamSearchResult.setFollowingWatchersNumber(watchers);
         return streamSearchResult;
       } else {
         return null;
