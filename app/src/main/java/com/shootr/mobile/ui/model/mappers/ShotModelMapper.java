@@ -2,8 +2,11 @@ package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.Url;
+import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.UrlModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -58,7 +61,25 @@ public class ShotModelMapper {
     if (userInfo.getVerifiedUser() != null) {
       shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
     }
+    setupEntities(shot, shotModel);
+
     return shotModel;
+  }
+
+  private void setupEntities(Shot shot, ShotModel shotModel) {
+    if (shot.getEntities() != null) {
+      ArrayList<UrlModel> urlModels = new ArrayList<>();
+      for (Url url : shot.getEntities().getUrls()) {
+        UrlModel urlModel = new UrlModel();
+        urlModel.setDisplayUrl(url.getDisplayUrl());
+        urlModel.setUrl(url.getUrl());
+        urlModel.setIndices(url.getIndices());
+        urlModels.add(urlModel);
+      }
+      EntitiesModel entitiesModel = new EntitiesModel();
+      entitiesModel.setUrls(urlModels);
+      shotModel.setEntitiesModel(entitiesModel);
+    }
   }
 
   private String durationToText(Long durationInSeconds) {

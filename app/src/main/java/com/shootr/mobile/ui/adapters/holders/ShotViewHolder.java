@@ -14,6 +14,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
@@ -38,7 +39,7 @@ public class ShotViewHolder {
     @BindView(R.id.shot_user_name) TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) TextView timestamp;
-    @BindView(R.id.shot_text) ClickableTextView text;
+    @BindView(R.id.shot_text) BaseMessageTextView text;
     @BindView(R.id.shot_text_stream_title) ClickableTextView streamTitle;
     @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
     @BindView(R.id.default_image) ImageView defaultImage;
@@ -135,7 +136,7 @@ public class ShotViewHolder {
         if (comment != null) {
             SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(comment);
             text.setVisibility(View.VISIBLE);
-            addShotComment(this, spannableStringBuilder);
+            addShotComment(this, spannableStringBuilder, item);
         } else {
             text.setVisibility(View.GONE);
         }
@@ -145,9 +146,10 @@ public class ShotViewHolder {
         }
     }
 
-    private void addShotComment(ShotViewHolder vh, CharSequence comment) {
+    private void addShotComment(ShotViewHolder vh, CharSequence comment, ShotModel shotModel) {
         CharSequence spannedComment =
           shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+        vh.text.setBaseMessageModel(shotModel);
         vh.text.setText(spannedComment);
         vh.text.addLinks();
     }

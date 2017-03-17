@@ -2,7 +2,10 @@ package com.shootr.mobile.data.api.entity.mapper;
 
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
+import com.shootr.mobile.data.api.entity.UrlApiEntity;
+import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.UrlEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,8 +73,25 @@ public class ShotApiEntityMapper {
         shotEntity.setPadding((shotApiEntity.getIsPadding()));
         shotEntity.setFromHolder((shotApiEntity.getFromHolder()));
         shotEntity.setFromContributor((shotApiEntity.getFromContributor()));
+        setupEntities(shotApiEntity, shotEntity);
 
         return shotEntity;
+    }
+
+    private void setupEntities(ShotApiEntity shotApiEntity, ShotEntity shotEntity) {
+        if (shotApiEntity.getEntities() != null) {
+            ArrayList<UrlEntity> urlEntities = new ArrayList<>();
+            for (UrlApiEntity urlApiEntity : shotApiEntity.getEntities().getUrls()) {
+                UrlEntity urlEntity = new UrlEntity();
+                urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
+                urlEntity.setUrl(urlApiEntity.getUrl());
+                urlEntity.setIndices(urlApiEntity.getIndices());
+                urlEntities.add(urlEntity);
+            }
+            EntitiesEntity entitiesEntity = new EntitiesEntity();
+            entitiesEntity.setUrls(urlEntities);
+            shotEntity.setEntities(entitiesEntity);
+        }
     }
 
     public List<ShotEntity> transform(List<ShotApiEntity> shots) {

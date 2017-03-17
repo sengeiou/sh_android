@@ -15,8 +15,8 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.CheckableImageView;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -32,7 +32,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_user_name) public TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) public TextView timestamp;
-    @BindView(R.id.shot_text) public ClickableTextView text;
+    @BindView(R.id.shot_text) public BaseMessageTextView text;
     @BindView(R.id.shot_image_landscape) public ProportionalImageView proportionalImageView;
     @BindView(R.id.default_image) ImageView defaultImage;
     @BindView(R.id.shot_video_frame) View videoFrame;
@@ -105,17 +105,18 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     private void setupComment(ShotModel shotModel) {
         String comment = shotModel.getComment();
         if (comment != null) {
-            setComment(comment);
+            setComment(shotModel, comment);
         } else if (shotModel.getCtaCaption() != null) {
-            setComment(shotModel.getCtaCaption());
+            setComment(shotModel, shotModel.getCtaCaption());
         } else {
             this.text.setVisibility(View.GONE);
         }
     }
 
-    private void setComment(String comment) {
+    private void setComment(ShotModel shotModel, String comment) {
         CharSequence spannedComment =
           shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+        this.text.setBaseMessageModel(shotModel);
         this.text.setText(spannedComment);
         this.text.addLinks();
     }

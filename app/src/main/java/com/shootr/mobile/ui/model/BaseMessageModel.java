@@ -15,6 +15,7 @@ public class BaseMessageModel implements Serializable {
   private String videoUrl;
   private String videoTitle;
   private String videoDuration;
+  private EntitiesModel entitiesModel;
 
   public String getComment() {
     return comment;
@@ -98,5 +99,13 @@ public class BaseMessageModel implements Serializable {
 
   public void setBirth(Date birth) {
     this.birth = birth;
+  }
+
+  public EntitiesModel getEntitiesModel() {
+    return entitiesModel;
+  }
+
+  public void setEntitiesModel(EntitiesModel entitiesModel) {
+    this.entitiesModel = entitiesModel;
   }
 }

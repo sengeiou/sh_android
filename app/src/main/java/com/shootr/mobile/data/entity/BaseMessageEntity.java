@@ -18,6 +18,7 @@ public class BaseMessageEntity extends Synchronized {
   private String videoUrl;
   private String videoTitle;
   private Long videoDuration;
+  private EntitiesEntity entities;
 
 
   public String getIdUser() {
@@ -98,5 +99,13 @@ public class BaseMessageEntity extends Synchronized {
 
   public void setVerifiedUser(Long verifiedUser) {
     this.verifiedUser = verifiedUser;
+  }
+
+  public EntitiesEntity getEntities() {
+    return entities;
+  }
+
+  public void setEntities(EntitiesEntity entities) {
+    this.entities = entities;
   }
 }

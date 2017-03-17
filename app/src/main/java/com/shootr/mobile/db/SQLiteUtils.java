@@ -134,6 +134,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.FROM_CONTRIBUTOR
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.ENTITIES
+      + " text NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -822,6 +824,8 @@ public class SQLiteUtils {
         + " NUMBER NULL,"
         + DatabaseContract.PrivateMessageTable.VERIFIED_USER
         + " NUMBER NULL,"
+        + DatabaseContract.PrivateMessageTable.ENTITIES
+        + " text NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
         + DatabaseContract.SyncColumns.MODIFIED

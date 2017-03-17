@@ -2,6 +2,8 @@ package com.shootr.mobile.db.mappers;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import com.google.gson.Gson;
+import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import javax.inject.Inject;
@@ -48,7 +50,17 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         shot.setFromContributor(
             c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.FROM_CONTRIBUTOR)));
         setSynchronizedfromCursor(c, shot);
+
+        retrieveEntities(c, shot);
+
+
         return shot;
+    }
+
+    private void retrieveEntities(Cursor c, ShotEntity shot) {
+        Gson gson = new Gson();
+        String json = c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ENTITIES));
+        shot.setEntities(gson.fromJson(json, EntitiesEntity.class));
     }
 
     public ContentValues toContentValues(ShotEntity shot) {
@@ -84,8 +96,15 @@ public class ShotEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ShotTable.IS_PADDING, shot.isPadding());
         cv.put(DatabaseContract.ShotTable.FROM_HOLDER, shot.isFromHolder());
         cv.put(DatabaseContract.ShotTable.FROM_CONTRIBUTOR, shot.isFromContributor());
+        storeEntities(shot, cv);
         setSynchronizedtoContentValues(shot, cv);
         return cv;
+    }
+
+    private void storeEntities(ShotEntity shot, ContentValues cv) {
+        Gson gson = new Gson();
+        String json = gson.toJson(shot.getEntities());
+        cv.put(DatabaseContract.ShotTable.ENTITIES, json);
     }
 }
 

@@ -1,11 +1,15 @@
 package com.shootr.mobile.data.mapper;
 
+import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
+import com.shootr.mobile.domain.model.shot.Entities;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
+import com.shootr.mobile.domain.model.shot.Url;
 import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -69,7 +73,26 @@ public class ShotEntityMapper {
     shot.setIsHolder(shotEntity.isFromHolder() != null && shotEntity.isFromHolder() == 1);
     shot.setIsContributor(
         shotEntity.isFromContributor() != null && shotEntity.isFromContributor() == 1);
+
+    setupEntities(shot, shotEntity);
+
     return shot;
+  }
+
+  private void setupEntityUrls(ShotEntity shotEntity, Shot shot) {
+    if (shot.getEntities() != null) {
+      ArrayList<UrlEntity> urlEntities = new ArrayList<>();
+      for (Url urlApiEntity : shot.getEntities().getUrls()) {
+        UrlEntity urlEntity = new UrlEntity();
+        urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
+        urlEntity.setUrl(urlApiEntity.getUrl());
+        urlEntity.setIndices(urlApiEntity.getIndices());
+        urlEntities.add(urlEntity);
+      }
+      EntitiesEntity entitiesEntity = new EntitiesEntity();
+      entitiesEntity.setUrls(urlEntities);
+      shotEntity.setEntities(entitiesEntity);
+    }
   }
 
   public List<Shot> transform(List<ShotEntity> shotEntities) {
@@ -134,7 +157,24 @@ public class ShotEntityMapper {
     shotEntity.setFromHolder(shot.isFromHolder() ? 1 : 0);
     shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
+    setupEntityUrls(shotEntity, shot);
     return shotEntity;
+  }
+
+  private void setupEntities(Shot shot, ShotEntity shotEntity) {
+    if (shotEntity.getEntities() != null) {
+      ArrayList<Url> urls = new ArrayList<>();
+      for (UrlEntity urlApiEntity : shotEntity.getEntities().getUrls()) {
+        Url url = new Url();
+        url.setDisplayUrl(urlApiEntity.getDisplayUrl());
+        url.setUrl(urlApiEntity.getUrl());
+        url.setIndices(urlApiEntity.getIndices());
+        urls.add(url);
+      }
+      Entities entities = new Entities();
+      entities.setUrls(urls);
+      shot.setEntities(entities);
+    }
   }
 
   public ShotDetail transform(ShotDetailEntity shotDetailEntity) {

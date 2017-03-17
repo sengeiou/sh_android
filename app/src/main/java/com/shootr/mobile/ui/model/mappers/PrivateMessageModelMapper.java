@@ -1,9 +1,12 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
+import com.shootr.mobile.domain.model.shot.Url;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.PrivateMessageModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
+import com.shootr.mobile.ui.model.UrlModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -53,7 +56,25 @@ public class PrivateMessageModelMapper {
 
     model.setBirth(privateMessage.getPublishDate());
 
+    setupEntities(privateMessage, model);
+
     return model;
+  }
+
+  private void setupEntities(PrivateMessage privateMessage, PrivateMessageModel model) {
+    if (privateMessage.getEntities() != null) {
+      ArrayList<UrlModel> urlModels = new ArrayList<>();
+      for (Url url : privateMessage.getEntities().getUrls()) {
+        UrlModel urlModel = new UrlModel();
+        urlModel.setDisplayUrl(url.getDisplayUrl());
+        urlModel.setUrl(url.getUrl());
+        urlModel.setIndices(url.getIndices());
+        urlModels.add(urlModel);
+      }
+      EntitiesModel entitiesModel = new EntitiesModel();
+      entitiesModel.setUrls(urlModels);
+      model.setEntitiesModel(entitiesModel);
+    }
   }
 
   private String durationToText(Long durationInSeconds) {
