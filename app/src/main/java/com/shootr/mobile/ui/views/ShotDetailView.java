@@ -44,4 +44,6 @@ public interface ShotDetailView {
     void showLoading();
 
     void hideLoading();
+
+    void showChecked();
 }

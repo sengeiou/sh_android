@@ -499,4 +499,6 @@
   <string name="analytics_action_open_app">OpenApp</string>
   <string name="on_boarding_add_favorites">Añadir a Favoritos</string>
   <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
+  <string name="menu_check_in">Check-in</string>
+  <string name="check_in_show_case">Check-in to say you\'re here</string>
 </resources>

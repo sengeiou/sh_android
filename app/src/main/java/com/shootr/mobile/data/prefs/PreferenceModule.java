@@ -49,4 +49,9 @@ import javax.inject.Singleton;
     @Provides @Singleton @LastTimeFiltered StringPreference provideLastTimeFiltered(SharedPreferences preferences) {
         return new StringPreference(preferences, "last_time_filtered", "0");
     }
+
+    @Provides @Singleton @CheckInShowcaseStatus ShowcasePreference provideCheckInPreferences(
+        SharedPreferences preferences) {
+        return new ShowcasePreference(preferences, "check_in_showcase", new ShowcaseStatus(true));
+    }
 }

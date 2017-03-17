@@ -87,6 +87,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
   @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
   @BindString(R.string.analytics_source_shot_detail) String shotDetailSource;
+  @BindString(R.string.stream_checked) String streamChecked;
 
   @Inject ImageLoader imageLoader;
   @Inject TimeFormatter timeFormatter;
@@ -434,6 +435,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           @Override public void openEditTopicDialog() {
                   /* no-op */
           }
+
+          @Override public void onCheckIn() {
+            detailPresenter.callCheckIn();
+          }
         })
         .build();
   }
@@ -610,6 +615,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         /* no-op */
   }
 
+  @Override public void showPrivateMessageOptions() {
+    /* no-op */
+  }
+
   @Override public void openNewShotViewWithImage(File image) {
     newShotBarViewDelegate.openNewShotViewWithImage(image);
   }
@@ -648,6 +657,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
   @Override public void hideLoading() {
     progressBar.setVisibility(View.GONE);
+  }
+
+  @Override public void showChecked() {
+    feedbackMessage.show(getView(), streamChecked);
   }
   //endregion
 

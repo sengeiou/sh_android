@@ -31,8 +31,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import com.daasuu.bl.BubbleLayout;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
+import com.shootr.mobile.data.prefs.ShowcasePreference;
+import com.shootr.mobile.data.prefs.ShowcaseStatus;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -153,6 +157,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject SessionRepository sessionRepository;
   @Inject FormatNumberUtils formatNumberUtils;
+  @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -168,6 +173,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.poll_action) TextView pollAction;
   @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
+  @BindView(R.id.check_in_showcase) BubbleLayout checkInShowcase;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -274,6 +280,22 @@ public class StreamTimelineFragment extends BaseFragment
     return fragmentView;
   }
 
+  private void setupCheckInShowcase() {
+    ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
+    if (checkInShowcaseStatus.shouldShowShowcase()) {
+      checkInShowcase.setVisibility(View.VISIBLE);
+      checkInShowcase.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          pickImage();
+        }
+      });
+      checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
+      checkInShowcasePreferences.set(checkInShowcaseStatus);
+    } else {
+      checkInShowcase.setVisibility(View.GONE);
+    }
+  }
+
   @Override public void onDestroyView() {
     super.onDestroyView();
     unbinder.unbind();
@@ -298,6 +320,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void sendAnalythicsEnterTimeline() {
     sendTimelineAnalytics();
+    setupCheckInShowcase();
   }
 
   protected void setupPresentersInitialization(String idStream, String streamAuthorIdUser,
@@ -534,6 +557,10 @@ public class StreamTimelineFragment extends BaseFragment
 
           @Override public void openEditTopicDialog() {
             newShotBarPresenter.openEditTopicCustomDialog();
+          }
+
+          @Override public void onCheckIn() {
+            streamTimelinePresenter.onMenuCheckInClick();
           }
         })
         .build();
@@ -785,6 +812,10 @@ public class StreamTimelineFragment extends BaseFragment
 
           @Override public void onSendClick() {
             sendShotToMixPanel();
+          }
+
+          @Override public void onCheckInClick() {
+            //TODO
           }
         }, false, null);
   }
@@ -1252,6 +1283,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void pickImage() {
+    setShowcasePreference();
     if (writePermissionManager.hasWritePermission()) {
       newShotBarContainer.pickImage();
     } else {
@@ -1259,12 +1291,26 @@ public class StreamTimelineFragment extends BaseFragment
     }
   }
 
+  private void setShowcasePreference() {
+    if (checkInShowcasePreferences.get().shouldShowShowcase()) {
+      ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
+      checkInShowcase.setVisibility(View.GONE);
+      checkInShowcaseStatus.setShouldShowShowcase(false);
+      checkInShowcasePreferences.set(checkInShowcaseStatus);
+    }
+  }
+
   @Override public void showHolderOptions() {
+    setShowcasePreference();
     if (writePermissionManager.hasWritePermission()) {
       newShotBarContainer.showHolderOptions();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
+  }
+
+  @Override public void showPrivateMessageOptions() {
+    /* no-op */
   }
 
   @Override public void openNewShotViewWithImage(File image) {

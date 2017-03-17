@@ -2,6 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/menu_check_in"
+        android:icon="@drawable/ic_check_in"
+        android:title="@string/menu_check_in" />
+
+    <item
       android:id="@+id/menu_photo_take"
       android:icon="@drawable/ic_photo_camera"
       android:title="@string/photo_edit_take" />

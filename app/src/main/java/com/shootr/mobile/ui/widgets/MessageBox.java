@@ -130,6 +130,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
           @Override public void openEditTopicDialog() {
             onActionsClick.onTopicClick();
           }
+
         };
 
     sendImageButton.setOnClickListener(new OnClickListener() {
@@ -350,6 +351,10 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     newShotBarViewDelegate.pickImage();
   }
 
+  public void pickPrivateMessageOptions() {
+    newShotBarViewDelegate.showPrivateMessageOptions();
+  }
+
   public void showHolderOptions() {
     newShotBarViewDelegate.showHolderOptions();
   }
@@ -380,5 +385,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
     void onAttachClick();
 
     void onSendClick();
+
+    void onCheckInClick();
   }
 }

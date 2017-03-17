@@ -76,14 +76,14 @@ public class PhotoPickerController {
     }
 
     public void pickPhoto() {
-        pickPhotoOption();
+        pickTimelineOptions();
     }
 
     public void pickOption() {
         pickHolderOptions();
     }
 
-    private void pickPhotoOption() {
+    private void pickTimelineOptions() {
         if (!activity.isFinishing()) {
             BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
                 .sheet(R.menu.photo_picker_bottom_sheet)
@@ -96,6 +96,9 @@ public class PhotoPickerController {
                             case R.id.menu_photo_take:
                                 pickPhotoFromCamera(activity);
                                 break;
+                            case R.id.menu_check_in:
+                                handler.onCheckIn();
+                                break;
                             default:
                                 break;
                         }
@@ -104,6 +107,32 @@ public class PhotoPickerController {
             builder.show();
         }
     }
+
+    public void pickPrivateMessageOptions() {
+        if (!activity.isFinishing()) {
+            BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
+                .sheet(R.menu.private_messages_bottom_sheet)
+                .listener(new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case R.id.menu_photo_gallery:
+                                pickPhotoFromGallery();
+                                break;
+                            case R.id.menu_photo_take:
+                                pickPhotoFromCamera(activity);
+                                break;
+                            case R.id.menu_check_in:
+                                handler.onCheckIn();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+            builder.show();
+        }
+    }
+
 
     private void pickHolderOptions() {
         BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
@@ -119,6 +148,9 @@ public class PhotoPickerController {
                           break;
                       case R.id.menu_photo_take:
                           pickPhotoFromCamera(activity);
+                          break;
+                      case R.id.menu_check_in:
+                          handler.onCheckIn();
                           break;
                       default:
                           break;
@@ -186,5 +218,7 @@ public class PhotoPickerController {
         void startPickerActivityForResult(Intent intent, int requestCode);
 
         void openEditTopicDialog();
+
+        void onCheckIn();
     }
 }

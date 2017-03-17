@@ -491,4 +491,6 @@
   <string name="analytics_action_open_app">OpenApp</string>
   <string name="on_boarding_add_favorites">添加到喜爱</string>
   <string name="on_boarding_enter_shootr">进入Shootr</string>
+  <string name="menu_check_in">Check-in</string>
+  <string name="check_in_show_case">Check-in to say you\'re here</string>
 </resources>

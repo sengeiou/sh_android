@@ -17,6 +17,10 @@ public class NullNewShotBarView implements NewShotBarView {
         /* no-op */
     }
 
+    @Override public void showPrivateMessageOptions() {
+        /* no-op */
+    }
+
     @Override public void openNewShotViewWithImage(File image) {
         /* no-op */
     }

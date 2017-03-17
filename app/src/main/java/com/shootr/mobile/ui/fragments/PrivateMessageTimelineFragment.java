@@ -251,6 +251,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
           @Override public void openEditTopicDialog() {
             newShotBarPresenter.openEditTopicCustomDialog();
           }
+
+          @Override public void onCheckIn() {
+            //TODO
+          }
         })
         .build();
   }
@@ -400,6 +404,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
           @Override public void onSendClick() {
             sendPrivateMessageToMixPanel();
+          }
+
+          @Override public void onCheckInClick() {
+            /* no-op */
           }
         }, true, idTargetUser);
   }
@@ -559,13 +567,17 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void pickImage() {
     if (writePermissionManager.hasWritePermission()) {
-      newShotBar.pickImage();
+      newShotBar.pickPrivateMessageOptions();
     } else {
       writePermissionManager.requestWritePermissionToUser();
     }
   }
 
   @Override public void showHolderOptions() {
+    /* no-op */
+  }
+
+  @Override public void showPrivateMessageOptions() {
     /* no-op */
   }
 

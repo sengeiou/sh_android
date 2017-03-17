@@ -743,19 +743,28 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   public void onCtaPressed(ShotModel shotModel) {
     if (shotModel.getCtaButtonLink().startsWith(SCHEMA) && shotModel.getType()
         .equals(ShotType.CTACHECKIN)) {
-      callCtaCheckInInteractor.checkIn(shotModel.getStreamId(), new Interactor.CompletedCallback() {
-        @Override public void onCompleted() {
-          streamTimelineView.showChecked();
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-          streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
-        }
-      });
+      callCheckIn(shotModel.getStreamId());
     } else {
       streamTimelineView.storeCtaClickLink(shotModel);
       streamTimelineView.openCtaAction(shotModel.getCtaButtonLink());
     }
   }
 
+  public void onMenuCheckInClick() {
+    if (streamModel != null) {
+      callCheckIn(streamModel.getIdStream());
+    }
+  }
+
+  private void callCheckIn(String streamId) {
+    callCtaCheckInInteractor.checkIn(streamId, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        streamTimelineView.showChecked();
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
+  }
 }

@@ -10,6 +10,8 @@ public interface NewShotBarView {
 
     void showHolderOptions();
 
+    void showPrivateMessageOptions();
+
     void openNewShotViewWithImage(File image);
 
     void openEditTopicDialog();

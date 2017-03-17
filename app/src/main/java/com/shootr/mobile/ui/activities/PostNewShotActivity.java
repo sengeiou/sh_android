@@ -208,6 +208,10 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
           @Override public void openEditTopicDialog() {
                   /* no-op */
           }
+
+          @Override public void onCheckIn() {
+            /* no-op */
+          }
         })
         .build();
   }
