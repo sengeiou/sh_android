@@ -1,8 +1,10 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.shot.BaseMessage;
+import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.Url;
+import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -68,18 +70,37 @@ public class ShotModelMapper {
 
   private void setupEntities(Shot shot, ShotModel shotModel) {
     if (shot.getEntities() != null) {
-      ArrayList<UrlModel> urlModels = new ArrayList<>();
-      for (Url url : shot.getEntities().getUrls()) {
-        UrlModel urlModel = new UrlModel();
-        urlModel.setDisplayUrl(url.getDisplayUrl());
-        urlModel.setUrl(url.getUrl());
-        urlModel.setIndices(url.getIndices());
-        urlModels.add(urlModel);
-      }
       EntitiesModel entitiesModel = new EntitiesModel();
-      entitiesModel.setUrls(urlModels);
+      setupUrls(shot, entitiesModel);
+      setupPolls(shot, entitiesModel);
       shotModel.setEntitiesModel(entitiesModel);
     }
+  }
+
+  private void setupPolls(Shot shot, EntitiesModel entitiesModel) {
+    ArrayList<BaseMessagePollModel> baseMessagePollModels = new ArrayList<>();
+    for (Poll poll : shot.getEntities().getPolls()) {
+      BaseMessagePollModel baseMessagePollModel = new BaseMessagePollModel();
+      baseMessagePollModel.setPollQuestion(poll.getPollQuestion());
+      baseMessagePollModel.setIdPoll(poll.getIdPoll());
+      baseMessagePollModel.setIndices(poll.getIndices());
+      baseMessagePollModels.add(baseMessagePollModel);
+    }
+
+    entitiesModel.setPolls(baseMessagePollModels);
+  }
+
+  private void setupUrls(Shot shot, EntitiesModel entitiesModel) {
+    ArrayList<UrlModel> urlModels = new ArrayList<>();
+    for (Url url : shot.getEntities().getUrls()) {
+      UrlModel urlModel = new UrlModel();
+      urlModel.setDisplayUrl(url.getDisplayUrl());
+      urlModel.setUrl(url.getUrl());
+      urlModel.setIndices(url.getIndices());
+      urlModels.add(urlModel);
+    }
+
+    entitiesModel.setUrls(urlModels);
   }
 
   private String durationToText(Long durationInSeconds) {

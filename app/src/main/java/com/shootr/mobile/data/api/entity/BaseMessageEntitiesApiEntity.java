@@ -4,7 +4,9 @@ import java.util.ArrayList;
 
 public class BaseMessageEntitiesApiEntity {
 
-  ArrayList<UrlApiEntity> urls;
+  private ArrayList<UrlApiEntity> urls;
+  private ArrayList<BaseMessagePollApiEntity> polls;
+
 
   public ArrayList<UrlApiEntity> getUrls() {
     return urls;
@@ -12,5 +14,13 @@ public class BaseMessageEntitiesApiEntity {
 
   public void setUrls(ArrayList<UrlApiEntity> urls) {
     this.urls = urls;
+  }
+
+  public ArrayList<BaseMessagePollApiEntity> getPolls() {
+    return polls;
+  }
+
+  public void setPolls(ArrayList<BaseMessagePollApiEntity> polls) {
+    this.polls = polls;
   }
 }

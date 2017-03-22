@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.widgets;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.text.Layout;
@@ -13,22 +14,25 @@ import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.TextView;
+import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.model.BaseMessageModel;
+import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.UrlModel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BaseMessageTextView extends TextView {
 
-  private static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
-  private static final String DEFAULT_SCHEMA = "http://";
+  private static final String POLL_TYPE = "POLL";
+  private static final String URL_TYPE = "URL";
+  public static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
+  public static final String DEFAULT_SCHEMA = "http://";
   public static final int START = 0;
 
   private BaseMessageModel baseMessageModel;
-  private PressableSpan alreadyPressedSpan;
+  private BaseMessagePressableSpan alreadyPressedSpan;
   private OnUrlClickListener onUrlClickListener;
 
   public BaseMessageTextView(Context context) {
@@ -68,26 +72,69 @@ public class BaseMessageTextView extends TextView {
       CharSequence text = getText();
       SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
       spanUrls(stringBuilder);
+      spanPollQuestions(stringBuilder);
       setText(stringBuilder, BufferType.SPANNABLE);
     }
   }
 
   private void spanUrls(SpannableStringBuilder stringBuilder) {
     if (baseMessageModel.getEntitiesModel() != null) {
+      int lastUrlindex = 0;
       for (UrlModel urlModel : baseMessageModel.getEntitiesModel().getUrls()) {
-        int start = urlModel.getIndices().get(0);
-        int end = urlModel.getIndices().get(1);
-        stringBuilder.replace(start, end, urlModel.getDisplayUrl());
-        Pattern termsPattern = Pattern.compile(urlModel.getDisplayUrl());
-        Matcher termsMatcher = termsPattern.matcher(stringBuilder.toString());
-        if (termsMatcher.find()) {
-          int termsStart = termsMatcher.start();
-          int termsEnd = termsMatcher.end();
-          stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener),
-              termsStart, termsEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        try {
+          Pattern termsPattern = Pattern.compile(Pattern.quote(urlModel.getUrl()));
+          Matcher termsMatcher = termsPattern.matcher(stringBuilder.toString());
+          if (termsMatcher.find(lastUrlindex)) {
+            int termsStart = termsMatcher.start();
+            int termsEnd = termsMatcher.end();
+            lastUrlindex = termsStart + urlModel.getDisplayUrl().length();
+
+            stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener),
+                termsStart, termsEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            stringBuilder.replace(termsStart, termsEnd, urlModel.getDisplayUrl());
+          }
+        } catch (IndexOutOfBoundsException error) {
+          /* no-op */
         }
       }
     }
+  }
+
+  private void spanPollQuestions(SpannableStringBuilder stringBuilder) {
+    if (baseMessageModel.getEntitiesModel() != null) {
+      for (final BaseMessagePollModel baseMessagePollModel : baseMessageModel.getEntitiesModel()
+          .getPolls()) {
+
+        try {
+          BaseMessagePollQuestionSpan pollQuestionSpan =
+              new BaseMessagePollQuestionSpan(baseMessagePollModel.getIdPoll()) {
+                @Override public void onPollQuestionClick(String pollQuestion) {
+                  openPoll(baseMessagePollModel.getIdPoll());
+                }
+              };
+
+          Pattern termsPattern =
+              Pattern.compile(Pattern.quote(baseMessagePollModel.getPollQuestion()));
+          Matcher termsMatcher = termsPattern.matcher(stringBuilder.toString());
+          if (termsMatcher.find()) {
+            int termsStart = termsMatcher.start();
+            int termsEnd = termsMatcher.end();
+            stringBuilder.replace(termsStart, termsEnd, baseMessagePollModel.getPollQuestion());
+            stringBuilder.setSpan(pollQuestionSpan, termsStart, termsEnd,
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+          }
+        } catch (IndexOutOfBoundsException error) {
+          /* no-op */
+        }
+      }
+    }
+  }
+
+  private void openPoll(String idPoll) {
+    Context context = getContext();
+    Intent pollVoteIntent =
+        PollVoteActivity.newIntentWithIdPoll(context, idPoll, null);
+    context.startActivity(pollVoteIntent);
   }
 
   @Override public boolean onTouchEvent(@NonNull MotionEvent event) {
@@ -109,7 +156,7 @@ public class BaseMessageTextView extends TextView {
       if (action == MotionEvent.ACTION_UP
           || action == MotionEvent.ACTION_DOWN
           || action == MotionEvent.ACTION_MOVE) {
-        PressableSpan touchedUrlSpan = getTouchedSpan(event, widget, buffer);
+        BaseMessagePressableSpan touchedUrlSpan = getTouchedSpan(event, widget, buffer);
 
         if (action == MotionEvent.ACTION_MOVE
             && alreadyPressedSpan != null
@@ -143,7 +190,7 @@ public class BaseMessageTextView extends TextView {
     return false;
   }
 
-  private PressableSpan getTouchedSpan(MotionEvent event, TextView widget, Spannable buffer) {
+  private BaseMessagePressableSpan getTouchedSpan(MotionEvent event, TextView widget, Spannable buffer) {
     int x = (int) event.getX();
     int y = (int) event.getY();
 
@@ -157,9 +204,9 @@ public class BaseMessageTextView extends TextView {
     int line = layout.getLineForVertical(y);
     int off = layout.getOffsetForHorizontal(line, x);
 
-    PressableSpan[] pressedSpans = buffer.getSpans(off, off, PressableSpan.class);
+    BaseMessagePressableSpan[] pressedSpans = buffer.getSpans(off, off, BaseMessagePressableSpan.class);
 
-    PressableSpan pressedSpan = null;
+    BaseMessagePressableSpan pressedSpan = null;
 
     if (pressedSpans.length != 0) {
       pressedSpan = pressedSpans[0];
@@ -167,7 +214,7 @@ public class BaseMessageTextView extends TextView {
     return pressedSpan;
   }
 
-  private class TouchableUrlSpan extends URLSpan implements PressableSpan {
+  private class TouchableUrlSpan extends URLSpan implements BaseMessagePressableSpan {
 
     private OnUrlClickListener onUrlClickListener;
     private boolean isPressed = false;
@@ -204,13 +251,4 @@ public class BaseMessageTextView extends TextView {
       return url;
     }
   }
-
-  public interface PressableSpan {
-
-    void setPressed(boolean isPressed);
-
-    void onClick(View widget);
-  }
-
-
 }

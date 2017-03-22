@@ -4,22 +4,21 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.view.View;
 
-public abstract class PollQuestionSpan extends ClickableSpan implements ClickableTextView.PressableSpan {
-
-  private String idStream;
-
-  protected PollQuestionSpan(String idStream) {
-    this.idStream = idStream;
-  }
-
+public abstract class BaseMessagePollQuestionSpan extends ClickableSpan
+    implements BaseMessagePressableSpan {
+  protected String idPoll;
   private boolean isPressed = false;
+
+  public BaseMessagePollQuestionSpan(String idPoll) {
+    this.idPoll = idPoll;
+  }
 
   @Override public void setPressed(boolean isPressed) {
     this.isPressed = isPressed;
   }
 
   @Override public void onClick(View widget) {
-    onPollQuestionClick(idStream);
+    onPollQuestionClick(idPoll);
   }
 
   public abstract void onPollQuestionClick(String pollQuestion);

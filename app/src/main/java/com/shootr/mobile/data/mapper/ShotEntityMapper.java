@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.mapper;
 
+import com.shootr.mobile.data.entity.BaseMessagePollEntity;
 import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
@@ -7,6 +8,7 @@ import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Entities;
+import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.shot.Url;
@@ -81,18 +83,36 @@ public class ShotEntityMapper {
 
   private void setupEntityUrls(ShotEntity shotEntity, Shot shot) {
     if (shot.getEntities() != null) {
-      ArrayList<UrlEntity> urlEntities = new ArrayList<>();
-      for (Url urlApiEntity : shot.getEntities().getUrls()) {
-        UrlEntity urlEntity = new UrlEntity();
-        urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
-        urlEntity.setUrl(urlApiEntity.getUrl());
-        urlEntity.setIndices(urlApiEntity.getIndices());
-        urlEntities.add(urlEntity);
-      }
       EntitiesEntity entitiesEntity = new EntitiesEntity();
-      entitiesEntity.setUrls(urlEntities);
+      setupUrls(shot, entitiesEntity);
+      setupPolls(shot, entitiesEntity);
       shotEntity.setEntities(entitiesEntity);
     }
+  }
+
+  private void setupPolls(Shot shot, EntitiesEntity entitiesEntity) {
+    ArrayList<BaseMessagePollEntity> baseMessagePollEntities = new ArrayList<>();
+    for (Poll poll : shot.getEntities().getPolls()) {
+      BaseMessagePollEntity baseMessagePollEntity = new BaseMessagePollEntity();
+      baseMessagePollEntity.setIndices(poll.getIndices());
+      baseMessagePollEntity.setIdPoll(poll.getIdPoll());
+      baseMessagePollEntity.setPollQuestion(poll.getPollQuestion());
+      baseMessagePollEntities.add(baseMessagePollEntity);
+    }
+    entitiesEntity.setPolls(baseMessagePollEntities);
+  }
+
+  private void setupUrls(Shot shot, EntitiesEntity entitiesEntity) {
+    ArrayList<UrlEntity> urlEntities = new ArrayList<>();
+    for (Url urlApiEntity : shot.getEntities().getUrls()) {
+      UrlEntity urlEntity = new UrlEntity();
+      urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
+      urlEntity.setUrl(urlApiEntity.getUrl());
+      urlEntity.setIndices(urlApiEntity.getIndices());
+      urlEntities.add(urlEntity);
+    }
+
+    entitiesEntity.setUrls(urlEntities);
   }
 
   public List<Shot> transform(List<ShotEntity> shotEntities) {
@@ -163,18 +183,37 @@ public class ShotEntityMapper {
 
   private void setupEntities(Shot shot, ShotEntity shotEntity) {
     if (shotEntity.getEntities() != null) {
-      ArrayList<Url> urls = new ArrayList<>();
-      for (UrlEntity urlApiEntity : shotEntity.getEntities().getUrls()) {
-        Url url = new Url();
-        url.setDisplayUrl(urlApiEntity.getDisplayUrl());
-        url.setUrl(urlApiEntity.getUrl());
-        url.setIndices(urlApiEntity.getIndices());
-        urls.add(url);
-      }
       Entities entities = new Entities();
-      entities.setUrls(urls);
+      setupUrls(shotEntity, entities);
+      setupPolls(shotEntity, entities);
       shot.setEntities(entities);
     }
+  }
+
+  private void setupPolls(ShotEntity shotEntity, Entities entities) {
+    ArrayList<Poll> polls = new ArrayList<>();
+
+    for (BaseMessagePollEntity baseMessagePollEntity : shotEntity.getEntities().getPolls()) {
+      Poll poll = new Poll();
+      poll.setIdPoll(baseMessagePollEntity.getIdPoll());
+      poll.setIndices(baseMessagePollEntity.getIndices());
+      poll.setPollQuestion(baseMessagePollEntity.getPollQuestion());
+      polls.add(poll);
+    }
+    entities.setPolls(polls);
+  }
+
+  private void setupUrls(ShotEntity shotEntity, Entities entities) {
+    ArrayList<Url> urls = new ArrayList<>();
+    for (UrlEntity urlApiEntity : shotEntity.getEntities().getUrls()) {
+      Url url = new Url();
+      url.setDisplayUrl(urlApiEntity.getDisplayUrl());
+      url.setUrl(urlApiEntity.getUrl());
+      url.setIndices(urlApiEntity.getIndices());
+      urls.add(url);
+    }
+
+    entities.setUrls(urls);
   }
 
   public ShotDetail transform(ShotDetailEntity shotDetailEntity) {

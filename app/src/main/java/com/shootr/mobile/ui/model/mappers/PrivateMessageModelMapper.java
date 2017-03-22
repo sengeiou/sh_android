@@ -1,8 +1,10 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
+import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Url;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.PrivateMessageModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
@@ -63,18 +65,37 @@ public class PrivateMessageModelMapper {
 
   private void setupEntities(PrivateMessage privateMessage, PrivateMessageModel model) {
     if (privateMessage.getEntities() != null) {
-      ArrayList<UrlModel> urlModels = new ArrayList<>();
-      for (Url url : privateMessage.getEntities().getUrls()) {
-        UrlModel urlModel = new UrlModel();
-        urlModel.setDisplayUrl(url.getDisplayUrl());
-        urlModel.setUrl(url.getUrl());
-        urlModel.setIndices(url.getIndices());
-        urlModels.add(urlModel);
-      }
       EntitiesModel entitiesModel = new EntitiesModel();
-      entitiesModel.setUrls(urlModels);
+      setupUrls(privateMessage, entitiesModel);
+      setupPolls(privateMessage, entitiesModel);
       model.setEntitiesModel(entitiesModel);
     }
+  }
+
+  private void setupPolls(PrivateMessage privateMessage, EntitiesModel entitiesModel) {
+    ArrayList<BaseMessagePollModel> baseMessagePollModels = new ArrayList<>();
+    for (Poll poll : privateMessage.getEntities().getPolls()) {
+      BaseMessagePollModel baseMessagePollModel = new BaseMessagePollModel();
+      baseMessagePollModel.setIndices(poll.getIndices());
+      baseMessagePollModel.setPollQuestion(poll.getPollQuestion());
+      baseMessagePollModel.setIdPoll(poll.getIdPoll());
+      baseMessagePollModels.add(baseMessagePollModel);
+    }
+
+    entitiesModel.setPolls(baseMessagePollModels);
+  }
+
+  private void setupUrls(PrivateMessage privateMessage, EntitiesModel entitiesModel) {
+    ArrayList<UrlModel> urlModels = new ArrayList<>();
+    for (Url url : privateMessage.getEntities().getUrls()) {
+      UrlModel urlModel = new UrlModel();
+      urlModel.setDisplayUrl(url.getDisplayUrl());
+      urlModel.setUrl(url.getUrl());
+      urlModel.setIndices(url.getIndices());
+      urlModels.add(urlModel);
+    }
+
+    entitiesModel.setUrls(urlModels);
   }
 
   private String durationToText(Long durationInSeconds) {
