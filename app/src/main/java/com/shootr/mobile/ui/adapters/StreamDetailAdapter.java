@@ -61,6 +61,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private final Set<String> keepFollowButtonIds = new HashSet<>();
     private boolean isAllParticipantsVisible = false;
+    private boolean isMuted;
 
     public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
       View.OnClickListener onContributorsClickListener, View.OnClickListener onMediaClickListener,
@@ -247,6 +248,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_MUTE:
                 muteViewHolder.setName(R.string.stream_detail_mute);
                 muteViewHolder.setMuteSwitch(onCheckedChangeListener);
+                muteViewHolder.setMuteStatus(isMuted);
                 break;
             case TYPE_PARTICIPANT:
                 UserModel user = participants.get(participantPosition(position));
@@ -274,6 +276,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void setMuteStatus(Boolean isChecked) {
+        this.isMuted = isChecked;
         if (muteViewHolder != null) {
             muteViewHolder.setMuteStatus(isChecked);
         }
