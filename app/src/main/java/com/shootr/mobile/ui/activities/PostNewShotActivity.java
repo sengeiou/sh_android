@@ -212,6 +212,14 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
           @Override public void onCheckIn() {
             /* no-op */
           }
+
+          @Override public boolean hasWritePermission() {
+            return writePermissionManager.hasWritePermission();
+          }
+
+          @Override public void requestWritePermissionToUser() {
+            writePermissionManager.requestWritePermissionToUser();
+          }
         })
         .build();
   }
@@ -380,11 +388,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @OnClick(R.id.new_shot_gallery_button) public void onAddImageFromGallery() {
-    if (writePermissionManager.hasWritePermission()) {
-      presenter.choosePhotoFromGallery();
-    } else {
-      writePermissionManager.requestWritePermissionToUser();
-    }
+    presenter.choosePhotoFromGallery();
   }
 
   @OnClick(R.id.new_shot_image_remove) public void onRemoveImage() {

@@ -46,4 +46,6 @@ public interface StreamTimelineView extends TimelineView  {
     void renderNice(ShotModel shotModel);
 
     void renderUnnice(String idShot);
+
+    void setupCheckInShowcase();
 }

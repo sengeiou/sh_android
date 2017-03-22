@@ -85,6 +85,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private Integer streamMode;
   private boolean isReadOnly;
   private boolean isCurrentUserContirbutor;
+  private boolean isViewOnlyStream;
+
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -260,6 +262,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         } else {
           streamTimelineView.hidePinnedMessage();
         }
+        if (streamModel.getReadWriteMode() == 0) {
+          streamTimelineView.setupCheckInShowcase();
+        }
       }
     });
   }
@@ -334,8 +339,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     String idUser = sessionRepository.getCurrentUserId();
     if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(idUser)) {
       streamTimelineView.hideStreamViewOnlyIndicator();
+      isViewOnlyStream = false;
     } else {
       streamTimelineView.showStreamViewOnlyIndicator();
+      isViewOnlyStream = true;
     }
   }
 
@@ -766,5 +773,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
       }
     });
+  }
+
+  public boolean isViewOnlyStream() {
+    return isViewOnlyStream;
+  }
+
+  public void setViewOnlyStream(boolean viewOnlyStream) {
+    isViewOnlyStream = viewOnlyStream;
   }
 }

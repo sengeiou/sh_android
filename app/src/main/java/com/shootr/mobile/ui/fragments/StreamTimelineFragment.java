@@ -280,13 +280,13 @@ public class StreamTimelineFragment extends BaseFragment
     return fragmentView;
   }
 
-  private void setupCheckInShowcase() {
+  @Override public void setupCheckInShowcase() {
     ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
     if (checkInShowcaseStatus.shouldShowShowcase()) {
       checkInShowcase.setVisibility(View.VISIBLE);
       checkInShowcase.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          pickImage();
+          checkInShowcase.setVisibility(View.GONE);
         }
       });
       checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
@@ -320,7 +320,6 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void sendAnalythicsEnterTimeline() {
     sendTimelineAnalytics();
-    setupCheckInShowcase();
   }
 
   protected void setupPresentersInitialization(String idStream, String streamAuthorIdUser,
@@ -560,7 +559,16 @@ public class StreamTimelineFragment extends BaseFragment
           }
 
           @Override public void onCheckIn() {
+            setShowcasePreference();
             streamTimelinePresenter.onMenuCheckInClick();
+          }
+
+          @Override public boolean hasWritePermission() {
+            return writePermissionManager.hasWritePermission();
+          }
+
+          @Override public void requestWritePermissionToUser() {
+            writePermissionManager.requestWritePermissionToUser();
           }
         })
         .build();
@@ -1283,12 +1291,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void pickImage() {
-    setShowcasePreference();
-    if (writePermissionManager.hasWritePermission()) {
-      newShotBarContainer.pickImage();
-    } else {
-      writePermissionManager.requestWritePermissionToUser();
-    }
+    newShotBarContainer.pickImage();
   }
 
   private void setShowcasePreference() {
@@ -1301,12 +1304,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showHolderOptions() {
-    setShowcasePreference();
-    if (writePermissionManager.hasWritePermission()) {
-      newShotBarContainer.showHolderOptions();
-    } else {
-      writePermissionManager.requestWritePermissionToUser();
-    }
+    newShotBarContainer.showHolderOptions();
   }
 
   @Override public void showPrivateMessageOptions() {

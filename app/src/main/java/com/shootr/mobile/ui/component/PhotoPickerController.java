@@ -91,10 +91,10 @@ public class PhotoPickerController {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case R.id.menu_photo_gallery:
-                                pickPhotoFromGallery();
+                                setupPhotoGallery();
                                 break;
                             case R.id.menu_photo_take:
-                                pickPhotoFromCamera(activity);
+                                setupPhotoFromCamera();
                                 break;
                             case R.id.menu_check_in:
                                 handler.onCheckIn();
@@ -116,10 +116,10 @@ public class PhotoPickerController {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case R.id.menu_photo_gallery:
-                                pickPhotoFromGallery();
+                                setupPhotoGallery();
                                 break;
                             case R.id.menu_photo_take:
-                                pickPhotoFromCamera(activity);
+                                setupPhotoFromCamera();
                                 break;
                             case R.id.menu_check_in:
                                 handler.onCheckIn();
@@ -144,10 +144,10 @@ public class PhotoPickerController {
                           handler.openEditTopicDialog();
                           break;
                       case R.id.menu_photo_gallery:
-                          pickPhotoFromGallery();
+                          setupPhotoGallery();
                           break;
                       case R.id.menu_photo_take:
-                          pickPhotoFromCamera(activity);
+                          setupPhotoFromCamera();
                           break;
                       case R.id.menu_check_in:
                           handler.onCheckIn();
@@ -158,6 +158,22 @@ public class PhotoPickerController {
               }
           });
         builder.show();
+    }
+
+    private void setupPhotoFromCamera() {
+        if (handler.hasWritePermission()) {
+            pickPhotoFromCamera(activity);
+        } else {
+            handler.requestWritePermissionToUser();
+        }
+    }
+
+    private void setupPhotoGallery() {
+        if (handler.hasWritePermission()) {
+            pickPhotoFromGallery();
+        } else {
+            handler.requestWritePermissionToUser();
+        }
     }
 
     public void pickPhotoFromCamera(Activity activity) {
@@ -220,5 +236,9 @@ public class PhotoPickerController {
         void openEditTopicDialog();
 
         void onCheckIn();
+
+        boolean hasWritePermission();
+
+        void requestWritePermissionToUser();
     }
 }

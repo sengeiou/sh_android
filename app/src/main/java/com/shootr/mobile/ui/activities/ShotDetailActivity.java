@@ -439,6 +439,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           @Override public void onCheckIn() {
             detailPresenter.callCheckIn();
           }
+
+          @Override public boolean hasWritePermission() {
+            return writePermissionManager.hasWritePermission();
+          }
+
+          @Override public void requestWritePermissionToUser() {
+            writePermissionManager.requestWritePermissionToUser();
+          }
         })
         .build();
   }
@@ -539,11 +547,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @OnClick(R.id.shot_bar_photo) public void onStartNewShotWithPhoto() {
-    if (writePermissionManager.hasWritePermission()) {
-      newShotBarPresenter.newShotFromImage();
-    } else {
-      writePermissionManager.requestWritePermissionToUser();
-    }
+    newShotBarPresenter.newShotFromImage();
   }
 
   @OnClick(R.id.shot_bar_drafts) public void openDrafts() {

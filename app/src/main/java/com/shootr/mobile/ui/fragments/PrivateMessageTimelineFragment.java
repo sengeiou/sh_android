@@ -253,7 +253,15 @@ public class PrivateMessageTimelineFragment extends BaseFragment
           }
 
           @Override public void onCheckIn() {
-            //TODO
+            /* no-op */
+          }
+
+          @Override public boolean hasWritePermission() {
+            return writePermissionManager.hasWritePermission();
+          }
+
+          @Override public void requestWritePermissionToUser() {
+            writePermissionManager.requestWritePermissionToUser();
           }
         })
         .build();
@@ -566,11 +574,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void pickImage() {
-    if (writePermissionManager.hasWritePermission()) {
-      newShotBar.pickPrivateMessageOptions();
-    } else {
-      writePermissionManager.requestWritePermissionToUser();
-    }
+    newShotBar.pickPrivateMessageOptions();
   }
 
   @Override public void showHolderOptions() {
