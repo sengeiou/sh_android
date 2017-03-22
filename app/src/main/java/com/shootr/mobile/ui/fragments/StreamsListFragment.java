@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.ui.views.nullview.NullStreamListView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -100,6 +101,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   protected void initializeViews(Bundle savedInstanceState) {
     unbinder = ButterKnife.bind(this, getView());
     streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+    streamsList.addItemDecoration(new BottomOffsetDecoration(200));
 
     adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
       @Override public void onStreamClick(StreamResultModel stream) {

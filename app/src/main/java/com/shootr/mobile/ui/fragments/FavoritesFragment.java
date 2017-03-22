@@ -24,6 +24,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FavoritesListPresenter;
 import com.shootr.mobile.ui.views.FavoritesListView;
 import com.shootr.mobile.ui.views.nullview.NullFavoritesListView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -94,6 +95,7 @@ public class FavoritesFragment extends BaseFragment implements FavoritesListView
 
   private void initializeViews() {
     favoritesList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    favoritesList.addItemDecoration(new BottomOffsetDecoration(200));
     adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
       @Override public void onStreamClick(StreamResultModel stream) {
         favoritesListPresenter.selectStream(stream);
