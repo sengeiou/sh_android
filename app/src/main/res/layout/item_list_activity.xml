@@ -31,14 +31,23 @@
           android:focusableInTouchMode="false"
           android:src="@drawable/ic_contact_picture_default" />
 
+        <LinearLayout
+            android:id="@+id/name_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/activity_avatar"
+            android:layout_toLeftOf="@+id/shot_media_content"
+            >
         <TextView android:id="@+id/ativity_user_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_toRightOf="@id/activity_avatar"
           android:textColor="@color/gray_10"
           android:textSize="16sp"
+          android:maxWidth="176dp"
+          android:ellipsize="end"
           android:paddingLeft="8dp"
           android:textStyle="bold"
+          android:maxLines="1"
           tools:text="Ignasi" />
 
         <TextView android:id="@+id/activity_timestamp"
@@ -46,16 +55,18 @@
           android:layout_height="wrap_content"
           android:textColor="@color/gray_60"
           android:paddingLeft="8dp"
+          android:singleLine="true"
           tools:text="22m"
           android:paddingTop="2dp"
-          android:layout_toRightOf="@+id/ativity_user_name" />
+          />
+        </LinearLayout>
 
         <com.shootr.mobile.ui.widgets.ClickableTextView android:id="@+id/activity_text"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/ativity_user_name"
+          android:layout_alignLeft="@+id/name_container"
           android:layout_toLeftOf="@+id/shot_media_content"
-          android:layout_below="@id/ativity_user_name"
+          android:layout_below="@id/name_container"
           android:textColor="@color/material_black"
           android:textColorLink="@color/links"
           android:textSize="16sp"
