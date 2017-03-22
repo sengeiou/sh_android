@@ -380,7 +380,7 @@
 
     <style name="InlineDescriptionAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">15sp</item>
-        <item name="android:textColor">@color/gray_60</item>
+        <item name="android:textColor">@color/gray_65</item>
     </style>
 
   <style name="InlineConnectedAppearance" parent="InlineDescriptionAppearance">
