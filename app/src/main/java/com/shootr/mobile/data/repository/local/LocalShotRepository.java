@@ -128,6 +128,6 @@ public class LocalShotRepository implements InternalShotRepository {
   }
 
   @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
-    return localShotDataSource.hasNewFilteredShots(idStream, lastTimeFiltered);
+    return localShotDataSource.hasNewFilteredShots(idStream, lastTimeFiltered, sessionRepository.getCurrentUserId());
   }
 }

@@ -360,7 +360,7 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
-  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
+  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered, String idUser) {
     throw new IllegalArgumentException("method not implemented");
   }
 
