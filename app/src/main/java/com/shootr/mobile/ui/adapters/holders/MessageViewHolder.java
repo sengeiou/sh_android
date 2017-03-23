@@ -15,7 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.PrivateMessageModel;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -34,7 +34,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.message_user_name) TextView name;
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @Nullable @BindView(R.id.message_timestamp) TextView timestamp;
-  @BindView(R.id.message_text) ClickableTextView text;
+  @BindView(R.id.message_text) BaseMessageTextView text;
   @BindView(R.id.message_image_landscape) ProportionalImageView proportionalImageView;
   @BindView(R.id.default_image) ImageView defaultImage;
   @BindView(R.id.message_video_frame) View videoFrame;
@@ -75,7 +75,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
   protected void bindComment(PrivateMessageModel item, OnUrlClickListener onUrlClickListener) {
     String comment = item.getComment();
     if (comment != null) {
-      addmessageComment(this, comment, onUrlClickListener);
+      addmessageComment(this, comment, onUrlClickListener, item);
       text.setVisibility(View.VISIBLE);
     } else {
       text.setVisibility(View.GONE);
@@ -83,11 +83,12 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void addmessageComment(MessageViewHolder vh, CharSequence comment,
-      OnUrlClickListener onUrlClickListener) {
+      OnUrlClickListener onUrlClickListener, PrivateMessageModel item) {
     CharSequence spannedComment =
         shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
     vh.text.setText(spannedComment);
-    vh.text.addLinks(onUrlClickListener);
+    vh.text.setBaseMessageModel(item);
+    vh.text.addLinks();
   }
 
   private void bindUsername(PrivateMessageModel message) {
