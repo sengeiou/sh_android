@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageChannelRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
@@ -17,7 +16,6 @@ public class GetFollowingPrivateMessagesChannelsInteractor implements Interactor
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final PrivateMessageChannelRepository remotePrivateMessageChannelRepository;
   private final PrivateMessageChannelRepository privateMessageChannelRepository;
   private final UserRepository localUserRepository;
 
@@ -27,12 +25,10 @@ public class GetFollowingPrivateMessagesChannelsInteractor implements Interactor
 
   @Inject public GetFollowingPrivateMessagesChannelsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      @Remote PrivateMessageChannelRepository remotePrivateMessageChannelRepository,
       @Local PrivateMessageChannelRepository privateMessageChannelRepository,
       @Local UserRepository localUserRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.remotePrivateMessageChannelRepository = remotePrivateMessageChannelRepository;
     this.privateMessageChannelRepository = privateMessageChannelRepository;
     this.localUserRepository = localUserRepository;
   }
@@ -49,13 +45,9 @@ public class GetFollowingPrivateMessagesChannelsInteractor implements Interactor
     loadLocalPrivateChannels();
   }
 
-  private void loadRemotePrivateChannels() {
-    remotePrivateMessageChannelRepository.getPrivateMessageChannels();
-    notifyLoaded(privateMessageChannelRepository.getPrivateMessageChannels());
-  }
-
   private void loadLocalPrivateChannels() {
-    List<PrivateMessageChannel> channels = privateMessageChannelRepository.getPrivateMessageChannels();
+    List<PrivateMessageChannel> channels =
+        privateMessageChannelRepository.getPrivateMessageChannels();
     ArrayList<PrivateMessageChannel> followingChannels = filterChannels(channels);
     notifyLoaded(followingChannels);
   }

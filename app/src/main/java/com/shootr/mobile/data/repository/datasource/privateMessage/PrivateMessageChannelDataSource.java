@@ -14,6 +14,13 @@ public interface PrivateMessageChannelDataSource {
 
   void putPrivateMessages(List<PrivateMessageChannelEntity> privateMessageChannelEntities);
 
+  void removePrivateMessageChannel(String idPrivateMessageChannel);
+
   List<PrivateMessageChannelEntity> getPrivateMessageChannels(Long timestamp);
 
+  void sendRemovedPrivateMessageChannels();
+
+  List<PrivateMessageChannelEntity> getPrivateMessageChannelsNotSynchronized();
+
+  void markPrivateMessageChannelDeleted(String channelId);
 }

@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.RemovePrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 public class PrivateMessagesChannelListPresenter implements Presenter {
 
   private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
+  private final RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor;
   private final PrivateMessageChannelModelMapper mapper;
   private final ErrorMessageFactory errorMessageFactory;
   private final BusPublisher busPublisher;
@@ -30,9 +32,11 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
 
   @Inject public PrivateMessagesChannelListPresenter(
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
+      RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor,
       PrivateMessageChannelModelMapper mapper, ErrorMessageFactory errorMessageFactory,
       BusPublisher busPublisher, @Main Bus bus) {
     this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
+    this.removePrivateMessagesChannelsInteractor = removePrivateMessagesChannelsInteractor;
     this.mapper = mapper;
     this.errorMessageFactory = errorMessageFactory;
     this.busPublisher = busPublisher;
@@ -50,7 +54,7 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
 
   public void loadChannels() {
     view.showLoading();
-    getPrivateMessagesChannelsInteractor.loadChannels(false,
+    getPrivateMessagesChannelsInteractor.loadChannels(true,
         new Interactor.Callback<List<PrivateMessageChannel>>() {
           @Override public void onLoaded(List<PrivateMessageChannel> result) {
             onLoadResults(result);
@@ -123,5 +127,14 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
 
   public PrivateMessageChannelListView getView() {
     return view;
+  }
+
+  public void removePrivateMessageChannel(String privateMessageChannelId) {
+    removePrivateMessagesChannelsInteractor.removePrivateMessageChannel(privateMessageChannelId,
+        new Interactor.Callback<String>() {
+          @Override public void onLoaded(String s) {
+            loadChannels();
+          }
+        });
   }
 }

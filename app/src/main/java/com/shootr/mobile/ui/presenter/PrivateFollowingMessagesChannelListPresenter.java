@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetFollowingPrivateMessagesChannelsInteractor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.RemovePrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 public class PrivateFollowingMessagesChannelListPresenter implements Presenter, ChannelsBadgeChanged.Receiver {
 
   private final GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor;
+  private final RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor;
   private final PrivateMessageChannelModelMapper mapper;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
@@ -30,9 +32,11 @@ public class PrivateFollowingMessagesChannelListPresenter implements Presenter, 
 
   @Inject public PrivateFollowingMessagesChannelListPresenter(
       GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor,
+      RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor,
       PrivateMessageChannelModelMapper mapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.getFollowingPrivateMessagesChannelsInteractor =
         getFollowingPrivateMessagesChannelsInteractor;
+    this.removePrivateMessagesChannelsInteractor = removePrivateMessagesChannelsInteractor;
     this.mapper = mapper;
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
@@ -123,5 +127,14 @@ public class PrivateFollowingMessagesChannelListPresenter implements Presenter, 
 
   @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
     loadChannels();
+  }
+
+  public void removePrivateMessageChannel(String privateMessageChannelId) {
+    removePrivateMessagesChannelsInteractor.removePrivateMessageChannel(privateMessageChannelId,
+        new Interactor.Callback<String>() {
+          @Override public void onLoaded(String s) {
+            loadChannels();
+          }
+        });
   }
 }

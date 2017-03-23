@@ -494,4 +494,5 @@
   <string name="on_boarding_enter_shootr">进入Shootr</string>
   <string name="menu_check_in">Check-in</string>
   <string name="check_in_show_case">Check-in to say you\'re here</string>
+  <string name="remove_private_message_channel">Remove</string>
 </resources>

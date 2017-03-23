@@ -6,9 +6,12 @@ import com.shootr.mobile.data.entity.PrivateMessageChannelEntity;
 import com.shootr.mobile.data.entity.PrivateMessageEntity;
 import java.io.IOException;
 import java.util.List;
+import retrofit.client.Response;
 import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
+import retrofit.http.PUT;
+import retrofit.http.Path;
 import retrofit.http.Query;
 
 public interface PrivateMessagesApiService {
@@ -30,4 +33,9 @@ public interface PrivateMessagesApiService {
   @GET("/privateMessage/timeline?embedPrivateMessageChannel=false")
   PrivateMessageTimelineEntity getOlderTimeline(@Query("idTargetUser") String idTargetUser,
       @Query("maxTimestamp") Long timestamp) throws ApiException, IOException;
+
+  @PUT("/privateMessageChannel/{idPrivateMessageChannel}/remove")
+  Response removePrivateMessageChannel(
+      @Path("idPrivateMessageChannel") String idPrivateMessageChannel)
+      throws ApiException, IOException;
 }

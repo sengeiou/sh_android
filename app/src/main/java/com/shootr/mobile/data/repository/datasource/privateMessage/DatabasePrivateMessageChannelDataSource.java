@@ -34,7 +34,23 @@ public class DatabasePrivateMessageChannelDataSource implements PrivateMessageCh
     privateMessageChannelManager.savePrivateMessageChannels(privateMessageChannelEntities);
   }
 
+  @Override public void removePrivateMessageChannel(String idPrivateMessageChannel) {
+    privateMessageChannelManager.removePrivateMessageChannel(idPrivateMessageChannel);
+  }
+
   @Override public List<PrivateMessageChannelEntity> getPrivateMessageChannels(Long timestamp) {
     return privateMessageChannelManager.getPrivateMessageChannels();
+  }
+
+  @Override public void sendRemovedPrivateMessageChannels() {
+    throw new IllegalArgumentException("method not implemented");
+  }
+
+  @Override public List<PrivateMessageChannelEntity> getPrivateMessageChannelsNotSynchronized() {
+    return privateMessageChannelManager.getPrivateMessageChannelsNotSynchronized();
+  }
+
+  @Override public void markPrivateMessageChannelDeleted(String channelId) {
+    privateMessageChannelManager.markPrivateMessageChannelDeleted(channelId);
   }
 }
