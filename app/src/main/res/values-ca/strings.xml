@@ -274,6 +274,7 @@
   <string name="notification_image">Imatge</string>
   <string name="notification_image_and_text">Imatge: %s</string>
   <string name="notification_private_message_not_allowed">L\'usuari ha restringit els missatges privats i el teu missatge no pot enviar-se</string>
+  <string name="not_allowed_blocked_user">L\'usuari està bloquejat</string>
   <string name="notification_shot_failed">El shot no s\'ha publicat</string>
   <string name="notification_shot_failed_subtitle_pattern">Esborrany desat: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Esborrany desat</string>

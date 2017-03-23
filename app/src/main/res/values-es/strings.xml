@@ -274,6 +274,7 @@
   <string name="notification_image">Imagen</string>
   <string name="notification_image_and_text">Imagen: %s</string>
   <string name="notification_private_message_not_allowed">El usuario ha restringido los mensajes privados y tu mensaje no puede enviarse</string>
+  <string name="not_allowed_blocked_user">El usuario está bloqueado</string>
   <string name="notification_shot_failed">El shot no se ha publicado</string>
   <string name="notification_shot_failed_subtitle_pattern">Borrador guardado: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Borrador guardado</string>

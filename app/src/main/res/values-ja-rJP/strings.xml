@@ -265,6 +265,7 @@
   <string name="notification_image_and_text">画像: %s</string>
   <string name="notification_shot_failed">ショットは投稿されませんでした</string>
   <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
+  <string name="not_allowed_blocked_user">This User is blocked</string>
   <string name="notification_shot_failed_subtitle_pattern">下書きが保存されました: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">下書きが保存されました</string>
   <string name="notification_shot_has_parent_deleted_subtitle">返信したショットは削除されました</string>

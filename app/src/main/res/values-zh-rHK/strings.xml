@@ -274,6 +274,7 @@
   <string name="notification_image">圖片</string>
   <string name="notification_image_and_text">圖片: %s</string>
   <string name="notification_private_message_not_allowed">用戶屏蔽了你，你的信息將不會被發送。</string>
+  <string name="not_allowed_blocked_user">This User is blocked</string>
   <string name="notification_shot_failed">Shot 發送失敗</string>
   <string name="notification_shot_failed_subtitle_pattern">草稿已儲存: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">草稿已儲存</string>

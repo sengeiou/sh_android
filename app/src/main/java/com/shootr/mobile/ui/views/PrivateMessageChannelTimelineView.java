@@ -14,4 +14,6 @@ public interface PrivateMessageChannelTimelineView extends TimelineView {
   void addMessages(List<PrivateMessageModel> privateMessageModels);
 
   void addOldMessages(List<PrivateMessageModel> oldMessages);
+
+  void showBlockedUserError();
 }

@@ -11,6 +11,7 @@ import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessag
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.domain.exception.NotAllowedToPublishException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.UserBlockedToPrivateMessageException;
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
 import com.shootr.mobile.domain.repository.Local;
@@ -100,6 +101,8 @@ public class RemotePrivateMessageRepository implements PrivateMessageRepository 
       responseMessageEntity.setUsername(userEntity.getUserName());
       localPrivateMessageDataSource.putPrivateMessage(responseMessageEntity);
       return privateMessageEntityMapper.transform(responseMessageEntity);
+    } catch (UserBlockedToPrivateMessageException err) {
+      throw err;
     } catch (NotAllowedToPublishException e) {
       throw e;
     }

@@ -55,6 +55,10 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
         Timber.e(e, "You're not allowed to publish this private message");
     }
 
+    @Override public void onPrivateMessageBlockedUser(QueuedShot shot, Exception e) {
+        shotQueueNotificationManager.hideShotNotification(shot);
+    }
+
     @Override public void onQueueShot(QueuedShot queuedShot) {
         shotQueueNotificationManager.showSendingShotNotification(queuedShot);
     }

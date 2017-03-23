@@ -275,6 +275,7 @@
   <string name="notification_image">Image</string>
   <string name="notification_image_and_text">Image: %s</string>
   <string name="notification_private_message_not_allowed">This user has restricted private messages and your message cannot be sent</string>
+  <string name="not_allowed_blocked_user">This User is blocked</string>
   <string name="notification_shot_failed">Shot failed</string>
   <string name="notification_shot_failed_subtitle_pattern">Draft saved: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Draft saved</string>
