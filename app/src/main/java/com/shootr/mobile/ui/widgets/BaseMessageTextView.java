@@ -78,21 +78,21 @@ public class BaseMessageTextView extends TextView {
   }
 
   private void spanUrls(SpannableStringBuilder stringBuilder) {
+    int lastUrlindex = 0;
     if (baseMessageModel.getEntitiesModel() != null) {
-      int lastUrlindex = 0;
       for (UrlModel urlModel : baseMessageModel.getEntitiesModel().getUrls()) {
         try {
-          Pattern termsPattern = Pattern.compile(Pattern.quote(urlModel.getUrl()));
-          Matcher termsMatcher = termsPattern.matcher(stringBuilder.toString());
-          if (termsMatcher.find(lastUrlindex)) {
-            int termsStart = termsMatcher.start();
-            int termsEnd = termsMatcher.end();
-            lastUrlindex = termsStart + urlModel.getDisplayUrl().length();
+          int start = urlModel.getIndices().get(0) + lastUrlindex;
+          int end = urlModel.getIndices().get(1) + lastUrlindex;
 
-            stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener),
-                termsStart, termsEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            stringBuilder.replace(termsStart, termsEnd, urlModel.getDisplayUrl());
-          }
+          String textToReplace = stringBuilder.toString().substring(start, end);
+
+          stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener),
+              start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+          stringBuilder.replace(start, end, urlModel.getDisplayUrl());
+
+          lastUrlindex += urlModel.getDisplayUrl().length() - textToReplace.length();
         } catch (IndexOutOfBoundsException error) {
           /* no-op */
         }
