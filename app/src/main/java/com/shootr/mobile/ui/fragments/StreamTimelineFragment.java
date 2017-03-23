@@ -287,6 +287,7 @@ public class StreamTimelineFragment extends BaseFragment
       checkInShowcase.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           checkInShowcase.setVisibility(View.GONE);
+          setShowcasePreference();
         }
       });
       checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
@@ -559,7 +560,6 @@ public class StreamTimelineFragment extends BaseFragment
           }
 
           @Override public void onCheckIn() {
-            setShowcasePreference();
             streamTimelinePresenter.onMenuCheckInClick();
           }
 
@@ -1291,6 +1291,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void pickImage() {
+    setShowcasePreference();
     newShotBarContainer.pickImage();
   }
 

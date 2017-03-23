@@ -45,8 +45,10 @@ import com.shootr.mobile.data.ServerDownErrorInterceptor;
 import com.shootr.mobile.data.UnauthorizedErrorInterceptor;
 import com.shootr.mobile.data.VersionOutdatedErrorInterceptor;
 import com.shootr.mobile.data.prefs.BooleanPreference;
+import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.NotificationsEnabled;
+import com.shootr.mobile.data.prefs.ShowcasePreference;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
 import com.shootr.mobile.ui.AppContainer;
@@ -99,6 +101,7 @@ import static butterknife.ButterKnife.findById;
     private final IntPreference animationSpeed;
     private final BooleanPreference scalpelEnabled;
     private final BooleanPreference scalpelWireframeEnabled;
+    private final ShowcasePreference checkInShowcasePreferences;
     private final BooleanPreference captureIntentsEnabled;
     private final BooleanPreference notificationsEnabled;
     private final BooleanPreference pollerEnabled;
@@ -115,6 +118,7 @@ import static butterknife.ButterKnife.findById;
       @DebugMode BooleanPreference debugMode, @NetworkProxy StringPreference networkProxy,
       @AnimationSpeed IntPreference animationSpeed, @ScalpelEnabled BooleanPreference scalpelEnabled,
       @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
+      @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences,
       @CaptureIntents BooleanPreference captureIntentsEnabled, @CustomEndpoint StringPreference customEndpoint,
       @NotificationsEnabled BooleanPreference notificationsEnabled, @PollerEnabled BooleanPreference pollerEnabled,
       MockRestAdapter mockRestAdapter, Application app) {
@@ -133,6 +137,7 @@ import static butterknife.ButterKnife.findById;
         this.pollerEnabled = pollerEnabled;
         this.mockRestAdapter = mockRestAdapter;
         this.app = app;
+        this.checkInShowcasePreferences = checkInShowcasePreferences;
     }
 
     @BindView(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
@@ -175,6 +180,7 @@ import static butterknife.ButterKnife.findById;
     @BindView(R.id.debug_device_api) TextView deviceApiView;
     @BindView(R.id.debug_logs_show) TextView deviceLogView;
     @BindView(R.id.debug_device_database_extract) Button deviceDatabaseExtractView;
+    @BindView(R.id.debug_reset_showcase) Button resetShowcaseButton;
 
     @Override public ViewGroup get(final Activity activity) {
         this.activity = activity;
@@ -223,7 +229,7 @@ import static butterknife.ButterKnife.findById;
         debugActions.add(new LoginDebugAction("fukdalaw", "654321"));
         debugActions.add(new LoginDebugAction("VSaldanya", "123456"));
         debugActions.add(new LoginDebugAction("AlterEgoVic", "123456"));
-        debugActions.add(new LoginDebugAction("JorgeShoot", "poned_una_contraseña"));
+        debugActions.add(new LoginDebugAction("Jorgetest", "jmartinez4"));
         return debugActions;
     }
 
@@ -383,6 +389,12 @@ import static butterknife.ButterKnife.findById;
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting Poller Enabled to " + isChecked);
                 pollerEnabled.set(isChecked);
+            }
+        });
+
+        resetShowcaseButton.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) {
+                checkInShowcasePreferences.delete();
             }
         });
     }

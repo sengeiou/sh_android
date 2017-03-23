@@ -24,7 +24,7 @@ public class ShowcaseStatus {
 
   public void setTimesViewed(int timesViewed) {
     this.timesViewed = timesViewed;
-    if (this.timesViewed >= 5) {
+    if (this.timesViewed >= 3) {
       this.shouldShowShowcase = false;
     }
   }
