@@ -49,6 +49,8 @@
   <string name="alert_report_confirmed_email_title">Se requiere un email confirmado</string>
   <string name="alert_shootr_update">Este contenido solo puede verse con la última versión de Shootr.</string>
   <string name="alert_update_shootr">Este contenido solo puede verse con la última versión de Shootr</string>
+  <string name="all_messages_title">TODOS</string>
+  <string name="all_messages_title_plural">TODOS (%d)</string>
   <string name="all_participants_button">Todos los participantes</string>
   <string name="all_push_settings">Todas</string>
   <string name="ban_user_dialog_message">Los shots que publique en tus streams solo se mostrarán a sus seguidores.</string>
@@ -69,6 +71,7 @@
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
+  <string name="check_in_show_case">Haz Check-in para decir que estás aquí</string>
   <!-- Errors -->
   <string name="communication_error">Hay un problema de conexión a Internet. Comprueba tu conexión y prueba otra vez.</string>
   <string name="confirmation_hide_shot_message" formatted="false">Quitar shot</string>
@@ -177,7 +180,7 @@
   <string name="error_stream_already_favorites">Ya está en Favoritos</string>
   <string name="error_stream_read_only">Este stream ha sido borrado y es solo de lectura.</string>
   <string name="error_title">Ooops!</string>
-  <string name="error_user_already_checked">Hoy ya has hecho check-in en este stream.</string>
+  <string name="error_user_already_checked">Hecho</string>
   <!-- Error message not for user. Only for developers -->
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No se puede votar</string>
@@ -186,10 +189,13 @@
   <string name="favorites_emtpy">No hay favoritos</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="filtered_by_important">Filtrado por: Importante</string>
   <string name="finished_poll">Resultado de la encuesta %s</string>
   <string name="follower_list_empty">No hay seguidores</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">No sigues a nadie</string>
+  <string name="following_messages_title">SIGUIENDO</string>
+  <string name="following_messages_title_plural">SIGUIENDO (%d)</string>
   <string name="highlight_shot_dialog">El shot dejará de estar destacado</string>
   <string name="hours">h</string>
   <!-- When there are no private message channels -->
@@ -223,6 +229,7 @@
   <string name="main_activity_title">Actividad</string>
   <string name="mentioned_shot_activity_with_comment">"Te ha mencionado: "</string>
   <string name="menu_all_shots">Mostrar todos los shots</string>
+  <string name="menu_check_in">Check-in</string>
   <string name="menu_copy_text">Copiar texto</string>
   <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Mostrar los shots del administrador</string>
@@ -248,6 +255,7 @@
   <string name="new_activity_notification">Nueva actividad</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Nuevos seguidores</string>
+  <string name="new_messages_notification">%d mensajes nuevos</string>
   <string name="new_password_again_hint">Nueva contraseña otra vez</string>
   <string name="new_password_hint">Nueva contraseña</string>
   <plurals name="new_shots_indicator">
@@ -255,7 +263,7 @@
     <item quantity="other">%d shots nuevos</item>
   </plurals>
   <string name="new_shot_discard_message">¿Descartar shot?</string>
-  <string name="new_shot_placeholder">Escribe algo…</string>
+  <string name="new_shot_placeholder">Mensaje</string>
   <string name="new_shot_repeated">Whoops! Ya has publicado eso</string>
   <string name="new_stream_description_label">Descripción</string>
   <string name="new_stream_title_label">Título</string>
@@ -274,7 +282,6 @@
   <string name="notification_image">Imagen</string>
   <string name="notification_image_and_text">Imagen: %s</string>
   <string name="notification_private_message_not_allowed">El usuario ha restringido los mensajes privados y tu mensaje no puede enviarse</string>
-  <string name="not_allowed_blocked_user">El usuario está bloqueado</string>
   <string name="notification_shot_failed">El shot no se ha publicado</string>
   <string name="notification_shot_failed_subtitle_pattern">Borrador guardado: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Borrador guardado</string>
@@ -284,10 +291,15 @@
   <string name="notification_shot_multiple_title">%d shots nuevos</string>
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot enviado</string>
+  <!-- When you try to send a private message to a blocked user -->
+  <string name="not_allowed_blocked_user">Ignoraste a este usuario. Para escribirle debes deshacer ignorar.</string>
   <string name="now">ahora</string>
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
   <string name="off_push_settings">Ninguna</string>
   <string name="ok">OK</string>
+  <string name="on_boarding_add_favorites">Añadir a Favoritos</string>
+  <!-- Button enter Shootr -->
+  <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
   <string name="opened_activity_text_pattern">Ha creado (stream)</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">No hay participantes</string>
@@ -316,10 +328,6 @@
     <item quantity="zero">%d votos</item>
   </plurals>
   <string name="poll_vote_timeout_retry">Reintentar</string>
-  <string name="all_messages_title">TODOS</string>
-  <string name="following_messages_title">SIGUIENDO</string>
-  <string name="all_messages_title_plural">TODOS (%d)</string>
-  <string name="following_messages_title_plural">SIGUIENDO (%d)</string>
   <string name="private_message_image">Foto</string>
   <!-- Push Settings -->
   <string name="private_message_push_settings">Mensajes Privados</string>
@@ -352,6 +360,8 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">Quitar de Favoritos</string>
   <string name="remove_highlight">Quitar destacado</string>
+  <!-- Long press for remove a private message channel -->
+  <string name="remove_private_message_channel">Borrar</string>
   <string name="remove_stream_confirmation">¿Borrar stream?</string>
   <string name="remove_stream_label">Borrar stream</string>
   <string name="remove_stream_listing_context_menu">Borrar</string>
@@ -495,12 +505,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="new_messages_notification">%d mensajes nuevos</string>
-  <string name="filtered_by_important">Filtered by: Important</string>
-  <string name="analytics_action_open_app">OpenApp</string>
-  <string name="on_boarding_add_favorites">Añadir a Favoritos</string>
-  <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
-  <string name="menu_check_in">Check-in</string>
-  <string name="check_in_show_case">Check-in to say you\'re here</string>
-  <string name="remove_private_message_channel">Borrar</string>
 </resources>

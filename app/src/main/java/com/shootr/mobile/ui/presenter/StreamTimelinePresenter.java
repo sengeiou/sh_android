@@ -231,7 +231,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           @Override public void onLoaded(Boolean hasNewFilteredShots) {
             if (hasNewFilteredShots) {
               if (!filterActivated) {
-                streamTimelineView.showFilterAlert();
+                //TODO esto se ha de descomentar deapués streamTimelineView.showFilterAlert();
               }
             }
           }

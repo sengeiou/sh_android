@@ -49,6 +49,8 @@
   <string name="alert_report_confirmed_email_title">メールアドレスの確認を済ませてください</string>
   <string name="alert_shootr_update">このコンテンツはShootrの最新バージョンでのみ表示できます。</string>
   <string name="alert_update_shootr">このコンテンツはShootrの最新バージョンでのみ表示できます</string>
+  <string name="all_messages_title">すべて</string>
+  <string name="all_messages_title_plural">すべて(%d)</string>
   <string name="all_participants_button">全ての参加者</string>
   <string name="all_push_settings">全て</string>
   <string name="ban_user_dialog_message">あなたが作成したストリームで、このユーザーのショットはフォロワーのみ見ることができます。</string>
@@ -67,6 +69,9 @@
   <string name="change_password_logout_message">パスワードが変更されました。再度ログインしてください。</string>
   <string name="change_photo">写真を変更</string>
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
+  <!-- It's the title of the settings that mean receive push on do a check-in -->
+  <string name="checkin_push_settings">チェックイン</string>
+  <string name="check_in_show_case">チェックインしてストリーム内にいると伝える</string>
   <!-- Errors -->
   <string name="communication_error">インターネット接続に問題があります。接続をご確認の上、もう一度お試しください。</string>
   <string name="confirmation_hide_shot_message" formatted="false">ピン留めを解除</string>
@@ -80,6 +85,8 @@
   <string name="discard">破棄</string>
   <string name="discard_profile_confirmation">変更を破棄しますか？</string>
   <string name="discover">発見</string>
+  <string name="discover_banner_content">星をタップして追加してください。テレビやラジオ番組が始まると通知が届きます。</string>
+  <string name="discover_banner_title">ストリームをお気に入りに追加</string>
   <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完了</string>
@@ -173,24 +180,27 @@
   <string name="error_stream_already_favorites">既に登録されています</string>
   <string name="error_stream_read_only">このストリームは削除されたため、読むことのみ可能です。</string>
   <string name="error_title">おっと！</string>
+  <string name="error_user_already_checked">このストリームには今日既にチェックインしました</string>
+  <!-- Error message not for user. Only for developers -->
+  <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">メールアドレスと友人は必須項目です。</string>
   <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
-  <string name="private_message_push_settings">Private Messages</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
+  <string name="filtered_by_important">フィルター: 大切なショット</string>
   <string name="finished_poll">アンケート %s の結果</string>
   <string name="follower_list_empty">フォロワーはいません</string>
   <string name="following_followers_separator">|</string>
   <string name="following_list_empty">フォロー中の人はいません</string>
+  <string name="following_messages_title">フォロー中</string>
+  <string name="following_messages_title_plural">フォロー中(%d)</string>
   <string name="highlight_shot_dialog">メッセージのハイライトを取り消しますか？</string>
   <string name="hours">時間</string>
+  <!-- When there are no private message channels -->
+  <string name="include_listing_channels_empty">メッセージがありません</string>
   <string name="include_listing_empty">ストリームはありません</string>
-  <string name="include_listing_channels_empty">No private messages</string>
-  <string name="private_message_video">video</string>
-  <string name="private_message_image">image</string>
-  <string name="private_message_timeline_empty_title">No private messages</string>
   <string name="intro_create_text">所有するコミュニティーのストリームを作成してみてください。</string>
   <string name="intro_create_title">新規作成</string>
   <string name="intro_favorites_text">毎日多くのストリームが追加されます。あなたのお気に入りを作ってください。</string>
@@ -217,6 +227,7 @@
   <string name="main_activity_title">アクティビティ</string>
   <string name="mentioned_shot_activity_with_comment">"あなたについて書きました: "</string>
   <string name="menu_all_shots">全てのショットを見る</string>
+  <string name="menu_check_in">チェックイン</string>
   <string name="menu_copy_text">テキストをコピー</string>
   <string name="menu_highlight_shot">ハイライト</string>
   <string name="menu_holding_shots">作成者のショットを表示する</string>
@@ -240,6 +251,9 @@
   <string name="multiple_activity_notification">新しいショット: %d件</string>
   <string name="mute">通知をオフ</string>
   <string name="new_activity_notification">新しいアクティビティ</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="new_followers_push_settings">新しいフォロワー</string>
+  <string name="new_messages_notification">%d件の新しいメッセージ</string>
   <string name="new_password_again_hint">再度入力してください</string>
   <string name="new_password_hint">新しいパスワード</string>
   <plurals name="new_shots_indicator">
@@ -263,9 +277,8 @@
   <string name="no">いいえ</string>
   <string name="notification_image">画像</string>
   <string name="notification_image_and_text">画像: %s</string>
+  <string name="notification_private_message_not_allowed">ユーザーがプライベートメッセージを制限しているため、メッセージを送信できません</string>
   <string name="notification_shot_failed">ショットは投稿されませんでした</string>
-  <string name="notification_private_message_not_allowed">You are not allowed to publish this private message</string>
-  <string name="not_allowed_blocked_user">This User is blocked</string>
   <string name="notification_shot_failed_subtitle_pattern">下書きが保存されました: %s</string>
   <string name="notification_shot_failed_subtitle_pattern_no_comment">下書きが保存されました</string>
   <string name="notification_shot_has_parent_deleted_subtitle">返信したショットは削除されました</string>
@@ -278,6 +291,9 @@
   <string name="no_intent_handler">このアクションを実施するために使用可能なアプリがありません。</string>
   <string name="off_push_settings">オフ</string>
   <string name="ok">OK</string>
+  <string name="on_boarding_add_favorites">お気に入りに追加</string>
+  <!-- Button enter Shootr -->
+  <string name="on_boarding_enter_shootr">Shootrに入る</string>
   <string name="opened_activity_text_pattern">(stream)を作成しました</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">参加者はいません</string>
@@ -293,6 +309,8 @@
   <string name="pin_topic" formatted="false">メッセージをピン留め</string>
   <string name="poll_ignore">無視する</string>
   <string name="poll_live_results">現在の結果</string>
+  <!-- It's the title of the settings that mean receive push on have a new one -->
+  <string name="poll_push_settings">アンケート</string>
   <string name="poll_results">最終結果</string>
   <string name="poll_results_dialog">結果を見ると、その後このアンケートに投票することはできません。</string>
   <string name="poll_results_pct">(%s%%)</string>
@@ -303,6 +321,11 @@
     <item quantity="zero">%d件の投票</item>
   </plurals>
   <string name="poll_vote_timeout_retry">もう一度試す</string>
+  <string name="private_message_image">写真</string>
+  <!-- Push Settings -->
+  <string name="private_message_push_settings">プライベートメッセージ</string>
+  <string name="private_message_timeline_empty_title">メッセージがありません</string>
+  <string name="private_message_video">ビデオ</string>
   <string name="profile_all_shots">全てのショット</string>
   <string name="profile_edit_done_button">完了</string>
   <string name="profile_edit_profile">プロフィールを編集</string>
@@ -317,6 +340,7 @@
   <string name="profile_settings">プッシュ通知</string>
   <string name="profile_support">サポート</string>
   <string name="profile_updated">プロフィールが更新されました</string>
+  <string name="promoted">プロモーション</string>
   <string name="publish_poll">%1$s：%2$sに新しいアンケート</string>
   <string name="push_settings_everyone">全員から（既定）</string>
   <string name="push_settings_people_follow">フォロー中の人からのみ</string>
@@ -326,7 +350,11 @@
   <string name="read_write_mode_view_only_title">表示専用</string>
   <string name="registration_create_button_text">アカウントの作成</string>
   <string name="remove">削除する</string>
+  <!-- When a stream has been removed from favorites feedback -->
+  <string name="removed_from_favorites">お気に入り解除</string>
   <string name="remove_highlight">ハイライトの取消</string>
+  <!-- Long press for remove a private message channel -->
+  <string name="remove_private_message_channel">削除</string>
   <string name="remove_stream_confirmation">ストリームを削除しますか？</string>
   <string name="remove_stream_label">ストリームを削除</string>
   <string name="remove_stream_listing_context_menu">削除</string>
@@ -351,9 +379,6 @@
     <item quantity="other">リショット: %s件</item>
     <item quantity="zero">リショット: %s件</item>
   </plurals>
-  <string name="new_followers_push_settings">New followers</string>
-  <string name="poll_push_settings">Poll</string>
-  <string name="checkin_push_settings">Check-in</string>
   <string name="reshot_push_settings">リショット</string>
   <string name="restore_stream_label">ストリームを復元</string>
   <string name="restore_stream_snackbar_action">復元する</string>
@@ -386,6 +411,8 @@
   <string name="sign_out_message">ログアウトしています…</string>
   <string name="started_shooting_activity_text_pattern">(stream)に投稿しました</string>
   <string name="started_shooting_push_settings">新規ショットの通知</string>
+  <string name="stream_checked">完了</string>
+  <string name="stream_check_in_activity_text_pattern">(stream)にチェックインしました</string>
   <string name="stream_data_info_favorites">お気に入り</string>
   <string name="stream_data_info_participants">参加者数</string>
   <string name="stream_data_info_participants_with_shots">ショット投稿済み</string>
@@ -419,9 +446,11 @@
   <string name="support_privacy_policy">プライバシーポリシー</string>
   <string name="support_terms_service">利用条件</string>
   <string name="support_version">バージョン</string>
+  <string name="timeline_poll_results">検索結果: 0件</string>
   <string name="title_activity_all_participants">全ての参加者</string>
   <string name="title_activity_all_shots">全てのショット</string>
   <string name="title_activity_change_password">パスワードを変更</string>
+  <string name="title_activity_channels">プライベートメッセージ</string>
   <string name="title_activity_contributors">投稿者</string>
   <string name="title_activity_email_confirmation">メールアドレス</string>
   <string name="title_activity_listing">ストリーム</string>
@@ -464,17 +493,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">暫くお待ちください</string>
   <string name="yes">はい</string>
-  <string name="error_user_cannot_check">user cannot check</string>
-  <string name="timeline_poll_results">検索結果: 0件</string>
-  <string name="analytics_action_open_cta_link">Ad</string>
-  <string name="analytics_label_open_cta_link">Ad</string>
-  <string name="title_activity_channels">Channels</string>
-  <string name="new_messages_notification">%d new messages</string>
-  <string name="filtered_by_important">Filtered by: Important</string>
-  <string name="analytics_action_open_app">OpenApp</string>
-  <string name="on_boarding_add_favorites">Add to Favorites</string>
-  <string name="on_boarding_enter_shootr">Enter Shootr</string>
-  <string name="menu_check_in">Check-in</string>
-  <string name="check_in_show_case">Check-in to say you\'re here</string>
-  <string name="remove_private_message_channel">Remove</string>
 </resources>
