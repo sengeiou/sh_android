@@ -13,6 +13,21 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.30.0] - 2017-03-24
+
+### Added
+- Remove de chanels de mensajes privados
+- Quienes están bloqueados no me pueden escribir
+- Shootr go entities
+- Poll goes shot
+- New hot
+- Espacio en blanco al final de listas del mainTabbedActivity
+
+
+### Removed
+
+- Badge del filtro
+
 ## [1.29.0] - 2017-03-10
 
 ### Added
