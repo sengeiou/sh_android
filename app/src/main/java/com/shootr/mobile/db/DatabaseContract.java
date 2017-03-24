@@ -30,6 +30,7 @@ public class DatabaseContract {
     String ID_USER = "idUser";
     String VERIFIED_USER = "verifiedUser";
     String USERNAME = "username";
+    String ENTITIES = "entities";
   }
 
   public static class UserTable implements SyncColumns {
@@ -114,13 +115,14 @@ public class DatabaseContract {
     public static final String IS_PADDING = "isPadding";
     public static final String FROM_HOLDER = "fromHolder";
     public static final String FROM_CONTRIBUTOR = "fromContributor";
+    public static final String ENTITIES = "entities";
 
     public static final String[] PROJECTION = {
         ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT,
         ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
         VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, VIEWS, LINK_CLICKS,
         RESHOOT_COUNT, CTA_CAPTION, CTA_BUTTON_LINK, CTA_BUTTON_TEXT, PROMOTED, VERIFIED_USER,
-        IS_PADDING, FROM_HOLDER, FROM_CONTRIBUTOR, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        IS_PADDING, FROM_HOLDER, FROM_CONTRIBUTOR, ENTITIES, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -580,7 +582,7 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         ID_PRIVATE_MESSAGE, ID_PRIVATE_MESSAGE_CHANNEL, ID_USER, USERNAME, COMMENT, IMAGE,
-        IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, VERIFIED_USER, BIRTH,
+        IMAGE_WIDTH, IMAGE_HEIGHT, VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, VERIFIED_USER, ENTITIES, BIRTH,
         MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }

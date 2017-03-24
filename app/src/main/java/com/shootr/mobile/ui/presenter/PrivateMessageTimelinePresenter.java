@@ -1,25 +1,27 @@
 package com.shootr.mobile.ui.presenter;
 
-    import com.shootr.mobile.data.bus.Main;
-    import com.shootr.mobile.domain.bus.ShotSent;
-    import com.shootr.mobile.domain.exception.ShootrException;
-    import com.shootr.mobile.domain.interactor.Interactor;
-    import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
-    import com.shootr.mobile.ui.Poller;
-    import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
-    import com.shootr.mobile.ui.model.PrivateMessageModel;
-    import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
-    import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
-    import com.shootr.mobile.ui.presenter.interactorwrapper.PrivateMessageChannelTimelineInteractorWrapper;
-    import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
-    import com.shootr.mobile.util.ErrorMessageFactory;
-    import com.squareup.otto.Bus;
-    import com.squareup.otto.Subscribe;
-    import java.util.ArrayList;
-    import java.util.List;
-    import javax.inject.Inject;
+import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.domain.bus.MessageFailed;
+import com.shootr.mobile.domain.bus.ShotSent;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
+import com.shootr.mobile.ui.Poller;
+import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
+import com.shootr.mobile.ui.model.PrivateMessageModel;
+import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
+import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
+import com.shootr.mobile.ui.presenter.interactorwrapper.PrivateMessageChannelTimelineInteractorWrapper;
+import com.shootr.mobile.ui.views.PrivateMessageChannelTimelineView;
+import com.shootr.mobile.util.ErrorMessageFactory;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
+import java.util.ArrayList;
+import java.util.List;
+import javax.inject.Inject;
 
-public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Receiver {
+public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Receiver,
+    MessageFailed.Receiver {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
@@ -371,5 +373,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
     bus.unregister(this);
     stopPollingShots();
     hasBeenPaused = true;
+  }
+
+  @Subscribe @Override public void onBlockUserMessageFailed(MessageFailed.Event event) {
+    view.showBlockedUserError();
   }
 }

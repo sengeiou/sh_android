@@ -1,9 +1,15 @@
 package com.shootr.mobile.data.mapper;
 
+import com.shootr.mobile.data.entity.BaseMessagePollEntity;
+import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.PrivateMessageEntity;
+import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
+import com.shootr.mobile.domain.model.shot.Entities;
+import com.shootr.mobile.domain.model.shot.Poll;
+import com.shootr.mobile.domain.model.shot.Url;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -38,7 +44,45 @@ public class PrivateMessageEntityMapper {
         privateMessage.setVideoTitle(privateMessageEntity.getVideoTitle());
         privateMessage.setVideoDuration(privateMessageEntity.getVideoDuration());
         privateMessage.setMetadata(metadataMapper.metadataFromEntity(privateMessageEntity));
+        setupEntities(privateMessageEntity, privateMessage);
+
         return privateMessage;
+    }
+
+    private void setupEntities(PrivateMessageEntity privateMessageEntity,
+        PrivateMessage privateMessage) {
+        if (privateMessageEntity.getEntities() != null) {
+            Entities entities = new Entities();
+            setupUrls(privateMessageEntity, entities);
+            setupPolls(privateMessageEntity, entities);
+            privateMessage.setEntities(entities);
+        }
+    }
+
+    private void setupPolls(PrivateMessageEntity privateMessageEntity, Entities entities) {
+        ArrayList<Poll> polls = new ArrayList<>();
+        for (BaseMessagePollEntity baseMessagePollEntity : privateMessageEntity.getEntities()
+            .getPolls()) {
+            Poll poll = new Poll();
+            poll.setPollQuestion(baseMessagePollEntity.getPollQuestion());
+            poll.setIndices(baseMessagePollEntity.getIndices());
+            poll.setIdPoll(baseMessagePollEntity.getIdPoll());
+            polls.add(poll);
+        }
+        entities.setPolls(polls);
+    }
+
+    private void setupUrls(PrivateMessageEntity privateMessageEntity, Entities entities) {
+        ArrayList<Url> urls = new ArrayList<>();
+        for (UrlEntity urlApiEntity : privateMessageEntity.getEntities().getUrls()) {
+            Url url = new Url();
+            url.setDisplayUrl(urlApiEntity.getDisplayUrl());
+            url.setUrl(urlApiEntity.getUrl());
+            url.setIndices(urlApiEntity.getIndices());
+            urls.add(url);
+        }
+
+        entities.setUrls(urls);
     }
 
     public List<PrivateMessage> transform(List<PrivateMessageEntity> privateMessageEntities) {
@@ -80,7 +124,44 @@ public class PrivateMessageEntityMapper {
         privateMessageEntity.setVideoDuration(privateMessage.getVideoDuration());
         privateMessageEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
         metadataMapper.fillEntityWithMetadata(privateMessageEntity, privateMessage.getMetadata());
+        setupEntities(privateMessage, privateMessageEntity);
+
         return privateMessageEntity;
+    }
+
+    private void setupEntities(PrivateMessage privateMessage,
+        PrivateMessageEntity privateMessageEntity) {
+        if (privateMessage.getEntities() != null) {
+            EntitiesEntity entitiesEntity = new EntitiesEntity();
+            setupUrlsEntitiies(privateMessage, entitiesEntity);
+            setupPollEntities(privateMessage, entitiesEntity);
+            privateMessageEntity.setEntities(entitiesEntity);
+        }
+    }
+
+    private void setupPollEntities(PrivateMessage privateMessage, EntitiesEntity entitiesEntity) {
+        ArrayList<BaseMessagePollEntity> baseMessagePollEntities = new ArrayList<>();
+
+        for (Poll poll : privateMessage.getEntities().getPolls()) {
+            BaseMessagePollEntity baseMessagePollEntity = new BaseMessagePollEntity();
+            baseMessagePollEntity.setPollQuestion(poll.getPollQuestion());
+            baseMessagePollEntity.setIdPoll(poll.getIdPoll());
+            baseMessagePollEntity.setIndices(poll.getIndices());
+            baseMessagePollEntities.add(baseMessagePollEntity);
+        }
+        entitiesEntity.setPolls(baseMessagePollEntities);
+    }
+
+    private void setupUrlsEntitiies(PrivateMessage privateMessage, EntitiesEntity entitiesEntity) {
+        ArrayList<UrlEntity> urlEntities = new ArrayList<>();
+        for (Url urlApiEntity : privateMessage.getEntities().getUrls()) {
+            UrlEntity urlEntity = new UrlEntity();
+            urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
+            urlEntity.setUrl(urlApiEntity.getUrl());
+            urlEntity.setIndices(urlApiEntity.getIndices());
+            urlEntities.add(urlEntity);
+        }
+        entitiesEntity.setUrls(urlEntities);
     }
 
     public List<PrivateMessageEntity> transformInEntities(List<PrivateMessage> privateMessages) {

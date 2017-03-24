@@ -161,6 +161,13 @@
       style="@style/Widget.U2020.DebugDrawer.RowWidget"
       android:layout_gravity="start|center_vertical" />
 
+    <Button android:id="@+id/debug_reset_showcase"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_columnSpan="2"
+        android:layout_gravity="start|fill_horizontal"
+        android:text="Reset Showcase" />
+
     <Button android:id="@+id/debug_fake_version"
       android:layout_width="0dp"
       android:layout_height="wrap_content"

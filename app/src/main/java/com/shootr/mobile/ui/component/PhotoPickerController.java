@@ -76,14 +76,14 @@ public class PhotoPickerController {
     }
 
     public void pickPhoto() {
-        pickPhotoOption();
+        pickTimelineOptions();
     }
 
     public void pickOption() {
         pickHolderOptions();
     }
 
-    private void pickPhotoOption() {
+    private void pickTimelineOptions() {
         if (!activity.isFinishing()) {
             BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
                 .sheet(R.menu.photo_picker_bottom_sheet)
@@ -91,10 +91,13 @@ public class PhotoPickerController {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
                             case R.id.menu_photo_gallery:
-                                pickPhotoFromGallery();
+                                setupPhotoGallery();
                                 break;
                             case R.id.menu_photo_take:
-                                pickPhotoFromCamera(activity);
+                                setupPhotoFromCamera();
+                                break;
+                            case R.id.menu_check_in:
+                                handler.onCheckIn();
                                 break;
                             default:
                                 break;
@@ -104,6 +107,32 @@ public class PhotoPickerController {
             builder.show();
         }
     }
+
+    public void pickPrivateMessageOptions() {
+        if (!activity.isFinishing()) {
+            BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
+                .sheet(R.menu.private_messages_bottom_sheet)
+                .listener(new DialogInterface.OnClickListener() {
+                    @Override public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case R.id.menu_photo_gallery:
+                                setupPhotoGallery();
+                                break;
+                            case R.id.menu_photo_take:
+                                setupPhotoFromCamera();
+                                break;
+                            case R.id.menu_check_in:
+                                handler.onCheckIn();
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                });
+            builder.show();
+        }
+    }
+
 
     private void pickHolderOptions() {
         BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
@@ -115,10 +144,13 @@ public class PhotoPickerController {
                           handler.openEditTopicDialog();
                           break;
                       case R.id.menu_photo_gallery:
-                          pickPhotoFromGallery();
+                          setupPhotoGallery();
                           break;
                       case R.id.menu_photo_take:
-                          pickPhotoFromCamera(activity);
+                          setupPhotoFromCamera();
+                          break;
+                      case R.id.menu_check_in:
+                          handler.onCheckIn();
                           break;
                       default:
                           break;
@@ -126,6 +158,22 @@ public class PhotoPickerController {
               }
           });
         builder.show();
+    }
+
+    private void setupPhotoFromCamera() {
+        if (handler.hasWritePermission()) {
+            pickPhotoFromCamera(activity);
+        } else {
+            handler.requestWritePermissionToUser();
+        }
+    }
+
+    private void setupPhotoGallery() {
+        if (handler.hasWritePermission()) {
+            pickPhotoFromGallery();
+        } else {
+            handler.requestWritePermissionToUser();
+        }
     }
 
     public void pickPhotoFromCamera(Activity activity) {
@@ -186,5 +234,11 @@ public class PhotoPickerController {
         void startPickerActivityForResult(Intent intent, int requestCode);
 
         void openEditTopicDialog();
+
+        void onCheckIn();
+
+        boolean hasWritePermission();
+
+        void requestWritePermissionToUser();
     }
 }

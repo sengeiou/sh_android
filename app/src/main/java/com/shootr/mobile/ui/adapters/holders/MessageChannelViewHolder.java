@@ -63,6 +63,13 @@ public class MessageChannelViewHolder extends RecyclerView.ViewHolder {
             privateMessageChannelModel.getIdTargetUser());
       }
     });
+    container.setOnLongClickListener(new View.OnLongClickListener() {
+      @Override public boolean onLongClick(View view) {
+        channelClickListener.onChannelLongClick(
+            privateMessageChannelModel.getIdPrivateMessageChannel());
+        return false;
+      }
+    });
     setupRead(privateMessageChannelModel);
     bindElapsedTime(privateMessageChannelModel);
   }
@@ -119,5 +126,4 @@ public class MessageChannelViewHolder extends RecyclerView.ViewHolder {
     TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
     pictureWithoutText.setImageDrawable(textDrawable);
   }
-
 }

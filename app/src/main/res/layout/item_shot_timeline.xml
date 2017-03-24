@@ -98,7 +98,7 @@
 
       </RelativeLayout>
 
-      <com.shootr.mobile.ui.widgets.ClickableTextView
+      <com.shootr.mobile.ui.widgets.BaseMessageTextView
           android:id="@+id/shot_text"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"

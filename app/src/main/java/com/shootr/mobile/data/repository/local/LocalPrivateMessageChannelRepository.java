@@ -24,4 +24,16 @@ public class LocalPrivateMessageChannelRepository implements PrivateMessageChann
     return privateMessageChannelEntityMapper.transform(
         localPrivateMessageChannelDatasource.getPrivateMessageChannels(0L));
   }
+
+  @Override public void putRemovedPrivateMessageChannels() {
+    throw new IllegalArgumentException("method not implemented");
+  }
+
+  @Override public void putRemovedPrivateMessageChannel(String channelId) {
+    localPrivateMessageChannelDatasource.removePrivateMessageChannel(channelId);
+  }
+
+  @Override public void markPrivateMessageChannelDeleted(String channelId) {
+    localPrivateMessageChannelDatasource.markPrivateMessageChannelDeleted(channelId);
+  }
 }

@@ -24,7 +24,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -48,7 +48,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
   @Nullable @BindView(R.id.shot_timestamp) TextView timestamp;
-  @BindView(R.id.shot_text) ClickableTextView text;
+  @BindView(R.id.shot_text) BaseMessageTextView text;
   @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
   @BindView(R.id.default_image) ImageView defaultImage;
   @BindView(R.id.shot_video_frame) View videoFrame;
@@ -183,7 +183,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   protected void bindComment(ShotModel item, OnUrlClickListener onUrlClickListener) {
     String comment = item.getComment();
     if (comment != null) {
-      addShotComment(this, comment, onUrlClickListener);
+      addShotComment(this, comment, onUrlClickListener, item);
       text.setVisibility(View.VISIBLE);
     } else {
       text.setVisibility(View.GONE);
@@ -191,11 +191,13 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void addShotComment(ShotTimelineViewHolder vh, CharSequence comment,
-      OnUrlClickListener onUrlClickListener) {
+      OnUrlClickListener onUrlClickListener, ShotModel shotModel) {
     CharSequence spannedComment =
         shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+    vh.text.setBaseMessageModel(shotModel);
+    vh.text.setOnUrlClickListener(onUrlClickListener);
     vh.text.setText(spannedComment);
-    vh.text.addLinks(onUrlClickListener);
+    vh.text.addLinks();
   }
 
   private void bindUsername(ShotModel shot) {

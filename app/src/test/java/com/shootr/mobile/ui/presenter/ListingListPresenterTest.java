@@ -343,7 +343,6 @@ public class ListingListPresenterTest {
         StreamSearchResult streamSearchResult = new StreamSearchResult();
         Stream stream = getStream();
         streamSearchResult.setStream(stream);
-        streamSearchResult.setFollowingWatchersNumber(1);
         return streamSearchResult;
     }
 
@@ -363,7 +362,6 @@ public class ListingListPresenterTest {
         streamModel.setTitle(STREAM_TITLE);
         streamResultModel.setStreamModel(streamModel);
         streamResultModel.setStreamModel(streamModel);
-        streamResultModel.setWatchers(1);
         return streamResultModel;
     }
 

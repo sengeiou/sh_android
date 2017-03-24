@@ -6,6 +6,7 @@ import com.shootr.mobile.data.api.service.PrivateMessagesApiService;
 import com.shootr.mobile.data.entity.PrivateMessageEntity;
 import com.shootr.mobile.domain.exception.NotAllowedToPublishException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.UserBlockedToPrivateMessageException;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannelTimelineParameters;
 import java.io.IOException;
 import java.util.List;
@@ -56,7 +57,9 @@ public class ServicePrivateMessageDataSource implements PrivateMessageDataSource
     } catch (IOException e) {
       throw new ServerCommunicationException(e);
     } catch (ApiException err) {
-      if (err.getErrorInfo().code() >= 9000 && err.getErrorInfo().code() <= 9999) {
+      if (err.getErrorInfo().code() == 9001) {
+        throw new UserBlockedToPrivateMessageException(err);
+      } else if (err.getErrorInfo().code() >= 9000 && err.getErrorInfo().code() <= 9999) {
         throw new NotAllowedToPublishException(err);
       } else {
         throw new ServerCommunicationException(err);

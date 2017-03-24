@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -48,7 +47,6 @@ public class GetFavoriteStreamsInteractorTest {
   @Mock InternalFavoriteRepository localFavoriteRepository;
   @Mock ExternalFavoriteRepository remoteFavoriteRepository;
   @Mock StreamRepository localStreamRepository;
-  @Mock WatchersRepository watchersRepository;
   @Mock SessionRepository sessionRepository;
   @Mock UserRepository localUserRepository;
   @Spy SpyCallback<List<StreamSearchResult>> spyCallback = new SpyCallback<>();
@@ -63,7 +61,7 @@ public class GetFavoriteStreamsInteractorTest {
     getFavoriteStreamsInteractor =
         new GetFavoriteStreamsInteractor(interactorHandler, postExecutionThread,
             localFavoriteRepository, remoteFavoriteRepository, localStreamRepository,
-            watchersRepository, sessionRepository, localUserRepository);
+            sessionRepository, localUserRepository);
   }
 
   @Test public void shouldCallbackWhenLoadFavoriteStreams() {
@@ -84,13 +82,6 @@ public class GetFavoriteStreamsInteractorTest {
   @Test public void shouldLoadStreamsFromLocal() {
     getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
     verify(localStreamRepository, atLeastOnce()).getStreamsByIds(anyList(), anyArray());
-  }
-
-  @Test public void shouldLoadWatchers() {
-    when(localStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
-        listWithOneStreams());
-    getFavoriteStreamsInteractor.loadFavoriteStreams(callback);
-    verify(watchersRepository, atLeastOnce()).getWatchers();
   }
 
   @Test public void shouldCallbackStreamsSortedByName() throws Exception {
@@ -158,14 +149,6 @@ public class GetFavoriteStreamsInteractorTest {
     ArrayList<String> strings = new ArrayList<>();
     strings.add(STREAM_ID);
     return strings;
-  }
-
-  private List<Stream> listWithOneStreams() {
-    List<Stream> streams = new ArrayList<>();
-    Stream stream = new Stream();
-    stream.setId(STREAM_ID);
-    streams.add(stream);
-    return streams;
   }
 
   private User userWatching() {

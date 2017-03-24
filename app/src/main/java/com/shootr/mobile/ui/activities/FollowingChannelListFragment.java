@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.presenter.PrivateFollowingMessagesChannelListPresent
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
 import com.shootr.mobile.ui.widgets.DividerItemDecoration;
 import com.shootr.mobile.util.AndroidTimeUtils;
+import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
@@ -63,11 +64,16 @@ public class FollowingChannelListFragment extends BaseFragment
   }
 
   private void initializeViews() {
-    adapter = new MessageChannelListAdapter(imageLoader, initialsLoader, new ChannelClickListener() {
-      @Override public void onChannelClick(String channelId, String targetUserId) {
-        navigateToChannelTimeline(channelId, targetUserId);
-      }
-    }, timeUtils);
+    adapter =
+        new MessageChannelListAdapter(imageLoader, initialsLoader, new ChannelClickListener() {
+          @Override public void onChannelClick(String channelId, String targetUserId) {
+            navigateToChannelTimeline(channelId, targetUserId);
+          }
+
+          @Override public void onChannelLongClick(String channelId) {
+            buildContextualMenu(channelId).show();
+          }
+        }, timeUtils);
     listingList.setAdapter(adapter);
     listingList.setLayoutManager(new LinearLayoutManager(getContext()));
     listingList.addItemDecoration(new DividerItemDecoration(getContext(), MARGIN_DIVIDER,
@@ -129,6 +135,15 @@ public class FollowingChannelListFragment extends BaseFragment
     if (presenter != null) {
       presenter.pause();
     }
+  }
+
+  private CustomContextMenu.Builder buildContextualMenu(final String privateMessageChannelId) {
+    return new CustomContextMenu.Builder(getActivity()).addAction(
+        R.string.remove_private_message_channel, new Runnable() {
+          @Override public void run() {
+            presenter.removePrivateMessageChannel(privateMessageChannelId);
+          }
+        });
   }
 }
 

@@ -1,8 +1,13 @@
 package com.shootr.mobile.data.api.entity.mapper;
 
+import com.shootr.mobile.data.api.entity.BaseMessagePollApiEntity;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
+import com.shootr.mobile.data.api.entity.UrlApiEntity;
+import com.shootr.mobile.data.entity.BaseMessagePollEntity;
+import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.UrlEntity;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,8 +75,45 @@ public class ShotApiEntityMapper {
         shotEntity.setPadding((shotApiEntity.getIsPadding()));
         shotEntity.setFromHolder((shotApiEntity.getFromHolder()));
         shotEntity.setFromContributor((shotApiEntity.getFromContributor()));
+        setupEntities(shotApiEntity, shotEntity);
 
         return shotEntity;
+    }
+
+    private void setupEntities(ShotApiEntity shotApiEntity, ShotEntity shotEntity) {
+        if (shotApiEntity.getEntities() != null) {
+            EntitiesEntity entitiesEntity = new EntitiesEntity();
+            setupUrls(shotApiEntity, entitiesEntity);
+            setupPollsEntities(shotApiEntity, entitiesEntity);
+            shotEntity.setEntities(entitiesEntity);
+        }
+    }
+
+    private void setupPollsEntities(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {
+        ArrayList<BaseMessagePollEntity> pollEntities = new ArrayList<>();
+
+        for (BaseMessagePollApiEntity baseMessagePollApiEntity : shotApiEntity.getEntities()
+            .getPolls()) {
+            BaseMessagePollEntity baseMessagePollEntity = new BaseMessagePollEntity();
+            baseMessagePollEntity.setIdPoll(baseMessagePollApiEntity.getIdPoll());
+            baseMessagePollEntity.setIndices(baseMessagePollApiEntity.getIndices());
+            baseMessagePollEntity.setPollQuestion(baseMessagePollApiEntity.getPollQuestion());
+            pollEntities.add(baseMessagePollEntity);
+        }
+        entitiesEntity.setPolls(pollEntities);
+    }
+
+    private void setupUrls(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {
+        ArrayList<UrlEntity> urlEntities = new ArrayList<>();
+        for (UrlApiEntity urlApiEntity : shotApiEntity.getEntities().getUrls()) {
+            UrlEntity urlEntity = new UrlEntity();
+            urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
+            urlEntity.setUrl(urlApiEntity.getUrl());
+            urlEntity.setIndices(urlApiEntity.getIndices());
+            urlEntities.add(urlEntity);
+        }
+
+        entitiesEntity.setUrls(urlEntities);
     }
 
     public List<ShotEntity> transform(List<ShotApiEntity> shots) {

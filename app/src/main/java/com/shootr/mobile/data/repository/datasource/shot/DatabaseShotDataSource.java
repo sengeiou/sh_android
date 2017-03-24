@@ -160,8 +160,8 @@ public class DatabaseShotDataSource implements ShotDataSource {
     throw new IllegalArgumentException("Should not have local implementation");
   }
 
-  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
-    return shotManager.hasNewFilteredShots(idStream, lastTimeFiltered);
+  @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered, String idUser) {
+    return shotManager.hasNewFilteredShots(idStream, lastTimeFiltered, idUser);
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

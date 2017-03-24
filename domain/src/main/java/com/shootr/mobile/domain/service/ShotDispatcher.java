@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.service;
 
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.MessageFailed;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.bus.ShotQueued;
 import com.shootr.mobile.domain.bus.ShotSent;
@@ -10,6 +11,7 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.StreamReadOnlyException;
 import com.shootr.mobile.domain.exception.StreamRemovedException;
+import com.shootr.mobile.domain.exception.UserBlockedToPrivateMessageException;
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
@@ -173,6 +175,9 @@ public class ShotDispatcher implements MessageSender {
     } catch (NotAllowedToPublishException e) {
       persistShotFailed(queuedShot);
       notifyPrivateMessageNotAllowed(queuedShot, e);
+    } catch (UserBlockedToPrivateMessageException e) {
+      clearShotFromQueue(queuedShot);
+      notifyShotSendingHasBlockedUser(queuedShot, e);
     } catch (ServerCommunicationException e) {
       persistShotFailed(queuedShot);
       notifyShotSendingFailed(queuedShot, e);
@@ -237,7 +242,10 @@ public class ShotDispatcher implements MessageSender {
     shotQueueListener.onShotFailed(queuedShot, e);
     busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));
   }
-
+  private void notifyShotSendingHasBlockedUser(QueuedShot queuedShot, Exception e) {
+    shotQueueListener.onPrivateMessageBlockedUser(queuedShot, e);
+    busPublisher.post(new MessageFailed.Event(queuedShot.getBaseMessage()));
+  }
   private void notifyPrivateMessageNotAllowed(QueuedShot queuedShot, Exception e) {
     shotQueueListener.onPrivateMessageNotAllowed(queuedShot, e);
     busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));

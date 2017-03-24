@@ -13,6 +13,7 @@ public abstract class BaseMessage implements Sendable {
   private Long videoDuration;
   private BaseMessageUserInfo userInfo;
   private EntityMetadata metadata;
+  private Entities entities;
 
   public String getComment() {
     return comment;
@@ -152,4 +153,11 @@ public abstract class BaseMessage implements Sendable {
     }
   }
 
+  public Entities getEntities() {
+    return entities;
+  }
+
+  public void setEntities(Entities entities) {
+    this.entities = entities;
+  }
 }

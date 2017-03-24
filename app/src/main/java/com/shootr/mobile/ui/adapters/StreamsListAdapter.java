@@ -16,96 +16,93 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
 
-public class StreamsListAdapter
-  extends SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
+public class StreamsListAdapter extends
+    SubheaderRecyclerViewAdapter<RecyclerView.ViewHolder, StreamResultModel, StreamResultModel> {
 
-    private final ImageLoader imageLoader;
-    private final InitialsLoader initialsLoader;
-    private boolean hasToShowIsFavorite = true;
+  private final ImageLoader imageLoader;
+  private final InitialsLoader initialsLoader;
+  private boolean hasToShowIsFavorite = true;
+  private boolean hasToShowRankNumber = true;
 
-    private OnStreamClickListener onStreamClickListener;
-    private OnUnwatchClickListener onUnwatchClickListener;
-    private OnFavoriteClickListener onFavoriteClickListener;
-    private List<String> mutedStreamsIds;
+  private OnStreamClickListener onStreamClickListener;
+  private OnUnwatchClickListener onUnwatchClickListener;
+  private OnFavoriteClickListener onFavoriteClickListener;
+  private List<String> mutedStreamsIds;
 
-    public StreamsListAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
-        OnStreamClickListener onStreamClickListener,
-        OnFavoriteClickListener onFavoriteClickListener,
-        boolean hasToShowIsFavorite) {
-        this.imageLoader = imageLoader;
-        this.initialsLoader = initialsLoader;
-        this.onStreamClickListener = onStreamClickListener;
-        this.onFavoriteClickListener = onFavoriteClickListener;
-        this.hasToShowIsFavorite = hasToShowIsFavorite;
+  public StreamsListAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
+      OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener,
+      boolean hasToShowIsFavorite, boolean hasToShowRankNumber) {
+    this.imageLoader = imageLoader;
+    this.initialsLoader = initialsLoader;
+    this.onStreamClickListener = onStreamClickListener;
+    this.onFavoriteClickListener = onFavoriteClickListener;
+    this.hasToShowIsFavorite = hasToShowIsFavorite;
+    this.hasToShowRankNumber = hasToShowRankNumber;
+  }
+
+  public void setStreams(List<StreamResultModel> streams) {
+    boolean wasEmpty = getItems().isEmpty();
+    setItems(streams);
+    if (wasEmpty) {
+      notifyItemRangeInserted(0, streams.size());
+    } else {
+      notifyDataSetChanged();
     }
+  }
 
-    public void setStreams(List<StreamResultModel> streams) {
-        boolean wasEmpty = getItems().isEmpty();
-        setItems(streams);
-        if (wasEmpty) {
-            notifyItemRangeInserted(0, streams.size());
-        } else {
-            notifyDataSetChanged();
-        }
-    }
+  @Override
+  protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+    StreamResultViewHolder watchingViewHolder =
+        new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
+            imageLoader, initialsLoader, mutedStreamsIds);
+    watchingViewHolder.enableWatchingState(onUnwatchClickListener);
+    return watchingViewHolder;
+  }
 
-    @Override protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        StreamResultViewHolder watchingViewHolder =
-          new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-              imageLoader, initialsLoader,
-              mutedStreamsIds);
-        watchingViewHolder.enableWatchingState(onUnwatchClickListener);
-        return watchingViewHolder;
-    }
+  @Override
+  protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
+    View view = LayoutInflater.from(parent.getContext())
+        .inflate(R.layout.item_list_card_separator, parent, false);
+    return new SubheaderViewHolder(view);
+  }
 
-    @Override protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_card_separator, parent, false);
-        return new SubheaderViewHolder(view);
-    }
+  @Override
+  protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+    View view =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+    return new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
+        imageLoader, initialsLoader, mutedStreamsIds);
+  }
 
-    @Override protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
-        return new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-            imageLoader, initialsLoader,
-            mutedStreamsIds);
-    }
+  @Override
+  protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    StreamResultModel stream = getHeader();
+    ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
+    ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite, position, hasToShowRankNumber);
+  }
 
-    @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel stream = getHeader();
-        ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
-        ((StreamResultViewHolder) viewHolder).render(stream, false, hasToShowIsFavorite);
-    }
-
-    @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+  @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
         /* no-op */
-    }
+  }
 
-    @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        StreamResultModel stream = getItem(position);
-        boolean showSeparator = position != getFirstItemPosition();
-        ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
-        ((StreamResultViewHolder) viewHolder).render(stream, showSeparator, hasToShowIsFavorite);
-    }
+  @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+    StreamResultModel stream = getItem(position);
+    ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
+    ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite,
+        position, hasToShowRankNumber);
+  }
 
-    public void setCurrentWatchingStream(StreamResultModel streamResultModel) {
-        this.setHeader(streamResultModel);
-    }
+  public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {
+    this.onUnwatchClickListener = onUnwatchClickListener;
+  }
 
-    public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {
-        this.onUnwatchClickListener = onUnwatchClickListener;
-    }
+  public void setMutedStreamIds(List<String> mutedStreamIds) {
+    this.mutedStreamsIds = mutedStreamIds;
+  }
 
-    public OnUnwatchClickListener getOnUnwatchClickListener() {
-        return onUnwatchClickListener;
-    }
-
-    public void setMutedStreamIds(List<String> mutedStreamIds) {
-        this.mutedStreamsIds = mutedStreamIds;
-    }
-
-    public List<String> getMutedStreamIds() {
-        return mutedStreamsIds;
-    }
-
+  public List<String> getMutedStreamIds() {
+    return mutedStreamsIds;
+  }
 }

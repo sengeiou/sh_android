@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageChannelRepository;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -41,15 +42,32 @@ public class RemotePrivateMessageChannelRepository implements PrivateMessageChan
     ArrayList<PrivateMessageChannel> privateMessageChannels = new ArrayList<>();
     try {
       SynchroEntity synchroEntity = getSynchroEntity(SynchroDataSource.PRIVATE_MESSAGE_CHANNEL);
-      Long pmChannelTimestamp = synchroDataSource.getTimestamp(SynchroDataSource.PRIVATE_MESSAGE_CHANNEL);
+      Long pmChannelTimestamp =
+          synchroDataSource.getTimestamp(SynchroDataSource.PRIVATE_MESSAGE_CHANNEL);
       List<PrivateMessageChannelEntity> privateMessageChannelEntities =
           remoteMessageChannelDataSource.getPrivateMessageChannels(pmChannelTimestamp);
+      privateMessageChannelEntities =
+          updateDeletedPrivateMessageChannels(privateMessageChannelEntities);
       privateMessageChannels = new ArrayList<>(
           privateMessageChannelEntityMapper.transform(privateMessageChannelEntities));
       privateMessageChannelDataSource.putPrivateMessages(privateMessageChannelEntities);
       synchroDataSource.putEntity(synchroEntity);
     } catch (ServerCommunicationException e) {
       e.printStackTrace();
+    }
+    return privateMessageChannels;
+  }
+
+  private List<PrivateMessageChannelEntity> updateDeletedPrivateMessageChannels(
+      List<PrivateMessageChannelEntity> privateMessageChannels) {
+    Iterator<PrivateMessageChannelEntity> iterator = privateMessageChannels.iterator();
+    while (iterator.hasNext()) {
+      PrivateMessageChannelEntity privateMessageChannelEntity = iterator.next();
+      if (privateMessageChannelEntity.getDeleted() != null) {
+        privateMessageChannelDataSource.removePrivateMessageChannel(
+            privateMessageChannelEntity.getIdPrivateMessageChannel());
+        iterator.remove();
+      }
     }
     return privateMessageChannels;
   }
@@ -61,4 +79,15 @@ public class RemotePrivateMessageChannelRepository implements PrivateMessageChan
     return synchroEntity;
   }
 
+  @Override public void putRemovedPrivateMessageChannels() {
+    remoteMessageChannelDataSource.sendRemovedPrivateMessageChannels();
+  }
+
+  @Override public void putRemovedPrivateMessageChannel(String channelId) {
+    remoteMessageChannelDataSource.removePrivateMessageChannel(channelId);
+  }
+
+  @Override public void markPrivateMessageChannelDeleted(String channelId) {
+    throw new IllegalArgumentException("method not implemented");
+  }
 }

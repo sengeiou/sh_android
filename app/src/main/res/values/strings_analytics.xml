@@ -113,4 +113,5 @@
     <string name="analytics_label_open_cta_link">Ad</string>
     <string name="analytics_action_long_login">LongLogin</string>
     <string name="analytics_action_short_login">ShortLogin</string>
+    <string name="analytics_action_open_app">OpenApp</string>
 </resources>

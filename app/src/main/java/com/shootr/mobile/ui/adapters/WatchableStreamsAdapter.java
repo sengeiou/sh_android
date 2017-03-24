@@ -12,8 +12,9 @@ public class WatchableStreamsAdapter extends StreamsListAdapter {
 
   public WatchableStreamsAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
       OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener,
-      boolean hasToShowIsFavorite) {
-    super(imageLoader, initialsLoader, onStreamClickListener, onFavoriteClickListener, hasToShowIsFavorite);
+      boolean hasToShowIsFavorite, boolean hasToShowRankNumber) {
+    super(imageLoader, initialsLoader, onStreamClickListener, onFavoriteClickListener,
+        hasToShowIsFavorite, hasToShowRankNumber);
   }
 
   @Override

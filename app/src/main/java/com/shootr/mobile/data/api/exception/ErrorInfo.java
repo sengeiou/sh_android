@@ -47,7 +47,8 @@ public enum ErrorInfo {
   UserHasVotedRequestException(7002, "Has voted", 403),
   StreamTooManyPolls(7003, "It has surpassed the number of polls for this stream", 400),
   UserCannotCheckInRequestException(8001, "Checked In General Exception", 403),
-  UserAlreadyCheckInRequestException(8002, "Already Checked In", 403);
+  UserAlreadyCheckInRequestException(8002, "Already Checked In", 403),
+  UserBlockedToPrivateMessageException(9001, "User blocked", 400);
 
   private int code;
   private int httpCode;

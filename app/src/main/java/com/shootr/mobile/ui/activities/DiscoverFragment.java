@@ -26,6 +26,7 @@ import com.shootr.mobile.ui.model.DiscoveredModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.DiscoverPresenter;
 import com.shootr.mobile.ui.views.DiscoverView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -139,6 +140,7 @@ public class DiscoverFragment extends BaseFragment implements DiscoverView {
       }
     });
     discoverList.setLayoutManager(gridLayoutManager);
+    discoverList.addItemDecoration(new BottomOffsetDecoration(150));
   }
 
   private void initializePresenter() {

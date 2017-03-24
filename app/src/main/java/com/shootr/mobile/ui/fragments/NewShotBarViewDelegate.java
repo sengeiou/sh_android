@@ -51,6 +51,10 @@ public abstract class NewShotBarViewDelegate implements NewShotBarView {
         ((ViewGroup) draftsButton.getParent()).setLayoutTransition(transition);
     }
 
+    @Override public void showPrivateMessageOptions() {
+        photoPickerController.pickPrivateMessageOptions();
+    }
+
     @Override public void pickImage() {
         photoPickerController.pickPhoto();
     }

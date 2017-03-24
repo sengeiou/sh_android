@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.PrivateMessageChannelEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.PrivateMessageChannelEntityDBMapper;
@@ -110,11 +111,19 @@ public class PrivateMessageChannelManager extends AbstractManager {
   }
 
   public List<PrivateMessageChannelEntity> getPrivateMessageChannels() {
-    String whereSelection = DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME + " IS NOT NULL";
+    String whereSelection = DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME
+        + " IS NOT NULL AND "
+        + DatabaseContract.PrivateMessageChannelTable.DELETED
+        + " IS NULL AND ("
+        + DatabaseContract.PrivateMessageChannelTable.SYNCHRONIZED
+        + " IS NULL OR "
+        + DatabaseContract.PrivateMessageChannelTable.SYNCHRONIZED
+        + " <> ? )";
+    String[] whereArgs = new String[] { LocalSynchronized.SYNC_DELETED };
     Cursor queryResult =
         getReadableDatabase().query(DatabaseContract.PrivateMessageChannelTable.TABLE,
-            DatabaseContract.PrivateMessageChannelTable.PROJECTION, whereSelection, null, null, null,
-            DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME + " DESC", null);
+            DatabaseContract.PrivateMessageChannelTable.PROJECTION, whereSelection, null, null,
+            null, DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME + " DESC", null);
 
     List<PrivateMessageChannelEntity> resultShots = new ArrayList<>(queryResult.getCount());
     PrivateMessageChannelEntity privateMessageChannelEntity;
@@ -127,5 +136,37 @@ public class PrivateMessageChannelManager extends AbstractManager {
     }
     queryResult.close();
     return resultShots;
+  }
+
+  public void removePrivateMessageChannel(String idPrivateMessageChannel) {
+    String where = DatabaseContract.PrivateMessageChannelTable.ID_PRIVATE_MESSAGE_CHANNEL + "=?";
+    String[] whereArgs = new String[] { idPrivateMessageChannel };
+    getWritableDatabase().delete(DatabaseContract.PrivateMessageChannelTable.TABLE, where,
+        whereArgs);
+  }
+
+  public List<PrivateMessageChannelEntity> getPrivateMessageChannelsNotSynchronized() {
+    List<PrivateMessageChannelEntity> privateMessageChannelsToDelete = new ArrayList<>();
+    String args = DatabaseContract.SyncColumns.DELETED + " IS NOT NULL";
+    Cursor c = getReadableDatabase().query(DatabaseContract.PrivateMessageChannelTable.TABLE,
+        DatabaseContract.PrivateMessageChannelTable.PROJECTION, args, null, null, null, null);
+    if (c.getCount() > 0) {
+      c.moveToFirst();
+      do {
+        privateMessageChannelsToDelete.add(privateMessageChannelEntityDBMapper.fromCursor(c));
+      } while (c.moveToNext());
+    }
+    c.close();
+    return privateMessageChannelsToDelete;
+  }
+
+  public void markPrivateMessageChannelDeleted(String channelId) {
+    String where = DatabaseContract.PrivateMessageChannelTable.ID_PRIVATE_MESSAGE_CHANNEL + "=?";
+    String[] whereArgs = new String[] { String.valueOf(channelId) };
+    ContentValues contentValues = new ContentValues();
+    contentValues.put(DatabaseContract.PrivateMessageChannelTable.DELETED,
+        LocalSynchronized.SYNC_DELETED);
+    getWritableDatabase().update(DatabaseContract.PrivateMessageChannelTable.TABLE, contentValues,
+        where, whereArgs);
   }
 }

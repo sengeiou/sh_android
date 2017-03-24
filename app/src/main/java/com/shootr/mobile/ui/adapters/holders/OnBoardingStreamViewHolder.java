@@ -30,7 +30,6 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_muted) ImageView mute;
   @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
   @BindView(R.id.stream_card) CardView favoriteCardview;
-  @BindView(R.id.stream_watchers) TextView watchers;
   @BindView(R.id.stream_verified) ImageView streamVerified;
   @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
@@ -56,7 +55,6 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     renderSubtitle(onBoardingStreamModel.getStreamModel());
     handleFavorite(onBoardingStreamModel);
     setupStreamPicture(onBoardingStreamModel.getStreamModel());
-    watchers.setVisibility(View.GONE);
   }
 
   private void setVerifiedVisibility(StreamModel streamModel) {

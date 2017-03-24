@@ -8,7 +8,7 @@ public abstract class PollQuestionSpan extends ClickableSpan implements Clickabl
 
   private String idStream;
 
-  public PollQuestionSpan(String idStream) {
+  protected PollQuestionSpan(String idStream) {
     this.idStream = idStream;
   }
 

@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.WatchersRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.RecentStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -29,7 +28,6 @@ public class SelectStreamInteractor implements Interactor {
   private final ExternalStreamRepository remoteStreamRepository;
   private final UserRepository localUserRepository;
   private final UserRepository remoteUserRepository;
-  private final WatchersRepository localWatchersRepository;
   private final SessionRepository sessionRepository;
   private final TimeUtils timeUtils;
   private final RecentStreamRepository recentStreamRepository;
@@ -41,8 +39,7 @@ public class SelectStreamInteractor implements Interactor {
   @Inject public SelectStreamInteractor(final InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
       ExternalStreamRepository remoteStreamRepository, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository,
-      @Local WatchersRepository localWatchersRepository, SessionRepository sessionRepository,
+      @Remote UserRepository remoteUserRepository, SessionRepository sessionRepository,
       TimeUtils timeUtils, RecentStreamRepository recentStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
@@ -50,7 +47,6 @@ public class SelectStreamInteractor implements Interactor {
     this.remoteStreamRepository = remoteStreamRepository;
     this.localUserRepository = localUserRepository;
     this.remoteUserRepository = remoteUserRepository;
-    this.localWatchersRepository = localWatchersRepository;
     this.sessionRepository = sessionRepository;
     this.timeUtils = timeUtils;
     this.recentStreamRepository = recentStreamRepository;
@@ -118,8 +114,6 @@ public class SelectStreamInteractor implements Interactor {
   private StreamSearchResult attachWatchNumber(Stream stream) {
     StreamSearchResult streamSearchResult = new StreamSearchResult();
     streamSearchResult.setStream(stream);
-    streamSearchResult.setFollowingWatchersNumber(
-        localWatchersRepository.getWatchers(stream.getId()));
     return streamSearchResult;
   }
 

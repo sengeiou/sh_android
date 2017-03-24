@@ -41,8 +41,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_title) TextView title;
   @BindView(R.id.stream_muted) ImageView mute;
   @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
-  @BindView(R.id.stream_watchers) TextView watchers;
   @BindView(R.id.stream_verified) ImageView streamVerified;
+  @BindView(R.id.stream_rank) TextView rankNumber;
   @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
@@ -85,30 +85,25 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     this.setUnwatchClickListener();
   }
 
-  public void disableWatchingState() {
-    checkNotNull(removeButton,
-        "The view used in this ViewHolder doesn't contain the unwatch button.");
-    unwatchClickListener = null;
-    isWatchingStateEnabled = false;
-    removeButton.setVisibility(View.GONE);
-  }
-
-  public void render(StreamResultModel streamResultModel, boolean showSeparator,
-      boolean hasToShowIsFavorite) {
+  public void render(StreamResultModel streamResultModel, boolean hasToShowIsFavorite,
+      Integer position, boolean hasToShowRankNumber) {
     this.setClickListener(streamResultModel);
     this.setupFavoriteClickListener(streamResultModel);
     title.setText(streamResultModel.getStreamModel().getTitle());
     setMutedVisibility(streamResultModel);
     renderSubtitle(streamResultModel.getStreamModel());
-    int watchersCount = streamResultModel.getWatchers();
-    if (watchersCount > 0 || showsFavoritesText) {
-      watchers.setVisibility(View.VISIBLE);
-      watchers.setText(getFavoritesText(watchersCount));
-    } else {
-      watchers.setVisibility(View.GONE);
-    }
+    handleShowRankNumber(position, hasToShowRankNumber);
     handleShowFavorite(streamResultModel, hasToShowIsFavorite);
     setupStreamPicture(streamResultModel);
+  }
+
+  private void handleShowRankNumber(Integer position, boolean hasToShowRankNumber) {
+    if (hasToShowRankNumber) {
+      position++;
+      rankNumber.setText(position.toString());
+    } else {
+      rankNumber.setVisibility(View.GONE);
+    }
   }
 
   private void setVerifiedVisibility(StreamModel streamModel) {
@@ -119,26 +114,17 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  public void render(StreamResultModel streamResultModel, boolean showSeparator,
-      List<StreamResultModel> favoritedStreams, boolean hasToShowIsFavorite) {
+  public void render(StreamResultModel streamResultModel, List<StreamResultModel> favoritedStreams,
+      boolean hasToShowIsFavorite, Integer position, boolean hasToShowRankNumber) {
     this.setClickListener(streamResultModel);
     this.setupFavoriteClickListener(streamResultModel);
     title.setText(streamResultModel.getStreamModel().getTitle());
     setMutedVisibility(streamResultModel);
     renderSubtitle(streamResultModel.getStreamModel());
-    int watchersCount = streamResultModel.getWatchers();
-    if (watchersCount > 0 || (showsFavoritesText && !favoritedStreams.contains(
-        streamResultModel))) {
+    if (showsFavoritesText && !favoritedStreams.contains(streamResultModel)) {
       renderHolderSubtitle(streamResultModel);
-      if (watchersCount > 0) {
-        watchers.setVisibility(View.VISIBLE);
-        watchers.setText(String.valueOf(watchersCount));
-      } else {
-        watchers.setVisibility(View.GONE);
-      }
-    } else {
-      watchers.setVisibility(View.GONE);
     }
+    handleShowRankNumber(position, hasToShowRankNumber);
     handleShowFavorite(streamResultModel, hasToShowIsFavorite);
     setupStreamPicture(streamResultModel);
   }
@@ -228,16 +214,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         }
       }
     });
-  }
-
-  private String getFavoritesText(int favorites) {
-    if (showsFavoritesText) {
-      return itemView.getContext()
-          .getResources()
-          .getQuantityString(R.plurals.listing_favorites, favorites, favorites);
-    } else {
-      return String.valueOf(favorites);
-    }
   }
 
   protected void renderSubtitle(StreamModel stream) {

@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.ui.views.nullview.NullStreamListView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -101,6 +102,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     unbinder = ButterKnife.bind(this, getView());
     streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+    streamsList.addItemDecoration(new BottomOffsetDecoration(200));
+
     adapter = new StreamsListAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
       @Override public void onStreamClick(StreamResultModel stream) {
         presenter.selectStream(stream);
@@ -119,7 +122,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
         presenter.removeFromFavorites(stream, false);
       }
-    }, true);
+    }, true, true);
     adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
       @Override public void onUnwatchClick() {
         presenter.unwatchStream();

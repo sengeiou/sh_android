@@ -10,6 +10,7 @@ public class BaseMessageApiEntity {
   private String videoUrl;
   private String videoTitle;
   private Long videoDuration;
+  private BaseMessageEntitiesApiEntity entities;
 
   public String getComment() {
     return comment;
@@ -65,5 +66,13 @@ public class BaseMessageApiEntity {
 
   public void setVideoDuration(Long videoDuration) {
     this.videoDuration = videoDuration;
+  }
+
+  public BaseMessageEntitiesApiEntity getEntities() {
+    return entities;
+  }
+
+  public void setEntities(BaseMessageEntitiesApiEntity entities) {
+    this.entities = entities;
   }
 }

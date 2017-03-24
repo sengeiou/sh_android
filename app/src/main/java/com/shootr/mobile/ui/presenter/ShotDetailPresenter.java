@@ -4,6 +4,7 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
@@ -32,6 +33,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final ShareShotInteractor shareShotInteractor;
     private final ViewShotDetailEventInteractor viewShotEventInteractor;
     private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
+    private final CallCtaCheckInInteractor callCtaCheckInInteractor;
     private final ShotModelMapper shotModelMapper;
     private final NicerModelMapper nicerModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -47,7 +49,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
         MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
         ShareShotInteractor shareShotInteractor, ViewShotDetailEventInteractor viewShotEventInteractor,
-        ClickShotLinkEventInteractor clickShotLinkEventInteractor, ShotModelMapper shotModelMapper,
+        ClickShotLinkEventInteractor clickShotLinkEventInteractor,
+        CallCtaCheckInInteractor callCtaCheckInInteractor, ShotModelMapper shotModelMapper,
         NicerModelMapper nicerModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
@@ -55,6 +58,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.shareShotInteractor = shareShotInteractor;
         this.viewShotEventInteractor = viewShotEventInteractor;
         this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
+        this.callCtaCheckInInteractor = callCtaCheckInInteractor;
         this.shotModelMapper = shotModelMapper;
         this.nicerModelMapper = nicerModelMapper;
         this.bus = bus;
@@ -297,5 +301,19 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
                 /* no-op */
             }
         });
+    }
+
+    public void callCheckIn() {
+        if (shotModel != null) {
+            callCtaCheckInInteractor.checkIn(shotModel.getStreamId(), new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    shotDetailView.showChecked();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+                }
+            });
+        }
     }
 }

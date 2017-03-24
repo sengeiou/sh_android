@@ -18,6 +18,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.ImageLoader;
@@ -37,7 +38,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
   @BindView(R.id.shot_detail_timestamp) TextView timestamp;
-  @BindView(R.id.shot_detail_text) ClickableTextView shotText;
+  @BindView(R.id.shot_detail_text) BaseMessageTextView shotText;
   @BindView(R.id.shot_detail_image) ImageView shotImage;
   @BindView(R.id.shot_detail_stream_title) TextView streamTitle;
   @BindView(R.id.shot_detail_parent_toggle) ImageView parentToggleButton;
@@ -224,9 +225,9 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   private void setupComment(ShotModel shotModel) {
     String comment = shotModel.getComment();
     if (comment != null) {
-      setComment(comment);
+      setComment(shotModel, comment);
     } else if (shotModel.getCtaCaption() != null) {
-      setComment(shotModel.getCtaCaption());
+      setComment(shotModel, shotModel.getCtaCaption());
     } else {
       shotText.setVisibility(View.GONE);
     }
@@ -295,11 +296,13 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private void setComment(String comment) {
+  private void setComment(ShotModel shotModel, String comment) {
     CharSequence spannedComment =
         shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+    shotText.setBaseMessageModel(shotModel);
+    shotText.setOnUrlClickListener(onUrlClickListener);
     shotText.setText(spannedComment);
-    shotText.addLinks(onUrlClickListener);
+    shotText.addLinks();
   }
 
   private void setImage(final ShotModel shotModel, String imageUrl) {

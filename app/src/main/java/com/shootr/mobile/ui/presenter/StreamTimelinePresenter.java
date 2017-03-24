@@ -85,6 +85,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private Integer streamMode;
   private boolean isReadOnly;
   private boolean isCurrentUserContirbutor;
+  private boolean isViewOnlyStream;
+
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
@@ -229,7 +231,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           @Override public void onLoaded(Boolean hasNewFilteredShots) {
             if (hasNewFilteredShots) {
               if (!filterActivated) {
-                streamTimelineView.showFilterAlert();
+                //TODO esto se ha de descomentar deapués streamTimelineView.showFilterAlert();
               }
             }
           }
@@ -259,6 +261,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           streamTimelineView.showPinnedMessage(streamTopic);
         } else {
           streamTimelineView.hidePinnedMessage();
+        }
+        if (streamModel.getReadWriteMode() == 0) {
+          streamTimelineView.setupCheckInShowcase();
         }
       }
     });
@@ -334,8 +339,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     String idUser = sessionRepository.getCurrentUserId();
     if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(idUser)) {
       streamTimelineView.hideStreamViewOnlyIndicator();
+      isViewOnlyStream = false;
     } else {
       streamTimelineView.showStreamViewOnlyIndicator();
+      isViewOnlyStream = true;
     }
   }
 
@@ -743,19 +750,36 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   public void onCtaPressed(ShotModel shotModel) {
     if (shotModel.getCtaButtonLink().startsWith(SCHEMA) && shotModel.getType()
         .equals(ShotType.CTACHECKIN)) {
-      callCtaCheckInInteractor.checkIn(shotModel.getStreamId(), new Interactor.CompletedCallback() {
-        @Override public void onCompleted() {
-          streamTimelineView.showChecked();
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-          streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
-        }
-      });
+      callCheckIn(shotModel.getStreamId());
     } else {
       streamTimelineView.storeCtaClickLink(shotModel);
       streamTimelineView.openCtaAction(shotModel.getCtaButtonLink());
     }
   }
 
+  public void onMenuCheckInClick() {
+    if (streamModel != null) {
+      callCheckIn(streamModel.getIdStream());
+    }
+  }
+
+  private void callCheckIn(String streamId) {
+    callCtaCheckInInteractor.checkIn(streamId, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        streamTimelineView.showChecked();
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
+  }
+
+  public boolean isViewOnlyStream() {
+    return isViewOnlyStream;
+  }
+
+  public void setViewOnlyStream(boolean viewOnlyStream) {
+    isViewOnlyStream = viewOnlyStream;
+  }
 }

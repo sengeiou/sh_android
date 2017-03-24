@@ -15,7 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -30,7 +30,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_user_name) public TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) public TextView timestamp;
-    @BindView(R.id.shot_text) public ClickableTextView text;
+    @BindView(R.id.shot_text) public BaseMessageTextView text;
     @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
     @BindView(R.id.default_image) ImageView defaultImage;
     @BindView(R.id.shot_video_frame) View videoFrame;
@@ -103,6 +103,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
             this.text.setVisibility(View.VISIBLE);
             CharSequence spannedComment =
               shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
+            this.text.setBaseMessageModel(reply);
             this.text.setText(spannedComment);
             this.text.addLinks();
         } else {

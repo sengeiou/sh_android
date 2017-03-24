@@ -59,6 +59,7 @@ public class GetPrivateMessagesChannelsInteractor implements Interactor {
   }
 
   private void loadRemotePrivateChannels() {
+    remotePrivateMessageChannelRepository.putRemovedPrivateMessageChannels();
     remotePrivateMessageChannelRepository.getPrivateMessageChannels();
     notifyLoaded(privateMessageChannelRepository.getPrivateMessageChannels());
   }

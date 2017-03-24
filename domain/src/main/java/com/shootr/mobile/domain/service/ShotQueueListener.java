@@ -14,6 +14,8 @@ public interface ShotQueueListener {
 
     void onPrivateMessageNotAllowed(QueuedShot shot, Exception e);
 
+    void onPrivateMessageBlockedUser(QueuedShot shot, Exception e);
+
     void onShotHasStreamRemoved(QueuedShot shot, Exception e);
 
     void onQueueShot(QueuedShot queuedShot);
