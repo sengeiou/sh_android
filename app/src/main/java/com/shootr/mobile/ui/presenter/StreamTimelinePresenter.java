@@ -607,7 +607,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     streamTimelineView.hideHoldingShots();
     streamTimelineView.showAllStreamShots();
     sessionRepository.setTimelineFilterActivated(true);
-    sessionRepository.setLastTimeFiltered(String.valueOf(new Date().getTime()));
     isFirstLoad = true;
     loadTimeline(0);
   }

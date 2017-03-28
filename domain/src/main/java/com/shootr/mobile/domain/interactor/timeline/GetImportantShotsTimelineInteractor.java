@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
 import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.Date;
@@ -20,6 +21,7 @@ public class GetImportantShotsTimelineInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ExternalShotRepository remoteShotRepository;
+  private final SessionRepository sessionRepository;
   private final StreamRepository localStreamRepository;
   private Callback<Timeline> callback;
   private ErrorCallback errorCallback;
@@ -27,10 +29,11 @@ public class GetImportantShotsTimelineInteractor implements Interactor {
 
   @Inject public GetImportantShotsTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository,
-      @Local StreamRepository localStreamRepository) {
+      SessionRepository sessionRepository, @Local StreamRepository localStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteShotRepository = remoteShotRepository;
+    this.sessionRepository = sessionRepository;
     this.localStreamRepository = localStreamRepository;
   }
 
@@ -51,7 +54,9 @@ public class GetImportantShotsTimelineInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      localStreamRepository.putLastTimeFiltered(idStream, String.valueOf(new Date().getTime()));
+      String lastFilteredDate = String.valueOf(new Date().getTime());
+      localStreamRepository.putLastTimeFiltered(idStream, lastFilteredDate);
+      sessionRepository.setLastTimeFiltered(lastFilteredDate);
       notifyLoaded(
           buildTimeline(remoteShotRepository.updateImportantShots(buildTimelineParameters())));
     } catch (ShootrException error) {
