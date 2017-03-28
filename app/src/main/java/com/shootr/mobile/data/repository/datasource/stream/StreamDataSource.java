@@ -5,25 +5,27 @@ import java.util.List;
 
 public interface StreamDataSource {
 
-    StreamEntity getStreamById(String idStream, String[] types);
+  StreamEntity getStreamById(String idStream, String[] types);
 
-    List<StreamEntity> getStreamByIds(List<String> streamIds, String[] types);
+  List<StreamEntity> getStreamByIds(List<String> streamIds, String[] types);
 
-    StreamEntity putStream(StreamEntity streamEntity, Boolean notifyStreamMessage);
+  StreamEntity putStream(StreamEntity streamEntity, Boolean notifyStreamMessage);
 
-    StreamEntity putStream(StreamEntity streamEntity);
+  StreamEntity putStream(StreamEntity streamEntity);
 
-    List<StreamEntity> putStreams(List<StreamEntity> streams);
+  List<StreamEntity> putStreams(List<StreamEntity> streams);
 
-    List<StreamEntity> getStreamsListing(String idUser, String[] types);
+  List<StreamEntity> getStreamsListing(String idUser, String[] types);
 
-    void shareStream(String idStream);
+  void shareStream(String idStream);
 
-    void removeStream(String idStream);
+  void removeStream(String idStream);
 
-    void restoreStream(String idStream);
+  void restoreStream(String idStream);
 
-    StreamEntity getBlogStream(String country, String language);
+  StreamEntity getBlogStream(String country, String language);
 
-    StreamEntity getHelpStream(String country, String language);
+  StreamEntity getHelpStream(String country, String language);
+
+  String getLastTimeFilteredStream(String idStream);
 }

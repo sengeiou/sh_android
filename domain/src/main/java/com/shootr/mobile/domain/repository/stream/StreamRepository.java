@@ -14,4 +14,6 @@ public interface StreamRepository {
     void removeStream(String idStream);
 
     void restoreStream(String idStream);
+
+  String getLastTimeFiltered(String idStream);
 }

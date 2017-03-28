@@ -58,4 +58,8 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     @Override public StreamEntity getHelpStream(String country, String language) {
         throw new IllegalArgumentException("method not implemented in local datasource");
     }
+
+    @Override public String getLastTimeFilteredStream(String idStream) {
+        return streamManager.getLastTimeFilteredStream(idStream).toString();
+    }
 }

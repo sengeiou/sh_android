@@ -81,6 +81,10 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         remoteStreamDataSource.restoreStream(idStream);
     }
 
+    @Override public String getLastTimeFiltered(String idStream) {
+        return "0";
+    }
+
     @Override public Stream getBlogStream(String country, String language) {
         StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, language);
         if (blogStream != null) {
