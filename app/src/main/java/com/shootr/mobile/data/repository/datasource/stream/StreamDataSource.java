@@ -28,4 +28,6 @@ public interface StreamDataSource {
   StreamEntity getHelpStream(String country, String language);
 
   String getLastTimeFilteredStream(String idStream);
+
+  void putLastTimeFiltered(String idStream, String lastTimeFiltered);
 }

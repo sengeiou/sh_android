@@ -104,4 +104,8 @@ public class ServiceStreamDataSource implements StreamDataSource {
   @Override public String getLastTimeFilteredStream(String idStream) {
     throw new RuntimeException("Method not implemented yet!");
   }
+
+  @Override public void putLastTimeFiltered(String idStream, String lastTimeFiltered) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
 }

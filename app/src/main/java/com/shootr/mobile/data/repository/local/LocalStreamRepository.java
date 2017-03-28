@@ -70,4 +70,8 @@ public class LocalStreamRepository implements StreamRepository {
     @Override public String getLastTimeFiltered(String idStream) {
         return localStreamDataSource.getLastTimeFilteredStream(idStream);
     }
+
+    @Override public void putLastTimeFiltered(String idStream, String lastTimeFiltered) {
+        localStreamDataSource.putLastTimeFiltered(idStream, lastTimeFiltered);
+    }
 }
