@@ -14,128 +14,110 @@ import javax.inject.Inject;
 
 public class ActivityManager extends AbstractManager {
 
-    @Inject ActivityEntityDBMapper activityEntityMapper;
+  @Inject ActivityEntityDBMapper activityEntityMapper;
 
-    private static final String ACTIVITY_TABLE = DatabaseContract.ActivityTable.TABLE;
+  private static final String ACTIVITY_TABLE = DatabaseContract.ActivityTable.TABLE;
 
-    @Inject protected ActivityManager(SQLiteOpenHelper dbHelper) {
-        super(dbHelper);
+  @Inject protected ActivityManager(SQLiteOpenHelper dbHelper) {
+    super(dbHelper);
+  }
+
+  public List<ActivityEntity> getActivityTimelineFromParameters(
+      ActivityTimelineParameters parameters) {
+    List<String> includedTypes = parameters.getIncludedTypes();
+
+    String typeSelection = DatabaseContract.ActivityTable.TYPE
+        + " IN ("
+        + createListPlaceholders(includedTypes.size())
+        + ")";
+
+    int whereArgumentsSize = includedTypes.size();
+    String[] whereArguments = new String[whereArgumentsSize];
+
+    for (int i = 0; i < includedTypes.size(); i++) {
+      whereArguments[i] = includedTypes.get(i);
     }
 
-    public List<ActivityEntity> getActivityTimelineFromParameters(ActivityTimelineParameters parameters) {
-        List<String> includedTypes = parameters.getIncludedTypes();
+    String whereClause = typeSelection;
 
-        String typeSelection =
-          DatabaseContract.ActivityTable.TYPE + " IN (" + createListPlaceholders(includedTypes.size()) + ")";
+    Cursor queryResult =
+        getReadableDatabase().query(ACTIVITY_TABLE, DatabaseContract.ActivityTable.PROJECTION,
+            whereClause, whereArguments, null, null, DatabaseContract.ActivityTable.BIRTH + " DESC",
+            parameters.getLimit().toString());
 
-        int whereArgumentsSize = includedTypes.size();
-        String[] whereArguments = new String[whereArgumentsSize];
-
-        for (int i = 0; i < includedTypes.size(); i++) {
-            whereArguments[i] = includedTypes.get(i);
-        }
-
-        String whereClause = typeSelection;
-
-        Cursor queryResult = getReadableDatabase().query(ACTIVITY_TABLE,
-          DatabaseContract.ActivityTable.PROJECTION,
-          whereClause,
-          whereArguments,
-          null,
-          null,
-          DatabaseContract.ActivityTable.BIRTH + " DESC");
-
-        List<ActivityEntity> resultActivities = new ArrayList<>(queryResult.getCount());
-        ActivityEntity activityEntity;
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            do {
-                activityEntity = activityEntityMapper.fromCursor(queryResult);
-                resultActivities.add(activityEntity);
-            } while (queryResult.moveToNext());
-        }
-        queryResult.close();
-        return resultActivities;
+    List<ActivityEntity> resultActivities = new ArrayList<>(queryResult.getCount());
+    ActivityEntity activityEntity;
+    if (queryResult.getCount() > 0) {
+      queryResult.moveToFirst();
+      do {
+        activityEntity = activityEntityMapper.fromCursor(queryResult);
+        resultActivities.add(activityEntity);
+      } while (queryResult.moveToNext());
     }
+    queryResult.close();
+    return resultActivities;
+  }
 
-    public void saveActivities(List<ActivityEntity> activityEntities) {
-        SQLiteDatabase database = getWritableDatabase();
-        try {
-            database.beginTransaction();
-            for (ActivityEntity activityEntity : activityEntities) {
-                ContentValues contentValues = activityEntityMapper.toContentValues(activityEntity);
-                database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE,
-                  null,
-                  contentValues,
-                  SQLiteDatabase.CONFLICT_REPLACE);
-            }
-            database.setTransactionSuccessful();
-        } finally {
-            database.endTransaction();
-        }
+  public void saveActivities(List<ActivityEntity> activityEntities) {
+    SQLiteDatabase database = getWritableDatabase();
+    try {
+      database.beginTransaction();
+      for (ActivityEntity activityEntity : activityEntities) {
+        ContentValues contentValues = activityEntityMapper.toContentValues(activityEntity);
+        database.insertWithOnConflict(DatabaseContract.ActivityTable.TABLE, null, contentValues,
+            SQLiteDatabase.CONFLICT_REPLACE);
+      }
+      database.setTransactionSuccessful();
+    } finally {
+      database.endTransaction();
     }
+  }
 
-    public ActivityEntity getActivity(String activityId) {
-        String whereSelection = DatabaseContract.ActivityTable.ID_ACTIVITY + " = ?";
-        String[] whereArguments = new String[] { activityId };
+  public ActivityEntity getActivity(String activityId) {
+    String whereSelection = DatabaseContract.ActivityTable.ID_ACTIVITY + " = ?";
+    String[] whereArguments = new String[] { activityId };
 
-        Cursor queryResult = getReadableDatabase().query(ACTIVITY_TABLE,
-          DatabaseContract.ActivityTable.PROJECTION,
-          whereSelection,
-          whereArguments,
-          null,
-          null,
-          null);
+    Cursor queryResult =
+        getReadableDatabase().query(ACTIVITY_TABLE, DatabaseContract.ActivityTable.PROJECTION,
+            whereSelection, whereArguments, null, null, null);
 
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            ActivityEntity activityEntity = activityEntityMapper.fromCursor(queryResult);
-            queryResult.close();
-            return activityEntity;
-        } else {
-            return null;
-        }
+    if (queryResult.getCount() > 0) {
+      queryResult.moveToFirst();
+      ActivityEntity activityEntity = activityEntityMapper.fromCursor(queryResult);
+      queryResult.close();
+      return activityEntity;
+    } else {
+      return null;
     }
+  }
 
-    public Long getLastModifiedDateForActivity() {
-        String order = DatabaseContract.ActivityTable.MODIFIED + " desc";
+  public Long getLastModifiedDateForActivity() {
+    String order = DatabaseContract.ActivityTable.MODIFIED + " desc";
 
-        Cursor queryResult = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE,
-          DatabaseContract.ActivityTable.PROJECTION,
-          null,
-          null,
-          null,
-          null,
-          order,
-          "1");
+    Cursor queryResult = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE,
+        DatabaseContract.ActivityTable.PROJECTION, null, null, null, null, order, "1");
 
-        if (queryResult.getCount() > 0) {
-            queryResult.moveToFirst();
-            ActivityEntity lastActivity = activityEntityMapper.fromCursor(queryResult);
-            return lastActivity.getModified().getTime();
-        } else {
-            return 0L;
-        }
+    if (queryResult.getCount() > 0) {
+      queryResult.moveToFirst();
+      ActivityEntity lastActivity = activityEntityMapper.fromCursor(queryResult);
+      return lastActivity.getModified().getTime();
+    } else {
+      return 0L;
     }
+  }
 
-    public void deleteActivitiesWithShot(String idShot) {
-        String args = DatabaseContract.ActivityTable.ID_SHOT + "=?";
-        String[] stringArgs = new String[] { idShot };
-        Cursor c = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE,
-          DatabaseContract.ActivityTable.PROJECTION,
-          args,
-          stringArgs,
-          null,
-          null,
-          null);
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            do {
-                getWritableDatabase().delete(DatabaseContract.ActivityTable.TABLE,
-                  DatabaseContract.ActivityTable.ID_SHOT,
-                  new String[] {});
-            } while (c.moveToNext());
-        }
-        c.close();
+  public void deleteActivitiesWithShot(String idShot) {
+    String args = DatabaseContract.ActivityTable.ID_SHOT + "=?";
+    String[] stringArgs = new String[] { idShot };
+    Cursor c = getReadableDatabase().query(DatabaseContract.ActivityTable.TABLE,
+        DatabaseContract.ActivityTable.PROJECTION, args, stringArgs, null, null, null);
+    if (c.getCount() > 0) {
+      c.moveToFirst();
+      do {
+        getWritableDatabase().delete(DatabaseContract.ActivityTable.TABLE,
+            DatabaseContract.ActivityTable.ID_SHOT, new String[] {});
+      } while (c.moveToNext());
     }
+    c.close();
+  }
 }
