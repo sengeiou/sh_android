@@ -7,7 +7,10 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
+import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -17,15 +20,18 @@ public class GetImportantShotsTimelineInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ExternalShotRepository remoteShotRepository;
+  private final StreamRepository localStreamRepository;
   private Callback<Timeline> callback;
   private ErrorCallback errorCallback;
   private String idStream;
 
   @Inject public GetImportantShotsTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository) {
+      PostExecutionThread postExecutionThread, ExternalShotRepository remoteShotRepository,
+      @Local StreamRepository localStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteShotRepository = remoteShotRepository;
+    this.localStreamRepository = localStreamRepository;
   }
 
   public void getImportantShotsTimeline(String streamId,
@@ -45,6 +51,7 @@ public class GetImportantShotsTimelineInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
+      localStreamRepository.putLastTimeFiltered(idStream, String.valueOf(new Date().getTime()));
       notifyLoaded(
           buildTimeline(remoteShotRepository.updateImportantShots(buildTimelineParameters())));
     } catch (ShootrException error) {
