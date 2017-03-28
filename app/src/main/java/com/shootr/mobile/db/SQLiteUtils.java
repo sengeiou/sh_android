@@ -843,6 +843,6 @@ public class SQLiteUtils {
         + DatabaseContract.StreamFilterTable.ID_STREAM
         + " TEXT NOT NULL PRIMARY KEY,"
         + DatabaseContract.StreamFilterTable.LAST_TIME_FILTERED
-        + " INTEGER NULL";
+        + " INTEGER NULL)";
 
 }
