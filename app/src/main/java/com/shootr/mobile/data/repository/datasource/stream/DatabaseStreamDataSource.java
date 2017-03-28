@@ -64,6 +64,10 @@ public class DatabaseStreamDataSource implements StreamDataSource {
   }
 
   @Override public void putLastTimeFiltered(String idStream, String lastTimeFiltered) {
-    streamManager.saveLastTimeFilteredStream(idStream, Long.getLong(lastTimeFiltered));
+    try {
+      streamManager.saveLastTimeFilteredStream(idStream, Long.valueOf(lastTimeFiltered));
+    } catch (NumberFormatException nfe) {
+      System.out.println("NumberFormatException: " + nfe.getMessage());
+    }
   }
 }
