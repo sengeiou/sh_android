@@ -376,7 +376,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_showing_all_shots:
         streamTimelinePresenter.onAllStreamShotsClick();
-        //TODO esto se ha de descomentar después hideFilterAlert();
+        hideFilterAlert();
         sendFilterOffAnalytics();
         return true;
       case R.id.menu_stream_add_favorite:
