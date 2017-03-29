@@ -87,7 +87,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean isCurrentUserContirbutor;
   private boolean isViewOnlyStream;
 
-
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
@@ -226,16 +225,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void hasNewFilteredShots() {
-    getNewFilteredShotsInteractor.hasNewFilteredShots(streamId,
-        sessionRepository.getLastTimeFiltered(), new Interactor.Callback<Boolean>() {
-          @Override public void onLoaded(Boolean hasNewFilteredShots) {
-            if (hasNewFilteredShots) {
-              if (!filterActivated) {
-                streamTimelineView.showFilterAlert();
-              }
-            }
+    getNewFilteredShotsInteractor.hasNewFilteredShots(streamId, new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean hasNewFilteredShots) {
+        if (hasNewFilteredShots) {
+          if (!filterActivated) {
+            streamTimelineView.showFilterAlert();
           }
-        });
+        }
+      }
+    });
   }
 
   private void postWatchNumberEvent() {

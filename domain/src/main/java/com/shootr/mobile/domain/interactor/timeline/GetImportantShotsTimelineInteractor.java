@@ -56,7 +56,6 @@ public class GetImportantShotsTimelineInteractor implements Interactor {
     try {
       String lastFilteredDate = String.valueOf(new Date().getTime());
       localStreamRepository.putLastTimeFiltered(idStream, lastFilteredDate);
-      sessionRepository.setLastTimeFiltered(lastFilteredDate);
       notifyLoaded(
           buildTimeline(remoteShotRepository.updateImportantShots(buildTimelineParameters())));
     } catch (ShootrException error) {
