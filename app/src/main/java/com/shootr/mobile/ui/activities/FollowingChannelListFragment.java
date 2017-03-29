@@ -102,7 +102,9 @@ public class FollowingChannelListFragment extends BaseFragment
   }
 
   @Override public void hideEmpty() {
-    emptyView.setVisibility(View.GONE);
+    if (emptyView != null) {
+      emptyView.setVisibility(View.GONE);
+    }
   }
 
   @Override

@@ -535,12 +535,14 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void addMessages(List<PrivateMessageModel> privateMessageModels) {
-    messageRecycler.setVisibility(View.VISIBLE);
-    hideLoading();
-    adapter.addMessages(privateMessageModels);
-    presenter.setIsFirstShotPosition(true);
-    presenter.setNewShotsNumber(0);
-    messageRecycler.smoothScrollToPosition(0);
+    if (messageRecycler != null) {
+      messageRecycler.setVisibility(View.VISIBLE);
+      hideLoading();
+      adapter.addMessages(privateMessageModels);
+      presenter.setIsFirstShotPosition(true);
+      presenter.setNewShotsNumber(0);
+      messageRecycler.smoothScrollToPosition(0);
+    }
   }
 
   @Override public void updateMessagesInfo(List<PrivateMessageModel> privateMessageModels) {
