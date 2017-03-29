@@ -10,13 +10,14 @@
     >
   <TextView
       android:id="@+id/stream_rank"
-      android:layout_width="wrap_content"
+      android:layout_width="30dp"
       android:layout_height="wrap_content"
       android:textColor="@color/gray_65"
       android:textSize="16sp"
+      android:gravity="center"
       tools:text="1"
       android:layout_gravity="center"
-      android:layout_marginLeft="18dp"
+      android:layout_marginLeft="12dp"
       android:layout_marginRight="2dp"
       />
   <ImageView
@@ -38,7 +39,7 @@
       android:layout_width="@dimen/stream_result_picture_width"
       android:layout_height="@dimen/stream_result_picture_height"
       android:layout_marginBottom="12dp"
-      android:layout_marginLeft="12dp"
+      android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
       android:layout_marginTop="12dp"
       android:scaleType="centerCrop"
