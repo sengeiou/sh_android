@@ -293,7 +293,9 @@ public class StreamTimelineFragment extends BaseFragment
       checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
       checkInShowcasePreferences.set(checkInShowcaseStatus);
     } else {
-      checkInShowcase.setVisibility(View.GONE);
+      if(checkInShowcase != null) {
+        checkInShowcase.setVisibility(View.GONE);
+      }
     }
   }
 
