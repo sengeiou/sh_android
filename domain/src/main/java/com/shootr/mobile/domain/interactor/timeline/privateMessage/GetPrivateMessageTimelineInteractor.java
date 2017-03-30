@@ -66,10 +66,12 @@ public class GetPrivateMessageTimelineInteractor implements Interactor {
   private void loadLocalPrivateMessages() {
     PrivateMessageTimeline timeline =
         localPrivateMessageRepository.getPrivateMessageTimeline(idTargetUser);
-    List<PrivateMessage> messages = timeline.getPrivateMessages();
-    messages = sortShotsByPublishDate(messages);
-    timeline.setPrivateMessages(messages);
-    notifyTimelineFromShots(timeline);
+    if (timeline != null) {
+      List<PrivateMessage> messages = timeline.getPrivateMessages();
+      messages = sortShotsByPublishDate(messages);
+      timeline.setPrivateMessages(messages);
+      notifyTimelineFromShots(timeline);
+    }
   }
 
   private PrivateMessageChannelTimelineParameters buildParameters() {
