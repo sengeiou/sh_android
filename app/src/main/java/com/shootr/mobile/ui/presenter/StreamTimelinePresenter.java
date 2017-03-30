@@ -463,7 +463,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
           @Override public void onLoaded(Timeline timeline) {
             updateTimelineLiveSettings();
             loadNewShotsInView(timeline);
-            if (!isReadOnly) {
+            if (!isReadOnly && !filterActivated) {
               hasNewFilteredShots();
             }
           }
