@@ -26,6 +26,7 @@ public class ShootrTimelineService {
   private final ActivityRepository remoteActivityRepository;
   private final TimelineSynchronizationRepository timelineSynchronizationRepository;
   private final PrivateMessageRepository remotePrivateMessageRepository;
+  private final static int NUM_SHOTS_UPDATE = 50;
 
 
   @Inject public ShootrTimelineService(ExternalShotRepository remoteShotRepository,
@@ -92,6 +93,7 @@ public class ShootrTimelineService {
         .forStream(idStream) //
         .since(streamRefreshDateSince) //
         .realTime(isRealTime) //
+        .limit(NUM_SHOTS_UPDATE)
         .build();
 
     List<Shot> newShots = remoteShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
