@@ -283,15 +283,17 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void setupCheckInShowcase() {
     ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
     if (checkInShowcaseStatus.shouldShowShowcase()) {
-      checkInShowcase.setVisibility(View.VISIBLE);
-      checkInShowcase.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-          checkInShowcase.setVisibility(View.GONE);
-          setShowcasePreference();
-        }
-      });
-      checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
-      checkInShowcasePreferences.set(checkInShowcaseStatus);
+      if (checkInShowcase != null) {
+        checkInShowcase.setVisibility(View.VISIBLE);
+        checkInShowcase.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            checkInShowcase.setVisibility(View.GONE);
+            setShowcasePreference();
+          }
+        });
+        checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
+        checkInShowcasePreferences.set(checkInShowcaseStatus);
+      }
     } else {
       if (checkInShowcase != null) {
         checkInShowcase.setVisibility(View.GONE);
