@@ -837,4 +837,12 @@ public class SQLiteUtils {
         + DatabaseContract.SyncColumns.SYNCHRONIZED
         + " CHAR(1) NULL)";
 
+    public static final String CREATE_TABLE_STREAM_FILTER = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.StreamFilterTable.TABLE
+        + " ("
+        + DatabaseContract.StreamFilterTable.ID_STREAM
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.StreamFilterTable.LAST_TIME_FILTERED
+        + " INTEGER NULL)";
+
 }

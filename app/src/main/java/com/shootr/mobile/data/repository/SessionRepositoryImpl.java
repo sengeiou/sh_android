@@ -89,14 +89,6 @@ public class SessionRepositoryImpl implements SessionRepository {
     timelineFilterPreference.set(isFilterActivated);
   }
 
-  @Override public String getLastTimeFiltered() {
-    return lastTimeFilteredPreference.get();
-  }
-
-  @Override public void setLastTimeFiltered(String lastTimeFiltered) {
-    lastTimeFilteredPreference.set(lastTimeFiltered);
-  }
-
   @Override public int getSynchroTime() {
     try {
       return synchroTime;

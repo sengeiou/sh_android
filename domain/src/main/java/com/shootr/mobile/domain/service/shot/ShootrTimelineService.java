@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.TimelineSynchronizationRepository;
 import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -27,18 +28,21 @@ public class ShootrTimelineService {
   private final TimelineSynchronizationRepository timelineSynchronizationRepository;
   private final PrivateMessageRepository remotePrivateMessageRepository;
   private final static int NUM_SHOTS_UPDATE = 50;
+  private StreamRepository localStreamRepository;
 
 
   @Inject public ShootrTimelineService(ExternalShotRepository remoteShotRepository,
       @Local ActivityRepository localActivityRepository,
       @Remote ActivityRepository remoteActivityRepository,
       TimelineSynchronizationRepository timelineSynchronizationRepository,
-      @Remote PrivateMessageRepository remotePrivateMessageRepository) {
+      @Remote PrivateMessageRepository remotePrivateMessageRepository,
+      @Local StreamRepository localStreamRepository) {
     this.remoteShotRepository = remoteShotRepository;
     this.localActivityRepository = localActivityRepository;
     this.remoteActivityRepository = remoteActivityRepository;
     this.timelineSynchronizationRepository = timelineSynchronizationRepository;
     this.remotePrivateMessageRepository = remotePrivateMessageRepository;
+    this.localStreamRepository = localStreamRepository;
   }
 
   public ActivityTimeline refreshTimelinesForActivity(String language,
@@ -67,12 +71,22 @@ public class ShootrTimelineService {
     return remoteActivityRepository.getActivityTimeline(activityTimelineParameters, language);
   }
 
-  public Timeline refreshTimelinesForStream(String idStream, boolean filterActivated, Boolean isRealTime) {
+  public Timeline refreshTimelinesForStream(String idStream, boolean filterActivated,
+      Boolean isRealTime) {
     List<Shot> shotsForStream = refreshStreamShots(idStream, isRealTime);
     if (filterActivated) {
       filterShots(shotsForStream);
+      updateLastTimeFiltered(shotsForStream);
     }
     return buildSortedTimeline(shotsForStream);
+  }
+
+  private void updateLastTimeFiltered(List<Shot> shotsForStream) {
+    if (shotsForStream.size() > 0) {
+      String lastFilteredDate = String.valueOf(shotsForStream.get(0).getPublishDate().getTime());
+      localStreamRepository.putLastTimeFiltered(shotsForStream.get(0).getStreamInfo().getIdStream(),
+          lastFilteredDate);
+    }
   }
 
   private void filterShots(List<Shot> shotsForStream) {
@@ -104,8 +118,10 @@ public class ShootrTimelineService {
     return newShots;
   }
 
-  public PrivateMessageTimeline refreshTimelinesForChannel(String idChannel, String idTargetUser, Long lastRefresh) {
-    List<PrivateMessage> shotsForStream = refreshChannelMessages(idChannel, idTargetUser, lastRefresh);
+  public PrivateMessageTimeline refreshTimelinesForChannel(String idChannel, String idTargetUser,
+      Long lastRefresh) {
+    List<PrivateMessage> shotsForStream =
+        refreshChannelMessages(idChannel, idTargetUser, lastRefresh);
     return buildSortedPrivateMessageTimeline(shotsForStream);
   }
 
@@ -116,7 +132,8 @@ public class ShootrTimelineService {
     return timeline.getPrivateMessages();
   }
 
-  private PrivateMessageTimeline buildSortedPrivateMessageTimeline(List<PrivateMessage> privateMessages) {
+  private PrivateMessageTimeline buildSortedPrivateMessageTimeline(
+      List<PrivateMessage> privateMessages) {
     PrivateMessageTimeline timeline = new PrivateMessageTimeline();
     timeline.setPrivateMessages(sortPrivateMessagesByPublishDate(privateMessages));
     return timeline;
@@ -139,7 +156,8 @@ public class ShootrTimelineService {
     return remoteShots;
   }
 
-  private List<PrivateMessage> sortPrivateMessagesByPublishDate(List<PrivateMessage> privateMessages) {
+  private List<PrivateMessage> sortPrivateMessagesByPublishDate(
+      List<PrivateMessage> privateMessages) {
     Collections.sort(privateMessages, new PrivateMessage.NewerAboveComparator());
     return privateMessages;
   }
