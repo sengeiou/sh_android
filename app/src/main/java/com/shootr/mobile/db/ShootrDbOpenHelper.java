@@ -44,6 +44,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_PRIVATE_MESSAGE_CHANNEL);
         db.execSQL(SQLiteUtils.CREATE_TABLE_PRIVATE_MESSAGE);
         db.execSQL(SQLiteUtils.CREATE_TABLE_MESSAGE_QUEUE);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_STREAM_FILTER);
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -72,6 +73,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.PrivateMessageChannelTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.PrivateMessageTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MessageQueueTable.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.StreamFilterTable.TABLE);
         onCreate(db);
     }
 

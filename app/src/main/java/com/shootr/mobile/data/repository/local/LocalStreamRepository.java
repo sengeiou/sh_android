@@ -66,4 +66,12 @@ public class LocalStreamRepository implements StreamRepository {
     @Override public void restoreStream(String idStream) {
         localStreamDataSource.restoreStream(idStream);
     }
+
+    @Override public String getLastTimeFiltered(String idStream) {
+        return localStreamDataSource.getLastTimeFilteredStream(idStream);
+    }
+
+    @Override public void putLastTimeFiltered(String idStream, String lastTimeFiltered) {
+        localStreamDataSource.putLastTimeFiltered(idStream, lastTimeFiltered);
+    }
 }

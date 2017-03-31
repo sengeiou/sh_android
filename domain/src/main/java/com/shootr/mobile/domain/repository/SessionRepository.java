@@ -24,10 +24,6 @@ public interface SessionRepository {
 
     void setTimelineFilterActivated(boolean isFilterActivated);
 
-    String getLastTimeFiltered();
-
-    void setLastTimeFiltered(String lastTimeFiltered);
-
     int getSynchroTime();
 
     void setSynchroTime(String synchroTime);

@@ -18,7 +18,7 @@ import com.shootr.mobile.util.ImageLoader;
 
 public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
-    private final ImageLoader imageLoader;
+    protected final ImageLoader imageLoader;
     private final AndroidTimeUtils androidTimeUtils;
     private final OnAvatarClickListener onAvatarClickListener;
 

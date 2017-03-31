@@ -283,17 +283,21 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void setupCheckInShowcase() {
     ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
     if (checkInShowcaseStatus.shouldShowShowcase()) {
-      checkInShowcase.setVisibility(View.VISIBLE);
-      checkInShowcase.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-          checkInShowcase.setVisibility(View.GONE);
-          setShowcasePreference();
-        }
-      });
-      checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
-      checkInShowcasePreferences.set(checkInShowcaseStatus);
+      if (checkInShowcase != null) {
+        checkInShowcase.setVisibility(View.VISIBLE);
+        checkInShowcase.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            checkInShowcase.setVisibility(View.GONE);
+            setShowcasePreference();
+          }
+        });
+        checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
+        checkInShowcasePreferences.set(checkInShowcaseStatus);
+      }
     } else {
-      checkInShowcase.setVisibility(View.GONE);
+      if (checkInShowcase != null) {
+        checkInShowcase.setVisibility(View.GONE);
+      }
     }
   }
 
@@ -372,7 +376,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       case R.id.menu_showing_all_shots:
         streamTimelinePresenter.onAllStreamShotsClick();
-        //TODO esto se ha de descomentar después hideFilterAlert();
+        hideFilterAlert();
         sendFilterOffAnalytics();
         return true;
       case R.id.menu_stream_add_favorite:

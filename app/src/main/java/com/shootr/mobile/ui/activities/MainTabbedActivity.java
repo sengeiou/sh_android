@@ -283,9 +283,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void goToTimeline(StreamModel streamModel) {
-    startActivity(
-        StreamTimelineActivity.newIntent(this, streamModel.getIdStream(), streamModel.getTitle(),
-            streamModel.getAuthorId()));
+    if (streamModel != null) {
+      startActivity(
+          StreamTimelineActivity.newIntent(this, streamModel.getIdStream(), streamModel.getTitle(),
+              streamModel.getAuthorId()));
+    }
   }
 
   private void showBadge(int count) {
@@ -373,7 +375,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
   }
-
 
   private void navigateToDiscoverSearch() {
     Intent intent = new Intent(this, DiscoverSearchActivity.class);
