@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.30.2] - 2017-03-31
+
+### Fixed
+- Showcase fix
+- Fix null in privateMessages
+- Fix Crashlytics crashes
+- New filter shots
+
+### Changed
+- Limit en local activities
+- Reduce count streamTimeline request
+
+
 ## [1.30.0] - 2017-03-24
 
 ### Added
