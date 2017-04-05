@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.base.BaseSearchFragment;
+import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.FindFriendsPresenter;
 import com.shootr.mobile.ui.views.FindFriendsView;
@@ -31,7 +32,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class FindFriendsFragment extends BaseSearchFragment
-    implements FindFriendsView, UserListAdapter.FollowUnfollowAdapterCallback {
+    implements FindFriendsView, UserListAdapter.FollowUnfollowAdapterCallback, SearchFragment {
 
   @Inject ImageLoader imageLoader;
   @Inject FeedbackMessage feedbackMessage;
@@ -204,5 +205,9 @@ public class FindFriendsFragment extends BaseSearchFragment
   @OnItemClick(R.id.find_friends_search_results_list) public void openUserProfile(int position) {
     UserModel user = adapter.getItem(position);
     startActivityForResult(ProfileActivity.getIntent(getContext(), user.getIdUser()), 666);
+  }
+
+  @Override public void renderSearchItems(List<SearchableModel> searchableModels) {
+    //TODO
   }
 }

@@ -21,6 +21,7 @@ import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.base.BaseSearchFragment;
+import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
 import com.shootr.mobile.ui.views.FindStreamsView;
@@ -34,7 +35,7 @@ import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindStreamsFragment extends BaseSearchFragment implements FindStreamsView {
+public class FindStreamsFragment extends BaseSearchFragment implements FindStreamsView, SearchFragment {
 
   private StreamsListAdapter adapter;
 
@@ -219,5 +220,9 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
   @Override public void onPause() {
     super.onPause();
     findStreamsPresenter.pause();
+  }
+
+  @Override public void renderSearchItems(List<SearchableModel> searchableModels) {
+    //TODO
   }
 }

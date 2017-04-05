@@ -16,22 +16,22 @@ public class GetSearchItemsInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final ExternalSearchItemRepository externalSearchItemRepository;
-  private final ErrorCallback errorCallback;
+  private ErrorCallback errorCallback;
   private String query;
   private Interactor.Callback<List<Searchable>> callback;
 
   @Inject public GetSearchItemsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      ExternalSearchItemRepository externalSearchItemRepository, ErrorCallback errorCallback) {
+      ExternalSearchItemRepository externalSearchItemRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.externalSearchItemRepository = externalSearchItemRepository;
-    this.errorCallback = errorCallback;
   }
 
-  public void searchItems(String query, Callback<List<Searchable>> callback) {
+  public void searchItems(String query, Callback<List<Searchable>> callback, ErrorCallback errorCallback) {
     this.query = query;
     this.callback = callback;
+    this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 

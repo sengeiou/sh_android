@@ -1,9 +1,10 @@
 package com.shootr.mobile.ui.model;
 
+import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 import timber.log.Timber;
 
-public class UserModel implements Serializable, Cloneable {
+public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   private String idUser;
   private String userName;
@@ -200,5 +201,9 @@ public class UserModel implements Serializable, Cloneable {
 
   public void setVerifiedUser(Boolean verifiedUser) {
     this.verifiedUser = verifiedUser;
+  }
+
+  @Override public String getSearchableType() {
+    return SearchableType.USER;
   }
 }
