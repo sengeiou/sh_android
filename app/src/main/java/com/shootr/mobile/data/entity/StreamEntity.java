@@ -1,8 +1,9 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.domain.model.SearchableType;
 import java.util.List;
 
-public class StreamEntity extends Synchronized implements Comparable<StreamEntity> {
+public class StreamEntity extends Synchronized implements Comparable<StreamEntity>, SearchableEntity {
 
     private String idStream;
     private String idUser;
@@ -238,5 +239,9 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setiAmContributor(int iAmContributor) {
         this.iAmContributor = iAmContributor;
+    }
+
+    @Override public String getSearcheableType() {
+        return SearchableType.STREAM;
     }
 }
