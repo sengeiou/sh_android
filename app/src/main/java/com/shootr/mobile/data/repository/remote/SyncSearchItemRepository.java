@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SyncSearchItemRepository implements ExternalSearchItemRepository{
+public class SyncSearchItemRepository implements ExternalSearchItemRepository {
 
   private final ExternalSearchItemDataSource externalSearchItemDataSource;
   private final UserEntityMapper userEntityMapper;

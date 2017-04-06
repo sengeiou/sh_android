@@ -196,11 +196,11 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
           return genericSearchFragment;
         case 1:
           FindFriendsFragment findFriendsFragment = new FindFriendsFragment();
-          fragments[0] = findFriendsFragment;
+          fragments[1] = findFriendsFragment;
           return findFriendsFragment;
         case 2:
           FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
-          fragments[1] = findStreamsFragment;
+          fragments[2] = findStreamsFragment;
           return findStreamsFragment;
         default:
           return null;
@@ -208,14 +208,16 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
     }
 
     @Override public int getCount() {
-      return 2;
+      return 3;
     }
 
     @Override public CharSequence getPageTitle(int position) {
       switch (position) {
         case 0:
-          return usersTitle;
+          return "all";
         case 1:
+          return usersTitle;
+        case 2:
           return streamsTitle;
         default:
           throw new IllegalStateException(
