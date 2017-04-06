@@ -18,8 +18,8 @@ import javax.inject.Inject;
 public class SearchPresenter implements Presenter {
 
   public static Integer TYPE_ALL = 0;
-  public static int TYPE_STREAM = 1;
-  public static int TYPE_USER = 2;
+  public static int TYPE_USER = 1;
+  public static int TYPE_STREAM = 2;
 
   private final GetSearchItemsInteractor getSearchItemsInteractor;
   private final UserModelMapper userModelMapper;

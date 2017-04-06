@@ -28,6 +28,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.SearchItemsPresenter;
 import com.shootr.mobile.ui.views.SearchStreamView;
+import com.shootr.mobile.ui.views.SearchUserView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -38,7 +39,8 @@ import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindStreamsFragment extends BaseFragment implements SearchStreamView, SearchFragment {
+public class GenericSearchFragment extends BaseFragment implements SearchStreamView,
+    SearchUserView, SearchFragment {
 
   private SearchAdapter adapter;
 
@@ -72,7 +74,7 @@ public class FindStreamsFragment extends BaseFragment implements SearchStreamVie
     ButterKnife.bind(this, getView());
     streamsList.setLayoutManager(new LinearLayoutManager(getContext()));
     setupViews();
-    searchItemsPresenter.initialize(null, this);
+    searchItemsPresenter.initialize(this, this);
   }
 
   private void initializeStreamListAdapter() {
@@ -168,6 +170,22 @@ public class FindStreamsFragment extends BaseFragment implements SearchStreamVie
   @Override public void hideKeyboard() {
     final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+  }
+
+  @Override public void showContent() {
+
+  }
+
+  @Override public void hideContent() {
+
+  }
+
+  @Override public void showFollow(UserModel userModel) {
+
+  }
+
+  @Override public void showUnfolow(UserModel userModel) {
+
   }
 
   @Override public void showError(String errorMessage) {

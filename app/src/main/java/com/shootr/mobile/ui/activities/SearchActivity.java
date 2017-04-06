@@ -19,6 +19,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
+import com.shootr.mobile.ui.fragments.GenericSearchFragment;
 import com.shootr.mobile.ui.fragments.SearchFragment;
 import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.presenter.SearchPresenter;
@@ -41,7 +42,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
   private String currentSearchQuery;
   private Bundle savedInstanceState;
 
-  private SearchFragment[] fragments = new SearchFragment[2];
+  private SearchFragment[] fragments = new SearchFragment[3];
   private SearchFragment currentFragment;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
@@ -190,10 +191,14 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
     @Override public Fragment getItem(int position) {
       switch (position) {
         case 0:
+          GenericSearchFragment genericSearchFragment = new GenericSearchFragment();
+          fragments[0] = genericSearchFragment;
+          return genericSearchFragment;
+        case 1:
           FindFriendsFragment findFriendsFragment = new FindFriendsFragment();
           fragments[0] = findFriendsFragment;
           return findFriendsFragment;
-        case 1:
+        case 2:
           FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
           fragments[1] = findStreamsFragment;
           return findStreamsFragment;
