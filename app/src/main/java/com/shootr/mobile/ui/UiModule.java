@@ -10,7 +10,6 @@ import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.CropPictureActivity;
 import com.shootr.mobile.ui.activities.DiscoverFragment;
-import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
@@ -31,6 +30,7 @@ import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
+import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDataInfoActivity;
@@ -110,7 +110,7 @@ import javax.inject.Singleton;
     SettingsActivity.class,
     DiscoverFragment.class,
     FriendsActivity.class,
-    DiscoverSearchActivity.class,
+    SearchActivity.class,
     FindFriendsFragment.class,
     FindStreamsFragment.class,
     CropPictureActivity.class,

@@ -14,8 +14,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.adapters.SearchAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
@@ -68,7 +68,7 @@ public class FindFriendsFragment extends BaseFragment
   }
 
   @Override public void hideKeyboard() {
-    ((DiscoverSearchActivity) getActivity()).hideKeyboard();
+    ((SearchActivity) getActivity()).hideKeyboard();
   }
 
   @Override public void showContent() {
