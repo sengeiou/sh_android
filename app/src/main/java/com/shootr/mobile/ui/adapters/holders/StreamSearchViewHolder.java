@@ -53,6 +53,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
     renderSubtitle(streamModel);
     handleShowFavorite(streamModel);
     setupStreamPicture(streamModel);
+    rankNumber.setVisibility(View.GONE);
   }
 
   private void setClickListener(final StreamModel streamResult) {

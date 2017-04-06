@@ -26,7 +26,7 @@ public class SearchPresenter implements Presenter {
   private final StreamModelMapper streamModelMapper;
 
   private SearchView view;
-  private String query;
+  private String currentQuery = "";
   private boolean hasBeenPaused = false;
   private List<SearchableModel> searchableModelList = new ArrayList<>();
 
@@ -42,19 +42,25 @@ public class SearchPresenter implements Presenter {
   }
 
   public void search(String query, final int type) {
-    getSearchItemsInteractor.searchItems(query, new Interactor.Callback<List<Searchable>>() {
-      @Override public void onLoaded(List<Searchable> searchables) {
-        mapSearch(searchables);
-        filterSearch(type);
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
+    if (query != null && !currentQuery.equals(query)
+        && !query.isEmpty()) {
+      currentQuery = query;
+      getSearchItemsInteractor.searchItems(query, new Interactor.Callback<List<Searchable>>() {
+        @Override public void onLoaded(List<Searchable> searchables) {
+          mapSearch(searchables);
+          filterSearch(type);
+        }
+      }, new Interactor.ErrorCallback() {
+        @Override public void onError(ShootrException error) {
         /* no-op */
-      }
-    });
+        }
+      });
+    } else {
+      filterSearch(type);
+    }
   }
 
-  private void filterSearch(int type) {
+  public void filterSearch(int type) {
     if (type == TYPE_ALL) {
       view.renderSearch(searchableModelList);
     } else if (type == TYPE_USER) {
@@ -67,7 +73,7 @@ public class SearchPresenter implements Presenter {
   private void renderStreams() {
     ArrayList<SearchableModel> streams = new ArrayList<>();
     for (SearchableModel searchableModel : searchableModelList) {
-      if (searchableModel.getSearchableType().equals(SearchableType.USER)) {
+      if (searchableModel.getSearchableType().equals(SearchableType.STREAM)) {
         streams.add(searchableModel);
       }
     }

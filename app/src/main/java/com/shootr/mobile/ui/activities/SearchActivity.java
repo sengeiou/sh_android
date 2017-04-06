@@ -68,7 +68,8 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
 
       @Override public void onPageSelected(int position) {
         changeSearchViewHint(position);
-        presenter.search(currentSearchQuery, position);
+        currentFragment = fragments[position];
+        presenter.filterSearch(position);
       }
 
       @Override public void onPageScrollStateChanged(int state) {
@@ -234,14 +235,14 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @Override public void renderSearch(List<SearchableModel> searchableModelList) {
-    //TODO
+    currentFragment.renderSearchItems(searchableModelList);
   }
 
   @Override public void renderUsersSearch(List<SearchableModel> searchableModelList) {
-
+    currentFragment.renderSearchItems(searchableModelList);
   }
 
   @Override public void renderStreamsSearch(List<SearchableModel> searchableModelList) {
-
+    currentFragment.renderSearchItems(searchableModelList);
   }
 }

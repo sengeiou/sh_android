@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
+import android.util.Log;
 import com.shootr.mobile.data.entity.SearchableEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -30,18 +31,24 @@ public class SyncSearchItemRepository implements ExternalSearchItemRepository {
 
     List<Searchable> searchables = new ArrayList<>();
     List<SearchableEntity> searchableEntities = externalSearchItemDataSource.getSearch(query, type);
+    int i = 0;
+    try {
 
-    for (SearchableEntity searchableEntity : searchableEntities) {
-      switch (searchableEntity.getSearcheableType()) {
-        case SearchableType.STREAM:
-          searchables.add(streamEntityMapper.transform((StreamEntity) searchableEntity));
-          break;
-        case SearchableType.USER:
-          searchables.add(userEntityMapper.transform((UserEntity) searchableEntity));
-          break;
-        default:
-          break;
+      for (SearchableEntity searchableEntity : searchableEntities) {
+        switch (searchableEntity.getSearcheableType()) {
+          case SearchableType.STREAM:
+            searchables.add(streamEntityMapper.transform((StreamEntity) searchableEntity));
+            break;
+          case SearchableType.USER:
+            searchables.add(userEntityMapper.transform((UserEntity) searchableEntity));
+            break;
+          default:
+            break;
+        }
+        i++;
       }
+    } catch (NullPointerException e) {
+      Log.d("peto", "peto en linea " + i);
     }
 
     return searchables;

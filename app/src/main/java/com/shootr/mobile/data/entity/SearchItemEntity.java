@@ -3,8 +3,8 @@ package com.shootr.mobile.data.entity;
 public class SearchItemEntity {
 
   private String type;
-  private StreamEntity streamEntity;
-  private UserEntity userEntity;
+  private StreamEntity stream;
+  private UserEntity user;
 
   public String getType() {
     return type;
@@ -15,18 +15,18 @@ public class SearchItemEntity {
   }
 
   public StreamEntity getStreamEntity() {
-    return streamEntity;
+    return stream;
   }
 
   public void setStreamEntity(StreamEntity streamEntity) {
-    this.streamEntity = streamEntity;
+    this.stream = streamEntity;
   }
 
   public UserEntity getUserEntity() {
-    return userEntity;
+    return user;
   }
 
   public void setUserEntity(UserEntity userEntity) {
-    this.userEntity = userEntity;
+    this.user = userEntity;
   }
 }
