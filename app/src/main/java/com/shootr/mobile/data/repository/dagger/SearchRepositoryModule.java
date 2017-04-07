@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.repository.searchItem.ExternalSearchItemReposito
 import dagger.Module;
 import dagger.Provides;
 
-
 @Module(
     injects = {
         SyncSearchItemRepository.class, ServiceSearchItemDataSource.class
@@ -15,12 +14,13 @@ import dagger.Provides;
     complete = false,
     library = true) public class SearchRepositoryModule {
 
-  @Provides ExternalSearchItemDataSource provideExternalSearchDatasource(ServiceSearchItemDataSource serviceSearchItemDataSource) {
+  @Provides ExternalSearchItemDataSource provideExternalSearchDatasource(
+      ServiceSearchItemDataSource serviceSearchItemDataSource) {
     return serviceSearchItemDataSource;
   }
 
-  @Provides
-  ExternalSearchItemRepository provideRemoteSearchRepository(SyncSearchItemRepository syncSearchItemRepository) {
+  @Provides ExternalSearchItemRepository provideRemoteSearchRepository(
+      SyncSearchItemRepository syncSearchItemRepository) {
     return syncSearchItemRepository;
   }
 }

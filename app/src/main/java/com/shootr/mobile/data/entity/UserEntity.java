@@ -4,7 +4,8 @@ import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 import timber.log.Timber;
 
-public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity {
+public class UserEntity extends Synchronized
+    implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity {
 
     private String idUser;
     private String sessionToken;

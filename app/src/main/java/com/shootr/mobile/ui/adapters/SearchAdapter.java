@@ -33,8 +33,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
   private List<SearchableModel> items;
 
-  public SearchAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader, OnFollowUnfollowListener onFollowUnfollowListener,
-      OnUserClickListener onUserClickListener, OnSearchStreamClickListener onStreamClickListener,
+  public SearchAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
+      OnFollowUnfollowListener onFollowUnfollowListener, OnUserClickListener onUserClickListener,
+      OnSearchStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener) {
     this.imageLoader = imageLoader;
     this.onFollowUnfollowListener = onFollowUnfollowListener;
