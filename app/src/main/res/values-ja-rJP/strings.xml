@@ -53,18 +53,13 @@
   <string name="all_messages_title_plural">すべて(%d)</string>
   <string name="all_participants_button">全ての参加者</string>
   <string name="all_push_settings">全て</string>
-  <string name="ban_user_dialog_message">あなたが作成したストリームで、このユーザーのショットはフォロワーのみ見ることができます。</string>
-  <string name="block_cannot_shoot_streams">投稿を禁止</string>
-  <string name="block_ignore_user">無視する</string>
   <string name="block_unblock_user">無視を解除</string>
-  <string name="block_user_dialog_ban">投稿を禁止</string>
   <string name="block_user_dialog_block">無視する</string>
   <string name="block_user_dialog_cancel">キャンセル</string>
   <string name="block_user_dialog_message">無視すると、このユーザーのショットは全て見られなくなります。</string>
   <string name="block_user_error"> 無視するためにはフォローを解除する必要があります。</string>
   <string name="cancel">キャンセル</string>
   <string name="cancel_hide_shot" formatted="false">キャンセル</string>
-  <string name="can_shoot_streams">禁止を解除</string>
   <string name="change_password_button_text">完了</string>
   <string name="change_password_logout_message">パスワードが変更されました。再度ログインしてください。</string>
   <string name="change_photo">写真を変更</string>
@@ -473,11 +468,9 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">今すぐアップデート</string>
   <string name="update_warning_message">Shootrを最新のバージョンにアップデートすると、アプリの改善が反映されます。</string>
-  <string name="user_banned">完了しました。</string>
   <string name="user_blocked">完了しました</string>
   <string name="user_not_found">ユーザーが見つかりません。</string>
   <string name="user_not_found_message">ユーザーが見つかりませんでした。</string>
-  <string name="user_unbanned">解除しました</string>
   <string name="user_unblocked">解除しました</string>
   <plurals name="view_count_pattern">
     <item quantity="other">%s回表示</item>

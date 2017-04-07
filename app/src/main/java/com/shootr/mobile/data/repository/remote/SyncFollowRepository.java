@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
 import android.support.annotation.NonNull;
-import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.Synchronized;
@@ -11,10 +10,10 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,31 +84,13 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
 
     @Override public List<String> getBlockedIdUsers() {
         List<BlockEntity> blockeds = remoteFollowDataSource.getBlockeds();
+        localFollowDataSource.removeAllBlocks();
         localFollowDataSource.putBlockeds(blockeds);
         List<String> blockedIds = new ArrayList<>(blockeds.size());
         for (BlockEntity blocked : blockeds) {
             blockedIds.add(blocked.getIdBlockedUser());
         }
         return blockedIds;
-    }
-
-    @Override public void ban(String idUser) {
-        BanEntity banEntity = createBan(idUser);
-        remoteFollowDataSource.ban(banEntity);
-    }
-
-    @Override public List<String> getBannedIdUsers() {
-        List<BanEntity> banneds = remoteFollowDataSource.getBanneds();
-        localFollowDataSource.putBanneds(banneds);
-        List<String> bannedIdUsers = new ArrayList<>(banneds.size());
-        for (BanEntity banned : banneds) {
-            bannedIdUsers.add(banned.getIdBannedUser());
-        }
-        return bannedIdUsers;
-    }
-
-    @Override public void unban(String idUser) {
-        remoteFollowDataSource.unban(idUser);
     }
 
     @Override public List<String> getMutualIdUsers() {
@@ -169,10 +150,4 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         return blockEntity;
     }
 
-    @NonNull protected BanEntity createBan(String idUser) {
-        BanEntity blockEntity = new BanEntity();
-        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
-        blockEntity.setIdBannedUser(idUser);
-        return blockEntity;
-    }
 }

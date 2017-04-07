@@ -251,48 +251,27 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-    getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_unblock, new Runnable() {
-      @Override public void run() {
-        reportShotPresenter.unblockUser(shotModel);
-      }
-    }).show();
+    /* no-op */
   }
 
   @Override public void showBlockFollowingUserAlert() {
-    feedbackMessage.showLong(getView(), R.string.block_user_error);
+    /* no-op */
   }
 
   @Override public void showUserBlocked() {
-    feedbackMessage.show(getView(), R.string.user_blocked);
+    /* no-op */
   }
 
   @Override public void showUserUnblocked() {
-    feedbackMessage.show(getView(), R.string.user_unblocked);
+    /* no-op */
   }
 
   @Override public void showBlockUserConfirmation() {
-    new AlertDialog.Builder(this).setMessage(R.string.block_user_dialog_message)
-        .setPositiveButton(getString(R.string.block_user_dialog_block),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                reportShotPresenter.confirmBlock();
-              }
-            })
-        .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-        .create()
-        .show();
+    /* no-op */
   }
 
   @Override public void showErrorLong(String messageForError) {
     feedbackMessage.showLong(getView(), messageForError);
-  }
-
-  @Override public void showUserBanned() {
-        /* no-op */
-  }
-
-  @Override public void showUserUnbanned() {
-        /* no-op */
   }
 
   @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {
@@ -460,10 +439,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     getBaseContextMenu(shotModel).addAction(R.string.report_context_menu_report, new Runnable() {
       @Override public void run() {
         reportShotPresenter.report(shotModel);
-      }
-    }).addAction(R.string.report_context_menu_block, new Runnable() {
-      @Override public void run() {
-        reportShotPresenter.blockUserClicked(shotModel);
       }
     }).show();
   }

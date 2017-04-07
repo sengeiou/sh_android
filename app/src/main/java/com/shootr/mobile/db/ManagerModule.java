@@ -7,7 +7,6 @@ import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShotEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
-import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.ContributorDBMapper;
 import com.shootr.mobile.db.mappers.DeviceEntityDBMapper;
@@ -30,8 +29,8 @@ import javax.inject.Singleton;
     }
 
     @Provides @Singleton FollowManager provideFollowManager(SQLiteOpenHelper openHelper,
-      FollowEntityDBMapper followMapper, BlockEntityDBMapper blockEntityDBMapper, BanEntityDBMapper banEntityDBMapper) {
-        return new FollowManager(openHelper, followMapper, blockEntityDBMapper, banEntityDBMapper);
+      FollowEntityDBMapper followMapper, BlockEntityDBMapper blockEntityDBMapper) {
+        return new FollowManager(openHelper, followMapper, blockEntityDBMapper);
     }
 
     @Provides @Singleton ShotManager provideShotManager(SQLiteOpenHelper openHelper,

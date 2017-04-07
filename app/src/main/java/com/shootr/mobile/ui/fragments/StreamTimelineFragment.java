@@ -1212,6 +1212,22 @@ public class StreamTimelineFragment extends BaseFragment
     feedbackMessage.showLong(getView(), message);
   }
 
+  @Override public void showBlockFollowingUserAlert() {
+        /* no-op */
+  }
+
+  @Override public void showUserBlocked() {
+    /* no-op */
+  }
+
+  @Override public void showUserUnblocked() {
+    /* no-op */
+  }
+
+  @Override public void showBlockUserConfirmation() {
+    /* no-op */
+  }
+
   @Override public void showUnmuteButton() {
     unmuteMenuItem.setVisible(true);
   }
@@ -1228,50 +1244,8 @@ public class StreamTimelineFragment extends BaseFragment
     unmuteMenuItem.setVisible(false);
   }
 
-  @Override public void showContextMenuWithUnblock(final ShotModel shotModel) {
-    getBaseContextMenuOptions(shotModel).addAction(R.string.report_context_menu_unblock,
-        new Runnable() {
-          @Override public void run() {
-            reportShotPresenter.unblockUser(shotModel);
-          }
-        }).show();
-  }
-
-  @Override public void showBlockFollowingUserAlert() {
-    feedbackMessage.showLong(getView(), R.string.block_user_error);
-  }
-
-  @Override public void showUserBlocked() {
-    feedbackMessage.show(getView(), R.string.user_blocked);
-  }
-
-  @Override public void showUserUnblocked() {
-    feedbackMessage.show(getView(), R.string.user_unblocked);
-  }
-
-  @Override public void showBlockUserConfirmation() {
-    new AlertDialog.Builder(getActivity()).setMessage(R.string.block_user_dialog_message)
-        .setPositiveButton(getString(R.string.block_user_dialog_block),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                reportShotPresenter.confirmBlock();
-              }
-            })
-        .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-        .create()
-        .show();
-  }
-
   @Override public void showErrorLong(String messageForError) {
     feedbackMessage.showLong(getView(), messageForError);
-  }
-
-  @Override public void showUserBanned() {
-        /* no-op */
-  }
-
-  @Override public void showUserUnbanned() {
-        /* no-op */
   }
 
   public void notifyPinnedShot(ShotModel shotModel) {
@@ -1739,11 +1713,7 @@ public class StreamTimelineFragment extends BaseFragment
             @Override public void run() {
               reportShotPresenter.report(shotModel);
             }
-          }).addAction(R.string.report_context_menu_block, new Runnable() {
-        @Override public void run() {
-          reportShotPresenter.blockUserClicked(shotModel);
-        }
-      }).show();
+          }).show();
     } catch (NullPointerException error) {
       crashReportTool.logException(error);
     }
@@ -1774,6 +1744,10 @@ public class StreamTimelineFragment extends BaseFragment
         openDeleteConfirmation(shotModel);
       }
     }).show();
+  }
+
+  @Override public void showContextMenuWithUnblock(ShotModel shotModel) {
+
   }
 
   private void openDeleteConfirmation(final ShotModel shotModel) {

@@ -53,18 +53,13 @@
   <string name="all_messages_title_plural">ALL (%d)</string>
   <string name="all_participants_button">All participants</string>
   <string name="all_push_settings">All</string>
-  <string name="ban_user_dialog_message">Their shots on your streams will only be visible to their followers.</string>
-  <string name="block_cannot_shoot_streams">Ban user</string>
-  <string name="block_ignore_user">Ignore user</string>
-  <string name="block_unblock_user">Remove ignore</string>
-  <string name="block_user_dialog_ban">Ban</string>
-  <string name="block_user_dialog_block">Ignore</string>
+  <string name="block_unblock_user">Unblock</string>
+  <string name="block_user_dialog_block">Block</string>
   <string name="block_user_dialog_cancel">Cancel</string>
-  <string name="block_user_dialog_message">Ignoring will prevent you from seeing this user\'s shots.</string>
-  <string name="block_user_error">To ignore this user you need to unfollow first.</string>
+  <string name="block_user_dialog_message">Blocking will prevent you from seeing this user\'s shots.</string>
+  <string name="block_user_error">To block this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
   <string name="cancel_hide_shot" formatted="false">Cancel</string>
-  <string name="can_shoot_streams">Remove ban</string>
   <string name="change_password_button_text">DONE</string>
   <string name="change_password_logout_message">Password changed. Must sign in again…</string>
   <string name="change_photo">Change photo</string>
@@ -125,7 +120,7 @@
   <string name="error_adding_contributor">You can add up to  100 contributors</string>
   <string name="error_deleted_shot">This shot was deleted</string>
   <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
-  <string name="error_following_user_blocked">Cannot follow users you ignored.</string>
+  <string name="error_following_user_blocked">Cannot follow users you blocked.</string>
   <string name="error_has_voted">You voted already</string>
   <string name="error_image_upload">Error trying to upload image</string>
   <string name="error_login_credentials_invalid">Id or password are not valid</string>
@@ -292,7 +287,7 @@
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot sent</string>
   <!-- When you try to send a private message to a blocked user -->
-  <string name="not_allowed_blocked_user">You ignored this user. Remove ignore to shoot a message.</string>
+  <string name="not_allowed_blocked_user">You blocked this user. Unblock to shoot a message.</string>
   <string name="now">now</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="off_push_settings">Off</string>
@@ -373,10 +368,10 @@
   </plurals>
   <string name="reply_name_pattern">%1$s to %2$s</string>
   <string name="reply_placeholder_pattern">Respond to %s…</string>
-  <string name="report_context_menu_block">Block…</string>
+  <string name="report_context_menu_block">Block</string>
   <string name="report_context_menu_delete">Delete</string>
   <string name="report_context_menu_report">Report</string>
-  <string name="report_context_menu_unblock">Remove ignore</string>
+  <string name="report_context_menu_unblock">Unblock</string>
   <string name="report_user_default_message">Why are you reporting this account? Help us understand what the issue is.\n\n</string>
   <string name="report_user_subject">Report This Account - Issue %1$s - %2$s</string>
   <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
@@ -484,11 +479,9 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Update now</string>
   <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
-  <string name="user_banned">User banned.</string>
-  <string name="user_blocked">User ignored.</string>
+  <string name="user_blocked">User blocked.</string>
   <string name="user_not_found">User not found.</string>
   <string name="user_not_found_message">User not found.</string>
-  <string name="user_unbanned">Ban removed.</string>
   <string name="user_unblocked">Ignore removed.</string>
   <plurals name="view_count_pattern">
     <item quantity="one">%s view</item>

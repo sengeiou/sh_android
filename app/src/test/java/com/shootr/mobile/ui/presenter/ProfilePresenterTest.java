@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.GetBannedUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
@@ -80,7 +79,6 @@ public class ProfilePresenterTest {
   @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
   @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
   @Mock SessionRepository sessionRepository;
-  @Mock GetBannedUsersInteractor getBannedUsersInteractor;
 
   @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -96,8 +94,7 @@ public class ProfilePresenterTest {
             markNiceShotInteractor, unmarkNiceShotInteractor, hideShotInteractor,
             shareShotInteractor, followInteractor, unfollowInteractor, getLastShotsInteractor,
             uploadUserPhotoInteractor, removeUserPhotoInteractor, getBlockedIdUsersInteractor,
-            getBannedUsersInteractor, sessionRepository, errorMessageFactory, userModelMapper,
-            shotModelMapper);
+            sessionRepository, errorMessageFactory, userModelMapper, shotModelMapper);
     profilePresenter.setView(profileView);
   }
 
@@ -775,33 +772,9 @@ public class ProfilePresenterTest {
     verify(profileView).setUserInfo(any(UserModel.class));
   }
 
-  @Test public void shouldShowBanConfirmationWhenBanClicked() throws Exception {
-    profilePresenter.banUserClicked();
-
-    verify(profileView).showBanUserConfirmation(any(UserModel.class));
-  }
-
-  @Test public void shouldShowUnbanConfirmationWhenUnbanClicked() throws Exception {
-    profilePresenter.unbanUserClicked();
-
-    verify(profileView).confirmUnban(any(UserModel.class));
-  }
-
-  @Test public void shouldshowDefaultBlockMenuIfUserNotBlockedNorBanned() throws Exception {
-    setupUserById();
-    setupUserNotInBlockedIdsCallback();
-    setupUserNotInBannedIdsCallback();
-
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
-    profilePresenter.blockMenuClicked();
-
-    verify(profileView).showDefaultBlockMenu(any(UserModel.class));
-  }
-
   @Test public void shouldshowBlockedMenuIfUserBlockedButNotBanned() throws Exception {
     setupUserById();
     setupUserInBlockedIdsCallback();
-    setupUserNotInBannedIdsCallback();
 
     profilePresenter.initializeWithIdUser(profileView, ID_USER);
     profilePresenter.blockMenuClicked();
@@ -809,32 +782,9 @@ public class ProfilePresenterTest {
     verify(profileView).showBlockedMenu(any(UserModel.class));
   }
 
-  @Test public void shouldshowBannedMenuIfUserNotBlockedButBanned() throws Exception {
-    setupUserById();
-    setupUserNotInBlockedIdsCallback();
-    setupUserInBannedIdsCallback();
-
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
-    profilePresenter.blockMenuClicked();
-
-    verify(profileView).showBannedMenu(any(UserModel.class));
-  }
-
-  @Test public void shouldshowBlockAndBannedMenuIfUserBlockedAndBanned() throws Exception {
-    setupUserById();
-    setupUserInBlockedIdsCallback();
-    setupUserInBannedIdsCallback();
-
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
-    profilePresenter.blockMenuClicked();
-
-    verify(profileView).showBlockAndBannedMenu(any(UserModel.class));
-  }
-
   @Test public void shouldShowHideShotConfirmationDialogWhenHideShotIsPressed() throws Exception {
     setupUserById();
     setupUserInBlockedIdsCallback();
-    setupUserInBannedIdsCallback();
 
     profilePresenter.showUnpinShotAlert(ID_SHOT);
 
@@ -847,28 +797,6 @@ public class ProfilePresenterTest {
     verify(profileView, never()).showChangePasswordButton();
   }
 
-  private void setupUserInBannedIdsCallback() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<String>> completedCallback =
-            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-        completedCallback.onLoaded(bannedIdsWithUser());
-        return null;
-      }
-    }).when(getBannedUsersInteractor).loadBannedIdUsers(anyCallback(), anyErrorCallback());
-  }
-
-  public void setupUserNotInBannedIdsCallback() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<String>> completedCallback =
-            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-        completedCallback.onLoaded(bannedIds());
-        return null;
-      }
-    }).when(getBannedUsersInteractor).loadBannedIdUsers(anyCallback(), anyErrorCallback());
-  }
-
   private void setupUserInBlockedIdsCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -877,38 +805,14 @@ public class ProfilePresenterTest {
         completedCallback.onLoaded(blockedIdsWithUser());
         return null;
       }
-    }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
-  }
-
-  public void setupUserNotInBlockedIdsCallback() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<String>> completedCallback =
-            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-        completedCallback.onLoaded(blockedIds());
-        return null;
-      }
-    }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
-  }
-
-  private List<String> bannedIdsWithUser() {
-    ArrayList<String> userIds = new ArrayList<>();
-    userIds.add(ID_USER);
-    return userIds;
-  }
-
-  private List<String> bannedIds() {
-    return new ArrayList<>();
+    }).when(getBlockedIdUsersInteractor)
+        .loadBlockedIdUsers(anyCallback(), anyErrorCallback(), anyBoolean());
   }
 
   private List<String> blockedIdsWithUser() {
     ArrayList<String> userIds = new ArrayList<>();
     userIds.add(ID_USER);
     return userIds;
-  }
-
-  private List<String> blockedIds() {
-    return new ArrayList<>();
   }
 
   public void setupFollowCallback() {
@@ -1115,7 +1019,8 @@ public class ProfilePresenterTest {
         callback.onLoaded(idUsers());
         return null;
       }
-    }).when(getBlockedIdUsersInteractor).loadBlockedIdUsers(anyCallback(), anyErrorCallback());
+    }).when(getBlockedIdUsersInteractor)
+        .loadBlockedIdUsers(anyCallback(), anyErrorCallback(), anyBoolean());
   }
 
   private List<String> idUsers() {
