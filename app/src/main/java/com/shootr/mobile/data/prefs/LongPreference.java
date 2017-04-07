@@ -23,7 +23,7 @@ public class LongPreference {
     }
 
     public boolean isSet() {
-        return preferences.contains(key);
+        return preferences.contains(key) && preferences.getLong(key, -1L) != -1L;
     }
 
     public void set(long value) {

@@ -11,11 +11,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.presenter.EmailLoginPresenter;
 import com.shootr.mobile.ui.views.EmailLoginView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import javax.inject.Inject;
 
@@ -28,6 +30,8 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
 
     @Inject EmailLoginPresenter presenter;
     @Inject FeedbackMessage feedbackMessage;
+    @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
 
     /* --- UI methods --- */
 
@@ -72,11 +76,23 @@ public class EmailLoginActivity extends BaseToolbarDecoratedActivity implements 
     }
 
     public void goToTimeline() {
+        sendLoginToMixpanel();
         finish();
         Intent i = new Intent(this, MainTabbedActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(i);
     }
+
+    private void sendLoginToMixpanel() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId("ConnectionType");
+        builder.setLabelId("ConnectionType");
+        builder.setSource("FacebookLogin");
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
+    }
+
 
     @Override public String getUsernameOrEmail() {
         return emailUsername.getText().toString();

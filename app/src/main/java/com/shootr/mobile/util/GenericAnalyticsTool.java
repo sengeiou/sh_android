@@ -8,8 +8,11 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
+import com.mixpanel.android.mpmetrics.OnMixpanelTweaksUpdatedListener;
+import com.mixpanel.android.mpmetrics.OnMixpanelUpdatesReceivedListener;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.model.user.User;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,8 +53,10 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private HashMap<String, Tracker> trackers = new HashMap();
   private User user;
   private AppsFlyerLib appsFlyerLib;
+  private LongPreference discoverPreference;
 
-  @Override public void init(Application application) {
+  @Override public void init(Application application, LongPreference discoverPreferences) {
+    this.discoverPreference = discoverPreferences;
     try {
       GoogleAnalytics analytics = GoogleAnalytics.getInstance(application);
       tracker = analytics.newTracker(application.getString(R.string.google_analytics_tracking_id));
@@ -106,6 +111,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       mixpanel.getPeople().set(LOGIN_TYPE, loginType);
       props.put(LOGIN_TYPE, loginType);
       mixpanel.track(actionId, props);
+      mixpanel.flush();
     } catch (NullPointerException error) {
       Log.e("Shootr", "Unable to build mixPanel object", error);
     } catch (JSONException e) {
@@ -213,6 +219,37 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   @Override public void reset() {
     mixpanel.clearSuperProperties();
     mixpanel.reset();
+  }
+
+  @Override public long getDiscoverTweak() {
+    return 0;
+  }
+
+  @Override public void identify(User currentUser) {
+    try {
+      mixpanel.identify(currentUser.getIdUser());
+      mixpanel.flush();
+      discoverPreference.set(
+          MixpanelAPI.longTweak("discoverTimeline",
+              discoverPreference.get()).get());
+      mixpanel.getPeople()
+          .addOnMixpanelUpdatesReceivedListener(new OnMixpanelUpdatesReceivedListener() {
+            @Override public void onMixpanelUpdatesReceived() {
+              if (mixpanel.getPeople().getDistinctId() != null) {
+                mixpanel.getPeople().joinExperimentIfAvailable();
+              }
+            }
+          });
+      mixpanel.getPeople()
+          .addOnMixpanelTweaksUpdatedListener(new OnMixpanelTweaksUpdatedListener() {
+            @Override public void onMixpanelTweakUpdated() {
+              discoverPreference.set(
+                  MixpanelAPI.longTweak("discoverTimeline", discoverPreference.get()).get());
+            }
+          });
+    } catch (NullPointerException error) {
+      /* no-op */
+    }
   }
 
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,

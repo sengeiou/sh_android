@@ -505,4 +505,8 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="remove_from_favorites_dialog">Remove %s from favorites?</string>
+  <string name="favorited">favorited</string>
+  <string name="add_to_favorites">add to favorites</string>
+  <string name="remove_favorite">remove</string>
 </resources>

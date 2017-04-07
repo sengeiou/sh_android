@@ -2,11 +2,12 @@ package com.shootr.mobile.util;
 
 import android.app.Application;
 import android.content.Context;
+import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.model.user.User;
 
 public interface AnalyticsTool {
 
-  void init(Application application);
+  void init(Application application, LongPreference discoverPreferences);
 
   void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context);
 
@@ -21,6 +22,10 @@ public interface AnalyticsTool {
   void appsFlyerSendAction(Builder builder);
 
   void reset();
+
+  long getDiscoverTweak();
+
+  void identify(User currentUser);
 
   class Builder {
 

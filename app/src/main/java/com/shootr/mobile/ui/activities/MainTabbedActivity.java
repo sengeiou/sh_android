@@ -25,9 +25,12 @@ import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.DiscoverType;
+import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
+import com.shootr.mobile.ui.fragments.DiscoverTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -47,6 +50,9 @@ import javax.inject.Inject;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
+  private static final int TAB_WITH_DISCOVER = 1;
+  private static final int TAB_WITH_DISCOVER_TIMELINE = 2;
+  private static final int TAB_WITHOUT_DISCOVER = 3;
   public static final int REQUEST_NEW_STREAM = 3;
   private static final int ANIMATION_DURATION = 200;
   private static final int ANIMATION_TRANSLATION = 500;
@@ -74,6 +80,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
+  @Inject @DiscoverType LongPreference discoverPreference;
 
   private ToolbarDecorator toolbarDecorator;
   private BottomBarTab activitiesTab;
@@ -106,6 +113,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     handleMultipleActivitiesIntent();
   }
 
+  private void sendOpenToMixpanel() {
+    analyticsTool.identify(sessionRepository.getCurrentUser());
+  }
+
+
   private void setupBottomBar(Bundle savedInstanceState) {
     setupBottomMenu();
     activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
@@ -134,6 +146,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             switchTab(activityTimelineFragment);
             activitiesTab.removeBadge();
             break;
+          case R.id.bottombar_discover_timeline:
+            Fragment discoverTimelineFragment = DiscoverTimelineFragment.newInstance();
+            currentFragment = discoverTimelineFragment;
+            switchTab(discoverTimelineFragment);
+            break;
           default:
             break;
         }
@@ -149,11 +166,21 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupBottomMenu() {
-    if (defaultTabUtils.getDefaultTabPosition(getSessionHandler().getCurrentUserId())
-        == DefaultTabUtils.DEFAULT_POSITION) {
-      bottomBar.setItems(R.xml.bottombar_menu);
-    } else {
-      bottomBar.setItems(R.xml.bottombar_menu_discover);
+    Long tabType = discoverPreference.get();
+
+    switch (tabType.intValue()) {
+      case TAB_WITH_DISCOVER:
+        bottomBar.setItems(R.xml.bottombar_menu);
+        break;
+      case TAB_WITH_DISCOVER_TIMELINE:
+        bottomBar.setItems(R.xml.bottombar_menu_timeline_discover);
+        break;
+      case TAB_WITHOUT_DISCOVER:
+        bottomBar.setItems(R.xml.bottombar_menu_no_discover);
+        break;
+      default:
+        bottomBar.setItems(R.xml.bottombar_menu);
+        break;
     }
   }
 
@@ -179,6 +206,8 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       case R.id.bottombar_discover:
         ((DiscoverFragment) currentFragment).scrollListToTop();
         break;
+      case R.id.bottombar_discover_timeline:
+        ((DiscoverTimelineFragment) currentFragment).scrollListToTop();
       default:
         break;
     }
@@ -237,6 +266,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override protected void onResume() {
     super.onResume();
     mainScreenPresenter.resume();
+    sendOpenToMixpanel();
   }
 
   @Override protected void onPause() {

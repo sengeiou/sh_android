@@ -287,6 +287,7 @@ public class LoginSelectionActivity extends BaseActivity {
                   sendSignUpAnalythics();
                   intent = new Intent(LoginSelectionActivity.this, OnBoardingStreamActivity.class);
                 } else {
+                  sendLoginToMixpanel();
                   intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
                 }
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -298,6 +299,16 @@ public class LoginSelectionActivity extends BaseActivity {
                 hideLoading();
               }
             });
+      }
+
+      private void sendLoginToMixpanel() {
+        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+        builder.setContext(getBaseContext());
+        builder.setActionId("ConnectionType");
+        builder.setLabelId("ConnectionType");
+        builder.setSource("FacebookLogin");
+        builder.setUser(sessionRepository.getCurrentUser());
+        analyticsTool.analyticsSendAction(builder);
       }
 
       @Override public void onError(FacebookException e) {

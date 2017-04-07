@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.api.service;
 
+import com.shootr.mobile.data.api.entity.DiscoverTimelineApiEntity;
 import com.shootr.mobile.data.api.entity.DiscoveredApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import java.io.IOException;
@@ -13,4 +14,7 @@ public interface DiscoveredApiService {
   List<DiscoveredApiEntity> getDiscoveredList(@Query("locale") String locale,
       @Query("streamReadWriteMode") String[] streamTypes,
       @Query("types") String[] discoveredTypes) throws ApiException, IOException;
+
+  @GET("/discover/timeline?includeEmbed=true") DiscoverTimelineApiEntity getDiscoverTimeline(
+      @Query("locale") String locale) throws ApiException, IOException;
 }
