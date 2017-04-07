@@ -505,4 +505,8 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
+  <string name="remove_from_favorites_dialog">¿Quitar &lt;b>%s&lt;/b> de Favoritos?</string>
+  <string name="favorited">favorito</string>
+  <string name="add_to_favorites">añadir a favoritos</string>
+  <string name="remove_favorite">quitar</string>
 </resources>

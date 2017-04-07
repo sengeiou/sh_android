@@ -49,6 +49,7 @@ import com.shootr.mobile.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.mobile.ui.base.BaseToolbarActivity;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
+import com.shootr.mobile.ui.fragments.DiscoverTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
@@ -115,7 +116,7 @@ import javax.inject.Singleton;
     CropPictureActivity.class,
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
-    OnBoardingStreamActivity.class
+    OnBoardingStreamActivity.class, DiscoverTimelineFragment.class
   },
   complete = false) public class UiModule {
 

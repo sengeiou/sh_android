@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    >
+
+  <LinearLayout
+      android:layout_height="32dp"
+      android:layout_width="0dp"
+      android:layout_weight="70"
+      android:orientation="horizontal"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="8dp"
+      >
+
+  <LinearLayout
+      android:layout_height="match_parent"
+      android:layout_width="wrap_content"
+      android:background="@drawable/round_layout"
+      android:gravity="center"
+      android:orientation="horizontal"
+      >
+
+    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/stream_picture"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:src="@drawable/ic_contact_picture_default"/>
+
+    <ImageView
+        android:id="@+id/stream_picture_without_image"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+
+
+    <TextView
+          android:id="@+id/stream_title"
+          android:layout_width="wrap_content"
+          android:layout_height="36dp"
+          android:textSize="14sp"
+          android:textColor="#6b6b6b"
+          android:gravity="center_vertical"
+          android:layout_marginRight="12dp"
+          android:layout_marginLeft="12dp"
+          tools:text="titulo de un stream"
+          android:ellipsize="end"
+          android:maxLines="1"
+          android:scrollHorizontally="true"
+          />
+
+    <TextView
+        android:id="@+id/stream_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="titulo de un stream gua"
+        android:textSize="12sp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:visibility="gone"
+        tools:visibility="gone"
+        />
+
+
+  </LinearLayout>
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/favorite_container"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="right"
+      android:layout_marginTop="24dp"
+      android:layout_marginBottom="8dp"
+      >
+
+    <com.sackcentury.shinebuttonlib.ShineButton
+        android:id="@+id/favorite_discover_indicator"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:allow_random_color="false"
+        app:big_shine_color="@color/primary_dark"
+        app:btn_color="#d9d9d9"
+        app:btn_fill_color="@color/primary"
+        app:click_animation_duration="200"
+        app:enable_flashing="false"
+        app:shine_animation_duration="1500"
+        app:shine_count="8"
+        app:shine_turn_angle="10"
+        app:siShape="@drawable/ic_favorite_not_added_28_gray50"
+        app:small_shine_color="@color/accent"
+        app:small_shine_offset_angle="20"
+        />
+
+    <TextView
+        android:id="@+id/stream_add_fav"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:text="@string/add_to_favorites"
+        android:textColor="@color/primary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/stream_faved"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginLeft="8dp"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:text="@string/favorited"
+        android:textColor="@color/gray_60"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>

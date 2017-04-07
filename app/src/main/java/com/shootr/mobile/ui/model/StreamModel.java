@@ -24,6 +24,7 @@ public class StreamModel implements Serializable {
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
+    private boolean isFavorite;
 
     public Boolean isRemoved() {
         return removed;
@@ -201,5 +202,13 @@ public class StreamModel implements Serializable {
 
     public void setCurrentUserContributor(boolean currentUserContributor) {
         isCurrentUserContributor = currentUserContributor;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

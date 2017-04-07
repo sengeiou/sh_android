@@ -2,7 +2,9 @@ package com.shootr.mobile.data.repository;
 
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
+import com.shootr.mobile.data.prefs.DiscoverType;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
+import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
@@ -19,6 +21,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final StringPreference currentUserIdPreference;
   private final BooleanPreference timelineFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
+  private final LongPreference discoverTypePreference;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
   private User currentUser;
@@ -27,12 +30,14 @@ public class SessionRepositoryImpl implements SessionRepository {
   @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
       @CurrentUserId StringPreference currentUserIdPreference,
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
-      @LastTimeFiltered StringPreference lastTimeFiltered, CrashReportTool crashReportTool,
+      @LastTimeFiltered StringPreference lastTimeFiltered, @DiscoverType
+      LongPreference discoverType, CrashReportTool crashReportTool,
       AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.timelineFilterPreference = timelineFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
+    this.discoverTypePreference = discoverType;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
@@ -77,6 +82,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     sessionTokenPreference.delete();
     lastTimeFilteredPreference.delete();
     timelineFilterPreference.delete();
+    discoverTypePreference.delete();
     analyticsTool.reset();
     currentUser = null;
   }

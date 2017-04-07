@@ -148,6 +148,10 @@
         android:name="com.mixpanel.android.MPConfig.ResourcePackageName"
         android:value="com.shootr.mobile"/>
 
+    <meta-data android:name="com.mixpanel.android.MPConfig.EnableDebugLogging" android:value="false" />
+
+    <meta-data android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates" android:value="false" />
+
     <receiver
         android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
         android:exported="true">

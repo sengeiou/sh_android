@@ -54,4 +54,9 @@ import javax.inject.Singleton;
         SharedPreferences preferences) {
         return new ShowcasePreference(preferences, "check_in_showcase", new ShowcaseStatus(true));
     }
+
+    @Provides @Singleton @DiscoverType LongPreference provideDiscoverTypePreferences(
+        SharedPreferences preferences) {
+        return new LongPreference(preferences, "discover_type", -1L);
+    }
 }
