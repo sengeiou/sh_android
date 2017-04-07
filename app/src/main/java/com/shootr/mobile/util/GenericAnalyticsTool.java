@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 public class GenericAnalyticsTool implements AnalyticsTool {
 
+  private static final String DISCOVER_TWEAK = "discover_type";
   private static final String APP_TRACKER = "app_tracker";
   private static final String MIX_PANEL_PRO = "017c3e7d9670fec221d97a4eeeca00bf";
   private static final String MIX_PANEL_TST = "e86d9d782e8d6d32b0c2263d5cf2758a";
@@ -230,7 +231,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       mixpanel.identify(currentUser.getIdUser());
       mixpanel.flush();
       discoverPreference.set(
-          MixpanelAPI.longTweak("discoverTimeline",
+          MixpanelAPI.longTweak(DISCOVER_TWEAK,
               discoverPreference.get()).get());
       mixpanel.getPeople()
           .addOnMixpanelUpdatesReceivedListener(new OnMixpanelUpdatesReceivedListener() {
@@ -244,7 +245,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
           .addOnMixpanelTweaksUpdatedListener(new OnMixpanelTweaksUpdatedListener() {
             @Override public void onMixpanelTweakUpdated() {
               discoverPreference.set(
-                  MixpanelAPI.longTweak("discoverTimeline", discoverPreference.get()).get());
+                  MixpanelAPI.longTweak(DISCOVER_TWEAK, discoverPreference.get()).get());
             }
           });
     } catch (NullPointerException error) {
