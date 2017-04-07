@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.30.2] - 2017-04-07
+
+### Fixed
+- Activity poller
+
+### Added
+- New discover and ABC test
+
 ## [1.30.2] - 2017-03-31
 
 ### Fixed
