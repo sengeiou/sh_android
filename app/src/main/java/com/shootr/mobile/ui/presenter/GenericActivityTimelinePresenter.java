@@ -88,6 +88,11 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
     this.setView(timelineView);
     this.isUserActivityTimeline = isUserActivityTimeline;
     getFollowingIds();
+    setupPoller();
+    loadNewActivities(badgeCount.get());
+  }
+
+  private void setupPoller() {
     long intervalSynchroServerResponse = handleIntervalSynchro();
     poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
@@ -168,7 +173,6 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
               timelineView.hideEmpty();
               timelineView.showActivities();
             }
-            loadNewActivities(badgeCount.get());
             clearActivityBadge();
           }
         });
