@@ -48,6 +48,7 @@ public class GenericSearchFragment extends BaseFragment
   @BindView(R.id.find_streams_empty) View emptyView;
   @BindView(R.id.find_streams_loading) View loadingView;
   @BindString(R.string.added_to_favorites) String addedToFavorites;
+  @BindString(R.string.removed_from_favorites) String removedFromFavorites;
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShare;
@@ -201,11 +202,11 @@ public class GenericSearchFragment extends BaseFragment
   }
 
   @Override public void showAddedToFavorites(StreamModel streamModel) {
-
+    feedbackMessage.show(getView(), addedToFavorites);
   }
 
   @Override public void showRemovedFromFavorites(StreamModel streamModel) {
-
+    feedbackMessage.show(getView(), removedFromFavorites);
   }
 
   @Override public void showStreamShared() {
