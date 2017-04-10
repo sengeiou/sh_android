@@ -39,8 +39,8 @@ import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GenericSearchFragment extends BaseFragment implements SearchStreamView,
-    SearchUserView, SearchFragment {
+public class GenericSearchFragment extends BaseFragment
+    implements SearchStreamView, SearchUserView, SearchFragment {
 
   private SearchAdapter adapter;
 
@@ -93,7 +93,8 @@ public class GenericSearchFragment extends BaseFragment implements SearchStreamV
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
-        //TODO searchItemsPresenter.selectStream(stream);
+        searchItemsPresenter.selectStream(stream);
+        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
@@ -168,7 +169,8 @@ public class GenericSearchFragment extends BaseFragment implements SearchStreamV
   }
 
   @Override public void hideKeyboard() {
-    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+    final InputMethodManager imm =
+        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
   }
 
@@ -184,7 +186,7 @@ public class GenericSearchFragment extends BaseFragment implements SearchStreamV
 
   }
 
-  @Override public void showUnfolow(UserModel userModel) {
+  @Override public void showUnfollow(UserModel userModel) {
 
   }
 

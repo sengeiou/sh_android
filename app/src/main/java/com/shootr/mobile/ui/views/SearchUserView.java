@@ -12,7 +12,7 @@ public interface SearchUserView {
 
   void showFollow(UserModel userModel);
 
-  void showUnfolow(UserModel userModel);
+  void showUnfollow(UserModel userModel);
 
   void showError(String errorMessage);
 }
