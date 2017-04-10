@@ -83,7 +83,7 @@ public class FindFriendsFragment extends BaseFragment
 
   }
 
-  @Override public void showUnfolow(UserModel userModel) {
+  @Override public void showUnfollow(UserModel userModel) {
 
   }
 

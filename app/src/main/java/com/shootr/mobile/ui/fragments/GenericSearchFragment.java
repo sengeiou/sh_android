@@ -98,15 +98,16 @@ public class GenericSearchFragment extends BaseFragment
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
-        //TODO openContextualMenu(stream);
+        openContextualMenu(stream);
       }
     }, new OnFavoriteClickListener() {
       @Override public void onFavoriteClick(StreamResultModel stream) {
-        //TODO
+        searchItemsPresenter.addToFavorites(stream.getStreamModel());
+        sendFavoriteAnalytics(stream.getStreamModel());
       }
 
       @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
-        //TODO
+        searchItemsPresenter.removeFromFavorites(stream.getStreamModel());
       }
     });
 

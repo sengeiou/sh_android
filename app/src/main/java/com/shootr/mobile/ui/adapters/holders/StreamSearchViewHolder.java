@@ -97,17 +97,17 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
 
   private void setupFavoriteClickListener(final StreamModel streamResult) {
     //TODO
-    /*if (onFavoriteClickListener != null) {
+    if (onFavoriteClickListener != null) {
       favorite.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          if (streamResult.isFavorited()) {
+          /*if (streamResult.isFavorited()) {
             onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
           } else {
             onFavoriteClickListener.onFavoriteClick(streamResult);
-          }
+          }*/
         }
       });
-    }*/
+    }
   }
 
   private void handleShowFavorite(StreamModel streamResultModel) {
