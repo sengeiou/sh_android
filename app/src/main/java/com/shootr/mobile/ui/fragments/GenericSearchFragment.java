@@ -87,12 +87,14 @@ public class GenericSearchFragment extends BaseFragment
     adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
         searchItemsPresenter.followUser(user);
+        adapter.followUser(user);
         adapter.notifyDataSetChanged();
         sendAnalytics(user);
       }
 
       @Override public void onUnfollow(UserModel user) {
         searchItemsPresenter.unfollowUser(user);
+        adapter.unfollowUser(user);
         adapter.notifyDataSetChanged();
       }
     }, new OnUserClickListener() {

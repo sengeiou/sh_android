@@ -106,12 +106,14 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
     adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
         presenter.followUser(user);
+        adapter.followUser(user);
         adapter.notifyDataSetChanged();
         sendAnalytics(user);
       }
 
       @Override public void onUnfollow(UserModel user) {
         presenter.unfollowUser(user);
+        adapter.unfollowUser(user);
         adapter.notifyDataSetChanged();
       }
     }, new OnUserClickListener() {

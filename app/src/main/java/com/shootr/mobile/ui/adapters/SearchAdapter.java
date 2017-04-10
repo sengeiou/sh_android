@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.holders.StreamSearchViewHolder;
 import com.shootr.mobile.ui.adapters.holders.UserSearchViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
@@ -88,5 +89,17 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
   public void setItems(List<SearchableModel> searchableModels) {
     this.items = searchableModels;
+  }
+
+  public void followUser(UserModel user) {
+    int index = items.indexOf(user);
+    ((UserModel)items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
+    notifyDataSetChanged();
+  }
+
+  public void unfollowUser(UserModel user) {
+    int index = items.indexOf(user);
+    ((UserModel)items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+    notifyDataSetChanged();
   }
 }
