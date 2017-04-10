@@ -98,20 +98,6 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
     analyticsTool.analyticsSendAction(builder);
   }
 
-  /*@Override public void unFollow(int position) {
-    final UserModel userModel = adapter.getItem(position);
-    new AlertDialog.Builder(getContext()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
-        userModel.getUsername()))
-        .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int which) {
-            presenter.unfollowUser(userModel);
-          }
-        })
-        .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
-        .create()
-        .show();
-  }*/
-
   @Override public void showError(String message) {
     feedbackMessage.show(getView(), message);
   }

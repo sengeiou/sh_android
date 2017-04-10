@@ -185,7 +185,6 @@ public class GenericSearchFragment extends BaseFragment
   }
 
   @Override public void showFollow(UserModel userModel) {
-
   }
 
   @Override public void showUnfollow(UserModel userModel) {
