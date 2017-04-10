@@ -7,8 +7,11 @@ import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.searchItem.ExternalSearchItemDataSource;
+import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
+import com.shootr.mobile.domain.repository.Local;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.searchItem.ExternalSearchItemRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +22,17 @@ public class SyncSearchItemRepository implements ExternalSearchItemRepository {
   private final ExternalSearchItemDataSource externalSearchItemDataSource;
   private final UserEntityMapper userEntityMapper;
   private final StreamEntityMapper streamEntityMapper;
+  private final UserDataSource localUserDataSource;
+  private final SessionRepository sessionRepository;
 
   @Inject public SyncSearchItemRepository(ExternalSearchItemDataSource externalSearchItemDataSource,
-      UserEntityMapper userEntityMapper, StreamEntityMapper streamEntityMapper) {
+      UserEntityMapper userEntityMapper, StreamEntityMapper streamEntityMapper,
+      @Local UserDataSource localUserDataSource, SessionRepository sessionRepository) {
     this.externalSearchItemDataSource = externalSearchItemDataSource;
     this.userEntityMapper = userEntityMapper;
     this.streamEntityMapper = streamEntityMapper;
+    this.localUserDataSource = localUserDataSource;
+    this.sessionRepository = sessionRepository;
   }
 
   @Override public List<Searchable> getSearch(String query, String[] type) {
@@ -40,7 +48,10 @@ public class SyncSearchItemRepository implements ExternalSearchItemRepository {
             searchables.add(streamEntityMapper.transform((StreamEntity) searchableEntity));
             break;
           case SearchableType.USER:
-            searchables.add(userEntityMapper.transform((UserEntity) searchableEntity));
+            UserEntity userEntity = (UserEntity) searchableEntity;
+            searchables.add(
+                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(),
+                    false, isFollowing(userEntity.getIdUser())));
             break;
           default:
             break;
@@ -52,5 +63,9 @@ public class SyncSearchItemRepository implements ExternalSearchItemRepository {
     }
 
     return searchables;
+  }
+
+  private boolean isFollowing(String userId) {
+    return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
   }
 }
