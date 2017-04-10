@@ -15,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.SearchAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
@@ -55,6 +56,9 @@ public class GenericSearchFragment extends BaseFragment
   @BindString(R.string.analytics_source_discover_stream_search) String discoverSearchSource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
+  @BindString(R.string.analytics_source_discover_user_search) String discoverUserSearch;
 
   @Inject SearchItemsPresenter searchItemsPresenter;
   @Inject FeedbackMessage feedbackMessage;
@@ -82,15 +86,18 @@ public class GenericSearchFragment extends BaseFragment
 
     adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
-        /* no-op */
+        searchItemsPresenter.followUser(user);
+        adapter.notifyDataSetChanged();
+        sendAnalytics(user);
       }
 
       @Override public void onUnfollow(UserModel user) {
-        /* no-op */
+        searchItemsPresenter.unfollowUser(user);
+        adapter.notifyDataSetChanged();
       }
     }, new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
-        /* no-op */
+        startActivityForResult(ProfileActivity.getIntent(getContext(), idUser), 666);
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
@@ -151,6 +158,18 @@ public class GenericSearchFragment extends BaseFragment
     builder.setIdStream(stream.getIdStream());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendAnalytics(UserModel user) {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionFollow);
+    builder.setLabelId(analyticsLabelFollow);
+    builder.setSource(discoverUserSearch);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(user.getIdUser());
+    builder.setTargetUsername(user.getUsername());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void sendExternalShareAnalytics(StreamModel streamResultModel) {
