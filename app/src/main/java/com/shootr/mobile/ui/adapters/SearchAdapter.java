@@ -22,7 +22,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
   private static final int TYPE_STREAM = 0;
   private static final int TYPE_USER = 1;
-  private static final int UNKNOW = -1;
+  private static final int UNKNOWN = -1;
 
   private final ImageLoader imageLoader;
   private final OnFollowUnfollowListener onFollowUnfollowListener;
@@ -51,7 +51,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     } else if (items.get(position) instanceof UserModel) {
       return TYPE_USER;
     } else {
-      return UNKNOW;
+      return UNKNOWN;
     }
   }
 

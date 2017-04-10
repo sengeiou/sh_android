@@ -35,8 +35,7 @@ import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindFriendsFragment extends BaseFragment
-    implements SearchUserView, SearchFragment {
+public class FindFriendsFragment extends BaseFragment implements SearchUserView, SearchFragment {
 
   @Inject ImageLoader imageLoader;
   @Inject InitialsLoader initialsLoader;
@@ -118,14 +117,13 @@ public class FindFriendsFragment extends BaseFragment
   }
 
   private void setupViews() {
-
     adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
-
+        presenter.followUser(user);
       }
 
       @Override public void onUnfollow(UserModel user) {
-
+        presenter.unfollowUser(user);
       }
     }, new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
