@@ -1,27 +1,27 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
-import com.shootr.mobile.data.entity.RecentStreamEntity;
+import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
-import com.shootr.mobile.db.manager.RecentStreamManager;
+import com.shootr.mobile.db.manager.RecentSearchManager;
 import java.util.List;
 import javax.inject.Inject;
 
 public class DatabaseRecentStreamDataSource implements RecentStreamDataSource {
 
-  private final RecentStreamManager recentStreamManager;
+  private final RecentSearchManager recentSearchManager;
 
-  @Inject public DatabaseRecentStreamDataSource(RecentStreamManager recentStreamManager) {
-    this.recentStreamManager = recentStreamManager;
+  @Inject public DatabaseRecentStreamDataSource(RecentSearchManager recentSearchManager) {
+    this.recentSearchManager = recentSearchManager;
   }
 
   @Override public void putRecentStream(StreamEntity streamEntity, long currentTime) {
-    RecentStreamEntity recentStreamEntity = new RecentStreamEntity();
-    recentStreamEntity.setStream(streamEntity);
-    recentStreamEntity.setJoinStreamDate(currentTime);
-    recentStreamManager.saveStream(recentStreamEntity);
+    RecentSearchEntity recentSearchEntity = new RecentSearchEntity();
+    recentSearchEntity.setStream(streamEntity);
+    recentSearchEntity.setVisitDate(currentTime);
+    recentSearchManager.saveRecentSearch(recentSearchEntity);
   }
 
-  @Override public List<RecentStreamEntity> getRecentStreams() {
-    return recentStreamManager.readRecentStreams();
+  @Override public List<RecentSearchEntity> getRecentStreams() {
+    return recentSearchManager.readRecentSearches();
   }
 }

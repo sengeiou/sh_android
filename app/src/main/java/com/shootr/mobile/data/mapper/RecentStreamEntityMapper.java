@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.mapper;
 
-import com.shootr.mobile.data.entity.RecentStreamEntity;
+import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.model.stream.RecentStream;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -17,33 +17,33 @@ public class RecentStreamEntityMapper {
         this.streamEntityMapper = streamEntityMapper;
     }
 
-    public RecentStream transform(RecentStreamEntity recentStreamEntity) {
-        if (recentStreamEntity == null) {
+    public RecentStream transform(RecentSearchEntity recentSearchEntity) {
+        if (recentSearchEntity == null) {
             return null;
         }
         RecentStream recentStream = new RecentStream();
-        recentStream.setJoinStreamDate(recentStreamEntity.getJoinStreamDate());
-        Stream stream = streamEntityMapper.transform(recentStreamEntity.getStream());
+        recentStream.setJoinStreamDate(recentSearchEntity.getVisitDate());
+        Stream stream = streamEntityMapper.transform(recentSearchEntity.getStream());
         recentStream.setStream(stream);
         return recentStream;
     }
 
-    public RecentStreamEntity transform(RecentStream recentStream) {
+    public RecentSearchEntity transform(RecentStream recentStream) {
         if (recentStream == null) {
             return null;
         }
-        RecentStreamEntity recentStreamEntity = new RecentStreamEntity();
-        recentStreamEntity.setJoinStreamDate(recentStream.getJoinStreamDate());
+        RecentSearchEntity recentSearchEntity = new RecentSearchEntity();
+        recentSearchEntity.setVisitDate(recentStream.getJoinStreamDate());
         StreamEntity stream = streamEntityMapper.transform(recentStream.getStream());
-        recentStreamEntity.setStream(stream);
-        return recentStreamEntity;
+        recentSearchEntity.setStream(stream);
+        return recentSearchEntity;
     }
 
-    public List<StreamSearchResult> transform(List<RecentStreamEntity> recentStreamEntities) {
+    public List<StreamSearchResult> transform(List<RecentSearchEntity> recentStreamEntities) {
         List<StreamSearchResult> streamSearchResults = new ArrayList<>(recentStreamEntities.size());
-        for (RecentStreamEntity recentStreamEntity : recentStreamEntities) {
+        for (RecentSearchEntity recentSearchEntity : recentStreamEntities) {
             StreamSearchResult streamSearchResult = new StreamSearchResult();
-            streamSearchResult.setStream(streamEntityMapper.transform(recentStreamEntity.getStream()));
+            streamSearchResult.setStream(streamEntityMapper.transform(recentSearchEntity.getStream()));
             streamSearchResults.add(streamSearchResult);
         }
         return streamSearchResults;

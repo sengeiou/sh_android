@@ -29,13 +29,13 @@ public class RecentStreamManager extends AbstractManager {
   }
 
   public List<RecentStreamEntity> readRecentStreams() {
-    Cursor queryResult = getReadableDatabase().query(DatabaseContract.RecentStreamTable.TABLE,
-        DatabaseContract.RecentStreamTable.PROJECTION,
+    Cursor queryResult = getReadableDatabase().query(DatabaseContract.RecentSearchTable.TABLE,
+        DatabaseContract.RecentSearchTable.PROJECTION,
         null,
         null,
         null,
         null,
-        DatabaseContract.RecentStreamTable.JOIN_STREAM_DATE + " DESC");
+        DatabaseContract.RecentSearchTable.JOIN_STREAM_DATE + " DESC");
 
     List<RecentStreamEntity> recentStreams = new ArrayList<>(queryResult.getCount());
     RecentStreamEntity recentStreamEntity;
@@ -67,7 +67,7 @@ public class RecentStreamManager extends AbstractManager {
 
   public void saveStream(RecentStreamEntity recentStreamEntity) {
     ContentValues contentValues = recentStreamEntityDBMapper.toContentValues(recentStreamEntity);
-    getWritableDatabase().insertWithOnConflict(DatabaseContract.RecentStreamTable.TABLE, null,
+    getWritableDatabase().insertWithOnConflict(DatabaseContract.RecentSearchTable.TABLE, null,
         contentValues, SQLiteDatabase.CONFLICT_REPLACE);
   }
 }

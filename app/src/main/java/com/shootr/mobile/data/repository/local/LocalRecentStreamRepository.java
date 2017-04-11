@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.repository.local;
 
-import com.shootr.mobile.data.entity.RecentStreamEntity;
+import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.mapper.RecentStreamEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.RecentStreamDataSource;
@@ -30,7 +30,7 @@ public class LocalRecentStreamRepository implements RecentStreamRepository {
   }
 
   @Override public List<StreamSearchResult> getDefaultStreams() {
-    List<RecentStreamEntity> recentStreamEntities = localStreamDataSource.getRecentStreams();
+    List<RecentSearchEntity> recentStreamEntities = localStreamDataSource.getRecentStreams();
     return recentStreamEntityMapper.transform(recentStreamEntities);
   }
 }

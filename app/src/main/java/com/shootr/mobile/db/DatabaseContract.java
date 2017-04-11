@@ -485,19 +485,20 @@ public class DatabaseContract {
     };
   }
 
-  public static final class RecentStreamTable {
+  public static final class RecentSearchTable {
 
-    private RecentStreamTable() {
+    private RecentSearchTable() {
 
     }
 
-    public static final String TABLE = "RecentStreamTable";
+    public static final String TABLE = "RecentSearchTable";
 
-    public static final String ID_STREAM = "idStream";
-    public static final String JOIN_STREAM_DATE = "joinStreamDate";
+    public static final String ID_SEARCH_ITEM = "idSearchItem";
+    public static final String VISIT_DATE = "visitDate";
+    public static final String ITEM_TYPE = "itemType";
 
     public static final String[] PROJECTION = {
-        ID_STREAM, JOIN_STREAM_DATE
+        ID_SEARCH_ITEM, VISIT_DATE, ITEM_TYPE
     };
   }
 
