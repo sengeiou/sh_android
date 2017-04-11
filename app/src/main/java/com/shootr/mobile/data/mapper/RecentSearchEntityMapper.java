@@ -1,11 +1,9 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.RecentSearchEntity;
-import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.stream.RecentSearch;
 import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;

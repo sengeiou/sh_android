@@ -6,7 +6,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
 import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
-import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
