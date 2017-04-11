@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.searchItem.GetSearchItemsInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetRecentSearchInteractor;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -22,6 +23,7 @@ public class SearchPresenter implements Presenter {
   public static int TYPE_STREAM = 2;
 
   private final GetSearchItemsInteractor getSearchItemsInteractor;
+  private final GetRecentSearchInteractor getRecentSearchInteractor;
   private final UserModelMapper userModelMapper;
   private final StreamModelMapper streamModelMapper;
 
@@ -31,8 +33,10 @@ public class SearchPresenter implements Presenter {
   private List<SearchableModel> searchableModelList = new ArrayList<>();
 
   @Inject public SearchPresenter(GetSearchItemsInteractor getSearchItemsInteractor,
-      UserModelMapper userModelMapper, StreamModelMapper streamModelMapper) {
+      GetRecentSearchInteractor getRecentSearchInteractor, UserModelMapper userModelMapper,
+      StreamModelMapper streamModelMapper) {
     this.getSearchItemsInteractor = getSearchItemsInteractor;
+    this.getRecentSearchInteractor = getRecentSearchInteractor;
     this.userModelMapper = userModelMapper;
     this.streamModelMapper = streamModelMapper;
   }
@@ -41,9 +45,17 @@ public class SearchPresenter implements Presenter {
     this.view = searchView;
   }
 
+  public void initialSearch() {
+    getRecentSearchInteractor.loadStreams(new Interactor.Callback<List<Searchable>>() {
+      @Override public void onLoaded(List<Searchable> searchables) {
+        mapSearch(searchables);
+        filterSearch(TYPE_ALL);
+      }
+    });
+  }
+
   public void search(String query, final int type) {
-    if (query != null && !currentQuery.equals(query)
-        && !query.isEmpty()) {
+    if (query != null && !currentQuery.equals(query) && !query.isEmpty()) {
       currentQuery = query;
       getSearchItemsInteractor.searchItems(query, new Interactor.Callback<List<Searchable>>() {
         @Override public void onLoaded(List<Searchable> searchables) {

@@ -26,8 +26,8 @@ import com.shootr.mobile.ui.presenter.SearchPresenter;
 import java.util.List;
 import javax.inject.Inject;
 
-public class SearchActivity extends BaseToolbarDecoratedActivity implements
-    com.shootr.mobile.ui.views.SearchView {
+public class SearchActivity extends BaseToolbarDecoratedActivity
+    implements com.shootr.mobile.ui.views.SearchView {
 
   public static final String EXTRA_QUERY = "query";
 
@@ -69,7 +69,6 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
       @Override public void onPageSelected(int position) {
         changeSearchViewHint(position);
         currentFragment = fragments[position];
-        presenter.filterSearch(position);
       }
 
       @Override public void onPageScrollStateChanged(int state) {
@@ -164,7 +163,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
         return false;
       }
     });
-    searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
+    searchView.setQueryHint(getResources().getString(R.string.menu_search_streams));
     searchView.setIconifiedByDefault(false);
     searchView.setIconified(false);
     if (savedInstanceState != null) {
@@ -194,6 +193,8 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
         case 0:
           GenericSearchFragment genericSearchFragment = new GenericSearchFragment();
           fragments[0] = genericSearchFragment;
+          currentFragment = fragments[0];
+          presenter.initialSearch();
           return genericSearchFragment;
         case 1:
           FindFriendsFragment findFriendsFragment = new FindFriendsFragment();
@@ -203,6 +204,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity implements
           FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
           fragments[2] = findStreamsFragment;
           return findStreamsFragment;
+
         default:
           return null;
       }

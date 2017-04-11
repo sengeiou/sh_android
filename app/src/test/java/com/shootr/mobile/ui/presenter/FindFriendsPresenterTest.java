@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.GetRecentSearchInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
@@ -47,6 +48,7 @@ public class FindFriendsPresenterTest {
     @Mock FindFriendsServerInteractor findFriendsServerInteractor;
     @Mock ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor;
     @Mock GetLocalPeopleInteractor getLocalPeopleInteractor;
+    @Mock GetRecentSearchInteractor getRecentSearchInteractor;
 
     private FindFriendsPresenter presenter;
 
@@ -60,7 +62,7 @@ public class FindFriendsPresenterTest {
           reactiveSearchPeopleInteractor,
           getLocalPeopleInteractor,
           userModelMapper,
-          errorMessageFactory);
+          errorMessageFactory, getRecentSearchInteractor);
         presenter.setView(findFriendsView);
     }
 
