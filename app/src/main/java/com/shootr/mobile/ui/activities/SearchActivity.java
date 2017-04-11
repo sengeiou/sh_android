@@ -69,6 +69,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
       @Override public void onPageSelected(int position) {
         changeSearchViewHint(position);
         currentFragment = fragments[position];
+        presenter.filterSearch(position);
       }
 
       @Override public void onPageScrollStateChanged(int state) {
