@@ -13,7 +13,7 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
-import com.shootr.mobile.domain.repository.stream.RecentStreamRepository;
+import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
@@ -30,7 +30,7 @@ public class SelectStreamInteractor implements Interactor {
   private final UserRepository remoteUserRepository;
   private final SessionRepository sessionRepository;
   private final TimeUtils timeUtils;
-  private final RecentStreamRepository recentStreamRepository;
+  private final RecentSearchRepository recentSearchRepository;
 
   private String idSelectedStream;
   private Callback<StreamSearchResult> callback;
@@ -40,7 +40,7 @@ public class SelectStreamInteractor implements Interactor {
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
       ExternalStreamRepository remoteStreamRepository, @Local UserRepository localUserRepository,
       @Remote UserRepository remoteUserRepository, SessionRepository sessionRepository,
-      TimeUtils timeUtils, RecentStreamRepository recentStreamRepository) {
+      TimeUtils timeUtils, RecentSearchRepository recentSearchRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;
@@ -49,7 +49,7 @@ public class SelectStreamInteractor implements Interactor {
     this.remoteUserRepository = remoteUserRepository;
     this.sessionRepository = sessionRepository;
     this.timeUtils = timeUtils;
-    this.recentStreamRepository = recentStreamRepository;
+    this.recentSearchRepository = recentSearchRepository;
   }
   //endregion
 
@@ -64,7 +64,7 @@ public class SelectStreamInteractor implements Interactor {
   @Override public void execute() throws Exception {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     Stream selectedStream = getSelectedStream();
-    recentStreamRepository.putRecentStream(selectedStream, getCurrentTime());
+    recentSearchRepository.putRecentStream(selectedStream, getCurrentTime());
     if (isSelectingCurrentWatchingStream(currentUser)) {
       notifyLoaded(selectedStream);
     } else {

@@ -4,9 +4,9 @@ import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import java.util.List;
 
-public interface RecentStreamDataSource {
+public interface RecentSearchDataSource {
 
     void putRecentStream(StreamEntity stream, long currentTime);
 
-    List<RecentSearchEntity> getRecentStreams();
+    List<RecentSearchEntity> getRecentSearches();
 }

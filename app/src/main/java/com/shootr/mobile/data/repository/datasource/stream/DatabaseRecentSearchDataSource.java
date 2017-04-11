@@ -6,11 +6,11 @@ import com.shootr.mobile.db.manager.RecentSearchManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DatabaseRecentStreamDataSource implements RecentStreamDataSource {
+public class DatabaseRecentSearchDataSource implements RecentSearchDataSource {
 
   private final RecentSearchManager recentSearchManager;
 
-  @Inject public DatabaseRecentStreamDataSource(RecentSearchManager recentSearchManager) {
+  @Inject public DatabaseRecentSearchDataSource(RecentSearchManager recentSearchManager) {
     this.recentSearchManager = recentSearchManager;
   }
 
@@ -21,7 +21,7 @@ public class DatabaseRecentStreamDataSource implements RecentStreamDataSource {
     recentSearchManager.saveRecentSearch(recentSearchEntity);
   }
 
-  @Override public List<RecentSearchEntity> getRecentStreams() {
+  @Override public List<RecentSearchEntity> getRecentSearches() {
     return recentSearchManager.readRecentSearches();
   }
 }

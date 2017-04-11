@@ -3,10 +3,9 @@ package com.shootr.mobile.domain.interactor.stream;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
-import com.shootr.mobile.domain.repository.stream.RecentStreamRepository;
+import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
 import com.shootr.mobile.domain.service.stream.WatchingStreamService;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
@@ -19,23 +18,23 @@ public class GetLocalStreamsInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final LocaleProvider localeProvider;
   private final WatchingStreamService watchingStreamService;
-  private final RecentStreamRepository recentStreamRepository;
+  private final RecentSearchRepository recentSearchRepository;
 
-  private Interactor.Callback<StreamSearchResultList> callback;
+  private Interactor.Callback<List<Searchable>> callback;
 
   @Inject public GetLocalStreamsInteractor(InteractorHandler interactorHandler,
       InternalStreamSearchRepository streamSearchRepository, PostExecutionThread postExecutionThread,
       LocaleProvider localeProvider, WatchingStreamService watchingStreamService,
-      RecentStreamRepository recentStreamRepository) {
+      RecentSearchRepository recentSearchRepository) {
     this.interactorHandler = interactorHandler;
     this.streamSearchRepository = streamSearchRepository;
     this.postExecutionThread = postExecutionThread;
     this.localeProvider = localeProvider;
     this.watchingStreamService = watchingStreamService;
-    this.recentStreamRepository = recentStreamRepository;
+    this.recentSearchRepository = recentSearchRepository;
   }
 
-  public void loadStreams(Callback<StreamSearchResultList> callback) {
+  public void loadStreams(Callback<List<Searchable>> callback) {
     this.callback = callback;
     interactorHandler.execute(this);
   }
@@ -45,17 +44,17 @@ public class GetLocalStreamsInteractor implements Interactor {
   }
 
   private void loadLocalStreams() {
-    List<StreamSearchResult> streams =
-        recentStreamRepository.getDefaultStreams();
-    watchingStreamService.markWatchingStream(streams);
-    StreamSearchResultList streamSearchResultList = new StreamSearchResultList(streams);
-    notifySearchResultsSuccessful(streamSearchResultList);
+    List<Searchable> searchables =
+        recentSearchRepository.getDefaultSearch();
+    //TODO: watchingStreamService.markWatchingStream(searchables);
+    //StreamSearchResultList streamSearchResultList = new StreamSearchResultList(searchables);
+    notifySearchResultsSuccessful(searchables);
   }
 
-  private void notifySearchResultsSuccessful(final StreamSearchResultList streams) {
+  private void notifySearchResultsSuccessful(final List<Searchable> searchables) {
     postExecutionThread.post(new Runnable() {
       @Override public void run() {
-        callback.onLoaded(streams);
+        callback.onLoaded(searchables);
       }
     });
   }

@@ -3,20 +3,21 @@ package com.shootr.mobile.data.repository.local;
 import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.mapper.RecentStreamEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
-import com.shootr.mobile.data.repository.datasource.stream.RecentStreamDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
+import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.repository.stream.RecentStreamRepository;
+import com.shootr.mobile.domain.model.user.User;
+import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
 import java.util.List;
 import javax.inject.Inject;
 
-public class LocalRecentStreamRepository implements RecentStreamRepository {
+public class LocalRecentSearchRepository implements RecentSearchRepository {
 
-  private final RecentStreamDataSource localStreamDataSource;
+  private final RecentSearchDataSource localStreamDataSource;
   private final RecentStreamEntityMapper recentStreamEntityMapper;
   private final StreamEntityMapper streamEntityMapper;
 
-  @Inject public LocalRecentStreamRepository(RecentStreamDataSource localStreamDataSource,
+  @Inject public LocalRecentSearchRepository(RecentSearchDataSource localStreamDataSource,
       RecentStreamEntityMapper recentStreamEntityMapper, StreamEntityMapper streamEntityMapper) {
     this.localStreamDataSource = localStreamDataSource;
     this.recentStreamEntityMapper = recentStreamEntityMapper;
@@ -29,8 +30,12 @@ public class LocalRecentStreamRepository implements RecentStreamRepository {
     }
   }
 
-  @Override public List<StreamSearchResult> getDefaultStreams() {
-    List<RecentSearchEntity> recentStreamEntities = localStreamDataSource.getRecentStreams();
+  @Override public void putRecentUser(User user, long currentTime) {
+
+  }
+
+  @Override public List<Searchable> getDefaultSearch() {
+    List<RecentSearchEntity> recentStreamEntities = localStreamDataSource.getRecentSearches();
     return recentStreamEntityMapper.transform(recentStreamEntities);
   }
 }
