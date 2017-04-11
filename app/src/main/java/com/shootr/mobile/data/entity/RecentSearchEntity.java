@@ -5,8 +5,6 @@ public class RecentSearchEntity {
   private Long visitDate;
   private StreamEntity stream;
   private UserEntity user;
-  public static final String STREAM = "0";
-  public static final String USER = "1";
 
   public UserEntity getUser() {
     return user;

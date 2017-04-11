@@ -6,6 +6,7 @@ import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.DatabaseContract;
+import com.shootr.mobile.domain.model.SearchableType;
 import javax.inject.Inject;
 
 public class RecentSearchEntityDBMapper extends GenericDBMapper {
@@ -24,11 +25,11 @@ public class RecentSearchEntityDBMapper extends GenericDBMapper {
     if (recentSearchEntity.getStream().getIdStream() != null) {
       contentValues.put(DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM,
           recentSearchEntity.getStream().getIdStream());
-      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, RecentSearchEntity.STREAM);
+      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, SearchableType.STREAM);
     } else {
       contentValues.put(DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM,
           recentSearchEntity.getUser().getIdUser());
-      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, RecentSearchEntity.USER);
+      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, SearchableType.USER);
     }
     contentValues.put(DatabaseContract.RecentSearchTable.VISIT_DATE,
         recentSearchEntity.getVisitDate());

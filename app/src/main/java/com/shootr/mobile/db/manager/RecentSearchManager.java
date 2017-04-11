@@ -10,6 +10,7 @@ import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.mappers.RecentSearchEntityDBMapper;
 import com.shootr.mobile.db.mappers.StreamEntityDBMapper;
+import com.shootr.mobile.domain.model.SearchableType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -101,7 +102,7 @@ public class RecentSearchManager extends AbstractManager {
     String whereSelection = DatabaseContract.RecentSearchTable.ITEM_TYPE + " = ?";
 
     String[] whereArguments = new String[] {
-        (type == RecentSearchEntity.STREAM) ? RecentSearchEntity.STREAM : RecentSearchEntity.USER
+        (type == SearchableType.STREAM) ? SearchableType.STREAM : SearchableType.USER
     };
 
     Cursor queryResult = getReadableDatabase().query(DatabaseContract.RecentSearchTable.TABLE,
