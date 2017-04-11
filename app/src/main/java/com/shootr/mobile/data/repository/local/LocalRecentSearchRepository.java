@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.RecentSearchEntity;
-import com.shootr.mobile.data.mapper.RecentStreamEntityMapper;
+import com.shootr.mobile.data.mapper.RecentSearchEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
 import com.shootr.mobile.domain.model.Searchable;
@@ -13,20 +13,21 @@ import javax.inject.Inject;
 
 public class LocalRecentSearchRepository implements RecentSearchRepository {
 
-  private final RecentSearchDataSource localStreamDataSource;
-  private final RecentStreamEntityMapper recentStreamEntityMapper;
+  private final RecentSearchDataSource localRecentSearchDataSource;
+  private final RecentSearchEntityMapper recentSearchEntityMapper;
   private final StreamEntityMapper streamEntityMapper;
 
-  @Inject public LocalRecentSearchRepository(RecentSearchDataSource localStreamDataSource,
-      RecentStreamEntityMapper recentStreamEntityMapper, StreamEntityMapper streamEntityMapper) {
-    this.localStreamDataSource = localStreamDataSource;
-    this.recentStreamEntityMapper = recentStreamEntityMapper;
+  @Inject public LocalRecentSearchRepository(RecentSearchDataSource localRecentSearchDataSource,
+      RecentSearchEntityMapper recentSearchEntityMapper, StreamEntityMapper streamEntityMapper) {
+    this.localRecentSearchDataSource = localRecentSearchDataSource;
+    this.recentSearchEntityMapper = recentSearchEntityMapper;
     this.streamEntityMapper = streamEntityMapper;
   }
 
   @Override public void putRecentStream(Stream stream, long currentTime) {
     if (stream != null) {
-      localStreamDataSource.putRecentStream(streamEntityMapper.transform(stream), currentTime);
+      localRecentSearchDataSource.putRecentStream(streamEntityMapper.transform(stream),
+          currentTime);
     }
   }
 
@@ -35,7 +36,7 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
   }
 
   @Override public List<Searchable> getDefaultSearch() {
-    List<RecentSearchEntity> recentStreamEntities = localStreamDataSource.getRecentSearches();
-    return recentStreamEntityMapper.transform(recentStreamEntities);
+    List<RecentSearchEntity> recentStreamEntities = localRecentSearchDataSource.getRecentSearches();
+    return recentSearchEntityMapper.transform(recentStreamEntities);
   }
 }

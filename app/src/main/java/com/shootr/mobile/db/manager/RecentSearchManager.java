@@ -54,7 +54,7 @@ public class RecentSearchManager extends AbstractManager {
     Iterator<UserEntity> iteratorUser = userList.iterator();
     while (iteratorSearches.hasNext()) {
       RecentSearchEntity recentSearchEntity = iteratorSearches.next();
-      if (recentSearchEntity.getStream() != null) {
+      if (recentSearchEntity.getStream().getIdStream() != null) {
         while (iteratorStream.hasNext()) {
           StreamEntity stream = iteratorStream.next();
           if (stream.getIdStream().equals(recentSearchEntity.getStream().getIdStream())) {

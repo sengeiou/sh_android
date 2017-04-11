@@ -11,26 +11,24 @@ import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetLocalStreamsInteractor implements Interactor {
+public class GetRecentSearchInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final InternalStreamSearchRepository streamSearchRepository;
   private final PostExecutionThread postExecutionThread;
   private final LocaleProvider localeProvider;
-  private final WatchingStreamService watchingStreamService;
   private final RecentSearchRepository recentSearchRepository;
 
   private Interactor.Callback<List<Searchable>> callback;
 
-  @Inject public GetLocalStreamsInteractor(InteractorHandler interactorHandler,
-      InternalStreamSearchRepository streamSearchRepository, PostExecutionThread postExecutionThread,
-      LocaleProvider localeProvider, WatchingStreamService watchingStreamService,
+  @Inject public GetRecentSearchInteractor(InteractorHandler interactorHandler,
+      InternalStreamSearchRepository streamSearchRepository,
+      PostExecutionThread postExecutionThread, LocaleProvider localeProvider,
       RecentSearchRepository recentSearchRepository) {
     this.interactorHandler = interactorHandler;
     this.streamSearchRepository = streamSearchRepository;
     this.postExecutionThread = postExecutionThread;
     this.localeProvider = localeProvider;
-    this.watchingStreamService = watchingStreamService;
     this.recentSearchRepository = recentSearchRepository;
   }
 
@@ -44,10 +42,7 @@ public class GetLocalStreamsInteractor implements Interactor {
   }
 
   private void loadLocalStreams() {
-    List<Searchable> searchables =
-        recentSearchRepository.getDefaultSearch();
-    //TODO: watchingStreamService.markWatchingStream(searchables);
-    //StreamSearchResultList streamSearchResultList = new StreamSearchResultList(searchables);
+    List<Searchable> searchables = recentSearchRepository.getDefaultSearch();
     notifySearchResultsSuccessful(searchables);
   }
 
