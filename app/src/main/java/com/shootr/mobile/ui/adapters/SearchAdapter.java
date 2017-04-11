@@ -93,13 +93,13 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
   public void followUser(UserModel user) {
     int index = items.indexOf(user);
-    ((UserModel)items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
+    ((UserModel) items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
     notifyDataSetChanged();
   }
 
   public void unfollowUser(UserModel user) {
     int index = items.indexOf(user);
-    ((UserModel)items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+    ((UserModel) items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_NONE);
     notifyDataSetChanged();
   }
 }
