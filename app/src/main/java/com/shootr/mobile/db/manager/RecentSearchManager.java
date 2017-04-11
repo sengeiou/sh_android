@@ -40,7 +40,7 @@ public class RecentSearchManager extends AbstractManager {
     List<String> streamsIds = new ArrayList<>();
     List<String> usersIds = new ArrayList<>();
     for (RecentSearchEntity recentSearch : recentSearches) {
-      if (recentSearch.getStream() != null) {
+      if (recentSearch.getStream().getIdStream() != null) {
         streamsIds.add(recentSearch.getStream().getIdStream());
       } else {
         usersIds.add(recentSearch.getUser().getIdUser());
@@ -51,9 +51,9 @@ public class RecentSearchManager extends AbstractManager {
     List<UserEntity> userList = userManager.getUsersByIds(usersIds);
 
     Iterator<RecentSearchEntity> iteratorSearches = recentSearches.iterator();
-    Iterator<StreamEntity> iteratorStream = streamList.iterator();
-    Iterator<UserEntity> iteratorUser = userList.iterator();
+
     while (iteratorSearches.hasNext()) {
+      Iterator<StreamEntity> iteratorStream = streamList.iterator();
       RecentSearchEntity recentSearchEntity = iteratorSearches.next();
       if (recentSearchEntity.getStream().getIdStream() != null) {
         while (iteratorStream.hasNext()) {
@@ -65,6 +65,7 @@ public class RecentSearchManager extends AbstractManager {
           }
         }
       } else {
+        Iterator<UserEntity> iteratorUser = userList.iterator();
         while (iteratorUser.hasNext()) {
           UserEntity user = iteratorUser.next();
           if (user.getIdUser().equals(recentSearchEntity.getUser().getIdUser())) {
