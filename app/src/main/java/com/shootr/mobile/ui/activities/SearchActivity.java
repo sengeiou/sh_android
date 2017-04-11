@@ -80,6 +80,9 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
 
   private void changeSearchViewHint(int position) {
     if (searchView != null) {
+      if (position == 0) {
+        searchView.setQueryHint(getResources().getString(R.string.menu_search_streams));
+      }
       if (position == 1) {
         searchView.setQueryHint(getResources().getString(R.string.activity_find_streams_hint));
       } else {
@@ -198,14 +201,13 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
           presenter.initialSearch();
           return genericSearchFragment;
         case 1:
-          FindFriendsFragment findFriendsFragment = new FindFriendsFragment();
-          fragments[1] = findFriendsFragment;
-          return findFriendsFragment;
-        case 2:
           FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
-          fragments[2] = findStreamsFragment;
+          fragments[1] = findStreamsFragment;
           return findStreamsFragment;
-
+        case 2:
+          FindFriendsFragment findFriendsFragment = new FindFriendsFragment();
+          fragments[2] = findFriendsFragment;
+          return findFriendsFragment;
         default:
           return null;
       }
@@ -220,9 +222,9 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
         case 0:
           return "all";
         case 1:
-          return usersTitle;
-        case 2:
           return streamsTitle;
+        case 2:
+          return usersTitle;
         default:
           throw new IllegalStateException(
               String.format("Item title for position %d doesn't exists", position));
