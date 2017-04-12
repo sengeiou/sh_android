@@ -1,71 +1,49 @@
 package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
-import com.shootr.mobile.domain.utils.LocaleProvider;
-import java.util.List;
+import com.shootr.mobile.domain.utils.TimeUtils;
 import javax.inject.Inject;
 
-public class FindFriendsInteractor implements Interactor {
+public class PutRecentUserInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final UserRepository remoteUserRepository;
-    private final UserRepository localUserRepository;
-    private final PostExecutionThread postExecutionThread;
-    private final LocaleProvider localeProvider;
+  private final InteractorHandler interactorHandler;
+  private final UserRepository localUserRepository;
+  private final RecentSearchRepository recentSearchRepository;
+  private final TimeUtils timeUtils;
 
-    private Callback<List<User>> callback;
-    private ErrorCallback errorCallback;
-    private String search;
-    private Integer currentPage;
+  private User user;
 
-    @Inject public FindFriendsInteractor(InteractorHandler interactorHandler, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, PostExecutionThread postExecutionThread,
-      LocaleProvider localeProvider) {
-        this.interactorHandler = interactorHandler;
-        this.remoteUserRepository = remoteUserRepository;
-        this.localUserRepository = localUserRepository;
-        this.postExecutionThread = postExecutionThread;
-        this.localeProvider = localeProvider;
+  @Inject public PutRecentUserInteractor(InteractorHandler interactorHandler,
+      @Local UserRepository localUserRepository, RecentSearchRepository recentSearchRepository,
+      TimeUtils timeUtils) {
+    this.interactorHandler = interactorHandler;
+    this.localUserRepository = localUserRepository;
+    this.recentSearchRepository = recentSearchRepository;
+    this.timeUtils = timeUtils;
+  }
+
+  public void putRecentUser(User user) {
+    this.user = user;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    try {
+      recentSearchRepository.putRecentUser(user, getCurrentTime());
+      localUserRepository.putUser(user);
+    } catch (ServerCommunicationException error) {
+        /* no-op */
     }
+  }
 
-    public void findFriends(String search, Integer currentPage, Callback<List<User>> callback,
-      ErrorCallback errorCallback) {
-        this.search = search;
-        this.currentPage = currentPage;
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
-    }
-
-    @Override public void execute() throws Exception {
-        try {
-            notifyLoaded(remoteUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
-        } catch (ServerCommunicationException error) {
-            notifyLoaded(localUserRepository.findFriends(search, currentPage, localeProvider.getLocale()));
-        }
-    }
-
-    private void notifyLoaded(final List<User> results) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(results);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private long getCurrentTime() {
+    return timeUtils.getCurrentTime();
+  }
 }
