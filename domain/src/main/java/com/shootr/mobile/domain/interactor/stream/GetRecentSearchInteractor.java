@@ -31,16 +31,16 @@ public class GetRecentSearchInteractor implements Interactor {
     this.recentSearchRepository = recentSearchRepository;
   }
 
-  public void loadStreams(Callback<List<Searchable>> callback) {
+  public void loadSearches(Callback<List<Searchable>> callback) {
     this.callback = callback;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    loadLocalStreams();
+    loadLocalSearches();
   }
 
-  private void loadLocalStreams() {
+  private void loadLocalSearches() {
     List<Searchable> searchables = recentSearchRepository.getDefaultSearch();
     notifySearchResultsSuccessful(searchables);
   }
