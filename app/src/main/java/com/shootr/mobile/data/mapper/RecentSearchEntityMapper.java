@@ -2,6 +2,7 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.domain.model.Searchable;
+import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.stream.RecentSearch;
 import com.shootr.mobile.domain.model.stream.Stream;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class RecentSearchEntityMapper {
   public List<Searchable> transform(List<RecentSearchEntity> recentStreamEntities) {
     List<Searchable> searchableSearchResults = new ArrayList<>(recentStreamEntities.size());
     for (RecentSearchEntity recentSearchEntity : recentStreamEntities) {
-      if (recentSearchEntity.getStream().getIdStream() != null) {
+      if (recentSearchEntity.getSearchableType().equals(SearchableType.STREAM)) {
         searchableSearchResults.add(streamEntityMapper.transform(recentSearchEntity.getStream()));
       } else {
         searchableSearchResults.add(userEntityMapper.transform(recentSearchEntity.getUser()));

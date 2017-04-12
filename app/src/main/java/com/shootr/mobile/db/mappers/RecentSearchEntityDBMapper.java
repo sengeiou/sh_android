@@ -22,14 +22,14 @@ public class RecentSearchEntityDBMapper extends GenericDBMapper {
 
   private void fillContentValues(RecentSearchEntity recentSearchEntity,
       ContentValues contentValues) {
-    if (recentSearchEntity.getStream().getIdStream() != null) {
+    if (recentSearchEntity.getSearchableType().equals(SearchableType.STREAM)) {
       contentValues.put(DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM,
           recentSearchEntity.getStream().getIdStream());
-      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, SearchableType.STREAM);
+      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, 0);
     } else {
       contentValues.put(DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM,
           recentSearchEntity.getUser().getIdUser());
-      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, SearchableType.USER);
+      contentValues.put(DatabaseContract.RecentSearchTable.ITEM_TYPE, 1);
     }
     contentValues.put(DatabaseContract.RecentSearchTable.VISIT_DATE,
         recentSearchEntity.getVisitDate());
@@ -49,11 +49,13 @@ public class RecentSearchEntityDBMapper extends GenericDBMapper {
       stream.setIdStream(
           c.getString(c.getColumnIndex(DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM)));
       recentSearchEntity.setStream(stream);
+      recentSearchEntity.setSearchableType(SearchableType.STREAM);
     } else {
       UserEntity user = new UserEntity();
       user.setIdUser(
           c.getString(c.getColumnIndex(DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM)));
       recentSearchEntity.setUser(user);
+      recentSearchEntity.setSearchableType(SearchableType.USER);
     }
     recentSearchEntity.setVisitDate(
         c.getLong(c.getColumnIndex(DatabaseContract.RecentSearchTable.VISIT_DATE)));

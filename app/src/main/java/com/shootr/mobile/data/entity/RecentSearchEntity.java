@@ -1,10 +1,21 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.domain.model.SearchableType;
+
 public class RecentSearchEntity {
 
   private Long visitDate;
   private StreamEntity stream;
   private UserEntity user;
+  private String searchableType;
+
+  public String getSearchableType() {
+    return searchableType;
+  }
+
+  public void setSearchableType(String searchableType) {
+    this.searchableType = searchableType;
+  }
 
   public UserEntity getUser() {
     return user;
