@@ -118,7 +118,8 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
       }
     }, new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
-        startActivityForResult(ProfileActivity.getIntent(getContext(), idUser), 666);
+
+        startActivityForResult(ProfileActivity.getIntentFromSearch(getContext(), idUser), 666);
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
