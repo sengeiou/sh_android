@@ -45,11 +45,11 @@ public class SearchPresenter implements Presenter {
     this.view = searchView;
   }
 
-  public void initialSearch() {
-    getRecentSearchInteractor.loadStreams(new Interactor.Callback<List<Searchable>>() {
+  public void initialSearch(final int type) {
+    getRecentSearchInteractor.loadSearches(new Interactor.Callback<List<Searchable>>() {
       @Override public void onLoaded(List<Searchable> searchables) {
         mapSearch(searchables);
-        filterSearch(TYPE_ALL);
+        filterSearch(type);
       }
     });
   }
@@ -67,6 +67,8 @@ public class SearchPresenter implements Presenter {
         /* no-op */
         }
       });
+    } else if (query.isEmpty()) {
+      initialSearch(type);
     } else {
       filterSearch(type);
     }

@@ -198,7 +198,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
           GenericSearchFragment genericSearchFragment = new GenericSearchFragment();
           fragments[0] = genericSearchFragment;
           currentFragment = fragments[0];
-          presenter.initialSearch();
+          presenter.initialSearch(0);
           return genericSearchFragment;
         case 1:
           FindStreamsFragment findStreamsFragment = new FindStreamsFragment();
