@@ -131,9 +131,6 @@ public class ProfilePresenter implements Presenter {
   private void onProfileLoaded(User user) {
     this.isCurrentUser = user.isMe();
     this.setUserModel(userModelMapper.transform(user));
-    if(isFromSearch) {
-      putRecentUserInteractor.putRecentUser(user);
-    }
     setupMenuItemsVisibility();
     setupProfilePhoto(user);
     setRelationshipButtonStatus(user);
