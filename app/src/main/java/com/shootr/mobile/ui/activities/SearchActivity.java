@@ -16,6 +16,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
@@ -23,6 +24,7 @@ import com.shootr.mobile.ui.fragments.GenericSearchFragment;
 import com.shootr.mobile.ui.fragments.SearchFragment;
 import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.presenter.SearchPresenter;
+import com.shootr.mobile.util.AnalyticsTool;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -32,11 +34,16 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
   public static final String EXTRA_QUERY = "query";
 
   @Inject SearchPresenter presenter;
+  @Inject AnalyticsTool analyticsTool;
+  @Inject SessionRepository sessionRepository;
 
   @BindView(R.id.pager) ViewPager viewPager;
   @BindView(R.id.tab_layout) TabLayout tabLayout;
   @BindString(R.string.drawer_streams_title) String streamsTitle;
   @BindString(R.string.drawer_users_title) String usersTitle;
+  @BindString(R.string.analytics_label_search) String analyticsLabelSearch;
+  @BindString(R.string.analytics_label_search_users) String analyticsLabelSearchUsers;
+  @BindString(R.string.analytics_label_search_streams) String analyticsLabelSearchStreams;
 
   private SearchView searchView;
   private String currentSearchQuery;
@@ -82,13 +89,43 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
     if (searchView != null) {
       if (position == 0) {
         searchView.setQueryHint(getResources().getString(R.string.menu_search_streams));
+        sendAllMixpanel();
       }
       if (position == 1) {
         searchView.setQueryHint(getResources().getString(R.string.activity_find_streams_hint));
+        sendStreamsMixpanel();
       } else {
         searchView.setQueryHint(getResources().getString(R.string.search_users_hint));
+        sendUsersMixpanel();
       }
     }
+  }
+
+  private void sendAllMixpanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsLabelSearch);
+    builder.setLabelId(analyticsLabelSearch);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendStreamsMixpanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsLabelSearchStreams);
+    builder.setLabelId(analyticsLabelSearchStreams);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendUsersMixpanel() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsLabelSearchUsers);
+    builder.setLabelId(analyticsLabelSearchUsers);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override protected int getLayoutResource() {
