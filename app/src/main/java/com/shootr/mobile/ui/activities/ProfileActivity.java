@@ -206,7 +206,7 @@ public class ProfileActivity extends BaseActivity
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
     if (getIntent().hasExtra(EXTRA_SEARCH)) {
-      isFromSearch = Boolean.getBoolean(getIntent().getStringExtra(EXTRA_SEARCH));
+      isFromSearch = getIntent().getBooleanExtra(EXTRA_SEARCH, true);
     }
     OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
       @Override public void onAvatarClick(String userId, View avatarView) {
