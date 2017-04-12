@@ -99,7 +99,7 @@ public class GenericSearchFragment extends BaseFragment
       }
     }, new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
-        startActivityForResult(ProfileActivity.getIntent(getContext(), idUser), 666);
+        startActivityForResult(ProfileActivity.getIntentFromSearch(getContext(), idUser), 666);
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
