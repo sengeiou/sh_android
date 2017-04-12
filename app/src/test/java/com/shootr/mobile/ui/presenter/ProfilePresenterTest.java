@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
+import com.shootr.mobile.domain.interactor.user.PutRecentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
@@ -79,6 +80,7 @@ public class ProfilePresenterTest {
   @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
   @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
   @Mock SessionRepository sessionRepository;
+  @Mock PutRecentUserInteractor putRecentUserInteractor;
 
   @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -89,17 +91,17 @@ public class ProfilePresenterTest {
     MockitoAnnotations.initMocks(this);
     userModelMapper = new UserModelMapper(streamJoinDateFormatter);
     ShotModelMapper shotModelMapper = new ShotModelMapper();
-    profilePresenter =
-        new ProfilePresenter(getUserByIdInteractor, getUserByUsernameInteractor, logoutInteractor,
-            markNiceShotInteractor, unmarkNiceShotInteractor, hideShotInteractor,
-            shareShotInteractor, followInteractor, unfollowInteractor, getLastShotsInteractor,
-            uploadUserPhotoInteractor, removeUserPhotoInteractor, getBlockedIdUsersInteractor,
-            sessionRepository, errorMessageFactory, userModelMapper, shotModelMapper);
+    profilePresenter = new ProfilePresenter(putRecentUserInteractor, getUserByIdInteractor,
+        getUserByUsernameInteractor, logoutInteractor, markNiceShotInteractor,
+        unmarkNiceShotInteractor, hideShotInteractor, shareShotInteractor, followInteractor,
+        unfollowInteractor, getLastShotsInteractor, uploadUserPhotoInteractor,
+        removeUserPhotoInteractor, getBlockedIdUsersInteractor,
+        sessionRepository, errorMessageFactory, userModelMapper, shotModelMapper);
     profilePresenter.setView(profileView);
   }
 
   @Test public void shouldGetUserByIdIfItHasBeenInitializedWithUserId() throws Exception {
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(getUserByIdInteractor).loadUserById(anyString(), anyBoolean(), anyCallback(),
         anyErrorCallback());
@@ -115,7 +117,7 @@ public class ProfilePresenterTest {
   @Test public void shouldSetUserInfoWhenUserHasBeenInitializedWithUserId() throws Exception {
     setupUnverifiedUserById();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).setUserInfo(any(UserModel.class));
   }
@@ -131,7 +133,7 @@ public class ProfilePresenterTest {
   @Test public void shouldLoadLastShotsWhenInitializedFromId() throws Exception {
     setupUserById();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
   }
@@ -148,7 +150,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(11));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showAllShotsButton();
   }
@@ -157,7 +159,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(10));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).hideAllShotsButton();
   }
@@ -167,7 +169,7 @@ public class ProfilePresenterTest {
     user.setMe(true);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showEditProfileButton();
   }
@@ -178,7 +180,7 @@ public class ProfilePresenterTest {
     user.setFollowing(false);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showFollowButton();
   }
@@ -188,7 +190,7 @@ public class ProfilePresenterTest {
     user.setFollowing(true);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showUnfollowButton();
   }
@@ -199,7 +201,7 @@ public class ProfilePresenterTest {
     user.setPhoto(null);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showAddPhoto();
   }
@@ -209,7 +211,7 @@ public class ProfilePresenterTest {
     user.setPhoto(null);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView, never()).showAddPhoto();
   }
@@ -217,7 +219,7 @@ public class ProfilePresenterTest {
   @Test public void shouldOpenPhotoWhenAvatarClickedAndNotCurrentUser() throws Exception {
     setupUserIdInteractorCallbacks(user());
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.avatarClicked();
 
     verify(profileView).openPhoto(anyString());
@@ -228,7 +230,7 @@ public class ProfilePresenterTest {
     user.setMe(true);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.avatarClicked();
 
     verify(profileView).openEditPhotoMenu(anyBoolean(), anyString());
@@ -241,7 +243,7 @@ public class ProfilePresenterTest {
     user.setPhoto("photo");
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.avatarClicked();
 
     verify(profileView).openEditPhotoMenu(true, "photo");
@@ -254,7 +256,7 @@ public class ProfilePresenterTest {
     user.setPhoto(null);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.avatarClicked();
 
     verify(profileView).openEditPhotoMenu(false, null);
@@ -305,7 +307,7 @@ public class ProfilePresenterTest {
     user.setMe(true);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showLogoutButton();
   }
@@ -316,7 +318,7 @@ public class ProfilePresenterTest {
     setupUserIdInteractorCallbacks(user);
     setupBlockedIdUsersIdInteractorCallbacks();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showBlockUserButton();
   }
@@ -326,7 +328,7 @@ public class ProfilePresenterTest {
     user.setMe(true);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView, never()).showBlockUserButton();
   }
@@ -354,7 +356,7 @@ public class ProfilePresenterTest {
     setupUserIdInteractorCallbacks(user);
     setupBlockedIdUsersIdInteractorCallbacks();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showReportUserButton();
   }
@@ -377,7 +379,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(3));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showLatestShots();
   }
@@ -386,7 +388,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(0));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).hideLatestShots();
   }
@@ -395,7 +397,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(0));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showLatestShotsEmpty();
   }
@@ -404,7 +406,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(1));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).hideLatestShotsEmpty();
   }
@@ -413,7 +415,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(11));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).renderLastShots(shotModelListCaptor.capture());
     assertThat(shotModelListCaptor.getValue()).hasSize(10);
@@ -423,7 +425,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(10));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).renderLastShots(shotModelListCaptor.capture());
     assertThat(shotModelListCaptor.getValue()).hasSize(10);
@@ -433,7 +435,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupLatestShotCallbacks(shotList(2));
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).renderLastShots(shotModelListCaptor.capture());
     assertThat(shotModelListCaptor.getValue()).hasSize(2);
@@ -455,7 +457,7 @@ public class ProfilePresenterTest {
     user.setWebsite(WEBSITE_NO_PREFIX);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.websiteClicked();
 
     verify(profileView).goToWebsite(HTTP_PREFIX + WEBSITE_NO_PREFIX);
@@ -466,7 +468,7 @@ public class ProfilePresenterTest {
     user.setWebsite(WEBSITE_HTTP_PREFIX);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.websiteClicked();
 
     verify(profileView).goToWebsite(WEBSITE_HTTP_PREFIX);
@@ -477,7 +479,7 @@ public class ProfilePresenterTest {
     user.setWebsite(WEBSITE_HTTPS_PREFIX);
     setupUserIdInteractorCallbacks(user);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.websiteClicked();
 
     verify(profileView).goToWebsite(WEBSITE_HTTPS_PREFIX);
@@ -485,7 +487,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldGetUserByIdWhenResumed() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     profilePresenter.pause();
@@ -509,7 +511,7 @@ public class ProfilePresenterTest {
   @Test public void shouldNotLoadProfileWhenIdInteractorNotReturned() throws Exception {
     doNothing().when(getUserByIdInteractor)
         .loadUserById(anyString(), anyBoolean(), anyCallback(), anyErrorCallback());
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     profilePresenter.resume();
@@ -534,7 +536,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldLoadLatestShotsWhenResumed() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getLastShotsInteractor);
 
     profilePresenter.pause();
@@ -546,7 +548,7 @@ public class ProfilePresenterTest {
   @Test public void shouldNotLoadLatestShotsWhenInteractorNotReturned() throws Exception {
     doNothing().when(getUserByIdInteractor)
         .loadUserById(anyString(), anyBoolean(), anyCallback(), anyErrorCallback());
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getLastShotsInteractor);
 
     profilePresenter.resume();
@@ -557,7 +559,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldShowLoadingWhenUploadingPhoto() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     profilePresenter.uploadPhoto(new File(PHOTO_PATH));
 
@@ -566,7 +568,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldCallUploadPhotoInteractorWhenUploadingPhoto() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     profilePresenter.uploadPhoto(new File(PHOTO_PATH));
 
@@ -576,7 +578,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldLoadProfileAgainWhenPhotoUploaded() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     setupUploadPhotoCompletedCallback();
@@ -589,7 +591,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldLoadLastestShotsAgainWhenPhotoUploaded() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getLastShotsInteractor);
 
     setupUploadPhotoCompletedCallback();
@@ -601,7 +603,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldHideLoadingWhenUploadinPhotoCallbacksCompleted() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     setupUploadPhotoCompletedCallback();
@@ -613,7 +615,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldHideLoadingWhenUploadinPhotoCallbacksError() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     setupUploadPhotoErrorCallback();
@@ -625,7 +627,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldLoadProfileAgainWhenPhotoRemoved() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     setupRemovePhotoCompletedCallback();
@@ -638,7 +640,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldLoadLatestShotsAgainWhenPhotoRemoved() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getLastShotsInteractor);
 
     setupRemovePhotoCompletedCallback();
@@ -650,7 +652,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldShowErrorIfRemovePhotoCallbacksError() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     setupRemovePhotoErrorCallback();
@@ -662,7 +664,7 @@ public class ProfilePresenterTest {
 
   @Test public void shouldNotLoadProfileWhenPhotoUploadedCallbacksError() throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getUserByIdInteractor);
 
     setupUploadPhotoErrorCallback();
@@ -676,7 +678,7 @@ public class ProfilePresenterTest {
   @Test public void shouldNotLoadLastestShotsAgainWhenPhotoUploadedCallbacksError()
       throws Exception {
     setupUserById();
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     reset(getLastShotsInteractor);
 
     setupUploadPhotoErrorCallback();
@@ -698,7 +700,7 @@ public class ProfilePresenterTest {
   @Test public void shouldShowAvatarPhotoIfNotCurrentUserAndHasPhoto() throws Exception {
     setupUserById();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.avatarClicked();
 
     verify(profileView).openPhoto(anyString());
@@ -707,7 +709,7 @@ public class ProfilePresenterTest {
   @Test public void shouldNotShowAvatarPhotoIfNotCurrentUserAndHasNotPhoto() throws Exception {
     setupUserByIdWithoutPhoto();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.avatarClicked();
 
     verify(profileView, never()).openPhoto(anyString());
@@ -716,7 +718,7 @@ public class ProfilePresenterTest {
   @Test public void shouldShowVerifiedUserIfUserVerifiedWhenProfileInitialized() throws Exception {
     setupVerifiedUserById();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showVerifiedUser();
   }
@@ -725,7 +727,7 @@ public class ProfilePresenterTest {
       throws Exception {
     setupUnverifiedUserById();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).hideVerifiedUser();
   }
@@ -733,7 +735,7 @@ public class ProfilePresenterTest {
   @Test public void shouldShowStreamsCountIfUserHasFavoritedStreams() throws Exception {
     setupUserWithStreams(0, 1);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showStreamsCount();
   }
@@ -741,7 +743,7 @@ public class ProfilePresenterTest {
   @Test public void shouldShowStreamsCountIfUserHasCreatedStreams() throws Exception {
     setupUserWithStreams(1, 0);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showStreamsCount();
   }
@@ -749,7 +751,7 @@ public class ProfilePresenterTest {
   @Test public void shouldShowStreamsCountIfUserHasCreatedAndFavoritedStreams() throws Exception {
     setupUserWithStreams(1, 1);
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
     verify(profileView).showStreamsCount();
   }
@@ -776,7 +778,7 @@ public class ProfilePresenterTest {
     setupUserById();
     setupUserInBlockedIdsCallback();
 
-    profilePresenter.initializeWithIdUser(profileView, ID_USER);
+    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
     profilePresenter.blockMenuClicked();
 
     verify(profileView).showBlockedMenu(any(UserModel.class));

@@ -1,7 +1,5 @@
 package com.shootr.mobile.data.entity;
 
-import com.shootr.mobile.domain.model.SearchableType;
-
 public class RecentSearchEntity {
 
   private Long visitDate;
