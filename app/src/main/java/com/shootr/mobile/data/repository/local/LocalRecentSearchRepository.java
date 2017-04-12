@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.local;
 import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.mapper.RecentSearchEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
+import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -16,12 +17,15 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
   private final RecentSearchDataSource localRecentSearchDataSource;
   private final RecentSearchEntityMapper recentSearchEntityMapper;
   private final StreamEntityMapper streamEntityMapper;
+  private final UserEntityMapper userEntityMapper;
 
   @Inject public LocalRecentSearchRepository(RecentSearchDataSource localRecentSearchDataSource,
-      RecentSearchEntityMapper recentSearchEntityMapper, StreamEntityMapper streamEntityMapper) {
+      RecentSearchEntityMapper recentSearchEntityMapper, StreamEntityMapper streamEntityMapper,
+      UserEntityMapper userEntityMapper) {
     this.localRecentSearchDataSource = localRecentSearchDataSource;
     this.recentSearchEntityMapper = recentSearchEntityMapper;
     this.streamEntityMapper = streamEntityMapper;
+    this.userEntityMapper = userEntityMapper;
   }
 
   @Override public void putRecentStream(Stream stream, long currentTime) {
@@ -32,7 +36,10 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
   }
 
   @Override public void putRecentUser(User user, long currentTime) {
-
+    if (user != null) {
+      localRecentSearchDataSource.putRecentUser(userEntityMapper.transform(user),
+          currentTime);
+    }
   }
 
   @Override public List<Searchable> getDefaultSearch() {
