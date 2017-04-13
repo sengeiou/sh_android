@@ -40,6 +40,7 @@
     <string name="analytics_label_mute">Mute stream</string>
     <string name="analytics_action_nice">Nice</string>
     <string name="analytics_label_nice">Nice</string>
+    <string name="analytics_action_checkin">Checkin</string>
     <string name="analytics_action_shot">Shot</string>
     <string name="analytics_label_shot">Shot</string>
     <string name="analytics_action_private_message">Message</string>
