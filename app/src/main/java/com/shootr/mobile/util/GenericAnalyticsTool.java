@@ -14,6 +14,7 @@ import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.model.user.User;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.json.JSONException;
@@ -47,6 +48,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String FIRST_NAME = "$first_name";
   private static final String ACTIVATED = "Activated";
   private static final String TYPE = "Type";
+  private static final String LASTDATE = "LastDate";
   private static final String PLATFORM_TYPE = "shootrPlatform";
   private static final String ANDROID_PLATFORM = "shootrAndroid";
   private final String ACTION = "action";
@@ -86,6 +88,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     mixpanel.getPeople().set(FOLLOWING, user.getNumFollowings());
     mixpanel.getPeople().set(FAVORITES, user.getFavoritedStreamsCount());
     mixpanel.getPeople().set(PLATFORM_TYPE, ANDROID_PLATFORM);
+    mixpanel.getPeople().set(LASTDATE, new Date());
   }
 
   @Override public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
