@@ -186,6 +186,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;
   @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+  @BindString(R.string.analytics_action_checkin) String analyticsActionCheckin;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_filter_on_stream) String analyticsActionFilterOnStream;
@@ -565,6 +566,7 @@ public class StreamTimelineFragment extends BaseFragment
 
           @Override public void onCheckIn() {
             streamTimelinePresenter.onMenuCheckInClick();
+            sendCheckinAnalythics();
           }
 
           @Override public boolean hasWritePermission() {
@@ -669,6 +671,7 @@ public class StreamTimelineFragment extends BaseFragment
     }, new OnCtaClickListener() {
       @Override public void onCtaClick(ShotModel shotModel) {
         streamTimelinePresenter.onCtaPressed(shotModel);
+        sendCheckinAnalythics();
       }
     }, numberFormatUtil,
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
@@ -694,6 +697,19 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(shotModel.getStreamId());
     builder.setStreamName(shotModel.getStreamTitle());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendCheckinAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionCheckin);
+    builder.setLabelId(analyticsActionCheckin);
+    builder.setSource(timelineSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName((streamTitle != null) ? streamTitle
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     analyticsTool.analyticsSendAction(builder);
   }
 
