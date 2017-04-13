@@ -698,6 +698,7 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(shotModel.getStreamId());
     builder.setStreamName(shotModel.getStreamTitle());
+    builder.setIdShot(shotModel.getIdShot());
     analyticsTool.analyticsSendAction(builder);
   }
 
