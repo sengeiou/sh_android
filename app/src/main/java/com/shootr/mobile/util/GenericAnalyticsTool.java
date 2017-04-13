@@ -37,6 +37,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String NOTIFICATION_NAME = "notificationName";
   private static final String PUSH_REDIRECTION = "pushRedirection";
   private static final String ID_POLL = "idPoll";
+  private static final String ID_SHOT = "idShot";
   private static final String LOGIN_TYPE = "loginType";
   private static final String FAVORITES = "Favorites";
   private static final String FOLLOWING = "Following";
@@ -165,12 +166,13 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String idStream = builder.getIdStream();
     String stream = builder.getStreamName();
     String idPoll = builder.getIdPoll();
+    String idShot = builder.getIdShot();
     String loginType = builder.getLoginType();
     User user = builder.getUser();
 
     sendGoogleAnalytics(context, action, actionId, labelId);
     sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
-        pushRedirection, idStream, stream, idPoll, loginType, context);
+        pushRedirection, idStream, stream, idPoll, idShot, loginType, context);
   }
 
   @Override public void appsFlyerSendAction(Builder builder) {
@@ -255,7 +257,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
       String targetUsername, String notificationName, String pushRedirection, String idStream,
-      String streamName, String idPoll, String loginType, Context context) {
+      String streamName, String idPoll, String idShot, String loginType, Context context) {
     try {
       JSONObject props = new JSONObject();
       if (user != null) {
@@ -293,6 +295,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       }
       if (idPoll != null) {
         props.put(ID_POLL, idPoll);
+      }
+      if (idShot != null) {
+        props.put(ID_SHOT, idShot);
       }
       if (loginType != null) {
         props.put(LOGIN_TYPE, loginType);
