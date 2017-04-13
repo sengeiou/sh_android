@@ -75,6 +75,8 @@
     <string name="analytics_source_timeline">timeline</string>
     <string name="analytics_source_discover_timeline">discover_timeline</string>
     <string name="analytics_source_shot_detail">shotDetail</string>
+    <string name="analytics_source_ctashot_detail">checkinCTA</string>
+    <string name="analytics_source_checkin_showcase_timeline">checkinShowCaseTimeline</string>
     <string name="analytics_source_profile">profile</string>
     <string name="analytics_source_friends">whoToFollow</string>
     <string name="analytics_source_favorites">favorites</string>
