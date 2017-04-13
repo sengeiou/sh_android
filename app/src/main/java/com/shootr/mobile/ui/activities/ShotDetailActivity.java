@@ -537,7 +537,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     if (detailAdapter.getMainShot() != null) {
       builder.setIdStream(detailAdapter.getMainShot().getStreamId());
       builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
-      builder.setIdTargetUser(detailAdapter.getMainShot().getIdShot());
+      builder.setIdShot(detailAdapter.getMainShot().getIdShot());
     }
     analyticsTool.analyticsSendAction(builder);
   }
