@@ -198,6 +198,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
   @BindString(R.string.analytics_source_timeline) String timelineSource;
+  @BindString(R.string.analytics_source_checkin_showcase_timeline) String checkinShowCaseTimeline;
   @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
   @BindString(R.string.analytics_label_open_cta_link) String analyticsLabelOpenCtaLink;
   @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
@@ -705,7 +706,7 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setContext(getContext());
     builder.setActionId(analyticsActionCheckin);
     builder.setLabelId(analyticsActionCheckin);
-    builder.setSource(timelineSource);
+    builder.setSource(checkinShowCaseTimeline);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(idStream);
     builder.setStreamName((streamTitle != null) ? streamTitle
