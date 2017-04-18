@@ -31,6 +31,7 @@ public class Stream implements Searchable {
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
+    private boolean isFavorite;
 
     public Boolean isRemoved() {
         return removed;
@@ -272,5 +273,13 @@ public class Stream implements Searchable {
 
     public void setCurrentUserContributor(boolean currentUserContributor) {
         isCurrentUserContributor = currentUserContributor;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }

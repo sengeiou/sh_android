@@ -8,7 +8,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.holders.StreamSearchViewHolder;
 import com.shootr.mobile.ui.adapters.holders.UserSearchViewHolder;
-import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.FavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnSearchStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -29,7 +29,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   private final OnFollowUnfollowListener onFollowUnfollowListener;
   private final OnUserClickListener onUserClickListener;
   private final OnSearchStreamClickListener onStreamClickListener;
-  private final OnFavoriteClickListener onFavoriteClickListener;
+  private final FavoriteClickListener onFavoriteClickListener;
   private final InitialsLoader initialsLoader;
 
   private List<SearchableModel> items;
@@ -37,7 +37,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   public SearchAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
       OnFollowUnfollowListener onFollowUnfollowListener, OnUserClickListener onUserClickListener,
       OnSearchStreamClickListener onStreamClickListener,
-      OnFavoriteClickListener onFavoriteClickListener) {
+      FavoriteClickListener onFavoriteClickListener) {
     this.imageLoader = imageLoader;
     this.onFollowUnfollowListener = onFollowUnfollowListener;
     this.onUserClickListener = onUserClickListener;
@@ -100,6 +100,18 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   public void unfollowUser(UserModel user) {
     int index = items.indexOf(user);
     ((UserModel) items.get(index)).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+    notifyDataSetChanged();
+  }
+
+  public void markFavorite(StreamModel stream) {
+    int index = items.indexOf(stream);
+    ((StreamModel) items.get(index)).setFavorite(true);
+    notifyDataSetChanged();
+  }
+
+  public void unmarkFavorite(StreamModel stream) {
+    int index = items.indexOf(stream);
+    ((StreamModel) items.get(index)).setFavorite(false);
     notifyDataSetChanged();
   }
 }

@@ -60,6 +60,12 @@ public class StreamEntityMapper {
     return stream;
   }
 
+  public Stream transform(StreamEntity streamEntity, boolean isFavorite) {
+    Stream stream = transform(streamEntity);
+    stream.setFavorite(isFavorite);
+    return stream;
+  }
+
   public List<Stream> transform(List<StreamEntity> eventEntities) {
     List<Stream> streams = new ArrayList<>(eventEntities.size());
     for (StreamEntity streamEntity : eventEntities) {

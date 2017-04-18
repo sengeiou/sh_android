@@ -17,14 +17,13 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.SearchAdapter;
-import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.FavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnSearchStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.model.StreamModel;
-import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.SearchItemsPresenter;
 import com.shootr.mobile.ui.views.SearchStreamView;
@@ -99,13 +98,16 @@ public class FindStreamsFragment extends BaseFragment implements SearchStreamVie
       @Override public void onStreamLongClick(StreamModel stream) {
         openContextualMenu(stream);
       }
-    }, new OnFavoriteClickListener() {
-      @Override public void onFavoriteClick(StreamResultModel stream) {
-        searchItemsPresenter.addToFavorites(stream.getStreamModel());
+    }, new FavoriteClickListener() {
+      @Override public void onFavoriteClick(StreamModel stream) {
+        searchItemsPresenter.addToFavorites(stream);
+        adapter.markFavorite(stream);
+        sendFavoriteAnalytics(stream);
       }
 
-      @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
-        searchItemsPresenter.removeFromFavorites(stream.getStreamModel());
+      @Override public void onRemoveFavoriteClick(StreamModel stream) {
+        searchItemsPresenter.removeFromFavorites(stream);
+        adapter.unmarkFavorite(stream);
       }
     });
 
@@ -183,11 +185,11 @@ public class FindStreamsFragment extends BaseFragment implements SearchStreamVie
   }
 
   @Override public void showAddedToFavorites(StreamModel streamModel) {
-    feedbackMessage.show(getView(), addedToFavorites);
+    /* no-op */
   }
 
   @Override public void showRemovedFromFavorites(StreamModel streamModel) {
-    feedbackMessage.show(getView(), removedFromFavorites);
+    /* no-op */
   }
 
   @Override public void showStreamShared() {

@@ -1,9 +1,11 @@
 package com.shootr.mobile.data.repository.local;
 
+import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
+import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.domain.model.Searchable;
@@ -24,15 +26,18 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
   private final UserEntityMapper userEntityMapper;
   private final UserDataSource localUserDataSource;
   private final SessionRepository sessionRepository;
+  private final InternalFavoriteDatasource localFavoriteDataSource;
 
   @Inject public LocalRecentSearchRepository(RecentSearchDataSource localRecentSearchDataSource,
       StreamEntityMapper streamEntityMapper, UserEntityMapper userEntityMapper,
-      @Local UserDataSource localUserDataSource, SessionRepository sessionRepository) {
+      @Local UserDataSource localUserDataSource, SessionRepository sessionRepository,
+      InternalFavoriteDatasource localFavoriteDataSource) {
     this.localRecentSearchDataSource = localRecentSearchDataSource;
     this.streamEntityMapper = streamEntityMapper;
     this.userEntityMapper = userEntityMapper;
     this.localUserDataSource = localUserDataSource;
     this.sessionRepository = sessionRepository;
+    this.localFavoriteDataSource = localFavoriteDataSource;
   }
 
   @Override public void putRecentStream(Stream stream, long currentTime) {
@@ -50,14 +55,14 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
   }
 
   @Override public List<Searchable> getDefaultSearch() {
-
     List<Searchable> searchables = new ArrayList<>();
     List<RecentSearchEntity> searchableEntities = localRecentSearchDataSource.getRecentSearches();
     try {
       for (RecentSearchEntity searchableEntity : searchableEntities) {
         switch (searchableEntity.getSearchableType()) {
           case SearchableType.STREAM:
-            searchables.add(streamEntityMapper.transform(searchableEntity.getStream()));
+            searchables.add(streamEntityMapper.transform(searchableEntity.getStream(),
+                localFavoriteDataSource.getFavoriteByIdStream(searchableEntity.getStream().getIdStream()) != null));
             break;
           case SearchableType.USER:
             UserEntity userEntity = searchableEntity.getUser();

@@ -39,6 +39,7 @@ public class StreamModelMapper {
         streamModel.setContributorCount(stream.getContributorCount());
         streamModel.setCurrentUserContributor(stream.isCurrentUserContributor());
         streamModel.setVerifiedUser(stream.isVerifiedUser());
+        streamModel.setFavorite(stream.isFavorite());
         return streamModel;
     }
 

@@ -19,14 +19,13 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.adapters.SearchAdapter;
-import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.FavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnSearchStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.model.StreamModel;
-import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.SearchItemsPresenter;
 import com.shootr.mobile.ui.views.SearchUserView;
@@ -121,19 +120,19 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
-
+        /* no-op */
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
-
+        /* no-op */
       }
-    }, new OnFavoriteClickListener() {
-      @Override public void onFavoriteClick(StreamResultModel stream) {
-
+    }, new FavoriteClickListener() {
+      @Override public void onFavoriteClick(StreamModel stream) {
+        /* no-op */
       }
 
-      @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
-
+      @Override public void onRemoveFavoriteClick(StreamModel stream) {
+        /* no-op */
       }
     });
 
