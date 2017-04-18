@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -107,14 +109,11 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
       @Override public void onFollow(UserModel user) {
         presenter.followUser(user);
         adapter.followUser(user);
-        adapter.notifyDataSetChanged();
         sendAnalytics(user);
       }
 
       @Override public void onUnfollow(UserModel user) {
-        presenter.unfollowUser(user);
-        adapter.unfollowUser(user);
-        adapter.notifyDataSetChanged();
+        showUnfollowConfirmation(user);
       }
     }, new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
@@ -142,8 +141,28 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
     resultsListView.setAdapter(adapter);
   }
 
+  private void unfollowUser(UserModel user) {
+    presenter.unfollowUser(user);
+    adapter.unfollowUser(user);
+  }
+
   @Override public void renderSearchItems(List<SearchableModel> searchableModels) {
     adapter.setItems(searchableModels);
     adapter.notifyDataSetChanged();
   }
+
+  private void showUnfollowConfirmation(final UserModel userModel) {
+    new AlertDialog.Builder(getContext()).setMessage(
+        String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+        .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                unfollowUser(userModel);
+              }
+            })
+        .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
+        .create()
+        .show();
+  }
+
 }

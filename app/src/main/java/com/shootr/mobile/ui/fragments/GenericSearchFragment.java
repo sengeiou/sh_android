@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -88,14 +90,11 @@ public class GenericSearchFragment extends BaseFragment
       @Override public void onFollow(UserModel user) {
         searchItemsPresenter.followUser(user);
         adapter.followUser(user);
-        adapter.notifyDataSetChanged();
         sendAnalytics(user);
       }
 
       @Override public void onUnfollow(UserModel user) {
-        searchItemsPresenter.unfollowUser(user);
-        adapter.unfollowUser(user);
-        adapter.notifyDataSetChanged();
+        showUnfollowConfirmation(user);
       }
     }, new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
@@ -128,6 +127,25 @@ public class GenericSearchFragment extends BaseFragment
         hideKeyboard();
       }
     });
+  }
+
+  private void unfollowUser(UserModel user) {
+    searchItemsPresenter.unfollowUser(user);
+    adapter.unfollowUser(user);
+  }
+
+  private void showUnfollowConfirmation(final UserModel userModel) {
+    new AlertDialog.Builder(getContext()).setMessage(
+        String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
+        .setPositiveButton(getString(R.string.unfollow_dialog_yes),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                unfollowUser(userModel);
+              }
+            })
+        .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
+        .create()
+        .show();
   }
 
   private void openContextualMenu(final StreamModel stream) {
