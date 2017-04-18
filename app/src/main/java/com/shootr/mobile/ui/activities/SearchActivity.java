@@ -271,9 +271,15 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
 
   @Override protected void onResume() {
     super.onResume();
+    presenter.resume();
     if (searchView != null) {
       searchView.clearFocus();
     }
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    presenter.pause();
   }
 
   @Override public void renderSearch(List<SearchableModel> searchableModelList) {

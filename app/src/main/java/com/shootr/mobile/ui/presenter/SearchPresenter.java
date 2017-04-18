@@ -29,7 +29,9 @@ public class SearchPresenter implements Presenter {
 
   private SearchView view;
   private String currentQuery = "";
+  private int currentType = 0;
   private boolean hasBeenPaused = false;
+  private boolean hasBeenSearched;
   private List<SearchableModel> searchableModelList = new ArrayList<>();
 
   @Inject public SearchPresenter(GetSearchItemsInteractor getSearchItemsInteractor,
@@ -56,25 +58,32 @@ public class SearchPresenter implements Presenter {
 
   public void search(String query, final int type) {
     if (query != null && !currentQuery.equals(query) && !query.isEmpty()) {
+      hasBeenSearched = true;
       currentQuery = query;
-      getSearchItemsInteractor.searchItems(query, new Interactor.Callback<List<Searchable>>() {
-        @Override public void onLoaded(List<Searchable> searchables) {
-          mapSearch(searchables);
-          filterSearch(type);
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-        /* no-op */
-        }
-      });
+      searchItems(query, type);
     } else if (query.isEmpty()) {
+      hasBeenSearched = false;
       initialSearch(type);
     } else {
       filterSearch(type);
     }
   }
 
+  private void searchItems(String query, final int type) {
+    getSearchItemsInteractor.searchItems(query, new Interactor.Callback<List<Searchable>>() {
+      @Override public void onLoaded(List<Searchable> searchables) {
+        mapSearch(searchables);
+        filterSearch(type);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+      /* no-op */
+      }
+    });
+  }
+
   public void filterSearch(int type) {
+    currentType = type;
     if (type == TYPE_ALL) {
       view.renderSearch(searchableModelList);
     } else if (type == TYPE_USER) {
@@ -121,10 +130,16 @@ public class SearchPresenter implements Presenter {
   }
 
   @Override public void resume() {
-
+    if (hasBeenPaused) {
+      if (hasBeenSearched) {
+        searchItems(currentQuery, currentType);
+      } else {
+        initialSearch(currentType);
+      }
+    }
   }
 
   @Override public void pause() {
-
+    hasBeenPaused = true;
   }
 }
