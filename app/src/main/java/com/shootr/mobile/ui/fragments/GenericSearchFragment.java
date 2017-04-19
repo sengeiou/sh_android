@@ -106,7 +106,7 @@ public class GenericSearchFragment extends BaseFragment
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
-        openContextualMenu(stream);
+        searchItemsPresenter.openContextualMenu(stream);
       }
     }, new FavoriteClickListener() {
       @Override public void onFavoriteClick(StreamModel stream) {
@@ -147,25 +147,6 @@ public class GenericSearchFragment extends BaseFragment
         .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
         .create()
         .show();
-  }
-
-  private void openContextualMenu(final StreamModel stream) {
-    new CustomContextMenu.Builder(getContext()).addAction(R.string.add_to_favorites_menu_title,
-        new Runnable() {
-          @Override public void run() {
-            searchItemsPresenter.addToFavorites(stream);
-            sendFavoriteAnalytics(stream);
-          }
-        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
-      @Override public void run() {
-        searchItemsPresenter.shareStream(stream);
-      }
-    }).addAction(R.string.share_via, new Runnable() {
-      @Override public void run() {
-        shareStream(stream);
-        sendExternalShareAnalytics(stream);
-      }
-    }).show();
   }
 
   private void sendFavoriteAnalytics(StreamModel stream) {
@@ -234,6 +215,45 @@ public class GenericSearchFragment extends BaseFragment
 
   @Override public void showError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+  }
+
+  @Override public void openContextualMenuWithAddFavorite(final StreamModel stream) {
+    new CustomContextMenu.Builder(getContext()).addAction(R.string.add_to_favorites_menu_title,
+        new Runnable() {
+          @Override public void run() {
+            searchItemsPresenter.addToFavorites(stream);
+            adapter.markFavorite(stream);
+            sendFavoriteAnalytics(stream);
+          }
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
+      @Override public void run() {
+        searchItemsPresenter.shareStream(stream);
+      }
+    }).addAction(R.string.share_via, new Runnable() {
+      @Override public void run() {
+        shareStream(stream);
+        sendExternalShareAnalytics(stream);
+      }
+    }).show();
+  }
+
+  @Override public void openContextualMenuWithUnmarkFavorite(final StreamModel stream) {
+    new CustomContextMenu.Builder(getContext()).addAction(R.string.menu_remove_favorite,
+        new Runnable() {
+          @Override public void run() {
+            searchItemsPresenter.removeFromFavorites(stream);
+            adapter.unmarkFavorite(stream);
+          }
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
+      @Override public void run() {
+        searchItemsPresenter.shareStream(stream);
+      }
+    }).addAction(R.string.share_via, new Runnable() {
+      @Override public void run() {
+        shareStream(stream);
+        sendExternalShareAnalytics(stream);
+      }
+    }).show();
   }
 
   @Override

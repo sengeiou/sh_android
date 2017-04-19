@@ -123,4 +123,12 @@ public class SearchItemsPresenter implements Presenter {
           }
         });
   }
+
+  public void openContextualMenu(StreamModel streamModel) {
+    if (streamModel.isFavorite()) {
+      searchStreamView.openContextualMenuWithUnmarkFavorite(streamModel);
+    } else {
+      searchStreamView.openContextualMenuWithAddFavorite(streamModel);
+    }
+  }
 }

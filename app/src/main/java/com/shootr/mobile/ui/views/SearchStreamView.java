@@ -15,4 +15,8 @@ public interface SearchStreamView {
   void showStreamShared();
 
   void showError(String errorMessage);
+
+  void openContextualMenuWithAddFavorite(StreamModel stream);
+
+  void openContextualMenuWithUnmarkFavorite(StreamModel stream);
 }
