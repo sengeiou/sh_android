@@ -114,10 +114,8 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setComment(ShotModel shotModel, String comment) {
-        CharSequence spannedComment =
-          shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         this.text.setBaseMessageModel(shotModel);
-        this.text.setText(spannedComment);
+        this.text.setText(comment);
         this.text.addLinks();
     }
 
