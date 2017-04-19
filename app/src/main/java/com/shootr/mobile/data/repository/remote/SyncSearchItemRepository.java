@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.repository.remote;
 
-import android.util.Log;
 import com.shootr.mobile.data.entity.SearchableEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -49,13 +48,14 @@ public class SyncSearchItemRepository implements ExternalSearchItemRepository {
         switch (searchableEntity.getSearcheableType()) {
           case SearchableType.STREAM:
             searchables.add(streamEntityMapper.transform((StreamEntity) searchableEntity,
-                localFavoriteDataSource.getFavoriteByIdStream(((StreamEntity) searchableEntity).getIdStream()) != null));
+                localFavoriteDataSource.getFavoriteByIdStream(
+                    ((StreamEntity) searchableEntity).getIdStream()) != null));
             break;
           case SearchableType.USER:
             UserEntity userEntity = (UserEntity) searchableEntity;
             searchables.add(
-                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(),
-                    false, isFollowing(userEntity.getIdUser())));
+                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(), false,
+                    isFollowing(userEntity.getIdUser())));
             break;
           default:
             break;

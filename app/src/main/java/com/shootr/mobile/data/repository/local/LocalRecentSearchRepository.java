@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.repository.local;
 
-import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
