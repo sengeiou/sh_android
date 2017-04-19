@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,8 +118,7 @@ public class GenericSearchFragment extends BaseFragment
       }
 
       @Override public void onRemoveFavoriteClick(StreamModel stream) {
-        searchItemsPresenter.removeFromFavorites(stream);
-        adapter.unmarkFavorite(stream);
+        setupRemoveFromFavoriteDialog(stream);
       }
     });
 
@@ -241,8 +242,7 @@ public class GenericSearchFragment extends BaseFragment
     new CustomContextMenu.Builder(getContext()).addAction(R.string.menu_remove_favorite,
         new Runnable() {
           @Override public void run() {
-            searchItemsPresenter.removeFromFavorites(stream);
-            adapter.unmarkFavorite(stream);
+            setupRemoveFromFavoriteDialog(stream);
           }
         }).addAction(R.string.share_stream_via_shootr, new Runnable() {
       @Override public void run() {
@@ -255,6 +255,32 @@ public class GenericSearchFragment extends BaseFragment
       }
     }).show();
   }
+
+  private void setupRemoveFromFavoriteDialog(final StreamModel streamModel) {
+    Spanned text;
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+      text = Html.fromHtml(
+          String.format(getString(R.string.remove_from_favorites_dialog), streamModel.getTitle()),
+          Html.FROM_HTML_MODE_LEGACY);
+    } else {
+      text = Html.fromHtml(
+          String.format(getString(R.string.remove_from_favorites_dialog), streamModel.getTitle()));
+    }
+
+    new AlertDialog.Builder(getContext()).setMessage(text)
+        .setPositiveButton(getString(R.string.remove_favorite),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                searchItemsPresenter.removeFromFavorites(streamModel);
+                adapter.unmarkFavorite(streamModel);
+              }
+            })
+        .setNegativeButton(getString(R.string.cancel), null)
+        .create()
+        .show();
+  }
+
 
   @Override
   public void navigateToStreamTimeline(String idStream, String streamTitle, String authorId) {

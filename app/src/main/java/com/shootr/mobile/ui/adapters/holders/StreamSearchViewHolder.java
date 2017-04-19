@@ -100,6 +100,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
       favorite.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           if (streamResult.isFavorite()) {
+            favorite.setChecked(streamResult.isFavorite());
             onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
           } else {
             onFavoriteClickListener.onFavoriteClick(streamResult);

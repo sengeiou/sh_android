@@ -217,12 +217,4 @@ public class StreamModel implements Serializable, SearchableModel {
     @Override public String getSearchableType() {
         return SearchableType.STREAM;
     }
-
-    public boolean isFavorite() {
-        return isFavorite;
-    }
-
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
-    }
 }

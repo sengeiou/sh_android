@@ -106,7 +106,6 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   public void markFavorite(StreamModel stream) {
     int index = items.indexOf(stream);
     ((StreamModel) items.get(index)).setFavorite(true);
-    notifyDataSetChanged();
   }
 
   public void unmarkFavorite(StreamModel stream) {
