@@ -296,10 +296,6 @@
         android:name=".ui.activities.FriendsActivity"
         android:label="@string/drawer_friends_title">
     </activity>
-    <activity
-        android:name=".ui.activities.DiscoverSearchActivity"
-        android:theme="@style/ShootrTheme.Closable">
-    </activity>
     <activity android:name=".ui.activities.CropPictureActivity">
     </activity>
 
@@ -329,6 +325,10 @@
         android:name="com.mixpanel.android.surveys.SurveyActivity"
         android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
     <activity android:name=".ui.activities.OnBoardingStreamActivity">
+    </activity>
+    <activity
+        android:name=".ui.activities.SearchActivity"
+        android:theme="@style/ShootrTheme.Closable">
     </activity>
   </application>
 

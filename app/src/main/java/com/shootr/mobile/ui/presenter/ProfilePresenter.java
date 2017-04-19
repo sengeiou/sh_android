@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
+import com.shootr.mobile.domain.interactor.user.PutRecentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
@@ -36,6 +37,7 @@ public class ProfilePresenter implements Presenter {
 
   public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 11;
   public static final int MAX_SHOTS_SHOWN = 10;
+  private final PutRecentUserInteractor putRecentUserInteractor;
   private final GetUserByIdInteractor getUserByIdInteractor;
   private final GetUserByUsernameInteractor getUserByUsernameInteractor;
   private final LogoutInteractor logoutInteractor;
@@ -56,6 +58,7 @@ public class ProfilePresenter implements Presenter {
   private ProfileView profileView;
   private String profileIdUser;
   private boolean isCurrentUser;
+  private boolean isFromSearch = false;
   private String username;
   private UserModel userModel;
   private boolean hasBeenPaused = false;
@@ -64,7 +67,8 @@ public class ProfilePresenter implements Presenter {
   private boolean refreshOnlyLocal = false;
   private boolean hasLoadedBlocks = false;
 
-  @Inject public ProfilePresenter(GetUserByIdInteractor getUserByIdInteractor,
+  @Inject public ProfilePresenter(PutRecentUserInteractor putRecentUserInteractor,
+      GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, HideShotInteractor hideShotInteractor,
@@ -75,6 +79,7 @@ public class ProfilePresenter implements Presenter {
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, SessionRepository sessionRepository,
       ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
       ShotModelMapper shotModelMapper) {
+    this.putRecentUserInteractor = putRecentUserInteractor;
     this.getUserByIdInteractor = getUserByIdInteractor;
     this.getUserByUsernameInteractor = getUserByUsernameInteractor;
     this.logoutInteractor = logoutInteractor;
@@ -107,8 +112,9 @@ public class ProfilePresenter implements Presenter {
     initialize(profileView);
   }
 
-  public void initializeWithIdUser(ProfileView profileView, String idUser) {
+  public void initializeWithIdUser(ProfileView profileView, String idUser, boolean isFromSearch) {
     this.profileIdUser = idUser;
+    this.isFromSearch = isFromSearch;
     initialize(profileView);
     loadLatestShots(idUser);
   }

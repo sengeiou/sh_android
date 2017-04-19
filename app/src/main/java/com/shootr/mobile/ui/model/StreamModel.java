@@ -1,8 +1,9 @@
 package com.shootr.mobile.ui.model;
 
+import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 
-public class StreamModel implements Serializable {
+public class StreamModel implements Serializable, SearchableModel {
 
     private String idStream;
     private String authorId;
@@ -204,11 +205,16 @@ public class StreamModel implements Serializable {
         isCurrentUserContributor = currentUserContributor;
     }
 
+
     public boolean isFavorite() {
         return isFavorite;
     }
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    @Override public String getSearchableType() {
+        return SearchableType.STREAM;
     }
 }

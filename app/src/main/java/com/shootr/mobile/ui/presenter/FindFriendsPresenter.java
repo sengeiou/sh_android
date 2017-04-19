@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.GetRecentSearchInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsInteractor;
 import com.shootr.mobile.domain.interactor.user.FindFriendsServerInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
@@ -27,6 +28,7 @@ public class FindFriendsPresenter implements Presenter {
   private final ErrorMessageFactory errorMessageFactory;
   private final FindFriendsServerInteractor findFriendsServerInteractor;
   private final ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor;
+  private final GetRecentSearchInteractor getRecentSearchInteractor;
   private final GetLocalPeopleInteractor getLocalPeopleInteractor;
 
   private FindFriendsView findFriendsView;
@@ -41,7 +43,7 @@ public class FindFriendsPresenter implements Presenter {
       UnfollowInteractor unfollowInteractor,
       ReactiveSearchPeopleInteractor reactiveSearchPeopleInteractor,
       GetLocalPeopleInteractor getLocalPeopleInteractor, UserModelMapper userModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      ErrorMessageFactory errorMessageFactory, GetRecentSearchInteractor getRecentSearchInteractor) {
     this.findFriendsInteractor = findFriendsInteractor;
     this.findFriendsServerInteractor = findFriendsServerInteractor;
     this.followInteractor = followInteractor;
@@ -50,6 +52,7 @@ public class FindFriendsPresenter implements Presenter {
     this.getLocalPeopleInteractor = getLocalPeopleInteractor;
     this.userModelMapper = userModelMapper;
     this.errorMessageFactory = errorMessageFactory;
+    this.getRecentSearchInteractor = getRecentSearchInteractor;
   }
 
   protected void setView(FindFriendsView findFriendsView) {

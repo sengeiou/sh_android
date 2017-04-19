@@ -16,14 +16,17 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
-import com.shootr.mobile.ui.adapters.StreamsListAdapter;
-import com.shootr.mobile.ui.adapters.WatchableStreamsAdapter;
-import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
-import com.shootr.mobile.ui.base.BaseSearchFragment;
-import com.shootr.mobile.ui.model.StreamResultModel;
-import com.shootr.mobile.ui.presenter.FindStreamsPresenter;
-import com.shootr.mobile.ui.views.FindStreamsView;
+import com.shootr.mobile.ui.adapters.SearchAdapter;
+import com.shootr.mobile.ui.adapters.listeners.FavoriteClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
+import com.shootr.mobile.ui.adapters.listeners.OnSearchStreamClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
+import com.shootr.mobile.ui.base.BaseFragment;
+import com.shootr.mobile.ui.model.SearchableModel;
+import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.presenter.SearchItemsPresenter;
+import com.shootr.mobile.ui.views.SearchStreamView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -34,14 +37,15 @@ import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class FindStreamsFragment extends BaseSearchFragment implements FindStreamsView {
+public class FindStreamsFragment extends BaseFragment implements SearchStreamView, SearchFragment {
 
-  private StreamsListAdapter adapter;
+  private SearchAdapter adapter;
 
   @BindView(R.id.find_streams_list) RecyclerView streamsList;
   @BindView(R.id.find_streams_empty) View emptyView;
   @BindView(R.id.find_streams_loading) View loadingView;
   @BindString(R.string.added_to_favorites) String addedToFavorites;
+  @BindString(R.string.removed_from_favorites) String removedFromFavorites;
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShare;
@@ -49,7 +53,7 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
 
-  @Inject FindStreamsPresenter findStreamsPresenter;
+  @Inject SearchItemsPresenter searchItemsPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject ShareManager shareManager;
   @Inject InitialsLoader initialsLoader;
@@ -68,25 +72,45 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
     ButterKnife.bind(this, getView());
     streamsList.setLayoutManager(new LinearLayoutManager(getContext()));
     setupViews();
-    findStreamsPresenter.initialize(this);
+    searchItemsPresenter.initialize(null, this);
   }
 
   private void initializeStreamListAdapter() {
-    adapter = new WatchableStreamsAdapter(imageLoader, initialsLoader, new OnStreamClickListener() {
-      @Override public void onStreamClick(StreamResultModel stream) {
-        findStreamsPresenter.selectStream(stream);
+
+    adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
+      @Override public void onFollow(UserModel user) {
+        /* no-op */
       }
 
-      @Override public boolean onStreamLongClick(StreamResultModel stream) {
-        openContextualMenu(stream);
-        return true;
+      @Override public void onUnfollow(UserModel user) {
+        /* no-op */
       }
-    }, null, false, false);
-    adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
-      @Override public void onUnwatchClick() {
-        findStreamsPresenter.unwatchStream();
+    }, new OnUserClickListener() {
+      @Override public void onUserClick(String idUser) {
+        /* no-op */
+      }
+    }, new OnSearchStreamClickListener() {
+      @Override public void onStreamClick(StreamModel stream) {
+        searchItemsPresenter.selectStream(stream);
+        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
+      }
+
+      @Override public void onStreamLongClick(StreamModel stream) {
+        searchItemsPresenter.openContextualMenu(stream);
+      }
+    }, new FavoriteClickListener() {
+      @Override public void onFavoriteClick(StreamModel stream) {
+        searchItemsPresenter.addToFavorites(stream);
+        adapter.markFavorite(stream);
+        sendFavoriteAnalytics(stream);
+      }
+
+      @Override public void onRemoveFavoriteClick(StreamModel stream) {
+        searchItemsPresenter.removeFromFavorites(stream);
+        adapter.unmarkFavorite(stream);
       }
     });
+
     streamsList.setAdapter(adapter);
     streamsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -96,87 +120,40 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
     });
   }
 
-  private void openContextualMenu(final StreamResultModel stream) {
-    new CustomContextMenu.Builder(getContext()).addAction(R.string.add_to_favorites_menu_title,
-        new Runnable() {
-          @Override public void run() {
-            findStreamsPresenter.addToFavorites(stream);
-            sendFavoriteAnalytics(stream);
-          }
-        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
-      @Override public void run() {
-        findStreamsPresenter.shareStream(stream);
-      }
-    }).addAction(R.string.share_via, new Runnable() {
-      @Override public void run() {
-        shareStream(stream);
-        sendExternalShareAnalytics(stream);
-      }
-    }).show();
-  }
-
-  private void sendFavoriteAnalytics(StreamResultModel stream) {
+  private void sendFavoriteAnalytics(StreamModel stream) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(discoverSearchSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setStreamName(stream.getStreamModel().getTitle());
-    builder.setIdStream(stream.getStreamModel().getIdStream());
+    builder.setStreamName(stream.getTitle());
+    builder.setIdStream(stream.getIdStream());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  private void sendExternalShareAnalytics(StreamResultModel streamResultModel) {
+  private void sendExternalShareAnalytics(StreamModel streamResultModel) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionExternalShare);
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(discoverSearchSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setStreamName(streamResultModel.getStreamModel().getTitle());
-    builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
+    builder.setStreamName(streamResultModel.getTitle());
+    builder.setIdStream(streamResultModel.getIdStream());
     analyticsTool.analyticsSendAction(builder);
   }
 
-  private void shareStream(StreamResultModel stream) {
-    Intent shareIntent = shareManager.shareStreamIntent(getActivity(), stream.getStreamModel());
+  private void shareStream(StreamModel stream) {
+    Intent shareIntent = shareManager.shareStreamIntent(getActivity(), stream);
     Intents.maybeStartActivity(getContext(), shareIntent);
   }
 
-  //region View methods
-  @Override public void hideContent() {
-    streamsList.setVisibility(View.GONE);
-  }
-
   @Override public void hideKeyboard() {
-    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+    final InputMethodManager imm =
+        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-  }
-
-  @Override public void showLoading() {
-    loadingView.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideLoading() {
-    loadingView.setVisibility(View.GONE);
-  }
-
-  @Override public void showEmpty() {
-    emptyView.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void showContent() {
-    streamsList.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideEmpty() {
-    emptyView.setVisibility(View.GONE);
-  }
-
-  @Override public void renderStreams(List<StreamResultModel> streamModels) {
-    adapter.setStreams(streamModels);
   }
 
   @Override public void showError(String errorMessage) {
@@ -188,22 +165,55 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
     startActivity(StreamTimelineActivity.newIntent(getContext(), idStream, streamTitle, authorId));
   }
 
-  @Override public void showAddedToFavorites() {
-    feedbackMessage.show(getView(), addedToFavorites);
+  @Override public void showAddedToFavorites(StreamModel streamModel) {
+    /* no-op */
+  }
+
+  @Override public void showRemovedFromFavorites(StreamModel streamModel) {
+    /* no-op */
   }
 
   @Override public void showStreamShared() {
-    feedbackMessage.show(getView(), sharedStream);
+
   }
 
-  //endregion
-
-  @Override public void search(String query) {
-    findStreamsPresenter.search(query);
+  @Override public void openContextualMenuWithAddFavorite(final StreamModel stream) {
+    new CustomContextMenu.Builder(getContext()).addAction(R.string.add_to_favorites_menu_title,
+        new Runnable() {
+          @Override public void run() {
+            searchItemsPresenter.addToFavorites(stream);
+            adapter.markFavorite(stream);
+            sendFavoriteAnalytics(stream);
+          }
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
+      @Override public void run() {
+        searchItemsPresenter.shareStream(stream);
+      }
+    }).addAction(R.string.share_via, new Runnable() {
+      @Override public void run() {
+        shareStream(stream);
+        sendExternalShareAnalytics(stream);
+      }
+    }).show();
   }
 
-  @Override public void searchChanged(String query) {
-    findStreamsPresenter.reactiveSearch(query);
+  @Override public void openContextualMenuWithUnmarkFavorite(final StreamModel stream) {
+    new CustomContextMenu.Builder(getContext()).addAction(R.string.menu_remove_favorite,
+        new Runnable() {
+          @Override public void run() {
+            searchItemsPresenter.removeFromFavorites(stream);
+            adapter.unmarkFavorite(stream);
+          }
+        }).addAction(R.string.share_stream_via_shootr, new Runnable() {
+      @Override public void run() {
+        searchItemsPresenter.shareStream(stream);
+      }
+    }).addAction(R.string.share_via, new Runnable() {
+      @Override public void run() {
+        shareStream(stream);
+        sendExternalShareAnalytics(stream);
+      }
+    }).show();
   }
 
   private void setupViews() {
@@ -213,11 +223,16 @@ public class FindStreamsFragment extends BaseSearchFragment implements FindStrea
 
   @Override public void onResume() {
     super.onResume();
-    findStreamsPresenter.resume();
+    searchItemsPresenter.resume();
   }
 
   @Override public void onPause() {
     super.onPause();
-    findStreamsPresenter.pause();
+    searchItemsPresenter.pause();
+  }
+
+  @Override public void renderSearchItems(List<SearchableModel> searchableModels) {
+    adapter.setItems(searchableModels);
+    adapter.notifyDataSetChanged();
   }
 }

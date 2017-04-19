@@ -10,7 +10,6 @@ import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.CropPictureActivity;
 import com.shootr.mobile.ui.activities.DiscoverFragment;
-import com.shootr.mobile.ui.activities.DiscoverSearchActivity;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
@@ -31,6 +30,7 @@ import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
+import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDataInfoActivity;
@@ -53,6 +53,7 @@ import com.shootr.mobile.ui.fragments.DiscoverTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
+import com.shootr.mobile.ui.fragments.GenericSearchFragment;
 import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
@@ -110,13 +111,14 @@ import javax.inject.Singleton;
     SettingsActivity.class,
     DiscoverFragment.class,
     FriendsActivity.class,
-    DiscoverSearchActivity.class,
+    SearchActivity.class,
     FindFriendsFragment.class,
     FindStreamsFragment.class,
     CropPictureActivity.class,
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
-    OnBoardingStreamActivity.class, DiscoverTimelineFragment.class
+    OnBoardingStreamActivity.class, DiscoverTimelineFragment.class,
+    GenericSearchFragment.class
   },
   complete = false) public class UiModule {
 

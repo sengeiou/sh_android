@@ -1,12 +1,14 @@
 package com.shootr.mobile.domain.model.stream;
 
+import com.shootr.mobile.domain.model.Searchable;
+import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.user.User;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Stream {
+public class Stream implements Searchable {
 
     private String id;
     private String authorId;
@@ -29,6 +31,7 @@ public class Stream {
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
+    private boolean isFavorite;
 
     public Boolean isRemoved() {
         return removed;
@@ -212,6 +215,10 @@ public class Stream {
         this.readWriteMode = readWriteMode;
     }
 
+    @Override public String getSearchableType() {
+        return SearchableType.STREAM;
+    }
+
     public static class StreamExplicitComparator implements Comparator<Stream> {
 
         private Map<String, Integer> indexMap = new HashMap<>();
@@ -266,5 +273,13 @@ public class Stream {
 
     public void setCurrentUserContributor(boolean currentUserContributor) {
         isCurrentUserContributor = currentUserContributor;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
     }
 }
