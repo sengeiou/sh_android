@@ -84,9 +84,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
   private void addmessageComment(MessageViewHolder vh, CharSequence comment,
       OnUrlClickListener onUrlClickListener, PrivateMessageModel item) {
-    CharSequence spannedComment =
-        shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
-    vh.text.setText(spannedComment);
+    vh.text.setText(comment);
     vh.text.setBaseMessageModel(item);
     vh.text.addLinks();
   }

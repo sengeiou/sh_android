@@ -147,10 +147,8 @@ public class ShotViewHolder {
     }
 
     private void addShotComment(ShotViewHolder vh, CharSequence comment, ShotModel shotModel) {
-        CharSequence spannedComment =
-          shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
         vh.text.setBaseMessageModel(shotModel);
-        vh.text.setText(spannedComment);
+        vh.text.setText(comment);
         vh.text.addLinks();
     }
 

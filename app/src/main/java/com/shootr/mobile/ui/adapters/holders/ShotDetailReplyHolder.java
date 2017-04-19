@@ -101,10 +101,8 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
         String comment = reply.getComment();
         if (comment != null) {
             this.text.setVisibility(View.VISIBLE);
-            CharSequence spannedComment =
-              shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
             this.text.setBaseMessageModel(reply);
-            this.text.setText(spannedComment);
+            this.text.setText(comment);
             this.text.addLinks();
         } else {
             this.text.setVisibility(View.GONE);

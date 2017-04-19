@@ -16,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
@@ -30,6 +31,7 @@ public class BaseMessageTextView extends TextView {
   public static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
   public static final String DEFAULT_SCHEMA = "http://";
   public static final int START = 0;
+  private static final String USERNAME_REGEX = "@[-_A-Za-z0-9]{3,25}";
 
   private BaseMessageModel baseMessageModel;
   private BaseMessagePressableSpan alreadyPressedSpan;
@@ -73,7 +75,23 @@ public class BaseMessageTextView extends TextView {
       SpannableStringBuilder stringBuilder = new SpannableStringBuilder(text);
       spanUrls(stringBuilder);
       spanPollQuestions(stringBuilder);
+      spanMentions(stringBuilder);
       setText(stringBuilder, BufferType.SPANNABLE);
+    }
+  }
+
+  private void spanMentions(SpannableStringBuilder stringBuilder) {
+    Pattern pattern = Pattern.compile(USERNAME_REGEX);
+    Matcher matcher = pattern.matcher(stringBuilder);
+    while (matcher.find()) {
+      String username = stringBuilder.subSequence(matcher.start() + 1, matcher.end()).toString();
+      BaseMessageUsernameSpan usernameClickSpan = new BaseMessageUsernameSpan(username) {
+        @Override public void onUsernameClick(String username) {
+          goToUserProfile(username);
+        }
+      };
+      stringBuilder.setSpan(usernameClickSpan, matcher.start(), matcher.end(),
+          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
   }
 
@@ -128,6 +146,12 @@ public class BaseMessageTextView extends TextView {
         }
       }
     }
+  }
+
+  private void goToUserProfile(String username) {
+    Context context = getContext();
+    Intent intentForUser = ProfileActivity.getIntentWithUsername(context, username);
+    context.startActivity(intentForUser);
   }
 
   private void openPoll(String idPoll) {
