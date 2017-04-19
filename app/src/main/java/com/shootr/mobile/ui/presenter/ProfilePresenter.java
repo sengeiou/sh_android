@@ -145,6 +145,9 @@ public class ProfilePresenter implements Presenter {
       profileView.hideChannelButton();
       profileView.showEditMenu();
     } else {
+      if (isFromSearch) {
+        putRecentUserInteractor.putRecentUser(user);
+      }
       profileView.hideFriendsButton();
       profileView.hideEditMenu();
       subscribeUIObserverToObservable(getBlockedIdsObservable());
