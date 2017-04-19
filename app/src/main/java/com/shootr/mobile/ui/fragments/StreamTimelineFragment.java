@@ -186,6 +186,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;
   @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
+  @BindString(R.string.analytics_action_checkin) String analyticsActionCheckin;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_filter_on_stream) String analyticsActionFilterOnStream;
@@ -197,6 +198,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
   @BindString(R.string.analytics_source_timeline) String timelineSource;
+  @BindString(R.string.analytics_source_checkin_showcase_timeline) String checkinShowCaseTimeline;
   @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
   @BindString(R.string.analytics_label_open_cta_link) String analyticsLabelOpenCtaLink;
   @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
@@ -565,6 +567,7 @@ public class StreamTimelineFragment extends BaseFragment
 
           @Override public void onCheckIn() {
             streamTimelinePresenter.onMenuCheckInClick();
+            sendCheckinAnalythics();
           }
 
           @Override public boolean hasWritePermission() {
@@ -669,6 +672,7 @@ public class StreamTimelineFragment extends BaseFragment
     }, new OnCtaClickListener() {
       @Override public void onCtaClick(ShotModel shotModel) {
         streamTimelinePresenter.onCtaPressed(shotModel);
+        sendCheckinAnalythics();
       }
     }, numberFormatUtil,
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
@@ -694,6 +698,20 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(shotModel.getStreamId());
     builder.setStreamName(shotModel.getStreamTitle());
+    builder.setIdShot(shotModel.getIdShot());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendCheckinAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionCheckin);
+    builder.setLabelId(analyticsActionCheckin);
+    builder.setSource(checkinShowCaseTimeline);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdStream(idStream);
+    builder.setStreamName((streamTitle != null) ? streamTitle
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     analyticsTool.analyticsSendAction(builder);
   }
 

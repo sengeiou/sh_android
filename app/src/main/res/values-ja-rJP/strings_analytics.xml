@@ -39,6 +39,7 @@
     <string name="analytics_label_mute">Mute stream</string>
     <string name="analytics_action_nice">Nice</string>
     <string name="analytics_label_nice">Nice</string>
+    <string name="analytics_action_checkin">Checkin</string>
     <string name="analytics_action_shot">Shot</string>
     <string name="analytics_label_shot">Shot</string>
     <string name="analytics_action_private_message">Message</string>
@@ -76,6 +77,8 @@
     <string name="analytics_screen_push_settings">pushSettings</string>
     <string name="analytics_source_timeline">timeline</string>
     <string name="analytics_source_shot_detail">shotDetail</string>
+    <string name="analytics_source_ctashot_detail">checkinCTA</string>
+    <string name="analytics_source_checkin_showcase_timeline">checkinShowCaseTimeline</string>
     <string name="analytics_source_profile">profile</string>
     <string name="analytics_source_friends">whoToFollow</string>
     <string name="analytics_source_favorites">favorites</string>
