@@ -43,6 +43,7 @@
   <string name="add_contributor">Adicionar</string>
   <string name="add_contributor_button">Adicionar colaborador</string>
   <string name="add_contributor_confirmation_message">Adicionar %s?</string>
+  <string name="add_to_favorites">adicionar aos favoritos</string>
   <string name="add_to_favorites_menu_title">Adicionar aos Favoritos</string>
   <string name="alert_report_confirmed_email_message">Vá para conta &gt; Editar Perfil e confirme seu email</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
@@ -53,11 +54,11 @@
   <string name="all_messages_title_plural">TODOS (%d)</string>
   <string name="all_participants_button">Todos os participantes</string>
   <string name="all_push_settings">Todas</string>
-  <string name="block_unblock_user">Desfazer ignorar</string>
-  <string name="block_user_dialog_block">Ignorar</string>
+  <string name="block_unblock_user">Desbloquear</string>
+  <string name="block_user_dialog_block">Bloquear</string>
   <string name="block_user_dialog_cancel">Cancelar</string>
-  <string name="block_user_dialog_message">Ao ignorar deixará de ver os shots deste usuário</string>
-  <string name="block_user_error">Antes de ignorar é necessário primeiro deixar de seguir.</string>
+  <string name="block_user_dialog_message">Este usuário não incomodará você nem os participantes de seus streams.</string>
+  <string name="block_user_error">Para bloquear este usuário, primeiro você deve deixar de segui-lo.</string>
   <string name="cancel">Cancelar</string>
   <string name="cancel_hide_shot" formatted="false">Cancelar</string>
   <string name="change_password_button_text">FEITO</string>
@@ -66,7 +67,7 @@
   <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
-  <string name="check_in_show_case">Faça o Check-in para avisar que está aqui</string>
+  <string name="check_in_show_case">Faça o check-in para avisar que está aqui</string>
   <!-- Errors -->
   <string name="communication_error">Há um problema com a conexão à Internet. Comprove sua conexão e tente outra vez.</string>
   <string name="confirmation_hide_shot_message" formatted="false">Retirar shot</string>
@@ -120,7 +121,7 @@
   <string name="error_adding_contributor">Você pode adicionar até 100 colaboradores</string>
   <string name="error_deleted_shot">Este shot foi eliminado</string>
   <string name="error_facebook_login">Não foi possível fazer login com o Facebook. Tente mais tarde.</string>
-  <string name="error_following_user_blocked">Não é possível seguir usuários que ignora</string>
+  <string name="error_following_user_blocked">Não é possível seguir usuários que você bloqueou.</string>
   <string name="error_has_voted">Já votou</string>
   <string name="error_image_upload">Erro de foto</string>
   <string name="error_login_credentials_invalid">Id ou senha inválidos.</string>
@@ -181,6 +182,7 @@
   <string name="error_user_cannot_vote">Não se pode votar</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">O email e a lista de amigos são necessários.</string>
+  <string name="favorited">favorito</string>
   <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -287,7 +289,7 @@
   <string name="notification_shot_sending">Enviando…</string>
   <string name="notification_shot_sent">Shot enviado</string>
   <!-- When you try to send a private message to a blocked user -->
-  <string name="not_allowed_blocked_user">Você ignorou este usuário. Desfaça esta ação para lhe escrever.</string>
+  <string name="not_allowed_blocked_user">Você bloqueou este usuário. Desbloqueie para enviar mensagens.</string>
   <string name="now">agora</string>
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="off_push_settings">Nenhuma</string>
@@ -303,7 +305,7 @@
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
   <string name="photo_edit_take">Câmera</string>
   <string name="pinned_shot_activity">Linkado ao perfil</string>
-  <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
+  <string name="pinned_shot_activity_with_comment">Linkado ao perfil: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">Não</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">A notificação será enviada aos participantes atuais e aos usuários que tenham o stream como favorito.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
@@ -353,7 +355,9 @@
   <string name="registration_create_button_text">Criar conta</string>
   <string name="remove">Apagar</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">Retirar dos Favoritos</string>
+  <string name="removed_from_favorites">Removido dos Favoritos</string>
+  <string name="remove_favorite">retirar</string>
+  <string name="remove_from_favorites_dialog">Deseja retirar &lt;b&gt;%s&lt;/b&gt; dos Favoritos?</string>
   <string name="remove_highlight">Eliminar destaque</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Apagar</string>
@@ -369,10 +373,10 @@
   </plurals>
   <string name="reply_name_pattern">%1$s a %2$s</string>
   <string name="reply_placeholder_pattern">Responder a %s…</string>
-  <string name="report_context_menu_block">Bloquear…</string>
+  <string name="report_context_menu_block">Bloquear</string>
   <string name="report_context_menu_delete">Eliminar</string>
   <string name="report_context_menu_report">Reportar</string>
-  <string name="report_context_menu_unblock">Desfazer ignorar</string>
+  <string name="report_context_menu_unblock">Desbloquear</string>
   <string name="report_user_default_message">Por que reporta esta conta? Ajude-nos a entender qual é o problema.\n\n</string>
   <string name="report_user_subject">Reportar esta conta - Incidência %1$s - %2$s</string>
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
@@ -479,7 +483,7 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Atualizar agora</string>
   <string name="update_warning_message">Fizemos melhorias que requerem que se atualize Shootr a sua última versão.</string>
-  <string name="user_blocked">Usuário ignorado.</string>
+  <string name="user_blocked">Usuário bloqueado</string>
   <string name="user_not_found">Usuário não encontrado.</string>
   <string name="user_not_found_message">Usuário não encontrado</string>
   <string name="user_unblocked">Ignorar desfeito.</string>
@@ -498,8 +502,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="remove_from_favorites_dialog">Deseja retirar &lt;b>%s&lt;/b> dos Favoritos?</string>
-  <string name="favorited">favorito</string>
-  <string name="add_to_favorites">adicionar aos favoritos</string>
-  <string name="remove_favorite">retirar</string>
 </resources>
