@@ -103,14 +103,6 @@ public class DraftsPresenterTest {
         verify(draftsView, times(1)).hideShootAllButton();
     }
 
-    @Test public void shouldShowShootAllButtonWhenDraftListHasTwoItems() throws Exception {
-        setupInteractorReturns(drafts(2));
-
-        presenter.initialize(draftsView);
-
-        verify(draftsView, times(1)).showShootAllButton();
-    }
-
     private void setupInteractorReturns(final List<QueuedShot> drafts) {
         doAnswer(new Answer<Void>() {
             @Override public Void answer(InvocationOnMock invocation) throws Throwable {

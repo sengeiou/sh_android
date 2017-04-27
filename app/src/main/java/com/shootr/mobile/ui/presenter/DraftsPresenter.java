@@ -82,11 +82,7 @@ public class DraftsPresenter implements Presenter, ShotQueued.Receiver, ShotFail
   }
 
   private void showShootAllButtonIfMoreThanOneDraft(List<DraftModel> drafts) {
-    if (drafts.size() > 1) {
-      draftsView.showShootAllButton();
-    } else {
-      draftsView.hideShootAllButton();
-    }
+    draftsView.hideShootAllButton();
   }
 
   @Override public void resume() {
