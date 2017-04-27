@@ -506,4 +506,5 @@
   <string name="public_vote_dialog">Para que seja anônimo, clique no cadeado antes de votar.</string>
   <string name="public_vote">Voto Público</string>
   <string name="private_vote">Voto Anônimo</string>
+  <string name="voted_public_poll">Votou %1$s em (question) em %2$s</string>
 </resources>

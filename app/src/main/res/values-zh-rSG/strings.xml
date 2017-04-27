@@ -498,4 +498,5 @@
   <string name="public_vote_dialog">为了不公开投票结果，在投票之前请点击锁。</string>
   <string name="public_vote">公开投票</string>
   <string name="private_vote">不公开投票</string>
+  <string name="voted_public_poll">在 %2$s 的 (question) 投了 %1$s</string>
 </resources>

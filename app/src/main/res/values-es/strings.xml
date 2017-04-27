@@ -506,5 +506,6 @@
   <string name="public_vote_dialog">Para hacerlo privado, pulsa el candado antes de votar.</string>
   <string name="public_vote">Voto Público</string>
   <string name="private_vote">Voto Privado</string>
+  <string name="voted_public_poll">Ha votado %1$s en (question) en %2$s</string>
 </resources>
 

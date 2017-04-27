@@ -506,5 +506,6 @@
   <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
   <string name="public_vote">Vot Públic</string>
   <string name="private_vote">Vot Privat</string>
+  <string name="voted_public_poll">Ha votat %1$s a (question) a %2$s</string>
 </resources>
 
