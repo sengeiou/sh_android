@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.PollApiService;
 import com.shootr.mobile.data.entity.PollEntity;
+import com.shootr.mobile.data.entity.PollVoteRequestEntity;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
@@ -68,10 +69,12 @@ public class ServicePollDataSource implements PollDataSource {
     throw new IllegalArgumentException("method not implemented");
   }
 
-  @Override public PollEntity vote(String idPoll, String idPollOption)
+  @Override public PollEntity vote(String idPoll, String idPollOption, boolean isPrivateVote)
       throws UserCannotVoteRequestException, UserHasVotedRequestException {
     try {
-      return pollApiService.vote(idPoll, idPollOption);
+      PollVoteRequestEntity pollVoteRequestEntity = new PollVoteRequestEntity();
+      pollVoteRequestEntity.setVotePrivacy(isPrivateVote);
+      return pollApiService.vote(idPoll, idPollOption, pollVoteRequestEntity);
     } catch (IOException e) {
       throw new ServerCommunicationException(e);
     } catch (ApiException e) {

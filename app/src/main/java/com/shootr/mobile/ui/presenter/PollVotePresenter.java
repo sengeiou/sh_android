@@ -44,6 +44,7 @@ public class PollVotePresenter implements Presenter {
   private PollModel pollModel;
   private String votedPollOptionId;
   private long pollVotes = 0;
+  private boolean isPrivateVote = true;
 
   @Inject public PollVotePresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
       GetPollByIdPollInteractor getPollByIdPollInteractor,
@@ -113,10 +114,21 @@ public class PollVotePresenter implements Presenter {
       idStream = pollModel.getIdStream();
       pollVoteView.renderPoll(pollModel);
       showPollVotes();
+      handlePollPrivacy();
     } else {
       if (pollModel != null) {
         pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
       }
+    }
+  }
+
+  private void handlePollPrivacy() {
+    if (pollModel.getVotePrivacy().equals(PollStatus.PRIVATE)) {
+      isPrivateVote = true;
+      pollVoteView.showPrivateVotePrivacyDisabled();
+    } else {
+      isPrivateVote = false;
+      pollVoteView.showPublicVotePrivacy();
     }
   }
 
@@ -159,7 +171,7 @@ public class PollVotePresenter implements Presenter {
     pollVoteView.showLoading();
     setVotedPollOption(pollOptionId);
     if (pollModel != null) {
-      votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId,
+      votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, isPrivateVote,
           new Interactor.Callback<Poll>() {
             @Override public void onLoaded(Poll poll) {
               pollVoteView.hideLoading();
@@ -176,7 +188,7 @@ public class PollVotePresenter implements Presenter {
 
   public void retryVote() {
     pollVoteView.showLoading();
-    votePollOptionInteractor.vote(pollModel.getIdPoll(), votedPollOptionId,
+    votePollOptionInteractor.vote(pollModel.getIdPoll(), votedPollOptionId, isPrivateVote,
         new Interactor.Callback<Poll>() {
           @Override public void onLoaded(Poll poll) {
             pollVoteView.hideLoading();
@@ -263,5 +275,15 @@ public class PollVotePresenter implements Presenter {
     } else {
       return null;
     }
+  }
+
+  public void changeVotePrivacyToPublic() {
+    isPrivateVote = false;
+    pollVoteView.showPublicVotePrivacy();
+  }
+
+  public void changeVotePrivacyToPrivate() {
+    isPrivateVote = true;
+    pollVoteView.showPrivateVotePrivacy();
   }
 }

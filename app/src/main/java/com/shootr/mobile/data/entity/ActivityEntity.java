@@ -19,6 +19,7 @@ public class ActivityEntity extends Synchronized {
     private String idStreamAuthor;
     private String idPoll;
     private String pollQuestion;
+    private String pollOptionText;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -132,5 +133,13 @@ public class ActivityEntity extends Synchronized {
 
     public void setPollQuestion(String pollQuestion) {
         this.pollQuestion = pollQuestion;
+    }
+
+    public String getPollOptionText() {
+        return pollOptionText;
+    }
+
+    public void setPollOptionText(String pollOptionText) {
+        this.pollOptionText = pollOptionText;
     }
 }

@@ -320,10 +320,11 @@ public class DatabaseContract {
     public static final String ID_STREAM_AUTHOR = "idStreamAuthor";
     public static final String ID_POLL = "idPoll";
     public static final String POLL_QUESTION = "pollQuestion";
+    public static final String POLL_OPTION_TEXT = "pollOptiontext";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, TYPE, BIRTH, MODIFIED, DELETED,
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH, MODIFIED, DELETED,
         REVISION, SYNCHRONIZED
     };
   }
@@ -349,10 +350,11 @@ public class DatabaseContract {
     public static final String ID_STREAM_AUTHOR = "idStreamAuthor";
     public static final String ID_POLL = "idPoll";
     public static final String POLL_QUESTION = "pollQuestion";
+    public static final String POLL_OPTION_TEXT = "pollOptiontext";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, TYPE, BIRTH, MODIFIED, DELETED,
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH, MODIFIED, DELETED,
         REVISION, SYNCHRONIZED
     };
   }
@@ -437,9 +439,10 @@ public class DatabaseContract {
     public static final String STATUS = "status";
     public static final String PUBLISHED = "published";
     public static final String VOTE_STATUS = "voteStatus";
+    public static final String VOTE_PRIVACY = "votePrivacy";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, PUBLISHED
+        ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, VOTE_PRIVACY, PUBLISHED
     };
   }
 

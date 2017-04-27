@@ -357,7 +357,6 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">Tret de Favorits</string>
   <string name="remove_favorite">treure</string>
-  <string name="remove_from_favorites_dialog">Treure &lt;b&gt;%s&lt;/b&gt; de Favorits?</string>
   <string name="remove_highlight">Treure destacat</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Esborrar</string>
@@ -502,4 +501,10 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
+  <string name="remove_from_favorites_dialog">Treure &lt;b>%s&lt;/b> de Favorits?</string>
+  <string name="public_vote_title_dialog">El teu vot serà públic</string>
+  <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
+  <string name="public_vote">Vot Públic</string>
+  <string name="private_vote">Vot Privat</string>
 </resources>
+

@@ -352,7 +352,6 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">從喜愛中刪除</string>
   <string name="remove_favorite">删除</string>
-  <string name="remove_from_favorites_dialog">從喜愛中刪除  &lt;b&gt;%s&lt;/b&gt; ?</string>
   <string name="remove_highlight">刪除置頂</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">清除</string>
@@ -493,4 +492,9 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="remove_from_favorites_dialog">從喜愛中刪除 &lt;b>%s&lt;/b> ?</string>
+  <string name="public_vote_title_dialog">你的投票將是公開的</string>
+  <string name="public_vote_dialog">為了不公開投票結果，在投票之前請點擊鎖。</string>
+  <string name="public_vote">公開投票</string>
+  <string name="private_vote">不公開投票</string>
 </resources>

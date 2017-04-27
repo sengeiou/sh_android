@@ -14,6 +14,7 @@ public class PollModel {
   private Boolean published;
   private List<PollOptionModel> pollOptionModels;
   private String streamTitle;
+  private String votePrivacy;
 
   public String getIdPoll() {
     return idPoll;
@@ -93,5 +94,13 @@ public class PollModel {
 
   public void setStreamTitle(String streamTitle) {
     this.streamTitle = streamTitle;
+  }
+
+  public String getVotePrivacy() {
+    return votePrivacy;
+  }
+
+  public void setVotePrivacy(String votePrivacy) {
+    this.votePrivacy = votePrivacy;
   }
 }

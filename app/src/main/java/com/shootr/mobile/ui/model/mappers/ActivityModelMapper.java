@@ -42,6 +42,7 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
 
         activityModel.setIdPoll(activity.getIdPoll());
         activityModel.setPollQuestion(activity.getPollQuestion());
+        activityModel.setPollOptionText(activity.getPollOptionText());
         return activityModel;
     }
 

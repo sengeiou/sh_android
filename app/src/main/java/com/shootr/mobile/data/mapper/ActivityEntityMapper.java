@@ -49,6 +49,7 @@ public class ActivityEntityMapper {
         activity.setIdAuthorStream(activityEntity.getIdStreamAuthor());
         activity.setIdPoll(activityEntity.getIdPoll());
         activity.setPollQuestion(activityEntity.getPollQuestion());
+        activity.setPollOptionText(activityEntity.getPollOptionText());
 
         return activity;
     }
@@ -92,6 +93,7 @@ public class ActivityEntityMapper {
         activityEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
         activityEntity.setIdPoll(activity.getIdPoll());
         activityEntity.setPollQuestion(activity.getPollQuestion());
+        activityEntity.setPollOptionText(activity.getPollOptionText());
 
         return activityEntity;
     }

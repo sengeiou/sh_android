@@ -31,6 +31,7 @@ public class VotePollOptionInteractorTest {
   public static final String ID_POLL = "id_poll";
   public static final String ID_POLL_OPTION = "id_poll_option";
   private static final String ANOTHER_ID_POLL_OPTION = "another_id_poll_option";
+  public static final boolean PRIVATE_VOTE = true;
   private VotePollOptionInteractor votePollOptionInteractor;
   @Mock InternalPollRepository localPollRepository;
   @Mock ExternalPollRepository remotePollRepository;
@@ -49,83 +50,83 @@ public class VotePollOptionInteractorTest {
 
   @Test public void shouldNotPutPollIfLocalReturnsNoPollOptionsWhenFallbackToLocal()
       throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenThrow(
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new ServerCommunicationException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithoutPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(localPollRepository, never()).putPoll(any(Poll.class));
   }
 
   @Test public void shoudlNotifyErrorWhenServerCommunticationExceptionThrown() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenThrow(
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new ServerCommunicationException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
   }
 
   @Test
   public void shouldVoteInRemoteRepositoryWhenVote() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenReturn(pollWithPollOptions());
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
-    verify(remotePollRepository).vote(ID_POLL, ID_POLL_OPTION);
+    verify(remotePollRepository).vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE);
   }
 
   @Test
   public void shouldNotifyPollLoadedWhenVote() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenReturn(pollWithoutPollOptions());
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenReturn(pollWithoutPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(callback).onLoaded(any(Poll.class));
   }
 
   @Test
   public void shouldGetLocalPollWhenUserCannotVoteRequestExceptionThrown() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenThrow(
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new UserCannotVoteRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(localPollRepository).getPollByIdPoll(ID_POLL);
   }
 
   @Test
   public void shouldNotifyLocalPollWhenUserCannotVoteRequestExceptionThrown() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenThrow(
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new UserCannotVoteRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(callback).onLoaded(any(Poll.class));
   }
 
   @Test
   public void shouldGetLocalPollWhenUserHasVotedRequestExceptionThrown() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenThrow(
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new UserHasVotedRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(localPollRepository).getPollByIdPoll(ID_POLL);
   }
 
   @Test
   public void shouldNotifyLocalPollWhenUserHasVotedRequestExceptionThrown() throws Exception {
-    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION)).thenThrow(
+    when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new UserHasVotedRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
 
     verify(callback).onLoaded(any(Poll.class));
   }

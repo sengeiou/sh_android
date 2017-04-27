@@ -30,6 +30,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -351,24 +352,24 @@ public class PollVotePresenterTest {
   private void setupVotePollOptionInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[2];
+        Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[3];
         callback.onLoaded(poll());
         return null;
       }
     }).when(votePollOptionInteractor)
-        .vote(anyString(), anyString(), any(Interactor.Callback.class), any(
+        .vote(anyString(), anyString(), anyBoolean(), any(Interactor.Callback.class), any(
             Interactor.ErrorCallback.class));
   }
 
   private void setupVotePollOptionInteractorErrorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[3];
+        Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[4];
         errorCallback.onError(new ShootrException() { });
         return null;
       }
     }).when(votePollOptionInteractor)
-        .vote(anyString(), anyString(), any(Interactor.Callback.class), any(
+        .vote(anyString(), anyString(), anyBoolean(), any(Interactor.Callback.class), any(
             Interactor.ErrorCallback.class));
   }
 

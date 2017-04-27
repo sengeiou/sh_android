@@ -20,7 +20,7 @@ public interface PollDataSource {
 
   void removePolls(String idStream);
 
-  PollEntity vote(String idPoll, String idPollOption)
+  PollEntity vote(String idPoll, String idPollOption, boolean isPrivateVote)
       throws UserCannotVoteRequestException, UserHasVotedRequestException;
 
   void sharePoll(String idPoll) throws PollDeletedException;

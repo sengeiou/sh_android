@@ -5,6 +5,7 @@ import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.DiscoverType;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.LongPreference;
+import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
@@ -22,6 +23,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final BooleanPreference timelineFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
   private final LongPreference discoverTypePreference;
+  private final BooleanPreference publicVoteAlertPreference;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
   private User currentUser;
@@ -30,14 +32,16 @@ public class SessionRepositoryImpl implements SessionRepository {
   @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
       @CurrentUserId StringPreference currentUserIdPreference,
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
-      @LastTimeFiltered StringPreference lastTimeFiltered, @DiscoverType
-      LongPreference discoverType, CrashReportTool crashReportTool,
-      AnalyticsTool analyticsTool) {
+      @LastTimeFiltered StringPreference lastTimeFiltered,
+      @DiscoverType LongPreference discoverType,
+      @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
+      CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.timelineFilterPreference = timelineFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.discoverTypePreference = discoverType;
+    this.publicVoteAlertPreference = publicVoteAlertPreference;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
@@ -83,6 +87,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     lastTimeFilteredPreference.delete();
     timelineFilterPreference.delete();
     discoverTypePreference.delete();
+    publicVoteAlertPreference.delete();
     analyticsTool.reset();
     currentUser = null;
   }

@@ -32,6 +32,8 @@ public class MeActivityEntityDBMapper extends GenericDBMapper {
     activity.setPollQuestion(
         c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.POLL_QUESTION)));
     setSynchronizedfromCursor(c, activity);
+    activity.setPollOptionText(
+        c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.POLL_OPTION_TEXT)));
     return activity;
   }
 
@@ -50,6 +52,7 @@ public class MeActivityEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.ActivityTable.ID_STREAM_AUTHOR, activity.getIdStreamAuthor());
     cv.put(DatabaseContract.ActivityTable.POLL_QUESTION, activity.getPollQuestion());
     cv.put(DatabaseContract.ActivityTable.ID_POLL, activity.getIdPoll());
+    cv.put(DatabaseContract.ActivityTable.POLL_OPTION_TEXT, activity.getPollOptionText());
     setSynchronizedtoContentValues(activity, cv);
     return cv;
   }

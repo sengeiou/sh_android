@@ -357,7 +357,6 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">Removed from Favorites</string>
   <string name="remove_favorite">remove</string>
-  <string name="remove_from_favorites_dialog">Remove &lt;b&gt;%s&lt;/b&gt; from Favorites?</string>
   <string name="remove_highlight">Dismiss highlight</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Remove</string>
@@ -493,6 +492,7 @@
     <item quantity="zero">%s views</item>
   </plurals>
   <string name="voted_poll">Voted in (question) in %s</string>
+  <string name="voted_public_poll">Voted %1$s in (question) in %2$s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
   <string name="watch_profile_photo" formatted="false">View</string>
@@ -502,4 +502,10 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <string name="public_vote_title_dialog">Your vote will be public</string>
+  <string name="public_vote_dialog">To make it private, tap on the lock icon before you vote.</string>
+  <string name="public_vote">Public Vote</string>
+  <string name="private_vote">Private Vote</string>
+  <string name="remove_from_favorites_dialog">Remove &lt;b>%s&lt;/b> from Favorites?</string>
 </resources>
+

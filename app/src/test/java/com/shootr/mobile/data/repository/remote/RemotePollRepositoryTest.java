@@ -25,6 +25,7 @@ public class RemotePollRepositoryTest {
   public static final String ID_STREAM = "id_stream";
   public static final String ID_POLL = "id_poll";
   public static final String ID_POLL_OPTION = "id_poll_option";
+  public static final boolean PRIVATE_VOTE = true;
 
   private RemotePollRepository repository;
   @Mock PollDataSource servicePollDataSource;
@@ -83,9 +84,9 @@ public class RemotePollRepositoryTest {
   @Test
   public void shouldSavePollInLocalWhenVote() throws Exception {
     PollEntity pollEntity = pollEntity();
-    when(servicePollDataSource.vote(ID_POLL, ID_POLL_OPTION)).thenReturn(pollEntity);
+    when(servicePollDataSource.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenReturn(pollEntity);
 
-    repository.vote(ID_POLL, ID_POLL_OPTION);
+    repository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE);
 
     verify(databasePollDataSource).putPoll(pollEntity);
   }
