@@ -28,9 +28,16 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
   }
 
   protected CharSequence formatActivityComment(final ActivityModel activity) {
-    activity.setComment(itemView.getResources()
-        .getString(R.string.voted_poll, activity.getStreamTitle()));
-    return pollVotedSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(), activity.getStreamTitle(),
-        activity.getPollQuestion(), activity.getComment(), onPollQuestionClickListener);
+    if (activity.getPollOptionText() != null && !activity.getPollOptionText().isEmpty()) {
+      activity.setComment(itemView.getResources()
+          .getString(R.string.voted_public_poll, activity.getPollOptionText(),
+              activity.getStreamTitle()));
+    } else {
+      activity.setComment(
+          itemView.getResources().getString(R.string.voted_poll, activity.getStreamTitle()));
+    }
+    return pollVotedSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(),
+        activity.getStreamTitle(), activity.getPollQuestion(), activity.getComment(),
+        onPollQuestionClickListener);
   }
 }

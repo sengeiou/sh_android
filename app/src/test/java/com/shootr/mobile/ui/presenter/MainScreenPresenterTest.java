@@ -22,6 +22,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.squareup.otto.Bus;
 import org.junit.Before;
 import org.junit.Test;
@@ -62,6 +63,7 @@ public class MainScreenPresenterTest {
     @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
     @Mock GetLocalStreamInteractor getStreamInteractor;
     @Mock StreamModelMapper streamModelMapper;
+    @Mock AnalyticsTool analyticsTool;
     private MainScreenPresenter mainScreenPresenter;
 
     @Before public void setUp() throws Exception {
@@ -74,7 +76,8 @@ public class MainScreenPresenterTest {
               getMutedStreamsInteractor, unwatchStreamInteractor, sessionRepository,
               userModelMapper, badgeCount, getFollowingInteractor,
               getPrivateMessagesChannelsInteractor,
-              getFollowingIdsInteractor, getStreamInteractor, streamModelMapper, bus, busPublisher);
+              getFollowingIdsInteractor, getStreamInteractor, streamModelMapper, bus, busPublisher,
+              analyticsTool);
         mainScreenPresenter.setView(view);
         User user = new User();
         user.setIdWatchingStream(ID_STREAM);

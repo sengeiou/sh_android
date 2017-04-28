@@ -45,6 +45,10 @@ public class ActivityApiEntityMapper {
             activityEntity.setIdStreamAuthor(activityApiEntity.getStream().getIdUser());
         }
 
+        if (activityApiEntity.getPollVote() != null) {
+            activityEntity.setPollOptionText(activityApiEntity.getPollVote().getPollOptionText());
+        }
+
         return activityEntity;
     }
 

@@ -1,9 +1,11 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 import timber.log.Timber;
 
-public class UserEntity extends Synchronized implements Serializable, Comparable<UserEntity>, Cloneable {
+public class UserEntity extends Synchronized
+    implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity {
 
     private String idUser;
     private String sessionToken;
@@ -247,5 +249,9 @@ public class UserEntity extends Synchronized implements Serializable, Comparable
 
     public void setReceivedReactions(Long receivedReactions) {
         this.receivedReactions = receivedReactions;
+    }
+
+    @Override public String getSearcheableType() {
+        return SearchableType.USER;
     }
 }

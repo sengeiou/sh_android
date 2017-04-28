@@ -41,6 +41,7 @@ public interface AnalyticsTool {
     String streamName;
     String idStream;
     String idPoll;
+    String idShot;
     String loginType;
     User user;
 
@@ -106,6 +107,14 @@ public interface AnalyticsTool {
 
     public void setNotificationName(String notificationName) {
       this.notificationName = notificationName;
+    }
+
+    public String getIdShot() {
+      return idShot;
+    }
+
+    public void setIdShot(String idShot) {
+      this.idShot = idShot;
     }
 
     public String getPushRedirection() {

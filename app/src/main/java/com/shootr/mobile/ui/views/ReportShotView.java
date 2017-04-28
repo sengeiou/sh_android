@@ -23,10 +23,6 @@ public interface ReportShotView {
 
     void showErrorLong(String messageForError);
 
-    void showUserBanned();
-
-    void showUserUnbanned();
-
     void goToReport(String sessionToken, ShotModel shotModel);
 
     void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);

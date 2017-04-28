@@ -26,6 +26,7 @@ public class VotePollOptionInteractor implements Interactor {
   private ErrorCallback errorCallback;
   private String idPoll;
   private String idPollOption;
+  private boolean isPrivateVote;
 
   @Inject public VotePollOptionInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, InternalPollRepository localPollRepository,
@@ -36,9 +37,11 @@ public class VotePollOptionInteractor implements Interactor {
     this.remotePollRepository = remotePollRepository;
   }
 
-  public void vote(String idPoll, String idPollOption, Callback<Poll> callback, ErrorCallback errorCallback) {
+  public void vote(String idPoll, String idPollOption, boolean isPrivateVote,
+      Callback<Poll> callback, ErrorCallback errorCallback) {
     this.idPoll = idPoll;
     this.idPollOption = idPollOption;
+    this.isPrivateVote = isPrivateVote;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -46,7 +49,7 @@ public class VotePollOptionInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      Poll poll = remotePollRepository.vote(idPoll, idPollOption);
+      Poll poll = remotePollRepository.vote(idPoll, idPollOption, isPrivateVote);
       Collections.sort(poll.getPollOptions(), PollOption.PollOptionComparator);
       notifyLoaded(poll);
     } catch (ServerCommunicationException error) {

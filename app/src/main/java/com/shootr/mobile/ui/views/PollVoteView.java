@@ -22,4 +22,10 @@ public interface PollVoteView  extends LoadDataView {
   void showViewResultsButton();
 
   void showResultsWithoutVotingDialog();
+
+  void showPublicVotePrivacy();
+
+  void showPrivateVotePrivacy();
+
+  void showPrivateVotePrivacyDisabled();
 }

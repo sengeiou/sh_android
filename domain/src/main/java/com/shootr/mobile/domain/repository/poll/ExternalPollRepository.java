@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.model.poll.Poll;
 
 public interface ExternalPollRepository extends PollRepository {
 
-  Poll vote(String idPoll, String idPollOption)
+  Poll vote(String idPoll, String idPollOption, boolean isPrivateVote)
       throws UserCannotVoteRequestException, UserHasVotedRequestException;
 
   void sharePoll(String idPoll) throws PollDeletedException;

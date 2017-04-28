@@ -1,6 +1,5 @@
 package com.shootr.mobile.db;
 
-import com.shootr.mobile.db.mappers.BanEntityDBMapper;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
 import com.shootr.mobile.db.mappers.ContributorDBMapper;
 import com.shootr.mobile.db.mappers.DeviceEntityDBMapper;
@@ -54,7 +53,4 @@ import dagger.Provides;
     return new BlockEntityDBMapper();
   }
 
-  @Provides BanEntityDBMapper provideBanMapper() {
-    return new BanEntityDBMapper();
-  }
 }

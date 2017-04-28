@@ -192,11 +192,9 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
   private void addShotComment(ShotTimelineViewHolder vh, CharSequence comment,
       OnUrlClickListener onUrlClickListener, ShotModel shotModel) {
-    CharSequence spannedComment =
-        shotTextSpannableBuilder.formatWithUsernameSpans(comment, onUsernameClickListener);
     vh.text.setBaseMessageModel(shotModel);
     vh.text.setOnUrlClickListener(onUrlClickListener);
-    vh.text.setText(spannedComment);
+    vh.text.setText(comment);
     vh.text.addLinks();
   }
 

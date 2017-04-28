@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
   <item
@@ -12,4 +13,18 @@
       android:id="@+id/menu_ignore_poll"
       android:title="@string/poll_ignore"
       tools:visible="true" />
+
+  <item
+      android:id="@+id/menu_public_poll"
+      android:title="@string/public_vote"
+      android:icon="@drawable/ic_lock_open"
+      tools:visible="false"
+      app:showAsAction="always"/>
+
+  <item
+      android:id="@+id/menu_private_poll"
+      android:title="@string/private_vote"
+      tools:visible="false"
+      android:icon="@drawable/ic_lock_outline"
+      app:showAsAction="always"/>
 </menu>

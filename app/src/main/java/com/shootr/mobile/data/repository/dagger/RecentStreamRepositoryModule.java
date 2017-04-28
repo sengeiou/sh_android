@@ -1,27 +1,27 @@
 package com.shootr.mobile.data.repository.dagger;
 
-import com.shootr.mobile.data.repository.datasource.stream.DatabaseRecentStreamDataSource;
-import com.shootr.mobile.data.repository.datasource.stream.RecentStreamDataSource;
-import com.shootr.mobile.data.repository.local.LocalRecentStreamRepository;
-import com.shootr.mobile.domain.repository.stream.RecentStreamRepository;
+import com.shootr.mobile.data.repository.datasource.stream.DatabaseRecentSearchDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
+import com.shootr.mobile.data.repository.local.LocalRecentSearchRepository;
+import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
 @Module(
     injects = {
-        RecentStreamRepository.class
+        RecentSearchRepository.class
     },
     complete = false,
     library = true) public class RecentStreamRepositoryModule {
 
-  @Provides @Singleton RecentStreamRepository provideRecentStreamRepository(
-      LocalRecentStreamRepository recentStreamRepository) {
+  @Provides @Singleton RecentSearchRepository provideRecentStreamRepository(
+      LocalRecentSearchRepository recentStreamRepository) {
     return recentStreamRepository;
   }
 
-  @Provides @Singleton RecentStreamDataSource provideRecentStreamDataSource(
-      DatabaseRecentStreamDataSource recentStreamDataSource) {
+  @Provides @Singleton RecentSearchDataSource provideRecentStreamDataSource(
+      DatabaseRecentSearchDataSource recentStreamDataSource) {
     return recentStreamDataSource;
   }
 }

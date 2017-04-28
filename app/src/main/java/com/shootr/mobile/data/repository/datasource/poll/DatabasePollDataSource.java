@@ -46,7 +46,7 @@ public class DatabasePollDataSource implements PollDataSource {
     pollManager.removePolls(idStream);
   }
 
-  @Override public PollEntity vote(String idPoll, String idPollOption) {
+  @Override public PollEntity vote(String idPoll, String idPollOption, boolean isPrivateVote) {
     throw new IllegalArgumentException("method not implemented");
   }
 

@@ -8,4 +8,6 @@ public interface PollStatus {
   String CLOSED = "CLOSED";
   String OPEN = "OPEN";
   String HASSEENRESULTS = "HASSEENRESULTS";
+  String PRIVATE = "PRIVATE";
+  String USER_DEFINED = "USER_DEFINED";
 }

@@ -39,7 +39,7 @@ public class GetBlockedIdUsersInteractorTest {
     @Test public void shouldNotLoadRemoteBlockedIdUsersIfThereAreLocalBlockedIdUsers() throws Exception {
         when(localFollowRepository.getBlockedIdUsers()).thenReturn(Collections.singletonList(LIST));
 
-        interactor.loadBlockedIdUsers(callback, errorCallback);
+        interactor.loadBlockedIdUsers(callback, errorCallback, false);
 
         verify(remoteFollowRepository, never()).getBlockedIdUsers();
     }
@@ -47,7 +47,7 @@ public class GetBlockedIdUsersInteractorTest {
     @Test public void shouldLoadRemoteBlockedIdUsersIfThereAreNotLocalBlockedIdUsers() throws Exception {
         when(localFollowRepository.getBlockedIdUsers()).thenReturn(Collections.EMPTY_LIST);
 
-        interactor.loadBlockedIdUsers(callback, errorCallback);
+        interactor.loadBlockedIdUsers(callback, errorCallback, false);
 
         verify(remoteFollowRepository).getBlockedIdUsers();
     }

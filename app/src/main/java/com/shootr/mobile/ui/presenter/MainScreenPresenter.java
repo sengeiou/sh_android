@@ -28,6 +28,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.MainScreenView;
+import com.shootr.mobile.util.AnalyticsTool;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import java.util.List;
@@ -52,6 +53,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final StreamModelMapper streamModelMapper;
   private final Bus bus;
   private final BusPublisher busPublisher;
+  private AnalyticsTool analyticsTool;
 
   private MainScreenView mainScreenView;
   private boolean hasBeenPaused = false;
@@ -71,7 +73,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
       GetFollowingIdsInteractor getFollowingIdsInteractor,
       GetLocalStreamInteractor getStreamInteractor, StreamModelMapper streamModelMapper,
-      @Main Bus bus, BusPublisher busPublisher) {
+      @Main Bus bus, BusPublisher busPublisher, AnalyticsTool analyticsTool) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
@@ -88,6 +90,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.streamModelMapper = streamModelMapper;
     this.bus = bus;
     this.busPublisher = busPublisher;
+    this.analyticsTool = analyticsTool;
   }
 
   protected void setView(MainScreenView mainScreenView) {
@@ -141,6 +144,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
                     .setAnalyticsUserType(user.getAnalyticsUserType());
                 sessionRepository.getCurrentUser()
                     .setReceivedReactions(user.getReceivedReactions());
+                analyticsTool.setUser(sessionRepository.getCurrentUser());
               }
             }
           }, new Interactor.ErrorCallback() {

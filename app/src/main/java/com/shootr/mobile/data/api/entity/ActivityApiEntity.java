@@ -29,6 +29,7 @@ public class ActivityApiEntity {
   private String idPoll;
   private String pollQuestion;
   private ShotApiEntity shot;
+  private PollVoteApiEntity pollVote;
 
   public String getIdActivity() {
     return idActivity;
@@ -164,5 +165,13 @@ public class ActivityApiEntity {
 
   public void setShot(ShotApiEntity shot) {
     this.shot = shot;
+  }
+
+  public PollVoteApiEntity getPollVote() {
+    return pollVote;
+  }
+
+  public void setPollVote(PollVoteApiEntity pollVote) {
+    this.pollVote = pollVote;
   }
 }

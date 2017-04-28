@@ -13,6 +13,7 @@ public class PollEntity {
   private Long published;
   private List<PollOptionEntity> pollOptions;
   private String voteStatus;
+  private String votePrivacy;
 
   public String getIdPoll() {
     return idPoll;
@@ -84,5 +85,13 @@ public class PollEntity {
 
   public void setIdUser(String idUser) {
     this.idUser = idUser;
+  }
+
+  public String getVotePrivacy() {
+    return votePrivacy;
+  }
+
+  public void setVotePrivacy(String votePrivacy) {
+    this.votePrivacy = votePrivacy;
   }
 }

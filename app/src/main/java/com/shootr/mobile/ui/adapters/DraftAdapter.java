@@ -67,12 +67,8 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     } else {
       holder.draftItemView.setClickable(true);
     }
-    if (currentExpandedItemPosition == position) {
-      currentExpandedItem = holder;
-      holder.draftItemView.expand(false);
-    } else {
-      holder.draftItemView.collapse(false);
-    }
+    currentExpandedItem = holder;
+    holder.draftItemView.expand(false);
   }
 
   private CharSequence getShotCommentWithStream(BaseMessageModel shot, DraftViewHolder holder) {

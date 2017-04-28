@@ -131,7 +131,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.shotModels = new TreeSet<>();
     setIdAuthor(idAuthor);
     this.setView(streamTimelineView);
-    handleStreamViewOnlyVisibility();
     this.loadStream(streamTimelineView, idStream);
     this.selectStream();
     setupPoller();
@@ -253,6 +252,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         setStreamDescription(stream.getDescription());
         setStreamTopic(stream.getTopic());
         isCurrentUserContirbutor = stream.isCurrentUserContributor();
+        streamMode = streamModel.getReadWriteMode();
+        handleStreamViewOnlyVisibility();
         streamTimelineView.setTitle(stream.getTitle());
         streamTimelineView.sendAnalythicsEnterTimeline();
         if (streamTopic != null && !streamTopic.isEmpty()) {

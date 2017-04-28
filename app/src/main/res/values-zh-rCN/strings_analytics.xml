@@ -34,12 +34,16 @@
     <string name="analytics_label_photo">Photo view</string>
     <string name="analytics_action_follow">Follow</string>
     <string name="analytics_label_follow">Follow</string>
+    <string name="analytics_label_search">Search</string>
+    <string name="analytics_label_search_users">SearchUsers</string>
+    <string name="analytics_label_search_streams">SearchStreams</string>
     <string name="analytics_action_signup">Signup</string>
     <string name="analytics_label_signup">Signup</string>
     <string name="analytics_action_mute">MuteStream</string>
     <string name="analytics_label_mute">Mute stream</string>
     <string name="analytics_action_nice">Nice</string>
     <string name="analytics_label_nice">Nice</string>
+    <string name="analytics_action_checkin">Checkin</string>
     <string name="analytics_action_shot">Shot</string>
     <string name="analytics_label_shot">Shot</string>
     <string name="analytics_action_private_message">Message</string>
@@ -73,6 +77,8 @@
     <string name="analytics_screen_push_settings">pushSettings</string>
     <string name="analytics_source_timeline">timeline</string>
     <string name="analytics_source_shot_detail">shotDetail</string>
+    <string name="analytics_source_ctashot_detail">checkinCTA</string>
+    <string name="analytics_source_checkin_showcase_timeline">checkinShowCaseTimeline</string>
     <string name="analytics_source_profile">profile</string>
     <string name="analytics_source_friends">whoToFollow</string>
     <string name="analytics_source_favorites">favorites</string>

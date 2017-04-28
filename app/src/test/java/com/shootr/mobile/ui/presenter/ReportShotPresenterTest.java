@@ -5,11 +5,9 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
-import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
-import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
@@ -32,6 +30,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
@@ -61,8 +60,6 @@ public class ReportShotPresenterTest {
     @Mock BlockUserInteractor blockUserInteractor;
     @Mock UnblockUserInteractor unblockUserInteractor;
     @Mock GetFollowingInteractor getFollowingInteractor;
-    @Mock BanUserInteractor banUserInteractor;
-    @Mock UnbanUserInteractor unbanUserInteractor;
     @Mock GetLocalStreamInteractor getLocalStreamInteractor;
     @Mock GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
 
@@ -78,8 +75,7 @@ public class ReportShotPresenterTest {
           blockUserInteractor,
           unblockUserInteractor,
           getFollowingInteractor,
-          banUserInteractor,
-          unbanUserInteractor, getHighlightedShotInteractor, getLocalStreamInteractor);
+          getHighlightedShotInteractor, getLocalStreamInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -139,22 +135,6 @@ public class ReportShotPresenterTest {
         presenter.onShotLongPressedWithStreamAuthor(shotModel(), ID_USER);
 
         verify(reportShotView, never()).showAuthorContextMenuWithPin(any(ShotModel.class));
-    }
-
-    @Test public void shouldShowBanSuccessfullyWhenBanConfirmed() throws Exception {
-        setupBanUserCallback();
-
-        presenter.confirmBan(user());
-
-        verify(reportShotView).showUserBanned();
-    }
-
-    @Test public void shouldShowUnbanSuccessfullyWhenBanConfirmed() throws Exception {
-        setupUnbanUserCallback();
-
-        presenter.confirmUnBan(user());
-
-        verify(reportShotView).showUserUnbanned();
     }
 
     @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
@@ -244,28 +224,6 @@ public class ReportShotPresenterTest {
         presenter.onShotLongPressed(shotModel);
 
         verify(reportShotView).showContextMenu(shotModel);
-    }
-
-    private void setupUnbanUserCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
-                callback.onCompleted();
-                return null;
-            }
-        }).when(unbanUserInteractor)
-          .unban(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
-    }
-
-    public void setupBanUserCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.CompletedCallback callback = (Interactor.CompletedCallback) invocation.getArguments()[1];
-                callback.onCompleted();
-                return null;
-            }
-        }).when(banUserInteractor)
-          .ban(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetFollowingCallbacksFollowingUser() {
@@ -363,7 +321,7 @@ public class ReportShotPresenterTest {
                 return null;
             }
         }).when(getBlockedIdUsersInteractor)
-          .loadBlockedIdUsers(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+          .loadBlockedIdUsers(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class), anyBoolean());
     }
 
     private ShotModel shotModel() {

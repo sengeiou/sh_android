@@ -1,14 +1,13 @@
 package com.shootr.mobile.data.repository.local;
 
 import android.support.annotation.NonNull;
-import com.shootr.mobile.data.entity.BanEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
-import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,24 +55,6 @@ public class LocalFollowRepository implements FollowRepository {
         return blockedIds;
     }
 
-    @Override public void ban(String idUser) {
-        BanEntity banEntity = createBan(idUser);
-        followDataSource.ban(banEntity);
-    }
-
-    @Override public List<String> getBannedIdUsers() {
-        List<BanEntity> banEntities = followDataSource.getBanneds();
-        List<String> blockedIds = new ArrayList<>();
-        for (BanEntity banEntity : banEntities) {
-            blockedIds.add(banEntity.getIdBannedUser());
-        }
-        return blockedIds;
-    }
-
-    @Override public void unban(String idUser) {
-        followDataSource.unban(idUser);
-    }
-
     @Override public List<String> getMutualIdUsers() {
         return followDataSource.getMutuals();
     }
@@ -95,10 +76,4 @@ public class LocalFollowRepository implements FollowRepository {
         return blockEntity;
     }
 
-    @NonNull protected BanEntity createBan(String idUser) {
-        BanEntity blockEntity = new BanEntity();
-        blockEntity.setIdUser(sessionRepository.getCurrentUserId());
-        blockEntity.setIdBannedUser(idUser);
-        return blockEntity;
-    }
 }

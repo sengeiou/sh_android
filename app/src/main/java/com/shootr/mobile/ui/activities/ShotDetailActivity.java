@@ -76,6 +76,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @BindView(R.id.shotdetail_progress) ProgressBar progressBar;
   @BindString(R.string.shot_shared_message) String shotShared;
   @BindString(R.string.analytics_screen_shot_detail) String analyticsScreenShotDetail;
+  @BindString(R.string.analytics_action_checkin) String analyticsActionCheckin;
   @BindString(R.string.analytics_action_photo) String analyticsActionPhoto;
   @BindString(R.string.analytics_label_photo) String analyticsLabelPhoto;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;
@@ -87,6 +88,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @BindString(R.string.analytics_label_open_link) String analyticsLabelOpenlink;
   @BindString(R.string.analytics_action_open_link) String analyticsActionOpenLink;
   @BindString(R.string.analytics_source_shot_detail) String shotDetailSource;
+  @BindString(R.string.analytics_source_ctashot_detail) String ctaShotSource;
   @BindString(R.string.stream_checked) String streamChecked;
 
   @Inject ImageLoader imageLoader;
@@ -438,6 +440,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
           @Override public void onCheckIn() {
             detailPresenter.callCheckIn();
+            sendCheckinAnalythics();
           }
 
           @Override public boolean hasWritePermission() {
@@ -521,6 +524,21 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdStream(shot.getStreamId());
     builder.setStreamName(shot.getStreamTitle());
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendCheckinAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionCheckin);
+    builder.setLabelId(analyticsActionCheckin);
+    builder.setSource(ctaShotSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    if (detailAdapter.getMainShot() != null) {
+      builder.setIdStream(detailAdapter.getMainShot().getStreamId());
+      builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
+      builder.setIdShot(detailAdapter.getMainShot().getIdShot());
+    }
     analyticsTool.analyticsSendAction(builder);
   }
 

@@ -84,6 +84,7 @@ public class ProfileActivity extends BaseActivity
     ReportShotView {
 
   public static final String EXTRA_USER = "user";
+  public static final String EXTRA_SEARCH = "isSearch";
   public static final String EXTRA_USERNAME = "username";
   public static final int LOGOUT_DISMISS_DELAY = 1500;
 
@@ -138,6 +139,8 @@ public class ProfileActivity extends BaseActivity
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
   @BindString(R.string.analytics_source_profile) String profileSource;
   @BindString(R.string.analytics_source_friends) String whoToFollowSource;
+  @BindString(R.string.block_unblock_user) String unblockUser;
+  @BindString(R.string.report_context_menu_block) String blockUser;
 
   @Inject ImageLoader imageLoader;
   @Inject IntentFactory intentFactory;
@@ -169,10 +172,18 @@ public class ProfileActivity extends BaseActivity
   private String username;
 
   private int mScrollOffset = 4;
+  private boolean isFromSearch = false;
 
   public static Intent getIntent(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
     i.putExtra(EXTRA_USER, idUser);
+    return i;
+  }
+
+  public static Intent getIntentFromSearch(Context context, String idUser) {
+    Intent i = new Intent(context, ProfileActivity.class);
+    i.putExtra(EXTRA_USER, idUser);
+    i.putExtra(EXTRA_SEARCH, true);
     return i;
   }
 
@@ -194,6 +205,9 @@ public class ProfileActivity extends BaseActivity
     collapsingToolbarLayout.setTitle("");
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
+    if (getIntent().hasExtra(EXTRA_SEARCH)) {
+      isFromSearch = getIntent().getBooleanExtra(EXTRA_SEARCH, true);
+    }
     OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
       @Override public void onAvatarClick(String userId, View avatarView) {
         onShotAvatarClick(avatarView);
@@ -308,10 +322,6 @@ public class ProfileActivity extends BaseActivity
     startActivity(PrivateMessageTimelineActivity.newIntent(this, idTargetUser));
   }
 
-  @Override public void hideFollowButton() {
-    followButton.setVisibility(View.GONE);
-  }
-
   @Override public void hideEditMenu() {
     floatingMenu.setVisibility(View.GONE);
   }
@@ -322,7 +332,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override protected void initializePresenter() {
     if (idUser != null) {
-      profilePresenter.initializeWithIdUser(this, idUser);
+      profilePresenter.initializeWithIdUser(this, idUser, isFromSearch);
     } else {
       profilePresenter.initializeWithUsername(this, username);
     }
@@ -695,77 +705,21 @@ public class ProfileActivity extends BaseActivity
     Intents.maybeStartActivity(this, reportEmailIntent);
   }
 
-  @Override public void showBanUserConfirmation(final UserModel userModel) {
-    new AlertDialog.Builder(this).setMessage(R.string.ban_user_dialog_message)
-        .setPositiveButton(getString(R.string.block_user_dialog_ban),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                reportShotPresenter.confirmBan(userModel);
-              }
-            })
-        .setNegativeButton(getString(R.string.block_user_dialog_cancel), null)
-        .create()
-        .show();
-  }
-
   @Override public void showBlockUserButton() {
     blockUserMenuItem.setVisible(true);
+    blockUserMenuItem.setTitle(blockUser);
   }
 
-  @Override public void showDefaultBlockMenu(UserModel userModel) {
-    new CustomContextMenu.Builder(this).addAction(R.string.block_ignore_user, new Runnable() {
-      @Override public void run() {
-        profilePresenter.blockUserClicked();
-      }
-    }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
-      @Override public void run() {
-        profilePresenter.banUserClicked();
-      }
-    }).show();
-  }
-
-  @Override public void showBlockedMenu(UserModel userModel) {
-    new CustomContextMenu.Builder(this).addAction(R.string.block_unblock_user, new Runnable() {
-      @Override public void run() {
-        profilePresenter.unblockUserClicked();
-      }
-    }).addAction(R.string.block_cannot_shoot_streams, new Runnable() {
-      @Override public void run() {
-        profilePresenter.banUserClicked();
-      }
-    }).show();
-  }
-
-  @Override public void showBannedMenu(UserModel userModel) {
-    new CustomContextMenu.Builder(this).addAction(R.string.block_ignore_user, new Runnable() {
-      @Override public void run() {
-        profilePresenter.blockUserClicked();
-      }
-    }).addAction(R.string.can_shoot_streams, new Runnable() {
-      @Override public void run() {
-        profilePresenter.unbanUserClicked();
-      }
-    }).show();
-  }
-
-  @Override public void showBlockAndBannedMenu(UserModel userModel) {
-    new CustomContextMenu.Builder(this).addAction(R.string.block_unblock_user, new Runnable() {
-      @Override public void run() {
-        profilePresenter.unblockUserClicked();
-      }
-    }).addAction(R.string.can_shoot_streams, new Runnable() {
-      @Override public void run() {
-        profilePresenter.unbanUserClicked();
-      }
-    }).show();
-  }
-
-  @Override public void confirmUnban(final UserModel userModel) {
-    reportShotPresenter.confirmUnBan(userModel);
+  @Override public void showUnblockUserButton() {
+    blockUserMenuItem.setTitle(unblockUser);
   }
 
   @Override public void blockUser(UserModel userModel) {
     reportShotPresenter.blockUserClicked(userModel);
+  }
+
+  @Override public void showBlockedMenu(UserModel userModel) {
+    unblockUser(userModel);
   }
 
   @Override public void navigateToCreatedStreamDetail(String streamId) {
@@ -968,10 +922,6 @@ public class ProfileActivity extends BaseActivity
     streamsCountView.setText(String.valueOf(streamCount));
   }
 
-  @Override public void hideStreamsCount() {
-    streamsCountView.setVisibility(View.GONE);
-  }
-
   @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
     getSuggestedPeopleAdapter().setItems(suggestedPeople);
     getSuggestedPeopleAdapter().notifyDataSetChanged();
@@ -1046,11 +996,7 @@ public class ProfileActivity extends BaseActivity
           @Override public void run() {
             reportShotPresenter.report(shotModel);
           }
-        }).addAction(R.string.report_context_menu_block, new Runnable() {
-      @Override public void run() {
-        reportShotPresenter.blockUserClicked(shotModel);
-      }
-    }).show();
+        }).show();
   }
 
   @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
@@ -1077,10 +1023,14 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void showUserBlocked() {
     feedbackMessage.show(getView(), R.string.user_blocked);
+    showUnblockUserButton();
+    profilePresenter.setUserBlocked(true);
   }
 
   @Override public void showUserUnblocked() {
     feedbackMessage.show(getView(), R.string.user_unblocked);
+    showBlockUserButton();
+    profilePresenter.setUserBlocked(false);
   }
 
   @Override public void showBlockUserConfirmation() {
@@ -1098,14 +1048,6 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void showErrorLong(String messageForError) {
     feedbackMessage.showLong(getView(), messageForError);
-  }
-
-  @Override public void showUserBanned() {
-    feedbackMessage.show(getView(), R.string.user_banned);
-  }
-
-  @Override public void showUserUnbanned() {
-    feedbackMessage.show(getView(), R.string.user_unbanned);
   }
 
   @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {

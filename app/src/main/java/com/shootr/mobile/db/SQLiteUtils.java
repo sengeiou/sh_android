@@ -281,19 +281,6 @@ public class SQLiteUtils {
       + DatabaseContract.BlockTable.ID_BLOCKED_USER
       + "))";
 
-    public static final String CREATE_TABLE_BAN = "CREATE TABLE IF NOT EXISTS "
-      + DatabaseContract.BanTable.TABLE
-      + " ("
-      + DatabaseContract.BanTable.ID_USER
-      + " TEXT NOT NULL,"
-      + DatabaseContract.BanTable.ID_BANNED_USER
-      + " TEXT NOT NULL,"
-      + " PRIMARY KEY("
-      + DatabaseContract.BanTable.ID_USER
-      + ","
-      + DatabaseContract.BanTable.ID_BANNED_USER
-      + "))";
-
     public static final String CREATE_TABLE_MUTE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.MuteTable.TABLE
       + " ("
@@ -483,6 +470,8 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.POLL_QUESTION
       + " TEXT NULL,"
+      + DatabaseContract.MeActivityTable.POLL_OPTION_TEXT
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -522,6 +511,8 @@ public class SQLiteUtils {
         + DatabaseContract.MeActivityTable.ID_POLL
         + " TEXT NULL,"
         + DatabaseContract.MeActivityTable.POLL_QUESTION
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.POLL_OPTION_TEXT
         + " TEXT NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
@@ -642,6 +633,8 @@ public class SQLiteUtils {
         + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.VOTE_STATUS
         + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.VOTE_PRIVACY
+        + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.PUBLISHED
         + " NUMBER NOT NULL)";
 
@@ -743,13 +736,20 @@ public class SQLiteUtils {
         + DatabaseContract.SyncColumns.SYNCHRONIZED
         + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_RECENT_STREAM = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.RecentStreamTable.TABLE
+    public static final String CREATE_TABLE_RECENT_SEARCH = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.RecentSearchTable.TABLE
         + " ("
-        + DatabaseContract.RecentStreamTable.ID_STREAM
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.RecentStreamTable.JOIN_STREAM_DATE
-        + " INTEGER NULL)";
+        + DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM
+        + " TEXT NOT NULL,"
+        + DatabaseContract.RecentSearchTable.VISIT_DATE
+        + " INTEGER NULL,"
+        + DatabaseContract.RecentSearchTable.ITEM_TYPE
+        + " INTEGER NOT NULL,"
+        + " PRIMARY KEY("
+        + DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM
+        + ","
+        + DatabaseContract.RecentSearchTable.ITEM_TYPE
+        + "))";
 
     public static final String CREATE_TABLE_SHOT_EVENT = "CREATE TABLE IF NOT EXISTS "
         + DatabaseContract.ShotEventTable.TABLE

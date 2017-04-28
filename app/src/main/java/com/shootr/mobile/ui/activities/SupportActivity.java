@@ -23,85 +23,86 @@ import javax.inject.Inject;
 
 public class SupportActivity extends BaseToolbarDecoratedActivity implements SupportView {
 
-    @Inject LocaleProvider localeProvider;
-    @Inject IntentFactory intentFactory;
-    @Inject SupportPresenter supportPresenter;
-    @Inject AnalyticsTool analyticsTool;
+  @Inject LocaleProvider localeProvider;
+  @Inject IntentFactory intentFactory;
+  @Inject SupportPresenter supportPresenter;
+  @Inject AnalyticsTool analyticsTool;
 
-    @BindView(R.id.support_version_number) TextView versionNumber;
-    @BindView(R.id.support_help_text) TextView help;
+  @BindView(R.id.support_version_number) TextView versionNumber;
+  @BindView(R.id.support_help_text) TextView help;
 
-    @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
-    @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
-    @BindString(R.string.help_service_base_url) String helpServiceBaseUrl;
-    @BindString(R.string.analytics_screen_support) String analyticsScreenStreamSupport;
+  @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
+  @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
+  @BindString(R.string.help_service_base_url) String helpServiceBaseUrl;
+  @BindString(R.string.analytics_screen_support) String analyticsScreenStreamSupport;
 
-    //region lifecycle methods
-    @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+  //region lifecycle methods
+  @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
         /* no-op */
-    }
+  }
 
-    @Override protected int getLayoutResource() {
-        return R.layout.activity_support;
-    }
+  @Override protected int getLayoutResource() {
+    return R.layout.activity_support;
+  }
 
-    @Override protected void initializeViews(Bundle savedInstanceState) {
-        ButterKnife.bind(this);
-        versionNumber.setText(VersionUtils.getVersionName(getApplication()));
-    }
+  @Override protected void initializeViews(Bundle savedInstanceState) {
+    ButterKnife.bind(this);
+    versionNumber.setText(
+        VersionUtils.getVersionName(getApplication()) + "-" + VersionUtils.getDBVersion(
+            getApplication()));
+  }
 
-    @Override protected void initializePresenter() {
-        supportPresenter.initialize(this);
-    }
+  @Override protected void initializePresenter() {
+    supportPresenter.initialize(this);
+  }
 
-    @Override public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == android.R.id.home) {
+      finish();
+      return true;
+    } else {
+      return super.onOptionsItemSelected(item);
     }
-    //endregion
+  }
+  //endregion
 
-    //region Click listeners
-    @OnClick(R.id.support_terms_service_text) public void onTermsAndServiceClick() {
-        String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
-        Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
-        Intents.maybeStartActivity(this, termsIntent);
-    }
+  //region Click listeners
+  @OnClick(R.id.support_terms_service_text) public void onTermsAndServiceClick() {
+    String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
+    Intent termsIntent = intentFactory.openEmbededUrlIntent(this, termsUrl);
+    Intents.maybeStartActivity(this, termsIntent);
+  }
 
-    @OnClick(R.id.privacy_policy_text) public void onPrivacyPolicyClick() {
-        String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-        Intent privacyIntent = intentFactory.openEmbededUrlIntent(this, privacyUrl);
-        Intents.maybeStartActivity(this, privacyIntent);
-    }
+  @OnClick(R.id.privacy_policy_text) public void onPrivacyPolicyClick() {
+    String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+    Intent privacyIntent = intentFactory.openEmbededUrlIntent(this, privacyUrl);
+    Intents.maybeStartActivity(this, privacyIntent);
+  }
 
-    @OnClick(R.id.support_help_text) public void onHelpClick() {
-        String helpUrl = String.format(helpServiceBaseUrl, localeProvider.getLanguage());
-        Intent helpIntent = intentFactory.openEmbededUrlIntent(this, helpUrl);
-        Intents.maybeStartActivity(this, helpIntent);
-    }
+  @OnClick(R.id.support_help_text) public void onHelpClick() {
+    String helpUrl = String.format(helpServiceBaseUrl, localeProvider.getLanguage());
+    Intent helpIntent = intentFactory.openEmbededUrlIntent(this, helpUrl);
+    Intents.maybeStartActivity(this, helpIntent);
+  }
 
-    @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
-        Intent intent = new Intent(this, EasterEggActivity.class);
-        startActivity(intent);
-        return true;
-    }
-    //endregion
+  @OnLongClick(R.id.support_version_container) public boolean onVersionLongClick() {
+    Intent intent = new Intent(this, EasterEggActivity.class);
+    startActivity(intent);
+    return true;
+  }
+  //endregion
 
-    @Override public void showError() {
-        help.setEnabled(false);
-        help.setTextColor(getResources().getColor(R.color.gray_60));
-    }
+  @Override public void showError() {
+    help.setEnabled(false);
+    help.setTextColor(getResources().getColor(R.color.gray_60));
+  }
 
-    @Override protected void onPause() {
-        super.onPause();
-    }
+  @Override protected void onPause() {
+    super.onPause();
+  }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamSupport);
-    }
+  @Override public void onStart() {
+    super.onStart();
+    analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamSupport);
+  }
 }

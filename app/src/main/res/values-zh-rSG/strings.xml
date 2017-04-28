@@ -43,6 +43,7 @@
   <string name="add_contributor">新增</string>
   <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
+  <string name="add_to_favorites">添加到喜愛</string>
   <string name="add_to_favorites_menu_title">添加到喜爱</string>
   <string name="alert_report_confirmed_email_message">个人账号&gt;编辑个人主页并验证您的邮箱。</string>
   <string name="alert_report_confirmed_email_ok">好的</string>
@@ -53,18 +54,13 @@
   <string name="all_messages_title_plural">全部 (%d)</string>
   <string name="all_participants_button">所有参与者</string>
   <string name="all_push_settings">全部</string>
-  <string name="ban_user_dialog_message">用户在你的streams上发布的shots只对他/她的关注者可见。</string>
-  <string name="block_cannot_shoot_streams">禁止用户</string>
-  <string name="block_ignore_user">屏蔽用户</string>
-  <string name="block_unblock_user">清除屏蔽</string>
-  <string name="block_user_dialog_ban">禁止</string>
-  <string name="block_user_dialog_block">屏蔽</string>
+  <string name="block_unblock_user">封锁</string>
+  <string name="block_user_dialog_block">封锁用户</string>
   <string name="block_user_dialog_cancel">取消</string>
-  <string name="block_user_dialog_message">屏蔽后你将不会看到这位用户的shots。</string>
-  <string name="block_user_error">屏蔽该用户你需要先取消关注。</string>
+  <string name="block_user_dialog_message">该用户不会再打扰你和你的 stream 的参与者。</string>
+  <string name="block_user_error">要封锁该用户请取消关注。</string>
   <string name="cancel">取消</string>
   <string name="cancel_hide_shot" formatted="false">取消</string>
-  <string name="can_shoot_streams">清除禁止</string>
   <string name="change_password_button_text">完成</string>
   <string name="change_password_logout_message">密码已被更改。需重新登录…</string>
   <string name="change_photo">更改照片</string>
@@ -125,7 +121,7 @@
   <string name="error_adding_contributor">无法新增超过100以上的合作者</string>
   <string name="error_deleted_shot">这条shot已被删除</string>
   <string name="error_facebook_login">不能用Facebook登录。请稍后再试。</string>
-  <string name="error_following_user_blocked">不能关注你屏蔽的用户。</string>
+  <string name="error_following_user_blocked">你不能关注被你封锁的用户。</string>
   <string name="error_has_voted">你已投票</string>
   <string name="error_image_upload">上传图片失败</string>
   <string name="error_login_credentials_invalid">用户名或密码无效</string>
@@ -186,6 +182,7 @@
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
   <string name="facebook_alert_dialog">需要电子邮件和好友列表。</string>
+  <string name="favorited">喜愛</string>
   <string name="favorites_emtpy">没有喜爱</string>
   <string name="favorite_streams_push_settings">喜爱的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -289,7 +286,7 @@
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">发送shot</string>
   <!-- When you try to send a private message to a blocked user -->
-  <string name="not_allowed_blocked_user">你已经屏蔽该用户，在发送之前你需要清除屏蔽。</string>
+  <string name="not_allowed_blocked_user">你封锁了该用户，取消封锁来发送消息。</string>
   <string name="now">现在</string>
   <string name="no_intent_handler">沒有应用程序可用来处理此行为。\n</string>
   <string name="off_push_settings">关闭</string>
@@ -354,7 +351,8 @@
   <string name="registration_create_button_text">建立账户</string>
   <string name="remove">清除</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">取消喜爱</string>
+  <string name="removed_from_favorites">从喜爱中删除</string>
+  <string name="remove_favorite">刪除</string>
   <string name="remove_highlight">删除置顶</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">清除</string>
@@ -369,10 +367,10 @@
   </plurals>
   <string name="reply_name_pattern">%1$s 回复 %2$s</string>
   <string name="reply_placeholder_pattern">回复%s…</string>
-  <string name="report_context_menu_block">封锁…</string>
+  <string name="report_context_menu_block">封锁用户</string>
   <string name="report_context_menu_delete">删除</string>
   <string name="report_context_menu_report">举报</string>
-  <string name="report_context_menu_unblock">清除屏蔽</string>
+  <string name="report_context_menu_unblock">封锁</string>
   <string name="report_user_default_message">你为什么举报此用户？请帮助我们解答此疑问。</string>
   <string name="report_user_subject">举报此用户-问题%1$s-%2$s</string>
   <string name="reset_password_confirmation_message_email_pattern">邮件发送至%s</string>
@@ -477,11 +475,9 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">现在更新</string>
   <string name="update_warning_message">我们已经做出改善，请更新你的Shootr到最新版本。</string>
-  <string name="user_banned">用户已被禁止。</string>
-  <string name="user_blocked">用户已被屏蔽</string>
+  <string name="user_blocked">封锁用户</string>
   <string name="user_not_found">用户无法查找。</string>
   <string name="user_not_found_message">用户无法被找到。</string>
-  <string name="user_unbanned">已清除禁止</string>
   <string name="user_unblocked">屏蔽已被清除。</string>
   <plurals name="view_count_pattern">
     <item quantity="other">%s次查看</item>
@@ -498,7 +494,9 @@
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
   <string name="remove_from_favorites_dialog">从喜爱中删除 &lt;b>%s&lt;/b> ?</string>
-  <string name="favorited">喜愛</string>
-  <string name="add_to_favorites">添加到喜愛</string>
-  <string name="remove_favorite">刪除</string>
+  <string name="public_vote_title_dialog">你的投票将是公开的</string>
+  <string name="public_vote_dialog">为了不公开投票结果，在投票之前请点击锁。</string>
+  <string name="public_vote">公开投票</string>
+  <string name="private_vote">不公开投票</string>
+  <string name="voted_public_poll">在 %2$s 的 (question) 投了 %1$s</string>
 </resources>

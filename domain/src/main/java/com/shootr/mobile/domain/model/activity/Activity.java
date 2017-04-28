@@ -19,6 +19,7 @@ public class Activity {
   private String idAuthorStream;
   private String idPoll;
   private String pollQuestion;
+  private String pollOptionText;
 
   private ActivityUserInfo userInfo;
 
@@ -78,6 +79,14 @@ public class Activity {
 
   public void setPollQuestion(String pollQuestion) {
     this.pollQuestion = pollQuestion;
+  }
+
+  public String getPollOptionText() {
+    return pollOptionText;
+  }
+
+  public void setPollOptionText(String pollOptionText) {
+    this.pollOptionText = pollOptionText;
   }
 
   public String getIdUser() {

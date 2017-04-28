@@ -14,6 +14,7 @@ public class Poll {
   private Boolean published;
   private List<PollOption> pollOptions;
   private String voteStatus;
+  private String votePrivacy;
 
   public String getIdPoll() {
     return idPoll;
@@ -93,5 +94,13 @@ public class Poll {
 
   public void setIdUser(String idUser) {
     this.idUser = idUser;
+  }
+
+  public String getVotePrivacy() {
+    return votePrivacy;
+  }
+
+  public void setVotePrivacy(String votePrivacy) {
+    this.votePrivacy = votePrivacy;
   }
 }

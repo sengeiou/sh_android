@@ -1,9 +1,11 @@
 package com.shootr.mobile.domain.model.user;
 
 import com.shootr.mobile.domain.model.EntityMetadata;
+import com.shootr.mobile.domain.model.Searchable;
+import com.shootr.mobile.domain.model.SearchableType;
 import java.util.Comparator;
 
-public class User {
+public class User implements Searchable {
 
     private String idUser;
     private String username;
@@ -241,6 +243,10 @@ public class User {
 
     public void setRelationship(Integer relationship) {
         this.relationship = relationship;
+    }
+
+    @Override public String getSearchableType() {
+        return SearchableType.USER;
     }
 
     public static class UsernameComparator implements Comparator<User> {

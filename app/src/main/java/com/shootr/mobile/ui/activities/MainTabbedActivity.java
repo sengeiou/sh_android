@@ -407,7 +407,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void navigateToDiscoverSearch() {
-    Intent intent = new Intent(this, DiscoverSearchActivity.class);
+    Intent intent = new Intent(this, SearchActivity.class);
     startActivity(intent);
     this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }

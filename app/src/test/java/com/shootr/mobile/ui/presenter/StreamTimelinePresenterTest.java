@@ -949,17 +949,6 @@ public class StreamTimelinePresenterTest {
     verify(streamTimelineView, times(2)).showPinnedMessage(TOPIC);
   }
 
-  @Test public void shouldShowStreamViewOnlyIndicatorWhenInitializeAndIAmContributor()
-      throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
-    setupSelectViewOnlyStreamInteractorCallbacksStream();
-    setupLoadTimelineInteractorCallbacks(timelineWithShots());
-
-    presenter.initialize(streamTimelineView, ID_STREAM, ID_AUTHOR, PUBLIC);
-
-    verify(streamTimelineView, atLeastOnce()).hideStreamViewOnlyIndicator();
-  }
-
   @Test public void shouldHideStreamViewOnlyIndicatorWhenInitializeAndIAmAuthor() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_AUTHOR);
     setupSelectViewOnlyStreamInteractorCallbacksStream();

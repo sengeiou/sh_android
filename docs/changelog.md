@@ -13,7 +13,24 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.30.2] - 2017-04-07
+## [1.32.0] - 2017-04-28
+
+### Added
+- Search everything
+- Mixpanel user properties
+- Mixpanel checkIn
+- Join ban - ignore
+- Vote privacy
+
+### Fixed
+- Mentions
+- ViewOnly streams
+
+### Changed
+- Los drafts se envían uno por uno
+
+
+## [1.31.0] - 2017-04-07
 
 ### Fixed
 - Activity poller

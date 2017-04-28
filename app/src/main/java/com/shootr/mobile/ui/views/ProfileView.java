@@ -88,8 +88,6 @@ public interface ProfileView {
 
     void setStreamsCount(Integer streams);
 
-    void hideStreamsCount();
-
     void hideChannelButton();
 
     void blockUser(UserModel userModel);
@@ -98,21 +96,13 @@ public interface ProfileView {
 
     void showReportUserButton();
 
-    void goToReportEmail(String currentUserId, String idUser);
+    void showUnblockUserButton();
 
-    void showBanUserConfirmation(UserModel userModel);
+    void goToReportEmail(String currentUserId, String idUser);
 
     void showBlockUserButton();
 
-    void showDefaultBlockMenu(UserModel userModel);
-
     void showBlockedMenu(UserModel userModel);
-
-    void showBannedMenu(UserModel userModel);
-
-    void showBlockAndBannedMenu(UserModel userModel);
-
-    void confirmUnban(UserModel userModel);
 
     void resetTimelineAdapter();
 
@@ -125,8 +115,6 @@ public interface ProfileView {
     void goToChannelsList();
 
     void goToChannelTimeline(String idTargetUser);
-
-    void hideFollowButton();
 
     void hideEditMenu();
 

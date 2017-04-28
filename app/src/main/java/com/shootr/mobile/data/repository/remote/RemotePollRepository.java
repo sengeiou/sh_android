@@ -59,9 +59,9 @@ public class RemotePollRepository implements ExternalPollRepository {
     }
   }
 
-  @Override public Poll vote(String idPoll, String idPollOption)
+  @Override public Poll vote(String idPoll, String idPollOption, boolean isPrivateVote)
       throws UserCannotVoteRequestException, UserHasVotedRequestException {
-    PollEntity pollEntity = remotePollDataSource.vote(idPoll, idPollOption);
+    PollEntity pollEntity = remotePollDataSource.vote(idPoll, idPollOption, isPrivateVote);
     pollEntity.setVoteStatus(PollStatus.VOTED);
     localPollDataSource.putPoll(pollEntity);
     return pollEntityMapper.transform(pollEntity);

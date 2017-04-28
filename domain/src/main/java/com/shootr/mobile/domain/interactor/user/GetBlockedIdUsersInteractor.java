@@ -13,63 +13,66 @@ import javax.inject.Inject;
 
 public class GetBlockedIdUsersInteractor implements Interactor {
 
-    private final InteractorHandler interactorHandler;
-    private final PostExecutionThread postExecutionThread;
-    private final FollowRepository localFollowRepository;
-    private final FollowRepository remoteFollowRepository;
+  private final InteractorHandler interactorHandler;
+  private final PostExecutionThread postExecutionThread;
+  private final FollowRepository localFollowRepository;
+  private final FollowRepository remoteFollowRepository;
 
-    private Callback<List<String>> callback;
-    private ErrorCallback errorCallback;
+  private Callback<List<String>> callback;
+  private ErrorCallback errorCallback;
+  private boolean onlyLocal;
 
-    @Inject
-    public GetBlockedIdUsersInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository) {
-        this.interactorHandler = interactorHandler;
-        this.postExecutionThread = postExecutionThread;
-        this.localFollowRepository = localFollowRepository;
-        this.remoteFollowRepository = remoteFollowRepository;
+  @Inject public GetBlockedIdUsersInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread, @Local FollowRepository localFollowRepository,
+      @Remote FollowRepository remoteFollowRepository) {
+    this.interactorHandler = interactorHandler;
+    this.postExecutionThread = postExecutionThread;
+    this.localFollowRepository = localFollowRepository;
+    this.remoteFollowRepository = remoteFollowRepository;
+  }
+
+  public void loadBlockedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback,
+      boolean onlyLocal) {
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    this.onlyLocal = onlyLocal;
+    interactorHandler.execute(this);
+  }
+
+  @Override public void execute() throws Exception {
+    tryLoadingLocalUsersAndThenRemote();
+  }
+
+  private void tryLoadingLocalUsersAndThenRemote() {
+    List<String> blockedIdUsers = localFollowRepository.getBlockedIdUsers();
+    if (blockedIdUsers.isEmpty() && !onlyLocal) {
+      loadRemoteBlockedIdUsers();
+    } else {
+      notifyResult(blockedIdUsers);
     }
+  }
 
-    public void loadBlockedIdUsers(Callback<List<String>> callback, ErrorCallback errorCallback) {
-        this.callback = callback;
-        this.errorCallback = errorCallback;
-        interactorHandler.execute(this);
+  private void loadRemoteBlockedIdUsers() {
+    try {
+      notifyResult(remoteFollowRepository.getBlockedIdUsers());
+    } catch (ServerCommunicationException error) {
+      notifyError(error);
     }
+  }
 
-    @Override public void execute() throws Exception {
-        tryLoadingLocalUsersAndThenRemote();
-    }
+  private void notifyResult(final List<String> user) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        callback.onLoaded(user);
+      }
+    });
+  }
 
-    private void tryLoadingLocalUsersAndThenRemote() {
-        List<String> blockedIdUsers = localFollowRepository.getBlockedIdUsers();
-        if (blockedIdUsers.isEmpty()) {
-            loadRemoteBlockedIdUsers();
-        } else {
-            notifyResult(blockedIdUsers);
-        }
-    }
-
-    private void loadRemoteBlockedIdUsers() {
-        try {
-            notifyResult(remoteFollowRepository.getBlockedIdUsers());
-        } catch (ServerCommunicationException error) {
-            notifyError(error);
-        }
-    }
-
-    private void notifyResult(final List<String> user) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                callback.onLoaded(user);
-            }
-        });
-    }
-
-    private void notifyError(final ShootrException error) {
-        postExecutionThread.post(new Runnable() {
-            @Override public void run() {
-                errorCallback.onError(error);
-            }
-        });
-    }
+  private void notifyError(final ShootrException error) {
+    postExecutionThread.post(new Runnable() {
+      @Override public void run() {
+        errorCallback.onError(error);
+      }
+    });
+  }
 }

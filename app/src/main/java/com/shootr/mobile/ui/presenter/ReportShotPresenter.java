@@ -5,11 +5,9 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.DeleteShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
-import com.shootr.mobile.domain.interactor.user.BanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
-import com.shootr.mobile.domain.interactor.user.UnbanUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -34,8 +32,6 @@ public class ReportShotPresenter implements Presenter {
   private final BlockUserInteractor blockUserInteractor;
   private final UnblockUserInteractor unblockUserInteractor;
   private final GetFollowingInteractor getFollowingInteractor;
-  private final BanUserInteractor banUserInteractor;
-  private final UnbanUserInteractor unbanUserInteractor;
   private final GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
   private final GetLocalStreamInteractor getLocalStreamInteractor;
 
@@ -45,12 +41,11 @@ public class ReportShotPresenter implements Presenter {
   private HighlightedShot currentHighlightedShot;
   private boolean isCurrentUserContributor;
 
-  @Inject
-  public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor, ErrorMessageFactory errorMessageFactory,
-      SessionRepository sessionRepository, UserModelMapper userModelMapper,
-      GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, BlockUserInteractor blockUserInteractor,
-      UnblockUserInteractor unblockUserInteractor, GetFollowingInteractor getFollowingInteractor,
-      BanUserInteractor banUserInteractor, UnbanUserInteractor unbanUserInteractor,
+  @Inject public ReportShotPresenter(DeleteShotInteractor deleteShotInteractor,
+      ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository,
+      UserModelMapper userModelMapper, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
+      BlockUserInteractor blockUserInteractor, UnblockUserInteractor unblockUserInteractor,
+      GetFollowingInteractor getFollowingInteractor,
       GetLocalHighlightedShotInteractor getHighlightedShotInteractor,
       GetLocalStreamInteractor getLocalStreamInteractor) {
     this.deleteShotInteractor = deleteShotInteractor;
@@ -61,8 +56,6 @@ public class ReportShotPresenter implements Presenter {
     this.blockUserInteractor = blockUserInteractor;
     this.unblockUserInteractor = unblockUserInteractor;
     this.getFollowingInteractor = getFollowingInteractor;
-    this.banUserInteractor = banUserInteractor;
-    this.unbanUserInteractor = unbanUserInteractor;
     this.getHighlightedShotInteractor = getHighlightedShotInteractor;
     this.getLocalStreamInteractor = getLocalStreamInteractor;
   }
@@ -240,7 +233,7 @@ public class ReportShotPresenter implements Presenter {
       @Override public void onError(ShootrException error) {
         showErrorInView(error);
       }
-    });
+    }, true);
   }
 
   public void deleteShot(final ShotModel shotModel) {
@@ -335,31 +328,6 @@ public class ReportShotPresenter implements Presenter {
 
   private void showErrorInView(ShootrException error) {
     reportShotView.showError(errorMessageFactory.getMessageForError(error));
-  }
-
-  public void confirmBan(UserModel userModel) {
-    banUserInteractor.ban(userModel.getIdUser(), new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        reportShotView.showUserBanned();
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        showErrorInView(error);
-      }
-    });
-  }
-
-  public void confirmUnBan(UserModel userModel) {
-    unbanUserInteractor.unban(userModel.getIdUser(), new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        reportShotView.showUserUnbanned();
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        reportShotView.showErrorLong(errorMessageFactory.getMessageForError(error));
-      }
-    });
-
   }
 
   public void reportClicked(String language, String sessionToken, ShotModel shotModel) {

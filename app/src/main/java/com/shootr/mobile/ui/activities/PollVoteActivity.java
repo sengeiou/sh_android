@@ -18,6 +18,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.BooleanPreference;
+import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.PollVoteAdapter;
@@ -51,6 +53,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @BindView(R.id.stream_title) TextView streamTitle;
 
   @BindString(R.string.analytics_screen_poll_vote) String analyticsPollVote;
+  @BindString(R.string.private_vote) String privatePoll;
+  @BindString(R.string.poll_vote) String pollVote;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollVotePresenter presenter;
@@ -58,9 +62,14 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Inject BackStackHandler backStackHandler;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference;
 
   private PollVoteAdapter pollVoteAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
+  private MenuItemValueHolder publicPollVoteMenu = new MenuItemValueHolder();
+  private MenuItemValueHolder privatePollVoteMenu = new MenuItemValueHolder();
+
+  private boolean isPrivateVote = true;
 
   public static Intent newIntent(Context context, String idStream, String streamTitle) {
     Intent intent = new Intent(context, PollVoteActivity.class);
@@ -100,7 +109,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     setupActionbar();
     pollVoteAdapter = new PollVoteAdapter(new OnPollOptionClickListener() {
       @Override public void onClickPressed(PollOptionModel pollOptionModel) {
-        presenter.voteOption(pollOptionModel.getIdPollOption());
+        voteOption(pollOptionModel);
       }
     }, new OnPollOptionLongClickListener() {
       @Override public void onLongPress(PollOptionModel pollOptionModel) {
@@ -111,6 +120,28 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
         new GridLayoutManager(this, COLUMNS_NUMBER);
     pollOptionsRecycler.setLayoutManager(layoutManager);
     pollOptionsRecycler.setAdapter(pollVoteAdapter);
+  }
+
+  private void voteOption(final PollOptionModel pollOptionModel) {
+    if (publicVoteAlertPreference.get() && !isPrivateVote) {
+      showPublicVoteAlert(pollOptionModel);
+    } else {
+      presenter.voteOption(pollOptionModel.getIdPollOption());
+    }
+  }
+
+  private void showPublicVoteAlert(final PollOptionModel pollOptionModel) {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    alertDialogBuilder //
+        .setTitle(getString(R.string.public_vote_title_dialog))
+        .setMessage(getString(R.string.public_vote_dialog)) //
+        .setPositiveButton(getString(R.string.ok),
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialogInterface, int action) {
+                publicVoteAlertPreference.set(false);
+                presenter.voteOption(pollOptionModel.getIdPollOption());
+              }
+            }).setNegativeButton(getString(R.string.cancel), null).show();
   }
 
   private void sendMixPanel() {
@@ -206,9 +237,34 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
             }).setNegativeButton(getString(R.string.cancel), null).show();
   }
 
+  @Override public void showPublicVotePrivacy() {
+    publicPollVoteMenu.setVisible(true);
+    privatePollVoteMenu.setVisible(false);
+    getToolbarDecorator().setTitle(pollVote);
+    isPrivateVote = false;
+  }
+
+  @Override public void showPrivateVotePrivacy() {
+    publicPollVoteMenu.setVisible(false);
+    privatePollVoteMenu.setVisible(true);
+    getToolbarDecorator().setTitle(privatePoll);
+    isPrivateVote = true;
+  }
+
+  @Override public void showPrivateVotePrivacyDisabled() {
+    publicPollVoteMenu.setVisible(false);
+    privatePollVoteMenu.setVisible(false);
+    getToolbarDecorator().setTitle(privatePoll);
+    isPrivateVote = true;
+  }
+
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_poll_vote, menu);
     ignorePollMenu.bindRealMenuItem(menu.findItem(R.id.menu_ignore_poll));
+    publicPollVoteMenu.bindRealMenuItem(menu.findItem(R.id.menu_public_poll));
+    publicPollVoteMenu.setVisible(false);
+    privatePollVoteMenu.bindRealMenuItem(menu.findItem(R.id.menu_private_poll));
+    privatePollVoteMenu.setVisible(false);
     return true;
   }
 
@@ -222,6 +278,12 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
       return true;
     } else if (item.getItemId() == R.id.menu_ignore_poll) {
       presenter.ignorePoll();
+      return true;
+    } else if (item.getItemId() == R.id.menu_private_poll) {
+      presenter.changeVotePrivacyToPublic();
+      return true;
+    } else if (item.getItemId() == R.id.menu_public_poll) {
+      presenter.changeVotePrivacyToPrivate();
       return true;
     } else {
       return super.onOptionsItemSelected(item);

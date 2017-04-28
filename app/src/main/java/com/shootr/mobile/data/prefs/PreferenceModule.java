@@ -59,4 +59,9 @@ import javax.inject.Singleton;
         SharedPreferences preferences) {
         return new LongPreference(preferences, "discover_type", -1L);
     }
+
+    @Provides @Singleton @PublicVoteAlertPreference
+    BooleanPreference providePublicVoteAlertPreference(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "public_vote_alert", true);
+    }
 }
