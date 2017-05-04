@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrServerException;
 import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.sloydev.jsonadapters.JsonAdapter;
+import com.shootr.mobile.util.JsonAdapter;
 import com.squareup.okhttp.Headers;
 import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.MultipartBuilder;

@@ -21,7 +21,7 @@ import com.shootr.mobile.notifications.message.MessageNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
-import com.sloydev.jsonadapters.JsonAdapter;
+import com.shootr.mobile.util.JsonAdapter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
