@@ -202,7 +202,7 @@ public class ProfileActivity extends BaseActivity
     ButterKnife.bind(this, getView());
     writePermissionManager.init(this);
     setupToolbar();
-    collapsingToolbarLayout.setTitle("");
+    collapsingToolbarLayout.setTitle(" ");
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
     if (getIntent().hasExtra(EXTRA_SEARCH)) {
@@ -874,7 +874,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void showLoading() {
-    collapsingToolbarLayout.setTitle("");
+    collapsingToolbarLayout.setTitle(" ");
     progressBar.setVisibility(View.VISIBLE);
   }
 

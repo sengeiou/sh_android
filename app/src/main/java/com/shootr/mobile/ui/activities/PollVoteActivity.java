@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,6 +52,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @BindView(R.id.pollvote_progress) ProgressBar progressBar;
   @BindView(R.id.poll_results) TextView viewResults;
   @BindView(R.id.stream_title) TextView streamTitle;
+  @BindView(R.id.container) CoordinatorLayout container;
 
   @BindString(R.string.analytics_screen_poll_vote) String analyticsPollVote;
   @BindString(R.string.private_vote) String privatePoll;
@@ -68,6 +70,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
   private MenuItemValueHolder publicPollVoteMenu = new MenuItemValueHolder();
   private MenuItemValueHolder privatePollVoteMenu = new MenuItemValueHolder();
+  private ActionBar actionBar;
 
   private boolean isPrivateVote = true;
 
@@ -166,13 +169,16 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   }
 
   private void setupActionbar() {
-    ActionBar actionBar = getSupportActionBar();
+    actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setDisplayShowHomeEnabled(false);
     actionBar.setHomeAsUpIndicator(R.drawable.ic_navigation_close_white_24);
+    actionBar.hide();
   }
 
   @Override public void renderPoll(PollModel pollModel) {
+    actionBar.show();
+    container.setVisibility(View.VISIBLE);
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
     streamTitle.setText(title);
     pollQuestion.setText(pollModel.getQuestion());

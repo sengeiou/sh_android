@@ -47,6 +47,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.presenter.DiscoverTimelinePresenter;
 import com.shootr.mobile.ui.views.DiscoverTimelineView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -132,6 +133,7 @@ public class DiscoverTimelineFragment extends BaseFragment implements DiscoverTi
         return true;
       }
     });
+    discoverList.addItemDecoration(new BottomOffsetDecoration(200));
   }
 
   private void initializePresenter() {
