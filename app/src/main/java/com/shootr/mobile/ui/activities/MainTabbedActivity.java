@@ -57,7 +57,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private static final int ANIMATION_TRANSLATION = 500;
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
-  private static final int ACTIVITY_FRAGMENT = 3;
+  private static final int ACTIVITY_FRAGMENT = 2;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
