@@ -12,11 +12,6 @@
       title="@string/drawer_favorites_title"
       barColorWhenSelected="@color/primary"
       />
-  <tab
-      id="@+id/bottombar_discover_timeline"
-      icon="@drawable/ic_action_discover"
-      title="@string/discover"
-      barColorWhenSelected="@color/primary"/>
 
   <tab
       id="@+id/bottombar_activity"
