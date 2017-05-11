@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.util.ImageLoader;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ToolbarDecorator implements ViewContainerDecorator {
 
@@ -27,7 +27,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     private ViewGroup titleContainer;
     private TextView subtitleText;
 
-    private CircleImageView avatar;
+    private AvatarView avatar;
 
     public ToolbarDecorator(Context context, ImageLoader imageLoader) {
         this.context = context;
@@ -40,7 +40,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleText = (TextView) toolbar.findViewById(R.id.toolbar_title);
         subtitleText = (TextView) toolbar.findViewById(R.id.toolbar_subtitle);
         titleContainer = (ViewGroup) toolbar.findViewById(R.id.toolbar_title_container);
-        avatar = (CircleImageView) toolbar.findViewById(R.id.toolbar_user_avatar);
+        avatar = (AvatarView) toolbar.findViewById(R.id.toolbar_user_avatar);
         subtitleFilteredText = (TextView) toolbar.findViewById(R.id.toolbar_filtered_subtitle);
         setupTitleContainerTransitions();
         return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
@@ -96,9 +96,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         titleContainer.setOnClickListener(clickListener);
     }
 
-    public void setAvatarImage(String imageURL) {
+    public void setAvatarImage(String imageURL, String username) {
         avatar.setVisibility(View.VISIBLE);
-        imageLoader.loadProfilePhoto(imageURL, avatar);
+        imageLoader.loadProfilePhoto(imageURL, avatar, username);
     }
 
     public Toolbar getToolbar() {

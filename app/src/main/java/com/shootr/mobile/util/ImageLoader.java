@@ -6,6 +6,7 @@ import android.support.annotation.WorkerThread;
 import android.widget.ImageView;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import java.io.File;
 import java.io.IOException;
 
@@ -13,6 +14,9 @@ public interface ImageLoader {
 
     @UiThread
     void loadProfilePhoto(String url, ImageView view);
+
+    @UiThread
+    void loadProfilePhoto(String url, AvatarView view, String username);
 
     @UiThread
     void loadStreamPicture(String url, ImageView view);

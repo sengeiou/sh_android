@@ -30,6 +30,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.github.clans.fab.FloatingActionMenu;
 import com.shootr.mobile.BuildConfig;
@@ -67,6 +68,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -155,6 +157,7 @@ public class ProfileActivity extends BaseActivity
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject BackStackHandler backStackHandler;
   @Inject SessionRepository sessionRepository;
+  @Inject InitialsLoader initialsLoader;
 
   //endregion
 
@@ -643,9 +646,24 @@ public class ProfileActivity extends BaseActivity
     nameTextView.setText(userModel.getName());
     renderWebsite(userModel);
     renderBio(userModel);
-    imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
+    setupAvatar(userModel);
     followersTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowers()));
     followingTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowings()));
+  }
+
+  private void setupAvatar(UserModel userModel) {
+    if (userModel.getPhoto() != null && !userModel.getPhoto().isEmpty()) {
+      imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
+    } else {
+      setupInitials(userModel);
+    }
+  }
+
+  private void setupInitials(UserModel userModel) {
+    String initials = initialsLoader.getLetters(userModel.getUsername());
+    int backgroundColor = initialsLoader.getColorForLetters(initials);
+    TextDrawable textDrawable = initialsLoader.getRectTextDrawable(initials, backgroundColor);
+    avatarImageView.setImageDrawable(textDrawable);
   }
 
   @Override public void navigateToListing(String idUser, boolean isCurrentUser) {

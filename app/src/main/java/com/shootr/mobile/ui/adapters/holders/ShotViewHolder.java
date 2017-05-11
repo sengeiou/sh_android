@@ -14,6 +14,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
@@ -35,7 +36,7 @@ public class ShotViewHolder {
     private final OnHideClickListener onHideClickListener;
     private final NumberFormatUtil numberFormatUtil;
 
-    @BindView(R.id.shot_avatar) ImageView avatar;
+    @BindView(R.id.shot_avatar) AvatarView avatar;
     @BindView(R.id.shot_user_name) TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) TextView timestamp;
@@ -172,7 +173,7 @@ public class ShotViewHolder {
     }
 
     private void bindUserPhoto(final ShotModel shot) {
-        imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
+        imageLoader.loadProfilePhoto(shot.getAvatar(), avatar, shot.getUsername());
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 avatarClickListener.onAvatarClick(shot.getIdUser(), v);

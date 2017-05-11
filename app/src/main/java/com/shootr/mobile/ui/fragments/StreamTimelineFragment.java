@@ -91,6 +91,7 @@ import com.shootr.mobile.ui.views.nullview.NullNewShotBarView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineOptionsView;
 import com.shootr.mobile.ui.views.nullview.NullStreamTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullWatchNumberView;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.ui.widgets.MessageBox;
@@ -109,7 +110,6 @@ import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
-import de.hdodenhof.circleimageview.CircleImageView;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
@@ -873,7 +873,7 @@ public class StreamTimelineFragment extends BaseFragment
     View dialogView = inflater.inflate(R.layout.dialog_shot_image, null);
     TextView user = (TextView) dialogView.findViewById(R.id.shot_user_name);
     ImageView image = (ImageView) dialogView.findViewById(R.id.shot_image);
-    CircleImageView avatar = (CircleImageView) dialogView.findViewById(R.id.shot_avatar);
+    AvatarView avatar = (AvatarView) dialogView.findViewById(R.id.shot_avatar);
 
     user.setText(shot.getUsername());
     loadImages(shot, image, avatar);
@@ -896,9 +896,9 @@ public class StreamTimelineFragment extends BaseFragment
     analyticsTool.analyticsSendAction(builder);
   }
 
-  private void loadImages(ShotModel shot, ImageView image, CircleImageView avatar) {
+  private void loadImages(ShotModel shot, ImageView image, AvatarView avatar) {
     imageLoader.load(shot.getImage().getImageUrl(), image);
-    imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
+    imageLoader.loadProfilePhoto(shot.getAvatar(), avatar, shot.getUsername());
   }
 
   private void setupTopicCustomDialog() {
@@ -1032,7 +1032,7 @@ public class StreamTimelineFragment extends BaseFragment
     setStreamTitle(title);
   }
 
-  @Override public void setImage(String avatarImage) {
+  @Override public void setImage(String avatarImage, String username) {
     /*no-op*/
   }
 

@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -11,6 +10,7 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.Set;
@@ -24,7 +24,7 @@ public class WatcherViewHolder extends RecyclerView.ViewHolder implements View.O
     private final OnFollowUnfollowListener onFollowUnfollowListener;
     private final Set<String> keepFollowButtonIds;
 
-    @BindView(R.id.watcher_user_avatar) ImageView avatar;
+    @BindView(R.id.watcher_user_avatar) AvatarView avatar;
     @BindView(R.id.watcher_user_name) TextView name;
     @BindView(R.id.watcher_user_watching) TextView watchingText;
     @BindView(R.id.user_follow_button) FollowButton followButton;
@@ -47,7 +47,7 @@ public class WatcherViewHolder extends RecyclerView.ViewHolder implements View.O
         name.setText(userModel.getUsername());
         setupVerifiedStatus(userModel);
         watchingText.setText(userModel.getJoinStreamDate());
-        imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar);
+        imageLoader.loadProfilePhoto(userModel.getPhoto(), avatar, userModel.getUsername());
         setupFollowButton(userModel);
     }
 

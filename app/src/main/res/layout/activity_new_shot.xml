@@ -14,7 +14,7 @@
         <RelativeLayout android:layout_width="match_parent"
           android:layout_height="wrap_content">
 
-            <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/new_shot_avatar"
+            <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/new_shot_avatar"
               android:layout_width="40dp"
               android:layout_height="40dp"
               android:layout_margin="16dp"

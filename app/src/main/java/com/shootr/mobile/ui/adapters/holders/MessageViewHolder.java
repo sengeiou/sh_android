@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.PrivateMessageModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -30,7 +31,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
   private final ImageLoader imageLoader;
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
 
-  @BindView(R.id.message_avatar) ImageView avatar;
+  @BindView(R.id.message_avatar) AvatarView avatar;
   @BindView(R.id.message_user_name) TextView name;
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @Nullable @BindView(R.id.message_timestamp) TextView timestamp;
@@ -110,7 +111,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void bindUserPhoto(final PrivateMessageModel message) {
-    imageLoader.loadProfilePhoto(message.getAvatar(), avatar);
+    imageLoader.loadProfilePhoto(message.getAvatar(), avatar, message.getUsername());
     avatar.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         avatarClickListener.onAvatarClick(message.getIdUser(), v);

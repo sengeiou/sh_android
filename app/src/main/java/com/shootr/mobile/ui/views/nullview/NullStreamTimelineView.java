@@ -66,7 +66,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void setImage(String imageAvatar) {
+    @Override public void setImage(String imageAvatar, String username) {
         /* no-op */
     }
 

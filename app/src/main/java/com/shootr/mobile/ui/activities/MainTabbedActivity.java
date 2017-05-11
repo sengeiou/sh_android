@@ -276,7 +276,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override public void setUserData(final UserModel userModel) {
     toolbarDecorator.setTitle(userModel.getUsername());
-    toolbarDecorator.setAvatarImage(userModel.getPhoto());
+    toolbarDecorator.setAvatarImage(userModel.getPhoto(), userModel.getUsername());
     setToolbarClickListener(userModel);
   }
 

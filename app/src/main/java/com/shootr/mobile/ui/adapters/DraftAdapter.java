@@ -14,6 +14,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.DraftItemView;
 import com.shootr.mobile.util.ImageLoader;
@@ -59,7 +60,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     holder.name.setText(shotModel.getUsername());
     holder.text.setText(getShotCommentWithStream(shotModel, holder));
     holder.text.addLinks();
-    imageLoader.loadProfilePhoto(shotModel.getAvatar(), holder.avatar);
+    imageLoader.loadProfilePhoto(shotModel.getAvatar(), holder.avatar, shotModel.getUsername());
     bindShotImageIfPresent(holder, draftModel);
     if (isExpandedLocked(position)) {
       currentExpandedItemPosition = position;
@@ -175,7 +176,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
 
   class DraftViewHolder extends RecyclerView.ViewHolder {
 
-    @BindView(R.id.shot_avatar) ImageView avatar;
+    @BindView(R.id.shot_avatar) AvatarView avatar;
     @BindView(R.id.shot_user_name) TextView name;
     @BindView(R.id.shot_text) ClickableTextView text;
     @BindView(R.id.shot_image) ImageView image;

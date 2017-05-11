@@ -23,7 +23,7 @@
       android:paddingRight="16dp"
       android:paddingTop="8dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/activity_avatar"
+        <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/activity_avatar"
           android:layout_width="40dp"
           android:layout_height="40dp"
           android:layout_marginRight="8dp"

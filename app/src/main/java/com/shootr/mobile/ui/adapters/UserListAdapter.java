@@ -4,13 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         }
 
         String photo = item.getPhoto();
-        imageLoader.loadProfilePhoto(photo, viewHolder.avatar);
+        imageLoader.loadProfilePhoto(photo, viewHolder.avatar, item.getUsername());
 
         if (isFollowButtonVisible()) {
             if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
@@ -143,7 +143,7 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
 
     public static class ViewHolder {
 
-        @BindView(R.id.user_avatar) ImageView avatar;
+        @BindView(R.id.user_avatar) AvatarView avatar;
         @BindView(R.id.user_name) TextView title;
         @BindView(R.id.user_username) TextView subtitle;
         @BindView(R.id.user_follow_button) FollowButton followButton;

@@ -32,6 +32,7 @@ import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.views.PostNewShotView;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.NestedListView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
@@ -65,7 +66,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   public static final String EXTRA_ID_TARGET_USER = "extraIdTargetUser";
   public static final String SPACE = " ";
 
-  @BindView(R.id.new_shot_avatar) ImageView avatar;
+  @BindView(R.id.new_shot_avatar) AvatarView avatar;
   @BindView(R.id.new_shot_title) TextView name;
   @BindView(R.id.new_shot_subtitle) TextView username;
   @BindView(R.id.new_shot_text) EditText editTextView;
@@ -157,7 +158,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   }
 
   private void initializeViews() {
-    imageLoader.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto(), avatar);
+    imageLoader.loadProfilePhoto(sessionRepository.getCurrentUser().getPhoto(), avatar,
+        sessionRepository.getCurrentUser().getUsername());
     name.setText(sessionRepository.getCurrentUser().getName());
     username.setText("@" + sessionRepository.getCurrentUser().getUsername());
 

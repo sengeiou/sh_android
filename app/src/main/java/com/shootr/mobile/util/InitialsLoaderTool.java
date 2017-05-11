@@ -57,4 +57,16 @@ public class InitialsLoaderTool implements InitialsLoader {
         .endConfig()
         .buildRound(initials, backgroundColor);
   }
+
+  @Override public TextDrawable getRectTextDrawable(String initials, int background) {
+    return TextDrawable.builder()
+        .beginConfig()
+        .width(56)
+        .height(56)
+        .textColor(Color.WHITE)
+        .useFont(Typeface.DEFAULT)
+        .fontSize(24)
+        .endConfig()
+        .buildRect(initials, background);
+  }
 }

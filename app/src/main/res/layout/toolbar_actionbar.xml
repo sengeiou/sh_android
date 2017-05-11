@@ -17,7 +17,7 @@
       android:visibility="gone"
       tools:visibility="visible">
 
-        <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/toolbar_user_avatar"
+        <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/toolbar_user_avatar"
           android:layout_width="@dimen/userlist_avatar_size"
           android:layout_height="@dimen/userlist_avatar_size"
           android:src="@drawable/ic_contact_picture_default"

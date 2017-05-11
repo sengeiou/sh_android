@@ -368,9 +368,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     toolbarDecorator.setTitle(streamTitle);
   }
 
-  private void setAvatarImage(String imageUrl) {
+  private void setAvatarImage(String imageUrl, String username) {
     if (imageUrl != null) {
-      toolbarDecorator.setAvatarImage(imageUrl);
+      toolbarDecorator.setAvatarImage(imageUrl, username);
     }
   }
 
@@ -492,8 +492,8 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     /*no-op*/
   }
 
-  @Override public void setImage(String avatarImage) {
-    setAvatarImage(avatarImage);
+  @Override public void setImage(String avatarImage, String username) {
+    setAvatarImage(avatarImage, username);
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
