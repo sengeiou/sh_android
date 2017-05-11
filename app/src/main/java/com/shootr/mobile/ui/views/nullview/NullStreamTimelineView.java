@@ -150,6 +150,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void setReshoot(String idShot, boolean mark) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

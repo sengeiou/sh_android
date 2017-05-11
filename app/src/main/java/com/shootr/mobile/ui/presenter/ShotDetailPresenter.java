@@ -8,7 +8,8 @@ import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
 import com.shootr.mobile.domain.model.shot.Shot;
@@ -30,7 +31,8 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private final GetShotDetailInteractor getShotDetailInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
-    private final ShareShotInteractor shareShotInteractor;
+    private final ReshootInteractor reshootInteractor;
+    private final UndoReshootInteractor undoReshootInteractor;
     private final ViewShotDetailEventInteractor viewShotEventInteractor;
     private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
     private final CallCtaCheckInInteractor callCtaCheckInInteractor;
@@ -48,14 +50,16 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
         MarkNiceShotInteractor markNiceShotInteractor, UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-        ShareShotInteractor shareShotInteractor, ViewShotDetailEventInteractor viewShotEventInteractor,
+        ReshootInteractor reshootInteractor, UndoReshootInteractor undoReshootInteractor,
+        ViewShotDetailEventInteractor viewShotEventInteractor,
         ClickShotLinkEventInteractor clickShotLinkEventInteractor,
         CallCtaCheckInInteractor callCtaCheckInInteractor, ShotModelMapper shotModelMapper,
         NicerModelMapper nicerModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
         this.getShotDetailInteractor = getShotDetailInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
-        this.shareShotInteractor = shareShotInteractor;
+        this.reshootInteractor = reshootInteractor;
+        this.undoReshootInteractor = undoReshootInteractor;
         this.viewShotEventInteractor = viewShotEventInteractor;
         this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
         this.callCtaCheckInInteractor = callCtaCheckInInteractor;
@@ -174,8 +178,13 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     private void onShotDetailLoaded(ShotDetail shotDetail) {
         setShotModel(shotModelMapper.transform(shotDetail.getShot()));
-        if (shotDetail.getNicers() != null) {
+        if (shotDetail.getNicers() != null && !shotDetail.getNicers().isEmpty()) {
             setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
+        }
+        if (shotDetail.getShot().isReshooted()) {
+            shotDetailView.showUndoReshootMenu();
+        } else {
+            shotDetailView.showReshootMenu();
         }
         shotDetailView.renderShot(shotModel);
         onRepliesLoaded(shotDetail.getReplies());
@@ -251,10 +260,34 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         this.loadShotDetail(shotModel, true);
     }
 
-    public void shareShotViaShootr() {
-        shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+    public void reshoot() {
+        if (shotModel.isReshooted()) {
+            undoReshoot();
+        } else {
+            markReshoot();
+        }
+    }
+
+    private void markReshoot() {
+        reshootInteractor.reshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                shotDetailView.showShotShared();
+                shotModel.setReshooted(true);
+                shotDetailView.showReshoot(true);
+                shotDetailView.showUndoReshootMenu();
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    private void undoReshoot() {
+        undoReshootInteractor.undoReshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                shotModel.setReshooted(false);
+                shotDetailView.showReshoot(false);
+                shotDetailView.showReshootMenu();
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

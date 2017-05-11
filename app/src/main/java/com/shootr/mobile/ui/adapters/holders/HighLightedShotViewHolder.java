@@ -13,6 +13,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnOpenShotMenuListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
@@ -53,9 +54,9 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
       OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
-      OnOpenShotMenuListener onOpenShotMenuListener, Boolean isAdmin) {
+      OnOpenShotMenuListener onOpenShotMenuListener, OnReshootClickListener onReshootClickListener, Boolean isAdmin) {
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
-        onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener);
+        onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener);
     setupSwipeLayout();
     setupHighlightedMenu();
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick,

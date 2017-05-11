@@ -3,10 +3,10 @@ package com.shootr.mobile.ui.presenter;
 import android.support.annotation.NonNull;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
-import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.GetProfileShotTimelineInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.interactor.user.PutRecentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
+import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -37,17 +38,19 @@ public class ProfilePresenter implements Presenter {
 
   public static final int ALL_SHOTS_VISIBILITY_TRESHOLD = 11;
   public static final int MAX_SHOTS_SHOWN = 10;
+  private static final int MAX_TIMESTAMP = 0;
+
   private final PutRecentUserInteractor putRecentUserInteractor;
   private final GetUserByIdInteractor getUserByIdInteractor;
   private final GetUserByUsernameInteractor getUserByUsernameInteractor;
   private final LogoutInteractor logoutInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
-  private final HideShotInteractor hideShotInteractor;
-  private final ShareShotInteractor shareShotInteractor;
+  private final ReshootInteractor reshootInteractor;
+  private final UndoReshootInteractor undoReshootInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
-  private final GetLastShotsInteractor getLastShotsInteractor;
+  private final GetProfileShotTimelineInteractor getProfileShotTimelineInteractor;
   private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
   private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
   private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
@@ -71,9 +74,10 @@ public class ProfilePresenter implements Presenter {
       GetUserByIdInteractor getUserByIdInteractor,
       GetUserByUsernameInteractor getUserByUsernameInteractor, LogoutInteractor logoutInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, HideShotInteractor hideShotInteractor,
-      ShareShotInteractor shareShotInteractor, FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor, GetLastShotsInteractor getLastShotsInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ReshootInteractor reshootInteractor,
+      UndoReshootInteractor undoReshootInteractor, FollowInteractor followInteractor,
+      UnfollowInteractor unfollowInteractor,
+      GetProfileShotTimelineInteractor getProfileShotTimelineInteractor,
       UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor,
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, SessionRepository sessionRepository,
@@ -85,10 +89,11 @@ public class ProfilePresenter implements Presenter {
     this.logoutInteractor = logoutInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
-    this.shareShotInteractor = shareShotInteractor;
+    this.reshootInteractor = reshootInteractor;
+    this.undoReshootInteractor = undoReshootInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
-    this.getLastShotsInteractor = getLastShotsInteractor;
+    this.getProfileShotTimelineInteractor = getProfileShotTimelineInteractor;
     this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
     this.removeUserPhotoInteractor = removeUserPhotoInteractor;
     this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
@@ -96,7 +101,6 @@ public class ProfilePresenter implements Presenter {
     this.errorMessageFactory = errorMessageFactory;
     this.userModelMapper = userModelMapper;
     this.shotModelMapper = shotModelMapper;
-    this.hideShotInteractor = hideShotInteractor;
   }
 
   protected void setView(ProfileView profileView) {
@@ -188,6 +192,12 @@ public class ProfilePresenter implements Presenter {
     subscribeUIObserverToObservable(getLatestShotsObservable(idUser));
   }
 
+  private void loadLatestShotsLocal(final String idUser) {
+    if (isCurrentUser) {
+      subscribeUIObserverToObservable(getLatestShotsFromLocalObservable(idUser));
+    }
+  }
+
   private List<Shot> getLimitedShotList(List<Shot> shotList) {
     if (shotList.size() > MAX_SHOTS_SHOWN) {
       return shotList.subList(0, MAX_SHOTS_SHOWN);
@@ -250,10 +260,23 @@ public class ProfilePresenter implements Presenter {
     loadLatestShots(userModel.getIdUser());
   }
 
-  public void shareShot(ShotModel shotModel) {
-    shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+  public void reshoot(final ShotModel shotModel) {
+    reshootInteractor.reshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        profileView.showShotShared();
+        profileView.notifyReshoot(shotModel.getIdShot(), true);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        profileView.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
+  }
+
+  public void undoReshoot(final ShotModel shotModel) {
+    undoReshootInteractor.undoReshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        profileView.notifyReshoot(shotModel.getIdShot(), false);
+        loadLatestShotsLocal(profileIdUser);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -459,29 +482,51 @@ public class ProfilePresenter implements Presenter {
   @NonNull private Observable<Void> getLatestShotsObservable(final String idUser) {
     return Observable.create(new Observable.OnSubscribe<Void>() {
       @Override public void call(Subscriber<? super Void> subscriber) {
-        getLastShotsInteractor.loadLastShots(idUser, new Interactor.Callback<List<Shot>>() {
-          @Override public void onLoaded(List<Shot> shotList) {
-            if (!shotList.isEmpty()) {
-              profileView.showLatestShots();
-              profileView.hideLatestShotsEmpty();
-              if (shotList.size() == ALL_SHOTS_VISIBILITY_TRESHOLD) {
-                profileView.showAllShotsButton();
-              } else {
-                profileView.hideAllShotsButton();
+        getProfileShotTimelineInteractor.loadProfileShotTimeline(idUser,
+            new Interactor.Callback<ProfileShotTimeline>() {
+              @Override public void onLoaded(ProfileShotTimeline profileShotTimeline) {
+                onLoadedLatestShots(profileShotTimeline);
               }
-              profileView.renderLastShots(shotModelMapper.transform(getLimitedShotList(shotList)));
-            } else {
-              profileView.hideLatestShots();
-              profileView.showLatestShotsEmpty();
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showErrorInView(error);
-          }
-        });
+            }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+              }
+            });
       }
     });
+  }
+
+  @NonNull private Observable<Void> getLatestShotsFromLocalObservable(final String idUser) {
+    return Observable.create(new Observable.OnSubscribe<Void>() {
+      @Override public void call(Subscriber<? super Void> subscriber) {
+        getProfileShotTimelineInteractor.loadProfileShotTimelineUndo(idUser,
+            new Interactor.Callback<ProfileShotTimeline>() {
+              @Override public void onLoaded(ProfileShotTimeline profileShotTimeline) {
+                onLoadedLatestShots(profileShotTimeline);
+              }
+            }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                showErrorInView(error);
+              }
+            });
+      }
+    });
+  }
+
+  private void onLoadedLatestShots(ProfileShotTimeline profileShotTimeline) {
+    if (!profileShotTimeline.getShots().isEmpty()) {
+      profileView.showLatestShots();
+      profileView.showReshotsHeader();
+      if (profileShotTimeline.getShots().size() > MAX_SHOTS_SHOWN) {
+        profileView.showAllShotsButton();
+      } else {
+        profileView.hideAllShotsButton();
+      }
+      profileView.renderLastShots(
+          shotModelMapper.transform(getLimitedShotList(profileShotTimeline.getShots())));
+    } else {
+      profileView.hideLatestShots();
+    }
   }
 
   @NonNull private Observable<Void> getMenuItemsVisibilityObservable() {
@@ -547,18 +592,6 @@ public class ProfilePresenter implements Presenter {
 
   @Override public void pause() {
     hasBeenPaused = true;
-  }
-
-  public void showUnpinShotAlert(String idShot) {
-    profileView.showHideShotConfirmation(idShot);
-  }
-
-  public void hideShot(String idShot) {
-    hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        loadLatestShots(userModel.getIdUser());
-      }
-    });
   }
 
   public boolean isCurrentUser() {

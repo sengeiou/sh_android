@@ -23,7 +23,7 @@ public interface ShotDetailView {
 
     void showError(String errorMessage);
 
-    void showShotShared();
+    void showReshoot(boolean mark);
 
     void setupNewShotBarDelegate(ShotModel shotModel);
 
@@ -46,4 +46,8 @@ public interface ShotDetailView {
     void hideLoading();
 
     void showChecked();
+
+    void showReshootMenu();
+
+    void showUndoReshootMenu();
 }

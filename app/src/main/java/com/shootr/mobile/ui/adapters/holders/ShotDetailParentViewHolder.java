@@ -213,10 +213,10 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupNiceListener(final ShotModel shotModel) {
-        niceButton.setChecked(shotModel.isMarkedAsNice());
+        niceButton.setChecked(shotModel.isNiced());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (shotModel.isMarkedAsNice()) {
+                if (shotModel.isNiced()) {
                     onNiceShotListener.unmarkNice(shotModel.getIdShot());
                 } else {
                     onNiceShotListener.markNice(shotModel);

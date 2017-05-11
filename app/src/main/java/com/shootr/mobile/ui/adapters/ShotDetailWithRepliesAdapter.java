@@ -329,5 +329,12 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         return mainShot;
     }
 
+    public void reshoot(boolean mark) {
+        if (mainShot != null) {
+            mainShot.setReshooted(mark);
+            notifyDataSetChanged();
+        }
+    }
+
     //endregion
 }

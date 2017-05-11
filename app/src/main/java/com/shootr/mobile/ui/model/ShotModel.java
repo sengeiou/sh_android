@@ -12,7 +12,6 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private String replyUsername;
     private String parentShotId;
     private Integer niceCount;
-    private Boolean isMarkedAsNice;
     private Long hide;
     private Long replyCount;
     private Long views;
@@ -26,6 +25,8 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private boolean canBePinned;
     private boolean titleEnabled;
     private boolean isHolderOrContributor;
+    private boolean niced;
+    private boolean reshooted;
 
     public String getIdShot() {
         return idShot;
@@ -69,14 +70,6 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
     public void setNiceCount(Integer niceCount) {
         this.niceCount = niceCount;
-    }
-
-    public Boolean isMarkedAsNice() {
-        return isMarkedAsNice;
-    }
-
-    public void setIsMarkedAsNice(Boolean isMarkedAsNice) {
-        this.isMarkedAsNice = isMarkedAsNice;
     }
 
     public String getStreamId() {
@@ -199,6 +192,22 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
         isHolderOrContributor = holderOrContributor;
     }
 
+    public boolean isNiced() {
+        return niced;
+    }
+
+    public void setNiced(boolean niced) {
+        this.niced = niced;
+    }
+
+    public boolean isReshooted() {
+        return reshooted;
+    }
+
+    public void setReshooted(boolean reshooted) {
+        this.reshooted = reshooted;
+    }
+
     @Override public int compareTo(ShotModel shotModel) {
         return this.getBirth().getTime() > shotModel.getBirth().getTime() ? 1 : 0;
     }
@@ -221,10 +230,6 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
             : shotModel.niceCount != null) {
             return false;
         }
-        if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shotModel.isMarkedAsNice)
-            : shotModel.isMarkedAsNice != null) {
-            return false;
-        }
         if (hide != null ? !hide.equals(shotModel.hide) : shotModel.hide != null) return false;
         return replyCount != null ? replyCount.equals(shotModel.replyCount)
             : shotModel.replyCount == null;
@@ -235,7 +240,6 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
         result = 31 * result + (nicers != null ? nicers.hashCode() : 0);
         result = 31 * result + (streamTitle != null ? streamTitle.hashCode() : 0);
         result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
-        result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
         result = 31 * result + (hide != null ? hide.hashCode() : 0);
         result = 31 * result + (replyCount != null ? replyCount.hashCode() : 0);
         return result;

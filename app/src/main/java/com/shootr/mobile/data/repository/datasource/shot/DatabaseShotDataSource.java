@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.manager.HighlightedShotManager;
@@ -107,8 +108,12 @@ public class DatabaseShotDataSource implements ShotDataSource {
         "getAllShotsFromUserWithMaxDate should have no local implementation");
   }
 
-  @Override public void shareShot(String idShot) {
-    throw new IllegalArgumentException("hasNewFilteredShots should not have local implementation");
+  @Override public void reshoot(String idShot) {
+    shotManager.reshoot(idShot);
+  }
+
+  @Override public void undoReshoot(String idShot) {
+    shotManager.undoReshoot(idShot);
   }
 
   @Override public void deleteShot(String idShot) {
@@ -121,7 +126,7 @@ public class DatabaseShotDataSource implements ShotDataSource {
   }
 
   @Override public List<ShotEntity> updateImportantShots(StreamTimelineParameters parameters) {
-    throw new IllegalArgumentException("shareShot should not have local implementation");
+    throw new IllegalArgumentException("reshoot should not have local implementation");
   }
 
   @Override public void deleteShotsByIdStream(String idStream) {
@@ -162,6 +167,16 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
   @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered, String idUser) {
     return shotManager.hasNewFilteredShots(idStream, lastTimeFiltered, idUser);
+  }
+
+  @Override
+  public ProfileShotTimelineEntity getProfileShotTimeline(String idUser, Long maxTimestamp,
+      int count) {
+    ProfileShotTimelineEntity profileShotTimelineEntity = new ProfileShotTimelineEntity();
+    profileShotTimelineEntity.setSinceTimestamp(0);
+    profileShotTimelineEntity.setSinceTimestamp(0);
+    profileShotTimelineEntity.setShotEntities(shotManager.getProfileShots(idUser, count));
+    return profileShotTimelineEntity;
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

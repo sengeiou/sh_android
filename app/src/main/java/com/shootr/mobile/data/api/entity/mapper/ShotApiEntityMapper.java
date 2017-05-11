@@ -68,6 +68,10 @@ public class ShotApiEntityMapper {
             shotApiEntity.getReshootCount() != null ? shotApiEntity.getReshootCount() : 0);
         shotEntity.setPromoted(
             shotApiEntity.getPromoted() != null ? shotApiEntity.getPromoted() : 0);
+        shotEntity.setNiced(shotApiEntity.getNiced());
+        shotEntity.setReshooted(shotApiEntity.getReshooted());
+        shotEntity.setNicedTime(shotApiEntity.getNicedTime());
+        shotEntity.setReshootedTime(shotApiEntity.getReshootedTime());
         shotEntity.setCtaCaption(shotApiEntity.getCtaCaption());
         shotEntity.setCtaButtonText(shotApiEntity.getCtaButtonText());
         shotEntity.setCtaButtonLink(shotApiEntity.getCtaButtonLink());

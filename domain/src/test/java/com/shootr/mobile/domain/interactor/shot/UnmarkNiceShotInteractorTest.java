@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NiceShotRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
@@ -34,7 +33,6 @@ public class UnmarkNiceShotInteractorTest {
   private static final Long SHOT_USER_ID = 3L;
   private static final String SHOT_USERNAME = "username";
 
-  @Mock InternalNiceShotRepository niceShotRepository;
   @Mock InternalShotRepository localShotRepository;
   @Mock ExternalShotRepository remoteShotRepository;
   @Mock NiceShotRepository remoteNiceShotRepository;
@@ -48,7 +46,7 @@ public class UnmarkNiceShotInteractorTest {
     TestInteractorHandler interactorHandler = new TestInteractorHandler();
     TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor =
-        new UnmarkNiceShotInteractor(interactorHandler, postExecutionThread, niceShotRepository,
+        new UnmarkNiceShotInteractor(interactorHandler, postExecutionThread,
             remoteNiceShotRepository, localShotRepository, remoteShotRepository);
   }
 
@@ -84,7 +82,7 @@ public class UnmarkNiceShotInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRepositoryFailsWithNiceNotMarked() throws Exception {
     setupLocalShot();
-    doThrow(new NiceNotMarkedException()).when(niceShotRepository).unmark(anyString());
+    doThrow(new NiceNotMarkedException()).when(remoteNiceShotRepository).unmark(anyString());
 
     interactor.unmarkNiceShot(SHOT_ID, callback, errorCallback);
 

@@ -42,7 +42,6 @@ import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -110,7 +109,7 @@ public class ProfileActivity extends BaseActivity
 
   @BindView(R.id.profile_follow_button) FollowButton followButton;
 
-  @BindView(R.id.profile_shots_empty) View shotsListEmpty;
+  @BindView(R.id.reshoots_people_title) TextView reshootsHeader;
   @BindView(R.id.profile_shots_list) ShotListView shotsList;
 
   @BindView(R.id.profile_all_shots_container) View allShotContainer;
@@ -242,11 +241,6 @@ public class ProfileActivity extends BaseActivity
       }
     };
 
-    OnHideClickListener onHideClickListener = new OnHideClickListener() {
-      @Override public void onHideClick(String idSHot) {
-        profilePresenter.showUnpinShotAlert(idSHot);
-      }
-    };
     suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
     suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
@@ -257,8 +251,7 @@ public class ProfileActivity extends BaseActivity
 
     latestsShotsAdapter =
         new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, onHideClickListener, numberFormatUtil,
-            profilePresenter.isCurrentUser()) {
+            onNiceShotListener, onUsernameClickListener, numberFormatUtil) {
           @Override protected boolean shouldShowTitle() {
             return true;
           }
@@ -291,21 +284,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void resetTimelineAdapter() {
-    latestsShotsAdapter.setIsCurrentUser(profilePresenter.isCurrentUser());
     latestsShotsAdapter.notifyDataSetChanged();
-  }
-
-  @Override public void showHideShotConfirmation(final String idShot) {
-    new AlertDialog.Builder(this).setMessage(confirmationMessage)
-        .setPositiveButton(confirmHideShotAlertDialogMessage,
-            new DialogInterface.OnClickListener() {
-
-              public void onClick(DialogInterface dialog, int whichButton) {
-                profilePresenter.hideShot(idShot);
-              }
-            })
-        .setNegativeButton(cancelHideShotAlertDialogMessage, null)
-        .show();
   }
 
   @Override public void showFriendsButton() {
@@ -744,8 +723,8 @@ public class ProfileActivity extends BaseActivity
     startActivity(StreamDetailActivity.getIntent(this, streamId));
   }
 
-  @Override public void showShotShared() {
-    feedbackMessage.show(getView(), this.getString(R.string.shot_shared_message));
+  @Override public void notifyReshoot(String idShot, boolean mark) {
+    latestsShotsAdapter.reshoot(idShot, mark);
   }
 
   @Override public void renderSuggestedPeopleList(List<UserModel> users) {
@@ -875,15 +854,12 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void hideLatestShots() {
+    reshootsHeader.setVisibility(View.GONE);
     shotsList.setVisibility(View.GONE);
   }
 
-  @Override public void showLatestShotsEmpty() {
-    shotsListEmpty.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideLatestShotsEmpty() {
-    shotsListEmpty.setVisibility(View.GONE);
+  @Override public void showReshotsHeader() {
+    reshootsHeader.setVisibility(View.VISIBLE);
   }
 
   @Override public void showLoadingPhoto() {
@@ -1120,11 +1096,16 @@ public class ProfileActivity extends BaseActivity
 
   private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
     final Context context = this;
-    return new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
+    return new CustomContextMenu.Builder(this).addAction(shotModel.isReshooted() ?
+            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
-            profilePresenter.shareShot(shotModel);
-            sendShareShotAnalythics(shotModel);
+            if (shotModel.isReshooted()) {
+              profilePresenter.undoReshoot(shotModel);
+            } else {
+              profilePresenter.reshoot(shotModel);
+              sendShareShotAnalythics(shotModel);
+            }
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {

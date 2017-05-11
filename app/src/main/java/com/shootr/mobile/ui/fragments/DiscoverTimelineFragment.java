@@ -208,6 +208,11 @@ public class DiscoverTimelineFragment extends BaseFragment implements DiscoverTi
         discoverPresenter.reshoot(shot);
         sendReshootAnalytics(shot);
       }
+
+      @Override public void onUndoReshootClick(ShotModel shot) {
+        discoverPresenter.undoReshoot(shot);
+        //TODO sendReshootAnalytics(shot);
+      }
     });
   }
 
@@ -369,8 +374,8 @@ public class DiscoverTimelineFragment extends BaseFragment implements DiscoverTi
     adapter.unmarkNice(idShot);
   }
 
-  @Override public void showReshot() {
-    feedbackMessage.show(getView(), shotShared);
+  @Override public void showReshot(ShotModel shotModel, boolean mark) {
+    adapter.reshoot(shotModel, mark);
   }
 
   @Override public void hideEmpty() {

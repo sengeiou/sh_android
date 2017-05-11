@@ -5,6 +5,7 @@ import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
+import com.shootr.mobile.data.mapper.ProfileShotTimelineMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
@@ -50,6 +51,7 @@ public class SyncShotRepositoryTest {
   @Mock ShotDataSource remoteShotDataSource;
   @Mock ShotDataSource localShotDataSource;
   @Mock ShotEntityMapper shotEntityMapper;
+  @Mock ProfileShotTimelineMapper profileShotTimelineMapper;
   @Mock SyncTrigger syncTrigger;
   @Mock UserDataSource userDataSource;
   @Mock HighlightedShotEntityMapper highlightedShotEntityMapper;
@@ -61,7 +63,7 @@ public class SyncShotRepositoryTest {
     MockitoAnnotations.initMocks(this);
     syncShotRepository =
         new SyncShotRepository(remoteShotDataSource, localShotDataSource, shotEntityMapper,
-            highlightedShotEntityMapper, userDataSource, syncTrigger, sessionRepository);
+            highlightedShotEntityMapper, profileShotTimelineMapper, userDataSource, syncTrigger, sessionRepository);
   }
 
   @Test public void shouldGetRemoteShotWhenGetShotAndLocalShotIsNull() throws Exception {

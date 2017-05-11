@@ -17,11 +17,11 @@
         android:id="@+id/reshoot_container"
         android:layout_width="100dp"
         android:layout_height="match_parent"
-        android:background="#388E3C"
+        android:background="@color/reshoot"
         android:gravity="center"
         >
       <TextView
-          android:id="@+id/hide_highlighted"
+          android:id="@+id/reshoot"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
           android:layout_gravity="center"

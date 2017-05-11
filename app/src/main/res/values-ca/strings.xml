@@ -449,6 +449,7 @@
   <string name="stream_timeline_remove_favorite">Treure de Favorits</string>
   <string name="stream_timeline_view_only">Només lectura</string>
   <string name="suggested_people_section_title">A qui seguir</string>
+  <string name="reshoot_section_title">Reshots</string>
   <string name="support_blog">Blog</string>
   <string name="support_help">Ajuda</string>
   <string name="support_privacy_policy">Política de privacitat</string>
@@ -507,5 +508,6 @@
   <string name="public_vote">Vot Públic</string>
   <string name="private_vote">Vot Privat</string>
   <string name="voted_public_poll">Ha votat %1$s a (question) a %2$s</string>
+  <string name="undo_reshoot">Undo reshoot</string>
 </resources>
 

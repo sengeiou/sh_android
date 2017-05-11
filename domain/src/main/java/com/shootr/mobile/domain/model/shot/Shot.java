@@ -16,7 +16,6 @@ public class Shot extends BaseMessage {
 
     private String type;
     private Integer niceCount;
-    private Boolean isMarkedAsNice;
     private Long profileHidden;
     private Long replyCount;
 
@@ -31,6 +30,10 @@ public class Shot extends BaseMessage {
     private boolean isPadding;
     private boolean isFromHolder;
     private boolean isFromContributor;
+    private boolean niced;
+    private boolean reshooted;
+    private Date nicedTime;
+    private Date reshootedTime;
 
     public String getIdShot() {
         return idShot;
@@ -96,14 +99,6 @@ public class Shot extends BaseMessage {
         this.niceCount = niceCount;
     }
 
-    public Boolean isMarkedAsNice() {
-        return isMarkedAsNice;
-    }
-
-    public void setIsMarkedAsNice(Boolean isMarkedAsNice) {
-        this.isMarkedAsNice = isMarkedAsNice;
-    }
-
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Shot)) return false;
@@ -159,9 +154,7 @@ public class Shot extends BaseMessage {
         }
         if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
         if (niceCount != null ? !niceCount.equals(shot.niceCount) : shot.niceCount != null) return false;
-        if (isMarkedAsNice != null ? !isMarkedAsNice.equals(shot.isMarkedAsNice) : shot.isMarkedAsNice != null) {
-            return false;
-        }
+
         return !(getMetadata() != null ? !getMetadata().equals(shot.getMetadata()) : shot.getMetadata() != null);
     }
 
@@ -181,7 +174,6 @@ public class Shot extends BaseMessage {
         result = 31 * result + (getVideoDuration() != null ? getVideoDuration().hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
-        result = 31 * result + (isMarkedAsNice != null ? isMarkedAsNice.hashCode() : 0);
         result = 31 * result + (getMetadata() != null ? getMetadata().hashCode() : 0);
         return result;
     }
@@ -356,5 +348,37 @@ public class Shot extends BaseMessage {
 
     public void setIsContributor(boolean contributor) {
         isFromContributor = contributor;
+    }
+
+    public boolean isNiced() {
+        return niced;
+    }
+
+    public void setNiced(boolean niced) {
+        this.niced = niced;
+    }
+
+    public boolean isReshooted() {
+        return reshooted;
+    }
+
+    public void setReshooted(boolean reshooted) {
+        this.reshooted = reshooted;
+    }
+
+    public Date getNicedTime() {
+        return nicedTime;
+    }
+
+    public void setNicedTime(Date nicedTime) {
+        this.nicedTime = nicedTime;
+    }
+
+    public Date getReshootedTime() {
+        return reshootedTime;
+    }
+
+    public void setReshootedTime(Date reshootedTime) {
+        this.reshootedTime = reshootedTime;
     }
 }

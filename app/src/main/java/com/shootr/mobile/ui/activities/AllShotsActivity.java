@@ -21,7 +21,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -150,7 +149,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     int lastItemPosition = listView.getAdapter().getCount() - 1;
     int lastVisiblePosition = listView.getLastVisiblePosition();
     if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
-      presenter.showingLastShot(adapter.getLastShot());
+      presenter.showingLastShot();
     }
   }
 
@@ -184,12 +183,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
       }
     };
 
-    OnHideClickListener onHideClickListener = new OnHideClickListener() {
-      @Override public void onHideClick(String idShot) {
-        presenter.showUnpinShotAlert(idShot);
-      }
-    };
-
     View footerView =
         LayoutInflater.from(this).inflate(R.layout.item_list_loading, listView, false);
     footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
@@ -200,8 +193,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
 
     adapter =
         new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, onHideClickListener, numberFormatUtil,
-            presenter.getIsCurrentUser()) {
+            onNiceShotListener, onUsernameClickListener, numberFormatUtil) {
           @Override protected boolean shouldShowTitle() {
             return true;
           }
@@ -336,7 +328,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showShots() {
-    adapter.setIsCurrentUser(presenter.getIsCurrentUser());
     adapter.notifyDataSetChanged();
     listView.setVisibility(View.VISIBLE);
   }
@@ -365,21 +356,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     adapter.addShotsBelow(shotModels);
   }
 
-  @Override public void showShotShared() {
-    feedbackMessage.show(getView(), shotShared);
-  }
-
-  @Override public void showHideShotConfirmation(final String idShot) {
-    new AlertDialog.Builder(this).setMessage(confirmationMessage)
-        .setPositiveButton(confirmHideShotAlertDialogMessage,
-            new DialogInterface.OnClickListener() {
-
-              public void onClick(DialogInterface dialog, int whichButton) {
-                presenter.hideShot(idShot);
-              }
-            })
-        .setNegativeButton(cancelHideShotAlertDialogMessage, null)
-        .show();
+  @Override public void notifyReshot(String idShot, boolean mark) {
+    adapter.reshoot(idShot, mark);
   }
 
   @Override public void handleReport(String sessionToken, ShotModel shotModel) {
@@ -452,11 +430,16 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   private CustomContextMenu.Builder getBaseContextMenu(final ShotModel shotModel) {
-    return new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
+    return new CustomContextMenu.Builder(this).addAction(shotModel.isReshooted() ?
+            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
-            presenter.shareShot(shotModel);
-            sendShareAnalytics(shotModel);
+            if (shotModel.isReshooted()) {
+              presenter.undoReshoot(shotModel);
+            } else {
+              presenter.reshoot(shotModel);
+              sendShareAnalytics(shotModel);
+            }
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {

@@ -2,13 +2,12 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.shot.GetAllShotsByUserInteractor;
-import com.shootr.mobile.domain.interactor.shot.GetOlderAllShotsByUserInteractor;
-import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.GetProfileShotTimelineInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
-import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
@@ -18,14 +17,13 @@ import javax.inject.Inject;
 
 public class AllShotsPresenter implements Presenter {
 
-    private final GetAllShotsByUserInteractor getAllShotsByUserInteractor;
-    private final GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor;
+    private final GetProfileShotTimelineInteractor getProfileShotTimelineInteractor;
     private final MarkNiceShotInteractor markNiceShotInteractor;
     private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
-    private final ShareShotInteractor shareShotInteractor;
+    private final ReshootInteractor reshootInteractor;
+    private final UndoReshootInteractor undoReshootInteractor;
     private final ErrorMessageFactory errorMessageFactory;
     private final ShotModelMapper shotModelMapper;
-    private final HideShotInteractor hideShotInteractor;
 
     private AllShotsView allShotsView;
     private String userId;
@@ -33,18 +31,20 @@ public class AllShotsPresenter implements Presenter {
     private boolean mightHaveMoreShots = true;
     private boolean hasBeenPaused = false;
     private Boolean isCurrentUser = false;
+    private long maxTimestamp;
 
-    @Inject public AllShotsPresenter(GetAllShotsByUserInteractor getAllShotsByUserInteractor,
-      GetOlderAllShotsByUserInteractor getOlderAllShotsByUserInteractor, MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, HideShotInteractor hideShotInteractor,
-      ShareShotInteractor shareShotInteractor, ErrorMessageFactory errorMessageFactory,
-      ShotModelMapper shotModelMapper) {
-        this.getAllShotsByUserInteractor = getAllShotsByUserInteractor;
-        this.getOlderAllShotsByUserInteractor = getOlderAllShotsByUserInteractor;
+    @Inject
+    public AllShotsPresenter(GetProfileShotTimelineInteractor getProfileShotTimelineInteractor,
+        MarkNiceShotInteractor markNiceShotInteractor,
+        UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+        UndoReshootInteractor undoReshootInteractor,
+        ReshootInteractor reshootInteractor, ErrorMessageFactory errorMessageFactory,
+        ShotModelMapper shotModelMapper) {
+        this.getProfileShotTimelineInteractor = getProfileShotTimelineInteractor;
         this.markNiceShotInteractor = markNiceShotInteractor;
         this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
-        this.hideShotInteractor = hideShotInteractor;
-        this.shareShotInteractor = shareShotInteractor;
+        this.undoReshootInteractor = undoReshootInteractor;
+        this.reshootInteractor = reshootInteractor;
         this.errorMessageFactory = errorMessageFactory;
         this.shotModelMapper = shotModelMapper;
     }
@@ -70,56 +70,59 @@ public class AllShotsPresenter implements Presenter {
     }
 
     private void loadAllShots() {
-        getAllShotsByUserInteractor.loadAllShots(userId, new Interactor.Callback<List<Shot>>() {
-            @Override public void onLoaded(List<Shot> shots) {
-                List<ShotModel> shotModels = shotModelMapper.transform(shots);
-                allShotsView.hideLoading();
-                allShotsView.setShots(shotModels);
-                if (!shotModels.isEmpty()) {
-                    allShotsView.hideEmpty();
-                    allShotsView.showShots();
-                } else {
-                    allShotsView.showEmpty();
-                    allShotsView.hideShots();
+        getProfileShotTimelineInteractor.loadProfileShotTimeline(userId, null,
+            new Interactor.Callback<ProfileShotTimeline>() {
+                @Override public void onLoaded(ProfileShotTimeline profileShotTimeline) {
+                    maxTimestamp = profileShotTimeline.getMaxTimestamp();
+                    List<ShotModel> shotModels =
+                        shotModelMapper.transform(profileShotTimeline.getShots());
+                    allShotsView.hideLoading();
+                    allShotsView.setShots(shotModels);
+                    if (!shotModels.isEmpty()) {
+                        allShotsView.hideEmpty();
+                        allShotsView.showShots();
+                    } else {
+                        allShotsView.showEmpty();
+                        allShotsView.hideShots();
+                    }
                 }
-            }
-        }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-                allShotsView.hideLoading();
-                allShotsView.showError(errorMessageFactory.getMessageForError(error));
-            }
-        });
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    allShotsView.hideLoading();
+                    allShotsView.showError(errorMessageFactory.getMessageForError(error));
+                }
+            });
     }
 
-    public void showingLastShot(ShotModel lastShot) {
+    public void showingLastShot() {
         if (!isLoadingOlderShots && mightHaveMoreShots) {
-            this.loadOlderShots(lastShot.getBirth().getTime());
+            this.loadOlderShots();
         }
     }
 
-    protected void loadOlderShots(long lastShotInScreenDate) {
+    protected void loadOlderShots() {
         isLoadingOlderShots = true;
         allShotsView.showLoadingOldShots();
-        getOlderAllShotsByUserInteractor.loadAllShots(userId,
-          lastShotInScreenDate,
-          new Interactor.Callback<List<Shot>>() {
-              @Override public void onLoaded(List<Shot> shots) {
-                  isLoadingOlderShots = false;
-                  List<ShotModel> shotModels = shotModelMapper.transform(shots);
-                  if (!shotModels.isEmpty()) {
-                      allShotsView.addOldShots(shotModels);
-                  } else {
-                      mightHaveMoreShots = false;
-                  }
-                  allShotsView.hideLoadingOldShots();
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  allShotsView.hideLoadingOldShots();
-                  allShotsView.showError(errorMessageFactory.getCommunicationErrorMessage());
-              }
-          });
+
+        getProfileShotTimelineInteractor.loadProfileShotTimeline(userId, maxTimestamp,
+            new Interactor.Callback<ProfileShotTimeline>() {
+                @Override public void onLoaded(ProfileShotTimeline profileShotTimeline) {
+                    isLoadingOlderShots = false;
+                    maxTimestamp = profileShotTimeline.getMaxTimestamp();
+                    List<ShotModel> shotModels =
+                        shotModelMapper.transform(profileShotTimeline.getShots());
+                    if (!shotModels.isEmpty()) {
+                        allShotsView.addOldShots(shotModels);
+                    }
+                    mightHaveMoreShots = maxTimestamp != 0L;
+                    allShotsView.hideLoadingOldShots();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    allShotsView.hideLoadingOldShots();
+                    allShotsView.showError(errorMessageFactory.getCommunicationErrorMessage());
+                }
+            });
     }
 
     public void markNiceShot(String idShot) {
@@ -146,18 +149,6 @@ public class AllShotsPresenter implements Presenter {
         });
     }
 
-    public void hideShot(String idShot) {
-        hideShotInteractor.hideShot(idShot, new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
-                loadAllShots();
-            }
-        });
-    }
-
-    public void showUnpinShotAlert(String idShot) {
-        allShotsView.showHideShotConfirmation(idShot);
-    }
-
     @Override public void resume() {
         if (hasBeenPaused) {
             loadAllShots();
@@ -168,10 +159,22 @@ public class AllShotsPresenter implements Presenter {
         hasBeenPaused = true;
     }
 
-    public void shareShot(ShotModel shotModel) {
-        shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+    public void reshoot(final ShotModel shotModel) {
+        reshootInteractor.reshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                allShotsView.showShotShared();
+                allShotsView.notifyReshot(shotModel.getIdShot(), true);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+                allShotsView.showError(errorMessageFactory.getMessageForError(error));
+            }
+        });
+    }
+
+    public void undoReshoot(final ShotModel shotModel) {
+        undoReshootInteractor.undoReshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+                allShotsView.notifyReshot(shotModel.getIdShot(), false);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {

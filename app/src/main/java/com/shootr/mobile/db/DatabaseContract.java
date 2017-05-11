@@ -116,14 +116,18 @@ public class DatabaseContract {
     public static final String FROM_HOLDER = "fromHolder";
     public static final String FROM_CONTRIBUTOR = "fromContributor";
     public static final String ENTITIES = "entities";
+    public static final String NICED = "niced";
+    public static final String NICED_TIME = "nicedTime";
+    public static final String RESHOOTED = "reshooted";
+    public static final String RESHOOTED_TIME = "reshootedTime";
 
     public static final String[] PROJECTION = {
         ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE, IMAGE_WIDTH, IMAGE_HEIGHT,
         ID_STREAM, STREAM_TITLE, NICE_COUNT, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT,
         VIDEO_URL, VIDEO_TITLE, VIDEO_DURATION, PROFILE_HIDDEN, REPLY_COUNT, VIEWS, LINK_CLICKS,
         RESHOOT_COUNT, CTA_CAPTION, CTA_BUTTON_LINK, CTA_BUTTON_TEXT, PROMOTED, VERIFIED_USER,
-        IS_PADDING, FROM_HOLDER, FROM_CONTRIBUTOR, ENTITIES, BIRTH, MODIFIED, DELETED, REVISION,
-        SYNCHRONIZED
+        IS_PADDING, FROM_HOLDER, FROM_CONTRIBUTOR, ENTITIES, NICED, NICED_TIME, RESHOOTED,
+        RESHOOTED_TIME, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -324,8 +328,8 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH, MODIFIED, DELETED,
-        REVISION, SYNCHRONIZED
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH,
+        MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -354,8 +358,8 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH, MODIFIED, DELETED,
-        REVISION, SYNCHRONIZED
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH,
+        MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -378,19 +382,6 @@ public class DatabaseContract {
         ANALYTICS_USER_TYPE, BIRTH, RELEVANCE, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT,
         MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
-  }
-
-  public static final class NiceShotTable implements SyncColumns {
-
-    private NiceShotTable() {
-            /* non instanciable */
-    }
-
-    public static final String TABLE = "NiceShot";
-
-    public static final String ID_SHOT = "idShot";
-
-    public static final String[] PROJECTION = { ID_SHOT };
   }
 
   public static final class ContributorTable implements SyncColumns {
@@ -442,7 +433,8 @@ public class DatabaseContract {
     public static final String VOTE_PRIVACY = "votePrivacy";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, VOTE_PRIVACY, PUBLISHED
+        ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, VOTE_PRIVACY,
+        PUBLISHED
     };
   }
 

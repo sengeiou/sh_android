@@ -188,10 +188,10 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupNiceListener(final ShotModel reply) {
-        niceButton.setChecked(reply.isMarkedAsNice());
+        niceButton.setChecked(reply.isNiced());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (reply.isMarkedAsNice()) {
+                if (reply.isNiced()) {
                     onNiceShotListener.unmarkNice(reply.getIdShot());
                 } else {
                     onNiceShotListener.markNice(reply);

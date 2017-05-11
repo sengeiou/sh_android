@@ -201,12 +201,12 @@ public class ShotsTimelineAdapter
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
       ((HighlightedPromotedShotViewHolder) holder).render(highlightedShotModel, shots.get(position),
           shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
-          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, isAdmin,
+          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener, isAdmin,
           onCtaClickListener);
     } else {
       ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel,
           shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
-          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
+          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
           isAdmin);
     }
   }
@@ -362,7 +362,7 @@ public class ShotsTimelineAdapter
       if (shot.getIdShot().equals(shotModel.getIdShot())) {
         int niceCount = shot.getNiceCount() + 1;
         shot.setNiceCount(niceCount);
-        shot.setIsMarkedAsNice(true);
+        shot.setNiced(true);
         notifyItemChanged(index);
       }
       index++;
@@ -376,7 +376,18 @@ public class ShotsTimelineAdapter
       if (shot.getIdShot().equals(idShot)) {
         int niceCount = shot.getNiceCount() - 1;
         shot.setNiceCount(niceCount);
-        shot.setIsMarkedAsNice(false);
+        shot.setNiced(false);
+        notifyItemChanged(index);
+      }
+      index++;
+    }
+  }
+
+  public void reshoot(String idShot, boolean mark) {
+    int index = 0;
+    for (ShotModel shot : shots) {
+      if (shot.getIdShot().equals(idShot)) {
+        shot.setReshooted(mark);
         notifyItemChanged(index);
       }
       index++;

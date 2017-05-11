@@ -2,10 +2,11 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.shot.GetLastShotsInteractor;
+import com.shootr.mobile.domain.interactor.shot.GetProfileShotTimelineInteractor;
 import com.shootr.mobile.domain.interactor.shot.HideShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
@@ -17,6 +18,7 @@ import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
+import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -68,19 +70,20 @@ public class ProfilePresenterTest {
   @Mock MarkNiceShotInteractor markNiceShotInteractor;
   @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   @Mock HideShotInteractor hideShotInteractor;
-  @Mock ShareShotInteractor shareShotInteractor;
+  @Mock ReshootInteractor reshootInteractor;
   @Mock FollowInteractor followInteractor;
   @Mock UnfollowInteractor unfollowInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock GetUserByUsernameInteractor getUserByUsernameInteractor;
   @Mock GetUserByIdInteractor getUserByIdInteractor;
   @Mock StreamJoinDateFormatter streamJoinDateFormatter;
-  @Mock GetLastShotsInteractor getLastShotsInteractor;
   @Mock UploadUserPhotoInteractor uploadUserPhotoInteractor;
   @Mock RemoveUserPhotoInteractor removeUserPhotoInteractor;
   @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
   @Mock SessionRepository sessionRepository;
   @Mock PutRecentUserInteractor putRecentUserInteractor;
+  @Mock GetProfileShotTimelineInteractor getProfileShotTimelineInteractor;
+  @Mock UndoReshootInteractor undoReshootInteractor;
 
   @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -93,10 +96,10 @@ public class ProfilePresenterTest {
     ShotModelMapper shotModelMapper = new ShotModelMapper();
     profilePresenter = new ProfilePresenter(putRecentUserInteractor, getUserByIdInteractor,
         getUserByUsernameInteractor, logoutInteractor, markNiceShotInteractor,
-        unmarkNiceShotInteractor, hideShotInteractor, shareShotInteractor, followInteractor,
-        unfollowInteractor, getLastShotsInteractor, uploadUserPhotoInteractor,
-        removeUserPhotoInteractor, getBlockedIdUsersInteractor,
-        sessionRepository, errorMessageFactory, userModelMapper, shotModelMapper);
+        unmarkNiceShotInteractor, reshootInteractor, undoReshootInteractor, followInteractor,
+        unfollowInteractor, getProfileShotTimelineInteractor, uploadUserPhotoInteractor,
+        removeUserPhotoInteractor, getBlockedIdUsersInteractor, sessionRepository,
+        errorMessageFactory, userModelMapper, shotModelMapper);
     profilePresenter.setView(profileView);
   }
 
@@ -135,7 +138,8 @@ public class ProfilePresenterTest {
 
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
-    verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
+    verify(getProfileShotTimelineInteractor).loadProfileShotTimeline(eq(ID_USER), anyCallback(),
+        anyErrorCallback());
   }
 
   @Test public void shouldLoadLastShotsWhenInitializedFromUsername() throws Exception {
@@ -143,7 +147,8 @@ public class ProfilePresenterTest {
 
     profilePresenter.initializeWithUsername(profileView, USERNAME);
 
-    verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
+    verify(getProfileShotTimelineInteractor).loadProfileShotTimeline(eq(ID_USER), anyCallback(),
+        anyErrorCallback());
   }
 
   @Test public void shouldShowAllShotsIfUserHaveFourLatsShots() throws Exception {
@@ -393,22 +398,13 @@ public class ProfilePresenterTest {
     verify(profileView).hideLatestShots();
   }
 
-  @Test public void shouldShowLatestShotsEmptyIfThereAreNoShots() throws Exception {
-    setupUserById();
-    setupLatestShotCallbacks(shotList(0));
-
-    profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
-
-    verify(profileView).showLatestShotsEmpty();
-  }
-
   @Test public void shouldHideShowLatestShotsEmptyIfThereAreShots() throws Exception {
     setupUserById();
     setupLatestShotCallbacks(shotList(1));
 
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
 
-    verify(profileView).hideLatestShotsEmpty();
+    verify(profileView).showReshotsHeader();
   }
 
   @Test public void shouldShowTenLatestShotsWhenReceivedEleven() throws Exception {
@@ -439,17 +435,6 @@ public class ProfilePresenterTest {
 
     verify(profileView).renderLastShots(shotModelListCaptor.capture());
     assertThat(shotModelListCaptor.getValue()).hasSize(2);
-  }
-
-  @Test public void shouldShowLatestShotsWhenMarkHideShot() throws Exception {
-    setupUserById();
-    profilePresenter.setUserModel(userModel());
-    setupHideShotInteractorCallback();
-    setupLatestShotCallbacks(shotList(2));
-
-    profilePresenter.hideShot(ID_SHOT);
-
-    verify(profileView).renderLastShots(shotModelListCaptor.capture());
   }
 
   @Test public void shouldOpenWebsiteWithHttpPrefixWhenWebsiteHasNoHttpPrefix() throws Exception {
@@ -537,24 +522,25 @@ public class ProfilePresenterTest {
   @Test public void shouldLoadLatestShotsWhenResumed() throws Exception {
     setupUserById();
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
-    reset(getLastShotsInteractor);
+    reset(getProfileShotTimelineInteractor);
 
     profilePresenter.pause();
     profilePresenter.resume();
 
-    verify(getLastShotsInteractor).loadLastShots(eq(ID_USER), anyCallback(), anyErrorCallback());
+    verify(getProfileShotTimelineInteractor).loadProfileShotTimeline(eq(ID_USER), anyCallback(),
+        anyErrorCallback());
   }
 
   @Test public void shouldNotLoadLatestShotsWhenInteractorNotReturned() throws Exception {
     doNothing().when(getUserByIdInteractor)
         .loadUserById(anyString(), anyBoolean(), anyCallback(), anyErrorCallback());
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
-    reset(getLastShotsInteractor);
+    reset(getProfileShotTimelineInteractor);
 
     profilePresenter.resume();
 
-    verify(getLastShotsInteractor, never()).loadLastShots(anyString(), anyCallback(),
-        anyErrorCallback());
+    verify(getProfileShotTimelineInteractor, never()).loadProfileShotTimeline(anyString(),
+        anyCallback(), anyErrorCallback());
   }
 
   @Test public void shouldShowLoadingWhenUploadingPhoto() throws Exception {
@@ -592,13 +578,14 @@ public class ProfilePresenterTest {
   @Test public void shouldLoadLastestShotsAgainWhenPhotoUploaded() throws Exception {
     setupUserById();
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
-    reset(getLastShotsInteractor);
+    reset(getProfileShotTimelineInteractor);
 
     setupUploadPhotoCompletedCallback();
 
     profilePresenter.uploadPhoto(new File(PHOTO_PATH));
 
-    verify(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    verify(getProfileShotTimelineInteractor).loadProfileShotTimeline(anyString(), anyCallback(),
+        anyErrorCallback());
   }
 
   @Test public void shouldHideLoadingWhenUploadinPhotoCallbacksCompleted() throws Exception {
@@ -641,13 +628,14 @@ public class ProfilePresenterTest {
   @Test public void shouldLoadLatestShotsAgainWhenPhotoRemoved() throws Exception {
     setupUserById();
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
-    reset(getLastShotsInteractor);
+    reset(getProfileShotTimelineInteractor);
 
     setupRemovePhotoCompletedCallback();
 
     profilePresenter.removePhotoConfirmed();
 
-    verify(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    verify(getProfileShotTimelineInteractor).loadProfileShotTimeline(anyString(), anyCallback(),
+        anyErrorCallback());
   }
 
   @Test public void shouldShowErrorIfRemovePhotoCallbacksError() throws Exception {
@@ -679,14 +667,14 @@ public class ProfilePresenterTest {
       throws Exception {
     setupUserById();
     profilePresenter.initializeWithIdUser(profileView, ID_USER, false);
-    reset(getLastShotsInteractor);
+    reset(getProfileShotTimelineInteractor);
 
     setupUploadPhotoErrorCallback();
 
     profilePresenter.uploadPhoto(new File(PHOTO_PATH));
 
-    verify(getLastShotsInteractor, never()).loadLastShots(anyString(), anyCallback(),
-        anyErrorCallback());
+    verify(getProfileShotTimelineInteractor, never()).loadProfileShotTimeline(anyString(),
+        anyCallback(), anyErrorCallback());
   }
 
   @Test public void shouldShowLogoutButtonWhenUserIsCurrentUserAndInitializedByUsername() {
@@ -782,15 +770,6 @@ public class ProfilePresenterTest {
     profilePresenter.blockMenuClicked();
 
     verify(profileView).showBlockedMenu(any(UserModel.class));
-  }
-
-  @Test public void shouldShowHideShotConfirmationDialogWhenHideShotIsPressed() throws Exception {
-    setupUserById();
-    setupUserInBlockedIdsCallback();
-
-    profilePresenter.showUnpinShotAlert(ID_SHOT);
-
-    verify(profileView).showHideShotConfirmation(ID_SHOT);
   }
 
   @Test public void shouldNotShowChangePasswordOptionIfUserHasSocialLogin() throws Exception {
@@ -1055,10 +1034,13 @@ public class ProfilePresenterTest {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[1];
-        callback.onLoaded(result);
+        ProfileShotTimeline profileShotTimeline = new ProfileShotTimeline();
+        profileShotTimeline.setShots(result);
+        callback.onLoaded(profileShotTimeline);
         return null;
       }
-    }).when(getLastShotsInteractor).loadLastShots(anyString(), anyCallback(), anyErrorCallback());
+    }).when(getProfileShotTimelineInteractor)
+        .loadProfileShotTimeline(anyString(), anyCallback(), anyErrorCallback());
   }
 
   private void setupUploadPhotoErrorCallback() {

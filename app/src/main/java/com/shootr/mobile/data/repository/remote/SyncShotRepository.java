@@ -1,11 +1,13 @@
 package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
+import com.shootr.mobile.data.mapper.ProfileShotTimelineMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
@@ -16,6 +18,7 @@ import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
 import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
+import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -33,18 +36,21 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
+  private final ProfileShotTimelineMapper profileShotTimelineMapper;
   private final UserDataSource userDataSource;
   private final SyncTrigger syncTrigger;
   private final SessionRepository sessionRepository;
 
   @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource,
       @Local ShotDataSource localShotDataSource, ShotEntityMapper shotEntityMapper,
-      HighlightedShotEntityMapper highlightedShotEntityMapper, @Local UserDataSource userDataSource,
+      HighlightedShotEntityMapper highlightedShotEntityMapper,
+      ProfileShotTimelineMapper profileShotTimelineMapper, @Local UserDataSource userDataSource,
       SyncTrigger syncTrigger, SessionRepository sessionRepository) {
     this.remoteShotDataSource = remoteShotDataSource;
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
+    this.profileShotTimelineMapper = profileShotTimelineMapper;
     this.userDataSource = userDataSource;
     this.syncTrigger = syncTrigger;
     this.sessionRepository = sessionRepository;
@@ -136,8 +142,22 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
             shotTypes));
   }
 
-  @Override public void shareShot(String idShot) {
-    remoteShotDataSource.shareShot(idShot);
+  @Override public void reshoot(String idShot) {
+    remoteShotDataSource.reshoot(idShot);
+  }
+
+  @Override public void undoReshoot(String idShot) {
+    remoteShotDataSource.undoReshoot(idShot);
+  }
+
+  @Override
+  public ProfileShotTimeline getProfileShotTimeline(String idUser, Long maxTimestamp, int count) {
+    ProfileShotTimelineEntity
+        profileShotTimeline = remoteShotDataSource.getProfileShotTimeline(idUser, maxTimestamp, count);
+    if (sessionRepository.getCurrentUserId().equals(idUser)) {
+      localShotDataSource.putShots(profileShotTimeline.getShotEntities(), idUser);
+    }
+    return profileShotTimelineMapper.map(profileShotTimeline);
   }
 
   @Override public void deleteShot(String idShot) {

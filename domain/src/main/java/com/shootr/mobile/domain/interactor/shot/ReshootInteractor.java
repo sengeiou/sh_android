@@ -5,25 +5,29 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
+import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
 import javax.inject.Inject;
 
-public class ShareShotInteractor implements Interactor {
+public class ReshootInteractor implements Interactor {
 
   private final ExternalShotRepository remoteShotRepository;
+  private final InternalShotRepository internalShotRepository;
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private String idShot;
   private CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
-  @Inject public ShareShotInteractor(ExternalShotRepository remoteShotRepository,
-      InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
+  @Inject public ReshootInteractor(ExternalShotRepository remoteShotRepository,
+      InternalShotRepository internalShotRepository, InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread) {
     this.remoteShotRepository = remoteShotRepository;
+    this.internalShotRepository = internalShotRepository;
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
   }
 
-  public void shareShot(String idShot, CompletedCallback callback, ErrorCallback errorCallback) {
+  public void reshoot(String idShot, CompletedCallback callback, ErrorCallback errorCallback) {
     this.idShot = idShot;
     this.completedCallback = callback;
     this.errorCallback = errorCallback;
@@ -32,7 +36,8 @@ public class ShareShotInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      remoteShotRepository.shareShot(idShot);
+      internalShotRepository.reshoot(idShot);
+      remoteShotRepository.reshoot(idShot);
       notifyCompleted();
     } catch (ShootrException error) {
       notifyError(error);

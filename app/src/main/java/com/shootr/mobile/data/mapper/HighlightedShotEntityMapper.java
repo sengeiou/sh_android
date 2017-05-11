@@ -7,7 +7,6 @@ import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,12 +14,9 @@ import javax.inject.Inject;
 
 public class HighlightedShotEntityMapper {
 
-  private final InternalNiceShotRepository niceShotRepository;
   private final MetadataMapper metadataMapper;
 
-  @Inject public HighlightedShotEntityMapper(InternalNiceShotRepository niceShotRepository,
-      MetadataMapper metadataMapper) {
-    this.niceShotRepository = niceShotRepository;
+  @Inject public HighlightedShotEntityMapper(MetadataMapper metadataMapper) {
     this.metadataMapper = metadataMapper;
   }
 
@@ -57,6 +53,8 @@ public class HighlightedShotEntityMapper {
 
     Integer niceCount = shotApiEntity.getNiceCount();
     highlightedShot.setNiceCount(niceCount != null ? niceCount : 0);
+    highlightedShot.setNiced(shotApiEntity.getNiced());
+    highlightedShot.setNicedTime(shotApiEntity.getNicedTime());
 
     highlightedShot.setBirth(value.getBirth());
     highlightedShot.setModified(new Date(shotApiEntity.getModified()));
@@ -73,6 +71,11 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setCtaButtonText(shotApiEntity.getCtaButtonText());
     highlightedShot.setCtaCaption(shotApiEntity.getCtaCaption());
     highlightedShot.setVerifiedUser(shotApiEntity.getVerifiedUser());
+
+    highlightedShot.setNiced(shotApiEntity.getNiced());
+    highlightedShot.setNicedTime(shotApiEntity.getNicedTime());
+    highlightedShot.setReshooted(shotApiEntity.getReshooted());
+    highlightedShot.setReshootedTime(shotApiEntity.getReshootedTime());
 
     return highlightedShot;
   }
@@ -124,7 +127,8 @@ public class HighlightedShotEntityMapper {
     shot.setVideoDuration(value.getVideoDuration());
     shot.setType(value.getType());
     shot.setNiceCount(value.getNiceCount());
-    shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
+    shot.setNiced(value.getNiced());
+    shot.setNicedTime(value.getNicedTime() != null ? new Date(value.getNicedTime()) : null);
     shot.setProfileHidden(value.getProfileHidden());
     shot.setMetadata(metadataMapper.metadataFromEntity(value));
     shot.setReplyCount(value.getReplyCount());
@@ -135,6 +139,11 @@ public class HighlightedShotEntityMapper {
     shot.setCtaButtonText(value.getCtaButtonText());
     shot.setCtaCaption(value.getCtaCaption());
     shot.setPromoted(value.getPromoted());
+    shot.setReshooted(value.getReshooted());
+    shot.setReshootedTime(
+        value.getReshootedTime() != null ? new Date(value.getReshootedTime()) : new Date());
+    shot.setNicedTime(value.getNicedTime() != null ? new Date(value.getNicedTime()) : new Date());
+    shot.setNiced(value.getNiced());
 
     highlightedShot.setShot(shot);
 

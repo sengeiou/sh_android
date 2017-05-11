@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -56,6 +57,11 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.reshoot_count) TextView reshotCount;
   @BindView(R.id.reshoot_container) LinearLayout reshootContainer;
   @BindView(R.id.external_share_container) LinearLayout externalShare;
+  @BindView(R.id.reshoot_text) TextView reshootText;
+  @BindView(R.id.reshoot_icon) ImageView reshootIcon;
+
+  @BindString(R.string.menu_share_shot_via_shootr) String reshootResource;
+  @BindString(R.string.undo_reshoot) String undoReshootResource;
 
   private final ImageLoader imageLoader;
   private final AvatarClickListener avatarClickListener;
@@ -121,7 +127,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     setupNiceButton(shotModel);
     setupPinShotView(shotModel);
     setupPinToProfileContainer(shotModel);
-    setupShareListener();
+    setupShareListener(shotModel);
     setupStreamTitle(shotModel);
   }
 
@@ -141,7 +147,16 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private void setupShareListener() {
+  private void setupShareListener(ShotModel shotModel) {
+    if (shotModel.isReshooted()) {
+      reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_repeat));
+      reshootText.setText(undoReshootResource);
+      reshootText.setTextColor(reshootText.getResources().getColor(R.color.primary));
+    } else {
+      reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_av_repeat));
+      reshootText.setText(reshootResource);
+      reshootText.setTextColor(reshootText.getResources().getColor(R.color.gray_40));
+    }
     reshootContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         reshootClickListener.onClickListener();
@@ -255,10 +270,10 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setNiceButton(final ShotModel shotModel) {
-    niceButton.setChecked(shotModel.isMarkedAsNice());
+    niceButton.setChecked(shotModel.isNiced());
     niceButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        if (shotModel.isMarkedAsNice()) {
+        if (shotModel.isNiced()) {
           onNiceShotListener.unmarkNice(shotModel.getIdShot());
         } else {
           onNiceShotListener.markNice(shotModel);

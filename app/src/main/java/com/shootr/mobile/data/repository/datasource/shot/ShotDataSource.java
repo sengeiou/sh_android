@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
@@ -36,7 +37,9 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
   List<ShotEntity> getAllShotsFromUserAndDate(String userId, Long currentOldestDate,
       String[] streamTypes, String[] shotTypes);
 
-  void shareShot(String idShot);
+  void reshoot(String idShot);
+
+  void undoReshoot(String idShot);
 
   void deleteShot(String idShot);
 
@@ -64,4 +67,6 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
       UserAlreadyCheckInRequestException;
 
   boolean hasNewFilteredShots(String idStream, String lastTimeFiltered, String idUser);
+
+  ProfileShotTimelineEntity getProfileShotTimeline(String idUser, Long maxTimestamp, int count);
 }

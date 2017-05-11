@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.holders.ShotViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
@@ -28,18 +27,14 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
     private final OnUsernameClickListener onUsernameClickListener;
     private final AndroidTimeUtils timeUtils;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-    private final OnHideClickListener onHideClickListener;
     private final NumberFormatUtil numberFormatUtil;
 
     private List<ShotModel> shots;
 
-    private boolean isCurrentUser;
-
     public TimelineAdapter(Context context, ImageLoader imageLoader, AndroidTimeUtils timeUtils,
         OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
         OnNiceShotListener onNiceShotListener, OnUsernameClickListener onUsernameClickListener,
-        OnHideClickListener onHideClickListener, NumberFormatUtil numberFormatUtil,
-        Boolean isCurrentUser) {
+        NumberFormatUtil numberFormatUtil) {
         super(context);
         this.imageLoader = imageLoader;
         this.avatarClickListener = avatarClickListener;
@@ -50,8 +45,6 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         this.numberFormatUtil = numberFormatUtil;
         this.shots = new ArrayList<>(0);
         shotTextSpannableBuilder = new ShotTextSpannableBuilder();
-        this.onHideClickListener = onHideClickListener;
-        this.isCurrentUser = isCurrentUser;
     }
 
     @Override public boolean areAllItemsEnabled() {
@@ -90,11 +83,11 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
                 view.setTag(new ShotViewHolder(view,
                   avatarClickListener,
                   videoClickListener,
-                  onNiceShotListener, onHideClickListener,
+                  onNiceShotListener,
                   onUsernameClickListener,
                   timeUtils,
                   imageLoader,
-                  shotTextSpannableBuilder, numberFormatUtil, isCurrentUser));
+                  shotTextSpannableBuilder, numberFormatUtil));
                 break;
             default:
                 break;
@@ -159,7 +152,12 @@ public class TimelineAdapter extends BindableAdapter<ShotModel> {
         return shotTextSpannableBuilder;
     }
 
-    public void setIsCurrentUser(boolean isCurrentUser) {
-        this.isCurrentUser = isCurrentUser;
+    public void reshoot(String idShot, boolean mark) {
+        for (ShotModel shot : shots) {
+            if (shot.getIdShot().equals(idShot)) {
+                shot.setReshooted(mark);
+                notifyDataSetChanged();
+            }
+        }
     }
 }
