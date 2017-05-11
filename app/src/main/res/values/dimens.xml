@@ -48,5 +48,6 @@
   <dimen name="nice_button_margin_top_normal">4dp</dimen>
   <dimen name="nice_button_margin_top_short">-16dp</dimen>
   <dimen name="fab_margin">16dp</dimen>
+  <dimen name="follow_button_width">108dp</dimen>
 
 </resources>
