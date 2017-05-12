@@ -224,7 +224,7 @@
   <string name="listing_title_holding">Administrador</string>
   <string name="loading_activity_message">Carregando…</string>
   <string name="main_activity_title">Atividade</string>
-  <string name="mentioned_shot_activity_with_comment">"Te mencionou: "</string>
+  <string name="mentioned_shot_activity_with_comment">Te mencionou: </string>
   <string name="menu_all_shots">Mostrar todos os shots</string>
   <string name="menu_check_in">Check-in</string>
   <string name="menu_copy_text">Copiar texto</string>
@@ -330,7 +330,8 @@
   <string name="private_message_push_settings">Mensagens Privadas</string>
   <string name="private_message_timeline_empty_title">Não há mensagens</string>
   <string name="private_message_video">Vídeo</string>
-  <string name="profile_all_shots">Todos os shots</string>
+  <string name="private_vote">Voto Anônimo</string>
+  <string name="profile_all_shots">Todos os reshots</string>
   <string name="profile_edit_done_button">Feito</string>
   <string name="profile_edit_profile">Editar perfil</string>
   <string name="profile_follow">Seguir</string>
@@ -345,6 +346,9 @@
   <string name="profile_support">Suporte</string>
   <string name="profile_updated">Perfil atualizado</string>
   <string name="promoted">Promovido</string>
+  <string name="public_vote">Voto Público</string>
+  <string name="public_vote_dialog">Para que seja anônimo, clique no cadeado antes de votar.</string>
+  <string name="public_vote_title_dialog">Seu voto será público</string>
   <string name="publish_poll">%1$s Novo questionário em %2$s</string>
   <string name="push_settings_everyone">De todos</string>
   <string name="push_settings_people_follow">Das pessoas que sigo</string>
@@ -355,8 +359,9 @@
   <string name="registration_create_button_text">Criar conta</string>
   <string name="remove">Apagar</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">Removido dos Favoritos</string>
+  <string name="removed_from_favorites">Eliminado dos Favoritos</string>
   <string name="remove_favorite">retirar</string>
+  <string name="remove_from_favorites_dialog">Deseja retirar &lt;b&gt;%s&lt;/b&gt; dos Favoritos?</string>
   <string name="remove_highlight">Eliminar destaque</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Apagar</string>
@@ -381,6 +386,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
   <string name="reset_password_enter_username_email">Entre com seu nome de usuário ou email em Shootr.</string>
   <string name="reset_password_send_email">Enviar email para modificação de senha</string>
+  <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
     <item quantity="other">%s reshots</item>
@@ -449,7 +455,6 @@
   <string name="stream_timeline_remove_favorite">Remover dos Favoritos</string>
   <string name="stream_timeline_view_only">Só leitura</string>
   <string name="suggested_people_section_title">Quem seguir</string>
-  <string name="reshoot_section_title">Reshots</string>
   <string name="support_blog">Blog</string>
   <string name="support_help">Ajuda</string>
   <string name="support_privacy_policy">Política de privacidade</string>
@@ -457,7 +462,7 @@
   <string name="support_version">Versão</string>
   <string name="timeline_poll_results">Resultados</string>
   <string name="title_activity_all_participants">Todos os participantes</string>
-  <string name="title_activity_all_shots">Todos os shots</string>
+  <string name="title_activity_all_shots">Todos os reshots</string>
   <string name="title_activity_change_password">Modificar senha</string>
   <string name="title_activity_channels">Mensagens Privadas</string>
   <string name="title_activity_contributors">Colaboradores</string>
@@ -476,6 +481,7 @@
     <item quantity="one">%s participante</item>
     <item quantity="other">%s participantes</item>
   </plurals>
+  <string name="undo_reshoot">Desfazer reshoot</string>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">Não</string>
   <string name="unfollow_dialog_yes">Sim</string>
@@ -493,6 +499,7 @@
     <item quantity="zero">%s visualizações</item>
   </plurals>
   <string name="voted_poll">Votou em (question) em %s</string>
+  <string name="voted_public_poll">Votou \"%1$s\" em (question) em %2$s</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">ver</string>
@@ -502,11 +509,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
-  <string name="remove_from_favorites_dialog">Deseja retirar &lt;b>%s&lt;/b> dos Favoritos?</string>
-  <string name="public_vote_title_dialog">Seu voto será público</string>
-  <string name="public_vote_dialog">Para que seja anônimo, clique no cadeado antes de votar.</string>
-  <string name="public_vote">Voto Público</string>
-  <string name="private_vote">Voto Anônimo</string>
-  <string name="voted_public_poll">Votou %1$s em (question) em %2$s</string>
-  <string name="undo_reshoot">Undo reshoot</string>
 </resources>

@@ -330,7 +330,8 @@
   <string name="private_message_push_settings">Missatges Privats</string>
   <string name="private_message_timeline_empty_title">Sense missatges</string>
   <string name="private_message_video">Vídeo</string>
-  <string name="profile_all_shots">Tots els shots</string>
+  <string name="private_vote">Vot Privat</string>
+  <string name="profile_all_shots">Tots els reshots</string>
   <string name="profile_edit_done_button">Fet</string>
   <string name="profile_edit_profile">Editar perfil</string>
   <string name="profile_follow">Seguir</string>
@@ -345,6 +346,9 @@
   <string name="profile_support">Suport</string>
   <string name="profile_updated">Perfil actualitzat</string>
   <string name="promoted">Promocionat</string>
+  <string name="public_vote">Vot Públic</string>
+  <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
+  <string name="public_vote_title_dialog">El teu vot serà públic</string>
   <string name="publish_poll">%1$s Nova enquesta a %2$s</string>
   <string name="push_settings_everyone">De tothom</string>
   <string name="push_settings_people_follow">De la gent que segueixo</string>
@@ -357,6 +361,7 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">Tret de Favorits</string>
   <string name="remove_favorite">treure</string>
+  <string name="remove_from_favorites_dialog">Treure &lt;b&gt;%s&lt;/b&gt; de Favorits?</string>
   <string name="remove_highlight">Treure destacat</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Esborrar</string>
@@ -381,6 +386,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviat a %s</string>
   <string name="reset_password_enter_username_email">Entra el teu nom d\'usuari o email a Shootr.</string>
   <string name="reset_password_send_email">Envira correu per canviar contrasenya</string>
+  <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
     <item quantity="other">%s reshots</item>
@@ -449,7 +455,6 @@
   <string name="stream_timeline_remove_favorite">Treure de Favorits</string>
   <string name="stream_timeline_view_only">Només lectura</string>
   <string name="suggested_people_section_title">A qui seguir</string>
-  <string name="reshoot_section_title">Reshots</string>
   <string name="support_blog">Blog</string>
   <string name="support_help">Ajuda</string>
   <string name="support_privacy_policy">Política de privacitat</string>
@@ -457,7 +462,7 @@
   <string name="support_version">Versió</string>
   <string name="timeline_poll_results">Resultats</string>
   <string name="title_activity_all_participants">Tots els participants</string>
-  <string name="title_activity_all_shots">Tots els shots</string>
+  <string name="title_activity_all_shots">Tots els reshots</string>
   <string name="title_activity_change_password">Canviar contrasenya</string>
   <string name="title_activity_channels">Missatges privats</string>
   <string name="title_activity_contributors">Col·laboradors</string>
@@ -476,6 +481,7 @@
     <item quantity="one">%s participant</item>
     <item quantity="other">%s participants</item>
   </plurals>
+  <string name="undo_reshoot">Desfer reshoot</string>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Sí</string>
@@ -493,6 +499,7 @@
     <item quantity="zero">%s visualitzacions</item>
   </plurals>
   <string name="voted_poll">Ha votat a (question) a %s</string>
+  <string name="voted_public_poll">Ha votat \"%1$s\" a (question) a %2$s</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>
@@ -502,12 +509,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="remove_from_favorites_dialog">Treure &lt;b>%s&lt;/b> de Favorits?</string>
-  <string name="public_vote_title_dialog">El teu vot serà públic</string>
-  <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
-  <string name="public_vote">Vot Públic</string>
-  <string name="private_vote">Vot Privat</string>
-  <string name="voted_public_poll">Ha votat %1$s a (question) a %2$s</string>
-  <string name="undo_reshoot">Undo reshoot</string>
 </resources>
-
