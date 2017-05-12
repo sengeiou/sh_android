@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.InvalidPasswordException;
 import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
-import com.shootr.mobile.domain.model.shot.Nicer;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.ForgotPasswordResult;
 import com.shootr.mobile.domain.model.user.LoginResult;
@@ -20,14 +19,11 @@ import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 public class ShootrUserService {
@@ -45,7 +41,6 @@ public class ShootrUserService {
   private final DatabaseUtils databaseUtils;
   private final NicerRepository nicerRepository;
   private final MuteRepository muteRepository;
-  private final InternalNiceShotRepository localNiceShotRepository;
   private final ExternalFavoriteRepository favoriteRepository;
 
   @Inject public ShootrUserService(@Local UserRepository localUserRepository,
@@ -55,7 +50,6 @@ public class ShootrUserService {
       ExternalStreamRepository remoteStreamRepository, @Remote UserRepository remoteUserRepository,
       ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils,
       NicerRepository nicerRepository, @Remote MuteRepository muteRepository,
-      InternalNiceShotRepository localNiceShotRepository,
       ExternalFavoriteRepository favoriteRepository) {
     this.localUserRepository = localUserRepository;
     this.sessionRepository = sessionRepository;
@@ -70,7 +64,6 @@ public class ShootrUserService {
     this.databaseUtils = databaseUtils;
     this.nicerRepository = nicerRepository;
     this.muteRepository = muteRepository;
-    this.localNiceShotRepository = localNiceShotRepository;
     this.favoriteRepository = favoriteRepository;
   }
 
@@ -100,19 +93,9 @@ public class ShootrUserService {
     if (visibleEventId != null) {
       remoteStreamRepository.getStreamById(visibleEventId, StreamMode.TYPES_STREAM);
     }
-    storeNicedShots(loginResult);
     storeFavoritesStreams(loginResult);
     storeMuteStreams();
     remoteUserRepository.getPeople();
-  }
-
-  private void storeNicedShots(LoginResult loginResult) {
-    List<Nicer> nices = nicerRepository.getNices(loginResult.getUser().getIdUser());
-    List<String> nicedIdShots = new ArrayList<>(nices.size());
-    for (Nicer nice : nices) {
-      nicedIdShots.add(nice.getIdShot());
-    }
-    localNiceShotRepository.markAll(nicedIdShots);
   }
 
   private void storeFavoritesStreams(LoginResult loginResult) {

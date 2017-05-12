@@ -30,6 +30,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.cocosw.bottomsheet.BottomSheet;
 import com.github.clans.fab.FloatingActionMenu;
 import com.shootr.mobile.BuildConfig;
@@ -41,7 +42,6 @@ import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.adapters.TimelineAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
@@ -67,6 +67,7 @@ import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -108,7 +109,7 @@ public class ProfileActivity extends BaseActivity
 
   @BindView(R.id.profile_follow_button) FollowButton followButton;
 
-  @BindView(R.id.profile_shots_empty) View shotsListEmpty;
+  @BindView(R.id.reshoots_people_title) TextView reshootsHeader;
   @BindView(R.id.profile_shots_list) ShotListView shotsList;
 
   @BindView(R.id.profile_all_shots_container) View allShotContainer;
@@ -155,6 +156,7 @@ public class ProfileActivity extends BaseActivity
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject BackStackHandler backStackHandler;
   @Inject SessionRepository sessionRepository;
+  @Inject InitialsLoader initialsLoader;
 
   //endregion
 
@@ -202,7 +204,7 @@ public class ProfileActivity extends BaseActivity
     ButterKnife.bind(this, getView());
     writePermissionManager.init(this);
     setupToolbar();
-    collapsingToolbarLayout.setTitle("");
+    collapsingToolbarLayout.setTitle(" ");
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
     if (getIntent().hasExtra(EXTRA_SEARCH)) {
@@ -239,11 +241,6 @@ public class ProfileActivity extends BaseActivity
       }
     };
 
-    OnHideClickListener onHideClickListener = new OnHideClickListener() {
-      @Override public void onHideClick(String idSHot) {
-        profilePresenter.showUnpinShotAlert(idSHot);
-      }
-    };
     suggestedPeopleListView.setAdapter(getSuggestedPeopleAdapter());
     suggestedPeopleListView.setOnUserClickListener(new OnUserClickListener() {
       @Override public void onUserClick(String idUser) {
@@ -254,8 +251,7 @@ public class ProfileActivity extends BaseActivity
 
     latestsShotsAdapter =
         new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, onHideClickListener, numberFormatUtil,
-            profilePresenter.isCurrentUser()) {
+            onNiceShotListener, onUsernameClickListener, numberFormatUtil) {
           @Override protected boolean shouldShowTitle() {
             return true;
           }
@@ -288,21 +284,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void resetTimelineAdapter() {
-    latestsShotsAdapter.setIsCurrentUser(profilePresenter.isCurrentUser());
     latestsShotsAdapter.notifyDataSetChanged();
-  }
-
-  @Override public void showHideShotConfirmation(final String idShot) {
-    new AlertDialog.Builder(this).setMessage(confirmationMessage)
-        .setPositiveButton(confirmHideShotAlertDialogMessage,
-            new DialogInterface.OnClickListener() {
-
-              public void onClick(DialogInterface dialog, int whichButton) {
-                profilePresenter.hideShot(idShot);
-              }
-            })
-        .setNegativeButton(cancelHideShotAlertDialogMessage, null)
-        .show();
   }
 
   @Override public void showFriendsButton() {
@@ -643,9 +625,24 @@ public class ProfileActivity extends BaseActivity
     nameTextView.setText(userModel.getName());
     renderWebsite(userModel);
     renderBio(userModel);
-    imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
+    setupAvatar(userModel);
     followersTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowers()));
     followingTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowings()));
+  }
+
+  private void setupAvatar(UserModel userModel) {
+    if (userModel.getPhoto() != null && !userModel.getPhoto().isEmpty()) {
+      imageLoader.loadProfilePhoto(userModel.getPhoto(), avatarImageView);
+    } else {
+      setupInitials(userModel);
+    }
+  }
+
+  private void setupInitials(UserModel userModel) {
+    String initials = initialsLoader.getLetters(userModel.getUsername());
+    int backgroundColor = initialsLoader.getColorForLetters(initials);
+    TextDrawable textDrawable = initialsLoader.getRectTextDrawable(initials, backgroundColor);
+    avatarImageView.setImageDrawable(textDrawable);
   }
 
   @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
@@ -726,8 +723,8 @@ public class ProfileActivity extends BaseActivity
     startActivity(StreamDetailActivity.getIntent(this, streamId));
   }
 
-  @Override public void showShotShared() {
-    feedbackMessage.show(getView(), this.getString(R.string.shot_shared_message));
+  @Override public void notifyReshoot(String idShot, boolean mark) {
+    latestsShotsAdapter.reshoot(idShot, mark);
   }
 
   @Override public void renderSuggestedPeopleList(List<UserModel> users) {
@@ -857,15 +854,12 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void hideLatestShots() {
+    reshootsHeader.setVisibility(View.GONE);
     shotsList.setVisibility(View.GONE);
   }
 
-  @Override public void showLatestShotsEmpty() {
-    shotsListEmpty.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideLatestShotsEmpty() {
-    shotsListEmpty.setVisibility(View.GONE);
+  @Override public void showReshotsHeader() {
+    reshootsHeader.setVisibility(View.VISIBLE);
   }
 
   @Override public void showLoadingPhoto() {
@@ -874,7 +868,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void showLoading() {
-    collapsingToolbarLayout.setTitle("");
+    collapsingToolbarLayout.setTitle(" ");
     progressBar.setVisibility(View.VISIBLE);
   }
 
@@ -1102,11 +1096,16 @@ public class ProfileActivity extends BaseActivity
 
   private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
     final Context context = this;
-    return new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr,
+    return new CustomContextMenu.Builder(this).addAction(shotModel.isReshooted() ?
+            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
-            profilePresenter.shareShot(shotModel);
-            sendShareShotAnalythics(shotModel);
+            if (shotModel.isReshooted()) {
+              profilePresenter.undoReshoot(shotModel);
+            } else {
+              profilePresenter.reshoot(shotModel);
+              sendShareShotAnalythics(shotModel);
+            }
           }
         }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {

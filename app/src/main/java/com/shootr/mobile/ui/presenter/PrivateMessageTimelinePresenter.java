@@ -98,7 +98,8 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
                   privateMessageModelMapper.transform(privateMessageTimeline.getPrivateMessages(),
                       privateMessageTimeline.getPrivateMessageChannel().getImage());
               timelineView.setTitle(privateMessageChannelModel.getTitle());
-              timelineView.setImage(privateMessageChannelModel.getImageUrl());
+              timelineView.setImage(privateMessageChannelModel.getImageUrl(),
+                  privateMessageChannelModel.getTitle());
               showMessagesInView(privateMessageTimeline);
             }
           }

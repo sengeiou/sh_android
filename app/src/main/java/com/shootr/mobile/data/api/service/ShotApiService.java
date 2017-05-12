@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.api.entity.CreateAHighlightedShotEntity;
+import com.shootr.mobile.data.api.entity.ProfileShotTimelineApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
@@ -67,7 +68,10 @@ public interface ShotApiService {
       @Query("shotType") String[] shotTypes, @Query("maxTimestamp") Long maxTimestamp)
       throws ApiException, IOException;
 
-  @POST("/shot/{idShot}/share") Response shareShot(@Path("idShot") String idShot)
+  @POST("/shot/{idShot}/share") Response reshoot(@Path("idShot") String idShot)
+      throws ApiException, IOException;
+
+  @DELETE("/shot/{idShot}/share") Response undoReshot(@Path("idShot") String idShot)
       throws ApiException, IOException;
 
   @DELETE("/shot/{idShot}") Response deleteShot(@Path("idShot") String idShot)
@@ -106,4 +110,8 @@ public interface ShotApiService {
       @Query("idStream") String idStream, @Query("streamReadWriteMode") String[] streamTypes,
       @Query("shotType") String[] shotTypes, @Query("maxTimestamp") Long maxTimestamp,
       @Query("count") Integer count) throws ApiException, IOException;
+
+  @GET("/reaction/reshot") ProfileShotTimelineApiEntity getProfileShotTimeline(
+      @Query("idUser") String idUser, @Query("maxTimestamp") Long maxTimestamp,
+      @Query("count") int count) throws ApiException, IOException;
 }

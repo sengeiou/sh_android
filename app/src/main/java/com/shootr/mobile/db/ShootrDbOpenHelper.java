@@ -31,7 +31,6 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_ACTIVITY);
         db.execSQL(SQLiteUtils.CREATE_ME_TABLE_ACTIVITY);
         db.execSQL(SQLiteUtils.CREATE_SUGGESTED_PEOPLE);
-        db.execSQL(SQLiteUtils.CREATE_TABLE_NICE_SHOTS);
         db.execSQL(SQLiteUtils.CREATE_TABLE_CONTRIBUTOR);
         db.execSQL(SQLiteUtils.CREATE_TABLE_TIMELINE_SYNC);
         db.execSQL(SQLiteUtils.CREATE_TABLE_POLL);
@@ -57,7 +56,6 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.ActivityTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MeActivityTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.SuggestedPeopleTable.TABLE);
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.NiceShotTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.TimelineSyncTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.BlockTable.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseContract.MuteTable.TABLE);

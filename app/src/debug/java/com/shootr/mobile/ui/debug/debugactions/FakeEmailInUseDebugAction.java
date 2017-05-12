@@ -4,9 +4,9 @@ import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.exception.ErrorResource;
 import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.mobile.ui.debug.ContextualDebugActions;
-import com.sloydev.jsonadapters.JsonAdapter;
-import com.sloydev.okresponsefaker.JsonFakeResponse;
-import com.sloydev.okresponsefaker.ResponseFaker;
+import com.shootr.mobile.util.JsonAdapter;
+import com.shootr.mobile.util.JsonFakeResponse;
+import com.shootr.mobile.util.ResponseFaker;
 
 public class FakeEmailInUseDebugAction extends ContextualDebugActions.DebugAction<EmailRegistrationActivity> {
 

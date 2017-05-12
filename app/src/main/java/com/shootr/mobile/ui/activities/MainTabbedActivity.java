@@ -30,7 +30,6 @@ import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
-import com.shootr.mobile.ui.fragments.DiscoverTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -58,7 +57,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private static final int ANIMATION_TRANSLATION = 500;
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
-  private static final int ACTIVITY_FRAGMENT = 3;
+  private static final int ACTIVITY_FRAGMENT = 2;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
@@ -134,22 +133,12 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             currentFragment = favoritesFragment;
             switchTab(favoritesFragment);
             break;
-          case R.id.bottombar_discover:
-            Fragment discoverFragment = DiscoverFragment.newInstance();
-            currentFragment = discoverFragment;
-            switchTab(discoverFragment);
-            break;
           case R.id.bottombar_activity:
             ActivityTimelineContainerFragment activityTimelineFragment =
                 ActivityTimelineContainerFragment.newInstance();
             currentFragment = activityTimelineFragment;
             switchTab(activityTimelineFragment);
             activitiesTab.removeBadge();
-            break;
-          case R.id.bottombar_discover_timeline:
-            Fragment discoverTimelineFragment = DiscoverTimelineFragment.newInstance();
-            currentFragment = discoverTimelineFragment;
-            switchTab(discoverTimelineFragment);
             break;
           default:
             break;
@@ -171,9 +160,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     switch (tabType.intValue()) {
       case TAB_WITH_DISCOVER:
         bottomBar.setItems(R.xml.bottombar_menu);
-        break;
-      case TAB_WITH_DISCOVER_TIMELINE:
-        bottomBar.setItems(R.xml.bottombar_menu_timeline_discover);
         break;
       case TAB_WITHOUT_DISCOVER:
         bottomBar.setItems(R.xml.bottombar_menu_no_discover);
@@ -203,11 +189,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       case R.id.bottombar_favorites:
         ((FavoritesFragment) currentFragment).scrollListToTop();
         break;
-      case R.id.bottombar_discover:
-        ((DiscoverFragment) currentFragment).scrollListToTop();
-        break;
-      case R.id.bottombar_discover_timeline:
-        ((DiscoverTimelineFragment) currentFragment).scrollListToTop();
       default:
         break;
     }
@@ -276,7 +257,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override public void setUserData(final UserModel userModel) {
     toolbarDecorator.setTitle(userModel.getUsername());
-    toolbarDecorator.setAvatarImage(userModel.getPhoto());
+    toolbarDecorator.setAvatarImage(userModel.getPhoto(), userModel.getUsername());
     setToolbarClickListener(userModel);
   }
 

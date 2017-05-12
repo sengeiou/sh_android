@@ -7,6 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.daimajia.swipe.SwipeLayout;
@@ -24,6 +25,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -43,7 +45,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private final NumberFormatUtil numberFormatUtil;
 
-  @BindView(R.id.shot_avatar) ImageView avatar;
+  @BindView(R.id.shot_avatar) AvatarView avatar;
   @BindView(R.id.shot_user_name) TextView name;
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
@@ -62,7 +64,14 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.open_menu) LinearLayout openImageMenu;
   @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
+  @BindView(R.id.actions) LinearLayout actionsContainer;
+  @BindView(R.id.reshoot_action) LinearLayout reshootAction;
+  @BindView(R.id.reshoot_icon) ImageView reshootIcon;
   @Nullable @BindView(R.id.reshoot_container) FrameLayout reshootContainer;
+  @Nullable @BindView(R.id.reshoot) TextView reshootText;
+
+  @BindString(R.string.menu_share_shot_via_shootr) String reshoootResource;
+  @BindString(R.string.undo_reshoot) String undoReshootResource;
 
   public int position;
   private View view;
@@ -106,12 +115,14 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener,
         onOpenShotMenuListener);
     setupSwipeLayout();
+    setupShotActions(shot, onReshootClickListener);
   }
 
   public void render(final ShotModel shot, final ShotClickListener shotClickListener,
       final OnShotLongClick onShotLongClick, OnImageLongClickListener onLongClickListener,
       View.OnTouchListener onTouchListener, OnImageClickListener onImageClickListener,
-      OnUrlClickListener onUrlClickListener, OnOpenShotMenuListener onOpenShotMenuListener) {
+      OnUrlClickListener onUrlClickListener, OnOpenShotMenuListener onOpenShotMenuListener,
+      OnReshootClickListener onReshootClickListener) {
     bindUsername(shot);
     setupVerified(shot);
     setupIsHolderOrContributor(shot);
@@ -125,7 +136,31 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     bindReplyCount(shot);
     setupListeners(shot, shotClickListener, onShotLongClick, null, onOpenShotMenuListener);
     setupSwipeLayout();
+    setupShotActions(shot, onReshootClickListener);
   }
+
+  private void setupShotActions(final ShotModel shot, final OnReshootClickListener onReshootClickListener) {
+    if (shot.isVerifiedUser()) {
+      actionsContainer.setVisibility(View.GONE);
+      if (shot.isReshooted()) {
+        reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_repeat));
+      } else {
+        reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_av_repeat));
+      }
+      reshootAction.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          if (shot.isReshooted()) {
+            onReshootClickListener.onUndoReshootClick(shot);
+          } else {
+            onReshootClickListener.onReshootClick(shot);
+          }
+        }
+      });
+    } else {
+      actionsContainer.setVisibility(View.GONE);
+    }
+  }
+
 
   private void setupSwipeLayout() {
     swipeLayout.setDragEdge(SwipeLayout.DragEdge.Left);
@@ -147,16 +182,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
         return false;
       }
     });
-    if (reshootContainer != null) {
-      reshootContainer.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-          if (reshootClickListener != null) {
-            reshootClickListener.onReshootClick(shot);
-            swipeLayout.close(true);
-          }
-        }
-      });
-    }
+    setupSwipe(shot, reshootClickListener);
     if (openImageMenu != null) {
       openImageMenu.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
@@ -165,6 +191,38 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
           }
         }
       });
+    }
+  }
+
+  private void setupSwipe(final ShotModel shot,
+      @Nullable final OnReshootClickListener reshootClickListener) {
+    if (reshootContainer != null) {
+      reshootContainer.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          if (reshootClickListener != null) {
+            if (!shot.isReshooted()) {
+              reshootClickListener.onReshootClick(shot);
+            } else {
+              reshootClickListener.onUndoReshootClick(shot);
+            }
+            swipeLayout.close(true);
+          }
+        }
+      });
+
+      if (shot.isReshooted()) {
+        reshootContainer.setBackgroundColor(
+            reshootContainer.getResources().getColor(R.color.gray_material));
+        if (reshootText != null) {
+          reshootText.setText(undoReshootResource);
+        }
+      } else {
+        reshootContainer.setBackgroundColor(
+            reshootContainer.getResources().getColor(R.color.reshoot));
+        if (reshootText != null) {
+          reshootText.setText(reshoootResource);
+        }
+      }
     }
   }
 
@@ -236,7 +294,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void bindUserPhoto(final ShotModel shot) {
-    imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
+    imageLoader.loadProfilePhoto(shot.getAvatar(), avatar, shot.getUsername());
     avatar.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         avatarClickListener.onAvatarClick(shot.getIdUser(), v);
@@ -336,10 +394,10 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       this.niceCount.setVisibility(View.INVISIBLE);
     }
 
-    niceButton.setChecked(shot.isMarkedAsNice());
+    niceButton.setChecked(shot.isNiced());
     niceButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        if (shot.isMarkedAsNice()) {
+        if (shot.isNiced()) {
           onNiceShotListener.unmarkNice(shot.getIdShot());
         } else {
           onNiceShotListener.markNice(shot);

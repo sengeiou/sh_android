@@ -12,6 +12,7 @@ import com.shootr.mobile.db.DatabaseContract.ShotTable;
 import com.shootr.mobile.db.mappers.ShotEntityDBMapper;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -83,6 +84,30 @@ public class ShotManager extends AbstractManager {
     }
     queryResult.close();
     return padding;
+  }
+
+  public List<ShotEntity> getProfileShots(String idUser, Integer limit) {
+    String whereSelection = ShotTable.RESHOOTED + " = 1";
+
+    return readProfileShots(whereSelection, null, String.valueOf(limit));
+  }
+
+  private List<ShotEntity> readProfileShots(String whereClause, String[] whereArguments, String limit) {
+    Cursor queryResult =
+        getReadableDatabase().query(ShotTable.TABLE, ShotTable.PROJECTION, whereClause,
+            whereArguments, null, null, ShotTable.RESHOOTED_TIME + " DESC", limit);
+
+    List<ShotEntity> resultShots = new ArrayList<>(queryResult.getCount());
+    ShotEntity shotEntity;
+    if (queryResult.getCount() > 0) {
+      queryResult.moveToFirst();
+      do {
+        shotEntity = shotEntityMapper.fromCursor(queryResult);
+        resultShots.add(shotEntity);
+      } while (queryResult.moveToNext());
+    }
+    queryResult.close();
+    return resultShots;
   }
 
   public List<ShotEntity> getShotsFromUser(String idUser, Integer limit) {
@@ -301,4 +326,33 @@ public class ShotManager extends AbstractManager {
     c.close();
     return shots;
   }
+
+  public void reshoot(String idShot) {
+    SQLiteDatabase database = getWritableDatabase();
+    try {
+      ContentValues contentValues = new ContentValues(2);
+      contentValues.put(ShotTable.RESHOOTED, 1);
+      contentValues.put(ShotTable.RESHOOTED_TIME, new Date().getTime());
+      String where = ShotTable.ID_SHOT + "= ?";
+      String[] whereArgs = new String[] { idShot };
+      database.update(SHOT_TABLE, contentValues, where, whereArgs);
+    } finally {
+      database.close();
+    }
+  }
+
+  public void undoReshoot(String idShot) {
+    SQLiteDatabase database = getWritableDatabase();
+    try {
+      ContentValues contentValues = new ContentValues(2);
+      contentValues.put(ShotTable.RESHOOTED, 0);
+      contentValues.put(ShotTable.RESHOOTED_TIME, new Date().getTime());
+      String where = ShotTable.ID_SHOT + "= ?";
+      String[] whereArgs = new String[] { idShot };
+      database.update(SHOT_TABLE, contentValues, where, whereArgs);
+    } finally {
+      database.close();
+    }
+  }
+
 }

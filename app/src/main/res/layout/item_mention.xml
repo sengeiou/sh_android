@@ -7,7 +7,7 @@
     android:gravity="center_vertical"
     android:padding="4dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/user_avatar"
+    <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/user_avatar"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginLeft="16dp"

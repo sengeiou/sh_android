@@ -4,7 +4,8 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.discover.GetDiscoverTimelineInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -23,7 +24,8 @@ public class DiscoverTimelinePresenter implements Presenter {
   private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
-  private final ShareShotInteractor shareShotInteractor;
+  private final ReshootInteractor reshootInteractor;
+  private final UndoReshootInteractor undoReshootInteractor;
   private final DiscoverTimelineModelMapper discoverTimelineModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
@@ -34,15 +36,16 @@ public class DiscoverTimelinePresenter implements Presenter {
       AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ShareShotInteractor shareShotInteractor,
-      DiscoverTimelineModelMapper discoverTimelineModelMapper,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ReshootInteractor reshootInteractor,
+      UndoReshootInteractor undoReshootInteractor, DiscoverTimelineModelMapper discoverTimelineModelMapper,
       ErrorMessageFactory errorMessageFactory) {
     this.getDiscoverTimelineInteractor = getDiscoverTimelineInteractor;
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
-    this.shareShotInteractor = shareShotInteractor;
+    this.reshootInteractor = reshootInteractor;
+    this.undoReshootInteractor = undoReshootInteractor;
     this.discoverTimelineModelMapper = discoverTimelineModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
@@ -138,10 +141,10 @@ public class DiscoverTimelinePresenter implements Presenter {
     this.hasBeenPaused = true;
   }
 
-  public void reshoot(ShotModel shotModel) {
-    shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+  public void reshoot(final ShotModel shotModel) {
+    reshootInteractor.reshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        discoverView.showReshot();
+        discoverView.showReshot(shotModel, true);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -149,5 +152,18 @@ public class DiscoverTimelinePresenter implements Presenter {
       }
     });
   }
+
+  public void undoReshoot(final ShotModel shotModel) {
+    undoReshootInteractor.undoReshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        discoverView.showReshot(shotModel, false);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        discoverView.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
+  }
+
 
 }

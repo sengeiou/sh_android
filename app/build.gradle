@@ -17,7 +17,6 @@ buildscript {
   }
 }
 
-apply plugin: 'android-sdk-manager'
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'io.fabric'
@@ -37,12 +36,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 32
+def versionMinor = 33
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 50
+def databaseVersion = 51
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -57,7 +56,7 @@ tasks.coveralls {
 
 android {
   compileSdkVersion 24
-  buildToolsVersion "24.0.1"
+  buildToolsVersion '25.0.3'
 
   dexOptions {
     javaMaxHeapSize "4g"
@@ -169,7 +168,7 @@ dependencies {
     exclude group: 'com.android.support'
   }
 
-  compile('com.crashlytics.sdk.android:crashlytics:2.6.5@aar') {
+  compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
     transitive = true;
   }
   // If you want to use the GPU Filters
@@ -194,8 +193,6 @@ dependencies {
   compile 'com.android.support:multidex:1.0.1'
   compile 'com.google.android.gms:play-services-gcm:9.2.1'
   compile 'com.google.android.gms:play-services-analytics:9.2.1'
-  compile 'com.sloydev:jsonadapters-core:0.1.0'
-  compile 'com.sloydev:jsonadapters-gson:0.1.1'
   compile 'com.squareup.dagger:dagger:1.2.2'
   compile 'com.squareup:otto:1.3.4'
   compile 'com.squareup.okhttp:okhttp:2.2.0'
@@ -215,8 +212,6 @@ dependencies {
   compile 'com.sloydev:collapsingavatartoolbar:1.1.0'
   compile 'com.github.bumptech.glide:glide:3.6.1'
   compile 'com.github.bumptech.glide:okhttp-integration:1.3.1@aar'
-  compile 'com.sloydev:okresponsefaker:1.0.0'
-  compile 'com.sloydev:okresponsefaker-json:1.0.0'
   compile 'com.fewlaps.quitnowcache:quitnow-cache:1.5.0'
   compile 'io.reactivex:rxjava:1.1.6'
   compile 'io.reactivex:rxandroid:1.2.1'

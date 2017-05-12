@@ -330,7 +330,8 @@
   <string name="private_message_push_settings">Private Messages</string>
   <string name="private_message_timeline_empty_title">No messages</string>
   <string name="private_message_video">Video</string>
-  <string name="profile_all_shots">All shots</string>
+  <string name="private_vote">Private Vote</string>
+  <string name="profile_all_shots">All reshots</string>
   <string name="profile_edit_done_button">Done</string>
   <string name="profile_edit_profile">Edit Profile</string>
   <string name="profile_follow">Follow</string>
@@ -345,6 +346,9 @@
   <string name="profile_support">Support</string>
   <string name="profile_updated">Profile updated</string>
   <string name="promoted">Promoted</string>
+  <string name="public_vote">Public Vote</string>
+  <string name="public_vote_dialog">To make it private, tap on the lock icon before you vote.</string>
+  <string name="public_vote_title_dialog">Your vote will be public</string>
   <string name="publish_poll">%1$s New poll in %2$s</string>
   <string name="push_settings_everyone">From Everyone</string>
   <string name="push_settings_people_follow">From People I Follow</string>
@@ -357,6 +361,7 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">Removed from Favorites</string>
   <string name="remove_favorite">remove</string>
+  <string name="remove_from_favorites_dialog">Remove &lt;b&gt;%s&lt;/b&gt; from Favorites?</string>
   <string name="remove_highlight">Dismiss highlight</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Remove</string>
@@ -380,6 +385,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email sent to %s</string>
   <string name="reset_password_enter_username_email">Enter your Username or Email in Shootr.</string>
   <string name="reset_password_send_email">Send a Password Reset Email</string>
+  <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
     <item quantity="other">%s reshots</item>
@@ -455,7 +461,7 @@
   <string name="support_version">Version</string>
   <string name="timeline_poll_results">Results</string>
   <string name="title_activity_all_participants">All Participants</string>
-  <string name="title_activity_all_shots">All shots</string>
+  <string name="title_activity_all_shots">All reshots</string>
   <string name="title_activity_change_password">Change Password</string>
   <string name="title_activity_channels">Private messages</string>
   <string name="title_activity_contributors">Contributors</string>
@@ -475,6 +481,7 @@
     <item quantity="other">%s participants       </item>
     <item quantity="zero">%s participants</item>
   </plurals>
+  <string name="undo_reshoot">Undo reshoot</string>
   <string name="unfollow_dialog_message">Unfollow %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Yes</string>
@@ -492,7 +499,7 @@
     <item quantity="zero">%s views</item>
   </plurals>
   <string name="voted_poll">Voted in (question) in %s</string>
-  <string name="voted_public_poll">Voted %1$s in (question) in %2$s</string>
+  <string name="voted_public_poll">Voted \"%1$s\" in (question) in %2$s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
   <string name="watch_profile_photo" formatted="false">View</string>
@@ -502,10 +509,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
-  <string name="public_vote_title_dialog">Your vote will be public</string>
-  <string name="public_vote_dialog">To make it private, tap on the lock icon before you vote.</string>
-  <string name="public_vote">Public Vote</string>
-  <string name="private_vote">Private Vote</string>
-  <string name="remove_from_favorites_dialog">Remove &lt;b>%s&lt;/b> from Favorites?</string>
 </resources>
-

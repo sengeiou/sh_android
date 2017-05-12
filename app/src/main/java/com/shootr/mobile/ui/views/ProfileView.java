@@ -22,7 +22,7 @@ public interface ProfileView {
 
     void navigateToCreatedStreamDetail(String streamId);
 
-    void showShotShared();
+    void notifyReshoot(String idShot, boolean mark);
 
     void setFollowing(Boolean following);
 
@@ -64,9 +64,7 @@ public interface ProfileView {
 
     void hideLatestShots();
 
-    void showLatestShotsEmpty();
-
-    void hideLatestShotsEmpty();
+    void showReshotsHeader();
 
     void showLoadingPhoto();
 
@@ -105,8 +103,6 @@ public interface ProfileView {
     void showBlockedMenu(UserModel userModel);
 
     void resetTimelineAdapter();
-
-    void showHideShotConfirmation(final String idShot);
 
     void showFriendsButton();
 

@@ -29,5 +29,5 @@ public interface DiscoverTimelineView extends LoadDataView {
 
   void renderNiceUnmarked(String idShot);
 
-  void showReshot();
+  void showReshot(ShotModel shotModel, boolean mark);
 }

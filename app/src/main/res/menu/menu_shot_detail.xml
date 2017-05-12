@@ -7,6 +7,13 @@
       android:title="@string/menu_share_shot_via_shootr"
       android:visible="true"
       app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_undo_reshoot"
+        android:title="@string/undo_reshoot"
+        android:visible="false"
+        app:showAsAction="never" />
+
     <item
         android:id="@+id/menu_share_via"
         android:title="@string/menu_share_shot_via"

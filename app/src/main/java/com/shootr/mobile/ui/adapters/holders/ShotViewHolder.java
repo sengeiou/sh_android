@@ -9,11 +9,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
-import com.shootr.mobile.ui.adapters.listeners.OnHideClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
@@ -32,10 +32,9 @@ public class ShotViewHolder {
     private final AndroidTimeUtils timeUtils;
     private final ImageLoader imageLoader;
     private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-    private final OnHideClickListener onHideClickListener;
     private final NumberFormatUtil numberFormatUtil;
 
-    @BindView(R.id.shot_avatar) ImageView avatar;
+    @BindView(R.id.shot_avatar) AvatarView avatar;
     @BindView(R.id.shot_user_name) TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) TextView timestamp;
@@ -54,14 +53,12 @@ public class ShotViewHolder {
 
     public int position;
     private View view;
-    private Boolean isCurrentUser;
 
     public ShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
         OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
-        OnHideClickListener onHideClickListener, OnUsernameClickListener onUsernameClickListener,
+        OnUsernameClickListener onUsernameClickListener,
         AndroidTimeUtils timeUtils, ImageLoader imageLoader,
-        ShotTextSpannableBuilder shotTextSpannableBuilder, NumberFormatUtil numberFormatUtil,
-        Boolean isCurrentUser) {
+        ShotTextSpannableBuilder shotTextSpannableBuilder, NumberFormatUtil numberFormatUtil) {
         this.numberFormatUtil = numberFormatUtil;
         ButterKnife.bind(this, view);
         this.avatarClickListener = avatarClickListener;
@@ -72,8 +69,6 @@ public class ShotViewHolder {
         this.imageLoader = imageLoader;
         this.shotTextSpannableBuilder = shotTextSpannableBuilder;
         this.view = view;
-        this.onHideClickListener = onHideClickListener;
-        this.isCurrentUser = isCurrentUser;
     }
 
     public void render(ShotModel shot, boolean shouldShowTitle) {
@@ -85,11 +80,7 @@ public class ShotViewHolder {
         setupShotMediaContentVisibility(shot);
         bindImageInfo(shot);
         bindVideoInfo(shot);
-        if (isCurrentUser) {
-            bindHideButton(shot);
-        } else {
-            bindNiceInfo(shot);
-        }
+        bindNiceInfo(shot);
         bindReplyCount(shot);
     }
 
@@ -111,16 +102,6 @@ public class ShotViewHolder {
         } else {
             replyCount.setVisibility(View.GONE);
         }
-    }
-
-    private void bindHideButton(final ShotModel shot) {
-        hideContainer.setVisibility(View.VISIBLE);
-        niceButton.setVisibility(View.GONE);
-        hideContainer.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View view) {
-                onHideClickListener.onHideClick(shot.getIdShot());
-            }
-        });
     }
 
     protected void bindComment(ShotModel item, boolean shouldShowTitle) {
@@ -172,7 +153,7 @@ public class ShotViewHolder {
     }
 
     private void bindUserPhoto(final ShotModel shot) {
-        imageLoader.loadProfilePhoto(shot.getAvatar(), avatar);
+        imageLoader.loadProfilePhoto(shot.getAvatar(), avatar, shot.getUsername());
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 avatarClickListener.onAvatarClick(shot.getIdUser(), v);
@@ -240,10 +221,10 @@ public class ShotViewHolder {
             this.niceCount.setVisibility(View.GONE);
         }
 
-        niceButton.setChecked(shot.isMarkedAsNice());
+        niceButton.setChecked(shot.isNiced());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (shot.isMarkedAsNice()) {
+                if (shot.isNiced()) {
                     onNiceShotListener.unmarkNice(shot.getIdShot());
                 } else {
                     onNiceShotListener.markNice(shot);

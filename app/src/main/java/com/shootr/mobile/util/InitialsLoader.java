@@ -12,4 +12,6 @@ public interface InitialsLoader {
 
   TextDrawable getCustomTextDrawable(String initials, int backgroundColor, int width, int height,
       int fontSize);
+
+  TextDrawable getRectTextDrawable(String initials, int background);
 }

@@ -8,7 +8,7 @@
   android:paddingBottom="12dp"
   android:paddingTop="12dp">
 
-    <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/user_avatar"
+    <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/user_avatar"
       android:layout_width="48dp"
       android:layout_height="48dp"
       android:layout_alignParentLeft="true"
@@ -52,7 +52,7 @@
     </LinearLayout>
 
     <com.shootr.mobile.ui.widgets.FollowButton android:id="@+id/user_follow_button"
-      android:layout_width="wrap_content"
+      android:layout_width="@dimen/follow_button_width"
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_centerVertical="true"

@@ -12,20 +12,17 @@ import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.shot.Url;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
 public class ShotEntityMapper {
 
-  private final InternalNiceShotRepository niceShotRepository;
   private final MetadataMapper metadataMapper;
 
-  @Inject public ShotEntityMapper(InternalNiceShotRepository niceShotRepository,
-      MetadataMapper metadataMapper) {
-    this.niceShotRepository = niceShotRepository;
+  @Inject public ShotEntityMapper(MetadataMapper metadataMapper) {
     this.metadataMapper = metadataMapper;
   }
 
@@ -60,7 +57,9 @@ public class ShotEntityMapper {
     shot.setVideoDuration(shotEntity.getVideoDuration());
     shot.setType(shotEntity.getType());
     shot.setNiceCount(shotEntity.getNiceCount());
-    shot.setIsMarkedAsNice(niceShotRepository.isMarked(shot.getIdShot()));
+    shot.setNiced(shotEntity.getNiced());
+    shot.setNicedTime(
+        shotEntity.getNicedTime() != null ? new Date(shotEntity.getNicedTime()) : null);
     shot.setProfileHidden(shotEntity.getProfileHidden());
     shot.setMetadata(metadataMapper.metadataFromEntity(shotEntity));
     shot.setReplyCount(shotEntity.getReplyCount());
@@ -75,6 +74,12 @@ public class ShotEntityMapper {
     shot.setIsHolder(shotEntity.isFromHolder() != null && shotEntity.isFromHolder() == 1);
     shot.setIsContributor(
         shotEntity.isFromContributor() != null && shotEntity.isFromContributor() == 1);
+    shot.setNiced(shotEntity.getNiced());
+    shot.setNicedTime(
+        shotEntity.getNicedTime() != null ? new Date(shotEntity.getNicedTime()) : null);
+    shot.setReshooted(shotEntity.getReshooted());
+    shot.setReshootedTime(
+        shotEntity.getReshootedTime() != null ? new Date(shotEntity.getReshootedTime()) : null);
 
     setupEntities(shot, shotEntity);
 
@@ -175,6 +180,11 @@ public class ShotEntityMapper {
       shotEntity.setFromContributor(0);
     }
     shotEntity.setFromHolder(shot.isFromHolder() ? 1 : 0);
+    shotEntity.setNiced(shot.isNiced());
+    shotEntity.setReshooted(shot.isReshooted());
+    shotEntity.setNicedTime(shot.getNicedTime() != null ? shot.getNicedTime().getTime() : 0L);
+    shotEntity.setReshootedTime(
+        shot.getReshootedTime() != null ? shot.getReshootedTime().getTime() : 0L);
     shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
     setupEntityUrls(shotEntity, shot);

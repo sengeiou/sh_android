@@ -5,12 +5,17 @@ import android.widget.ImageView;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import java.io.File;
 import java.io.IOException;
 
 public class ImageLoaderEditMode implements ImageLoader {
 
     @Override public void loadProfilePhoto(String url, ImageView view) {
+        view.setImageResource(R.drawable.sample_avatar);
+    }
+
+    @Override public void loadProfilePhoto(String url, AvatarView view, String username) {
         view.setImageResource(R.drawable.sample_avatar);
     }
 

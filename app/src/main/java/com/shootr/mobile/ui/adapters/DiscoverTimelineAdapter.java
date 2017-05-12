@@ -154,7 +154,7 @@ public class DiscoverTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     int index = items.indexOf(shotModel);
     ShotModel shot = (ShotModel) items.get(index);
     int niceCount = shot.getNiceCount() + 1;
-    shot.setIsMarkedAsNice(true);
+    shot.setNiced(true);
     shot.setNiceCount(niceCount);
     notifyItemChanged(index);
   }
@@ -167,7 +167,7 @@ public class DiscoverTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (shot.getIdShot().equals(idShot)) {
           int niceCount = shot.getNiceCount() - 1;
           shot.setNiceCount(niceCount);
-          shot.setIsMarkedAsNice(false);
+          shot.setNiced(false);
           notifyItemChanged(index);
         }
         index++;
@@ -188,4 +188,12 @@ public class DiscoverTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     stream.setFavorite(false);
     notifyItemChanged(index);
   }
+
+  public void reshoot(ShotModel shotModel, boolean mark) {
+    int index = items.indexOf(shotModel);
+    ShotModel shot = (ShotModel) items.get(index);
+    shot.setReshooted(mark);
+    notifyItemChanged(index);
+  }
+
 }

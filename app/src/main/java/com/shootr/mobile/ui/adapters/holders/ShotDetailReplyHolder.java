@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
@@ -26,7 +27,7 @@ import com.shootr.mobile.util.ShotTextSpannableBuilder;
 public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.shot_reply_container) RelativeLayout container;
-    @BindView(R.id.shot_avatar) public ImageView avatar;
+    @BindView(R.id.shot_avatar) public AvatarView avatar;
     @BindView(R.id.shot_user_name) public TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) public TextView timestamp;
@@ -123,7 +124,7 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
 
     private void loadImage(final ShotModel reply) {
         String photo = reply.getAvatar();
-        imageLoader.loadProfilePhoto(photo, this.avatar);
+        imageLoader.loadProfilePhoto(photo, this.avatar, reply.getUsername());
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 avatarClickListener.onClick(reply.getIdUser());
@@ -187,10 +188,10 @@ public class ShotDetailReplyHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupNiceListener(final ShotModel reply) {
-        niceButton.setChecked(reply.isMarkedAsNice());
+        niceButton.setChecked(reply.isNiced());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (reply.isMarkedAsNice()) {
+                if (reply.isNiced()) {
                     onNiceShotListener.unmarkNice(reply.getIdShot());
                 } else {
                     onNiceShotListener.markNice(reply);

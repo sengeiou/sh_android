@@ -24,7 +24,7 @@ public interface TimelineView extends LoadDataView {
 
   void sendAnalythicsEnterTimeline();
 
-  void setImage(String avatarImage);
+  void setImage(String avatarImage, String username);
 
   void showNewShotsIndicator(Integer numberNewShots);
 

@@ -5,7 +5,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
@@ -86,7 +87,8 @@ public class StreamTimelinePresenterTest {
   @Mock SelectStreamInteractor selectStreamInteractor;
   @Mock MarkNiceShotInteractor markNiceShotInteractor;
   @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
-  @Mock ShareShotInteractor shareShotInteractor;
+  @Mock ReshootInteractor reshootInteractor;
+  @Mock UndoReshootInteractor undoReshootInteractor;
   @Mock Bus bus;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock Poller poller;
@@ -109,7 +111,8 @@ public class StreamTimelinePresenterTest {
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
-        unmarkNiceShotInteractor, callCtaCheckInInteractor, shareShotInteractor, getStreamInteractor, shotModelMapper,
+        unmarkNiceShotInteractor, callCtaCheckInInteractor, reshootInteractor,
+        undoReshootInteractor, getStreamInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
         createStreamInteractor,

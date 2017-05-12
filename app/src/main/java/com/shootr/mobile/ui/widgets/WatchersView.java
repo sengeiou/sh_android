@@ -8,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -113,7 +112,8 @@ public class WatchersView extends LinearLayout {
         viewHolder.userId = userWatching.getIdUser();
         viewHolder.name.setText(userWatching.getUsername());
         viewHolder.watchingText.setText(userWatching.getJoinStreamDate());
-        imageLoader.loadProfilePhoto(userWatching.getPhoto(), viewHolder.avatar);
+        imageLoader.loadProfilePhoto(userWatching.getPhoto(), viewHolder.avatar,
+            userWatching.getUsername());
     }
 
     private WatcherViewHolder createViewHolder() {
@@ -142,7 +142,7 @@ public class WatchersView extends LinearLayout {
 
     class WatcherViewHolder extends RecyclerView.ViewHolder implements OnClickListener {
 
-        @BindView(R.id.watcher_user_avatar) ImageView avatar;
+        @BindView(R.id.watcher_user_avatar) AvatarView avatar;
         @BindView(R.id.watcher_user_name) TextView name;
         @BindView(R.id.watcher_user_watching) TextView watchingText;
         String userId;

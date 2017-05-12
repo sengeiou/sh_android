@@ -48,7 +48,6 @@ public class ShotModelMapper {
     shotModel.setVideoTitle(shot.getVideoTitle());
     shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
     shotModel.setNiceCount(shot.getNiceCount());
-    shotModel.setIsMarkedAsNice(shot.isMarkedAsNice());
     shotModel.setHide(shot.getProfileHidden());
     shotModel.setReplyCount(shot.getReplyCount());
     shotModel.setLinkClickCount(shot.getLinkClicks() == null ? 0 : shot.getLinkClicks());
@@ -60,6 +59,8 @@ public class ShotModelMapper {
     shotModel.setPromoted(shot.getPromoted());
     shotModel.setType(shot.getType());
     shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
+    shotModel.setNiced(shot.isNiced());
+    shotModel.setReshooted(shot.isReshooted());
     if (userInfo.getVerifiedUser() != null) {
       shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
     }

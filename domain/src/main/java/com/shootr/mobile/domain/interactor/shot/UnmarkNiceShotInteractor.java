@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NiceShotRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
@@ -19,7 +18,6 @@ public class UnmarkNiceShotInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final InternalNiceShotRepository localNiceShotRepository;
   private final NiceShotRepository remoteNiceShotRepository;
   private final InternalShotRepository localShotRepository;
   private final ExternalShotRepository remoteShotRepository;
@@ -29,12 +27,10 @@ public class UnmarkNiceShotInteractor implements Interactor {
   private ErrorCallback errorCallback;
 
   @Inject public UnmarkNiceShotInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, InternalNiceShotRepository localNiceShotRepository,
-      @Remote NiceShotRepository remoteNiceShotRepository,
+      PostExecutionThread postExecutionThread, @Remote NiceShotRepository remoteNiceShotRepository,
       InternalShotRepository localShotRepository, ExternalShotRepository remoteShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.localNiceShotRepository = localNiceShotRepository;
     this.remoteNiceShotRepository = remoteNiceShotRepository;
     this.localShotRepository = localShotRepository;
     this.remoteShotRepository = remoteShotRepository;
@@ -55,9 +51,10 @@ public class UnmarkNiceShotInteractor implements Interactor {
   }
 
   private void unmarkNiceInLocal() throws NiceNotMarkedException {
-    localNiceShotRepository.unmark(idShot);
     Shot shot = getShotFromLocalIfExists();
     shot.setNiceCount(shot.getNiceCount() - 1);
+    shot.setNiced(false);
+    shot.setNicedTime(null);
     localShotRepository.putShot(shot);
   }
 

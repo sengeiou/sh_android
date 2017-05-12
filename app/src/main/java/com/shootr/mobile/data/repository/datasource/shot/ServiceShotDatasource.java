@@ -2,13 +2,16 @@ package com.shootr.mobile.data.repository.datasource.shot;
 
 import android.support.annotation.NonNull;
 import com.shootr.mobile.data.api.entity.CreateAHighlightedShotEntity;
+import com.shootr.mobile.data.api.entity.ProfileShotTimelineApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
+import com.shootr.mobile.data.api.entity.mapper.ProfileShotTimelineApiEntityMapper;
 import com.shootr.mobile.data.api.entity.mapper.ShotApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
@@ -31,15 +34,18 @@ public class ServiceShotDatasource implements ShotDataSource {
   private final ShotApiService shotApiService;
   private final ShotApiEntityMapper shotApiEntityMapper;
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
+  private final ProfileShotTimelineApiEntityMapper profileShotTimelineApiEntityMapper;
   private final DatabaseShotDataSource databaseShotDataSource;
 
   @Inject public ServiceShotDatasource(ShotApiService shotApiService,
       ShotApiEntityMapper shotApiEntityMapper,
       HighlightedShotEntityMapper highlightedShotEntityMapper,
+      ProfileShotTimelineApiEntityMapper profileShotTimelineApiEntityMapper,
       DatabaseShotDataSource databaseShotDataSource) {
     this.shotApiService = shotApiService;
     this.shotApiEntityMapper = shotApiEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
+    this.profileShotTimelineApiEntityMapper = profileShotTimelineApiEntityMapper;
     this.databaseShotDataSource = databaseShotDataSource;
   }
 
@@ -197,9 +203,23 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
-  @Override public void shareShot(String idShot) throws ShotNotFoundException {
+  @Override public void reshoot(String idShot) throws ShotNotFoundException {
     try {
-      shotApiService.shareShot(idShot);
+      shotApiService.reshoot(idShot);
+    } catch (IOException error) {
+      throw new ServerCommunicationException(error);
+    } catch (ApiException error) {
+      if (error.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
+        throw new ShotNotFoundException(error);
+      } else {
+        throw new ServerCommunicationException(error);
+      }
+    }
+  }
+
+  @Override public void undoReshoot(String idShot) {
+    try {
+      shotApiService.undoReshot(idShot);
     } catch (IOException error) {
       throw new ServerCommunicationException(error);
     } catch (ApiException error) {
@@ -362,6 +382,18 @@ public class ServiceShotDatasource implements ShotDataSource {
 
   @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered, String idUser) {
     throw new IllegalArgumentException("method not implemented");
+  }
+
+  @Override
+  public ProfileShotTimelineEntity getProfileShotTimeline(String idUser, Long maxTimestamp,
+      int count) {
+    try {
+      ProfileShotTimelineApiEntity profileShotTimelineApiEntity =
+          shotApiService.getProfileShotTimeline(idUser, maxTimestamp, count);
+      return profileShotTimelineApiEntityMapper.map(profileShotTimelineApiEntity);
+    } catch (ApiException | IOException e) {
+      throw new ServerCommunicationException(e);
+    }
   }
 
   @Override public List<ShotEntity> getEntitiesNotSynchronized() {

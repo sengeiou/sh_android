@@ -330,6 +330,7 @@
   <string name="private_message_push_settings">Mensajes Privados</string>
   <string name="private_message_timeline_empty_title">No hay mensajes</string>
   <string name="private_message_video">Vídeo</string>
+  <string name="private_vote">Voto Privado</string>
   <string name="profile_all_shots">Todos los shots</string>
   <string name="profile_edit_done_button">Hecho</string>
   <string name="profile_edit_profile">Editar perfil</string>
@@ -345,6 +346,9 @@
   <string name="profile_support">Soporte</string>
   <string name="profile_updated">Perfil actualizado</string>
   <string name="promoted">Promocionado</string>
+  <string name="public_vote">Voto Público</string>
+  <string name="public_vote_dialog">Para hacerlo privado, pulsa el candado antes de votar.</string>
+  <string name="public_vote_title_dialog">Tu voto será público</string>
   <string name="publish_poll">%1$s Nueva encuesta en %2$s</string>
   <string name="push_settings_everyone">De todos</string>
   <string name="push_settings_people_follow">De la gente que sigo</string>
@@ -357,6 +361,7 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">Quitado de Favoritos</string>
   <string name="remove_favorite">quitar</string>
+  <string name="remove_from_favorites_dialog">¿Quitar &lt;b&gt;%s&lt;/b&gt; de Favoritos?</string>
   <string name="remove_highlight">Quitar destacado</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Borrar</string>
@@ -381,6 +386,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
   <string name="reset_password_enter_username_email">Entra tu nombre de usuario o email en Shootr.</string>
   <string name="reset_password_send_email">Enviar correo para cambiar contraseña</string>
+  <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
     <item quantity="other">%s reshots</item>
@@ -475,6 +481,7 @@
     <item quantity="one">%s participante</item>
     <item quantity="other">%s participantes</item>
   </plurals>
+  <string name="undo_reshoot">Deshacer reshoot</string>
   <string name="unfollow_dialog_message">¿Dejar de seguir a %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Sí</string>
@@ -492,6 +499,7 @@
     <item quantity="zero">%s visualizaciones</item>
   </plurals>
   <string name="voted_poll">Ha votado en (question) en %s</string>
+  <string name="voted_public_poll">Ha votado \"%1$s\" en (question) en %2$s</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">Ver</string>
@@ -501,11 +509,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="remove_from_favorites_dialog">¿Quitar &lt;b>%s&lt;/b> de Favoritos?</string>
-  <string name="public_vote_title_dialog">Tu voto será público</string>
-  <string name="public_vote_dialog">Para hacerlo privado, pulsa el candado antes de votar.</string>
-  <string name="public_vote">Voto Público</string>
-  <string name="private_vote">Voto Privado</string>
-  <string name="voted_public_poll">Ha votado %1$s en (question) en %2$s</string>
 </resources>
-

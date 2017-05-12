@@ -6,7 +6,8 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
@@ -49,7 +50,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   private final CallCtaCheckInInteractor callCtaCheckInInteractor;
-  private final ShareShotInteractor shareShotInteractor;
+  private final ReshootInteractor reshootInteractor;
+  private final UndoReshootInteractor undoReshootInteractor;
   private final GetStreamInteractor getStreamInteractor;
   private final ShotModelMapper shotModelMapper;
   private final StreamModelMapper streamModelMapper;
@@ -91,10 +93,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
-      CallCtaCheckInInteractor callCtaCheckInInteractor, ShareShotInteractor shareShotInteractor,
-      GetStreamInteractor getStreamInteractor, ShotModelMapper shotModelMapper,
-      StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
+      CallCtaCheckInInteractor callCtaCheckInInteractor, ReshootInteractor reshootInteractor,
+      UndoReshootInteractor undoReshootInteractor, GetStreamInteractor getStreamInteractor,
+      ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper, @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory, Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       CreateStreamInteractor createStreamInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
       SessionRepository sessionRepository) {
@@ -104,7 +106,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
-    this.shareShotInteractor = shareShotInteractor;
+    this.reshootInteractor = reshootInteractor;
+    this.undoReshootInteractor = undoReshootInteractor;
     this.getStreamInteractor = getStreamInteractor;
     this.shotModelMapper = shotModelMapper;
     this.streamModelMapper = streamModelMapper;
@@ -589,10 +592,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     refresh();
   }
 
-  public void shareShot(ShotModel shotModel) {
-    shareShotInteractor.shareShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+  public void reshoot(final ShotModel shotModel) {
+    reshootInteractor.reshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        streamTimelineView.showShotShared();
+        streamTimelineView.setReshoot(shotModel.getIdShot(), true);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -779,5 +782,17 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   public void setViewOnlyStream(boolean viewOnlyStream) {
     isViewOnlyStream = viewOnlyStream;
+  }
+
+  public void undoReshoot(final ShotModel shot) {
+    undoReshootInteractor.undoReshoot(shot.getIdShot(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        streamTimelineView.setReshoot(shot.getIdShot(), false);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
   }
 }

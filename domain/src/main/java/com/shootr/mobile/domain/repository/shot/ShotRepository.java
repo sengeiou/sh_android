@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.repository.shot;
 
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
+import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -40,4 +41,10 @@ public interface ShotRepository {
   HighlightedShot getHighlightedShots(String idStream);
 
   void dismissHighlightedShot(String idHighlightedShot);
+
+  void reshoot(String idShot);
+
+  void undoReshoot(String idShot);
+
+  ProfileShotTimeline getProfileShotTimeline(String idUser, Long maxTimestamp, int count);
 }

@@ -31,6 +31,10 @@ public class ShotEntity extends BaseMessageEntity {
     private Integer isPadding;
     private Integer isFromHolder;
     private Integer isFromContributor;
+    private boolean niced;
+    private boolean reshooted;
+    private Long nicedTime;
+    private Long reshootedTime;
 
 
     public String getIdShot() {
@@ -199,5 +203,37 @@ public class ShotEntity extends BaseMessageEntity {
 
     public void setFromHolder(Integer isFromHolder) {
         this.isFromHolder = isFromHolder;
+    }
+
+    public boolean getNiced() {
+        return niced;
+    }
+
+    public void setNiced(boolean niced) {
+        this.niced = niced;
+    }
+
+    public boolean getReshooted() {
+        return reshooted;
+    }
+
+    public void setReshooted(boolean reshooted) {
+        this.reshooted = reshooted;
+    }
+
+    public Long getNicedTime() {
+        return nicedTime;
+    }
+
+    public void setNicedTime(Long nicedTime) {
+        this.nicedTime = nicedTime;
+    }
+
+    public Long getReshootedTime() {
+        return reshootedTime;
+    }
+
+    public void setReshootedTime(Long reshootedTime) {
+        this.reshootedTime = reshootedTime;
     }
 }

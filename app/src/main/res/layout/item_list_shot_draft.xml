@@ -12,7 +12,7 @@
       android:layout_height="wrap_content"
       android:orientation="horizontal">
 
-        <de.hdodenhof.circleimageview.CircleImageView android:id="@+id/shot_avatar"
+        <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/shot_avatar"
           android:layout_width="@dimen/shot_avatar_size"
           android:layout_height="@dimen/shot_avatar_size"
           android:layout_marginBottom="16dp"

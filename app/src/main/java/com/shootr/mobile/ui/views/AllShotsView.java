@@ -27,7 +27,5 @@ public interface AllShotsView {
 
     void addOldShots(List<ShotModel> shotModels);
 
-    void showShotShared();
-
-    void showHideShotConfirmation(final String idShot);
+    void notifyReshot(String idShot, boolean mark);
 }

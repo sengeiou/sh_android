@@ -112,6 +112,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   private ShotDetailWithRepliesAdapter detailAdapter;
 
   private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder reshootMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder undoReshootMenuItem = new MenuItemValueHolder();
 
   private LinearLayoutManager linearLayoutManager;
   private int overallYScroll;
@@ -204,6 +206,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.menu_shot_detail, menu);
     copyShotMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_copy_text));
+    reshootMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_reshoot));
+    undoReshootMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_undo_reshoot));
     return true;
   }
 
@@ -212,6 +216,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
       backStackHandler.handleBackStack(this);
       return true;
     } else if (item.getItemId() == R.id.menu_reshoot) {
+      reshoot();
+    } else if (item.getItemId() == R.id.menu_undo_reshoot) {
       reshoot();
     } else if (item.getItemId() == R.id.menu_share_via) {
       externalShare();
@@ -227,8 +233,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   private void reshoot() {
-    detailPresenter.shareShotViaShootr();
-    sendShareShotAnalythics();
+    detailPresenter.reshoot();
   }
 
   private void sendExternalShareAnalythics() {
@@ -621,8 +626,11 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     feedbackMessage.show(getView(), errorMessage);
   }
 
-  @Override public void showShotShared() {
-    feedbackMessage.show(getView(), shotShared);
+  @Override public void showReshoot(boolean mark) {
+    detailAdapter.reshoot(mark);
+    if (mark) {
+      sendShareShotAnalythics();
+    }
   }
 
   @Override public void openNewShotView() {
@@ -683,6 +691,16 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
   @Override public void showChecked() {
     feedbackMessage.show(getView(), streamChecked);
+  }
+
+  @Override public void showReshootMenu() {
+    reshootMenuItem.setVisible(true);
+    undoReshootMenuItem.setVisible(false);
+  }
+
+  @Override public void showUndoReshootMenu() {
+    reshootMenuItem.setVisible(false);
+    undoReshootMenuItem.setVisible(true);
   }
   //endregion
 

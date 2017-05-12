@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -18,6 +19,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.NiceButtonView;
@@ -33,7 +35,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   public static final int NICES_TRESHOLD = 2;
   private Context context;
 
-  @BindView(R.id.shot_detail_avatar) ImageView avatar;
+  @BindView(R.id.shot_detail_avatar) AvatarView avatar;
   @BindView(R.id.shot_detail_user_name) TextView username;
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
@@ -55,6 +57,11 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.reshoot_count) TextView reshotCount;
   @BindView(R.id.reshoot_container) LinearLayout reshootContainer;
   @BindView(R.id.external_share_container) LinearLayout externalShare;
+  @BindView(R.id.reshoot_text) TextView reshootText;
+  @BindView(R.id.reshoot_icon) ImageView reshootIcon;
+
+  @BindString(R.string.menu_share_shot_via_shootr) String reshootResource;
+  @BindString(R.string.undo_reshoot) String undoReshootResource;
 
   private final ImageLoader imageLoader;
   private final AvatarClickListener avatarClickListener;
@@ -120,7 +127,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     setupNiceButton(shotModel);
     setupPinShotView(shotModel);
     setupPinToProfileContainer(shotModel);
-    setupShareListener();
+    setupShareListener(shotModel);
     setupStreamTitle(shotModel);
   }
 
@@ -140,7 +147,16 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private void setupShareListener() {
+  private void setupShareListener(ShotModel shotModel) {
+    if (shotModel.isReshooted()) {
+      reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_repeat));
+      reshootText.setText(undoReshootResource);
+      reshootText.setTextColor(reshootText.getResources().getColor(R.color.primary));
+    } else {
+      reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_av_repeat));
+      reshootText.setText(reshootResource);
+      reshootText.setTextColor(reshootText.getResources().getColor(R.color.gray_40));
+    }
     reshootContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         reshootClickListener.onClickListener();
@@ -234,7 +250,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupAvatar(final ShotModel shotModel) {
-    imageLoader.loadProfilePhoto(shotModel.getAvatar(), avatar);
+    imageLoader.loadProfilePhoto(shotModel.getAvatar(), avatar, shotModel.getUsername());
     avatar.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         avatarClickListener.onClick(shotModel.getIdUser());
@@ -254,10 +270,10 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setNiceButton(final ShotModel shotModel) {
-    niceButton.setChecked(shotModel.isMarkedAsNice());
+    niceButton.setChecked(shotModel.isNiced());
     niceButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        if (shotModel.isMarkedAsNice()) {
+        if (shotModel.isNiced()) {
           onNiceShotListener.unmarkNice(shotModel.getIdShot());
         } else {
           onNiceShotListener.markNice(shotModel);

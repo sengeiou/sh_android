@@ -4,14 +4,10 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.model.shot.Nicer;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.stream.MuteRepository;
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 public class PerformAutoLoginInteractor implements Interactor {
@@ -20,19 +16,17 @@ public class PerformAutoLoginInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final NicerRepository nicerRepository;
   private final MuteRepository muteRepository;
-  private final InternalNiceShotRepository localNiceShotRepository;
   private final ExternalFavoriteRepository favoriteRepository;
   private String idUser;
 
   @Inject public PerformAutoLoginInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, NicerRepository nicerRepository,
-      @Remote MuteRepository muteRepository, InternalNiceShotRepository localNiceShotRepository,
+      @Remote MuteRepository muteRepository,
       ExternalFavoriteRepository favoriteRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.nicerRepository = nicerRepository;
     this.muteRepository = muteRepository;
-    this.localNiceShotRepository = localNiceShotRepository;
     this.favoriteRepository = favoriteRepository;
   }
 
@@ -44,20 +38,10 @@ public class PerformAutoLoginInteractor implements Interactor {
   @Override public void execute() throws Exception {
     try {
       storeFavoritesStreams(idUser);
-      storeNicedShots(idUser);
       storeMutedStreams();
     } catch (ShootrException unknownException) {
       /* no-op */
     }
-  }
-
-  private void storeNicedShots(String idUser) {
-    List<Nicer> nices = nicerRepository.getNices(idUser);
-    List<String> nicedIdShots = new ArrayList<>(nices.size());
-    for (Nicer nice : nices) {
-      nicedIdShots.add(nice.getIdShot());
-    }
-    localNiceShotRepository.markAll(nicedIdShots);
   }
 
   private void storeFavoritesStreams(String idUser) {

@@ -436,6 +436,7 @@
   <string name="stream_timeline_remove_favorite">お気に入りから削除</string>
   <string name="stream_timeline_view_only">表示専用</string>
   <string name="suggested_people_section_title">おすすめのユーザー</string>
+  <string name="reshoot_section_title">Reshots</string>
   <string name="support_blog">ブログ</string>
   <string name="support_help">ヘルプ</string>
   <string name="support_privacy_policy">プライバシーポリシー</string>
@@ -490,4 +491,5 @@
   <string name="favorited">favorited</string>
   <string name="add_to_favorites">add to favorites</string>
   <string name="remove_favorite">remove</string>
+  <string name="undo_reshoot">Undo reshoot</string>
 </resources>

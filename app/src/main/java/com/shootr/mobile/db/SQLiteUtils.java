@@ -136,6 +136,14 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.ENTITIES
       + " text NULL,"
+      + DatabaseContract.ShotTable.NICED
+      + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.NICED_TIME
+      + " DATETIME NULL,"
+      + DatabaseContract.ShotTable.RESHOOTED
+      + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.RESHOOTED_TIME
+      + " DATETIME NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -590,12 +598,6 @@ public class SQLiteUtils {
       + " INT NOT NULL,"
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1));";
-
-    public static final String CREATE_TABLE_NICE_SHOTS = "CREATE TABLE IF NOT EXISTS "
-      + DatabaseContract.NiceShotTable.TABLE
-      + " ("
-      + DatabaseContract.NiceShotTable.ID_SHOT
-      + " TEXT NOT NULL PRIMARY KEY)";
 
     public static final String CREATE_TABLE_CONTRIBUTOR = "CREATE TABLE IF NOT EXISTS "
         + DatabaseContract.ContributorTable.TABLE

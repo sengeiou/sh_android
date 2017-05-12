@@ -15,6 +15,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.ui.widgets.CheckableImageView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
@@ -28,7 +29,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_detail_parent_progress) View progress;
     @BindView(R.id.shot_detail_parent_shot) View shot;
     @BindView(R.id.shot_detail_parent) FrameLayout container;
-    @BindView(R.id.shot_avatar) public ImageView avatar;
+    @BindView(R.id.shot_avatar) public AvatarView avatar;
     @BindView(R.id.shot_user_name) public TextView name;
     @BindView(R.id.verified_user) ImageView verifiedUser;
     @BindView(R.id.shot_timestamp) public TextView timestamp;
@@ -146,7 +147,7 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
 
     private void setupUserAvatar(final ShotModel shotModel) {
         String photo = shotModel.getAvatar();
-        imageLoader.loadProfilePhoto(photo, this.avatar);
+        imageLoader.loadProfilePhoto(photo, this.avatar, shotModel.getUsername());
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 avatarClickListener.onClick(shotModel.getIdUser());
@@ -212,10 +213,10 @@ public class ShotDetailParentViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void setupNiceListener(final ShotModel shotModel) {
-        niceButton.setChecked(shotModel.isMarkedAsNice());
+        niceButton.setChecked(shotModel.isNiced());
         niceButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                if (shotModel.isMarkedAsNice()) {
+                if (shotModel.isNiced()) {
                     onNiceShotListener.unmarkNice(shotModel.getIdShot());
                 } else {
                     onNiceShotListener.markNice(shotModel);

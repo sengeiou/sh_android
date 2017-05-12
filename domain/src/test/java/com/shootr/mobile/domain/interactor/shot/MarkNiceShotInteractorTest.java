@@ -3,14 +3,12 @@ package com.shootr.mobile.domain.interactor.shot;
 import com.shootr.mobile.domain.exception.NiceAlreadyMarkedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.exception.ShotNotFoundException;
 import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
-import com.shootr.mobile.domain.repository.nice.InternalNiceShotRepository;
 import com.shootr.mobile.domain.repository.nice.NiceShotRepository;
 import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
@@ -35,7 +33,6 @@ public class MarkNiceShotInteractorTest {
   private static final Long SHOT_USER_ID = 3L;
   private static final String SHOT_USERNAME = "username";
 
-  @Mock InternalNiceShotRepository localNiceShotRepository;
   @Mock InternalShotRepository localShotRepository;
   @Mock ExternalShotRepository remoteShotRepository;
   @Mock NiceShotRepository remoteNiceShotRepository;
@@ -49,7 +46,7 @@ public class MarkNiceShotInteractorTest {
     TestInteractorHandler interactorHandler = new TestInteractorHandler();
     TestPostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor =
-        new MarkNiceShotInteractor(interactorHandler, postExecutionThread, localNiceShotRepository,
+        new MarkNiceShotInteractor(interactorHandler, postExecutionThread,
             remoteNiceShotRepository, localShotRepository, remoteShotRepository);
   }
 
@@ -95,7 +92,7 @@ public class MarkNiceShotInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRepositoryFailsWithNiceAlreadyMarked() throws Exception {
     setupLocalShot();
-    doThrow(new NiceAlreadyMarkedException()).when(localNiceShotRepository).mark(anyString());
+    doThrow(new NiceAlreadyMarkedException()).when(remoteNiceShotRepository).mark(anyString());
 
     interactor.markNiceShot(SHOT_ID, callback, errorCallback);
 
@@ -103,7 +100,7 @@ public class MarkNiceShotInteractorTest {
   }
 
   @Test public void shouldNotifyCompletedWhenShotNotFoundException() throws Exception {
-    doThrow(new ShotNotFoundException(new Throwable())).when(localNiceShotRepository).mark(SHOT_ID);
+    doThrow(new ServerCommunicationException(new Throwable())).when(remoteNiceShotRepository).mark(SHOT_ID);
 
     interactor.markNiceShot(SHOT_ID, callback, errorCallback);
 
@@ -113,7 +110,7 @@ public class MarkNiceShotInteractorTest {
   @Test
   public void shouldNotifyCompletedWhenLocalNiceShotRepositoryThrowsServerCommunicationException()
       throws Exception {
-    doThrow(new ServerCommunicationException(new Throwable())).when(localNiceShotRepository)
+    doThrow(new ServerCommunicationException(new Throwable())).when(remoteNiceShotRepository)
         .mark(SHOT_ID);
 
     interactor.markNiceShot(SHOT_ID, callback, errorCallback);

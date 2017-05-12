@@ -5,7 +5,8 @@ import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.shot.ShareShotInteractor;
+import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
+import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
@@ -49,7 +50,8 @@ public class ShotDetaillPresenterTest {
     @Mock GetShotDetailInteractor getShotDetaillInteractor;
     @Mock MarkNiceShotInteractor markNiceShotInteractor;
     @Mock UnmarkNiceShotInteractor unmarkNiceShotInteractor;
-    @Mock ShareShotInteractor shareShotInteractor;
+    @Mock ReshootInteractor reshootInteractor;
+    @Mock UndoReshootInteractor undoReshootInteractor;
     @Mock ViewShotDetailEventInteractor viewShotEventInteractor;
     @Mock ClickShotLinkEventInteractor clickShotLinkEventInteractor;
     @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
@@ -64,8 +66,8 @@ public class ShotDetaillPresenterTest {
         NicerModelMapper nicerModelMapper = new NicerModelMapper();
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
-          unmarkNiceShotInteractor,
-          shareShotInteractor, viewShotEventInteractor, clickShotLinkEventInteractor,
+          unmarkNiceShotInteractor, reshootInteractor, undoReshootInteractor,
+            viewShotEventInteractor, clickShotLinkEventInteractor,
             callCtaCheckInInteractor, shotModelMapper, nicerModelMapper, bus,
           errorMessageFactory);
         presenter.setShotDetailView(shotDetailView);
@@ -311,9 +313,9 @@ public class ShotDetaillPresenterTest {
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, ID_SHOT);
 
-        presenter.shareShotViaShootr();
+        presenter.reshoot();
 
-        verify(shotDetailView).showShotShared();
+        verify(shotDetailView).showReshoot(anyBoolean());
     }
 
     @Test public void shouldShowShotSharedWhenInitializeWithShotModelAndShareShotViaShootr() throws Exception {
@@ -321,9 +323,9 @@ public class ShotDetaillPresenterTest {
         setupGetShotDetailInteractorCallback();
         presenter.initialize(shotDetailView, shotModel());
 
-        presenter.shareShotViaShootr();
+        presenter.reshoot();
 
-        verify(shotDetailView).showShotShared();
+        verify(shotDetailView).showReshoot(anyBoolean());
     }
 
     @Test public void shouldShareShotWhenInitializeWithShotModel() throws Exception {
@@ -449,7 +451,7 @@ public class ShotDetaillPresenterTest {
                 callback.onCompleted();
                 return null;
             }
-        }).when(shareShotInteractor)
-          .shareShot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        }).when(reshootInteractor)
+          .reshoot(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
     }
 }

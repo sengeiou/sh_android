@@ -17,6 +17,7 @@ import com.bumptech.glide.request.target.ImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.dagger.ApplicationContext;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -49,6 +50,16 @@ public class GlideImageLoader implements ImageLoader {
     } else {
       view.setImageResource(DEFAULT_PROFILE_PHOTO_RES);
     }
+  }
+
+  @Override public void loadProfilePhoto(String url, AvatarView view, String username) {
+    String photoBig = url != null ? url.replace("_thumbnail", "") : null; // <-- Chapuza Carlos, chapuza!!
+    glide.load(photoBig)
+        .dontAnimate()
+        .placeholder(new AvatarPlaceholder(username, 35))
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .fitCenter()
+        .into(view);
   }
 
   @Override public void loadStreamPicture(String url, ImageView view) {

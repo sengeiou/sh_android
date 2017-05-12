@@ -2,9 +2,11 @@ package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
+import com.shootr.mobile.data.mapper.ProfileShotTimelineMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
+import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -19,14 +21,16 @@ public class LocalShotRepository implements InternalShotRepository {
   private final ShotDataSource localShotDataSource;
   private final ShotEntityMapper shotEntityMapper;
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
+  private final ProfileShotTimelineMapper profileShotTimelineMapper;
   private final SessionRepository sessionRepository;
 
   @Inject public LocalShotRepository(@Local ShotDataSource localShotDataSource,
       ShotEntityMapper shotEntityMapper, HighlightedShotEntityMapper highlightedShotEntityMapper,
-      SessionRepository sessionRepository) {
+      ProfileShotTimelineMapper profileShotTimelineMapper, SessionRepository sessionRepository) {
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
+    this.profileShotTimelineMapper = profileShotTimelineMapper;
     this.sessionRepository = sessionRepository;
   }
 
@@ -121,6 +125,20 @@ public class LocalShotRepository implements InternalShotRepository {
 
   @Override public void dismissHighlightedShot(String idHighlightedShot) {
     localShotDataSource.dismissHighlight(idHighlightedShot);
+  }
+
+  @Override public void reshoot(String idShot) {
+    localShotDataSource.reshoot(idShot);
+  }
+
+  @Override public void undoReshoot(String idShot) {
+    localShotDataSource.undoReshoot(idShot);
+  }
+
+  @Override
+  public ProfileShotTimeline getProfileShotTimeline(String idUser, Long maxTimestamp, int count) {
+    return profileShotTimelineMapper.map(
+        localShotDataSource.getProfileShotTimeline(idUser, maxTimestamp, count));
   }
 
   @Override public void hideHighlightedShot(String idHighlightedShot) {

@@ -6,4 +6,10 @@
     <attr name="switchBarMarginStart" format="dimension" />
     <attr name="switchBarMarginEnd" format="dimension" />
     <attr name="switchBarText" format="string" />
+
+    <declare-styleable name="AvatarView">
+        <attr name="av_border_color" format="color" />
+        <attr name="av_border_width" format="dimension" />
+        <attr name="av_text_size_percentage" format="integer" />
+    </declare-styleable>
 </resources>

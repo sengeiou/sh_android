@@ -66,7 +66,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void setImage(String imageAvatar) {
+    @Override public void setImage(String imageAvatar, String username) {
         /* no-op */
     }
 
@@ -147,6 +147,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void setupCheckInShowcase() {
+        /* no-op */
+    }
+
+    @Override public void setReshoot(String idShot, boolean mark) {
         /* no-op */
     }
 

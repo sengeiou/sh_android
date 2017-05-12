@@ -326,7 +326,8 @@
   <string name="private_message_push_settings">私信</string>
   <string name="private_message_timeline_empty_title">没有信息</string>
   <string name="private_message_video">视频</string>
-  <string name="profile_all_shots">所有 shots</string>
+  <string name="private_vote">不公开投票</string>
+  <string name="profile_all_shots">所有 reshots</string>
   <string name="profile_edit_done_button">完成</string>
   <string name="profile_edit_profile">编辑个人主页</string>
   <string name="profile_follow">关注</string>
@@ -341,6 +342,9 @@
   <string name="profile_support">辅助</string>
   <string name="profile_updated">个人主页已更新</string>
   <string name="promoted">推广</string>
+  <string name="public_vote">公开投票</string>
+  <string name="public_vote_dialog">为了不公开投票结果，在投票之前请点击锁。</string>
+  <string name="public_vote_title_dialog">你的投票将是公开的</string>
   <string name="publish_poll">%1$s %2$s 新的投票</string>
   <string name="push_settings_everyone">任何用户</string>
   <string name="push_settings_people_follow">我关注的用户</string>
@@ -353,6 +357,7 @@
   <!-- When a stream has been removed from favorites feedback -->
   <string name="removed_from_favorites">从喜爱中删除</string>
   <string name="remove_favorite">刪除</string>
+  <string name="remove_from_favorites_dialog">从喜爱中删除 &lt;b&gt;%s&lt;/b&gt; ?</string>
   <string name="remove_highlight">删除置顶</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">清除</string>
@@ -376,6 +381,7 @@
   <string name="reset_password_confirmation_message_email_pattern">邮件发送至%s</string>
   <string name="reset_password_enter_username_email">在Shootr输入你的用户名或邮箱。</string>
   <string name="reset_password_send_email">发送密码重新设置邮箱</string>
+  <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="other">%s reshots</item>
     <item quantity="zero">%s reshots</item>
@@ -449,7 +455,7 @@
   <string name="support_version">版本</string>
   <string name="timeline_poll_results">无结果</string>
   <string name="title_activity_all_participants">所有参与者</string>
-  <string name="title_activity_all_shots">所有 shots</string>
+  <string name="title_activity_all_shots">所有 reshots</string>
   <string name="title_activity_change_password">更改密码</string>
   <string name="title_activity_channels">私信</string>
   <string name="title_activity_contributors">合作者</string>
@@ -468,6 +474,7 @@
     <item quantity="other">%s个参与者</item>
     <item quantity="zero">%s个参与者</item>
   </plurals>
+  <string name="undo_reshoot">撤销 reshoot</string>
   <string name="unfollow_dialog_message">取消关注 %s？</string>
   <string name="unfollow_dialog_no">不</string>
   <string name="unfollow_dialog_yes">是的</string>
@@ -484,6 +491,7 @@
     <item quantity="zero">%s次查看</item>
   </plurals>
   <string name="voted_poll">投了 (question) 在 %s</string>
+  <string name="voted_public_poll">在 %2$s 的 (question) 投了 \"%1$s\"</string>
   <string name="watching_stream_connected">已连接</string>
   <string name="watching_stream_connected_muted">已连接（已静音）</string>
   <string name="watch_profile_photo" formatted="false">点开</string>
@@ -493,10 +501,4 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
-  <string name="remove_from_favorites_dialog">从喜爱中删除 &lt;b>%s&lt;/b> ?</string>
-  <string name="public_vote_title_dialog">你的投票将是公开的</string>
-  <string name="public_vote_dialog">为了不公开投票结果，在投票之前请点击锁。</string>
-  <string name="public_vote">公开投票</string>
-  <string name="private_vote">不公开投票</string>
-  <string name="voted_public_poll">在 %2$s 的 (question) 投了 %1$s</string>
 </resources>

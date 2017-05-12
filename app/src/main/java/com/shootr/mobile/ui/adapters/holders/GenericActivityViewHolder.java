@@ -11,6 +11,7 @@ import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.ClickableTextView;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -22,7 +23,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     private final AndroidTimeUtils androidTimeUtils;
     private final OnAvatarClickListener onAvatarClickListener;
 
-    @BindView(R.id.activity_avatar) ImageView avatar;
+    @BindView(R.id.activity_avatar) AvatarView avatar;
     @BindView(R.id.ativity_user_name) TextView name;
     @BindView(R.id.activity_timestamp) TextView elapsedTime;
     @BindView(R.id.activity_text) ClickableTextView text;
@@ -63,7 +64,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
 
     protected void renderAvatar(final ActivityModel activity) {
-        imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar);
+        imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar, activity.getUsername());
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);

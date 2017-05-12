@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -11,6 +10,7 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 
@@ -20,7 +20,7 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
   private final OnFollowUnfollowListener onFollowUnfollowListener;
   private final OnUserClickListener onUserClickListener;
 
-  @BindView(R.id.user_avatar) ImageView avatar;
+  @BindView(R.id.user_avatar) AvatarView avatar;
   @BindView(R.id.user_name) TextView title;
   @BindView(R.id.user_username) TextView subtitle;
   @BindView(R.id.user_follow_button) FollowButton followButton;
@@ -51,7 +51,7 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
 
   private void setupPhoto(UserModel userModel) {
     String photo = userModel.getPhoto();
-    imageLoader.loadProfilePhoto(photo, avatar);
+    imageLoader.loadProfilePhoto(photo, avatar, userModel.getUsername());
   }
 
   private void setupFollowUnfollow(final UserModel userModel) {
