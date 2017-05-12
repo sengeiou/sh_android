@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.33.0] - 2017-05-12
+
+### Added
+- Profile photo with colors
+- Reshoot to profile
+
+### Removed
+- Pin to profile
+- Discover
+
+### Changed
+- Max acitivities lines
+- Follow button
+- Reshoot
+- Nice refactor
+
 ## [1.32.0] - 2017-04-28
 
 ### Added
