@@ -95,7 +95,6 @@
   <string name="drawer_favorites_title">Favoritos</string>
   <string name="drawer_following_activity_title" formatted="false">Siguiendo</string>
   <string name="drawer_friends_title">Amigos</string>
-  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuarios</string>
   <string name="edit_stream">Editar</string>
