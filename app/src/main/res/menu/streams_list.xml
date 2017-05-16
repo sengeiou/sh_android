@@ -12,7 +12,7 @@
 
     <item
         android:id="@+id/menu_channel"
-        android:icon="@drawable/ic_action_communication_forum"
+        android:icon="@drawable/ic_launcher"
         android:title="@string/title_activity_channels"
         app:showAsAction="always" />
 

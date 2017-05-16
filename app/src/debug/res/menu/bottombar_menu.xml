@@ -9,7 +9,6 @@
       android:id="@+id/bottombar_favorites"
       android:icon="@drawable/ic_bottombar_favorites_stream"
       android:title="@string/drawer_favorites_title" />
-
   <item
       android:id="@+id/bottombar_activity"
       android:icon="@drawable/ic_bottombar_activity"
