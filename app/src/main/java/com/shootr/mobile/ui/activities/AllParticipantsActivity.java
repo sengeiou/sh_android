@@ -5,45 +5,45 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.ParticipantsListAdapter;
-import com.shootr.mobile.ui.adapters.UserListAdapter;
+import com.shootr.mobile.ui.adapters.ParticipantAdapter;
+import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.AllParticipantsPresenter;
 import com.shootr.mobile.ui.views.AllParticipantsView;
-import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
 import javax.inject.Inject;
 
 public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
-    implements AllParticipantsView, UserListAdapter.FollowUnfollowAdapterCallback {
+    implements AllParticipantsView {
 
   private static final String EXTRA_STREAM = "stream";
 
-  private ParticipantsListAdapter adapter;
+  private ParticipantAdapter adapter;
   private Boolean isFooterLoading = false;
 
   View progressViewContent;
   View progressView;
 
-  @BindView(R.id.userlist_list) ListView userlistListView;
+  @BindView(R.id.userlist_list) RecyclerView userlistListView;
   @BindView(R.id.userlist_progress) ProgressBar progressBar;
   @BindView(R.id.userlist_empty) TextView emptyTextView;
   @BindString(R.string.analytics_screen_all_participants) String analyticsScreenAllParticipants;
@@ -56,6 +56,9 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
   @Inject AllParticipantsPresenter allParticipantsPresenter;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject InitialsLoader initialsLoader;
+
+  private LinearLayoutManager layoutManager;
 
   public static Intent newIntent(Context context, String idStream) {
     Intent intent = new Intent(context, AllParticipantsActivity.class);
@@ -73,28 +76,39 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    userlistListView.setAdapter(getParticipantsAdapter());
+    layoutManager = new LinearLayoutManager(this);
+    userlistListView.setLayoutManager(layoutManager);
 
+    userlistListView.setAdapter(getParticipantsAdapter());
     progressView = getLoadingView();
     progressViewContent = ButterKnife.findById(progressView, R.id.loading_progress);
+    setupListScrollListeners();
+  }
 
-    new ListViewScrollObserver(userlistListView).setOnScrollUpAndDownListener(
-        new ListViewScrollObserver.OnListViewScrollListener() {
-          @Override
-          public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                /* no-op */
-          }
+  private void setupListScrollListeners() {
+    userlistListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+      }
 
-          @Override public void onScrollIdle() {
-            int lastVisiblePosition = userlistListView.getLastVisiblePosition();
-            int loadingFooterPosition = userlistListView.getAdapter().getCount() - 1;
-            boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
-            if (shouldStartLoadingMore && !isFooterLoading) {
-              allParticipantsPresenter.makeNextRemoteSearch(
-                  adapter.getItems().get(adapter.getItems().size() - 1));
-            }
-          }
-        });
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        if (userlistListView != null) {
+
+          checkIfEndOfListVisible();
+        }
+      }
+    });
+  }
+
+  private void checkIfEndOfListVisible() {
+    int lastItemPosition = userlistListView.getAdapter().getItemCount() - 1;
+    int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+    if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+      allParticipantsPresenter.makeNextRemoteSearch(
+          adapter.getItems().get(adapter.getItems().size() - 1));
+    }
   }
 
   private View getLoadingView() {
@@ -133,10 +147,21 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     return super.onCreateOptionsMenu(menu);
   }
 
-  private ListAdapter getParticipantsAdapter() {
+  private ParticipantAdapter getParticipantsAdapter() {
     if (adapter == null) {
-      adapter = new ParticipantsListAdapter(this, imageLoader);
-      adapter.setCallback(this);
+      adapter = new ParticipantAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
+        @Override public void onFollow(UserModel user) {
+          follow(user);
+        }
+
+        @Override public void onUnfollow(UserModel user) {
+          unFollow(user);
+        }
+      }, new OnUserClickListener() {
+        @Override public void onUserClick(String idUser) {
+          openUserProfile(idUser);
+        }
+      });
     }
     return adapter;
   }
@@ -162,7 +187,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void renderAllParticipants(List<UserModel> users) {
-    adapter.setItems(users);
+    adapter.setUsers(users);
     adapter.notifyDataSetChanged();
   }
 
@@ -182,17 +207,14 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void hideProgressView() {
-    isFooterLoading = false;
-    userlistListView.removeFooterView(progressView);
+    /* no-op */
   }
 
   @Override public void showProgressView() {
-    isFooterLoading = true;
-    userlistListView.addFooterView(progressView, null, false);
+    /* no-op */
   }
 
-  @Override public void follow(int position) {
-    UserModel user = adapter.getItem(position);
+  private void follow(UserModel user) {
     allParticipantsPresenter.followUser(user);
     sendAnalytics(user);
   }
@@ -210,8 +232,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  @Override public void unFollow(int position) {
-    final UserModel userModel = adapter.getItem(position);
+  private void unFollow(final UserModel userModel) {
     new AlertDialog.Builder(this).setMessage(
         String.format(getString(R.string.unfollow_dialog_message), userModel.getUsername()))
         .setPositiveButton(getString(R.string.unfollow_dialog_yes),
@@ -225,9 +246,8 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
         .show();
   }
 
-  @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
-    UserModel user = adapter.getItem(position);
-    startActivityForResult(ProfileActivity.getIntent(this, user.getIdUser()), 666);
+  private void openUserProfile(String idUser) {
+    startActivityForResult(ProfileActivity.getIntent(this, idUser), 666);
   }
 
   @Override public void onStart() {

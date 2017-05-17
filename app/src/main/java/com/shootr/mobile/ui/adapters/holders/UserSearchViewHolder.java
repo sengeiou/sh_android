@@ -80,7 +80,7 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
     });
   }
 
-  private String getSubtitle(UserModel item) {
+  protected String getSubtitle(UserModel item) {
     return getUsernameForSubtitle(item);
   }
 
