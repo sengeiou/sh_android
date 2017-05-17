@@ -15,7 +15,6 @@
     <string name="analytics_screen_poll_vote">pollVote</string>
     <string name="analytics_screen_private_message_timeline">privateMessageTimeline</string>
     <string name="analytics_screen_channel_list">inbox</string>
-    <string name="analytics_screen_discover">discover</string>
     <string name="analytics_screen_user_follower">followersPeople</string>
     <string name="analytics_screen_user_following">followingPeople</string>
     <string name="analytics_screen_support">support</string>
@@ -84,9 +83,8 @@
     <string name="analytics_source_favorites">favorites</string>
     <string name="analytics_source_followers">followers</string>
     <string name="analytics_source_following">following</string>
-    <string name="analytics_source_discover">discover</string>
-    <string name="analytics_source_discover_user_search">discoverUserSearch</string>
-    <string name="analytics_source_discover_stream_search">discoverStreamSearch</string>
+    <string name="analytics_source_user_search">userSearch</string>
+    <string name="analytics_source_stream_search">streamSearch</string>
     <string name="analytics_source_streams">streams</string>
     <string name="analytics_source_all_participants">allParticipants</string>
     <string name="analytics_source_all_shots">allShots</string>

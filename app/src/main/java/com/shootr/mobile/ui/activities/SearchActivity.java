@@ -129,7 +129,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override protected int getLayoutResource() {
-    return R.layout.activity_discover_search;
+    return R.layout.activity_search;
   }
 
   @Override protected void initializeViews(Bundle savedInstanceState) {

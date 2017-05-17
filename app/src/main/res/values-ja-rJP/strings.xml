@@ -79,10 +79,6 @@
   <string name="delete_shot_confirmation_message">ショットを削除しますか？</string>
   <string name="discard">破棄</string>
   <string name="discard_profile_confirmation">変更を破棄しますか？</string>
-  <string name="discover">発見</string>
-  <string name="discover_banner_content">星をタップして追加してください。テレビやラジオ番組が始まると通知が届きます。</string>
-  <string name="discover_banner_title">ストリームをお気に入りに追加</string>
-  <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完了</string>
   <string name="done_label">完了</string>

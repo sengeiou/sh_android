@@ -25,8 +25,6 @@ import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.prefs.DiscoverType;
-import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
@@ -63,7 +61,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_streams) String streamsSource;
   @BindString(R.string.analytics_source_favorites) String favoriteSource;
-  @BindString(R.string.analytics_source_discover) String discoverSource;
   @BindString(R.string.analytics_source_activity) String activitySource;
   @BindView(R.id.bottomBar) BottomBar bottomBar;
   @BindView(R.id.connect_controller) LinearLayout connectController;
@@ -79,7 +76,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
-  @Inject @DiscoverType LongPreference discoverPreference;
 
   private ToolbarDecorator toolbarDecorator;
   private BottomBarTab activitiesTab;
@@ -118,7 +114,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
 
   private void setupBottomBar(Bundle savedInstanceState) {
-    setupBottomMenu();
+    bottomBar.setItems(R.xml.bottombar_menu);
     activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
       @Override public void onTabSelected(@IdRes int tabId) {
@@ -152,22 +148,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     });
     loadIntentData();
     handleUpdateVersion();
-  }
-
-  private void setupBottomMenu() {
-    Long tabType = discoverPreference.get();
-
-    switch (tabType.intValue()) {
-      case TAB_WITH_DISCOVER:
-        bottomBar.setItems(R.xml.bottombar_menu);
-        break;
-      case TAB_WITHOUT_DISCOVER:
-        bottomBar.setItems(R.xml.bottombar_menu_no_discover);
-        break;
-      default:
-        bottomBar.setItems(R.xml.bottombar_menu);
-        break;
-    }
   }
 
   protected void switchTab(Fragment fragment) {
@@ -370,8 +350,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
         return streamsSource;
       case R.id.bottombar_favorites:
         return favoriteSource;
-      case R.id.bottombar_discover:
-        return discoverSource;
       default:
         return activitySource;
     }

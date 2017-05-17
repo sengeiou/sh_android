@@ -80,10 +80,6 @@
   <string name="delete_shot_confirmation_message">Eliminar shot?</string>
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar modificações?</string>
-  <string name="discover">Descobrir</string>
-  <string name="discover_banner_content">Clique na estrela para adicionar. Quando os programas de TV e rádio começarem você será avisado.</string>
-  <string name="discover_banner_title">Adicione streams aos Favoritos</string>
-  <string name="discover_timestamp">faz %s</string>
   <string name="dismiss_highlight_shot">Desmarcar</string>
   <string name="done">Feito</string>
   <string name="done_label">Feito</string>

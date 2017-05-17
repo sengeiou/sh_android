@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.interactor.discover;
+package com.shootr.mobile.domain.interactor.device;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;

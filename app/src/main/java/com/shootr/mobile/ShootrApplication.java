@@ -3,8 +3,6 @@ package com.shootr.mobile;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
-import com.shootr.mobile.data.prefs.DiscoverType;
-import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
@@ -20,14 +18,13 @@ public class ShootrApplication extends MultiDexApplication {
     @Inject DatabaseVersionUtils databaseVersionUtils;
     @Inject CrashReportTool crashReportTool;
     @Inject AnalyticsTool analyticsTool;
-    @Inject @DiscoverType LongPreference discoverPreferences;
 
     @Override public void onCreate() {
         super.onCreate();
         buildObjectGraphAndInject();
         plantLoggerTrees();
         databaseVersionUtils.clearDataOnNewerVersion();
-        analyticsTool.init(this, discoverPreferences);
+        analyticsTool.init(this);
         CustomActivityOnCrash.install(this);
         CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
         crashReportTool.init(this);

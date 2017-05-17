@@ -80,10 +80,6 @@
   <string name="delete_shot_confirmation_message">删除shot？</string>
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消变更？</string>
-  <string name="discover">发现</string>
-  <string name="discover_banner_content">点击星形添加，电视和广播节目开始的时候会提醒你。</string>
-  <string name="discover_banner_title">添加到喜爱</string>
-  <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>

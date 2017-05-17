@@ -50,7 +50,7 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
   @BindView(R.id.userlist_progress) ProgressBar progressBar;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
-  @BindString(R.string.analytics_source_discover_user_search) String discoverUserSearch;
+  @BindString(R.string.analytics_source_user_search) String discoverUserSearch;
 
   private SearchAdapter adapter;
 
