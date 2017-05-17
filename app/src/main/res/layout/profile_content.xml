@@ -39,9 +39,10 @@
           android:visibility="gone"
           tools:visibility="visible" />
 
-      <com.shootr.mobile.ui.widgets.ShotListView android:id="@+id/profile_shots_list"
+      <android.support.v7.widget.RecyclerView android:id="@+id/profile_shots_list"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:nestedScrollingEnabled="false"
           android:visibility="gone"
           android:paddingTop="24dp"
           android:layout_marginTop="20dp"

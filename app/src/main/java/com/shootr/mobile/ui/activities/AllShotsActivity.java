@@ -6,30 +6,33 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
-import butterknife.OnItemLongClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.TimelineAdapter;
+import com.shootr.mobile.ui.adapters.ProfileShotAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
+import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.AllShotsPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.ui.views.ReportShotView;
-import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
+import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -59,7 +62,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject SessionRepository sessionRepository;
 
-  @BindView(R.id.all_shots_list) ListView listView;
+  @BindView(R.id.all_shots_list) RecyclerView shotsList;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.all_shots_loading) View loadingView;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -76,9 +79,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_source_all_shots) String allShotsSource;
 
-  @Deprecated private TimelineAdapter adapter;
+  private ProfileShotAdapter profileShotsAdapter;
 
-  private View footerProgress;
+  private PreCachingLayoutManager preCachingLayoutManager;
 
   public static Intent newIntent(Context context, String userId, Boolean isCurrentUser) {
     Intent intent = new Intent(context, AllShotsActivity.class);
@@ -128,26 +131,25 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   private void setupListScrollListeners() {
-    new ListViewScrollObserver(listView).setOnScrollUpAndDownListener(
-        new ListViewScrollObserver.OnListViewScrollListener() {
-          @Override
-          public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-            if (delta < -10) {
-              // going down
-            } else if (delta > 10) {
-              // going up
-            }
-          }
+    shotsList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+      }
 
-          @Override public void onScrollIdle() {
-            checkIfEndOfListVisible();
-          }
-        });
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        if (shotsList != null) {
+          checkIfEndOfListVisible();
+        }
+      }
+    });
   }
 
+
   private void checkIfEndOfListVisible() {
-    int lastItemPosition = listView.getAdapter().getCount() - 1;
-    int lastVisiblePosition = listView.getLastVisiblePosition();
+    int lastItemPosition = shotsList.getAdapter().getItemCount() - 1;
+    int lastVisiblePosition = preCachingLayoutManager.findLastVisibleItemPosition();
     if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
       presenter.showingLastShot();
     }
@@ -183,22 +185,47 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
       }
     };
 
-    View footerView =
-        LayoutInflater.from(this).inflate(R.layout.item_list_loading, listView, false);
-    footerProgress = ButterKnife.findById(footerView, R.id.loading_progress);
+    preCachingLayoutManager = new PreCachingLayoutManager(this);
+    shotsList.setLayoutManager(preCachingLayoutManager);
+    shotsList.setHasFixedSize(false);
+    shotsList.setItemAnimator(new DefaultItemAnimator() {
+      @Override
+      public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
+        return true;
+      }
 
-    footerProgress.setVisibility(View.GONE);
+      @Override
+      public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
+          @NonNull List<Object> payloads) {
+        return true;
+      }
+    });
 
-    listView.addFooterView(footerView, null, false);
+    profileShotsAdapter = new ProfileShotAdapter(imageLoader, avatarClickListener,
+        videoClickListener, onNiceShotListener, timeUtils, new ShotClickListener() {
+      @Override public void onClick(ShotModel shot) {
+        openShot(shot);
+      }
+    }, new OnShotLongClick() {
+      @Override public void onShotLongClick(ShotModel shot) {
+        reportShotPresenter.onShotLongPressed(shot);
+      }
+    }, new OnUrlClickListener() {
+      @Override public void onClick() {
+        /* no-op */
+      }
+    }, new OnReshootClickListener() {
+      @Override public void onReshootClick(ShotModel shotModel) {
+        presenter.reshoot(shotModel);
+        sendShareAnalytics(shotModel);
+      }
 
-    adapter =
-        new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, numberFormatUtil) {
-          @Override protected boolean shouldShowTitle() {
-            return true;
-          }
-        };
-    listView.setAdapter(adapter);
+      @Override public void onUndoReshootClick(ShotModel shot) {
+        presenter.undoReshoot(shot);
+      }
+    }, numberFormatUtil);
+
+    shotsList.setAdapter(profileShotsAdapter);
   }
 
   private void sendNiceAnalytics(ShotModel shot) {
@@ -320,7 +347,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void setShots(List<ShotModel> shotModels) {
-    adapter.setShots(shotModels);
+    profileShotsAdapter.setShots(shotModels);
   }
 
   @Override public void hideEmpty() {
@@ -328,8 +355,8 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showShots() {
-    adapter.notifyDataSetChanged();
-    listView.setVisibility(View.VISIBLE);
+    profileShotsAdapter.notifyDataSetChanged();
+    shotsList.setVisibility(View.VISIBLE);
   }
 
   @Override public void showEmpty() {
@@ -337,7 +364,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void hideShots() {
-    listView.setVisibility(View.GONE);
+    shotsList.setVisibility(View.GONE);
   }
 
   @Override public void showLoading() {
@@ -345,19 +372,19 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showLoadingOldShots() {
-    footerProgress.setVisibility(View.VISIBLE);
+    /* no -op */
   }
 
   @Override public void hideLoadingOldShots() {
-    footerProgress.setVisibility(View.GONE);
+    /* no-op */
   }
 
   @Override public void addOldShots(List<ShotModel> shotModels) {
-    adapter.addShotsBelow(shotModels);
+    profileShotsAdapter.addShotsBelow(shotModels);
   }
 
   @Override public void notifyReshot(String idShot, boolean mark) {
-    adapter.reshoot(idShot, mark);
+    profileShotsAdapter.reshoot(idShot, mark);
   }
 
   @Override public void handleReport(String sessionToken, ShotModel shotModel) {
@@ -391,16 +418,9 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
     startActivity(browserIntent);
   }
 
-  @OnItemClick(R.id.all_shots_list) public void openShot(int position) {
-    ShotModel shot = adapter.getItem(position);
+  private void openShot(ShotModel shot) {
     Intent intent = ShotDetailActivity.getIntentForActivity(this, shot);
     startActivity(intent);
-  }
-
-  @OnItemLongClick(R.id.all_shots_list) public boolean openContextMenu(int position) {
-    ShotModel shot = adapter.getItem(position);
-    reportShotPresenter.onShotLongPressed(shot);
-    return true;
   }
 
   @Override public void showEmailNotConfirmedError() {
@@ -492,6 +512,6 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void notifyDeletedShot(ShotModel shotModel) {
-    adapter.removeShot(shotModel);
+    profileShotsAdapter.removeShot(shotModel);
   }
 }
