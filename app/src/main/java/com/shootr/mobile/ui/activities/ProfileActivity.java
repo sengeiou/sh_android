@@ -89,7 +89,6 @@ public class ProfileActivity extends BaseActivity
     ReportShotView {
 
   public static final String EXTRA_USER = "user";
-  public static final String EXTRA_SEARCH = "isSearch";
   public static final String EXTRA_USERNAME = "username";
   public static final int LOGOUT_DISMISS_DELAY = 1500;
 
@@ -179,7 +178,6 @@ public class ProfileActivity extends BaseActivity
   private String username;
 
   private int mScrollOffset = 4;
-  private boolean isFromSearch = false;
 
   public static Intent getIntent(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
@@ -190,7 +188,6 @@ public class ProfileActivity extends BaseActivity
   public static Intent getIntentFromSearch(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
     i.putExtra(EXTRA_USER, idUser);
-    i.putExtra(EXTRA_SEARCH, true);
     return i;
   }
 
@@ -212,9 +209,6 @@ public class ProfileActivity extends BaseActivity
     collapsingToolbarLayout.setTitle(" ");
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
-    if (getIntent().hasExtra(EXTRA_SEARCH)) {
-      isFromSearch = getIntent().getBooleanExtra(EXTRA_SEARCH, true);
-    }
     OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
       @Override public void onAvatarClick(String userId, View avatarView) {
         onShotAvatarClick(avatarView);
@@ -350,7 +344,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override protected void initializePresenter() {
     if (idUser != null) {
-      profilePresenter.initializeWithIdUser(this, idUser, isFromSearch);
+      profilePresenter.initializeWithIdUser(this, idUser);
     } else {
       profilePresenter.initializeWithUsername(this, username);
     }
