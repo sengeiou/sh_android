@@ -93,7 +93,7 @@ public class ProfilePresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-    ShotModelMapper shotModelMapper = new ShotModelMapper();
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
     profilePresenter = new ProfilePresenter(putRecentUserInteractor, getUserByIdInteractor,
         getUserByUsernameInteractor, logoutInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, reshootInteractor, undoReshootInteractor, followInteractor,

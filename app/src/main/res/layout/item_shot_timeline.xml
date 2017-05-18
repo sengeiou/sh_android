@@ -195,8 +195,8 @@
       />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/actions"
+    <include
+        layout="@layout/stream_shot_actions"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/linearLayout2"
@@ -204,28 +204,8 @@
         android:layout_alignRight="@+id/linearLayout2"
         android:layout_alignStart="@+id/linearLayout2"
         android:layout_below="@+id/linearLayout2"
-        android:layout_marginTop="6dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        >
-
-      <LinearLayout
-          android:id="@+id/reshoot_action"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:paddingRight="16dp"
-          android:background="?selectableItemBackground"
-          >
-        <ImageView
-            android:id="@+id/reshoot_icon"
-            android:layout_width="20sp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_av_repeat"
-            />
-      </LinearLayout>
-
-    </LinearLayout>
-
+        android:layout_marginTop="8dp"
+        />
 
     <LinearLayout
         android:id="@+id/action_container"

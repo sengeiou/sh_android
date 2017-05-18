@@ -27,7 +27,6 @@ import org.mockito.stubbing.Answer;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,12 +41,14 @@ public class DraftsPresenterTest {
     @Mock DeleteDraftInteractor deleteDraftInteractor;
     @Mock SendPrivateMessageDraftInteractor sendPrivateMessageDraftInteractor;
     @Mock Bus bus;
+    @Mock SessionRepository sessionRepository;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        SessionRepository sessionRepository = mock(SessionRepository.class);
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
-        DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper(),
+        when(sessionRepository.getCurrentUserId()).thenReturn("userId");
+        DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper(
+            sessionRepository),
             new PrivateMessageModelMapper(sessionRepository));
         presenter = new DraftsPresenter(interactor, sendDraftInteractor,
             sendPrivateMessageDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);
@@ -130,7 +131,9 @@ public class DraftsPresenterTest {
     private Shot shot() {
         Shot shot = new Shot();
         shot.setComment("comment");
-        shot.setUserInfo(new BaseMessage.BaseMessageUserInfo());
+        BaseMessage.BaseMessageUserInfo baseMessageUserInfo = new BaseMessage.BaseMessageUserInfo();
+        baseMessageUserInfo.setIdUser("userId");
+        shot.setUserInfo(baseMessageUserInfo);
         return shot;
     }
 

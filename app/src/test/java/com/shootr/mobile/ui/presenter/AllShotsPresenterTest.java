@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.AllShotsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -48,6 +49,7 @@ public class AllShotsPresenterTest {
   @Mock UndoReshootInteractor undoReshootInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock AllShotsView allShotsView;
+  @Mock SessionRepository sessionRepository;
 
   private ShotModelMapper shotModelMapper;
   private AllShotsPresenter allShotsPresenter;
@@ -55,7 +57,7 @@ public class AllShotsPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    shotModelMapper = new ShotModelMapper();
+    shotModelMapper = new ShotModelMapper(sessionRepository);
     allShotsPresenter =
         new AllShotsPresenter(getProfileShotTimelineInteractor, markNiceShotInteractor,
             unmarkNiceShotInteractor, undoReshootInteractor, reshootInteractor, errorMessageFactory,

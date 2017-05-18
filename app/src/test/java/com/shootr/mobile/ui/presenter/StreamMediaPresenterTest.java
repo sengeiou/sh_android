@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.shot.GetOlderStreamMediaInteractor;
 import com.shootr.mobile.domain.interactor.shot.GetStreamMediaInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.StreamMediaView;
@@ -39,12 +40,13 @@ public class StreamMediaPresenterTest {
   @Mock GetOlderStreamMediaInteractor getOlderStreamMediaInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock StreamMediaView streamMediaView;
+  @Mock SessionRepository sessionRepository;
 
   private StreamMediaPresenter presenter;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    ShotModelMapper shotModelMapper = new ShotModelMapper();
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
     presenter = new StreamMediaPresenter(getStreamMediaInteractor, getOlderStreamMediaInteractor,
         shotModelMapper, errorMessageFactory);
     presenter.setView(streamMediaView);
