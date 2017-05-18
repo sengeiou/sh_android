@@ -143,12 +143,10 @@ public class ProfilePresenter implements Presenter {
     profileView.setupAnalytics(isCurrentUser);
     profileView.resetTimelineAdapter();
     if (isCurrentUser) {
-      profileView.showFriendsButton();
       profileView.hideChannelButton();
       profileView.showEditMenu();
     } else {
       putRecentUserInteractor.putRecentUser(user);
-      profileView.hideFriendsButton();
       profileView.hideEditMenu();
       subscribeUIObserverToObservable(getBlockedIdsObservable());
     }

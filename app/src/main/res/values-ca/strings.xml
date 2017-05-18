@@ -8,12 +8,8 @@
   <string name="activity_edit_profile_username_hint">Nom d\'usuari</string>
   <string name="activity_edit_profile_website_hint">Pàgina web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
-  <string name="activity_find_contributors_hint">Buscar</string>
-  <string name="activity_find_friends_cant_load_message">No és possible carregar dades. Comprova la teva connexió.</string>
   <string name="activity_find_friends_empty_message">No hi ha resultats</string>
   <string name="activity_find_friends_hint">Buscar amics</string>
-  <!-- Find Friends -->
-  <string name="activity_find_friends_title">Buscar amics</string>
   <string name="activity_find_participants_empty_message">No hi ha resultats</string>
   <string name="activity_find_participants_hint">Buscar participants</string>
   <string name="activity_find_streams_hint">Buscar streams</string>
@@ -94,7 +90,6 @@
   <string name="drawer_activity_title">Activitat</string>
   <string name="drawer_favorites_title">Favorits</string>
   <string name="drawer_following_activity_title" formatted="false">Seguint</string>
-  <string name="drawer_friends_title">Amics</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuaris</string>
   <string name="edit_stream">Editar</string>
@@ -176,7 +171,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No es pot votar</string>
   <string name="facebookID">389647124570169</string>
-  <string name="facebook_alert_dialog">Es requereixen l\'email i la llista d\'amics.</string>
   <string name="favorited">favorit</string>
   <string name="favorites_emtpy">No hi ha favorits</string>
   <string name="favorite_streams_push_settings">Streams favorits</string>
@@ -202,9 +196,6 @@
   <string name="intro_start_shooting_button">Començar</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">L\'app de missatgeria on els xats són oberts. S\'anomenen streams.</string>
-  <string name="invite_friends_button">Convidar amics</string>
-  <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
-  <string name="invite_friends_title">Convidar amics</string>
   <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic a l\'enllaç</item>
@@ -225,13 +216,10 @@
   <string name="menu_copy_text">Copiar text</string>
   <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Mostrar els shots de l\'administrador</string>
-  <!-- Menu names -->
-  <string name="menu_info">Amics</string>
   <string name="menu_pin_shot">Fixar al perfil</string>
   <string name="menu_profile_chage_password">Canviar contrasenya</string>
   <string name="menu_remove_favorite">Treure de Favorits</string>
   <string name="menu_save_photo">Desar imatge</string>
-  <string name="menu_search_friends">Buscar amics</string>
   <string name="menu_search_participants">Buscar participants</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>

@@ -123,7 +123,6 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
   @BindView(R.id.profile_user_verified) ImageView userVerified;
-  @BindView(R.id.mutuals_container) View mutualsContainer;
   @BindView(R.id.profile_container) CoordinatorLayout profileContainer;
   @BindView(R.id.fab_menu) FloatingActionMenu floatingMenu;
 
@@ -315,14 +314,6 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void resetTimelineAdapter() {
     profileShotsAdapter.notifyDataSetChanged();
-  }
-
-  @Override public void showFriendsButton() {
-    mutualsContainer.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideFriendsButton() {
-    mutualsContainer.setVisibility(View.GONE);
   }
 
   @Override public void goToChannelsList() {
@@ -1181,11 +1172,6 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void hideChannelButton() {
     channelButton.setVisibility(View.GONE);
-  }
-
-  @OnClick(R.id.mutuals_container) public void onMutualsClick() {
-    Intent intent = new Intent(this, FriendsActivity.class);
-    startActivity(intent);
   }
 
   @OnClick(R.id.channel_button) public void onChannelClick() {

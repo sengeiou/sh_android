@@ -9,11 +9,7 @@
   <string name="activity_edit_profile_website_hint">Website</string>
   <string name="activity_edit_stream_title">Edit stream</string>
   <string name="activity_find_contributors_hint">Search</string>
-  <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
   <string name="activity_find_friends_empty_message">No Results</string>
-  <string name="activity_find_friends_hint">Search for friends</string>
-  <!-- Find Friends -->
-  <string name="activity_find_friends_title">Search for friends</string>
   <string name="activity_find_participants_empty_message">No results</string>
   <string name="activity_find_participants_hint">Search for participants</string>
   <string name="activity_find_streams_hint">Search for streams</string>
@@ -94,7 +90,6 @@
   <string name="drawer_activity_title">Activity</string>
   <string name="drawer_favorites_title">Favorites</string>
   <string name="drawer_following_activity_title" formatted="false">Following</string>
-  <string name="drawer_friends_title">Friends</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Users</string>
   <string name="edit_stream">Edit</string>
@@ -176,7 +171,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">Cannot vote</string>
   <string name="facebookID">389647124570169</string>
-  <string name="facebook_alert_dialog">Email and Friends are required.</string>
   <string name="favorited">favorited</string>
   <string name="favorites_emtpy">No Favorites</string>
   <string name="favorite_streams_push_settings">Favorite streams</string>
@@ -202,9 +196,6 @@
   <string name="intro_start_shooting_button">Start shooting</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
-  <string name="invite_friends_button">Invite friends</string>
-  <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
-  <string name="invite_friends_title">Invite friends</string>
   <string name="language_support_alert" formatted="false">We currently support English only.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s link click</item>
@@ -225,13 +216,10 @@
   <string name="menu_copy_text">Copy text</string>
   <string name="menu_highlight_shot">Highlight</string>
   <string name="menu_holding_shots">Show holder\'s shots</string>
-  <!-- Menu names -->
-  <string name="menu_info">Friends</string>
   <string name="menu_pin_shot">Pin to profile</string>
   <string name="menu_profile_chage_password">Change password</string>
   <string name="menu_remove_favorite">Remove from Favorites</string>
   <string name="menu_save_photo">Save image</string>
-  <string name="menu_search_friends">Search for friends</string>
   <string name="menu_search_participants">Search for participants</string>
   <string name="menu_search_streams">Search</string>
   <string name="menu_search_timeline">Search timeline</string>

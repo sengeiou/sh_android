@@ -13,10 +13,8 @@ import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.ui.activities.FindContributorsActivity;
-import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
 import com.shootr.mobile.ui.activities.FollowingChannelListFragment;
-import com.shootr.mobile.ui.activities.FriendsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -73,7 +71,6 @@ import javax.inject.Singleton;
     PostNewShotActivity.class,
     ProfileActivity.class,
     UserFollowsContainerActivity.class,
-    FindFriendsActivity.class,
     StreamDetailActivity.class,
     ProfileEditActivity.class,
     ShotDetailActivity.class,
@@ -107,7 +104,6 @@ import javax.inject.Singleton;
     PollVoteActivity.class, PollResultsActivity.class,
     ActivityTimelineContainerFragment.class,
     SettingsActivity.class,
-    FriendsActivity.class,
     SearchActivity.class,
     FindFriendsFragment.class,
     FindStreamsFragment.class,

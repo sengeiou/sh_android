@@ -2,7 +2,6 @@
 <resources>
     <string name="analytics_screen_activity">activity</string>
     <string name="analytics_screen_favorites">favorites</string>
-    <string name="analytics_screen_friends">friends</string>
     <string name="analytics_screen_me">me</string>
     <string name="analytics_screen_stream_detail">streamDetail</string>
     <string name="analytics_screen_stream_list">hot</string>
@@ -88,8 +87,6 @@
     <string name="analytics_source_streams">streams</string>
     <string name="analytics_source_all_participants">allParticipants</string>
     <string name="analytics_source_all_shots">allShots</string>
-    <string name="analytics_source_find_friends">findFriends</string>
-    <string name="analytics_source_find_streams">findStreams</string>
     <string name="analytics_source_find_participants">findParticipants</string>
     <string name="analytics_source_nicers">nicers</string>
     <string name="analytics_source_activity">activity</string>
