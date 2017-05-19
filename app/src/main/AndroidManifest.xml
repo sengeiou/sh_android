@@ -90,14 +90,6 @@
     </activity>
     <activity android:name=".ui.activities.UserFollowsContainerActivity"/>
     <activity
-        android:name=".ui.activities.FindFriendsActivity"
-        android:label="@string/activity_find_friends_title"
-        android:theme="@style/ShootrTheme.Closable">
-      <meta-data
-          android:name="android.support.PARENT_ACTIVITY"
-          android:value="com.shootr.mobile.ui.activities.MainTabbedActivity"/>
-    </activity>
-    <activity
         android:name=".ui.activities.StreamDetailActivity"
         android:label="Participants">
       <meta-data
@@ -292,10 +284,6 @@
         android:configChanges="orientation|screenSize"
         android:label="@string/profile_settings"
         android:theme="@style/ShootrTheme"/>
-    <activity
-        android:name=".ui.activities.FriendsActivity"
-        android:label="@string/drawer_friends_title">
-    </activity>
     <activity android:name=".ui.activities.CropPictureActivity">
     </activity>
 

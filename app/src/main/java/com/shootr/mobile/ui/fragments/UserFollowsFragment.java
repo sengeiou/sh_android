@@ -6,37 +6,39 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.ProfileActivity;
-import com.shootr.mobile.ui.adapters.UserListAdapter;
+import com.shootr.mobile.ui.adapters.UsersAdapter;
+import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
+import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.UserFollowsPresenter;
 import com.shootr.mobile.ui.views.UserFollowsView;
 import com.shootr.mobile.ui.views.nullview.NullUserFollowsView;
-import com.shootr.mobile.ui.widgets.ListViewScrollObserver;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class UserFollowsFragment extends BaseFragment
-  implements UserListAdapter.FollowUnfollowAdapterCallback, UserFollowsView {
+  implements UserFollowsView {
 
     public static final String TAG = "follows";
 
@@ -48,7 +50,7 @@ public class UserFollowsFragment extends BaseFragment
     @Inject ImageLoader imageLoader;
     @Inject FeedbackMessage feedbackMessage;
 
-    @BindView(R.id.userlist_list) ListView userList;
+    @BindView(R.id.userlist_list) RecyclerView userList;
     @BindView(R.id.userlist_progress) ProgressBar progressBar;
     @BindView(R.id.userlist_empty) TextView emptyTextView;
     @BindString(R.string.analytics_screen_user_follower) String analyticsScreenUserFollower;
@@ -61,14 +63,16 @@ public class UserFollowsFragment extends BaseFragment
     @Inject UserFollowsPresenter userFollowsPresenter;
     @Inject AnalyticsTool analyticsTool;
     @Inject SessionRepository sessionRepository;
+    @Inject InitialsLoader initialsLoader;
 
     // Args
     String userId;
     Integer followType;
 
-    private UserListAdapter userListAdapter;
+    private UsersAdapter userListAdapter;
     private View progressView;
     private Unbinder unbinder;
+    private LinearLayoutManager layoutManager;
 
     public static UserFollowsFragment newInstance(String userId, Integer followType) {
         UserFollowsFragment fragment = new UserFollowsFragment();
@@ -111,27 +115,40 @@ public class UserFollowsFragment extends BaseFragment
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setupProgressView();
         setupUserListAdapter();
+        setupProgressView();
     }
 
     public void setupUserListAdapter() {
+        setupListScrollListeners();
+        layoutManager = new LinearLayoutManager(getContext());
+        userList.setLayoutManager(layoutManager);
         userList.setAdapter(getAdapter());
-        new ListViewScrollObserver(userList)
-          .setOnScrollUpAndDownListener(new ListViewScrollObserver.OnListViewScrollListener() {
-            @Override public void onScrollUpDownChanged(int delta, int scrollPosition, boolean exact) {
-                /* no-op */
+    }
+
+    private void setupListScrollListeners() {
+        userList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
-            @Override public void onScrollIdle() {
-                int lastVisiblePosition = userList.getLastVisiblePosition();
-                int loadingFooterPosition = userList.getAdapter().getCount() - 1;
-                boolean shouldStartLoadingMore = lastVisiblePosition >= loadingFooterPosition;
-                if (shouldStartLoadingMore && !isFooterLoading) {
-                    userFollowsPresenter.makeNextRemoteSearch();
+            @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (userList != null) {
+
+                    checkIfEndOfListVisible();
                 }
             }
         });
+    }
+
+    private void checkIfEndOfListVisible() {
+        int lastItemPosition = userList.getAdapter().getItemCount() - 1;
+        int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+        if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+            userFollowsPresenter.makeNextRemoteSearch();
+        }
     }
 
     public void setupProgressView() {
@@ -144,13 +161,12 @@ public class UserFollowsFragment extends BaseFragment
 
     protected void setListContent(List<UserModel> usersFollowing) {
         emptyTextView.setVisibility(View.GONE);
-        getAdapter().setItems(usersFollowing);
+        getAdapter().setUsers(usersFollowing);
         getAdapter().notifyDataSetChanged();
     }
 
-    @OnItemClick(R.id.userlist_list) public void openUserProfile(int position) {
-        UserModel user = getAdapter().getItem(position);
-        startActivityForResult(ProfileActivity.getIntent(getActivity(), user.getIdUser()), 666);
+    private void openUserProfile(String userId) {
+        startActivityForResult(ProfileActivity.getIntent(getActivity(), userId), 666);
     }
 
     private void followUser(UserModel user) {
@@ -204,21 +220,30 @@ public class UserFollowsFragment extends BaseFragment
         userFollowsPresenter.setView(new NullUserFollowsView());
     }
 
-    public UserListAdapter getAdapter() {
+    public UsersAdapter getAdapter() {
         if (userListAdapter == null) {
-            userListAdapter = new UserListAdapter(getActivity(), imageLoader);
-            userListAdapter.setCallback(this);
+            userListAdapter = new UsersAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
+                @Override public void onFollow(UserModel user) {
+                    follow(user);
+                }
+
+                @Override public void onUnfollow(UserModel user) {
+                    unFollow(user);
+                }
+            }, new OnUserClickListener() {
+                @Override public void onUserClick(String idUser) {
+                    openUserProfile(idUser);
+                }
+            });
         }
         return userListAdapter;
     }
 
-    @Override public void follow(int position) {
-        UserModel user = getAdapter().getItem(position);
+    private void follow(UserModel user) {
         followUser(user);
     }
 
-    @Override public void unFollow(int position) {
-        final UserModel userModel = getAdapter().getItem(position);
+    private void unFollow(final UserModel userModel) {
         new AlertDialog.Builder(getActivity()).setMessage(String.format(getString(R.string.unfollow_dialog_message),
           userModel.getUsername()))
           .setPositiveButton(getString(R.string.unfollow_dialog_yes), new DialogInterface.OnClickListener() {
@@ -257,19 +282,11 @@ public class UserFollowsFragment extends BaseFragment
     }
 
     @Override public void showProgressView() {
-        isFooterLoading = true;
-        userList.addFooterView(progressView, null, false);
-        setupUserListAfterAddFooter();
-    }
-
-    public void setupUserListAfterAddFooter() {
-        userList.setAdapter(getAdapter());
-        userList.setSelection(getAdapter().getCount() - 1);
+        /* no-op */
     }
 
     @Override public void hideProgressView() {
-        isFooterLoading = false;
-        userList.removeFooterView(progressView);
+        /* no-op */
     }
 
     @Override public void renderUsersBelow(List<UserModel> olderUsers) {
@@ -307,7 +324,7 @@ public class UserFollowsFragment extends BaseFragment
             userModels.remove(index);
             getAdapter().removeItems();
             userModels.add(index, userModel);
-            getAdapter().setItems(userModels);
+            getAdapter().setUsers(userModels);
             getAdapter().notifyDataSetChanged();
         }
     }

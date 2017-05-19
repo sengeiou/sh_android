@@ -86,7 +86,7 @@
       android:layout_height="wrap_content"
       android:layout_margin="16dp"
       android:clickable="true"
-      android:src="@drawable/ic_action_communication_forum"
+      android:src="@drawable/ic_launcher"
       app:backgroundTint="@color/primary_dark"
       app:borderWidth="0dp"
       app:layout_anchor="@id/app_bar"

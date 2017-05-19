@@ -3,6 +3,7 @@ language: android
 jdk:
     - oraclejdk8
 
+
 android:
   components:
     - tools
@@ -13,6 +14,10 @@ android:
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-21
 
+before_install:
+  - rvm install 2.0.0
+  - gem install fastlane -NV
+
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
 cache:
@@ -22,6 +27,7 @@ cache:
 
 script:
   - ./gradlew checkstyle test coveralls
+  - ./fastlane/travis.sh
 
 notifications:
-  slack: shootr:CEmsX5epzAEF8V8ukmnYjfSG
+  slack: shootr:kmSZwJMvy1HXouE4UqK5n55s

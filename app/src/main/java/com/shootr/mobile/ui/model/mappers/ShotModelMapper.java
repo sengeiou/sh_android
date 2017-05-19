@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.Url;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
@@ -15,7 +16,10 @@ import javax.inject.Inject;
 
 public class ShotModelMapper {
 
-  @Inject public ShotModelMapper() {
+  private final SessionRepository sessionRepository;
+
+  @Inject public ShotModelMapper(SessionRepository sessionRepository) {
+    this.sessionRepository = sessionRepository;
   }
 
   public ShotModel transform(Shot shot) {
@@ -61,6 +65,10 @@ public class ShotModelMapper {
     shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
     shotModel.setNiced(shot.isNiced());
     shotModel.setReshooted(shot.isReshooted());
+    if (userInfo.getIdUser() != null) {
+      shotModel.setMyshot(
+          shot.getUserInfo().getIdUser().equals(sessionRepository.getCurrentUserId()));
+    }
     if (userInfo.getVerifiedUser() != null) {
       shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
     }

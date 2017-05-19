@@ -56,12 +56,12 @@ public class GenericSearchFragment extends BaseFragment
   @BindString(R.string.shared_stream_notification) String sharedStream;
   @BindString(R.string.analytics_action_external_share_stream) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share_stream) String analyticsLabelExternalShare;
-  @BindString(R.string.analytics_source_discover_stream_search) String discoverSearchSource;
+  @BindString(R.string.analytics_source_stream_search) String discoverSearchSource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
-  @BindString(R.string.analytics_source_discover_user_search) String discoverUserSearch;
+  @BindString(R.string.analytics_source_user_search) String discoverUserSearch;
 
   @Inject SearchItemsPresenter searchItemsPresenter;
   @Inject FeedbackMessage feedbackMessage;

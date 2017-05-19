@@ -66,12 +66,13 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @BindView(R.id.actions) LinearLayout actionsContainer;
   @BindView(R.id.reshoot_action) LinearLayout reshootAction;
-  @BindView(R.id.reshoot_icon) ImageView reshootIcon;
+  @BindView(R.id.reshoot_action_text) TextView reshootActionText;
   @Nullable @BindView(R.id.reshoot_container) FrameLayout reshootContainer;
   @Nullable @BindView(R.id.reshoot) TextView reshootText;
 
   @BindString(R.string.menu_share_shot_via_shootr) String reshoootResource;
   @BindString(R.string.undo_reshoot) String undoReshootResource;
+  @BindString(R.string.reshoot_action_text) String reshootActionTextResource;
 
   public int position;
   private View view;
@@ -140,12 +141,16 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupShotActions(final ShotModel shot, final OnReshootClickListener onReshootClickListener) {
-    if (shot.isVerifiedUser()) {
-      actionsContainer.setVisibility(View.GONE);
+    if (shot.isVerifiedUser() || shot.isMine()) {
+      actionsContainer.setVisibility(View.VISIBLE);
       if (shot.isReshooted()) {
-        reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_repeat));
+        reshootAction.setBackgroundDrawable(reshootAction.getResources().getDrawable(R.drawable.blue_round_layout));
+        reshootActionText.setText(reshootActionTextResource);
+        reshootActionText.setTextColor(reshootActionText.getResources().getColor(R.color.white));
       } else {
-        reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_av_repeat));
+        reshootAction.setBackgroundDrawable(reshootAction.getResources().getDrawable(R.drawable.round_layout));
+        reshootActionText.setText(reshoootResource);
+        reshootActionText.setTextColor(reshootActionText.getResources().getColor(R.color.gray_50));
       }
       reshootAction.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {

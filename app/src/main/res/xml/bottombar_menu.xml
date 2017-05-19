@@ -3,8 +3,8 @@
 
   <tab
      id="@+id/bottombar_streams"
-     icon="@drawable/ic_whatshot_white"
-     title="@string/drawer_hot_title"
+     icon="@drawable/ic_bottombar_streams"
+     title="@string/drawer_streams_title"
      barColorWhenSelected="@color/primary"/>
   <tab
       id="@+id/bottombar_favorites"

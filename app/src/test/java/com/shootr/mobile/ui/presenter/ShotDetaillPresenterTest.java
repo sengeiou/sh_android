@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
@@ -59,10 +60,11 @@ public class ShotDetaillPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock ShotDetailView shotDetailView;
     @Mock List<ShotModel> repliesModels;
+    @Mock SessionRepository sessionRepository;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        ShotModelMapper shotModelMapper = new ShotModelMapper();
+        ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
         NicerModelMapper nicerModelMapper = new NicerModelMapper();
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,

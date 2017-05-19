@@ -9,7 +9,7 @@ import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.discover.SendDeviceInfoInteractor;
+import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;

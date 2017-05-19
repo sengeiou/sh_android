@@ -22,7 +22,6 @@ import javax.inject.Singleton;
         ContributorRepositoryModule.class,
         PollRepositoryModule.class,
         UserSettingsRepositoryModule.class,
-        DiscoveredRepositoryModule.class,
         RecentStreamRepositoryModule.class,
         ShotEventRepositoryModule.class,
         SynchroModule.class,

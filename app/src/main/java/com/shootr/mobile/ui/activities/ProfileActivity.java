@@ -18,6 +18,8 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,15 +41,17 @@ import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
-import com.shootr.mobile.ui.adapters.TimelineAdapter;
+import com.shootr.mobile.ui.adapters.ProfileShotAdapter;
 import com.shootr.mobile.ui.adapters.UserListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnNiceShotListener;
-import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
+import com.shootr.mobile.ui.adapters.listeners.OnReshootClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
+import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -58,7 +62,7 @@ import com.shootr.mobile.ui.views.ProfileView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.SuggestedPeopleView;
 import com.shootr.mobile.ui.widgets.FollowButton;
-import com.shootr.mobile.ui.widgets.ShotListView;
+import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.ui.widgets.SuggestedPeopleListView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -85,7 +89,6 @@ public class ProfileActivity extends BaseActivity
     ReportShotView {
 
   public static final String EXTRA_USER = "user";
-  public static final String EXTRA_SEARCH = "isSearch";
   public static final String EXTRA_USERNAME = "username";
   public static final int LOGOUT_DISMISS_DELAY = 1500;
 
@@ -110,7 +113,7 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_follow_button) FollowButton followButton;
 
   @BindView(R.id.reshoots_people_title) TextView reshootsHeader;
-  @BindView(R.id.profile_shots_list) ShotListView shotsList;
+  @BindView(R.id.profile_shots_list) RecyclerView shotsList;
 
   @BindView(R.id.profile_all_shots_container) View allShotContainer;
 
@@ -120,7 +123,6 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_suggested_people) SuggestedPeopleListView suggestedPeopleListView;
 
   @BindView(R.id.profile_user_verified) ImageView userVerified;
-  @BindView(R.id.mutuals_container) View mutualsContainer;
   @BindView(R.id.profile_container) CoordinatorLayout profileContainer;
   @BindView(R.id.fab_menu) FloatingActionMenu floatingMenu;
 
@@ -160,7 +162,7 @@ public class ProfileActivity extends BaseActivity
 
   //endregion
 
-  private TimelineAdapter latestsShotsAdapter;
+  private ProfileShotAdapter profileShotsAdapter;
   private ProgressDialog progress;
   private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
@@ -169,12 +171,12 @@ public class ProfileActivity extends BaseActivity
   private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder settingsMenuItem = new MenuItemValueHolder();
   private UserListAdapter suggestedPeopleAdapter;
+  private PreCachingLayoutManager preCachingLayoutManager;
 
   private String idUser;
   private String username;
 
   private int mScrollOffset = 4;
-  private boolean isFromSearch = false;
 
   public static Intent getIntent(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
@@ -185,7 +187,6 @@ public class ProfileActivity extends BaseActivity
   public static Intent getIntentFromSearch(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
     i.putExtra(EXTRA_USER, idUser);
-    i.putExtra(EXTRA_SEARCH, true);
     return i;
   }
 
@@ -207,9 +208,6 @@ public class ProfileActivity extends BaseActivity
     collapsingToolbarLayout.setTitle(" ");
     idUser = getIntent().getStringExtra(EXTRA_USER);
     username = getIntent().getStringExtra(EXTRA_USERNAME);
-    if (getIntent().hasExtra(EXTRA_SEARCH)) {
-      isFromSearch = getIntent().getBooleanExtra(EXTRA_SEARCH, true);
-    }
     OnAvatarClickListener avatarClickListener = new OnAvatarClickListener() {
       @Override public void onAvatarClick(String userId, View avatarView) {
         onShotAvatarClick(avatarView);
@@ -249,26 +247,57 @@ public class ProfileActivity extends BaseActivity
       }
     });
 
-    latestsShotsAdapter =
-        new TimelineAdapter(this, imageLoader, timeUtils, avatarClickListener, videoClickListener,
-            onNiceShotListener, onUsernameClickListener, numberFormatUtil) {
-          @Override protected boolean shouldShowTitle() {
-            return true;
-          }
-        };
-    shotsList.setAdapter(latestsShotsAdapter);
-    shotsList.setOnShotClick(new OnShotClick() {
-      @Override public void onShotClick(ShotModel shot) {
+    setupProfileShots(avatarClickListener, onUsernameClickListener, videoClickListener,
+        onNiceShotListener);
+
+    floatingMenu.setClosedOnTouchOutside(true);
+  }
+
+  private void setupProfileShots(final OnAvatarClickListener avatarClickListener,
+      final OnUsernameClickListener onUsernameClickListener,
+      final OnVideoClickListener videoClickListener, final OnNiceShotListener onNiceShotListener) {
+
+    profileShotsAdapter = new ProfileShotAdapter(imageLoader, avatarClickListener,
+        videoClickListener, onNiceShotListener, timeUtils, new ShotClickListener() {
+      @Override public void onClick(ShotModel shot) {
         openShot(shot);
       }
-    });
-    shotsList.setOnShotLongClick(new OnShotLongClick() {
+    }, new OnShotLongClick() {
       @Override public void onShotLongClick(ShotModel shot) {
         reportShotPresenter.onShotLongPressed(shot);
       }
+    }, new OnUrlClickListener() {
+      @Override public void onClick() {
+        /* no-op */
+      }
+    }, new OnReshootClickListener() {
+      @Override public void onReshootClick(ShotModel shot) {
+        profilePresenter.reshoot(shot);
+        sendShareShotAnalythics(shot);
+      }
+
+      @Override public void onUndoReshootClick(ShotModel shot) {
+        profilePresenter.undoReshoot(shot);
+      }
+    }, numberFormatUtil);
+
+    preCachingLayoutManager = new PreCachingLayoutManager(this);
+    shotsList.setLayoutManager(preCachingLayoutManager);
+    shotsList.setHasFixedSize(false);
+    shotsList.setItemAnimator(new DefaultItemAnimator() {
+      @Override
+      public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
+        return true;
+      }
+
+      @Override
+      public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
+          @NonNull List<Object> payloads) {
+        return true;
+      }
     });
 
-    floatingMenu.setClosedOnTouchOutside(true);
+    shotsList.setAdapter(profileShotsAdapter);
   }
 
   private void sendAnalytics(ShotModel shot) {
@@ -284,15 +313,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void resetTimelineAdapter() {
-    latestsShotsAdapter.notifyDataSetChanged();
-  }
-
-  @Override public void showFriendsButton() {
-    mutualsContainer.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideFriendsButton() {
-    mutualsContainer.setVisibility(View.GONE);
+    profileShotsAdapter.notifyDataSetChanged();
   }
 
   @Override public void goToChannelsList() {
@@ -314,7 +335,7 @@ public class ProfileActivity extends BaseActivity
 
   @Override protected void initializePresenter() {
     if (idUser != null) {
-      profilePresenter.initializeWithIdUser(this, idUser, isFromSearch);
+      profilePresenter.initializeWithIdUser(this, idUser);
     } else {
       profilePresenter.initializeWithUsername(this, username);
     }
@@ -724,7 +745,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void notifyReshoot(String idShot, boolean mark) {
-    latestsShotsAdapter.reshoot(idShot, mark);
+    profileShotsAdapter.reshoot(idShot, mark);
   }
 
   @Override public void renderSuggestedPeopleList(List<UserModel> users) {
@@ -827,8 +848,8 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void renderLastShots(List<ShotModel> shots) {
-    latestsShotsAdapter.setShots(shots);
-    latestsShotsAdapter.notifyDataSetChanged();
+    profileShotsAdapter.setShots(shots);
+    profileShotsAdapter.notifyDataSetChanged();
   }
 
   @Override public void showUnfollowConfirmation(String username) {
@@ -1151,11 +1172,6 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void hideChannelButton() {
     channelButton.setVisibility(View.GONE);
-  }
-
-  @OnClick(R.id.mutuals_container) public void onMutualsClick() {
-    Intent intent = new Intent(this, FriendsActivity.class);
-    startActivity(intent);
   }
 
   @OnClick(R.id.channel_button) public void onChannelClick() {

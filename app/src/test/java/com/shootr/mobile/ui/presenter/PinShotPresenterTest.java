@@ -42,7 +42,7 @@ public class PinShotPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        shotModelMapper = new ShotModelMapper();
+        shotModelMapper = new ShotModelMapper(sessionRepository);
         presenter =
           new PinShotPresenter(pinShotInteractor, getShotDetailInteractor, sessionRepository, shotModelMapper);
         presenter.setView(pinShotView);

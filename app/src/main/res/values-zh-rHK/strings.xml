@@ -9,11 +9,7 @@
   <string name="activity_edit_profile_website_hint">網站</string>
   <string name="activity_edit_stream_title">編輯stream</string>
   <string name="activity_find_contributors_hint">搜尋</string>
-  <string name="activity_find_friends_cant_load_message">不能載入數據。請檢查您的連接。</string>
   <string name="activity_find_friends_empty_message">找不到任何結果</string>
-  <string name="activity_find_friends_hint">搜尋朋友</string>
-  <!-- Find Friends -->
-  <string name="activity_find_friends_title">搜尋朋友</string>
   <string name="activity_find_participants_empty_message">找不到任何結果</string>
   <string name="activity_find_participants_hint">搜尋參與者</string>
   <string name="activity_find_streams_hint">搜尋streams</string>
@@ -80,10 +76,6 @@
   <string name="delete_shot_confirmation_message">刪除shot?</string>
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消變更？</string>
-  <string name="discover">發現</string>
-  <string name="discover_banner_content">點擊星形添加，電視和廣播節目開始的時候會提醒你。</string>
-  <string name="discover_banner_title">添加到喜愛</string>
-  <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完成</string>
   <string name="done_label">完成</string>
@@ -98,8 +90,6 @@
   <string name="drawer_activity_title">動態消息</string>
   <string name="drawer_favorites_title">最愛</string>
   <string name="drawer_following_activity_title" formatted="false">關注中</string>
-  <string name="drawer_friends_title">朋友</string>
-  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">用戶</string>
   <string name="edit_stream">編輯Stream</string>
@@ -181,7 +171,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
-  <string name="facebook_alert_dialog">需要電子郵件和好友列表。</string>
   <string name="favorited">喜爱</string>
   <string name="favorites_emtpy">沒有最愛</string>
   <string name="favorite_streams_push_settings">喜愛的 streams</string>
@@ -207,9 +196,6 @@
   <string name="intro_start_shooting_button">"開始Shooting "</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">一個開放對話的通訊軟件。所有開放的對話叫 Streams。</string>
-  <string name="invite_friends_button">邀請朋友</string>
-  <string name="invite_friends_message">嘿，一起使用Shootr吧: http://shootr.com/</string>
-  <string name="invite_friends_title">邀請朋友</string>
   <string name="language_support_alert" formatted="false">我們目前只支持英文。</string>
   <plurals name="link_click_count_pattern">
     <item quantity="other">%s次鏈接點擊</item>
@@ -228,13 +214,10 @@
   <string name="menu_copy_text">複製文字</string>
   <string name="menu_highlight_shot">置頂</string>
   <string name="menu_holding_shots">顯示創立者的shots</string>
-  <!-- Menu names -->
-  <string name="menu_info">朋友</string>
   <string name="menu_pin_shot">釘選到個人主頁</string>
   <string name="menu_profile_chage_password">更改密碼</string>
   <string name="menu_remove_favorite">從最愛中清除</string>
   <string name="menu_save_photo">儲存相片</string>
-  <string name="menu_search_friends">搜尋朋友</string>
   <string name="menu_search_participants">搜尋參與者</string>
   <string name="menu_search_streams">搜尋</string>
   <string name="menu_search_timeline">搜尋timeline</string>

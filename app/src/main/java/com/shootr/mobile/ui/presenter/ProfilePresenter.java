@@ -61,7 +61,6 @@ public class ProfilePresenter implements Presenter {
   private ProfileView profileView;
   private String profileIdUser;
   private boolean isCurrentUser;
-  private boolean isFromSearch = false;
   private String username;
   private UserModel userModel;
   private boolean hasBeenPaused = false;
@@ -116,9 +115,8 @@ public class ProfilePresenter implements Presenter {
     initialize(profileView);
   }
 
-  public void initializeWithIdUser(ProfileView profileView, String idUser, boolean isFromSearch) {
+  public void initializeWithIdUser(ProfileView profileView, String idUser) {
     this.profileIdUser = idUser;
-    this.isFromSearch = isFromSearch;
     initialize(profileView);
     loadLatestShots(idUser);
   }
@@ -145,14 +143,10 @@ public class ProfilePresenter implements Presenter {
     profileView.setupAnalytics(isCurrentUser);
     profileView.resetTimelineAdapter();
     if (isCurrentUser) {
-      profileView.showFriendsButton();
       profileView.hideChannelButton();
       profileView.showEditMenu();
     } else {
-      if (isFromSearch) {
-        putRecentUserInteractor.putRecentUser(user);
-      }
-      profileView.hideFriendsButton();
+      putRecentUserInteractor.putRecentUser(user);
       profileView.hideEditMenu();
       subscribeUIObserverToObservable(getBlockedIdsObservable());
     }

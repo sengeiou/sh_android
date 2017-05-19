@@ -8,12 +8,7 @@
   <string name="activity_edit_profile_username_hint">ユーザー名</string>
   <string name="activity_edit_profile_website_hint">ウェブサイト</string>
   <string name="activity_edit_stream_title">ストリームを編集</string>
-  <string name="activity_find_contributors_hint">検索</string>
-  <string name="activity_find_friends_cant_load_message">データをロードできません。接続を確認してください。</string>
   <string name="activity_find_friends_empty_message">検索結果: 0件</string>
-  <string name="activity_find_friends_hint">友達を見つける</string>
-  <!-- Find Friends -->
-  <string name="activity_find_friends_title">友達を見つける</string>
   <string name="activity_find_participants_empty_message">検索結果: 0件</string>
   <string name="activity_find_participants_hint">参加者を見つける</string>
   <string name="activity_find_streams_hint">ストリームを見つける</string>
@@ -79,10 +74,6 @@
   <string name="delete_shot_confirmation_message">ショットを削除しますか？</string>
   <string name="discard">破棄</string>
   <string name="discard_profile_confirmation">変更を破棄しますか？</string>
-  <string name="discover">発見</string>
-  <string name="discover_banner_content">星をタップして追加してください。テレビやラジオ番組が始まると通知が届きます。</string>
-  <string name="discover_banner_title">ストリームをお気に入りに追加</string>
-  <string name="discover_timestamp">%s前</string>
   <string name="dismiss_highlight_shot">取消</string>
   <string name="done">完了</string>
   <string name="done_label">完了</string>
@@ -97,8 +88,6 @@
   <string name="drawer_activity_title">アクティビティ</string>
   <string name="drawer_favorites_title">お気に入り</string>
   <string name="drawer_following_activity_title" formatted="false">フォロー中</string>
-  <string name="drawer_friends_title">友達</string>
-  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">ストリーム</string>
   <string name="drawer_users_title">ユーザー</string>
   <string name="edit_stream">編集</string>
@@ -180,7 +169,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
-  <string name="facebook_alert_dialog">メールアドレスと友人は必須項目です。</string>
   <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
@@ -205,9 +193,6 @@
   <string name="intro_start_shooting_button">始める</string>
   <string name="intro_streams">ストリーム</string>
   <string name="intro_streams_text">オープンチャット「ストリーム」を楽しめるメッセージアプリです。</string>
-  <string name="invite_friends_button">友達を招待</string>
-  <string name="invite_friends_message">あなたもShootrを始めてみませんか？: http://shootr.com/</string>
-  <string name="invite_friends_title">友達を招待</string>
   <string name="language_support_alert" formatted="false">現在、英語でのサポート対応のみとなっております。ご理解を頂き、ありがとうございます。</string>
   <plurals name="link_click_count_pattern">
     <item quantity="other">%sクリック</item>
@@ -226,13 +211,10 @@
   <string name="menu_copy_text">テキストをコピー</string>
   <string name="menu_highlight_shot">ハイライト</string>
   <string name="menu_holding_shots">作成者のショットを表示する</string>
-  <!-- Menu names -->
-  <string name="menu_info">友達</string>
   <string name="menu_pin_shot">プロフィールにピン留め</string>
   <string name="menu_profile_chage_password">パスワードを変更</string>
   <string name="menu_remove_favorite">お気に入りから外す</string>
   <string name="menu_save_photo">画像を保存</string>
-  <string name="menu_search_friends">友達を見つける</string>
   <string name="menu_search_participants">参加者を見つける</string>
   <string name="menu_search_streams">検索</string>
   <string name="menu_search_timeline">タイムラインを検索</string>

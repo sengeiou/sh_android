@@ -9,15 +9,12 @@ import com.shootr.mobile.ui.activities.ChannelListFragment;
 import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.ContributorsActivity;
 import com.shootr.mobile.ui.activities.CropPictureActivity;
-import com.shootr.mobile.ui.activities.DiscoverFragment;
 import com.shootr.mobile.ui.activities.DraftsActivity;
 import com.shootr.mobile.ui.activities.EmailConfirmationActivity;
 import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.ui.activities.FindContributorsActivity;
-import com.shootr.mobile.ui.activities.FindFriendsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
 import com.shootr.mobile.ui.activities.FollowingChannelListFragment;
-import com.shootr.mobile.ui.activities.FriendsActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -49,7 +46,6 @@ import com.shootr.mobile.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.mobile.ui.base.BaseToolbarActivity;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
-import com.shootr.mobile.ui.fragments.DiscoverTimelineFragment;
 import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
@@ -75,7 +71,6 @@ import javax.inject.Singleton;
     PostNewShotActivity.class,
     ProfileActivity.class,
     UserFollowsContainerActivity.class,
-    FindFriendsActivity.class,
     StreamDetailActivity.class,
     ProfileEditActivity.class,
     ShotDetailActivity.class,
@@ -109,15 +104,13 @@ import javax.inject.Singleton;
     PollVoteActivity.class, PollResultsActivity.class,
     ActivityTimelineContainerFragment.class,
     SettingsActivity.class,
-    DiscoverFragment.class,
-    FriendsActivity.class,
     SearchActivity.class,
     FindFriendsFragment.class,
     FindStreamsFragment.class,
     CropPictureActivity.class,
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
-    OnBoardingStreamActivity.class, DiscoverTimelineFragment.class,
+    OnBoardingStreamActivity.class,
     GenericSearchFragment.class
   },
   complete = false) public class UiModule {

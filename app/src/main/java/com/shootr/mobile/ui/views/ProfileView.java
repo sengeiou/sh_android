@@ -104,10 +104,6 @@ public interface ProfileView {
 
     void resetTimelineAdapter();
 
-    void showFriendsButton();
-
-    void hideFriendsButton();
-
     void goToChannelsList();
 
     void goToChannelTimeline(String idTargetUser);

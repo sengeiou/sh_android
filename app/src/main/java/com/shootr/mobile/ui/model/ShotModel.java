@@ -27,6 +27,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private boolean isHolderOrContributor;
     private boolean niced;
     private boolean reshooted;
+    private boolean isMyshot;
 
     public String getIdShot() {
         return idShot;
@@ -190,6 +191,22 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
     public void setHolderOrContributor(boolean holderOrContributor) {
         isHolderOrContributor = holderOrContributor;
+    }
+
+    public boolean isCanBePinned() {
+        return canBePinned;
+    }
+
+    public void setCanBePinned(boolean canBePinned) {
+        this.canBePinned = canBePinned;
+    }
+
+    public boolean isMine() {
+        return isMyshot;
+    }
+
+    public void setMyshot(boolean myshot) {
+        isMyshot = myshot;
     }
 
     public boolean isNiced() {

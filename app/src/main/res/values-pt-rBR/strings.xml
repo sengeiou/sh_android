@@ -9,11 +9,7 @@
   <string name="activity_edit_profile_website_hint">Página web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
   <string name="activity_find_contributors_hint">Buscar</string>
-  <string name="activity_find_friends_cant_load_message">Não é possível carregar dados. Verifique sua conexão.</string>
   <string name="activity_find_friends_empty_message">Nenhum resultado</string>
-  <string name="activity_find_friends_hint">Buscar amigos</string>
-  <!-- Find Friends -->
-  <string name="activity_find_friends_title">Buscar amigos</string>
   <string name="activity_find_participants_empty_message">Nenhum resultado</string>
   <string name="activity_find_participants_hint">Buscar participantes</string>
   <string name="activity_find_streams_hint">Buscar streams</string>
@@ -80,10 +76,6 @@
   <string name="delete_shot_confirmation_message">Eliminar shot?</string>
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar modificações?</string>
-  <string name="discover">Descobrir</string>
-  <string name="discover_banner_content">Clique na estrela para adicionar. Quando os programas de TV e rádio começarem você será avisado.</string>
-  <string name="discover_banner_title">Adicione streams aos Favoritos</string>
-  <string name="discover_timestamp">faz %s</string>
   <string name="dismiss_highlight_shot">Desmarcar</string>
   <string name="done">Feito</string>
   <string name="done_label">Feito</string>
@@ -98,8 +90,6 @@
   <string name="drawer_activity_title">Atividade</string>
   <string name="drawer_favorites_title">Favoritos</string>
   <string name="drawer_following_activity_title" formatted="false">Seguindo</string>
-  <string name="drawer_friends_title">Amigos</string>
-  <string name="drawer_hot_title">Hot</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuários</string>
   <string name="edit_stream">Editar</string>
@@ -181,7 +171,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">Não se pode votar</string>
   <string name="facebookID">389647124570169</string>
-  <string name="facebook_alert_dialog">O email e a lista de amigos são necessários.</string>
   <string name="favorited">favorito</string>
   <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
@@ -207,9 +196,6 @@
   <string name="intro_start_shooting_button">Começar</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">O app de mensagens onde os chats são abertos. Se chamam streams.</string>
-  <string name="invite_friends_button">Convidar amigos</string>
-  <string name="invite_friends_message">Olá! Te recomendo Shootr: http://shootr.com/</string>
-  <string name="invite_friends_title">Convidar amigos</string>
   <string name="language_support_alert" formatted="false">No momento só oferecemos suporte em inglês. Obrigado pela compreensão.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clique no link</item>
@@ -230,13 +216,10 @@
   <string name="menu_copy_text">Copiar texto</string>
   <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Exibir os shots do administrador</string>
-  <!-- Menu names -->
-  <string name="menu_info">Amigos</string>
   <string name="menu_pin_shot">Linkar ao perfil</string>
   <string name="menu_profile_chage_password">Modificar senha</string>
   <string name="menu_remove_favorite">Retirar dos Favoritos</string>
   <string name="menu_save_photo">Salvar imagem</string>
-  <string name="menu_search_friends">Buscar amigos</string>
   <string name="menu_search_participants">Buscar participantes</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
