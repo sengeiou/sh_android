@@ -13,6 +13,20 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.34.0] - 2017-05-19
+
+### Added
+- User recent Search
+- reshoot timeline button
+
+### Removed
+- friends
+- Discover code
+
+### Changed
+- profile listView to recyclerView
+- hot to stream
+
 ## [1.33.0] - 2017-05-12
 
 ### Added
