@@ -497,4 +497,5 @@
   <string name="yes">Yes</string>
   <string name="reshoot_action_text">Reshot!</string>
   <string name="poll_vote_dialog_confirmation">Vote</string>
+  <string name="no_filter_shots">No shots by you or verified accounts</string>
 </resources>
