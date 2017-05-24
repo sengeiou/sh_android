@@ -138,7 +138,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     alertDialogBuilder //
         .setTitle(getString(R.string.public_vote_title_dialog))
         .setMessage(getString(R.string.public_vote_dialog)) //
-        .setPositiveButton(getString(R.string.ok),
+        .setPositiveButton(getString(R.string.poll_vote_dialog_confirmation),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialogInterface, int action) {
                 publicVoteAlertPreference.set(false);
