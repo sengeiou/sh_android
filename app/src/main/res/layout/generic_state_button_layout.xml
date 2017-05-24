@@ -2,19 +2,6 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
 
     <FrameLayout android:id="@+id/follow"
-      style="@style/FollowButton"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:padding="8dp"
-      android:visibility="gone">
-
-        <TextView style="@style/FollowButtonText.Follow"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center" />
-    </FrameLayout>
-
-    <FrameLayout android:id="@+id/following"
       style="@style/FollowButton.Checked"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -22,6 +9,19 @@
       android:visibility="gone">
 
         <TextView style="@style/FollowButtonText.Checked"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center" />
+    </FrameLayout>
+
+    <FrameLayout android:id="@+id/following"
+      style="@style/FollowButton"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:padding="8dp"
+      android:visibility="gone">
+
+        <TextView style="@style/FollowButtonText.Follow"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center" />

@@ -6,12 +6,6 @@
      icon="@drawable/ic_bottombar_streams"
      title="@string/drawer_streams_title"
      barColorWhenSelected="@color/primary"/>
-  <tab
-      id="@+id/bottombar_favorites"
-      icon="@drawable/ic_bottombar_favorites_stream"
-      title="@string/drawer_favorites_title"
-      barColorWhenSelected="@color/primary"
-      />
 
   <tab
       id="@+id/bottombar_activity"
@@ -19,4 +13,11 @@
       title="@string/drawer_activity_title"
       barColorWhenSelected="@color/primary"
       badgeBackgroundColor="#00000000"/>
+
+  <tab
+      id="@+id/bottombar_messages"
+      icon="@drawable/ic_message"
+      title="messages"
+      barColorWhenSelected="@color/primary"
+      />
 </tabs>

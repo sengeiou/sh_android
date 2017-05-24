@@ -48,8 +48,6 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
   private void setupFavoriteIndicator(StreamResultModel streamResultModel) {
     checkNotNull(isFavorite, "Should call setFavorite(boolean) before calling render()");
-    favoriteIndicator.setVisibility(View.VISIBLE);
-    setupFavoriteClickListener(streamResultModel);
     updateIndicatorStatus();
   }
 
@@ -66,15 +64,17 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
   }
 
   private void showIsFavorite() {
-    favoriteIndicator.setImageResource(FAVORITE_ADDED_IMAGE);
+    followButton.setFollowing(true);
+    followButton.setVisibility(View.VISIBLE);
   }
 
   private void showIsNotFavorite() {
-    favoriteIndicator.setImageResource(FAVORITE_NOT_ADDED_IMAGE);
+    followButton.setFollowing(false);
+    followButton.setVisibility(View.VISIBLE);
   }
 
-  private void setupFavoriteClickListener(final StreamResultModel streamResult) {
-    favoriteIndicator.setOnClickListener(new View.OnClickListener() {
+  @Override void setupFavoriteClickListener(final StreamResultModel streamResult) {
+    followButton.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         if (isFavorite) {
           onFavoriteClickListener.onRemoveFavoriteClick(streamResult);

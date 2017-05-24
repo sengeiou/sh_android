@@ -255,9 +255,11 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
     if (event.getUnreadFollowChannels() > 0) {
-      mainScreenView.updateChannelBadge(event.getUnreadFollowChannels(), true);
+      mainScreenView.updateChannelBadge(event.getUnreadChannels(),
+          true);
     } else {
-      mainScreenView.updateChannelBadge(event.getUnreadChannels(), false);
+      mainScreenView.updateChannelBadge(event.getUnreadChannels(),
+          false);
     }
   }
 }

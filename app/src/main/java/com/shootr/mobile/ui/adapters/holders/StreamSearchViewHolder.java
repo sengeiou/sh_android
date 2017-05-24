@@ -7,11 +7,11 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.FavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnSearchStreamClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 
@@ -26,14 +26,13 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_picture_without_text) ImageView pictureWithoutText;
   @BindView(R.id.stream_title) TextView title;
   @BindView(R.id.stream_muted) ImageView mute;
-  @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
+  @BindView(R.id.user_follow_button) FollowButton followButton;
   @BindView(R.id.stream_verified) ImageView streamVerified;
   @BindView(R.id.stream_rank) TextView rankNumber;
   @BindView(R.id.stream_remove) ImageView removeButton;
   @BindView(R.id.stream_subtitle) TextView subtitle;
   @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
   @BindView(R.id.stream_actions_container) View actionsContainer;
-
 
   public StreamSearchViewHolder(View itemView, OnSearchStreamClickListener onStreamClickListener,
       FavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
@@ -97,22 +96,22 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
 
   private void setupFavoriteClickListener(final StreamModel streamResult) {
     if (onFavoriteClickListener != null) {
-      favorite.setOnClickListener(new View.OnClickListener() {
+      followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           if (streamResult.isFavorite()) {
-            favorite.setChecked(streamResult.isFavorite());
             onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
           } else {
             onFavoriteClickListener.onFavoriteClick(streamResult);
           }
+          followButton.setFollowing(streamResult.isFavorite());
         }
       });
     }
   }
 
   private void handleShowFavorite(StreamModel streamResultModel) {
-    favorite.setVisibility(View.VISIBLE);
-    favorite.setChecked(streamResultModel.isFavorite());
+    followButton.setVisibility(View.VISIBLE);
+    followButton.setFollowing(streamResultModel.isFavorite());
   }
 
   private void setupStreamPicture(StreamModel streamModel) {

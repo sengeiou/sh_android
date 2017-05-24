@@ -233,7 +233,7 @@
     </style>
 
     <style name="FollowButtonText.Follow">
-        <item name="android:text">@string/profile_follow</item>
+        <item name="android:text">@string/profile_following</item>
     </style>
 
     <style name="FollowButton.Checked">
@@ -245,7 +245,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:drawablePadding">4dp</item>
         <item name="android:gravity">center_vertical</item>
-        <item name="android:text">@string/profile_following</item>
+        <item name="android:text">@string/profile_follow</item>
     </style>
 
     <!--Following button-->

@@ -102,7 +102,7 @@ public class MessageChannelViewHolder extends RecyclerView.ViewHolder {
       unreadMessages.setText(UNREAD_MESSAGES);
       unreadMessages.setVisibility(View.VISIBLE);
     } else {
-      timestamp.setTextColor(context.getResources().getColor(R.color.gray_80));
+      timestamp.setTextColor(context.getResources().getColor(R.color.gray_50));
       unreadMessages.setVisibility(View.INVISIBLE);
     }
   }
