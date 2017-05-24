@@ -3,10 +3,13 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
@@ -40,12 +43,15 @@ public class StreamDetailPresenter implements Presenter {
   private final ShareStreamInteractor shareStreamInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
+  private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
   private final GetMutedStreamsInteractor getMutedStreamsInteractor;
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInteractor;
   private final RemoveStreamInteractor removeStreamInteractor;
   private final RestoreStreamInteractor restoreStreamInteractor;
+  private final AddToFavoritesInteractor addToFavoritesInteractor;
+  private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
 
   private final StreamModelMapper streamModelMapper;
   private final UserModelMapper userModelMapper;
@@ -64,23 +70,30 @@ public class StreamDetailPresenter implements Presenter {
   @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
       ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor, SelectStreamInteractor selectStreamInteractor,
+      UnfollowInteractor unfollowInteractor,
+      GetFavoriteStatusInteractor getFavoriteStatusInteractor,
+      SelectStreamInteractor selectStreamInteractor,
       GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
-      UnmuteInteractor unmuteInteractor,
-      RemoveStreamInteractor removeStreamInteractor,
-      RestoreStreamInteractor restoreStreamInteractor, StreamModelMapper streamModelMapper,
-      UserModelMapper userModelMapper, ErrorMessageFactory errorMessageFactory) {
+      UnmuteInteractor unmuteInteractor, RemoveStreamInteractor removeStreamInteractor,
+      RestoreStreamInteractor restoreStreamInteractor,
+      AddToFavoritesInteractor addToFavoritesInteractor,
+      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
     this.streamInfoInteractor = streamInfoInteractor;
     this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
     this.shareStreamInteractor = shareStreamInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
+    this.getFavoriteStatusInteractor = getFavoriteStatusInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
     this.getMutedStreamsInteractor = getMutedStreamsInteractor;
     this.muteInteractor = muteInteractor;
     this.unmuteInteractor = unmuteInteractor;
     this.removeStreamInteractor = removeStreamInteractor;
     this.restoreStreamInteractor = restoreStreamInteractor;
+    this.addToFavoritesInteractor = addToFavoritesInteractor;
+    this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.streamModelMapper = streamModelMapper;
     this.userModelMapper = userModelMapper;
     this.errorMessageFactory = errorMessageFactory;
@@ -95,7 +108,16 @@ public class StreamDetailPresenter implements Presenter {
     setView(streamDetailView);
     this.idStream = idStream;
     this.loadMutedStatus();
+    this.loadFavoriteStatus();
     this.loadStreamInfo();
+  }
+
+  public void loadFavoriteStatus() {
+    getFavoriteStatusInteractor.loadFavoriteStatus(idStream, new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean isFollowing) {
+        streamDetailView.setFollowingStream(isFollowing);
+      }
+    });
   }
 
   public void loadMutedStatus() {
@@ -105,7 +127,26 @@ public class StreamDetailPresenter implements Presenter {
       }
     });
   }
-  //endregion
+
+  public void addStreamAsFavorite() {
+    addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        loadFavoriteStatus();
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+
+      }
+    });
+  }
+
+  public void removeStreamFromFavorites() {
+    removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        loadFavoriteStatus();
+      }
+    });
+  }
 
   public void editStreamInfo() {
     streamDetailView.navigateToEditStream(idStream);
@@ -149,7 +190,8 @@ public class StreamDetailPresenter implements Presenter {
   public void getContributorsNumber() {
     Long contributorsCount = streamModel.getContributorCount();
     if (contributorsCount > 0) {
-      streamDetailView.showContributorsNumber(contributorsCount.intValue(), streamModel.amIAuthor());
+      streamDetailView.showContributorsNumber(contributorsCount.intValue(),
+          streamModel.amIAuthor());
     } else {
       streamDetailView.hideContributorsNumber(streamModel.amIAuthor());
     }
@@ -241,6 +283,7 @@ public class StreamDetailPresenter implements Presenter {
     streamDetailView.setStreamTitle(streamModel.getTitle());
     setupStreamPicture();
     streamDetailView.setStreamAuthor(streamModel.getAuthorUsername());
+    streamDetailView.setStream(streamModel);
     if (streamModel.getDescription() != null && !streamModel.getDescription().isEmpty()) {
       streamDetailView.setStreamDescription(streamModel.getDescription());
     } else {

@@ -11,6 +11,8 @@ public interface StreamDetailView extends DataTransferView {
 
     void setStreamAuthor(String author);
 
+    void setStream(StreamModel streamModel);
+
     void setStreamPicture(String picture);
 
     void showPhotoOptions();
@@ -50,6 +52,8 @@ public interface StreamDetailView extends DataTransferView {
     void goToAllParticipants(String idStream);
 
     void setMuteStatus(Boolean isChecked);
+
+    void setFollowingStream(Boolean isFollowing);
 
     void goToStreamDataInfo(StreamModel streamModel);
 
