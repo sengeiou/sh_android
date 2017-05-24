@@ -126,6 +126,7 @@ public class StreamTimelineOptionsPresenter implements Presenter {
     @Override public void resume() {
         if (hasBeenPaused) {
             loadMuteStatus();
+            loadFavoriteStatus();
         }
     }
 
