@@ -34,7 +34,6 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     public void initialize(WatchNumberView watchNumberView, String idStream) {
         this.setView(watchNumberView);
         this.setIdStream(idStream);
-        this.retrieveData();
     }
 
     protected void retrieveData() {
