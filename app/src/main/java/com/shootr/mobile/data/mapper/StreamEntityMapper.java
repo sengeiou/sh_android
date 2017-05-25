@@ -57,6 +57,8 @@ public class StreamEntityMapper {
     } else {
       stream.setCurrentUserContributor(false);
     }
+
+    stream.setTotalFollowingWatchers(streamEntity.getTotalFollowingWatchers());
     return stream;
   }
 
@@ -103,5 +105,6 @@ public class StreamEntityMapper {
     entityTemplate.setVerifiedUser((stream.isVerifiedUser()) ? 1L : 0L);
     entityTemplate.setiAmContributor(stream.isCurrentUserContributor() ? 1 : 0);
     entityTemplate.setContributorCount(stream.getContributorCount());
+    entityTemplate.setTotalFollowingWatchers(stream.getTotalFollowingWatchers());
   }
 }
