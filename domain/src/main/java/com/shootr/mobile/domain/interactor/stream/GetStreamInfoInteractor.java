@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.model.stream.StreamInfo;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -30,7 +29,6 @@ public class GetStreamInfoInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final UserRepository localUserRepository;
-  private final UserRepository remoteUserRepository;
   private final ExternalStreamRepository remoteStreamRepository;
   private final StreamRepository localStreamRepository;
   private final SessionRepository sessionRepository;
@@ -41,12 +39,11 @@ public class GetStreamInfoInteractor implements Interactor {
 
   @Inject public GetStreamInfoInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local UserRepository localUserRepository,
-      @Remote UserRepository remoteUserRepository, ExternalStreamRepository remoteStreamRepository,
+      ExternalStreamRepository remoteStreamRepository,
       @Local StreamRepository localStreamRepository, SessionRepository sessionRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localUserRepository = localUserRepository;
-    this.remoteUserRepository = remoteUserRepository;
     this.remoteStreamRepository = remoteStreamRepository;
     this.localStreamRepository = localStreamRepository;
     this.sessionRepository = sessionRepository;
@@ -62,9 +59,9 @@ public class GetStreamInfoInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
+      obtainLocalStreamInfo();
       obtainRemoteStreamInfo();
     } catch (ServerCommunicationException networkError) {
-      obtainLocalStreamInfo();
       notifyError(networkError);
     }
   }
@@ -78,8 +75,6 @@ public class GetStreamInfoInteractor implements Interactor {
     StreamInfo streamInfo = getStreamInfo(remoteStreamRepository, false);
     if (streamInfo != null) {
       notifyLoaded(streamInfo);
-    } else {
-      notifyLoaded(noStream());
     }
   }
 
@@ -92,44 +87,25 @@ public class GetStreamInfoInteractor implements Interactor {
       }
     });
 
-    List<User> followingInStream = localUserRepository.getLocalPeopleFromIdStream(stream.getId());
-    followingInStream = sortWatchersListByJoinStreamDate(followingInStream);
-
     List<User> watchers = new ArrayList<>();
-    filterFollowingUsers(followingInStream, watchers);
-    Integer followingsNumber = watchers.size();
+    watchers.addAll(stream.getWatchers());
+    setupFollowing(watchers);
+    sortWatchersListByJoinStreamDate(watchers);
 
-    handlerWatchersList(stream, watchers);
-
-    Boolean hasMoreParticipants = false;
+    boolean hasMoreParticipants = false;
     if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
       watchers = watchers.subList(0, MAX_WATCHERS_TO_SHOW);
       hasMoreParticipants = true;
     }
 
-    return buildStreamInfo(stream, watchers, currentUser, followingsNumber, hasMoreParticipants,
+    return buildStreamInfo(stream, watchers, currentUser, stream.getTotalFollowingWatchers(), hasMoreParticipants,
         localOnly);
   }
 
-  private void handlerWatchersList(Stream stream, List<User> watchers) {
-    if (stream.getWatchers() != null) {
-      List<User> watchesFromStream = removeCurrentUserFromWatchers(stream.getWatchers());
-      watchesFromStream.removeAll(watchers);
-      watchesFromStream = sortWatchersListByJoinStreamDate(watchesFromStream);
-
-      for (User user : watchesFromStream) {
-        if (!localUserRepository.isFollowing(user.getIdUser())) {
-          watchers.add(user);
-        }
-      }
-    }
-  }
-
-  private void filterFollowingUsers(List<User> followingInStream, List<User> watchers) {
-    for (User user : followingInStream) {
-      if (user.isFollowing()) {
-        watchers.add(user);
-      }
+  private void setupFollowing(List<User> watchers) {
+    for (User watcher : watchers) {
+      watcher.setFollowing(localUserRepository.isFollowing(watcher.getIdUser()));
+      watcher.setMe(sessionRepository.getCurrentUserId().equals(watcher.getIdUser()));
     }
   }
 
@@ -142,40 +118,17 @@ public class GetStreamInfoInteractor implements Interactor {
     return watchesFromPeople;
   }
 
-  private List<User> removeCurrentUserFromWatchers(List<User> watchers) {
-    int meIndex = findMeIn(watchers);
-    if (meIndex >= 0) {
-      watchers.remove(meIndex);
-    }
-    return watchers;
-  }
-
-  private int findMeIn(List<User> watchers) {
-    int meIndex = -1;
-    for (int i = 0; i < watchers.size(); i++) {
-      if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
-        meIndex = i;
-        break;
-      }
-    }
-    return meIndex;
-  }
-
   private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser,
       Integer numberOfFollowing, Boolean hasMoreParticipants, boolean localOnly) {
     boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
     return StreamInfo.builder()
         .stream(stream)
-        .watchers(streamWatchers)
+        .watchers(stream.getWatchers())
         .currentUserWatching(isCurrentUserWatching ? currentUser : null)
         .numberOfFollowing(numberOfFollowing)
         .hasMoreParticipants(hasMoreParticipants)
         .isDataComplete(!localOnly)
         .build();
-  }
-
-  private StreamInfo noStream() {
-    return new StreamInfo();
   }
 
   private void notifyLoaded(final StreamInfo streamInfo) {
