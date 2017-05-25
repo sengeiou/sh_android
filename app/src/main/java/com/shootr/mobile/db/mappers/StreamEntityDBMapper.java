@@ -49,6 +49,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         } else {
             contentValues.put(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR, 0);
         }
+        contentValues.put(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS, streamEntity.getTotalFollowingWatchers());
         setSynchronizedtoContentValues(streamEntity, contentValues);
     }
 
@@ -79,6 +80,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         streamEntity.setVerifiedUser(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.VERIFIED_USER)));
         streamEntity.setContributorCount(c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.CONTRIBUTORS_COUNT)));
         streamEntity.setiAmContributor(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR)));
+        streamEntity.setTotalFollowingWatchers(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS)));
         setSynchronizedfromCursor(c, streamEntity);
     }
 

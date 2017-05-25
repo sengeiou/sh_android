@@ -376,6 +376,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.I_AM_CONTRIBUTOR
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -429,6 +431,8 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.CONTRIBUTORS_COUNT
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.I_AM_CONTRIBUTOR
+      + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS
       + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
