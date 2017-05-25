@@ -9,6 +9,7 @@
   <string name="activity_edit_profile_website_hint">Página web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
   <string name="activity_find_contributors_hint">Buscar</string>
+  <string name="activity_find_friends_cant_load_message">Não é possível carregar dados. Verifique sua conexão.</string>
   <string name="activity_find_friends_empty_message">Nenhum resultado</string>
   <string name="activity_find_participants_empty_message">Nenhum resultado</string>
   <string name="activity_find_participants_hint">Buscar participantes</string>
@@ -39,7 +40,6 @@
   <string name="add_contributor">Adicionar</string>
   <string name="add_contributor_button">Adicionar colaborador</string>
   <string name="add_contributor_confirmation_message">Adicionar %s?</string>
-  <string name="add_to_favorites">adicionar aos favoritos</string>
   <string name="add_to_favorites_menu_title">Adicionar aos Favoritos</string>
   <string name="alert_report_confirmed_email_message">Vá para conta &gt; Editar Perfil e confirme seu email</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
@@ -88,7 +88,6 @@
   <string name="drafts_empty">Não há rascunhos</string>
   <string name="drawer_activity_me" formatted="false">Eu</string>
   <string name="drawer_activity_title">Atividade</string>
-  <string name="drawer_favorites_title">Favoritos</string>
   <string name="drawer_following_activity_title" formatted="false">Seguindo</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuários</string>
@@ -171,8 +170,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">Não se pode votar</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorited">favorito</string>
-  <string name="favorites_emtpy">Nenhum favorito</string>
   <string name="favorite_streams_push_settings">Streams favoritos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtrado por: importância</string>
@@ -196,6 +193,7 @@
   <string name="intro_start_shooting_button">Começar</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">O app de mensagens onde os chats são abertos. Se chamam streams.</string>
+  <string name="invite_friends_message">Olá! Te recomendo Shootr: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">No momento só oferecemos suporte em inglês. Obrigado pela compreensão.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clique no link</item>
@@ -250,8 +248,8 @@
   <string name="new_topic" formatted="false">Nova mensagem…</string>
   <string name="next">Próximo</string>
   <string name="niced_by">"Nice de "</string>
-  <string name="niced_shot_activity">Te deu um nice</string>
-  <string name="niced_shot_activity_with_comment">"Te deu um nice: "</string>
+  <string name="niced_shot_activity">Deu um nice</string>
+  <string name="niced_shot_activity_with_comment">"Deu um nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -369,6 +367,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
   <string name="reset_password_enter_username_email">Entre com seu nome de usuário ou email em Shootr.</string>
   <string name="reset_password_send_email">Enviar email para modificação de senha</string>
+  <string name="reshoot_action_text">Reshot!</string>
   <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
@@ -475,7 +474,7 @@
   <string name="user_blocked">Usuário bloqueado</string>
   <string name="user_not_found">Usuário não encontrado.</string>
   <string name="user_not_found_message">Usuário não encontrado</string>
-  <string name="user_unblocked">Ignorar desfeito.</string>
+  <string name="user_unblocked">Desbloqueado</string>
   <plurals name="view_count_pattern">
     <item quantity="one">%s visualização</item>
     <item quantity="other">%s visualizações</item>
