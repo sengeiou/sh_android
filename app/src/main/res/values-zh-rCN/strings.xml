@@ -9,6 +9,7 @@
   <string name="activity_edit_profile_website_hint">网址</string>
   <string name="activity_edit_stream_title">编辑stream</string>
   <string name="activity_find_contributors_hint">查找</string>
+  <string name="activity_find_friends_cant_load_message">不能载入数据。请检查你的连接</string>
   <string name="activity_find_friends_empty_message">无结果</string>
   <string name="activity_find_participants_empty_message">无结果</string>
   <string name="activity_find_participants_hint">查找参与者</string>
@@ -39,7 +40,6 @@
   <string name="add_contributor">新增</string>
   <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
-  <string name="add_to_favorites">添加到喜愛</string>
   <string name="add_to_favorites_menu_title">添加到喜爱</string>
   <string name="alert_report_confirmed_email_message">个人账号&gt;编辑个人主页并验证您的邮箱。</string>
   <string name="alert_report_confirmed_email_ok">好的</string>
@@ -88,7 +88,6 @@
   <string name="drafts_empty">不保存</string>
   <string name="drawer_activity_me" formatted="false">我</string>
   <string name="drawer_activity_title">动态</string>
-  <string name="drawer_favorites_title">喜爱</string>
   <string name="drawer_following_activity_title" formatted="false">正在关注</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">用户</string>
@@ -171,8 +170,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorited">喜愛</string>
-  <string name="favorites_emtpy">没有喜爱</string>
   <string name="favorite_streams_push_settings">喜爱的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">按重要性筛选</string>
@@ -196,6 +193,7 @@
   <string name="intro_start_shooting_button">开始shooting</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">通讯软件已经开通。\n他们叫做streams。</string>
+  <string name="invite_friends_message">嘿，让我们一起使用Shootr吧: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">我们目前只支持英语。</string>
   <plurals name="link_click_count_pattern">
     <item quantity="other">%s次链接点击</item>
@@ -247,7 +245,7 @@
   <string name="new_topic" formatted="false">新的消息…</string>
   <string name="next">继续</string>
   <string name="niced_by">"Nice: "</string>
-  <string name="niced_shot_activity">赞了你的shot</string>
+  <string name="niced_shot_activity">赞了</string>
   <string name="niced_shot_activity_with_comment">"赞了: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">赞过的 shot</string>
@@ -364,6 +362,7 @@
   <string name="reset_password_confirmation_message_email_pattern">邮件发送至%s</string>
   <string name="reset_password_enter_username_email">在Shootr输入你的用户名或邮箱。</string>
   <string name="reset_password_send_email">发送密码重新设置邮箱</string>
+  <string name="reshoot_action_text">Reshot!</string>
   <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="other">%s reshots</item>
@@ -468,7 +467,7 @@
   <string name="user_blocked">封锁用户</string>
   <string name="user_not_found">用户无法查找。</string>
   <string name="user_not_found_message">用户无法被找到。</string>
-  <string name="user_unblocked">屏蔽已被清除。</string>
+  <string name="user_unblocked">取消封锁</string>
   <plurals name="view_count_pattern">
     <item quantity="other">%s次查看</item>
     <item quantity="zero">%s次查看</item>
