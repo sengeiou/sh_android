@@ -13,6 +13,15 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.35.0] - 2017-05-26
+
+### Changed
+- favorite stream to follow stream
+- streamtimeline filter update
+
+### Added
+- follow stream on stream detail
+
 ## [1.34.0] - 2017-05-19
 
 ### Added

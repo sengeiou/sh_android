@@ -36,10 +36,10 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 34
-def versionRevision = 1
+def versionMinor = 35
+def versionRevision = 0
 
-def isSnapshot = true
+def isSnapshot = false
 def isPreProduction = false
 def databaseVersion = 51
 
