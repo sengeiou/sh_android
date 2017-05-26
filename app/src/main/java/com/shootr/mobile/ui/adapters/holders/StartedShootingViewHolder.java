@@ -30,7 +30,7 @@ public class StartedShootingViewHolder extends StreamActivityViewHolder {
         if (activityModel.getShot().getImage() == null
             || activityModel.getShot().getImage().getImageUrl() == null) {
             image.setVisibility(View.GONE);
-            favoriteButton.setVisibility(View.VISIBLE);
+            favoriteButton.setVisibility(View.GONE);
             favoriteButton.setChecked(activityModel.isFavorite());
             favoriteButton.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View view) {

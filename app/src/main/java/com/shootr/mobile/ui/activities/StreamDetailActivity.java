@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -27,7 +26,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
@@ -49,6 +47,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
+import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowStreamListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -57,7 +56,6 @@ import com.shootr.mobile.ui.presenter.StreamDetailPresenter;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
-import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
@@ -98,7 +96,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @BindView(R.id.cat_title) TextView streamTitle;
   @BindView(R.id.subtitle) TextView streamSubtitle;
   @BindView(R.id.blurLayout) FrameLayout blurLayout;
-  @BindView(R.id.stream_share_button) FloatingActionButton floatingActionButton;
   @BindView(R.id.appbar) AppBarLayout appBarLayout;
 
   @BindView(R.id.list) RecyclerView recyclerView;
@@ -169,12 +166,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   }
 
   private void setupAnimation() {
-    final PropertyAction fabAction = PropertyAction.newPropertyAction(floatingActionButton).
-        scaleX(0).
-        scaleY(0).
-        duration(750).
-        interpolator(new AccelerateDecelerateInterpolator()).
-        build();
     final PropertyAction headerAction = PropertyAction.newPropertyAction(appBarLayout).
         interpolator(new DecelerateInterpolator()).
         translationY(-700).
@@ -191,8 +182,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         animate(headerAction).
         then().
         animate(bottomAction).
-        then().
-        animate(fabAction).
         play();
   }
 
@@ -250,7 +239,27 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
                 .create()
                 .show();
           }
-        }); //follow
+        }, new OnFollowUnfollowStreamListener() {
+      @Override public void onFollow(StreamModel stream) {
+        streamDetailPresenter.addStreamAsFavorite();
+        adapter.setButtonFollowingState(true);
+      }
+
+      @Override public void onUnfollow(StreamModel stream) {
+        new AlertDialog.Builder(StreamDetailActivity.this).setMessage(
+            String.format(getString(R.string.unfollowstream_dialog_message), stream.getTitle()))
+            .setPositiveButton(getString(R.string.unfollowstream_dialog_yes),
+                new DialogInterface.OnClickListener() {
+                  @Override public void onClick(DialogInterface dialog, int which) {
+                    streamDetailPresenter.removeStreamFromFavorites();
+                    adapter.setButtonFollowingState(false);
+                  }
+                })
+            .setNegativeButton(getString(R.string.unfollowstream_dialog_no), null)
+            .create()
+            .show();
+      }
+    }); //follow
     recyclerView.setAdapter(adapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
   }
@@ -276,29 +285,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
-  }
-
-  @OnClick(R.id.stream_share_button) public void onShareClick() {
-    openContextualMenuForSharing();
-  }
-
-  private void openContextualMenuForSharing() {
-    new CustomContextMenu.Builder(this).addAction(R.string.share_stream_via_shootr, new Runnable() {
-      @Override public void run() {
-        streamDetailPresenter.shareStreamViaShootr();
-      }
-    }).addAction(R.string.share_via, new Runnable() {
-      @Override public void run() {
-        streamDetailPresenter.shareStreamVia();
-        AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-        builder.setContext(getBaseContext());
-        builder.setActionId(analyticsActionExternalShare);
-        builder.setLabelId(analyticsLabelExternalShare);
-        builder.setSource(streamDetailSource);
-        builder.setUser(sessionRepository.getCurrentUser());
-        analyticsTool.analyticsSendAction(builder);
-      }
-    }).show();
   }
 
   @Override protected void initializePresenter() {
@@ -327,6 +313,12 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
       case R.id.stream_detail_menu_data_info:
         streamDetailPresenter.dataInfoClicked();
         return true;
+      case R.id.stream_detail_share_shot_via:
+        shareVia();
+        return true;
+      case R.id.stream_detail_share_shot:
+        streamDetailPresenter.shareStreamViaShootr();
+        return true;
       case R.id.stream_detail_menu_remove:
         streamDetailPresenter.removeStream();
         return true;
@@ -354,6 +346,17 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
       File photoFile = getCameraPhotoFile();
       streamDetailPresenter.photoSelected(photoFile);
     }
+  }
+
+  private void shareVia() {
+    streamDetailPresenter.shareStreamVia();
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionExternalShare);
+    builder.setLabelId(analyticsLabelExternalShare);
+    builder.setSource(streamDetailSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
   }
 
   private void cropCameraPicture() {
@@ -437,6 +440,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
   @Override public void setStreamAuthor(String author) {
     adapter.setAuthorName(author);
+  }
+
+  @Override public void setStream(StreamModel streamModel) {
+    adapter.setStream(streamModel);
   }
 
   @Override public void setStreamPicture(String picture) {
@@ -703,6 +710,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
   @Override public void setMuteStatus(Boolean isChecked) {
     adapter.setMuteStatus(isChecked);
+  }
+
+  @Override public void setFollowingStream(Boolean isFollowing) {
+    adapter.setFollowing(isFollowing);
   }
 
   @Override public void goToStreamDataInfo(StreamModel streamModel) {

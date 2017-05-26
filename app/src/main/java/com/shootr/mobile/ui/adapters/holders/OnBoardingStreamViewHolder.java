@@ -15,6 +15,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.model.OnBoardingStreamModel;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 
@@ -35,6 +36,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
   @Nullable @BindView(R.id.stream_actions_container) View actionsContainer;
+  @BindView(R.id.user_follow_button) FollowButton followButton;
 
   @BindString(R.string.watching_stream_connected) String connected;
   @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
@@ -74,13 +76,13 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void showIsFavorite() {
-    favorite.setVisibility(View.VISIBLE);
-    favorite.setChecked(true);
+    followButton.setVisibility(View.VISIBLE);
+    followButton.setFollowing(true);
   }
 
   private void showIsNotFavorite() {
-    favorite.setVisibility(View.VISIBLE);
-    favorite.setChecked(false);
+    followButton.setVisibility(View.VISIBLE);
+    followButton.setFollowing(false);
   }
 
   private void setupStreamPicture(StreamModel streamModel) {
@@ -127,7 +129,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
           handleFavoriteStatus(onBoardingStreamModel);
         }
       });
-      favorite.setOnClickListener(new View.OnClickListener() {
+      followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           handleFavoriteStatus(onBoardingStreamModel);
         }
@@ -138,10 +140,10 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
   private void handleFavoriteStatus(OnBoardingStreamModel onBoardingStreamModel) {
     if (onBoardingStreamModel.isFavorite()) {
       onFavoriteClickListener.onRemoveFavoriteClick(onBoardingStreamModel);
-      favorite.setChecked(false);
+      followButton.setFollowing(false);
     } else {
       onFavoriteClickListener.onFavoriteClick(onBoardingStreamModel);
-      favorite.setChecked(true);
+      followButton.setFollowing(true);
     }
   }
 }

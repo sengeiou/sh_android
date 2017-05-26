@@ -14,6 +14,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.MessageChannelListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ChannelClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
+import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.presenter.PrivateMessagesChannelListPresenter;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
@@ -128,7 +129,7 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
 
   @Override public void updateTitle(int unreads) {
     try {
-      ((ChannelsContainerActivity) getActivity()).setTabTitle(this, unreads);
+      ((ChannelsContainerFragment) getParentFragment()).setTabTitle(this, unreads);
     } catch (NullPointerException error) {
       crashReportTool.logException(error);
     }

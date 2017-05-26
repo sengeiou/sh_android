@@ -9,6 +9,7 @@
   <string name="activity_edit_profile_website_hint">Página web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
   <string name="activity_find_contributors_hint">Buscar</string>
+  <string name="activity_find_friends_cant_load_message">No es posible cargar datos. Comprueba tu conexión.</string>
   <string name="activity_find_friends_empty_message">No hay resultados</string>
   <string name="activity_find_participants_empty_message">No hay resultados</string>
   <string name="activity_find_participants_hint">Buscar participantes</string>
@@ -35,12 +36,11 @@
   <string name="activity_started_following_you">Te sigue</string>
   <string name="activity_timeline_empty_title">No hay actividad</string>
   <string name="added_contributor">Añadido</string>
-  <string name="added_to_favorites">Añadido a Favoritos</string>
+  <string name="added_to_favorites">Siguiendo</string>
   <string name="add_contributor">Añadir</string>
   <string name="add_contributor_button">Añadir colaborador</string>
   <string name="add_contributor_confirmation_message">¿Añadir a %s?</string>
-  <string name="add_to_favorites">añadir a favoritos</string>
-  <string name="add_to_favorites_menu_title">Añadir a Favoritos</string>
+  <string name="add_to_favorites_menu_title">Seguir</string>
   <string name="alert_report_confirmed_email_message">Ve a Cuenta &gt; Editar Perfil y confirma tu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Se requiere un email confirmado</string>
@@ -88,7 +88,6 @@
   <string name="drafts_empty">No hay borradores</string>
   <string name="drawer_activity_me" formatted="false">Yo</string>
   <string name="drawer_activity_title">Actividad</string>
-  <string name="drawer_favorites_title">Favoritos</string>
   <string name="drawer_following_activity_title" formatted="false">Siguiendo</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuarios</string>
@@ -163,7 +162,7 @@
   <!-- Forgot password -->
   <string name="error_reset_password">Cuenta no encontrada.</string>
   <string name="error_restart_button">Reiniciar</string>
-  <string name="error_stream_already_favorites">Ya está en Favoritos</string>
+  <string name="error_stream_already_favorites">Ya lo sigues</string>
   <string name="error_stream_read_only">Este stream ha sido borrado y es solo de lectura.</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">Hecho</string>
@@ -171,9 +170,7 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No se puede votar</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorited">favorito</string>
-  <string name="favorites_emtpy">No hay favoritos</string>
-  <string name="favorite_streams_push_settings">Streams favoritos</string>
+  <string name="favorite_streams_push_settings">Streams seguidos</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtrado por: Importante</string>
   <string name="finished_poll">Resultado de la encuesta %s</string>
@@ -189,13 +186,14 @@
   <string name="include_listing_empty">No hay streams</string>
   <string name="intro_create_text">¿Diriges una comunidad? Crea su stream y… Shoot!</string>
   <string name="intro_create_title">Crear</string>
-  <string name="intro_favorites_text">Decenas de streams se añaden cada día. Crea tus Favoritos.</string>
+  <string name="intro_favorites_text">Decenas de streams se añaden cada día. Sigue a tus favoritos.</string>
   <string name="intro_free_title">Gratis</string>
   <string name="intro_friends_text">Registra tu @nombre antes de que otro lo haga.</string>
   <string name="intro_shootr">Shootr</string>
   <string name="intro_start_shooting_button">Empezar</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">La app de mensajería donde los chats son abiertos. Se llaman streams.</string>
+  <string name="invite_friends_message">Hola! Te recomiendo Shootr: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">En estos momentos la atención al usuario es en inglés.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic en el enlace</item>
@@ -203,10 +201,10 @@
     <item quantity="zero">%s clics en el enlace</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">%d favorito</item>
-    <item quantity="other">%d favoritos</item>
+    <item quantity="one">%d seguidor</item>
+    <item quantity="other">%d seguidores</item>
   </plurals>
-  <string name="listing_title_favorites">Favoritos</string>
+  <string name="listing_title_favorites">Siguiendo</string>
   <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Cargando…</string>
   <string name="main_activity_title">Actividad</string>
@@ -218,7 +216,7 @@
   <string name="menu_holding_shots">Mostrar los shots del administrador</string>
   <string name="menu_pin_shot">Anclar al perfil</string>
   <string name="menu_profile_chage_password">Cambiar contraseña</string>
-  <string name="menu_remove_favorite">Quitar de Favoritos</string>
+  <string name="menu_remove_favorite">Dejar de seguir</string>
   <string name="menu_save_photo">Guardar imagen</string>
   <string name="menu_search_participants">Buscar participantes</string>
   <string name="menu_search_streams">Buscar</string>
@@ -250,8 +248,8 @@
   <string name="new_topic" formatted="false">Nuevo mensaje…</string>
   <string name="next">Siguiente</string>
   <string name="niced_by">"Nice de "</string>
-  <string name="niced_shot_activity">Te ha hecho un nice</string>
-  <string name="niced_shot_activity_with_comment">"Ha hecho un nice en: "</string>
+  <string name="niced_shot_activity">Ha hecho nice</string>
+  <string name="niced_shot_activity_with_comment">"Ha hecho nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -274,10 +272,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloqueado este usuario. Desbloquea para enviar mensajes.</string>
   <string name="now">ahora</string>
+  <string name="no_filter_shots">No hay shots tuyos o de cuentas verificadas.</string>
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
   <string name="off_push_settings">Ninguna</string>
   <string name="ok">OK</string>
-  <string name="on_boarding_add_favorites">Añadir a Favoritos</string>
+  <string name="on_boarding_add_favorites">Streams populares</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
   <string name="opened_activity_text_pattern">Ha creado (stream)</string>
@@ -290,7 +289,7 @@
   <string name="pinned_shot_activity">Ha anclado al perfil</string>
   <string name="pinned_shot_activity_with_comment">Ha anclado al perfil: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
-  <string name="pin_message_notification_confirmation_text" formatted="false">La notificación se enviará a los participantes actuales y a los usuarios que tengan el stream como favorito.</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">La notificación se enviará a los seguidores y a participantes actuales del stream.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
@@ -307,6 +306,7 @@
     <item quantity="other">%d votos</item>
     <item quantity="zero">%d votos</item>
   </plurals>
+  <string name="poll_vote_dialog_confirmation">Votar</string>
   <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="private_message_image">Foto</string>
   <!-- Push Settings -->
@@ -342,9 +342,9 @@
   <string name="registration_create_button_text">Crear cuenta</string>
   <string name="remove">Borrar</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">Quitado de Favoritos</string>
+  <string name="removed_from_favorites">Dejar de seguir</string>
   <string name="remove_favorite">quitar</string>
-  <string name="remove_from_favorites_dialog">¿Quitar &lt;b&gt;%s&lt;/b&gt; de Favoritos?</string>
+  <string name="remove_from_favorites_dialog">¿Dejar de seguir a &lt;b&gt;%s&lt;/b&gt;?</string>
   <string name="remove_highlight">Quitar destacado</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Borrar</string>
@@ -369,6 +369,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviado a %s</string>
   <string name="reset_password_enter_username_email">Entra tu nombre de usuario o email en Shootr.</string>
   <string name="reset_password_send_email">Enviar correo para cambiar contraseña</string>
+  <string name="reshoot_action_text">¡Reshot!</string>
   <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
@@ -410,7 +411,7 @@
   <string name="started_shooting_push_settings">Aviso de nuevo shot</string>
   <string name="stream_checked">Hecho</string>
   <string name="stream_check_in_activity_text_pattern">Ha hecho check-in en (stream)</string>
-  <string name="stream_data_info_favorites">Favoritos</string>
+  <string name="stream_data_info_favorites">Seguidores</string>
   <string name="stream_data_info_participants">Participantes</string>
   <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
@@ -420,7 +421,7 @@
   <string name="stream_detail_menu_data_info">Números</string>
   <string name="stream_detail_mute">Silenciar</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">Ha marcado como favorito (stream)</string>
+  <string name="stream_favorited_activity_text_pattern">Sigue a (stream)</string>
   <string name="stream_list_empty">No hay resultados</string>
   <string name="stream_media_empty_title">No hay fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hay más archivos</string>
@@ -433,9 +434,9 @@
   <string name="stream_restored_feedback">Stream restaurado</string>
   <string name="stream_subtitle">siguiendo a %d</string>
   <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
-  <string name="stream_timeline_add_favorite">Añadir a Favoritos</string>
+  <string name="stream_timeline_add_favorite">Seguir</string>
   <string name="stream_timeline_empty_message">Comprobando shots…</string>
-  <string name="stream_timeline_remove_favorite">Quitar de Favoritos</string>
+  <string name="stream_timeline_remove_favorite">Dejar de seguir</string>
   <string name="stream_timeline_view_only">Solo lectura</string>
   <string name="suggested_people_section_title">A quién seguir</string>
   <string name="support_blog">Blog</string>
@@ -465,6 +466,9 @@
     <item quantity="other">%s participantes</item>
   </plurals>
   <string name="undo_reshoot">Deshacer reshoot</string>
+  <string name="unfollowstream_dialog_message">¿Dejar de seguir a %s?</string>
+  <string name="unfollowstream_dialog_no">no</string>
+  <string name="unfollowstream_dialog_yes">sí</string>
   <string name="unfollow_dialog_message">¿Dejar de seguir a %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Sí</string>
@@ -475,7 +479,7 @@
   <string name="user_blocked">Usuario bloqueado</string>
   <string name="user_not_found">Usuario no encontrado.</string>
   <string name="user_not_found_message">Usuario no encontrado.</string>
-  <string name="user_unblocked">Ignorar suprimido.</string>
+  <string name="user_unblocked">Desbloqueado</string>
   <plurals name="view_count_pattern">
     <item quantity="one">%s visualización</item>
     <item quantity="other">%s visualizaciones</item>

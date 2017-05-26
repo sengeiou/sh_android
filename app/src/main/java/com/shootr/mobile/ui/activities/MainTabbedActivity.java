@@ -28,7 +28,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
-import com.shootr.mobile.ui.fragments.FavoritesFragment;
+import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -55,7 +55,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private static final int ANIMATION_TRANSLATION = 500;
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
-  private static final int ACTIVITY_FRAGMENT = 2;
+  private static final int ACTIVITY_FRAGMENT = 1;
   @BindString(R.string.update_shootr_version_url) String updateVersionUrl;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
@@ -79,10 +79,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   private ToolbarDecorator toolbarDecorator;
   private BottomBarTab activitiesTab;
+  private BottomBarTab channelTab;
   private Fragment currentFragment;
   private Menu menu;
-  private int unreadChannels;
-  private boolean isFollowingChannels;
 
   public static Intent getUpdateNeededIntent(Context context) {
     Intent intent = new Intent(context, MainTabbedActivity.class);
@@ -116,6 +115,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void setupBottomBar(Bundle savedInstanceState) {
     bottomBar.setItems(R.xml.bottombar_menu);
     activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
+    channelTab = bottomBar.getTabWithId(R.id.bottombar_messages);
     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
       @Override public void onTabSelected(@IdRes int tabId) {
         switch (tabId) {
@@ -124,10 +124,11 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             currentFragment = streamsListFragment;
             switchTab(streamsListFragment);
             break;
-          case R.id.bottombar_favorites:
-            Fragment favoritesFragment = FavoritesFragment.newInstance();
+          case R.id.bottombar_messages:
+            Fragment favoritesFragment = ChannelsContainerFragment.newInstance();
             currentFragment = favoritesFragment;
             switchTab(favoritesFragment);
+            channelTab.removeBadge();
             break;
           case R.id.bottombar_activity:
             ActivityTimelineContainerFragment activityTimelineFragment =
@@ -152,7 +153,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   protected void switchTab(Fragment fragment) {
     try {
-      mainScreenPresenter.loadChannelsForBadge(true);
       getSupportFragmentManager().beginTransaction()
           .replace(R.id.container, fragment, fragment.getClass().getName())
           .commit();
@@ -165,9 +165,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     switch (menuItemId) {
       case R.id.bottombar_streams:
         ((StreamsListFragment) currentFragment).scrollListToTop();
-        break;
-      case R.id.bottombar_favorites:
-        ((FavoritesFragment) currentFragment).scrollListToTop();
         break;
       default:
         break;
@@ -312,7 +309,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.streams_list, menu);
     this.menu = menu;
-    setupBadge(unreadChannels, isFollowingChannels);
     return true;
   }
 
@@ -324,8 +320,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       case R.id.menu_search:
         navigateToDiscoverSearch();
         return true;
-      case R.id.menu_channel:
-        navigateToChannelsList();
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -372,9 +366,20 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {
-    this.isFollowingChannels = isFollowingChannels;
-    this.unreadChannels = unreadChannels;
-    setupBadge(unreadChannels, isFollowingChannels);
+    setupChannelBadge(unreadChannels);
+  }
+
+  private void setupChannelBadge(int count) {
+    if (currentFragment != null
+        && !(currentFragment instanceof ChannelsContainerFragment)) {
+      showMessagesBadge(count);
+    }
+  }
+
+  private void showMessagesBadge(int count) {
+    if (channelTab != null) {
+      channelTab.setBadgeCount(count);
+    }
   }
 
   private void setupBadge(int unreadChannels, boolean isFollowingChannels) {

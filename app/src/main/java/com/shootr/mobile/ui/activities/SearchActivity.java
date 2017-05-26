@@ -176,6 +176,9 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
   }
 
   private void setupQuery() {
+    if (searchView != null) {
+      searchView.clearFocus();
+    }
     if (currentSearchQuery != null) {
       searchView.setQuery(currentSearchQuery, false);
       searchView.clearFocus();

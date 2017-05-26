@@ -2,10 +2,13 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
+import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
@@ -76,6 +79,9 @@ public class StreamDetailPresenterTest {
   @Mock UnmuteInteractor unmuteInteractor;
   @Mock RemoveStreamInteractor removeStreamInteractor;
   @Mock RestoreStreamInteractor restoreStreamInteractor;
+  @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
+  @Mock AddToFavoritesInteractor addToFavoritesInteractor;
+  @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -83,9 +89,11 @@ public class StreamDetailPresenterTest {
     UserModelMapper userModelMapper =
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
     presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor,
-        shareStreamInteractor, followInteractor, unfollowInteractor, selectStreamInteractor,
+        shareStreamInteractor, followInteractor, unfollowInteractor, getFavoriteStatusInteractor,
+        selectStreamInteractor,
         getMutedStreamsInteractor, muteInteractor, unmuteInteractor,
-        removeStreamInteractor, restoreStreamInteractor, streamModelMapper, userModelMapper,
+        removeStreamInteractor, restoreStreamInteractor, addToFavoritesInteractor,
+        removeFromFavoritesInteractor, streamModelMapper, userModelMapper,
         errorMessageFactory);
     presenter.setView(streamDetailView);
   }

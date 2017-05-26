@@ -106,7 +106,6 @@
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-
     <android.support.v7.widget.RecyclerView android:id="@+id/list"
       xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:tools="http://schemas.android.com/tools"
@@ -122,16 +121,5 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="center" />
-
-    <android.support.design.widget.FloatingActionButton android:id="@+id/stream_share_button"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_margin="16dp"
-      android:clickable="true"
-      android:src="@drawable/ic_action_share_gray45"
-      app:backgroundTint="@color/white"
-      app:borderWidth="0dp"
-      app:layout_anchor="@id/appbar"
-      app:layout_anchorGravity="bottom|right|end" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -8,8 +8,9 @@
   <string name="activity_edit_profile_username_hint">Nom d\'usuari</string>
   <string name="activity_edit_profile_website_hint">Pàgina web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
+  <string name="activity_find_contributors_hint">Buscar</string>
+  <string name="activity_find_friends_cant_load_message">No és possible carregar dades. Comprova la teva connexió.</string>
   <string name="activity_find_friends_empty_message">No hi ha resultats</string>
-  <string name="activity_find_friends_hint">Buscar amics</string>
   <string name="activity_find_participants_empty_message">No hi ha resultats</string>
   <string name="activity_find_participants_hint">Buscar participants</string>
   <string name="activity_find_streams_hint">Buscar streams</string>
@@ -35,12 +36,11 @@
   <string name="activity_started_following_you">Et segueix</string>
   <string name="activity_timeline_empty_title">No hi ha activitat</string>
   <string name="added_contributor">Afegit</string>
-  <string name="added_to_favorites">Afegit a Favorits</string>
+  <string name="added_to_favorites">Seguint</string>
   <string name="add_contributor">Afegir</string>
   <string name="add_contributor_button">Afegir col·laborador</string>
   <string name="add_contributor_confirmation_message">Afegir %s?</string>
-  <string name="add_to_favorites">afegir a favorits</string>
-  <string name="add_to_favorites_menu_title">Afegir a Favorits</string>
+  <string name="add_to_favorites_menu_title">Seguir</string>
   <string name="alert_report_confirmed_email_message">Vés a Compte &gt; Editar Perfil i confirma el teu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Cal un email confirmat</string>
@@ -88,7 +88,6 @@
   <string name="drafts_empty">No hi ha esborranys</string>
   <string name="drawer_activity_me" formatted="false">Jo</string>
   <string name="drawer_activity_title">Activitat</string>
-  <string name="drawer_favorites_title">Favorits</string>
   <string name="drawer_following_activity_title" formatted="false">Seguint</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Usuaris</string>
@@ -163,7 +162,7 @@
   <!-- Forgot password -->
   <string name="error_reset_password">Compte no trobat.</string>
   <string name="error_restart_button">Reiniciar</string>
-  <string name="error_stream_already_favorites">Ja és a Favorits</string>
+  <string name="error_stream_already_favorites">Ja el segueixes</string>
   <string name="error_stream_read_only">Aquest stream ha estat esborrat i és només de lectura.</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">Fet</string>
@@ -171,9 +170,7 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No es pot votar</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorited">favorit</string>
-  <string name="favorites_emtpy">No hi ha favorits</string>
-  <string name="favorite_streams_push_settings">Streams favorits</string>
+  <string name="favorite_streams_push_settings">Streams seguits</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtrat per: Important</string>
   <string name="finished_poll">Resultat de l\'enquesta %s</string>
@@ -189,13 +186,14 @@
   <string name="include_listing_empty">No hi ha streams</string>
   <string name="intro_create_text">Dirigeixes una comunitat? Crea el seu stream.</string>
   <string name="intro_create_title">Crear</string>
-  <string name="intro_favorites_text">Desenes d\'streams s\'afegeixen cada dia. Crea els teus Favorits.</string>
+  <string name="intro_favorites_text">Desenes d\'streams s\'afegeixen cada dia. Segueix els teus favorits.</string>
   <string name="intro_free_title">Gratis</string>
   <string name="intro_friends_text">Registra el teu @nom abans que un altre ho faci.</string>
   <string name="intro_shootr">Shootr</string>
   <string name="intro_start_shooting_button">Començar</string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">L\'app de missatgeria on els xats són oberts. S\'anomenen streams.</string>
+  <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic a l\'enllaç</item>
@@ -203,10 +201,10 @@
     <item quantity="zero">%s clics a l\'enllaç</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">%d favorit</item>
-    <item quantity="other">%d favorits</item>
+    <item quantity="one">%d seguidor</item>
+    <item quantity="other">%d seguidors</item>
   </plurals>
-  <string name="listing_title_favorites">Favorits</string>
+  <string name="listing_title_favorites">Seguint</string>
   <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Carregant…</string>
   <string name="main_activity_title">Activitat</string>
@@ -218,7 +216,7 @@
   <string name="menu_holding_shots">Mostrar els shots de l\'administrador</string>
   <string name="menu_pin_shot">Fixar al perfil</string>
   <string name="menu_profile_chage_password">Canviar contrasenya</string>
-  <string name="menu_remove_favorite">Treure de Favorits</string>
+  <string name="menu_remove_favorite">Deixar de seguir</string>
   <string name="menu_save_photo">Desar imatge</string>
   <string name="menu_search_participants">Buscar participants</string>
   <string name="menu_search_streams">Buscar</string>
@@ -249,9 +247,9 @@
   <string name="new_stream_title_label">Títol</string>
   <string name="new_topic" formatted="false">Nou missatge...</string>
   <string name="next">Següent</string>
-  <string name="niced_by">Nice de</string>
-  <string name="niced_shot_activity">T\'ha fet un nice</string>
-  <string name="niced_shot_activity_with_comment">"Ha fet nice a: "</string>
+  <string name="niced_by">"Nice de "</string>
+  <string name="niced_shot_activity">Ha fet nice</string>
+  <string name="niced_shot_activity_with_comment">"Ha fet nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -274,10 +272,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloquejat aquest usuari. Desbloqueja per enviar missatges.</string>
   <string name="now">ara</string>
+  <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="off_push_settings">Cap</string>
   <string name="ok">OK</string>
-  <string name="on_boarding_add_favorites">Afegir a Favorits</string>
+  <string name="on_boarding_add_favorites">Streams populars</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Entrar a Shootr</string>
   <string name="opened_activity_text_pattern">Ha creat (stream)</string>
@@ -290,7 +289,7 @@
   <string name="pinned_shot_activity">Ha fixat al perfil</string>
   <string name="pinned_shot_activity_with_comment">Ha fixat al perfil: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
-  <string name="pin_message_notification_confirmation_text" formatted="false">La notificació s\'enviarà als participants actuals i als usuaris que tinguin l\'stream com a favorit.</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">La notificació s\'enviarà als seguidors i participants actuals de l\'stream.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_ignore">Llevar enquesta</string>
@@ -307,6 +306,7 @@
     <item quantity="other">%d vots</item>
     <item quantity="zero">%d vots</item>
   </plurals>
+  <string name="poll_vote_dialog_confirmation">Votar</string>
   <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="private_message_image">Foto</string>
   <!-- Push Settings -->
@@ -342,9 +342,9 @@
   <string name="registration_create_button_text">Crear compte</string>
   <string name="remove">Esborrar</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">Tret de Favorits</string>
+  <string name="removed_from_favorites">Deixar de seguir</string>
   <string name="remove_favorite">treure</string>
-  <string name="remove_from_favorites_dialog">Treure &lt;b&gt;%s&lt;/b&gt; de Favorits?</string>
+  <string name="remove_from_favorites_dialog">Deixar de seguir &lt;b&gt;%s&lt;/b&gt;?</string>
   <string name="remove_highlight">Treure destacat</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">Esborrar</string>
@@ -369,6 +369,7 @@
   <string name="reset_password_confirmation_message_email_pattern">Email enviat a %s</string>
   <string name="reset_password_enter_username_email">Entra el teu nom d\'usuari o email a Shootr.</string>
   <string name="reset_password_send_email">Envira correu per canviar contrasenya</string>
+  <string name="reshoot_action_text">Reshot!</string>
   <string name="reshoot_section_title">Reshots</string>
   <plurals name="reshot_count_pattern">
     <item quantity="one">%s reshot</item>
@@ -410,7 +411,7 @@
   <string name="started_shooting_push_settings">Avís de nou shot</string>
   <string name="stream_checked">Fet</string>
   <string name="stream_check_in_activity_text_pattern">Ha fet check-in a (stream)</string>
-  <string name="stream_data_info_favorites">Favorits</string>
+  <string name="stream_data_info_favorites">Seguidors</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
@@ -420,7 +421,7 @@
   <string name="stream_detail_menu_data_info">Nombres</string>
   <string name="stream_detail_mute">Silenciar</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">Ha marcat com a favorit (stream)</string>
+  <string name="stream_favorited_activity_text_pattern">Segueix (stream)</string>
   <string name="stream_list_empty">No hi ha resultats</string>
   <string name="stream_media_empty_title">No hi ha fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hi ha més arxius</string>
@@ -433,9 +434,9 @@
   <string name="stream_restored_feedback">Restaurar</string>
   <string name="stream_subtitle">seguint a %d</string>
   <string name="stream_subtitle_pattern_multiple_participants">seguint a %1$s de %2$s participants</string>
-  <string name="stream_timeline_add_favorite">Afegir a Favorits</string>
+  <string name="stream_timeline_add_favorite">Seguir</string>
   <string name="stream_timeline_empty_message">Comprovant shots…</string>
-  <string name="stream_timeline_remove_favorite">Treure de Favorits</string>
+  <string name="stream_timeline_remove_favorite">Deixar de seguir</string>
   <string name="stream_timeline_view_only">Només lectura</string>
   <string name="suggested_people_section_title">A qui seguir</string>
   <string name="support_blog">Blog</string>
@@ -465,6 +466,9 @@
     <item quantity="other">%s participants</item>
   </plurals>
   <string name="undo_reshoot">Desfer reshoot</string>
+  <string name="unfollowstream_dialog_message">Deixar de seguir %s?</string>
+  <string name="unfollowstream_dialog_no">no</string>
+  <string name="unfollowstream_dialog_yes">sí</string>
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Sí</string>
@@ -475,7 +479,7 @@
   <string name="user_blocked">Usuari bloquejat</string>
   <string name="user_not_found">Usuari no trobat.</string>
   <string name="user_not_found_message">Usuari no trobat.</string>
-  <string name="user_unblocked">Ignorar suprimit.</string>
+  <string name="user_unblocked">Desbloquejat</string>
   <plurals name="view_count_pattern">
     <item quantity="one">%s visualització</item>
     <item quantity="other">%s visualitzacions</item>

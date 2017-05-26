@@ -15,6 +15,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.MessageChannelListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ChannelClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
+import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.presenter.PrivateFollowingMessagesChannelListPresenter;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
@@ -98,7 +99,9 @@ public class FollowingChannelListFragment extends BaseFragment
   }
 
   @Override public void showEmpty() {
-    emptyView.setVisibility(View.VISIBLE);
+    if (emptyView != null) {
+      emptyView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideEmpty() {
@@ -122,7 +125,7 @@ public class FollowingChannelListFragment extends BaseFragment
   }
 
   @Override public void updateTitle(int unreads) {
-    ((ChannelsContainerActivity) getActivity()).setTabTitle(this, unreads);
+    ((ChannelsContainerFragment) getParentFragment()).setTabTitle(this, unreads);
   }
 
   @Override public void onResume() {

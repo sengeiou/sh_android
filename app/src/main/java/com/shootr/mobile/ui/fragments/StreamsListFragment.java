@@ -122,7 +122,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       @Override public void onRemoveFavoriteClick(StreamResultModel stream) {
         presenter.removeFromFavorites(stream, false);
       }
-    }, true, true);
+    }, false, true);
     adapter.setOnUnwatchClickListener(new OnUnwatchClickListener() {
       @Override public void onUnwatchClick() {
         presenter.unwatchStream();

@@ -17,6 +17,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Truss;
@@ -47,6 +48,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
   @Nullable @BindView(R.id.stream_actions_container) View actionsContainer;
+  @BindView(R.id.user_follow_button) FollowButton followButton;
 
   @BindString(R.string.watching_stream_connected) String connected;
   @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
@@ -146,13 +148,13 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void showIsFavorite() {
-    favorite.setVisibility(View.VISIBLE);
-    favorite.setChecked(true);
+    followButton.setVisibility(View.VISIBLE);
+    followButton.setFollowing(true);
   }
 
   private void showIsNotFavorite() {
-    favorite.setVisibility(View.VISIBLE);
-    favorite.setChecked(false);
+    followButton.setVisibility(View.VISIBLE);
+    followButton.setFollowing(false);
   }
 
   private void setupStreamPicture(StreamResultModel streamResultModel) {
@@ -283,9 +285,9 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     this.mutedStreamIds = mutedStreamsIds;
   }
 
-  private void setupFavoriteClickListener(final StreamResultModel streamResult) {
+  void setupFavoriteClickListener(final StreamResultModel streamResult) {
     if (onFavoriteClickListener != null) {
-      favorite.setOnClickListener(new View.OnClickListener() {
+      followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           if (streamResult.isFavorited()) {
             onFavoriteClickListener.onRemoveFavoriteClick(streamResult);

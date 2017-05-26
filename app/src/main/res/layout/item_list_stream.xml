@@ -46,6 +46,7 @@
       android:src="@color/default_photo_background"
       android:visibility="gone"
       tools:background="#660000cc"
+      tools:visibility="visible"
       />
 
   <LinearLayout
@@ -116,23 +117,29 @@
           android:visibility="gone"
           tools:visibility="visible"
       />
-
-      <TextView
-          android:id="@+id/stream_subtitle_description"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:singleLine="true"
-          android:textSize="15sp"
-          android:paddingLeft="4dp"
-          android:layout_marginRight="8dp"
-          style="@style/InlineDescriptionAppearance"
-          android:visibility="gone"
-          tools:visibility="visible"
-          tools:text="Romanesco"
-          />
-
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/stream_subtitle_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:textSize="15sp"
+        android:layout_marginRight="8dp"
+        style="@style/InlineDescriptionAppearance"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:text="Romanesco"
+        />
   </LinearLayout>
+
+  <com.shootr.mobile.ui.widgets.FollowButton android:id="@+id/user_follow_button"
+      android:layout_width="@dimen/follow_button_width"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      android:layout_marginRight="16dp"
+      android:visibility="gone"
+      tools:visibility="visible"/>
 
   <FrameLayout
       android:id="@+id/stream_actions_container"
@@ -141,6 +148,7 @@
       android:paddingBottom="16dp"
       android:paddingRight="16dp"
       android:paddingTop="16dp"
+      android:visibility="gone"
       >
 
     <ImageView

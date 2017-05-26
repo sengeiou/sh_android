@@ -163,7 +163,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
   @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
-  @BindView(R.id.timeline_empty) View emptyView;
+  @BindView(R.id.timeline_empty) TextView emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
@@ -215,6 +215,8 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_mute) String analyticsLabelMute;
   @BindString(R.string.analytics_action_shot) String analyticsActionSendShot;
   @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
+  @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
+  @BindString(R.string.no_filter_shots) String emptyFilter;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -239,6 +241,7 @@ public class StreamTimelineFragment extends BaseFragment
   private String streamTitle;
   private String streamAuthorIdUser;
   private Menu menu;
+  private boolean isFilterActivated;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -379,11 +382,13 @@ public class StreamTimelineFragment extends BaseFragment
       case R.id.menu_showing_holding_shots:
         streamTimelinePresenter.onHoldingShotsClick();
         sendFilterOnAnalytics();
+        isFilterActivated = true;
         return true;
       case R.id.menu_showing_all_shots:
         streamTimelinePresenter.onAllStreamShotsClick();
         hideFilterAlert();
         sendFilterOffAnalytics();
+        isFilterActivated = false;
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
@@ -1221,6 +1226,11 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showEmpty() {
     emptyView.setVisibility(View.VISIBLE);
+    if (isFilterActivated) {
+      emptyView.setText(emptyFilter);
+    } else {
+      emptyView.setText(emptyTimeline);
+    }
   }
 
   @Override public void hideEmpty() {
