@@ -36,11 +36,11 @@
   <string name="activity_started_following_you">開始關注您</string>
   <string name="activity_timeline_empty_title">沒有動態消息</string>
   <string name="added_contributor">已新增</string>
-  <string name="added_to_favorites">已被加入最愛</string>
+  <string name="added_to_favorites">關注中</string>
   <string name="add_contributor">新增</string>
   <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
-  <string name="add_to_favorites_menu_title">加入最愛</string>
+  <string name="add_to_favorites_menu_title">關注</string>
   <string name="alert_report_confirmed_email_message">點選帳戶〉編輯個人檔案，並確認您的電郵。</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">必須確認電郵</string>
@@ -162,7 +162,7 @@
   <!-- Forgot password -->
   <string name="error_reset_password">我們無法找到任何符合要求用戶</string>
   <string name="error_restart_button">重新啟動</string>
-  <string name="error_stream_already_favorites">已被加入最愛</string>
+  <string name="error_stream_already_favorites">已關注</string>
   <string name="error_stream_read_only">這stream已被清除並只能唯讀</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">你今天已經在這個 stream 簽到過</string>
@@ -170,7 +170,7 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorite_streams_push_settings">喜愛的 streams</string>
+  <string name="favorite_streams_push_settings">已關注的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">按重要性篩選</string>
   <string name="finished_poll">%s 投票結果</string>
@@ -186,11 +186,11 @@
   <string name="include_listing_empty">沒有 Streams</string>
   <string name="intro_create_text">是否在經營團體？讓它成為stream吧！</string>
   <string name="intro_create_title">建立</string>
-  <string name="intro_favorites_text">每天有很多新的streams。\n建立您的最愛。</string>
+  <string name="intro_favorites_text">每天有上百個 stream, 關注你喜歡的。</string>
   <string name="intro_free_title">免費</string>
   <string name="intro_friends_text">成為第一個登記您的@name。</string>
   <string name="intro_shootr">Shootr</string>
-  <string name="intro_start_shooting_button">"開始Shooting "</string>
+  <string name="intro_start_shooting_button">開始Shooting </string>
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">一個開放對話的通訊軟件。所有開放的對話叫 Streams。</string>
   <string name="invite_friends_message">嘿，一起使用Shootr吧: http://shootr.com/</string>
@@ -200,9 +200,9 @@
     <item quantity="zero">%s次鏈接點擊</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="other">%d個最愛</item>
+    <item quantity="other">%d關注者</item>
   </plurals>
-  <string name="listing_title_favorites">最愛</string>
+  <string name="listing_title_favorites">關注中</string>
   <string name="listing_title_holding">管理員</string>
   <string name="loading_activity_message">等待中…</string>
   <string name="main_activity_title">動態消息</string>
@@ -214,7 +214,7 @@
   <string name="menu_holding_shots">顯示創立者的shots</string>
   <string name="menu_pin_shot">釘選到個人主頁</string>
   <string name="menu_profile_chage_password">更改密碼</string>
-  <string name="menu_remove_favorite">從最愛中清除</string>
+  <string name="menu_remove_favorite">取消關注</string>
   <string name="menu_save_photo">儲存相片</string>
   <string name="menu_search_participants">搜尋參與者</string>
   <string name="menu_search_streams">搜尋</string>
@@ -268,10 +268,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">你封鎖了該用戶，取消封鎖來發送消息。</string>
   <string name="now">現在</string>
+  <string name="no_filter_shots">沒有你的 shots 或者認證用戶的</string>
   <string name="no_intent_handler">沒有應用程式可用來處理此行動。\n</string>
   <string name="off_push_settings">關閉</string>
   <string name="ok">OK</string>
-  <string name="on_boarding_add_favorites">添加到喜愛</string>
+  <string name="on_boarding_add_favorites">熱門 Streams</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">進入Shootr</string>
   <string name="opened_activity_text_pattern">建立了(stream)</string>
@@ -284,7 +285,7 @@
   <string name="pinned_shot_activity">已釘選到個人主頁</string>
   <string name="pinned_shot_activity_with_comment">已釘選到個人主頁:</string>
   <string name="pin_message_notification_confirmation_no" formatted="false">否</string>
-  <string name="pin_message_notification_confirmation_text" formatted="false">通知將傳送給喜愛Stream的參與者與使用者。</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">通知將會發送給你的關注者和正在參與 stream 的參與者。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知</string>
   <string name="pin_topic" formatted="false">釘選訊息</string>
   <string name="poll_ignore">忽略投票</string>
@@ -300,6 +301,7 @@
     <item quantity="other">%d 投票</item>
     <item quantity="zero">%d 投票</item>
   </plurals>
+  <string name="poll_vote_dialog_confirmation">投票</string>
   <string name="poll_vote_timeout_retry">重試</string>
   <string name="private_message_image">照片</string>
   <!-- Push Settings -->
@@ -335,9 +337,9 @@
   <string name="registration_create_button_text">建立帳戶</string>
   <string name="remove">清除</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">從喜愛中刪除</string>
+  <string name="removed_from_favorites">取消關注</string>
   <string name="remove_favorite">删除</string>
-  <string name="remove_from_favorites_dialog">從喜愛中刪除  &lt;b&gt;%s&lt;/b&gt; ?</string>
+  <string name="remove_from_favorites_dialog">取消關注  &lt;b&gt;%s&lt;/b&gt; ?</string>
   <string name="remove_highlight">刪除置頂</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">清除</string>
@@ -345,7 +347,7 @@
   <string name="remove_stream_label">清除stream</string>
   <string name="remove_stream_listing_context_menu">清除</string>
   <string name="replied_activity" formatted="false">已回覆</string>
-  <string name="replied_activity_with_comment" formatted="false">"已回覆: "</string>
+  <string name="replied_activity_with_comment" formatted="false">已回覆:</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="other">%d回覆</item>
     <item quantity="zero">%d回覆</item>
@@ -396,12 +398,12 @@
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">沒有Shots</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
-  <string name="sign_out_message">正在登出…</string>
+  <string name="sign_out_message">正在登出...</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">簽到</string>
   <string name="stream_check_in_activity_text_pattern">你已經在 (steam) 簽到</string>
-  <string name="stream_data_info_favorites">喜爱</string>
+  <string name="stream_data_info_favorites">關注者</string>
   <string name="stream_data_info_participants">参与者</string>
   <string name="stream_data_info_participants_with_shots">發送shot的參與者</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
@@ -411,7 +413,7 @@
   <string name="stream_detail_menu_data_info">数据</string>
   <string name="stream_detail_mute">靜音</string>
   <string name="stream_detail_subtitle_pattern">%1$s%2$s</string>
-  <string name="stream_favorited_activity_text_pattern">將(stream)加到最愛</string>
+  <string name="stream_favorited_activity_text_pattern">關注 (stream)</string>
   <string name="stream_list_empty">找不到任何結果</string>
   <string name="stream_media_empty_title">沒有相片或影片</string>
   <string name="stream_media_no_more_media">沒有更多媒體</string>
@@ -424,9 +426,9 @@
   <string name="stream_restored_feedback">已復原stream</string>
   <string name="stream_subtitle">在關注%d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在關注%2$s個參與者中的%1$s個參與者</string>
-  <string name="stream_timeline_add_favorite">加入最愛</string>
+  <string name="stream_timeline_add_favorite">關注</string>
   <string name="stream_timeline_empty_message">正在檢查shots...</string>
-  <string name="stream_timeline_remove_favorite">從最愛中清除</string>
+  <string name="stream_timeline_remove_favorite">取消關注</string>
   <string name="stream_timeline_view_only">私人編輯</string>
   <string name="suggested_people_section_title">建議關注</string>
   <string name="support_blog">Blog</string>
@@ -456,6 +458,9 @@
     <item quantity="zero">%s個參與者</item>
   </plurals>
   <string name="undo_reshoot">撤銷 reshoot</string>
+  <string name="unfollowstream_dialog_message">取消關注 %s?</string>
+  <string name="unfollowstream_dialog_no">否</string>
+  <string name="unfollowstream_dialog_yes">是</string>
   <string name="unfollow_dialog_message">取消對%s的關注?</string>
   <string name="unfollow_dialog_no">不用了</string>
   <string name="unfollow_dialog_yes">是</string>

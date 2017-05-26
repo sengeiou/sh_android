@@ -36,11 +36,11 @@
   <string name="activity_started_following_you">正在关注你</string>
   <string name="activity_timeline_empty_title">无动态</string>
   <string name="added_contributor">已新增</string>
-  <string name="added_to_favorites">添加到喜爱</string>
+  <string name="added_to_favorites">关注中</string>
   <string name="add_contributor">新增</string>
   <string name="add_contributor_button">新增合作者</string>
   <string name="add_contributor_confirmation_message">新增%s?</string>
-  <string name="add_to_favorites_menu_title">添加到喜爱</string>
+  <string name="add_to_favorites_menu_title">关注</string>
   <string name="alert_report_confirmed_email_message">个人账号&gt;编辑个人主页并验证您的邮箱。</string>
   <string name="alert_report_confirmed_email_ok">好的</string>
   <string name="alert_report_confirmed_email_title">必须确认邮箱。</string>
@@ -162,7 +162,7 @@
   <!-- Forgot password -->
   <string name="error_reset_password">我们没有找到任何账户。</string>
   <string name="error_restart_button">重启</string>
-  <string name="error_stream_already_favorites">已经添加到喜爱</string>
+  <string name="error_stream_already_favorites">已关注</string>
   <string name="error_stream_read_only">这条stream已被清除，只能阅读</string>
   <string name="error_title">Ooops!</string>
   <string name="error_user_already_checked">你今天已经在这个 stream 签到过</string>
@@ -170,7 +170,7 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorite_streams_push_settings">喜爱的 streams</string>
+  <string name="favorite_streams_push_settings">已关注的 streams</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">按重要性筛选</string>
   <string name="finished_poll">%s 投票结果</string>
@@ -186,7 +186,7 @@
   <string name="include_listing_empty">没有streams</string>
   <string name="intro_create_text">是否在经营团体？建立一个stream吧！</string>
   <string name="intro_create_title">建立</string>
-  <string name="intro_favorites_text">每天都有很多新的streams。\n建立你的喜爱。</string>
+  <string name="intro_favorites_text">每天有上百个 stream, 关注你喜欢的。</string>
   <string name="intro_free_title">免费</string>
   <string name="intro_friends_text">设置一个未被注册过的@名字。</string>
   <string name="intro_shootr">Shootr</string>
@@ -200,9 +200,9 @@
     <item quantity="zero">%s次链接点击</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="other">%d喜爱</item>
+    <item quantity="other">%d关注者</item>
   </plurals>
-  <string name="listing_title_favorites">喜爱</string>
+  <string name="listing_title_favorites">关注中</string>
   <string name="listing_title_holding">管理员</string>
   <string name="loading_activity_message">等待中…</string>
   <string name="main_activity_title">动态</string>
@@ -214,7 +214,7 @@
   <string name="menu_holding_shots">发送至管理员的shot</string>
   <string name="menu_pin_shot">钉选到个人主页</string>
   <string name="menu_profile_chage_password">更改密码</string>
-  <string name="menu_remove_favorite">取消喜爱</string>
+  <string name="menu_remove_favorite">取消关注</string>
   <string name="menu_save_photo">保存图片</string>
   <string name="menu_search_participants">查找参与者</string>
   <string name="menu_search_streams">查找</string>
@@ -269,10 +269,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">你封锁了该用户，取消封锁来发送消息。</string>
   <string name="now">现在</string>
+  <string name="no_filter_shots">没有你的 shots 或者认证用户的</string>
   <string name="no_intent_handler">沒有应用程序可用来处理此行为。\n</string>
   <string name="off_push_settings">关闭</string>
   <string name="ok">好的</string>
-  <string name="on_boarding_add_favorites">添加到喜爱</string>
+  <string name="on_boarding_add_favorites">热门 streams</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">进入Shootr</string>
   <string name="opened_activity_text_pattern">建立了(stream)</string>
@@ -285,7 +286,7 @@
   <string name="pinned_shot_activity">已钉选到个人主页</string>
   <string name="pinned_shot_activity_with_comment">"已钉选到个人主页: "</string>
   <string name="pin_message_notification_confirmation_no" formatted="false">否</string>
-  <string name="pin_message_notification_confirmation_text" formatted="false">信息将传送给喜爱Stream的参与者与使用者。</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">通知将会发送给你的关注者和正在参与 stream 的参与者。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知</string>
   <string name="pin_topic" formatted="false">钉选信息</string>
   <string name="poll_ignore">忽略投票</string>
@@ -301,6 +302,7 @@
     <item quantity="other">%d 投票</item>
     <item quantity="zero">%d 投票</item>
   </plurals>
+  <string name="poll_vote_dialog_confirmation">投票</string>
   <string name="poll_vote_timeout_retry">重试</string>
   <string name="private_message_image">照片</string>
   <!-- Push Settings -->
@@ -336,9 +338,9 @@
   <string name="registration_create_button_text">建立账户</string>
   <string name="remove">清除</string>
   <!-- When a stream has been removed from favorites feedback -->
-  <string name="removed_from_favorites">从喜爱中删除</string>
+  <string name="removed_from_favorites">取消关注</string>
   <string name="remove_favorite">刪除</string>
-  <string name="remove_from_favorites_dialog">从喜爱中删除 &lt;b&gt;%s&lt;/b&gt; ?</string>
+  <string name="remove_from_favorites_dialog">取消关注 &lt;b&gt;%s&lt;/b&gt; ?</string>
   <string name="remove_highlight">删除置顶</string>
   <!-- Long press for remove a private message channel -->
   <string name="remove_private_message_channel">清除</string>
@@ -381,7 +383,7 @@
   <string name="share_poll_subject">投票 %s</string>
   <string name="share_shot_chooser_title">分享</string>
   <string name="share_shot_message">%1$s %2$s</string>
-  <string name="share_shot_subject">"%1$s在%2$s上的消息 "</string>
+  <string name="share_shot_subject">%1$s在%2$s上的消息 </string>
   <string name="share_stream_activity_text_pattern">分享(stream)</string>
   <string name="share_stream_message">在Shootr上查看%1$s: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr上查看%s: </string>
@@ -402,7 +404,7 @@
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">签到</string>
   <string name="stream_check_in_activity_text_pattern">你已经在 (stream) 签到</string>
-  <string name="stream_data_info_favorites">喜爱</string>
+  <string name="stream_data_info_favorites">关注者</string>
   <string name="stream_data_info_participants">参与者</string>
   <string name="stream_data_info_participants_with_shots">发送shot的参与者</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
@@ -412,7 +414,7 @@
   <string name="stream_detail_menu_data_info">数据</string>
   <string name="stream_detail_mute">静音</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">将(stream)添加到喜爱</string>
+  <string name="stream_favorited_activity_text_pattern">关注 (stream)</string>
   <string name="stream_list_empty">无结果</string>
   <string name="stream_media_empty_title">没有图片或视频</string>
   <string name="stream_media_no_more_media">没有更多媒体</string>
@@ -425,9 +427,9 @@
   <string name="stream_restored_feedback">已复原stream</string>
   <string name="stream_subtitle">正在关注 %d</string>
   <string name="stream_subtitle_pattern_multiple_participants">正在关注%2$s个参与者中的%1$s个参与者</string>
-  <string name="stream_timeline_add_favorite">添加到喜爱</string>
+  <string name="stream_timeline_add_favorite">关注</string>
   <string name="stream_timeline_empty_message">正在检查shots…</string>
-  <string name="stream_timeline_remove_favorite">从喜爱中清除</string>
+  <string name="stream_timeline_remove_favorite">取消关注</string>
   <string name="stream_timeline_view_only">私人编辑</string>
   <string name="suggested_people_section_title">推荐关注</string>
   <string name="support_blog">博客</string>
@@ -457,6 +459,9 @@
     <item quantity="zero">%s个参与者</item>
   </plurals>
   <string name="undo_reshoot">撤销 reshoot</string>
+  <string name="unfollowstream_dialog_message">取消关注 %s?</string>
+  <string name="unfollowstream_dialog_no">否</string>
+  <string name="unfollowstream_dialog_yes">是</string>
   <string name="unfollow_dialog_message">取消关注 %s？</string>
   <string name="unfollow_dialog_no">不</string>
   <string name="unfollow_dialog_yes">是的</string>
