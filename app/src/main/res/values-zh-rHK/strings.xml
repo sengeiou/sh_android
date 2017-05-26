@@ -487,4 +487,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="messages">私信</string>
 </resources>

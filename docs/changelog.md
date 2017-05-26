@@ -13,7 +13,7 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.35.0] - 2017-05-26
+## [1.35.1] - 2017-05-26
 
 ### Changed
 - favorite stream to follow stream
