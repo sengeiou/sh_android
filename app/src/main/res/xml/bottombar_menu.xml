@@ -16,8 +16,8 @@
 
   <tab
       id="@+id/bottombar_messages"
-      icon="@drawable/ic_message"
-      title="messages"
+      icon="@drawable/ic_stat_mail"
+      title="@string/messages"
       barColorWhenSelected="@color/primary"
       />
 </tabs>
