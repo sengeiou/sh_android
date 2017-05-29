@@ -92,6 +92,10 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         subtitleFilteredText.setVisibility(View.GONE);
     }
 
+    public void showSubtitle() {
+        subtitleText.setVisibility(View.VISIBLE);
+    }
+
     public void setTitleClickListener(View.OnClickListener clickListener) {
         titleContainer.setOnClickListener(clickListener);
     }

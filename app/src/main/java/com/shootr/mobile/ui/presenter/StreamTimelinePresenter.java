@@ -136,6 +136,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.setView(streamTimelineView);
     this.loadStream(streamTimelineView, idStream);
     this.selectStream();
+    postWatchNumberEvent();
     setupPoller();
   }
 
@@ -162,6 +163,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.setView(streamTimelineView);
     this.loadStream(streamTimelineView, idStream);
     this.selectStream();
+    postWatchNumberEvent();
     setupPoller();
   }
 
