@@ -94,14 +94,16 @@ public class ChannelsContainerFragment extends BaseFragment {
   }
 
   public void setTabTitle(Fragment fragment, int unreads) {
-    if (fragment instanceof ChannelListFragment) {
-      String resource = setupPluralResource(unreads, R.string.all_messages_title,
-          R.string.all_messages_title_plural);
-      setupTabTitle(0, resource);
-    } else {
-      String resource = setupPluralResource(unreads, R.string.following_messages_title,
-          R.string.following_messages_title_plural);
-      setupTabTitle(1, resource);
+    if (isAdded()) {
+      if (fragment instanceof ChannelListFragment) {
+        String resource = setupPluralResource(unreads, R.string.all_messages_title,
+            R.string.all_messages_title_plural);
+        setupTabTitle(0, resource);
+      } else {
+        String resource = setupPluralResource(unreads, R.string.following_messages_title,
+            R.string.following_messages_title_plural);
+        setupTabTitle(1, resource);
+      }
     }
   }
 
