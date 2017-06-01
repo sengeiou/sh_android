@@ -17,6 +17,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -63,6 +64,7 @@ import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.SuggestedPeopleView;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
+import com.shootr.mobile.ui.widgets.ScrollableAppLayout;
 import com.shootr.mobile.ui.widgets.SuggestedPeopleListView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
@@ -104,7 +106,6 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_avatar) ImageView avatarImageView;
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
-  @BindView(R.id.profile_streams_number) TextView streamsCountView;
   @BindView(R.id.channel_button) FloatingActionButton channelButton;
 
   @BindView(R.id.profile_marks_followers) TextView followersTextView;
@@ -125,6 +126,9 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_user_verified) ImageView userVerified;
   @BindView(R.id.profile_container) CoordinatorLayout profileContainer;
   @BindView(R.id.fab_menu) FloatingActionMenu floatingMenu;
+  @BindView(R.id.profile_detail_container) NestedScrollView nestedScrollView;
+  @BindView(R.id.app_bar) ScrollableAppLayout appBarLayout;
+  @BindView(R.id.stream_number) TextView streamNumber;
 
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
@@ -251,6 +255,7 @@ public class ProfileActivity extends BaseActivity
         onNiceShotListener);
 
     floatingMenu.setClosedOnTouchOutside(true);
+    appBarLayout.collapseToolbar();
   }
 
   private void setupProfileShots(final OnAvatarClickListener avatarClickListener,
@@ -930,11 +935,11 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void showStreamsCount() {
-    streamsCountView.setVisibility(View.VISIBLE);
+    /* no-op */
   }
 
   @Override public void setStreamsCount(Integer streamCount) {
-    streamsCountView.setText(String.valueOf(streamCount));
+    streamNumber.setText(String.valueOf(streamCount));
   }
 
   @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
@@ -1189,6 +1194,11 @@ public class ProfileActivity extends BaseActivity
     intent.putExtra(NewStreamActivity.SOURCE, profileSource);
     startActivityForResult(intent, REQUEST_NEW_STREAM);
   }
+
+  @OnClick(R.id.streams_tab_container) public void onStreamsClick() {
+    profilePresenter.clickListing();
+  }
+
 
   private void closeFabMenu() {
     if (floatingMenu != null) {
