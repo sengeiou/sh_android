@@ -2,6 +2,7 @@ package com.shootr.mobile.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -13,6 +14,7 @@ import com.mixpanel.android.mpmetrics.OnMixpanelUpdatesReceivedListener;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.user.User;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,12 +51,19 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String LASTDATE = "LastDate";
   private static final String PLATFORM_TYPE = "shootrPlatform";
   private static final String ANDROID_PLATFORM = "shootrAndroid";
+  private static final String SIGN_UP_DATE = "signupDate";
+  private static final String NUM_MUTUALS = "Mutuals";
+  private static final String FIRST_SESSION_ACTIVATION = "firstSessionActivation";
+  private static final String FIRST_SESSION = "firstSession";
+  private static final String NOTIFICATIONS = "notifications";
+  private static final String NEW_CONTENT = "newContent";
   private final String ACTION = "action";
   private Tracker tracker;
   private MixpanelAPI mixpanel;
   private HashMap<String, Tracker> trackers = new HashMap();
   private User user;
   private AppsFlyerLib appsFlyerLib;
+  private Context appContext;
 
   @Override public void init(Application application) {
     try {
@@ -62,6 +71,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       tracker = analytics.newTracker(application.getString(R.string.google_analytics_tracking_id));
       tracker.enableAutoActivityTracking(false);
       tracker.enableExceptionReporting(true);
+      appContext = application;
     } catch (Exception error) {
     }
     mixpanel =
@@ -85,9 +95,17 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     mixpanel.getPeople().set(FAVORITES, user.getFavoritedStreamsCount());
     mixpanel.getPeople().set(PLATFORM_TYPE, ANDROID_PLATFORM);
     mixpanel.getPeople().set(LASTDATE, new Date());
+    mixpanel.getPeople().set(SIGN_UP_DATE, user.getSignUpDate());
+    mixpanel.getPeople().set(NUM_MUTUALS, user.getNumMutuals());
+    mixpanel.getPeople().set(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
+    if (appContext != null) {
+      mixpanel.getPeople()
+          .set(NOTIFICATIONS, NotificationManagerCompat.from(appContext).areNotificationsEnabled());
+    }
   }
 
-  @Override public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
+  @Override
+  public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
     try {
       JSONObject props = new JSONObject();
       mixpanel = MixpanelAPI.
@@ -101,7 +119,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     }
   }
 
-  @Override public void sendSignUpEvent(User newUser, String actionId, String loginType, Context context) {
+  @Override
+  public void sendSignUpEvent(User newUser, String actionId, String loginType, Context context) {
     try {
       JSONObject props = new JSONObject();
       mixpanel = MixpanelAPI.
@@ -130,7 +149,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
           eventData.put(LOGIN_TYPE, loginType);
           appsFlyerLib.trackEvent(context, actionId, eventData);
         }
-      }  catch (NullPointerException error) {
+      } catch (NullPointerException error) {
         Log.e("Shootr", "Unable to build appsflyer object", error);
       }
     }
@@ -167,11 +186,23 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String idPoll = builder.getIdPoll();
     String idShot = builder.getIdShot();
     String loginType = builder.getLoginType();
-    User user = builder.getUser();
+    Boolean newContent = builder.hasNewContent();
+    Boolean firstSession = null;
+    if (user != null) {
+      firstSession = (getSignUpDatePlusHour(user.getSignUpDate()).compareTo(new Date()) > 0);
+    }
 
     sendGoogleAnalytics(context, action, actionId, labelId);
     sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
-        pushRedirection, idStream, stream, idPoll, idShot, loginType, context);
+        pushRedirection, idStream, stream, idPoll, idShot, loginType, firstSession, newContent,
+        context);
+  }
+
+  private Date getSignUpDatePlusHour(Date date) {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(date);
+    calendar.add(Calendar.MINUTE, 60);
+    return calendar.getTime();
   }
 
   @Override public void appsFlyerSendAction(Builder builder) {
@@ -212,7 +243,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
           appsFlyerLib.trackEvent(context, actionId, eventData);
         }
-      }  catch (NullPointerException error) {
+      } catch (NullPointerException error) {
         Log.e("Shootr", "Unable to build appsflyer object", error);
       }
     }
@@ -252,7 +283,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
       String targetUsername, String notificationName, String pushRedirection, String idStream,
-      String streamName, String idPoll, String idShot, String loginType, Context context) {
+      String streamName, String idPoll, String idShot, String loginType, Boolean firstSession,
+      Boolean newContent, Context context) {
     try {
       JSONObject props = new JSONObject();
       if (user != null) {
@@ -264,6 +296,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         props.put(FAVORITES, user.getFavoritedStreamsCount());
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
+        if (firstSession != null) {
+          props.put(FIRST_SESSION, firstSession);
+        }
       }
 
       if (idStream != null) {
@@ -297,6 +332,10 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       if (loginType != null) {
         props.put(LOGIN_TYPE, loginType);
       }
+      if (newContent != null) {
+        props.put(NEW_CONTENT, newContent);
+      }
+
       props.put(PLATFORM_TYPE, ANDROID_PLATFORM);
       try {
         mixpanel.track(actionId, props);

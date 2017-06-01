@@ -23,4 +23,6 @@ public interface GenericActivityTimelineView extends LoadDataView {
     void showLoadingActivity();
 
     void hideLoadingActivity();
+
+    void setNewContentArrived();
 }

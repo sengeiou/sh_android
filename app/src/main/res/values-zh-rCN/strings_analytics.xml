@@ -30,6 +30,7 @@
     <string name="analytics_screen_shot_detail">shotDetail</string>
     <string name="analytics_action_photo">Photo</string>
     <string name="analytics_label_photo">Photo view</string>
+    <string name="analytics_action_home">Home</string>
     <string name="analytics_action_follow">Follow</string>
     <string name="analytics_label_follow">Follow</string>
     <string name="analytics_label_search">Search</string>
