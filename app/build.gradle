@@ -36,12 +36,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 35
-def versionRevision = 1
+def versionMinor = 36
+def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 51
+def databaseVersion = 52
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 

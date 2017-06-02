@@ -42,6 +42,7 @@ public interface AnalyticsTool {
     String idPoll;
     String idShot;
     String loginType;
+    Boolean newContent;
     User user;
 
     public Context getContext() {
@@ -162,6 +163,14 @@ public interface AnalyticsTool {
 
     public void setLoginType(String loginType) {
       this.loginType = loginType;
+    }
+
+    public Boolean hasNewContent() {
+      return newContent;
+    }
+
+    public void setNewContent(Boolean newContent) {
+      this.newContent = newContent;
     }
   }
 }

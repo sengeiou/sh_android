@@ -63,6 +63,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
   @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_action_home) String analyticsActionHome;
   @BindString(R.string.analytics_source_activity) String activitySource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
@@ -70,6 +71,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   private ActivityTimelineAdapter adapter;
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
+  private boolean hasNewContent = false;
   //endregion
 
   public static ActivityTimelineFragment newInstance() {
@@ -104,6 +106,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @Override public void onPause() {
     super.onPause();
     timelinePresenter.pause();
+    sendHomeAnalythics();
   }
 
   private void initializePresenter() {
@@ -185,6 +188,17 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
         .create()
         .show();
+  }
+
+  private void sendHomeAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionHome);
+    builder.setSource(activitySource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setNewContent(hasNewContent);
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
@@ -324,6 +338,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
   @Override public void hideLoadingActivity() {
     loadingActivityView.setVisibility(View.GONE);
+  }
+
+  @Override public void setNewContentArrived() {
+    this.hasNewContent = true;
   }
 
   public void scrollListToTop() {

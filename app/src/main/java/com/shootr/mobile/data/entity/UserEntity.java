@@ -30,6 +30,8 @@ public class UserEntity extends Synchronized
     private Boolean socialLogin;
     private String analyticsUserType;
     private Long receivedReactions;
+    private Long numMutuals;
+    private Boolean firstSessionActivation;
 
     public UserEntity() {
     }
@@ -249,6 +251,22 @@ public class UserEntity extends Synchronized
 
     public void setReceivedReactions(Long receivedReactions) {
         this.receivedReactions = receivedReactions;
+    }
+
+    public Long getNumMutuals() {
+        return numMutuals;
+    }
+
+    public void setNumMutuals(Long numMutuals) {
+        this.numMutuals = numMutuals;
+    }
+
+    public Boolean isFirstSessionActivation() {
+        return firstSessionActivation;
+    }
+
+    public void setFirstSessionActivation(Boolean firstSessionActivation) {
+        this.firstSessionActivation = firstSessionActivation;
     }
 
     @Override public String getSearcheableType() {

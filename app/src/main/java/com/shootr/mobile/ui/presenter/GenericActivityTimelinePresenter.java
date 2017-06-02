@@ -53,7 +53,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   private boolean isEmpty;
   private Boolean isUserActivityTimeline;
   private ArrayList<String> followingIds = new ArrayList<>();
-  private ArrayList<String> favortiesIds = new ArrayList<>();
+  private ArrayList<String> favoritesIds = new ArrayList<>();
 
   @Inject public GenericActivityTimelinePresenter(
       ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
@@ -116,13 +116,12 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   private void loadFavoritesIds() {
     getFavoritesIdsInteractor.loadFavoriteStreams(new Interactor.Callback<List<String>>() {
       @Override public void onLoaded(List<String> strings) {
-        favortiesIds.clear();
-        favortiesIds.addAll(strings);
+        favoritesIds.clear();
+        favoritesIds.addAll(strings);
         loadTimeline();
       }
     });
   }
-
 
   private void changeSynchroTimePoller() {
     if (poller.isPolling()) {
@@ -134,16 +133,17 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
       }
     }
   }
-    private long handleIntervalSynchro() {
-        int actualSynchroInterval = sessionRepository.getSynchroTime();
-        long intervalSynchroServerResponse = actualSynchroInterval * 1000;
-        if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
-            intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
-        } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
-            intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
-        }
-        return intervalSynchroServerResponse;
+
+  private long handleIntervalSynchro() {
+    int actualSynchroInterval = sessionRepository.getSynchroTime();
+    long intervalSynchroServerResponse = actualSynchroInterval * 1000;
+    if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
+    } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
+      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
     }
+    return intervalSynchroServerResponse;
+  }
 
   private void clearActivityBadge() {
     badgeCount.delete();
@@ -163,7 +163,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
           @Override public void onLoaded(ActivityTimeline timeline) {
             List<ActivityModel> activityModels =
                 activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
-                    followingIds, favortiesIds);
+                    followingIds, favoritesIds);
             timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
             isEmpty = activityModels.isEmpty();
             if (isEmpty) {
@@ -202,8 +202,11 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
           @Override public void onLoaded(ActivityTimeline timeline) {
             List<ActivityModel> newActivity =
                 activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
-                    followingIds, favortiesIds);
+                    followingIds, favoritesIds);
             boolean hasNewActivity = !newActivity.isEmpty();
+            if (hasNewActivity) {
+              timelineView.setNewContentArrived();
+            }
             if (isEmpty && hasNewActivity) {
               isEmpty = false;
             } else if (isEmpty && !hasNewActivity) {
@@ -236,7 +239,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
             timelineView.hideLoadingOldActivities();
             List<ActivityModel> activityModels =
                 activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
-                    followingIds, favortiesIds);
+                    followingIds, favoritesIds);
             if (!activityModels.isEmpty()) {
               timelineView.addOldActivities(activityModels);
             } else {
@@ -286,7 +289,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   public void addFavorite(final String idStream) {
     addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        favortiesIds.add(idStream);
+        favoritesIds.add(idStream);
         loadTimeline();
       }
     }, new Interactor.ErrorCallback() {
@@ -299,7 +302,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   public void removeFavorite(final String idStream) {
     removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        favortiesIds.remove(idStream);
+        favoritesIds.remove(idStream);
         loadTimeline();
       }
     });

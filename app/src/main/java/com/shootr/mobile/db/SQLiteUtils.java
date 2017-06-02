@@ -58,6 +58,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
       + " TEXT NULL,"
+      + DatabaseContract.UserTable.NUM_MUTUALS
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.FIRST_SESSION_ACTIVATION
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -588,6 +592,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
       + " TEXT NULL,"
+      + DatabaseContract.UserTable.NUM_MUTUALS
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.FIRST_SESSION_ACTIVATION
+      + " LONG NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED

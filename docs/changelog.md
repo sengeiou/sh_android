@@ -13,6 +13,18 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.36.0] - 2017-06-01
+
+### Changed
+- StreamList design
+- ChannelList design
+
+### Added
+- Mixpanel first session properties
+
+### Removed
+- Call to cta shots
+
 ## [1.35.1] - 2017-05-26
 
 ### Changed

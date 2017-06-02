@@ -53,7 +53,7 @@ public class StreamsListAdapter extends
   @Override
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
     View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
     StreamResultViewHolder watchingViewHolder =
         new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
             imageLoader, initialsLoader, mutedStreamsIds);
@@ -71,7 +71,7 @@ public class StreamsListAdapter extends
   @Override
   protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
     View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_stream, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
     return new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
         imageLoader, initialsLoader, mutedStreamsIds);
   }

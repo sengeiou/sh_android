@@ -12,22 +12,19 @@
     >
   <TextView
       android:id="@+id/stream_rank"
-      android:layout_width="30dp"
-      android:layout_height="wrap_content"
-      android:textColor="@color/gray_65"
-      android:textSize="16sp"
+      android:layout_width="32dp"
+      android:layout_height="16dp"
+      android:textSize="12sp"
       android:gravity="center"
-      tools:text="1"
+      tools:text="4"
       android:layout_gravity="center"
-      android:layout_marginLeft="12dp"
-      android:layout_marginRight="2dp"
+      android:layout_marginLeft="8dp"
       />
   <ImageView
       android:id="@+id/stream_picture_without_text"
       android:layout_width="@dimen/stream_result_picture_width"
       android:layout_height="@dimen/stream_result_picture_height"
       android:layout_marginBottom="12dp"
-      android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
       android:layout_marginTop="12dp"
       android:scaleType="centerCrop"
@@ -41,7 +38,6 @@
       android:layout_width="@dimen/stream_result_picture_width"
       android:layout_height="@dimen/stream_result_picture_height"
       android:layout_marginBottom="12dp"
-      android:layout_marginLeft="16dp"
       android:layout_marginRight="16dp"
       android:layout_marginTop="12dp"
       android:scaleType="centerCrop"
@@ -118,7 +114,7 @@
           android:src="@drawable/ic_action_verified_user"
           android:visibility="gone"
           tools:visibility="visible"
-      />
+          />
     </LinearLayout>
 
     <TextView

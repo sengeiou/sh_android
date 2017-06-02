@@ -40,6 +40,7 @@
         android:textColor="@color/gray_50"
         android:textSize="20sp"
         android:visibility="gone"
+        android:gravity="center"
         tools:visibility="visible"
         />
 

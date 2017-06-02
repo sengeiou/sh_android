@@ -42,6 +42,10 @@ public class NullActivityTimelineView implements ActivityTimelineView {
         /* no-op */
     }
 
+    @Override public void setNewContentArrived() {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

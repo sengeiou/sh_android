@@ -8,5 +8,5 @@ public interface ShotType {
     String CTAGENERICLINK = "CTA_GENERIC_LINK";
     String POLL = "POLL";
 
-    String[] TYPES_SHOWN = { COMMENT, CTACHECKIN, WAKEUP, CTAGENERICLINK, POLL };
+    String[] TYPES_SHOWN = { COMMENT, WAKEUP, CTAGENERICLINK, POLL };
 }
