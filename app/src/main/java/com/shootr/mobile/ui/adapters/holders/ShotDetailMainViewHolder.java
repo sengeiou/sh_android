@@ -400,10 +400,6 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupPinShotView(final ShotModel shotModel) {
-    if (shotModel.getCanBePinned()) {
-      pinToProfileContainer.setVisibility(View.VISIBLE);
-    } else {
-      pinToProfileContainer.setVisibility(View.GONE);
-    }
+    /* no-op */
   }
 }
