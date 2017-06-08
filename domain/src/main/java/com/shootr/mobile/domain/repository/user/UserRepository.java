@@ -2,6 +2,7 @@ package com.shootr.mobile.domain.repository.user;
 
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.model.user.User;
 import java.io.IOException;
@@ -31,7 +32,7 @@ public interface UserRepository {
 
     List<User> findParticipants(String idStream, String query);
 
-    void updateWatch(User user);
+    Stream updateWatch(User user);
 
     List<User> getFollowing(String idUser, Integer page, Integer pageSize);
 

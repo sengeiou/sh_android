@@ -57,8 +57,7 @@ public class SyncUserRepositoryCacheTest {
           localfollowDataSource,
           userEntityMapper,
           suggestedPeopleEntityMapper,
-          syncableUserEntityFactory,
-          syncTrigger,
+          syncableUserEntityFactory, streamEntityMapper, syncTrigger,
           bus,
           userCache, serviceFollowDataSource, localSynchroDataSource, androidTimeUtils);
     }
