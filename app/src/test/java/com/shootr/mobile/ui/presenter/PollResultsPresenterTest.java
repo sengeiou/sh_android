@@ -61,7 +61,7 @@ public class PollResultsPresenterTest {
 
     presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
-    verify(pollResultsView).showPollVotes(anyLong());
+    verify(pollResultsView).showPollVotesTimeToExpire(anyLong(), anyLong());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {

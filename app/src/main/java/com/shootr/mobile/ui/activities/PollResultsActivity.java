@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -54,6 +55,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Inject ShareManager shareManager;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject AndroidTimeUtils timeUtils;
 
   private PollResultsAdapter adapter;
 
@@ -169,11 +171,12 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     Intents.maybeStartActivity(this, shareIntent);
   }
 
-  @Override public void showPollVotes(Long votes) {
+  @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire) {
     Integer pollVotes = votes.intValue();
+    String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
-    getToolbarDecorator().setSubtitle(pollVotesText);
+    getToolbarDecorator().setSubtitle(pollVotesText + " · " + timeToExpireText);
   }
 
   @Override public void goToStreamTimeline(String idStream) {
