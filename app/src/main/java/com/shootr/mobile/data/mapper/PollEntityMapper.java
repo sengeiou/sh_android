@@ -27,6 +27,7 @@ public class PollEntityMapper {
       poll.setQuestion(pollEntity.getQuestion());
       poll.setVoteStatus(pollEntity.getVoteStatus());
       poll.setVotePrivacy(pollEntity.getVotePrivacy());
+      poll.setExpirationDate(pollEntity.getExpirationDate());
     }
     return poll;
   }
@@ -43,6 +44,7 @@ public class PollEntityMapper {
     pollEntity.setPublished(poll.getPublished() ? 1L : 0L);
     pollEntity.setVoteStatus(poll.getVoteStatus());
     pollEntity.setVotePrivacy(poll.getVotePrivacy());
+    pollEntity.setExpirationDate(poll.getExpirationDate());
     return pollEntity;
   }
 

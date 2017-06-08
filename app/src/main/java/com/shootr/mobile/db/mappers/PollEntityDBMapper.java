@@ -23,6 +23,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
     pollEntity.setVoteStatus(c.getString(c.getColumnIndex(DatabaseContract.PollTable.VOTE_STATUS)));
     pollEntity.setQuestion(c.getString(c.getColumnIndex(DatabaseContract.PollTable.QUESTION)));
     pollEntity.setVotePrivacy(c.getString(c.getColumnIndex(DatabaseContract.PollTable.VOTE_PRIVACY)));
+    pollEntity.setExpirationDate(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.EXPIRATION_DATE)));
     return pollEntity;
   }
 
@@ -38,6 +39,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PollTable.VOTE_STATUS,
         pollEntity.getVoteStatus() != null ? pollEntity.getVoteStatus() : PollStatus.VOTE);
     cv.put(DatabaseContract.PollTable.VOTE_PRIVACY, pollEntity.getVotePrivacy());
+    cv.put(DatabaseContract.PollTable.EXPIRATION_DATE, pollEntity.getExpirationDate());
     return cv;
   }
 }

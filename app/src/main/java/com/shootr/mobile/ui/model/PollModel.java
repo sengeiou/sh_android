@@ -15,6 +15,7 @@ public class PollModel {
   private List<PollOptionModel> pollOptionModels;
   private String streamTitle;
   private String votePrivacy;
+  private Long expirationDate;
 
   public String getIdPoll() {
     return idPoll;
@@ -102,5 +103,13 @@ public class PollModel {
 
   public void setVotePrivacy(String votePrivacy) {
     this.votePrivacy = votePrivacy;
+  }
+
+  public Long getExpirationDate() {
+    return expirationDate;
+  }
+
+  public void setExpirationDate(Long expirationDate) {
+    this.expirationDate = expirationDate;
   }
 }
