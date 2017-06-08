@@ -266,6 +266,7 @@
   <string name="notification_shot_sending">ショットを送信中…</string>
   <string name="notification_shot_sent">ショットが送信されました</string>
   <string name="now">今</string>
+  <string name="closed">closed</string>
   <string name="no_intent_handler">このアクションを実施するために使用可能なアプリがありません。</string>
   <string name="off_push_settings">オフ</string>
   <string name="ok">OK</string>

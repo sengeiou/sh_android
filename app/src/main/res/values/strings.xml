@@ -273,6 +273,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">You blocked this user. Unblock to shoot a message. </string>
   <string name="now">now</string>
+  <string name="closed">closed</string>
   <string name="no_filter_shots">No shots by you or verified accounts</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="off_push_settings">Off</string>

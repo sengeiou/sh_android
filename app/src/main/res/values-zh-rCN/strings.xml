@@ -270,6 +270,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">你封锁了该用户，取消封锁来发送消息。</string>
   <string name="now">现在</string>
+  <string name="closed">closed</string>
   <string name="no_filter_shots">没有你的 shots 或者认证用户的</string>
   <string name="no_intent_handler">沒有应用程序可用来处理此行为。\n</string>
   <string name="off_push_settings">关闭</string>

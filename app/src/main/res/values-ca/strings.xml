@@ -273,6 +273,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloquejat aquest usuari. Desbloqueja per enviar missatges.</string>
   <string name="now">ara</string>
+  <string name="closed">closed</string>
   <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="off_push_settings">Cap</string>
