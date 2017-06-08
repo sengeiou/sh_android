@@ -46,10 +46,12 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    Stream stream = getRemoteStreamOrFallbackToLocal();
     Integer[] watchersCount = new Integer[] { 0, 0 };
-    watchersCount[FRIENDS] = stream.getTotalFollowingWatchers();
-    watchersCount[WATCHERS] = stream.getTotalWatchers();
+    Stream stream = getRemoteStreamOrFallbackToLocal();
+    if (stream != null) {
+      watchersCount[FRIENDS] = stream.getTotalFollowingWatchers();
+      watchersCount[WATCHERS] = stream.getTotalWatchers();
+    }
     notifyLoaded(watchersCount);
   }
 
@@ -68,9 +70,10 @@ public class WatchNumberInteractor implements Interactor {
       try {
         return remoteStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
       } catch (ServerCommunicationException networkError) {
-        return localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
+        /* no-op */
       }
     }
+    return null;
   }
 
   public interface Callback {
