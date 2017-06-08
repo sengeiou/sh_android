@@ -174,8 +174,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire) {
     Integer pollVotes = votes.intValue();
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
-    String pollVotesText =
-        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+    String pollVotesText = getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
     getToolbarDecorator().setSubtitle(pollVotesText + " · " + timeToExpireText);
   }
 
