@@ -25,6 +25,8 @@ public class WatchNumberInteractor implements Interactor {
   private final StreamRepository localStreamRepository;
   private String idStream;
   private Callback callback;
+  private boolean localOnly;
+
 
   @Inject public WatchNumberInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -36,9 +38,10 @@ public class WatchNumberInteractor implements Interactor {
     this.localStreamRepository = localStreamRepository;
   }
 
-  public void loadWatchersNumber(String idStream, Callback callback) {
+  public void loadWatchersNumber(String idStream, boolean localOnly, Callback callback) {
     this.idStream = idStream;
     this.callback = callback;
+    this.localOnly = localOnly;
     interactorHandler.execute(this);
   }
 
@@ -59,10 +62,14 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   private Stream getRemoteStreamOrFallbackToLocal() {
-    try {
-      return remoteStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
-    } catch (ServerCommunicationException networkError) {
+    if (localOnly) {
       return localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
+    } else {
+      try {
+        return remoteStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
+      } catch (ServerCommunicationException networkError) {
+        return localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
+      }
     }
   }
 

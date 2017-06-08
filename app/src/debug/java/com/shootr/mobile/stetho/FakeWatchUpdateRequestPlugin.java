@@ -23,7 +23,7 @@ public class FakeWatchUpdateRequestPlugin implements DumperPlugin {
     @Override public void dump(DumperContext dumpContext) throws DumpException {
         PrintStream writer = dumpContext.getStdout();
         writer.println("Forcing watch update on SyncuserRepository...");
-        syncUserRepository.onWatchUpdateRequest(new WatchUpdateRequest.Event());
+        syncUserRepository.onWatchUpdateRequest(new WatchUpdateRequest.Event(false));
         writer.println("Watch update done.");
     }
 }

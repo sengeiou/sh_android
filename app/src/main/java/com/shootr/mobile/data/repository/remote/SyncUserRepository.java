@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Default;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.SynchroEntity;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -11,6 +12,7 @@ import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -51,6 +53,7 @@ public class SyncUserRepository
   private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
   private final FollowDataSource localFollowDataSource;
   private final UserEntityMapper userEntityMapper;
+  private final StreamDataSource localStreamDataSource;
   private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
   private final SyncableUserEntityFactory syncableUserEntityFactory;
   private final StreamEntityMapper streamEntityMapper;
@@ -66,7 +69,7 @@ public class SyncUserRepository
       @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
       CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource,
       @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
-      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
+      @Local StreamDataSource localStreamDataSource, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
       SyncableUserEntityFactory syncableUserEntityFactory, StreamEntityMapper streamEntityMapper,
       SyncTrigger syncTrigger, @Default Bus bus, UserCache userCache,
       @Remote FollowDataSource serviceFollowDataSource, SynchroDataSource synchroDataSource,
@@ -78,6 +81,7 @@ public class SyncUserRepository
     this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
     this.localFollowDataSource = localFollowDataSource;
     this.userEntityMapper = userEntityMapper;
+    this.localStreamDataSource = localStreamDataSource;
     this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
     this.syncableUserEntityFactory = syncableUserEntityFactory;
     this.streamEntityMapper = streamEntityMapper;
@@ -235,19 +239,20 @@ public class SyncUserRepository
 
   @Override public Stream updateWatch(User user) {
     UserEntity entityWithWatchValues = userEntityMapper.transform(user);
-    Stream watchingStream;
+    StreamEntity watchingStream;
     try {
       watchingStream =
-          streamEntityMapper.transform(remoteUserDataSource.updateWatch(entityWithWatchValues));
+          remoteUserDataSource.updateWatch(entityWithWatchValues);
+      localStreamDataSource.putStream(watchingStream);
       entityWithWatchValues.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
       entityWithWatchValues.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
       localUserDataSource.updateWatch(entityWithWatchValues);
     } catch (ServerCommunicationException e) {
       watchingStream =
-          streamEntityMapper.transform(localUserDataSource.updateWatch(entityWithWatchValues));
+          localUserDataSource.updateWatch(entityWithWatchValues);
       queueWatchUpload(entityWithWatchValues, e);
     }
-    return watchingStream;
+    return streamEntityMapper.transform(watchingStream);
   }
 
   @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
@@ -347,7 +352,7 @@ public class SyncUserRepository
       }
       if (isWatchReadyForSync(userEntity)) {
         if (userEntity.getIdUser().equals(sessionRepository.getCurrentUserId())) {
-          remoteUserDataSource.updateWatch(userEntity);
+          localStreamDataSource.putStream(remoteUserDataSource.updateWatch(userEntity));
           userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
           userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
           localUserDataSource.updateWatch(userEntity);
