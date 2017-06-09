@@ -31,7 +31,7 @@ public class UpdateWatchNumberInteractorTest {
   }
 
   @Test public void shouldPostInBusPublisher() throws Exception {
-    interactor.updateWatchNumber(callback);
+    interactor.updateWatchNumber(false, callback);
 
     ArgumentCaptor<WatchUpdateRequest.Event> captor =
         ArgumentCaptor.forClass(WatchUpdateRequest.Event.class);

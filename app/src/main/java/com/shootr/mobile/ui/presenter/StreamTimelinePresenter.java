@@ -252,12 +252,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   protected void selectStream() {
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-        StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
-        setupStreamInfo(streamModel);
+        StreamModel model = streamModelMapper.transform(streamSearchResult.getStream());
+        streamModel = model;
+        setupStreamInfo(model);
         postWatchNumberEvent(true);
-        handleFilterVisibility(streamModel.getReadWriteMode());
-        setStreamMode(streamModel.getReadWriteMode());
-        loadTimeline(streamModel.getReadWriteMode());
+        handleFilterVisibility(model.getReadWriteMode());
+        setStreamMode(model.getReadWriteMode());
+        loadTimeline(model.getReadWriteMode());
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {

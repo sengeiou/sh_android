@@ -36,7 +36,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
         this.setIdStream(idStream);
     }
 
-    private void retrieveData(boolean localOnly) {
+    protected void retrieveData(boolean localOnly) {
         watchNumberInteractor.loadWatchersNumber(idStream, localOnly, new WatchNumberInteractor.Callback() {
             @Override public void onLoaded(Integer[] count) {
                 setViewWathingCount(count);

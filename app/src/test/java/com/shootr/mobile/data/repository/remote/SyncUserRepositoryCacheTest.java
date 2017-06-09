@@ -1,8 +1,10 @@
 package com.shootr.mobile.data.repository.remote;
 
+import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -36,8 +38,10 @@ public class SyncUserRepositoryCacheTest {
     @Mock SuggestedPeopleDataSource remoteSuggestedPeopleDataSource;
     @Mock CachedSuggestedPeopleDataSource cachedSugestedPeopleDataSource;
     @Mock FollowDataSource localfollowDataSource;
+    @Mock StreamDataSource localStreamDataSource;
     @Mock UserEntityMapper userEntityMapper;
     @Mock SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
+    @Mock StreamEntityMapper streamEntityMapper;
     @Mock SyncableUserEntityFactory syncableUserEntityFactory;
     @Mock SyncTrigger syncTrigger;
     @Mock Bus bus;
