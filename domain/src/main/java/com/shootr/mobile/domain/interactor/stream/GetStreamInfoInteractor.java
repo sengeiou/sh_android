@@ -88,14 +88,19 @@ public class GetStreamInfoInteractor implements Interactor {
     });
 
     List<User> watchers = new ArrayList<>();
-    watchers.addAll(stream.getWatchers());
-    setupFollowing(watchers);
-    sortWatchersListByJoinStreamDate(watchers);
-
     boolean hasMoreParticipants = false;
-    if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
-      watchers = watchers.subList(0, MAX_WATCHERS_TO_SHOW);
-      hasMoreParticipants = true;
+    if (!localOnly) {
+      watchers.addAll(stream.getWatchers());
+      setupFollowing(watchers);
+      sortWatchersListByJoinStreamDate(watchers);
+      removeCurrentUserFromWatchers(watchers);
+      watchers.add(0, currentUser);
+      if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
+        watchers = watchers.subList(0, MAX_WATCHERS_TO_SHOW);
+        hasMoreParticipants = true;
+      }
+    } else {
+      watchers.add(currentUser);
     }
 
     return buildStreamInfo(stream, watchers, currentUser, stream.getTotalFollowingWatchers(), hasMoreParticipants,
@@ -112,10 +117,31 @@ public class GetStreamInfoInteractor implements Interactor {
   private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
     Collections.sort(watchesFromPeople, new Comparator<User>() {
       @Override public int compare(User userModel, User t1) {
-        return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate());
+        Boolean isFollowingUserModel = userModel.isFollowing();
+        Boolean t1IsFollowing = t1.isFollowing();
+        return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate()) - isFollowingUserModel.compareTo(t1IsFollowing);
       }
     });
     return watchesFromPeople;
+  }
+
+  private List<User> removeCurrentUserFromWatchers(List<User> watchers) {
+    int meIndex = findMeIn(watchers);
+    if (meIndex >= 0) {
+      watchers.remove(meIndex);
+    }
+    return watchers;
+  }
+
+  private int findMeIn(List<User> watchers) {
+    int meIndex = -1;
+    for (int i = 0; i < watchers.size(); i++) {
+      if (watchers.get(i).getIdUser().equals(sessionRepository.getCurrentUserId())) {
+        meIndex = i;
+        break;
+      }
+    }
+    return meIndex;
   }
 
   private StreamInfo buildStreamInfo(Stream stream, List<User> streamWatchers, User currentUser,
@@ -123,7 +149,7 @@ public class GetStreamInfoInteractor implements Interactor {
     boolean isCurrentUserWatching = stream.getId().equals(currentUser.getIdWatchingStream());
     return StreamInfo.builder()
         .stream(stream)
-        .watchers(stream.getWatchers())
+        .watchers(streamWatchers)
         .currentUserWatching(isCurrentUserWatching ? currentUser : null)
         .numberOfFollowing(numberOfFollowing)
         .hasMoreParticipants(hasMoreParticipants)
