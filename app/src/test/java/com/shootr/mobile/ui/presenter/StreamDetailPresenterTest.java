@@ -106,14 +106,6 @@ public class StreamDetailPresenterTest {
     verify(streamDetailView).setFollowingNumber(anyInt(), anyInt());
   }
 
-  @Test public void shouldShowTotalWatchersFromParticipantsListIfLessThan50() throws Exception {
-    setupStreamInfoCallback();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-
-    verify(streamDetailView).setFollowingNumber(0, THREE_WATCHERS);
-  }
-
   @Test public void shouldShowTotalWatchersFromStreamInfoIfMoreThan50() throws Exception {
     setupStreamInfoWith50PlusParticipantsCallback();
 
@@ -526,6 +518,7 @@ public class StreamDetailPresenterTest {
   private List<User> watchers() {
     List<User> participants = new ArrayList<>();
     participants.add(user());
+    participants.add(new User());
     participants.add(new User());
     return participants;
   }

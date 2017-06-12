@@ -64,20 +64,28 @@ public class SelectStreamInteractor implements Interactor {
   @Override public void execute() throws Exception {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     if (isSelectingCurrentWatchingStream(currentUser)) {
-      Stream stream = getSelectedStream();
-      if (stream != null) {
-        notifyLoaded(stream);
-      } else {
-        notifyError(new ServerCommunicationException(new Throwable()));
-      }
+      selectStreamFromRemote();
     } else {
-      Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
-      if (selectedStream != null) {
-        User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
-        sessionRepository.setTimelineFilterActivated(false);
-        sessionRepository.setCurrentUser(updatedUser);
-        notifyLoaded(remoteUserRepository.updateWatch(updatedUser));
-      }
+      selectStreamAndUpdateWatch(currentUser);
+    }
+  }
+
+  private void selectStreamAndUpdateWatch(User currentUser) {
+    Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
+    if (selectedStream != null) {
+      User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
+      sessionRepository.setTimelineFilterActivated(false);
+      sessionRepository.setCurrentUser(updatedUser);
+      notifyLoaded(remoteUserRepository.updateWatch(updatedUser));
+    }
+  }
+
+  private void selectStreamFromRemote() {
+    Stream stream = getSelectedStream();
+    if (stream != null) {
+      notifyLoaded(stream);
+    } else {
+      notifyError(new ServerCommunicationException(new Throwable()));
     }
   }
 

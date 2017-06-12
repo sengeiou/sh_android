@@ -28,7 +28,7 @@ public class WatchNumberPresenterTest {
     private static final Integer[] COUNT_2_PEOPLE = new Integer[]{0, 2};
     private static final Integer[] COUNT_NOBODY = new Integer[]{0, 0};
     private static final Integer[] NO_STREAM = new Integer[]{0, 0};
-    private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = null;
+    private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT = new WatchUpdateRequest.Event(true);
     private static final Boolean LOCAL_ONLY = false;
     public static final String STREAM_ID_STUB = "stream_id";
 
@@ -45,12 +45,6 @@ public class WatchNumberPresenterTest {
         presenter.setView(watchNumberView);
         presenter.setIdStream(STREAM_ID_STUB);
         watchUpdateReceiver = presenter;
-    }
-
-    @Test public void shouldLoadWatchNumberWhenInitialized() throws Exception {
-        presenter.initialize(watchNumberView, STREAM_ID_STUB);
-
-        verify(watchNumberInteractor).loadWatchersNumber(eq(STREAM_ID_STUB), anyBoolean(), any(WatchNumberInteractor.Callback.class));
     }
 
     @Test public void shouldShowCountInViewWhenOnePersonWatching() throws Exception {
@@ -118,7 +112,7 @@ public class WatchNumberPresenterTest {
     private void setupWatchNumberInteractorCallbacks(final Integer[] count) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((WatchNumberInteractor.Callback) invocation.getArguments()[1]).onLoaded(count);
+                ((WatchNumberInteractor.Callback) invocation.getArguments()[2]).onLoaded(count);
                 return null;
             }
         }).when(watchNumberInteractor)
