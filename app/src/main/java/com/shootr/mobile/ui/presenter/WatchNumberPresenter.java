@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.bus.StreamChanged;
 import com.shootr.mobile.domain.bus.WatchUpdateRequest;
 import com.shootr.mobile.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.mobile.ui.views.WatchNumberView;

@@ -103,8 +103,8 @@ public class GetStreamInfoInteractor implements Interactor {
       watchers.add(currentUser);
     }
 
-    return buildStreamInfo(stream, watchers, currentUser, stream.getTotalFollowingWatchers(), hasMoreParticipants,
-        localOnly);
+    return buildStreamInfo(stream, watchers, currentUser, stream.getTotalFollowingWatchers(),
+        hasMoreParticipants, localOnly);
   }
 
   private void setupFollowing(List<User> watchers) {
@@ -119,7 +119,8 @@ public class GetStreamInfoInteractor implements Interactor {
       @Override public int compare(User userModel, User t1) {
         Boolean isFollowingUserModel = userModel.isFollowing();
         Boolean t1IsFollowing = t1.isFollowing();
-        return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate()) - isFollowingUserModel.compareTo(t1IsFollowing);
+        return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate())
+            - isFollowingUserModel.compareTo(t1IsFollowing);
       }
     });
     return watchesFromPeople;

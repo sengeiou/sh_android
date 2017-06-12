@@ -744,7 +744,9 @@ public class StreamTimelinePresenterTest {
   @Test public void shouldLoadStreamIfInitializedWithoutAuthorIdUser() throws Exception {
     presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
 
-    verify(selectStreamInteractor).selectStream(anyString(), any(SelectStreamInteractor.Callback.class), any(SelectStreamInteractor.ErrorCallback.class));
+    verify(selectStreamInteractor).selectStream(anyString(),
+        any(SelectStreamInteractor.Callback.class),
+        any(SelectStreamInteractor.ErrorCallback.class));
   }
 
   @Test public void shouldShowEmptyWhenShotDeletedAndNoMoreShotsInTimeline() throws Exception {
