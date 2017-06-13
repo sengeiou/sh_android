@@ -31,6 +31,7 @@ import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollVotePresenter;
 import com.shootr.mobile.ui.views.PollVoteView;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
@@ -65,6 +66,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
   @Inject @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference;
+  @Inject AndroidTimeUtils timeUtils;
 
   private PollVoteAdapter pollVoteAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
@@ -187,11 +189,12 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     sendMixPanel();
   }
 
-  @Override public void showPollVotes(Long votes) {
+  @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire) {
     Integer pollVotes = votes.intValue();
+    String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
-    getToolbarDecorator().setSubtitle(pollVotesText);
+    getToolbarDecorator().setSubtitle(pollVotesText + " · " + timeToExpireText);
   }
 
   @Override public void ignorePoll() {

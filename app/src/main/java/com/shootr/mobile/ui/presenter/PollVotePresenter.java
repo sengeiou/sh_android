@@ -113,7 +113,7 @@ public class PollVotePresenter implements Presenter {
     if (canRenderPoll()) {
       idStream = pollModel.getIdStream();
       pollVoteView.renderPoll(pollModel);
-      showPollVotes();
+      showPollVotesTimeToExpire(pollModel.getExpirationDate());
       handlePollPrivacy();
     } else {
       if (pollModel != null) {
@@ -132,9 +132,9 @@ public class PollVotePresenter implements Presenter {
     }
   }
 
-  private void showPollVotes() {
+  private void showPollVotesTimeToExpire(Long expirationDate) {
     countPollVotes();
-    pollVoteView.showPollVotes(pollVotes);
+    pollVoteView.showPollVotesTimeToExpire(pollVotes, expirationDate);
   }
 
   private void countPollVotes() {
