@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.SharePollInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollOption;
+import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
@@ -18,11 +19,13 @@ import javax.inject.Inject;
 public class PollResultsPresenter implements Presenter {
 
   private static final long ZERO_VOTES = 0;
+  private static final long REFRESH_INTERVAL_MILLISECONDS = 1 * 1000;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final PollModelMapper pollModelMapper;
   private final IgnorePollInteractor ignorePollInteractor;
   private final SharePollInteractor sharePollInteractor;
   private final ErrorMessageFactory errorMessageFactory;
+  private final Poller poller;
 
   private PollResultsView pollResultsView;
   private boolean hasBeenPaused;
@@ -33,12 +36,14 @@ public class PollResultsPresenter implements Presenter {
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
       PollModelMapper pollModelMapper, IgnorePollInteractor ignorePollInteractor,
-      SharePollInteractor sharePollInteractor, ErrorMessageFactory errorMessageFactory) {
+      SharePollInteractor sharePollInteractor, ErrorMessageFactory errorMessageFactory,
+      Poller poller) {
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.pollModelMapper = pollModelMapper;
     this.ignorePollInteractor = ignorePollInteractor;
     this.sharePollInteractor = sharePollInteractor;
     this.errorMessageFactory = errorMessageFactory;
+    this.poller = poller;
   }
 
   public void initialize(PollResultsView pollResultsView, String idPoll, String idStream) {
@@ -74,6 +79,7 @@ public class PollResultsPresenter implements Presenter {
       idPoll = pollModel.getIdPoll();
       pollResultsView.renderPollResults(pollModel);
       showPollVotesTimeToExpire(pollModel.getExpirationDate());
+      setupPoller();
     }
   }
 
@@ -93,6 +99,15 @@ public class PollResultsPresenter implements Presenter {
     for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
       pollVotes += pollOptionModel.getVotes();
     }
+  }
+
+  private void setupPoller() {
+    this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
+      @Override public void run() {
+        showPollVotesTimeToExpire(pollModel.getExpirationDate());
+      }
+    });
+    poller.startPolling();
   }
 
   @Override public void resume() {

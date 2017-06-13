@@ -36,9 +36,9 @@ public class PollVotePresenter implements Presenter {
   private final SessionRepository sessionRepository;
   private final PollModelMapper pollModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
+  private final Poller poller;
 
   private PollVoteView pollVoteView;
-  private final Poller poller;
   private String idStream;
   private String idPoll;
   private boolean hasBeenPaused;
