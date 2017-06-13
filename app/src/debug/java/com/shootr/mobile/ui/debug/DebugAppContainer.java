@@ -226,7 +226,6 @@ import static butterknife.ButterKnife.findById;
         List<ContextualDebugActions.DebugAction<?>> debugActions = new LinkedList<>();
         debugActions.add(new FakeEmailInUseDebugAction(jsonAdapter));
         debugActions.add(new FakeUsernameInUseDebugAction(jsonAdapter));
-        debugActions.add(new LoginDebugAction("fukdalaw", "654321"));
         debugActions.add(new LoginDebugAction("VSaldanya", "123456"));
         debugActions.add(new LoginDebugAction("AlterEgoVic", "123456"));
         debugActions.add(new LoginDebugAction("Jorgetest", "jmartinez4"));
