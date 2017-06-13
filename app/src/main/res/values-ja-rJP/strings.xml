@@ -225,6 +225,22 @@
   <string name="menu_stream_edit_photo">写真</string>
   <!-- TimeUtils -->
   <string name="minutes">分</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour left</item>
+    <item quantity="other">%d hours left</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second left</item>
+    <item quantity="other">%d seconds left</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d day left</item>
+    <item quantity="other">%d days left</item>
+  </plurals>
   <string name="multiple_activities_action">見る</string>
   <string name="multiple_activity_notification">新しいショット: %d件</string>
   <string name="mute">通知をオフ</string>

@@ -227,7 +227,24 @@
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
   <!-- TimeUtils -->
+  <string name="left">queden %s</string>
   <string name="minutes">m</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minut</item>
+    <item quantity="other">%d minuts</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hora</item>
+    <item quantity="other">%d hores</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d segon</item>
+    <item quantity="other">%d segons</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d dia</item>
+    <item quantity="other">%d dies</item>
+  </plurals>
   <string name="multiple_activities_action">VEURE</string>
   <string name="multiple_activity_notification">%d notificacions noves</string>
   <string name="mute">Silenciar</string>

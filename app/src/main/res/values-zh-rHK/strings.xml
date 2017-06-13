@@ -107,6 +107,22 @@
   <string name="entered_just_now">剛登入</string>
   <string name="entered_long_time_ago">多天前登入</string>
   <string name="entered_minutes_ago">%d分鐘前登入</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour left</item>
+    <item quantity="other">%d hours left</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second left</item>
+    <item quantity="other">%d seconds left</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d day left</item>
+    <item quantity="other">%d days left</item>
+  </plurals>
   <string name="error_adding_contributor">無法新增超過100以上的合作者</string>
   <string name="error_deleted_shot">這個shot已被刪除</string>
   <string name="error_facebook_login">不能用Facebook登錄。請稍後再試</string>

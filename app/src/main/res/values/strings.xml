@@ -227,22 +227,23 @@
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Photo</string>
   <!-- TimeUtils -->
+  <string name="left">%s left</string>
   <string name="minutes">m</string>
   <plurals name="minutes_left">
-    <item quantity="one">%d minute left</item>
-    <item quantity="other">%d minutes left</item>
+    <item quantity="one">%d minute </item>
+    <item quantity="other">%d minutes </item>
   </plurals>
   <plurals name="hours_left">
-    <item quantity="one">%d hour left</item>
-    <item quantity="other">%d hours left</item>
+    <item quantity="one">%d hour </item>
+    <item quantity="other">%d hours </item>
   </plurals>
   <plurals name="seconds_left">
-    <item quantity="one">%d second left</item>
-    <item quantity="other">%d seconds left</item>
+    <item quantity="one">%d second</item>
+    <item quantity="other">%d seconds</item>
   </plurals>
   <plurals name="days_left">
-    <item quantity="one">%d day left</item>
-    <item quantity="other">%d days left</item>
+    <item quantity="one">%d day</item>
+    <item quantity="other">%d days </item>
   </plurals>
   <string name="multiple_activities_action">GO</string>
   <string name="multiple_activity_notification">%d new Activity notifications</string>
