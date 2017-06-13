@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
@@ -61,6 +62,7 @@ public class PollVotePresenterTest {
   @Mock GetStreamInteractor getStreamInteractor;
   @Mock ShowPollResultsInteractor showPollResultsInteractor;
   @Mock SessionRepository sessionRepository;
+  @Mock Poller poller;
 
   private PollVotePresenter presenter;
 
@@ -70,7 +72,8 @@ public class PollVotePresenterTest {
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
     presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
         ignorePollInteractor, votePollOptionInteractor,
-        showPollResultsInteractor, getStreamInteractor, sessionRepository, pollModelMapper, errorMessageFactory);
+        showPollResultsInteractor, getStreamInteractor, sessionRepository, pollModelMapper, errorMessageFactory,
+        poller);
   }
 
   @Test public void shouldRenderPollModelInView() throws Exception {
@@ -86,7 +89,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).showPollVotes(anyLong());
+    verify(pollVoteView).showPollVotesTimeToExpire(anyLong(), anyLong());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {

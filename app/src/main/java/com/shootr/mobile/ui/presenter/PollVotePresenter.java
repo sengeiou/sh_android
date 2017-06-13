@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
@@ -24,6 +25,7 @@ import javax.inject.Inject;
 public class PollVotePresenter implements Presenter {
 
   private static final long ZERO_VOTES = 0;
+  private static final long REFRESH_INTERVAL_MILLISECONDS = 1 * 1000;
 
   private final GetPollByIdStreamInteractor getPollByIdStreamInteractor;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
@@ -36,8 +38,8 @@ public class PollVotePresenter implements Presenter {
   private final ErrorMessageFactory errorMessageFactory;
 
   private PollVoteView pollVoteView;
+  private final Poller poller;
   private String idStream;
-  private String idStreamOwner;
   private String idPoll;
   private boolean hasBeenPaused;
   private boolean hasBeenInitializedWithIdPoll;
@@ -50,7 +52,8 @@ public class PollVotePresenter implements Presenter {
       GetPollByIdPollInteractor getPollByIdPollInteractor,
       IgnorePollInteractor ignorePollInteractor, VotePollOptionInteractor votePollOptionInteractor,
       ShowPollResultsInteractor showPollResultsInteractor, GetStreamInteractor getStreamInteractor,
-      SessionRepository sessionRepository, PollModelMapper pollModelMapper, ErrorMessageFactory errorMessageFactory) {
+      SessionRepository sessionRepository, PollModelMapper pollModelMapper,
+      ErrorMessageFactory errorMessageFactory, Poller poller) {
     this.getPollByIdStreamInteractor = getPollByIdStreamInteractor;
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.ignorePollInteractor = ignorePollInteractor;
@@ -60,11 +63,11 @@ public class PollVotePresenter implements Presenter {
     this.sessionRepository = sessionRepository;
     this.pollModelMapper = pollModelMapper;
     this.errorMessageFactory = errorMessageFactory;
+    this.poller = poller;
   }
 
   public void initialize(PollVoteView pollVoteView, String idStream, String idStreamOwner) {
     this.idStream = idStream;
-    this.idStreamOwner = idStreamOwner;
     this.pollVoteView = pollVoteView;
     this.hasBeenInitializedWithIdPoll = false;
     loadPollByIdStream();
@@ -114,6 +117,7 @@ public class PollVotePresenter implements Presenter {
       idStream = pollModel.getIdStream();
       pollVoteView.renderPoll(pollModel);
       showPollVotesTimeToExpire(pollModel.getExpirationDate());
+      setupPoller();
       handlePollPrivacy();
     } else {
       if (pollModel != null) {
@@ -142,6 +146,15 @@ public class PollVotePresenter implements Presenter {
     for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
       pollVotes += pollOptionModel.getVotes();
     }
+  }
+
+  private void setupPoller() {
+    this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
+      @Override public void run() {
+        showPollVotesTimeToExpire(pollModel.getExpirationDate());
+      }
+    });
+    poller.startPolling();
   }
 
   private boolean canRenderPoll() {
