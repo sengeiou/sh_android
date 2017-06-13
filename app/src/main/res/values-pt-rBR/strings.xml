@@ -289,7 +289,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Você bloqueou este usuário. Desbloqueie para enviar mensagens.</string>
   <string name="now">agora</string>
-  <string name="closed">closed</string>
+  <string name="poll_manual_close">at any time</string>
   <string name="no_filter_shots">Não há shots seus ou de contas verificadas.</string>
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="off_push_settings">Nenhuma</string>
