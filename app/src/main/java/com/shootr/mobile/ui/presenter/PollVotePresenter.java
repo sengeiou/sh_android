@@ -152,6 +152,10 @@ public class PollVotePresenter implements Presenter {
     this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
       @Override public void run() {
         showPollVotesTimeToExpire(pollModel.getExpirationDate());
+        if (pollModel.isExpired()) {
+          poller.stopPolling();
+          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+        }
       }
     });
     poller.startPolling();

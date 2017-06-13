@@ -112,4 +112,8 @@ public class PollModel {
   public void setExpirationDate(Long expirationDate) {
     this.expirationDate = expirationDate;
   }
+
+  public boolean isExpired() {
+    return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
+  }
 }
