@@ -68,8 +68,9 @@ public class AndroidTimeUtils implements TimeUtils {
     if (days > 0) {
       difference = difference - (MILISECONDS_ON_A_DAY * days);
       long hours = TimeUnit.MILLISECONDS.toHours(difference);
-      String timeDays = res.getQuantityString(R.plurals.days_left, (int)days);
-      String timeHours = ((hours > 0) ? res.getQuantityString(R.plurals.hours_left, (int)hours) : "");
+      String timeDays = res.getQuantityString(R.plurals.days_left, (int) days);
+      String timeHours =
+          ((hours > 0) ? res.getQuantityString(R.plurals.hours_left, (int) hours) : "");
       return timeDays + timeHours;
     }
 
@@ -77,8 +78,9 @@ public class AndroidTimeUtils implements TimeUtils {
     if (hours > 0) {
       difference = difference - (MILISECONDS_ON_A_HOUR * hours);
       long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
-      String timeHours = res.getQuantityString(R.plurals.hours_left, (int)hours);
-      String timeMinutes = ((minutes > 0) ? res.getQuantityString(R.plurals.minutes_left, (int)minutes) : "");
+      String timeHours = res.getQuantityString(R.plurals.hours_left, (int) hours);
+      String timeMinutes =
+          ((minutes > 0) ? res.getQuantityString(R.plurals.minutes_left, (int) minutes) : "");
       return timeHours + timeMinutes;
     }
 
@@ -86,14 +88,15 @@ public class AndroidTimeUtils implements TimeUtils {
     if (minutes > 0) {
       difference = difference - (MILISECONDS_ON_A_MINUTE * minutes);
       long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
-      String timeMinutes = res.getQuantityString(R.plurals.minutes_left, (int)minutes);
-      String timeSeconds = ((seconds > 0) ? res.getQuantityString(R.plurals.seconds_left, (int)seconds) : "");
+      String timeMinutes = res.getQuantityString(R.plurals.minutes_left, (int) minutes);
+      String timeSeconds =
+          ((seconds > 0) ? res.getQuantityString(R.plurals.seconds_left, (int) seconds) : "");
       return timeMinutes + timeSeconds;
     }
 
     long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
     if (seconds > 0) {
-      String timeSeconds = res.getQuantityString(R.plurals.seconds_left, (int)seconds);
+      String timeSeconds = res.getQuantityString(R.plurals.seconds_left, (int) seconds);
       return String.valueOf(seconds + timeSeconds);
     }
 
