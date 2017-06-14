@@ -227,7 +227,7 @@
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
   <!-- TimeUtils -->
-  <string name="left">quedan %s</string>
+  <string name="left">queda %s</string>
   <string name="minutes">m</string>
   <plurals name="minutes_left">
     <item quantity="one">%d minuto</item>
