@@ -19,7 +19,8 @@ import javax.inject.Inject;
 public class PollResultsPresenter implements Presenter {
 
   private static final long ZERO_VOTES = 0;
-  private static final long REFRESH_INTERVAL_MILLISECONDS = 1 * 1000;
+  private static final long REFRESH_INTERVAL_MILLISECONDS_SEC = 1 * 1000;
+  private static final long REFRESH_INTERVAL_MILLISECONDS_MIN = 60 * 1000;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final PollModelMapper pollModelMapper;
   private final IgnorePollInteractor ignorePollInteractor;
@@ -102,11 +103,17 @@ public class PollResultsPresenter implements Presenter {
   }
 
   private void setupPoller() {
-    this.poller.init(REFRESH_INTERVAL_MILLISECONDS, new Runnable() {
+    this.poller.init(REFRESH_INTERVAL_MILLISECONDS_SEC, new Runnable() {
       @Override public void run() {
         showPollVotesTimeToExpire(pollModel.getExpirationDate());
       }
     });
+    if (!pollModel.isLessThanHourToExpire()
+        && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
+      poller.stopPolling();
+      poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
+      poller.startPolling();
+    }
     poller.startPolling();
   }
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PollModel {
 
+  private final long ONE_HOUR_MILISECONDS = 3600000;
   private String idPoll;
   private String idStream;
   private String idUser;
@@ -116,6 +117,15 @@ public class PollModel {
   public boolean isExpired() {
     if (this.expirationDate != null) {
       return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean isLessThanHourToExpire() {
+    if (this.expirationDate != null) {
+      return (this.expirationDate - System.currentTimeMillis() < ONE_HOUR_MILISECONDS) ? true
+          : false;
     } else {
       return false;
     }
