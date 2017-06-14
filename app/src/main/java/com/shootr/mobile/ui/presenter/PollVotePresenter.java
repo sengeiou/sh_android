@@ -71,9 +71,6 @@ public class PollVotePresenter implements Presenter {
     this.pollVoteView = pollVoteView;
     this.hasBeenInitializedWithIdPoll = false;
     loadPollByIdStream();
-    if (sessionRepository.getCurrentUserId().equals(idStreamOwner)) {
-      pollVoteView.showViewResultsButton();
-    }
   }
 
   public void initializeWithIdPoll(PollVoteView pollVoteView, String idPoll) {

@@ -114,6 +114,10 @@ public class PollModel {
   }
 
   public boolean isExpired() {
-    return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
+    if (this.expirationDate != null) {
+      return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
+    } else {
+      return false;
+    }
   }
 }

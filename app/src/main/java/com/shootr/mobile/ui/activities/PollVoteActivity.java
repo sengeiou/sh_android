@@ -17,7 +17,6 @@ import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
@@ -51,9 +50,10 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @BindView(R.id.poll_option_list) RecyclerView pollOptionsRecycler;
   @BindView(R.id.poll_question) TextView pollQuestion;
   @BindView(R.id.pollvote_progress) ProgressBar progressBar;
-  @BindView(R.id.poll_results) TextView viewResults;
   @BindView(R.id.stream_title) TextView streamTitle;
   @BindView(R.id.container) CoordinatorLayout container;
+  @BindView(R.id.poll_countdown) TextView pollCountdown;
+  @BindView(R.id.poll_votes) TextView pollVoteNumber;
 
   @BindString(R.string.analytics_screen_poll_vote) String analyticsPollVote;
   @BindString(R.string.private_vote) String privatePoll;
@@ -194,7 +194,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
-    getToolbarDecorator().setSubtitle(pollVotesText + " · " + timeToExpireText);
+    pollVoteNumber.setText(pollVotesText);
+    pollCountdown.setText(timeToExpireText);
   }
 
   @Override public void ignorePoll() {
@@ -228,10 +229,6 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
             }
           }).show();
     }
-  }
-
-  @Override public void showViewResultsButton() {
-    viewResults.setVisibility(View.VISIBLE);
   }
 
   @Override public void showResultsWithoutVotingDialog() {
@@ -327,7 +324,4 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     progressBar.setVisibility(View.GONE);
   }
 
-  @OnClick(R.id.poll_results) public void goToResults() {
-    presenter.viewResults();
-  }
 }

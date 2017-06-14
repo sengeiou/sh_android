@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +45,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @BindView(R.id.results_recycler) RecyclerView results;
   @BindView(R.id.pollresults_progress) ProgressBar progressBar;
+  @BindView(R.id.poll_countdown) TextView pollCountdown;
+  @BindView(R.id.poll_votes) TextView pollVoteNumber;
 
   @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
 
@@ -174,8 +177,10 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire) {
     Integer pollVotes = votes.intValue();
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
-    String pollVotesText = getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
-    getToolbarDecorator().setSubtitle(pollVotesText + " · " + timeToExpireText);
+    String pollVotesText =
+        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+    pollVoteNumber.setText(pollVotesText);
+    pollCountdown.setText(timeToExpireText);
   }
 
   @Override public void goToStreamTimeline(String idStream) {
