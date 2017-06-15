@@ -213,12 +213,6 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     finish();
   }
 
-  @Override public void goToStreamTimeline(String idStream) {
-    Intent intent = StreamTimelineActivity.newIntent(this, idStream);
-    startActivity(intent);
-    finish();
-  }
-
   @Override public void showError(String message) {
     feedbackMessage.show(getView(), message);
   }
