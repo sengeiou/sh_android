@@ -64,7 +64,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
-  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle, String idStream) {
+  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle,
+      String idStream) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_results));
@@ -73,7 +74,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     return intent;
   }
 
-  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle, String idStream) {
+  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle,
+      String idStream) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_live_results));
@@ -174,13 +176,14 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     Intents.maybeStartActivity(this, shareIntent);
   }
 
-  @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
+  @Override
+  public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
     Integer pollVotes = votes.intValue();
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
     pollVoteNumber.setText(pollVotesText);
-    if(!isExpired) {
+    if (!isExpired) {
       pollCountdown.setText(timeToExpireText);
     }
   }
