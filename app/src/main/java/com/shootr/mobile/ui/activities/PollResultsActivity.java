@@ -174,13 +174,15 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     Intents.maybeStartActivity(this, shareIntent);
   }
 
-  @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire) {
+  @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
     Integer pollVotes = votes.intValue();
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
     pollVoteNumber.setText(pollVotesText);
-    pollCountdown.setText(timeToExpireText);
+    if(!isExpired) {
+      pollCountdown.setText(timeToExpireText);
+    }
   }
 
   @Override public void goToStreamTimeline(String idStream) {

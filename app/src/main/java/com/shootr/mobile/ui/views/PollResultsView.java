@@ -13,7 +13,7 @@ public interface PollResultsView extends LoadDataView {
 
   void share(PollModel pollModel);
 
-  void showPollVotesTimeToExpire(Long pollVotes, Long timeToExpire);
+  void showPollVotesTimeToExpire(Long pollVotes, Long timeToExpire, boolean isExpired);
 
   void goToStreamTimeline(String idStream);
 

@@ -121,8 +121,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
         setupPollOptionDialog(pollOptionModel);
       }
     }, imageLoader, initialsLoader);
-    GridLayoutManager layoutManager =
-        new GridLayoutManager(this, COLUMNS_NUMBER);
+    GridLayoutManager layoutManager = new GridLayoutManager(this, COLUMNS_NUMBER);
     pollOptionsRecycler.setLayoutManager(layoutManager);
     pollOptionsRecycler.setAdapter(pollVoteAdapter);
   }
@@ -146,7 +145,9 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
                 publicVoteAlertPreference.set(false);
                 presenter.voteOption(pollOptionModel.getIdPollOption());
               }
-            }).setNegativeButton(getString(R.string.cancel), null).show();
+            })
+        .setNegativeButton(getString(R.string.cancel), null)
+        .show();
   }
 
   private void sendMixPanel() {
@@ -189,13 +190,16 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     sendMixPanel();
   }
 
-  @Override public void showPollVotesTimeToExpire(Long votes, Long timeToExpire) {
+  @Override
+  public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
     Integer pollVotes = votes.intValue();
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
     pollVoteNumber.setText(pollVotesText);
-    pollCountdown.setText(timeToExpireText);
+    if (!isExpired) {
+      pollCountdown.setText(timeToExpireText);
+    }
   }
 
   @Override public void ignorePoll() {
@@ -223,11 +227,12 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     if (!isFinishing()) {
       AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
       alertDialogBuilder.setMessage(R.string.connection_lost) //
-          .setPositiveButton(getString(R.string.poll_vote_timeout_retry), new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-              presenter.retryVote();
-            }
-          }).show();
+          .setPositiveButton(getString(R.string.poll_vote_timeout_retry),
+              new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.retryVote();
+                }
+              }).show();
     }
   }
 
@@ -235,12 +240,11 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     alertDialogBuilder //
         .setMessage(getString(R.string.poll_results_dialog)) //
-        .setPositiveButton(getString(R.string.poll_results),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialogInterface, int action) {
-                presenter.showPollResultsWithoutVoting();
-              }
-            }).setNegativeButton(getString(R.string.cancel), null).show();
+        .setPositiveButton(getString(R.string.poll_results), new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialogInterface, int action) {
+            presenter.showPollResultsWithoutVoting();
+          }
+        }).setNegativeButton(getString(R.string.cancel), null).show();
   }
 
   @Override public void showPublicVotePrivacy() {
@@ -323,5 +327,4 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollOptionsRecycler.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
   }
-
 }

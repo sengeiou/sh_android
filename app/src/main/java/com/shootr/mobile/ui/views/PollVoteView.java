@@ -7,7 +7,7 @@ public interface PollVoteView  extends LoadDataView {
 
   void renderPoll(PollModel pollModel);
 
-  void showPollVotesTimeToExpire(Long votes, Long timeToExpire);
+  void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired);
 
   void ignorePoll();
 

@@ -92,7 +92,8 @@ public class PollResultsPresenter implements Presenter {
 
   private void showPollVotesTimeToExpire(Long expirationDate) {
     countPollVotes();
-    pollResultsView.showPollVotesTimeToExpire(pollVotes, expirationDate);
+    pollResultsView.showPollVotesTimeToExpire(pollVotes,
+        (expirationDate != null) ? expirationDate : -1, pollModel.isExpired());
   }
 
   private void countPollVotes() {
@@ -126,6 +127,7 @@ public class PollResultsPresenter implements Presenter {
 
   @Override public void pause() {
     hasBeenPaused = true;
+    poller.stopPolling();
   }
 
   public void ignorePoll() {

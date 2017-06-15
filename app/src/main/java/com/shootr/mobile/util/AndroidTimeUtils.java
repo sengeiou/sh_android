@@ -61,7 +61,7 @@ public class AndroidTimeUtils implements TimeUtils {
   public String getPollElapsedTime(Context context, Long timeToFinish) {
 
     Resources res = context.getResources();
-    if (timeToFinish != null) {
+    if (timeToFinish != -1) {
       long difference = timeToFinish - getCurrentTime();
       long days = TimeUnit.MILLISECONDS.toDays(difference);
 

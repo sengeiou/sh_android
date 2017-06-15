@@ -136,7 +136,8 @@ public class PollVotePresenter implements Presenter {
 
   private void showPollVotesTimeToExpire(Long expirationDate) {
     countPollVotes();
-    pollVoteView.showPollVotesTimeToExpire(pollVotes, expirationDate);
+    pollVoteView.showPollVotesTimeToExpire(pollVotes,
+        (expirationDate != null) ? expirationDate  : -1, pollModel.isExpired());
   }
 
   private void countPollVotes() {
@@ -236,10 +237,7 @@ public class PollVotePresenter implements Presenter {
 
   @Override public void pause() {
     hasBeenPaused = true;
-  }
-
-  public void viewResults() {
-    pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+    poller.stopPolling();
   }
 
   public void onShowPollResults() {
@@ -258,15 +256,6 @@ public class PollVotePresenter implements Presenter {
     return pollModel.getIdUser().equals(sessionRepository.getCurrentUserId());
   }
 
-  private boolean isContributor(List<Contributor> contributors) {
-    for (Contributor contributor : contributors) {
-      if (contributor.getIdUser().equals(sessionRepository.getCurrentUserId())) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   public void showPollResultsWithoutVoting() {
     showPollResultsInteractor.showPollResults(pollModel.getIdPoll(),
         new Interactor.CompletedCallback() {
@@ -274,12 +263,6 @@ public class PollVotePresenter implements Presenter {
             pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
           }
         });
-  }
-
-  public void onStreamTitleClick() {
-    if (idStream != null) {
-      pollVoteView.goToStreamTimeline(idStream);
-    }
   }
 
   public String getIdStream() {
