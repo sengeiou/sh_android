@@ -58,51 +58,84 @@ public class AndroidTimeUtils implements TimeUtils {
     return res.getString(R.string.now);
   }
 
+  private String getDays(long difference, Resources res) {
+    long days = TimeUnit.MILLISECONDS.toDays(difference);
+    if (days > 0) {
+      difference = difference - (MILISECONDS_ON_A_DAY * days);
+      long hours = TimeUnit.MILLISECONDS.toHours(difference);
+      String timeDays = res.getQuantityString(R.plurals.days_left, (int) days, (int) days);
+      String timeHours =
+          ((hours > 0) ? " " + res.getQuantityString(R.plurals.hours_left, (int) hours, (int) hours)
+              : "");
+      return res.getString(R.string.left, timeDays + timeHours);
+    } else {
+      return null;
+    }
+  }
+
+  private String getHours(long difference, Resources res) {
+    long hours = TimeUnit.MILLISECONDS.toHours(difference);
+    if (hours > 0) {
+      difference = difference - (MILISECONDS_ON_A_HOUR * hours);
+      long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
+      String timeHours = res.getQuantityString(R.plurals.hours_left, (int) hours, (int) hours);
+      String timeMinutes =
+          ((minutes > 0) ? " " + res.getQuantityString(R.plurals.minutes_left, (int) minutes,
+              (int) minutes) : "");
+      return res.getString(R.string.left, timeHours + timeMinutes);
+    } else {
+      return null;
+    }
+  }
+
+  private String getMinutes(long difference, Resources res) {
+    long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
+    if (minutes > 0) {
+      difference = difference - (MILISECONDS_ON_A_MINUTE * minutes);
+      long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
+      String timeMinutes =
+          res.getQuantityString(R.plurals.minutes_left, (int) minutes, (int) minutes);
+      String timeSeconds =
+          ((seconds > 0) ? " " + res.getQuantityString(R.plurals.seconds_left, (int) seconds,
+              (int) seconds) : "");
+      return res.getString(R.string.left, timeMinutes + timeSeconds);
+    } else {
+      return null;
+    }
+  }
+
+  private String getSeconds(long difference, Resources res) {
+    long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
+    if (seconds > 0) {
+      String timeSeconds =
+          res.getQuantityString(R.plurals.seconds_left, (int) seconds, (int) seconds);
+      return res.getString(R.string.left, timeSeconds);
+    } else {
+      return null;
+    }
+  }
+
   public String getPollElapsedTime(Context context, Long timeToFinish) {
 
     Resources res = context.getResources();
     if (timeToFinish != -1) {
       long difference = timeToFinish - getCurrentTime();
-      long days = TimeUnit.MILLISECONDS.toDays(difference);
 
-      if (days > 0) {
-        difference = difference - (MILISECONDS_ON_A_DAY * days);
-        long hours = TimeUnit.MILLISECONDS.toHours(difference);
-        String timeDays = res.getQuantityString(R.plurals.days_left, (int) days, (int) days);
-        String timeHours =
-            ((hours > 0) ? " " + res.getQuantityString(R.plurals.hours_left, (int) hours,
-                (int) hours) : "");
-        return res.getString(R.string.left, timeDays + timeHours);
+      String daysResulted = getDays(difference, res);
+      if (daysResulted != null) {
+        return daysResulted;
       }
-
-      long hours = TimeUnit.MILLISECONDS.toHours(difference);
-      if (hours > 0) {
-        difference = difference - (MILISECONDS_ON_A_HOUR * hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
-        String timeHours = res.getQuantityString(R.plurals.hours_left, (int) hours, (int) hours);
-        String timeMinutes =
-            ((minutes > 0) ? " " + res.getQuantityString(R.plurals.minutes_left, (int) minutes,
-                (int) minutes) : "");
-        return res.getString(R.string.left, timeHours + timeMinutes);
+      String hoursResulted = getHours(difference, res);
+      if (hoursResulted != null) {
+        return hoursResulted;
       }
-
-      long minutes = TimeUnit.MILLISECONDS.toMinutes(difference);
-      if (minutes > 0) {
-        difference = difference - (MILISECONDS_ON_A_MINUTE * minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
-        String timeMinutes =
-            res.getQuantityString(R.plurals.minutes_left, (int) minutes, (int) minutes);
-        String timeSeconds =
-            ((seconds > 0) ? " " + res.getQuantityString(R.plurals.seconds_left, (int) seconds,
-                (int) seconds) : "");
-        return res.getString(R.string.left, timeMinutes + timeSeconds);
+      String minutesResulted = getMinutes(difference, res);
+      if (minutesResulted != null) {
+        return minutesResulted;
       }
-
-      long seconds = TimeUnit.MILLISECONDS.toSeconds(difference);
-      if (seconds > 0) {
-        String timeSeconds =
-            res.getQuantityString(R.plurals.seconds_left, (int) seconds, (int) seconds);
-        return res.getString(R.string.left, timeSeconds);
+      String secondsResulted = getSeconds(difference, res);
+      if (secondsResulted != null) {
+        return secondsResulted;
       }
     }
     return res.getString(R.string.poll_manual_close);
