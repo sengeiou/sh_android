@@ -107,14 +107,16 @@ public class PollResultsPresenter implements Presenter {
     this.poller.init(REFRESH_INTERVAL_MILLISECONDS_SEC, new Runnable() {
       @Override public void run() {
         showPollVotesTimeToExpire(pollModel.getExpirationDate());
+        if (!pollModel.isLessThanHourToExpire()
+            && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
+          poller.stopPolling();
+          poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
+          poller.startPolling();
+        } else if (pollModel.isExpired()) {
+          poller.stopPolling();
+        }
       }
     });
-    if (!pollModel.isLessThanHourToExpire()
-        && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
-      poller.stopPolling();
-      poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
-      poller.startPolling();
-    }
     poller.startPolling();
   }
 
