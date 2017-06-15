@@ -112,6 +112,11 @@ public class PollResultsPresenter implements Presenter {
           poller.stopPolling();
           poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
           poller.startPolling();
+        } else if (pollModel.isLessThanHourToExpire()
+            && poller.getIntervalMilliseconds() == REFRESH_INTERVAL_MILLISECONDS_MIN) {
+          poller.stopPolling();
+          poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_SEC);
+          poller.startPolling();
         } else if (pollModel.isExpired()) {
           poller.stopPolling();
         }
