@@ -21,6 +21,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -63,7 +64,7 @@ public class PollResultsPresenterTest {
 
     presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
-    verify(pollResultsView).showPollVotesTimeToExpire(anyLong(), anyLong());
+    verify(pollResultsView).showPollVotesTimeToExpire(anyLong(), anyLong(), anyBoolean());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {

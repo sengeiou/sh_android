@@ -89,7 +89,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).showPollVotesTimeToExpire(anyLong(), anyLong());
+    verify(pollVoteView).showPollVotesTimeToExpire(anyLong(), anyLong(), anyBoolean());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {
