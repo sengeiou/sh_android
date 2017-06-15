@@ -11,7 +11,6 @@ import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
@@ -19,7 +18,6 @@ import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.views.PollVoteView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import java.util.List;
 import javax.inject.Inject;
 
 public class PollVotePresenter implements Presenter {
@@ -137,7 +135,7 @@ public class PollVotePresenter implements Presenter {
   private void showPollVotesTimeToExpire(Long expirationDate) {
     countPollVotes();
     pollVoteView.showPollVotesTimeToExpire(pollVotes,
-        (expirationDate != null) ? expirationDate  : -1, pollModel.isExpired());
+        (expirationDate != null) ? expirationDate : -1, pollModel.isExpired());
   }
 
   private void countPollVotes() {
@@ -243,17 +241,9 @@ public class PollVotePresenter implements Presenter {
   public void onShowPollResults() {
     getStreamInteractor.loadStream(idStream, new GetStreamInteractor.Callback() {
       @Override public void onLoaded(Stream stream) {
-        if (!isPollOwner() && !stream.isCurrentUserContributor()) {
-          pollVoteView.showResultsWithoutVotingDialog();
-        } else {
-          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
-        }
+        pollVoteView.showResultsWithoutVotingDialog();
       }
     });
-  }
-
-  private boolean isPollOwner() {
-    return pollModel.getIdUser().equals(sessionRepository.getCurrentUserId());
   }
 
   public void showPollResultsWithoutVoting() {
