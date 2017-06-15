@@ -219,6 +219,7 @@
   <string name="menu_search_streams">検索</string>
   <string name="menu_search_timeline">タイムラインを検索</string>
   <string name="menu_share_shot_via">共有する</string>
+  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_share_shot_via_shootr">リシュート</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">写真</string>

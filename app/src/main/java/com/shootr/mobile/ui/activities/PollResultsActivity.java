@@ -212,7 +212,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   }
 
   private void openSharePollMenu() {
-    new CustomContextMenu.Builder(this).addAction(R.string.menu_share_shot_via_shootr, new Runnable() {
+    new CustomContextMenu.Builder(this).addAction(R.string.menu_share_poll_via_shootr, new Runnable() {
       @Override public void run() {
         presenter.shareViaShootr();
       }

@@ -220,6 +220,7 @@
   <string name="menu_search_streams">搜尋</string>
   <string name="menu_search_timeline">搜尋timeline</string>
   <string name="menu_share_shot_via">透過以下方式分享：</string>
+  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">信息</string>
   <string name="menu_stream_edit_photo">相片</string>

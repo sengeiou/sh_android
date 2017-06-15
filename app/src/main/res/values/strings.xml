@@ -223,6 +223,7 @@
   <string name="menu_search_timeline">Search timeline</string>
   <string name="menu_share_shot_via">Share via…</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
+  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Photo</string>
   <!-- TimeUtils -->
