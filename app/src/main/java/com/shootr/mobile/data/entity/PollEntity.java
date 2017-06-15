@@ -8,7 +8,7 @@ public class PollEntity {
   private String idStream;
   private String idUser;
   private String question;
-  private Long hasVoted;
+  private Boolean userHasVoted;
   private String status;
   private Long published;
   private List<PollOptionEntity> pollOptions;
@@ -39,12 +39,12 @@ public class PollEntity {
     this.question = question;
   }
 
-  public Long getHasVoted() {
-    return hasVoted;
+  public Boolean getUserHasVoted() {
+    return userHasVoted;
   }
 
-  public void setHasVoted(Long hasVoted) {
-    this.hasVoted = hasVoted;
+  public void setUserHasVoted(Boolean userHasVoted) {
+    this.userHasVoted = userHasVoted;
   }
 
   public String getStatus() {

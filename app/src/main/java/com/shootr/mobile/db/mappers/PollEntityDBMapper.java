@@ -14,7 +14,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
 
   public PollEntity fromCursor(Cursor c) {
     PollEntity pollEntity = new PollEntity();
-    pollEntity.setHasVoted(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HAS_VOTED)));
+    pollEntity.setUserHasVoted(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HAS_VOTED)) == 1L);
     pollEntity.setIdPoll(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_POLL)));
     pollEntity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_STREAM)));
     pollEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_USER)));
@@ -28,7 +28,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
 
   public ContentValues toContentValues(PollEntity pollEntity) {
     ContentValues cv = new ContentValues();
-    cv.put(DatabaseContract.PollTable.HAS_VOTED, pollEntity.getHasVoted());
+    cv.put(DatabaseContract.PollTable.HAS_VOTED, pollEntity.getUserHasVoted() ? 1L : 0L);
     cv.put(DatabaseContract.PollTable.ID_POLL, pollEntity.getIdPoll());
     cv.put(DatabaseContract.PollTable.ID_STREAM, pollEntity.getIdStream());
     cv.put(DatabaseContract.PollTable.ID_USER, pollEntity.getIdStream());
