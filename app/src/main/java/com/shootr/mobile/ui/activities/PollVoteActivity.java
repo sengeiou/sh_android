@@ -199,6 +199,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollVoteNumber.setText(pollVotesText);
     if (!isExpired) {
       pollCountdown.setText(timeToExpireText);
+    }else {
+      pollCountdown.setVisibility(View.GONE);
     }
   }
 
