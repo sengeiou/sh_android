@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,7 +23,9 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollResultsPresenter;
 import com.shootr.mobile.ui.views.PollResultsView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -43,6 +46,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @BindView(R.id.results_recycler) RecyclerView results;
   @BindView(R.id.pollresults_progress) ProgressBar progressBar;
+  @BindView(R.id.poll_countdown) TextView pollCountdown;
+  @BindView(R.id.poll_votes) TextView pollVoteNumber;
 
   @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
 
@@ -54,12 +59,14 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Inject ShareManager shareManager;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject AndroidTimeUtils timeUtils;
 
   private PollResultsAdapter adapter;
 
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
 
-  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle, String idStream) {
+  public static Intent newResultsIntent(Context context, String idPoll, String streamTitle,
+      String idStream) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_results));
@@ -68,7 +75,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     return intent;
   }
 
-  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle, String idStream) {
+  public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle,
+      String idStream) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_live_results));
@@ -95,6 +103,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     results.setLayoutManager(linearLayoutManager);
     results.setAdapter(adapter);
+    results.addItemDecoration(new BottomOffsetDecoration(200));
   }
 
   private void setupPollOptionDialog(PollOptionModel pollOptionModel) {
@@ -169,11 +178,19 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     Intents.maybeStartActivity(this, shareIntent);
   }
 
-  @Override public void showPollVotes(Long votes) {
+  @Override
+  public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
     Integer pollVotes = votes.intValue();
+    String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
-    getToolbarDecorator().setSubtitle(pollVotesText);
+    pollVoteNumber.setText(pollVotesText);
+    if (!isExpired) {
+      pollCountdown.setText(timeToExpireText);
+      pollCountdown.setVisibility(View.VISIBLE);
+    } else {
+      pollCountdown.setVisibility(View.GONE);
+    }
   }
 
   @Override public void goToStreamTimeline(String idStream) {

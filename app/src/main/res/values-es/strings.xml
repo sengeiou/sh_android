@@ -227,7 +227,24 @@
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
   <!-- TimeUtils -->
+  <string name="left">Tiempo restante: %s</string>
   <string name="minutes">m</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minuto</item>
+    <item quantity="other">%d minutos</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hora</item>
+    <item quantity="other">%d horas</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d segundo</item>
+    <item quantity="other">%d segundos</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d día</item>
+    <item quantity="other">%d días</item>
+  </plurals>
   <string name="multiple_activities_action">VER</string>
   <string name="multiple_activity_notification">%d notificaciones nuevas</string>
   <string name="mute">Silenciar</string>
@@ -273,6 +290,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloqueado este usuario. Desbloquea para enviar mensajes.</string>
   <string name="now">ahora</string>
+  <string name="poll_manual_close">Esta encuesta puede acabar en cualquier momento</string>
   <string name="no_filter_shots">No hay shots tuyos o de cuentas verificadas.</string>
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
   <string name="off_push_settings">Ninguna</string>

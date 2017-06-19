@@ -7,19 +7,15 @@ public interface PollVoteView  extends LoadDataView {
 
   void renderPoll(PollModel pollModel);
 
-  void showPollVotes(Long votes);
+  void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired);
 
   void ignorePoll();
 
   void goToResults(String idPoll, String idStream);
 
-  void goToStreamTimeline(String idStream);
-
   void showError(String message);
 
   void showTimeoutAlert();
-
-  void showViewResultsButton();
 
   void showResultsWithoutVotingDialog();
 

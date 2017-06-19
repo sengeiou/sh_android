@@ -228,6 +228,22 @@
   <string name="menu_stream_edit_photo">Foto</string>
   <!-- TimeUtils -->
   <string name="minutes">m</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour left</item>
+    <item quantity="other">%d hours left</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second left</item>
+    <item quantity="other">%d seconds left</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d day left</item>
+    <item quantity="other">%d days left</item>
+  </plurals>
   <string name="multiple_activities_action">VER</string>
   <string name="multiple_activity_notification">%d novas notificações</string>
   <string name="mute">Silenciar</string>
@@ -273,6 +289,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Você bloqueou este usuário. Desbloqueie para enviar mensagens.</string>
   <string name="now">agora</string>
+  <string name="poll_manual_close">at any time</string>
   <string name="no_filter_shots">Não há shots seus ou de contas verificadas.</string>
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="off_push_settings">Nenhuma</string>

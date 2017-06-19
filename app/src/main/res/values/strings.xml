@@ -227,7 +227,24 @@
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Photo</string>
   <!-- TimeUtils -->
+  <string name="left">%s left</string>
   <string name="minutes">m</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minute </item>
+    <item quantity="other">%d minutes </item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour </item>
+    <item quantity="other">%d hours </item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second</item>
+    <item quantity="other">%d seconds</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d day</item>
+    <item quantity="other">%d days </item>
+  </plurals>
   <string name="multiple_activities_action">GO</string>
   <string name="multiple_activity_notification">%d new Activity notifications</string>
   <string name="mute">Mute</string>
@@ -273,6 +290,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">You blocked this user. Unblock to shoot a message. </string>
   <string name="now">now</string>
+  <string name="poll_manual_close">This poll may end at any time</string>
   <string name="no_filter_shots">No shots by you or verified accounts</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="off_push_settings">Off</string>

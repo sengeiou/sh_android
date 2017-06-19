@@ -649,6 +649,8 @@ public class SQLiteUtils {
         + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.VOTE_PRIVACY
         + " TEXT NOT NULL,"
+        + DatabaseContract.PollTable.EXPIRATION_DATE
+        + " NUMBER NULL,"
         + DatabaseContract.PollTable.PUBLISHED
         + " NUMBER NOT NULL)";
 

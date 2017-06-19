@@ -226,6 +226,22 @@
   <string name="menu_stream_edit_photo">图片</string>
   <!-- TimeUtils -->
   <string name="minutes">分</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour left</item>
+    <item quantity="other">%d hours left</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second left</item>
+    <item quantity="other">%d seconds left</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d day left</item>
+    <item quantity="other">%d days left</item>
+  </plurals>
   <string name="multiple_activities_action">瞅</string>
   <string name="multiple_activity_notification">%d新的动态消息</string>
   <string name="mute">静音</string>
@@ -270,6 +286,7 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">你封锁了该用户，取消封锁来发送消息。</string>
   <string name="now">现在</string>
+  <string name="poll_manual_close">at any time</string>
   <string name="no_intent_handler">沒有应用程序可用来处理此行为。\n</string>
   <string name="off_push_settings">关闭</string>
   <string name="ok">好的</string>

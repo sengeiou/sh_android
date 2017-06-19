@@ -37,6 +37,7 @@ public class PollModelMapper {
       pollModel.setPollOptionModels(mapper.transform(poll.getPollOptions()));
     }
     pollModel.setVotePrivacy(poll.getVotePrivacy() != null ? poll.getVotePrivacy() : PollStatus.PRIVATE);
+    pollModel.setExpirationDate(poll.getExpirationDate());
     return pollModel;
   }
 

@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
 import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.SharePollInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
@@ -20,6 +21,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
@@ -38,6 +40,7 @@ public class PollResultsPresenterTest {
   @Mock IgnorePollInteractor ignorePollInteractor;
   @Mock SharePollInteractor sharePollInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
+  @Mock Poller poller;
 
   private PollResultsPresenter presenter;
 
@@ -45,7 +48,7 @@ public class PollResultsPresenterTest {
     MockitoAnnotations.initMocks(this);
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
     presenter = new PollResultsPresenter(getPollByIdPollInteractor, pollModelMapper,
-        ignorePollInteractor, sharePollInteractor, errorMessageFactory);
+        ignorePollInteractor, sharePollInteractor, errorMessageFactory, poller);
   }
 
   @Test public void shouldRenderResultsWhenInitialize() throws Exception {
@@ -61,7 +64,7 @@ public class PollResultsPresenterTest {
 
     presenter.initialize(pollResultsView, POLL_ID, STREAM_ID);
 
-    verify(pollResultsView).showPollVotes(anyLong());
+    verify(pollResultsView).showPollVotesTimeToExpire(anyLong(), anyLong(), anyBoolean());
   }
 
   @Test public void shouldShowErrorInViewWhenInteractorReturnsError() throws Exception {

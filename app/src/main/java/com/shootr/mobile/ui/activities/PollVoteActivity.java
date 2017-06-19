@@ -17,7 +17,6 @@ import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
@@ -30,7 +29,9 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollVotePresenter;
 import com.shootr.mobile.ui.views.PollVoteView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.InitialsLoader;
@@ -50,9 +51,10 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @BindView(R.id.poll_option_list) RecyclerView pollOptionsRecycler;
   @BindView(R.id.poll_question) TextView pollQuestion;
   @BindView(R.id.pollvote_progress) ProgressBar progressBar;
-  @BindView(R.id.poll_results) TextView viewResults;
   @BindView(R.id.stream_title) TextView streamTitle;
   @BindView(R.id.container) CoordinatorLayout container;
+  @BindView(R.id.poll_countdown) TextView pollCountdown;
+  @BindView(R.id.poll_votes) TextView pollVoteNumber;
 
   @BindString(R.string.analytics_screen_poll_vote) String analyticsPollVote;
   @BindString(R.string.private_vote) String privatePoll;
@@ -65,6 +67,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
   @Inject @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference;
+  @Inject AndroidTimeUtils timeUtils;
 
   private PollVoteAdapter pollVoteAdapter;
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
@@ -119,10 +122,10 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
         setupPollOptionDialog(pollOptionModel);
       }
     }, imageLoader, initialsLoader);
-    GridLayoutManager layoutManager =
-        new GridLayoutManager(this, COLUMNS_NUMBER);
+    GridLayoutManager layoutManager = new GridLayoutManager(this, COLUMNS_NUMBER);
     pollOptionsRecycler.setLayoutManager(layoutManager);
     pollOptionsRecycler.setAdapter(pollVoteAdapter);
+    pollOptionsRecycler.addItemDecoration(new BottomOffsetDecoration(200));
   }
 
   private void voteOption(final PollOptionModel pollOptionModel) {
@@ -144,7 +147,9 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
                 publicVoteAlertPreference.set(false);
                 presenter.voteOption(pollOptionModel.getIdPollOption());
               }
-            }).setNegativeButton(getString(R.string.cancel), null).show();
+            })
+        .setNegativeButton(getString(R.string.cancel), null)
+        .show();
   }
 
   private void sendMixPanel() {
@@ -187,11 +192,19 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     sendMixPanel();
   }
 
-  @Override public void showPollVotes(Long votes) {
+  @Override
+  public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
     Integer pollVotes = votes.intValue();
+    String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
     String pollVotesText =
         getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
-    getToolbarDecorator().setSubtitle(pollVotesText);
+    pollVoteNumber.setText(pollVotesText);
+    if (!isExpired) {
+      pollCountdown.setText(timeToExpireText);
+      pollCountdown.setVisibility(View.VISIBLE);
+    } else {
+      pollCountdown.setVisibility(View.GONE);
+    }
   }
 
   @Override public void ignorePoll() {
@@ -205,12 +218,6 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     finish();
   }
 
-  @Override public void goToStreamTimeline(String idStream) {
-    Intent intent = StreamTimelineActivity.newIntent(this, idStream);
-    startActivity(intent);
-    finish();
-  }
-
   @Override public void showError(String message) {
     feedbackMessage.show(getView(), message);
   }
@@ -219,28 +226,24 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     if (!isFinishing()) {
       AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
       alertDialogBuilder.setMessage(R.string.connection_lost) //
-          .setPositiveButton(getString(R.string.poll_vote_timeout_retry), new DialogInterface.OnClickListener() {
-            @Override public void onClick(DialogInterface dialog, int which) {
-              presenter.retryVote();
-            }
-          }).show();
+          .setPositiveButton(getString(R.string.poll_vote_timeout_retry),
+              new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                  presenter.retryVote();
+                }
+              }).show();
     }
-  }
-
-  @Override public void showViewResultsButton() {
-    viewResults.setVisibility(View.VISIBLE);
   }
 
   @Override public void showResultsWithoutVotingDialog() {
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     alertDialogBuilder //
         .setMessage(getString(R.string.poll_results_dialog)) //
-        .setPositiveButton(getString(R.string.poll_results),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialogInterface, int action) {
-                presenter.showPollResultsWithoutVoting();
-              }
-            }).setNegativeButton(getString(R.string.cancel), null).show();
+        .setPositiveButton(getString(R.string.poll_results), new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialogInterface, int action) {
+            presenter.showPollResultsWithoutVoting();
+          }
+        }).setNegativeButton(getString(R.string.cancel), null).show();
   }
 
   @Override public void showPublicVotePrivacy() {
@@ -322,9 +325,5 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override public void hideLoading() {
     pollOptionsRecycler.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
-  }
-
-  @OnClick(R.id.poll_results) public void goToResults() {
-    presenter.viewResults();
   }
 }
