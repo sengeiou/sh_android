@@ -1,8 +1,10 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
+import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.db.manager.UserManager;
 import java.io.IOException;
 import java.util.List;
@@ -12,10 +14,13 @@ public class DatabaseUserDataSource implements UserDataSource {
 
     private final FollowManager followManager;
     private final UserManager userManager;
+    private final StreamManager streamManager;
 
-    @Inject public DatabaseUserDataSource(FollowManager followManager, UserManager userManager) {
+    @Inject public DatabaseUserDataSource(FollowManager followManager, UserManager userManager,
+        StreamManager streamManager) {
         this.followManager = followManager;
         this.userManager = userManager;
+        this.streamManager = streamManager;
     }
 
     @Override public List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize) {
@@ -65,9 +70,11 @@ public class DatabaseUserDataSource implements UserDataSource {
         throw new IllegalStateException("Find Participants has no local implementation");
     }
 
-    @Override public void updateWatch(UserEntity userEntity) {
+    @Override public StreamEntity updateWatch(UserEntity userEntity) {
         //TODO save only watching fields?
         userManager.saveUser(userEntity);
+        return userEntity.getIdWatchingStream() != null ? streamManager.getStreamById(
+            userEntity.getIdWatchingStream()) : null;
     }
 
     @Override public List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize) {

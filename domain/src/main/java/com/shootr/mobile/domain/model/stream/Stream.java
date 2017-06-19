@@ -32,6 +32,7 @@ public class Stream implements Searchable {
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFavorite;
+    private int totalFollowingWatchers;
 
     public Boolean isRemoved() {
         return removed;
@@ -281,5 +282,13 @@ public class Stream implements Searchable {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public int getTotalFollowingWatchers() {
+        return totalFollowingWatchers;
+    }
+
+    public void setTotalFollowingWatchers(int totalFollowingWatchers) {
+        this.totalFollowingWatchers = totalFollowingWatchers;
     }
 }

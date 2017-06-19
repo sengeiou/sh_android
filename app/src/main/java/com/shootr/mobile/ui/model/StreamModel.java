@@ -26,6 +26,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFavorite;
+    private int totalFollowingWatchers;
 
     public Boolean isRemoved() {
         return removed;
@@ -216,5 +217,13 @@ public class StreamModel implements Serializable, SearchableModel {
 
     @Override public String getSearchableType() {
         return SearchableType.STREAM;
+    }
+
+    public int getTotalFollowingWatchers() {
+        return totalFollowingWatchers;
+    }
+
+    public void setTotalFollowingWatchers(int totalFollowingWatchers) {
+        this.totalFollowingWatchers = totalFollowingWatchers;
     }
 }

@@ -265,16 +265,12 @@ public class StreamDetailPresenter implements Presenter {
 
   //region renders
   private void renderWatchersList(StreamInfo streamInfo) {
-    if (participantsShown.isEmpty() || streamInfo.isDataComplete()) {
-      List<User> watchers = streamInfo.getWatchers();
-      participantsShown = userModelMapper.transform(watchers);
-      streamDetailView.setWatchers(participantsShown);
-      if (streamInfo.hasMoreParticipants()) {
-        this.totalWatchers = streamModel.getTotalWatchers();
-        streamDetailView.showAllParticipantsButton();
-      } else {
-        this.totalWatchers = watchers.size();
-      }
+    List<User> watchers = streamInfo.getWatchers();
+    participantsShown = userModelMapper.transform(watchers);
+    streamDetailView.setWatchers(participantsShown);
+    this.totalWatchers = streamModel.getTotalWatchers();
+    if (streamInfo.hasMoreParticipants()) {
+      streamDetailView.showAllParticipantsButton();
     }
   }
 

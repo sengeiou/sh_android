@@ -4,12 +4,15 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Default;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.SynchroEntity;
 import com.shootr.mobile.data.entity.UserEntity;
+import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
+import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
@@ -22,6 +25,7 @@ import com.shootr.mobile.domain.bus.WatchUpdateRequest;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
@@ -49,8 +53,10 @@ public class SyncUserRepository
   private final CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource;
   private final FollowDataSource localFollowDataSource;
   private final UserEntityMapper userEntityMapper;
+  private final StreamDataSource localStreamDataSource;
   private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
   private final SyncableUserEntityFactory syncableUserEntityFactory;
+  private final StreamEntityMapper streamEntityMapper;
   private final SyncTrigger syncTrigger;
   private final Bus bus;
   private final UserCache userCache;
@@ -63,10 +69,11 @@ public class SyncUserRepository
       @Remote SuggestedPeopleDataSource remoteSuggestedPeopleDataSource,
       CachedSuggestedPeopleDataSource cachedSuggestedPeopleDataSource,
       @Local FollowDataSource localFollowDataSource, UserEntityMapper userEntityMapper,
-      SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory, SyncTrigger syncTrigger,
-      @Default Bus bus, UserCache userCache, @Remote FollowDataSource serviceFollowDataSource,
-      SynchroDataSource synchroDataSource, AndroidTimeUtils androidTimeUtils) {
+      @Local StreamDataSource localStreamDataSource, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
+      SyncableUserEntityFactory syncableUserEntityFactory, StreamEntityMapper streamEntityMapper,
+      SyncTrigger syncTrigger, @Default Bus bus, UserCache userCache,
+      @Remote FollowDataSource serviceFollowDataSource, SynchroDataSource synchroDataSource,
+      AndroidTimeUtils androidTimeUtils) {
     this.localUserDataSource = localUserDataSource;
     this.remoteUserDataSource = remoteUserDataSource;
     this.sessionRepository = sessionRepository;
@@ -74,8 +81,10 @@ public class SyncUserRepository
     this.cachedSuggestedPeopleDataSource = cachedSuggestedPeopleDataSource;
     this.localFollowDataSource = localFollowDataSource;
     this.userEntityMapper = userEntityMapper;
+    this.localStreamDataSource = localStreamDataSource;
     this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
     this.syncableUserEntityFactory = syncableUserEntityFactory;
+    this.streamEntityMapper = streamEntityMapper;
     this.syncTrigger = syncTrigger;
     this.bus = bus;
     this.userCache = userCache;
@@ -228,17 +237,22 @@ public class SyncUserRepository
     return transformParticipantsEntities(allParticipants);
   }
 
-  @Override public void updateWatch(User user) {
+  @Override public Stream updateWatch(User user) {
     UserEntity entityWithWatchValues = userEntityMapper.transform(user);
+    StreamEntity watchingStream;
     try {
-      remoteUserDataSource.updateWatch(entityWithWatchValues);
+      watchingStream =
+          remoteUserDataSource.updateWatch(entityWithWatchValues);
+      localStreamDataSource.putStream(watchingStream);
       entityWithWatchValues.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
       entityWithWatchValues.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
       localUserDataSource.updateWatch(entityWithWatchValues);
     } catch (ServerCommunicationException e) {
-      localUserDataSource.updateWatch(entityWithWatchValues);
+      watchingStream =
+          localUserDataSource.updateWatch(entityWithWatchValues);
       queueWatchUpload(entityWithWatchValues, e);
     }
+    return streamEntityMapper.transform(watchingStream);
   }
 
   @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
@@ -338,7 +352,7 @@ public class SyncUserRepository
       }
       if (isWatchReadyForSync(userEntity)) {
         if (userEntity.getIdUser().equals(sessionRepository.getCurrentUserId())) {
-          remoteUserDataSource.updateWatch(userEntity);
+          localStreamDataSource.putStream(remoteUserDataSource.updateWatch(userEntity));
           userEntity.setWatchSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
           userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
           localUserDataSource.updateWatch(userEntity);

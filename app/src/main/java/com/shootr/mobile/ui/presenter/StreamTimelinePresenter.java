@@ -11,7 +11,6 @@ import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.model.shot.ShotType;
@@ -52,7 +51,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final CallCtaCheckInInteractor callCtaCheckInInteractor;
   private final ReshootInteractor reshootInteractor;
   private final UndoReshootInteractor undoReshootInteractor;
-  private final GetStreamInteractor getStreamInteractor;
   private final ShotModelMapper shotModelMapper;
   private final StreamModelMapper streamModelMapper;
   private final Bus bus;
@@ -94,7 +92,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor, ReshootInteractor reshootInteractor,
-      UndoReshootInteractor undoReshootInteractor, GetStreamInteractor getStreamInteractor,
+      UndoReshootInteractor undoReshootInteractor,
       ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper, @Main Bus bus,
       ErrorMessageFactory errorMessageFactory, Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       CreateStreamInteractor createStreamInteractor,
@@ -108,7 +106,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.reshootInteractor = reshootInteractor;
     this.undoReshootInteractor = undoReshootInteractor;
-    this.getStreamInteractor = getStreamInteractor;
     this.shotModelMapper = shotModelMapper;
     this.streamModelMapper = streamModelMapper;
     this.bus = bus;
@@ -134,7 +131,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.shotModels = new TreeSet<>();
     setIdAuthor(idAuthor);
     this.setView(streamTimelineView);
-    this.loadStream(streamTimelineView, idStream);
     this.selectStream();
     setupPoller();
   }
@@ -160,7 +156,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.lastRefreshDate = 0L;
     this.shotModels = new TreeSet<>();
     this.setView(streamTimelineView);
-    this.loadStream(streamTimelineView, idStream);
     this.selectStream();
     setupPoller();
   }
@@ -198,7 +193,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.poller.init(intervalSynchroServerResponse, new Runnable() {
       @Override public void run() {
         loadNewShots();
-        postWatchNumberEvent();
+        postWatchNumberEvent(false);
         changeSynchroTimePoller();
       }
     });
@@ -238,35 +233,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     });
   }
 
-  private void postWatchNumberEvent() {
-    updateWatchNumberInteractor.updateWatchNumber(new Interactor.CompletedCallback() {
+  private void postWatchNumberEvent(boolean localOnly) {
+    updateWatchNumberInteractor.updateWatchNumber(localOnly, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
                 /* no-op */
-      }
-    });
-  }
-
-  public void loadStream(final StreamTimelineView streamTimelineView, String idStream) {
-    getStreamInteractor.loadStream(idStream, new GetStreamInteractor.Callback() {
-      @Override public void onLoaded(Stream stream) {
-        streamModel = streamModelMapper.transform(stream);
-        setIdAuthor(stream.getAuthorId());
-        setStreamTitle(stream.getTitle());
-        setStreamDescription(stream.getDescription());
-        setStreamTopic(stream.getTopic());
-        isCurrentUserContirbutor = stream.isCurrentUserContributor();
-        streamMode = streamModel.getReadWriteMode();
-        handleStreamViewOnlyVisibility();
-        streamTimelineView.setTitle(stream.getTitle());
-        streamTimelineView.sendAnalythicsEnterTimeline();
-        if (streamTopic != null && !streamTopic.isEmpty()) {
-          streamTimelineView.showPinnedMessage(streamTopic);
-        } else {
-          streamTimelineView.hidePinnedMessage();
-        }
-        if (streamModel.getReadWriteMode() == 0) {
-          streamTimelineView.setupCheckInShowcase();
-        }
       }
     });
   }
@@ -282,16 +252,39 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   protected void selectStream() {
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
-        StreamModel streamModel = streamModelMapper.transform(streamSearchResult.getStream());
-        handleFilterVisibility(streamModel.getReadWriteMode());
-        setStreamMode(streamModel.getReadWriteMode());
-        loadTimeline(streamModel.getReadWriteMode());
+        StreamModel model = streamModelMapper.transform(streamSearchResult.getStream());
+        streamModel = model;
+        setupStreamInfo(model);
+        postWatchNumberEvent(true);
+        handleFilterVisibility(model.getReadWriteMode());
+        setStreamMode(model.getReadWriteMode());
+        loadTimeline(model.getReadWriteMode());
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
                 /* no-op */
       }
     });
+  }
+
+  private void setupStreamInfo(StreamModel streamModel) {
+    setIdAuthor(streamModel.getAuthorId());
+    setStreamTitle(streamModel.getTitle());
+    setStreamDescription(streamModel.getDescription());
+    setStreamTopic(streamModel.getTopic());
+    isCurrentUserContirbutor = streamModel.isCurrentUserContributor();
+    streamMode = streamModel.getReadWriteMode();
+    handleStreamViewOnlyVisibility();
+    streamTimelineView.setTitle(streamModel.getTitle());
+    streamTimelineView.sendAnalythicsEnterTimeline();
+    if (streamTopic != null && !streamTopic.isEmpty()) {
+      streamTimelineView.showPinnedMessage(streamTopic);
+    } else {
+      streamTimelineView.hidePinnedMessage();
+    }
+    if (streamModel.getReadWriteMode() == 0) {
+      streamTimelineView.setupCheckInShowcase();
+    }
   }
 
   protected void setStreamMode(Integer mode) {

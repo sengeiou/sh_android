@@ -78,7 +78,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
                 subtitleText.setVisibility(View.VISIBLE);
             }
             subtitleText.setText(subtitle);
-            subtitleText.setTextColor(Color.parseColor("#80ffffff"));
+            subtitleText.setTextColor(Color.parseColor("#FFDAEDFB"));
         }
     }
 
@@ -90,6 +90,10 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     public void hideFilterSubtitle() {
         subtitleText.setVisibility(View.VISIBLE);
         subtitleFilteredText.setVisibility(View.GONE);
+    }
+
+    public void showSubtitle() {
+        subtitleText.setVisibility(View.VISIBLE);
     }
 
     public void setTitleClickListener(View.OnClickListener clickListener) {

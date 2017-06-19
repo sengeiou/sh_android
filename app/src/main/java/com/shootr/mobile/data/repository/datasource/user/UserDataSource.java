@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
@@ -27,7 +28,7 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
 
     List<UserEntity> findParticipants(String idStream, String query);
 
-    void updateWatch(UserEntity userEntity);
+    StreamEntity updateWatch(UserEntity userEntity);
 
     List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize);
 

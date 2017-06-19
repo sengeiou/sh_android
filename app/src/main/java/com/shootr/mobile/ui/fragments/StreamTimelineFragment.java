@@ -959,19 +959,25 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null) {
+    if (watchNumberCount != null && !isFilterActivated) {
+      toolbarDecorator.showSubtitle();
       toolbarDecorator.setSubtitle(
           getContext().getString(R.string.stream_subtitle_pattern_multiple_participants,
               formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWINGS].longValue()),
               formatNumberUtils.formatNumbers(watchNumberCount[PARTICIPANTS].longValue())));
+    } else {
+      toolbarDecorator.hideSubtitle();
     }
   }
 
   private void updateParticipants() {
-    if (watchNumberCount != null) {
+    if (watchNumberCount != null && !isFilterActivated) {
+      toolbarDecorator.showSubtitle();
       toolbarDecorator.setSubtitle(getContext().getResources()
           .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[1],
               formatNumberUtils.formatNumbers(watchNumberCount[1].longValue())));
+    } else {
+      toolbarDecorator.hideSubtitle();
     }
   }
 
