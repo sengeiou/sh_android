@@ -51,11 +51,12 @@ public class RemotePollRepository implements ExternalPollRepository {
   }
 
   private void setPollVoteStatus(PollEntity pollEntity)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException,
-      PollDeletedException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException, PollDeletedException {
     PollEntity pollById = localPollDataSource.getPollById(pollEntity.getIdPoll());
-    if (pollById != null) {
-      pollEntity.setVoteStatus(pollById.getVoteStatus());
+    if (pollById != null && pollById.getVoteStatus().equals(PollStatus.IGNORED)) {
+      pollEntity.setVoteStatus(PollStatus.IGNORED);
+    } else {
+      pollEntity.setVoteStatus(pollEntity.getUserHasVoted() ? PollStatus.VOTED : PollStatus.VOTE);
     }
   }
 
