@@ -286,14 +286,20 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void renderSearch(List<SearchableModel> searchableModelList) {
-    currentFragment.renderSearchItems(searchableModelList);
+    if (currentFragment != null) {
+      currentFragment.renderSearchItems(searchableModelList);
+    }
   }
 
   @Override public void renderUsersSearch(List<SearchableModel> searchableModelList) {
-    currentFragment.renderSearchItems(searchableModelList);
+    if (currentFragment != null) {
+      currentFragment.renderSearchItems(searchableModelList);
+    }
   }
 
   @Override public void renderStreamsSearch(List<SearchableModel> searchableModelList) {
-    currentFragment.renderSearchItems(searchableModelList);
+    if (currentFragment != null) {
+      currentFragment.renderSearchItems(searchableModelList);
+    }
   }
 }
