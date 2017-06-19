@@ -60,30 +60,34 @@
 
   <include layout="@layout/content_poll_vote"/>
 
-  <FrameLayout
+  <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
+      android:orientation="vertical"
       android:visibility="visible"
+      android:background="@color/gray_92"
       >
     <View
         android:layout_width="fill_parent"
         android:layout_height="4dp"
         android:background="@drawable/shadow_down_top"
         />
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:padding="4dp"
+      >
     <TextView
         android:id="@+id/poll_votes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center|top"
+        android:gravity="center|bottom"
         android:textStyle="bold"
-        android:layout_gravity="center_horizontal|bottom"
+        android:fontFamily="arial"
         android:textSize="12sp"
-        android:fontFamily="sans-serif"
-        android:layout_marginBottom="14dp"
-        android:layout_marginTop="4dp"
         android:visibility="visible"
-        android:background="@color/gray_92"
         tools:text="0 votes"
         />
     <TextView
@@ -91,14 +95,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center|bottom"
-        android:textStyle="normal"
-        android:layout_gravity="center_horizontal|bottom"
         android:textSize="12sp"
         android:visibility="visible"
-        android:background="@color/gray_92"
         tools:text="2 hours 25 seconds left"
         />
-
-  </FrameLayout>
+    </LinearLayout>
+  </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

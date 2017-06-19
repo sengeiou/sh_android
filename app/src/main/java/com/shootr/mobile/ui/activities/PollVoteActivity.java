@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.presenter.PollVotePresenter;
 import com.shootr.mobile.ui.views.PollVoteView;
+import com.shootr.mobile.ui.widgets.BottomOffsetDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
@@ -124,6 +125,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     GridLayoutManager layoutManager = new GridLayoutManager(this, COLUMNS_NUMBER);
     pollOptionsRecycler.setLayoutManager(layoutManager);
     pollOptionsRecycler.setAdapter(pollVoteAdapter);
+    pollOptionsRecycler.addItemDecoration(new BottomOffsetDecoration(200));
   }
 
   private void voteOption(final PollOptionModel pollOptionModel) {
@@ -199,6 +201,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     pollVoteNumber.setText(pollVotesText);
     if (!isExpired) {
       pollCountdown.setText(timeToExpireText);
+      pollCountdown.setVisibility(View.VISIBLE);
     }else {
       pollCountdown.setVisibility(View.GONE);
     }
