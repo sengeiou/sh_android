@@ -202,7 +202,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     if (!isExpired) {
       pollCountdown.setText(timeToExpireText);
       pollCountdown.setVisibility(View.VISIBLE);
-    }else {
+    } else {
       pollCountdown.setVisibility(View.GONE);
     }
   }
