@@ -56,7 +56,7 @@
   <string name="block_user_dialog_message">This user will not disturb you nor the participants in your streams.</string>
   <string name="block_user_error">To block this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
-  <string name="cancel_hide_shot" formatted="false">Cancel</string>
+  <string formatted="false" name="cancel_hide_shot">Cancel</string>
   <string name="change_password_button_text">DONE</string>
   <string name="change_password_logout_message">Password changed. Must sign in again…</string>
   <string name="change_photo">Change photo</string>
@@ -66,8 +66,8 @@
   <string name="check_in_show_case">Check-in to say you\'re here</string>
   <!-- Errors -->
   <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
-  <string name="confirmation_hide_shot_message" formatted="false">Unpin shot</string>
-  <string name="confirm_hide_shot" formatted="false">Unpin</string>
+  <string formatted="false" name="confirmation_hide_shot_message">Unpin shot</string>
+  <string formatted="false" name="confirm_hide_shot">Unpin</string>
   <string name="connection_lost">The network connection was lost</string>
   <string name="contributors_empty">No contributors</string>
   <string name="copied_to_clipboard">Text copied to clipboard.</string>
@@ -79,16 +79,16 @@
   <string name="dismiss_highlight_shot">Dismiss</string>
   <string name="done">Done</string>
   <string name="done_label">Done</string>
-  <string name="done_pin_topic" formatted="false">Pin</string>
+  <string formatted="false" name="done_pin_topic">Pin</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
   <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
   <string name="drafts_action_discard">Discard</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">No Drafts</string>
-  <string name="drawer_activity_me" formatted="false">Me</string>
+  <string formatted="false" name="drawer_activity_me">Me</string>
   <string name="drawer_activity_title">Activity</string>
-  <string name="drawer_following_activity_title" formatted="false">Following</string>
+  <string formatted="false" name="drawer_following_activity_title">Following</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Users</string>
   <string name="edit_stream">Edit</string>
@@ -194,7 +194,7 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
   <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
-  <string name="language_support_alert" formatted="false">We currently support English only.</string>
+  <string formatted="false" name="language_support_alert">We currently support English only.</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s link click</item>
     <item quantity="other">%s link clicks</item>
@@ -263,7 +263,7 @@
   <string name="new_shot_repeated">Whoops! You already shot that</string>
   <string name="new_stream_description_label">Description</string>
   <string name="new_stream_title_label">Title</string>
-  <string name="new_topic" formatted="false">New message…</string>
+  <string formatted="false" name="new_topic">New message…</string>
   <string name="next">Next</string>
   <string name="niced_by">"Niced by "</string>
   <string name="niced_shot_activity">Niced</string>
@@ -307,10 +307,10 @@
   <string name="photo_edit_take">Camera</string>
   <string name="pinned_shot_activity">Pinned to profile</string>
   <string name="pinned_shot_activity_with_comment">Pinned to profile: </string>
-  <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
-  <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to the stream\'s followers and current participants.</string>
-  <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
-  <string name="pin_topic" formatted="false">Pin message</string>
+  <string formatted="false" name="pin_message_notification_confirmation_no">No</string>
+  <string formatted="false" name="pin_message_notification_confirmation_text">Notification will be sent to the stream\'s followers and current participants.</string>
+  <string formatted="false" name="pin_message_notification_confirmation_yes">Notify</string>
+  <string formatted="false" name="pin_topic">Pin message</string>
   <string name="poll_ignore">Dismiss poll</string>
   <string name="poll_live_results">Live results</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
@@ -370,8 +370,8 @@
   <string name="remove_stream_confirmation">Remove stream?</string>
   <string name="remove_stream_label">Remove stream</string>
   <string name="remove_stream_listing_context_menu">Remove</string>
-  <string name="replied_activity" formatted="false">Responded</string>
-  <string name="replied_activity_with_comment" formatted="false">"Responded: "</string>
+  <string formatted="false" name="replied_activity">Responded</string>
+  <string formatted="false" name="replied_activity_with_comment">"Responded: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">            %d response\n        </item>
     <item quantity="other">            %d responses\n        </item>
@@ -432,7 +432,7 @@
   <string name="stream_data_info_favorites">Followers</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
-  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+  <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Edit stream</string>
   <string name="stream_detail_media">Media</string>
@@ -476,9 +476,9 @@
   <string name="title_activity_stream_data_info">Stats</string>
   <string name="title_activity_stream_media">Media</string>
   <string name="title_activity_support">Support</string>
-  <string name="title_menu_photo" formatted="false">Photo</string>
-  <string name="title_pin_message_notification" formatted="false">Notify message?</string>
-  <string name="topic" formatted="false">Message</string>
+  <string formatted="false" name="title_menu_photo">Photo</string>
+  <string formatted="false" name="title_pin_message_notification">Notify message?</string>
+  <string formatted="false" name="topic">Message</string>
   <plurals name="total_watchers_pattern">
     <item quantity="one">%s participant        </item>
     <item quantity="other">%s participants       </item>
@@ -508,7 +508,7 @@
   <string name="voted_public_poll">Voted \"%1$s\" in (question) in %2$s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
-  <string name="watch_profile_photo" formatted="false">View</string>
+  <string formatted="false" name="watch_profile_photo">View</string>
   <string name="welcome_get_started_button">Got it</string>
   <string name="welcome_shootr_title">Follow people to always read their messages</string>
   <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
@@ -516,4 +516,7 @@
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
   <string name="messages">Messages</string>
+  <string name="title_activity_setup_notifications">SetupNotificationsActivity</string>
+  <string name="user_cannot_vote_alert_title">Error</string>
+  <string name="user_cannot_vote_alert_description">Descripción de alerta</string>
 </resources>

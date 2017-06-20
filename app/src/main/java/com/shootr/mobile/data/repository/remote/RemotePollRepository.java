@@ -4,6 +4,7 @@ import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.mapper.PollEntityMapper;
 import com.shootr.mobile.data.repository.datasource.poll.PollDataSource;
 import com.shootr.mobile.domain.exception.PollDeletedException;
+import com.shootr.mobile.domain.exception.UserCannotVoteDueToDeviceRequestException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import com.shootr.mobile.domain.model.poll.Poll;
@@ -61,7 +62,8 @@ public class RemotePollRepository implements ExternalPollRepository {
   }
 
   @Override public Poll vote(String idPoll, String idPollOption, boolean isPrivateVote)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      UserCannotVoteDueToDeviceRequestException {
     PollEntity pollEntity = remotePollDataSource.vote(idPoll, idPollOption, isPrivateVote);
     pollEntity.setVoteStatus(PollStatus.VOTED);
     localPollDataSource.putPoll(pollEntity);

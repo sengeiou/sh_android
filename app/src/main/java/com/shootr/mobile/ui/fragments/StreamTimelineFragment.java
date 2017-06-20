@@ -1960,7 +1960,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void goToPollLiveResults(String idPoll, String idStream) {
     Intent intent =
-        PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream);
+        PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream, false);
     startActivity(intent);
   }
 

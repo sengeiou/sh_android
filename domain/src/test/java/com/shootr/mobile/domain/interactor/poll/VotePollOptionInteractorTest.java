@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollOption;
 import com.shootr.mobile.domain.repository.poll.ExternalPollRepository;
 import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.domain.service.user.UserCannotVoteDueToDeviceException;
 import java.util.Arrays;
 import java.util.Collections;
 import org.junit.Before;
@@ -32,6 +33,7 @@ public class VotePollOptionInteractorTest {
   public static final String ID_POLL_OPTION = "id_poll_option";
   private static final String ANOTHER_ID_POLL_OPTION = "another_id_poll_option";
   public static final boolean PRIVATE_VOTE = true;
+  public static final boolean SECURE_VOTE = true;
   private VotePollOptionInteractor votePollOptionInteractor;
   @Mock InternalPollRepository localPollRepository;
   @Mock ExternalPollRepository remotePollRepository;
@@ -54,7 +56,7 @@ public class VotePollOptionInteractorTest {
         new ServerCommunicationException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithoutPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
     verify(localPollRepository, never()).putPoll(any(Poll.class));
   }
@@ -64,7 +66,7 @@ public class VotePollOptionInteractorTest {
         new ServerCommunicationException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
   }
@@ -73,7 +75,7 @@ public class VotePollOptionInteractorTest {
   public void shouldVoteInRemoteRepositoryWhenVote() throws Exception {
     when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
     verify(remotePollRepository).vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE);
   }
@@ -82,7 +84,7 @@ public class VotePollOptionInteractorTest {
   public void shouldNotifyPollLoadedWhenVote() throws Exception {
     when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenReturn(pollWithoutPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
     verify(callback).onLoaded(any(Poll.class));
   }
@@ -93,7 +95,7 @@ public class VotePollOptionInteractorTest {
         new UserCannotVoteRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
     verify(localPollRepository).getPollByIdPoll(ID_POLL);
   }
@@ -104,7 +106,7 @@ public class VotePollOptionInteractorTest {
         new UserCannotVoteRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
     verify(callback).onLoaded(any(Poll.class));
   }
@@ -115,20 +117,20 @@ public class VotePollOptionInteractorTest {
         new UserHasVotedRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
-    verify(localPollRepository).getPollByIdPoll(ID_POLL);
+    verify(errorCallback).onError(any(UserCannotVoteDueToDeviceException.class));
   }
 
   @Test
-  public void shouldNotifyLocalPollWhenUserHasVotedRequestExceptionThrown() throws Exception {
+  public void shouldNotifyErrorWhenUserHasVotedRequestExceptionThrown() throws Exception {
     when(remotePollRepository.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE)).thenThrow(
         new UserHasVotedRequestException(new Throwable()));
     when(localPollRepository.getPollByIdPoll(ID_POLL)).thenReturn(pollWithPollOptions());
 
-    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, callback, errorCallback);
+    votePollOptionInteractor.vote(ID_POLL, ID_POLL_OPTION, PRIVATE_VOTE, SECURE_VOTE, callback, errorCallback);
 
-    verify(callback).onLoaded(any(Poll.class));
+    verify(errorCallback).onError(any(UserCannotVoteDueToDeviceException.class));
   }
 
   private Poll pollWithoutPollOptions() {

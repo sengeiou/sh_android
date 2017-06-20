@@ -211,9 +211,9 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     finish();
   }
 
-  @Override public void goToResults(String idPoll, String idStream) {
+  @Override public void goToResults(String idPoll, String idStream, boolean hasVoted) {
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
-    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll, title, idStream);
+    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll, title, idStream, hasVoted);
     startActivity(intent);
     finish();
   }
@@ -265,6 +265,20 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     privatePollVoteMenu.setVisible(false);
     getToolbarDecorator().setTitle(privatePoll);
     isPrivateVote = true;
+  }
+
+  @Override public void showNotificationsScreen() {
+    Intent intent = new Intent(this, SetupNotificationsActivity.class);
+    startActivity(intent);
+  }
+
+  @Override public void showUserCannotVoteAlert() {
+    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+    alertDialogBuilder //
+        .setTitle(R.string.user_cannot_vote_alert_title)
+        .setMessage(getString(R.string.user_cannot_vote_alert_description)) //
+        .setPositiveButton(getString(R.string.ok),
+            null).show();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

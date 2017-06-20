@@ -1,5 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.content.Context;
+import android.support.v4.app.NotificationManagerCompat;
+import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
@@ -12,7 +15,9 @@ import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
+
 import com.shootr.mobile.ui.Poller;
+import com.shootr.mobile.domain.service.user.UserCannotVoteDueToDeviceException;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
@@ -36,6 +41,8 @@ public class PollVotePresenter implements Presenter {
   private final PollModelMapper pollModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
   private final Poller poller;
+  private final Context appContext;
+
 
   private PollVoteView pollVoteView;
   private String idStream;
@@ -52,7 +59,8 @@ public class PollVotePresenter implements Presenter {
       IgnorePollInteractor ignorePollInteractor, VotePollOptionInteractor votePollOptionInteractor,
       ShowPollResultsInteractor showPollResultsInteractor, GetStreamInteractor getStreamInteractor,
       SessionRepository sessionRepository, PollModelMapper pollModelMapper,
-      ErrorMessageFactory errorMessageFactory, Poller poller) {
+      ErrorMessageFactory errorMessageFactory, Poller poller,
+      @ApplicationContext Context appContext) {
     this.getPollByIdStreamInteractor = getPollByIdStreamInteractor;
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.ignorePollInteractor = ignorePollInteractor;
@@ -63,6 +71,7 @@ public class PollVotePresenter implements Presenter {
     this.pollModelMapper = pollModelMapper;
     this.errorMessageFactory = errorMessageFactory;
     this.poller = poller;
+    this.appContext = appContext;
   }
 
   public void initialize(PollVoteView pollVoteView, String idStream, String idStreamOwner) {
@@ -81,7 +90,7 @@ public class PollVotePresenter implements Presenter {
 
   private void loadPollByIdPoll() {
     pollVoteView.showLoading();
-    getPollByIdPollInteractor.loadPollByIdPoll(idPoll, new Interactor.Callback<Poll>() {
+    getPollByIdPollInteractor.loadPollByIdPoll(idPoll, false, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         handlePollModel(poll);
         pollVoteView.hideLoading();
@@ -117,7 +126,7 @@ public class PollVotePresenter implements Presenter {
       handlePollPrivacy();
     } else {
       if (pollModel != null) {
-        pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+        pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
       }
     }
   }
@@ -151,7 +160,7 @@ public class PollVotePresenter implements Presenter {
         showPollVotesTimeToExpire(pollModel.getExpirationDate());
         if (pollModel.isExpired()) {
           poller.stopPolling();
-          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
         }
         if (!pollModel.isLessThanHourToExpire()
             && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
@@ -193,36 +202,50 @@ public class PollVotePresenter implements Presenter {
   }
 
   public void voteOption(String pollOptionId) {
-    pollVoteView.showLoading();
-    setVotedPollOption(pollOptionId);
     if (pollModel != null) {
-      votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, isPrivateVote,
-          new Interactor.Callback<Poll>() {
-            @Override public void onLoaded(Poll poll) {
-              pollVoteView.hideLoading();
-              pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
-            }
-          }, new Interactor.ErrorCallback() {
-            @Override public void onError(ShootrException error) {
-              pollVoteView.hideLoading();
-              pollVoteView.showTimeoutAlert();
-            }
-          });
+      if (pollModel.isVerifiedPoll() && !NotificationManagerCompat.from(appContext)
+          .areNotificationsEnabled()) {
+        pollVoteView.showNotificationsScreen();
+      } else {
+        pollVoteView.showLoading();
+        setVotedPollOption(pollOptionId);
+
+        votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, isPrivateVote,
+            pollModel.isVerifiedPoll(), new Interactor.Callback<Poll>() {
+              @Override public void onLoaded(Poll poll) {
+                pollVoteView.hideLoading();
+                pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), true);
+              }
+            }, new Interactor.ErrorCallback() {
+              @Override public void onError(ShootrException error) {
+                pollVoteView.hideLoading();
+                if (error instanceof UserCannotVoteDueToDeviceException) {
+                  pollVoteView.showUserCannotVoteAlert();
+                } else {
+                  pollVoteView.showTimeoutAlert();
+                }
+              }
+            });
+      }
     }
   }
 
   public void retryVote() {
     pollVoteView.showLoading();
     votePollOptionInteractor.vote(pollModel.getIdPoll(), votedPollOptionId, isPrivateVote,
-        new Interactor.Callback<Poll>() {
+        pollModel.isVerifiedPoll(), new Interactor.Callback<Poll>() {
           @Override public void onLoaded(Poll poll) {
             pollVoteView.hideLoading();
-            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), true);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
             pollVoteView.hideLoading();
-            pollVoteView.showTimeoutAlert();
+            if (error instanceof UserCannotVoteDueToDeviceException) {
+              pollVoteView.showUserCannotVoteAlert();
+            } else {
+              pollVoteView.showTimeoutAlert();
+            }
           }
         });
   }
@@ -243,6 +266,10 @@ public class PollVotePresenter implements Presenter {
     poller.stopPolling();
   }
 
+  public void viewResults() {
+    pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
+  }
+
   public void onShowPollResults() {
     getStreamInteractor.loadStream(idStream, new GetStreamInteractor.Callback() {
       @Override public void onLoaded(Stream stream) {
@@ -255,7 +282,7 @@ public class PollVotePresenter implements Presenter {
     showPollResultsInteractor.showPollResults(pollModel.getIdPoll(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream());
+            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
           }
         });
   }

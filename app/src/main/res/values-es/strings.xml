@@ -516,4 +516,7 @@
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
   <string name="messages">Mensajes</string>
+  <string name="official_poll_title">Encuesta oficial</string>
+  <string name="official_poll_description">Por razones de seguridad, para votar es necesario desbloquear las notificaciones de Shootr en tu dispositivo. Puedes configurar tus notificaciones en tu perfil.</string>
+  <string name="official_poll_button_text">Ir a Notificaciones</string>
 </resources>

@@ -16,6 +16,7 @@ public class Poll {
   private String voteStatus;
   private String votePrivacy;
   private Long expirationDate;
+  private boolean verifiedPoll;
 
   public String getIdPoll() {
     return idPoll;
@@ -111,5 +112,13 @@ public class Poll {
 
   public void setExpirationDate(Long expirationDate) {
     this.expirationDate = expirationDate;
+  }
+
+  public boolean isVerifiedPoll() {
+    return verifiedPoll;
+  }
+
+  public void setVerifiedPoll(boolean verifiedPoll) {
+    this.verifiedPoll = verifiedPoll;
   }
 }

@@ -27,4 +27,8 @@ public interface SessionRepository {
     int getSynchroTime();
 
     void setSynchroTime(String synchroTime);
+
+    String getDeviceId();
+
+    void setDeviceId(String device);
 }

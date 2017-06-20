@@ -139,10 +139,12 @@
     <meta-data
         android:name="com.mixpanel.android.MPConfig.ResourcePackageName"
         android:value="com.shootr.mobile"/>
-
-    <meta-data android:name="com.mixpanel.android.MPConfig.EnableDebugLogging" android:value="false" />
-
-    <meta-data android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates" android:value="false" />
+    <meta-data
+        android:name="com.mixpanel.android.MPConfig.EnableDebugLogging"
+        android:value="false"/>
+    <meta-data
+        android:name="com.mixpanel.android.MPConfig.AutoShowMixpanelUpdates"
+        android:value="false"/>
 
     <receiver
         android:name="com.appsflyer.MultipleInstallBroadcastReceiver"
@@ -317,6 +319,11 @@
     <activity
         android:name=".ui.activities.SearchActivity"
         android:theme="@style/ShootrTheme.Closable">
+    </activity>
+    <activity
+        android:name=".ui.activities.SetupNotificationsActivity"
+        android:label="@string/title_activity_setup_notifications"
+        android:theme="@style/ShootrTheme">
     </activity>
   </application>
 

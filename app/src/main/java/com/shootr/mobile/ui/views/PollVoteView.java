@@ -11,7 +11,7 @@ public interface PollVoteView  extends LoadDataView {
 
   void ignorePoll();
 
-  void goToResults(String idPoll, String idStream);
+  void goToResults(String idPoll, String idStream, boolean hasVoted);
 
   void showError(String message);
 
@@ -24,4 +24,8 @@ public interface PollVoteView  extends LoadDataView {
   void showPrivateVotePrivacy();
 
   void showPrivateVotePrivacyDisabled();
+
+  void showNotificationsScreen();
+
+  void showUserCannotVoteAlert();
 }

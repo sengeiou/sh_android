@@ -7,4 +7,6 @@ public interface DeviceFactory {
     Device createDevice();
 
     Device updateDevice(Device device);
+
+    boolean needsUpdate(Device device);
 }

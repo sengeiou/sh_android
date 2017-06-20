@@ -42,6 +42,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   private static final String EXTRA_RESULTS = "results";
   private static final String EXTRA_STREAM_TITLE = "title";
   private static final String EXTRA_STREAM_ID = "idStream";
+  private static final String EXTRA_HAS_VOTED = "hasVoted";
   private static final String NO_TITLE = "";
 
   @BindView(R.id.results_recycler) RecyclerView results;
@@ -72,16 +73,18 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_results));
     intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
     intent.putExtra(EXTRA_STREAM_ID, idStream);
+    intent.putExtra(EXTRA_HAS_VOTED, false);
     return intent;
   }
 
   public static Intent newLiveResultsIntent(Context context, String idPoll, String streamTitle,
-      String idStream) {
+      String idStream, boolean hasVoted) {
     Intent intent = new Intent(context, PollResultsActivity.class);
     intent.putExtra(EXTRA_ID_POLL, idPoll);
     intent.putExtra(EXTRA_RESULTS, context.getResources().getString(R.string.poll_live_results));
     intent.putExtra(EXTRA_STREAM_TITLE, streamTitle);
     intent.putExtra(EXTRA_STREAM_ID, idStream);
+    intent.putExtra(EXTRA_HAS_VOTED, hasVoted);
     return intent;
   }
 
@@ -113,7 +116,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override protected void initializePresenter() {
     presenter.initialize(this, getIntent().getStringExtra(EXTRA_ID_POLL),
-        getIntent().getStringExtra(EXTRA_STREAM_ID));
+        getIntent().getStringExtra(EXTRA_STREAM_ID), getIntent().getBooleanExtra(EXTRA_HAS_VOTED, false));
     sendAnalythics();
   }
 

@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.content.Context;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.poll.GetPollByIdPollInteractor;
@@ -63,6 +64,7 @@ public class PollVotePresenterTest {
   @Mock ShowPollResultsInteractor showPollResultsInteractor;
   @Mock SessionRepository sessionRepository;
   @Mock Poller poller;
+  @Mock Context appContext;
 
   private PollVotePresenter presenter;
 
@@ -73,7 +75,7 @@ public class PollVotePresenterTest {
     presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
         ignorePollInteractor, votePollOptionInteractor,
         showPollResultsInteractor, getStreamInteractor, sessionRepository, pollModelMapper, errorMessageFactory,
-        poller);
+        poller, appContext);
   }
 
   @Test public void shouldRenderPollModelInView() throws Exception {
@@ -118,7 +120,7 @@ public class PollVotePresenterTest {
 
     presenter.voteOption(POLL_OPTION_ID);
 
-    verify(pollVoteView).goToResults(anyString(), anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString(), anyBoolean());
   }
 
   @Test public void shouldGoToResultsWhenInitializeAndPollIsVoted() throws Exception {
@@ -126,7 +128,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).goToResults(anyString(), anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString(), anyBoolean());
   }
 
   @Test public void shouldGoToResultsWhenInitializeAndPollIsClosed() throws Exception {
@@ -134,7 +136,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).goToResults(anyString(), anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString(), anyBoolean());
   }
 
   @Test public void shouldGoToResultsWhenInitializeAndHadSeenPollResults() throws Exception {
@@ -142,7 +144,7 @@ public class PollVotePresenterTest {
 
     presenter.initialize(pollVoteView, STREAM_ID, HOLDER_USER_ID);
 
-    verify(pollVoteView).goToResults(anyString(), anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString(), anyBoolean());
   }
 
   @Test public void shouldLoadByIdPollWhenViewInitializesByIdPoll() throws Exception {
@@ -191,7 +193,7 @@ public class PollVotePresenterTest {
 
     presenter.retryVote();
 
-    verify(pollVoteView).goToResults(anyString(), anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString(), anyBoolean());
   }
 
   @Test public void shouldShowErrorAlertWhenRetryVoteError() throws Exception {
@@ -252,7 +254,7 @@ public class PollVotePresenterTest {
 
     presenter.showPollResultsWithoutVoting();
 
-    verify(pollVoteView).goToResults(anyString(), anyString());
+    verify(pollVoteView).goToResults(anyString(), anyString(), anyBoolean());
   }
 
   private void setupShowPollResultsInteractorCallback() {
@@ -343,36 +345,36 @@ public class PollVotePresenterTest {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(poll());
         return null;
       }
     }).when(getPollByIdPollInteractor)
-        .loadPollByIdPoll(anyString(), any(Interactor.Callback.class),
+        .loadPollByIdPoll(anyString(), anyBoolean(), any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
   }
 
   private void setupVotePollOptionInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[3];
+        Interactor.Callback callback = (Interactor.Callback) invocation.getArguments()[4];
         callback.onLoaded(poll());
         return null;
       }
     }).when(votePollOptionInteractor)
-        .vote(anyString(), anyString(), anyBoolean(), any(Interactor.Callback.class), any(
+        .vote(anyString(), anyString(), anyBoolean(), anyBoolean(), any(Interactor.Callback.class), any(
             Interactor.ErrorCallback.class));
   }
 
   private void setupVotePollOptionInteractorErrorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[4];
+        Interactor.ErrorCallback errorCallback = (Interactor.ErrorCallback) invocation.getArguments()[5];
         errorCallback.onError(new ShootrException() { });
         return null;
       }
     }).when(votePollOptionInteractor)
-        .vote(anyString(), anyString(), anyBoolean(), any(Interactor.Callback.class), any(
+        .vote(anyString(), anyString(), anyBoolean(), anyBoolean(), any(Interactor.Callback.class), any(
             Interactor.ErrorCallback.class));
   }
 

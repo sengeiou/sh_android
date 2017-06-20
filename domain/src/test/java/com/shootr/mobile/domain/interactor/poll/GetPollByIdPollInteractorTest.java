@@ -31,6 +31,8 @@ import static org.mockito.Mockito.when;
 public class GetPollByIdPollInteractorTest {
 
   private static final String ID_POLL = "idPoll";
+  private static final boolean VOTED = true;
+  private static final boolean NOT_VOTED = false;
   @Mock InternalPollRepository localPollRepository;
   @Mock ExternalPollRepository remotePollRepository;
   @Mock Interactor.Callback<Poll> callback;
@@ -53,7 +55,7 @@ public class GetPollByIdPollInteractorTest {
         .getPollByIdPoll(anyString());
     when(localPollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, VOTED, callback, errorCallback);
 
     verify(localPollRepository).getPollByIdPoll(anyString());
   }
@@ -62,7 +64,7 @@ public class GetPollByIdPollInteractorTest {
     when(localPollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, NOT_VOTED, callback, errorCallback);
 
     verify(remotePollRepository).getPollByIdPoll(anyString());
   }
@@ -71,7 +73,7 @@ public class GetPollByIdPollInteractorTest {
     when(localPollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, NOT_VOTED, callback, errorCallback);
 
     verify(callback).onLoaded(any(Poll.class));
   }
@@ -81,7 +83,7 @@ public class GetPollByIdPollInteractorTest {
     when(remotePollRepository.getPollByIdPoll(ID_POLL)).thenThrow(
         new ServerCommunicationException(new Throwable()));
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, NOT_VOTED, callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
   }
@@ -91,7 +93,7 @@ public class GetPollByIdPollInteractorTest {
     when(remotePollRepository.getPollByIdPoll(ID_POLL)).thenThrow(
         new UserCannotVoteRequestException(new Throwable()));
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, NOT_VOTED, callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
   }
@@ -100,7 +102,7 @@ public class GetPollByIdPollInteractorTest {
     when(localPollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdPoll(anyString())).thenReturn(poll());
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, NOT_VOTED, callback, errorCallback);
 
     verify(callback).onLoaded(pollArgumentCaptor.capture());
     assertThat(pollArgumentCaptor.getValue().getPollOptions()).isSortedAccordingTo(
@@ -111,7 +113,7 @@ public class GetPollByIdPollInteractorTest {
     when(localPollRepository.getPollByIdPoll(anyString())).thenReturn(nopoll());
     when(remotePollRepository.getPollByIdPoll(anyString())).thenReturn(nopoll());
 
-    interactor.loadPollByIdPoll(ID_POLL, callback, errorCallback);
+    interactor.loadPollByIdPoll(ID_POLL, NOT_VOTED, callback, errorCallback);
 
     verify(callback).onLoaded(null);
   }

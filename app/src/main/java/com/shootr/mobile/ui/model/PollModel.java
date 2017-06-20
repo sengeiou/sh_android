@@ -17,6 +17,7 @@ public class PollModel {
   private String streamTitle;
   private String votePrivacy;
   private Long expirationDate;
+  private boolean verifiedPoll;
 
   public String getIdPoll() {
     return idPoll;
@@ -129,5 +130,13 @@ public class PollModel {
     } else {
       return false;
     }
+  }
+
+  public boolean isVerifiedPoll() {
+    return verifiedPoll;
+  }
+
+  public void setVerifiedPoll(boolean verifiedPoll) {
+    this.verifiedPoll = verifiedPoll;
   }
 }

@@ -47,20 +47,20 @@ public class PollResultsPresenter implements Presenter {
     this.poller = poller;
   }
 
-  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream) {
+  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream, boolean hasVoted) {
     setView(pollResultsView);
     this.idPoll = idPoll;
     this.idStream = idStream;
-    loadPoll();
+    loadPoll(hasVoted);
   }
 
   protected void setView(PollResultsView pollResultsView) {
     this.pollResultsView = pollResultsView;
   }
 
-  private void loadPoll() {
+  private void loadPoll(boolean hasVoted) {
     pollResultsView.showLoading();
-    getPollByIdPollInteractor.loadPollByIdPoll(idPoll, new Interactor.Callback<Poll>() {
+    getPollByIdPollInteractor.loadPollByIdPoll(idPoll, hasVoted, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         orderPollOptions(poll);
         handlePollModel(poll);
@@ -128,7 +128,7 @@ public class PollResultsPresenter implements Presenter {
   @Override public void resume() {
     if (hasBeenPaused) {
       pollVotes = ZERO_VOTES;
-      loadPoll();
+      loadPoll(false);
     }
   }
 
