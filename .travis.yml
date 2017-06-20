@@ -6,7 +6,6 @@ android:
   components:
     - tools
     - platform-tools
-    - tools
     - build-tools-25.0.3
     - android-25
     - extra-android-support
@@ -14,10 +13,6 @@ android:
     - extra-android-m2repository
     - extra-google-android-support
     - sys-img-armeabi-v7a-android-25
-    licenses:
-     - android-sdk-preview-license-.+
-     - android-sdk-license-.+
-     - google-gdk-license-.+
 before_install:
   - rvm install 2.1.5
   - gem install fastlane -NV
