@@ -7,14 +7,14 @@ android:
     - tools
     - platform-tools
     - build-tools-25.0.3
-    - android-25
+    - android-24
     - extra-android-support
     - extra-google-m2repository
     - extra-android-m2repository
     - extra-google-android-support
-    - sys-img-armeabi-v7a-android-25
+    - sys-img-armeabi-v7a-android-21
 before_install:
-  - rvm install 2.1.5
+  - rvm install 2.0.0
   - gem install fastlane -NV
 
 before_cache:
