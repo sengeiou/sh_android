@@ -8,13 +8,13 @@ android:
   components:
     - tools
     - build-tools-25.0.3
-    - android update sdk --no-ui --filter build-tools-25.0.0,android-25,extra-android-m2repository
-    - android-25
     - platform-tools
+    - android-25
     - extra-android-support
     - extra-google-m2repository
     - extra-android-m2repository
-    - sys-img-armeabi-v7a-android-21
+    - extra-google-android-support
+    - sys-img-armeabi-v7a-android-25
 
 before_install:
   - rvm install 2.0.0
