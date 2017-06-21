@@ -777,7 +777,7 @@ public class StreamTimelineFragment extends BaseFragment
   private void checkIfEndOfListVisible() {
     int lastItemPosition = shotsTimeline.getAdapter().getItemCount() - 1;
     int lastVisiblePosition = preCachingLayoutManager.findLastVisibleItemPosition();
-    if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+    if (lastItemPosition > 40 && lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
       streamTimelinePresenter.showingLastShot(adapter.getLastShot());
     }
   }
