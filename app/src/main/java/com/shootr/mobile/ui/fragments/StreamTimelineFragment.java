@@ -1382,10 +1382,6 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void run() {
         highlightedShotPresenter.highlightShot(shotModel.getIdShot());
       }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
-      }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
@@ -1442,10 +1438,6 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void run() {
         highlightedShotPresenter.onDismissHighlightShot(highlightedShot.getIdHighlightedShot(),
             streamAuthorIdUser);
-      }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
@@ -1504,10 +1496,6 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void run() {
         highlightedShotPresenter.highlightShot(shotModel.getIdShot());
       }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
-      }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
@@ -1536,10 +1524,6 @@ public class StreamTimelineFragment extends BaseFragment
         }).addAction(R.string.remove_highlight, new Runnable() {
       @Override public void run() {
         highlightedShotPresenter.onMenuDismissHighlightShot();
-      }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
@@ -1822,11 +1806,7 @@ public class StreamTimelineFragment extends BaseFragment
               sendReshootAnalytics(shotModel);
             }
           }
-        }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
-      }
-    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
         sendShareExternalShotAnalytics(shotModel);
