@@ -273,7 +273,6 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override public void showUserCannotVoteAlert() {
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     alertDialogBuilder //
-        .setTitle(R.string.user_cannot_vote_alert_title)
         .setMessage(getString(R.string.user_cannot_vote_alert_description)) //
         .setPositiveButton(getString(R.string.ok),
             null).show();
