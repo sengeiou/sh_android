@@ -73,6 +73,7 @@ public class SelectStreamInteractor implements Interactor {
   private void selectStreamAndUpdateWatch(User currentUser) {
     Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
     if (selectedStream != null) {
+      recentSearchRepository.putRecentStream(selectedStream, getCurrentTime());
       User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
       sessionRepository.setTimelineFilterActivated(false);
       sessionRepository.setCurrentUser(updatedUser);
