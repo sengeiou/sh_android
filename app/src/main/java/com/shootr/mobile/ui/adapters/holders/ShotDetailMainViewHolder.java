@@ -26,7 +26,6 @@ import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NicerTextSpannableBuilder;
 import com.shootr.mobile.util.NumberFormatUtil;
-import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.TimeFormatter;
 import java.util.Date;
 
@@ -83,8 +82,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
       ShotClickListener imageClickListener, OnVideoClickListener videoClickListener,
       OnUsernameClickListener onUsernameClickListener, TimeFormatter timeFormatter,
       NumberFormatUtil followsFormatUtil, Resources resources,
-      OnNiceShotListener onNiceShotListener,
-      ShotClickListener nicesClickListener,
+      OnNiceShotListener onNiceShotListener, ShotClickListener nicesClickListener,
       NicerTextSpannableBuilder nicerTextSpannableBuilder, OnUrlClickListener onUrlClickListener,
       ShareClickListener reshootClickListener, ShareClickListener shareClickListener) {
     super(itemView);
@@ -133,7 +131,9 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupIsHolderOrContributor(ShotModel shotModel) {
-    if (!shotModel.isVerifiedUser() && shotModel.getParentShotId() == null && shotModel.isHolderOrContributor()) {
+    if (!shotModel.isVerifiedUser()
+        && shotModel.getParentShotId() == null
+        && shotModel.isHolderOrContributor()) {
       holderOrContributor.setVisibility(View.VISIBLE);
     } else {
       holderOrContributor.setVisibility(View.GONE);
