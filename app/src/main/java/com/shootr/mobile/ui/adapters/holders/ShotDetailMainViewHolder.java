@@ -50,7 +50,6 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.shot_nice_button) NiceButtonView niceButton;
   @BindView(R.id.shot_nice_count) TextView niceCount;
   @BindView(R.id.shot_nicers) ClickableTextView nicers;
-  @BindView(R.id.shot_detail_pin_to_profile_container) LinearLayout pinToProfileContainer;
   @BindView(R.id.shot_view_count) TextView viewsCount;
   @BindView(R.id.shot_link_clicks_count) TextView linkClicksCount;
   @BindView(R.id.counts_dot) TextView countsDot;
@@ -73,9 +72,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
   private final NumberFormatUtil numberFormatUtil;
   private final Resources resources;
   private final OnNiceShotListener onNiceShotListener;
-  private final ShotClickListener onClickListenerPinToProfile;
   private final ShotClickListener nicesClickListener;
-  private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private final NicerTextSpannableBuilder nicerTextSpannableBuilder;
   private final OnUrlClickListener onUrlClickListener;
   private final ShareClickListener reshootClickListener;
@@ -86,8 +83,8 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
       ShotClickListener imageClickListener, OnVideoClickListener videoClickListener,
       OnUsernameClickListener onUsernameClickListener, TimeFormatter timeFormatter,
       NumberFormatUtil followsFormatUtil, Resources resources,
-      OnNiceShotListener onNiceShotListener, ShotClickListener onClickListenerPinToProfile,
-      ShotClickListener nicesClickListener, ShotTextSpannableBuilder shotTextSpannableBuilder,
+      OnNiceShotListener onNiceShotListener,
+      ShotClickListener nicesClickListener,
       NicerTextSpannableBuilder nicerTextSpannableBuilder, OnUrlClickListener onUrlClickListener,
       ShareClickListener reshootClickListener, ShareClickListener shareClickListener) {
     super(itemView);
@@ -101,9 +98,7 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     this.numberFormatUtil = followsFormatUtil;
     this.resources = resources;
     this.onNiceShotListener = onNiceShotListener;
-    this.onClickListenerPinToProfile = onClickListenerPinToProfile;
     this.nicesClickListener = nicesClickListener;
-    this.shotTextSpannableBuilder = shotTextSpannableBuilder;
     this.nicerTextSpannableBuilder = nicerTextSpannableBuilder;
     this.onUrlClickListener = onUrlClickListener;
     this.reshootClickListener = reshootClickListener;
@@ -125,8 +120,6 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     setupVideo(shotModel);
     setupReply(shotModel);
     setupNiceButton(shotModel);
-    setupPinShotView(shotModel);
-    setupPinToProfileContainer(shotModel);
     setupShareListener(shotModel);
     setupStreamTitle(shotModel);
   }
@@ -389,17 +382,5 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
     } else {
       disableStreamTitle();
     }
-  }
-
-  private void setupPinToProfileContainer(final ShotModel shotModel) {
-    pinToProfileContainer.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View view) {
-        onClickListenerPinToProfile.onClick(shotModel);
-      }
-    });
-  }
-
-  private void setupPinShotView(final ShotModel shotModel) {
-    /* no-op */
   }
 }
