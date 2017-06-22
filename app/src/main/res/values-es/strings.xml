@@ -214,7 +214,6 @@
   <string name="menu_copy_text">Copiar texto</string>
   <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Mostrar los shots del administrador</string>
-  <string name="menu_pin_shot">Anclar al perfil</string>
   <string name="menu_profile_chage_password">Cambiar contraseña</string>
   <string name="menu_remove_favorite">Dejar de seguir</string>
   <string name="menu_save_photo">Guardar imagen</string>
@@ -305,8 +304,6 @@
   <string name="photo_edit_remove">Quitar</string>
   <string name="photo_edit_remove_confirmation">¿Borrar foto?</string>
   <string name="photo_edit_take">Cámara</string>
-  <string name="pinned_shot_activity">Ha anclado al perfil</string>
-  <string name="pinned_shot_activity_with_comment">Ha anclado al perfil: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">La notificación se enviará a los seguidores y a participantes actuales del stream.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
@@ -416,7 +413,6 @@
   <string name="share_via">Compartir vía…</string>
   <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Enviar todo</string>
-  <string name="shot_pinned">Anclado</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="one">%s respuesta</item>
     <item quantity="other">%s respuestas</item>

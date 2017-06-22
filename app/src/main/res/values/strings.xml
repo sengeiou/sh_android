@@ -214,7 +214,6 @@
   <string name="menu_copy_text">Copy text</string>
   <string name="menu_highlight_shot">Highlight</string>
   <string name="menu_holding_shots">Show holder\'s shots</string>
-  <string name="menu_pin_shot">Pin to profile</string>
   <string name="menu_profile_chage_password">Change password</string>
   <string name="menu_remove_favorite">Unfollow</string>
   <string name="menu_save_photo">Save image</string>
@@ -305,8 +304,6 @@
   <string name="photo_edit_remove">Remove</string>
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
   <string name="photo_edit_take">Camera</string>
-  <string name="pinned_shot_activity">Pinned to profile</string>
-  <string name="pinned_shot_activity_with_comment">Pinned to profile: </string>
   <string formatted="false" name="pin_message_notification_confirmation_no">No</string>
   <string formatted="false" name="pin_message_notification_confirmation_text">Notification will be sent to the stream\'s followers and current participants.</string>
   <string formatted="false" name="pin_message_notification_confirmation_yes">Notify</string>
@@ -415,7 +412,6 @@
   <string name="share_via">Share via…</string>
   <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Shoot all</string>
-  <string name="shot_pinned">Pinned</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="one">%s respond</item>
     <item quantity="other">%s responses</item>

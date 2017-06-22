@@ -212,7 +212,6 @@
   <string name="menu_copy_text">复制全文</string>
   <string name="menu_highlight_shot">置顶</string>
   <string name="menu_holding_shots">发送至管理员的shot</string>
-  <string name="menu_pin_shot">钉选到个人主页</string>
   <string name="menu_profile_chage_password">更改密码</string>
   <string name="menu_remove_favorite">取消喜爱</string>
   <string name="menu_save_photo">保存图片</string>
@@ -300,8 +299,6 @@
   <string name="photo_edit_remove">清除</string>
   <string name="photo_edit_remove_confirmation">清除照片？</string>
   <string name="photo_edit_take">相机</string>
-  <string name="pinned_shot_activity">已钉选到个人主页</string>
-  <string name="pinned_shot_activity_with_comment">"已钉选到个人主页: "</string>
   <string name="pin_message_notification_confirmation_no" formatted="false">否</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">信息将传送给喜爱Stream的参与者与使用者。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知</string>
@@ -407,7 +404,6 @@
   <string name="share_via">分享到…</string>
   <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">shoot所有</string>
-  <string name="shot_pinned">已连接</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="other">%s回复</item>
     <item quantity="zero">%s回复</item>
