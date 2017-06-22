@@ -214,7 +214,6 @@
   <string name="menu_copy_text">Copiar text</string>
   <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Mostrar els shots de l\'administrador</string>
-  <string name="menu_pin_shot">Fixar al perfil</string>
   <string name="menu_profile_chage_password">Canviar contrasenya</string>
   <string name="menu_remove_favorite">Deixar de seguir</string>
   <string name="menu_save_photo">Desar imatge</string>
@@ -305,8 +304,6 @@
   <string name="photo_edit_remove">Treure</string>
   <string name="photo_edit_remove_confirmation">Esborrar foto?</string>
   <string name="photo_edit_take">Càmera</string>
-  <string name="pinned_shot_activity">Ha fixat al perfil</string>
-  <string name="pinned_shot_activity_with_comment">Ha fixat al perfil: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">La notificació s\'enviarà als seguidors i participants actuals de l\'stream.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
@@ -416,7 +413,6 @@
   <string name="share_via">Compartir via…</string>
   <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Enviar tot</string>
-  <string name="shot_pinned">Ancorat</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="one">%s resposta</item>
     <item quantity="other">%s respostes</item>

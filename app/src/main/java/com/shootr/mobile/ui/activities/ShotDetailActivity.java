@@ -35,10 +35,8 @@ import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
-import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
-import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.ui.widgets.EndOffsetItemDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -60,7 +58,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity
-    implements ShotDetailView, NewShotBarView, PinShotView {
+    implements ShotDetailView, NewShotBarView {
 
   public static final String EXTRA_SHOT = "shot";
   public static final String EXTRA_ID_SHOT = "idShot";
@@ -103,7 +101,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @Inject WritePermissionManager writePermissionManager;
   @Inject BackStackHandler backStackHandler;
   @Inject CrashReportTool crashReportTool;
-  @Inject PinShotPresenter pinShotPresenter;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
 
@@ -192,14 +189,12 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @Override protected void onResume() {
     super.onResume();
     detailPresenter.resume();
-    pinShotPresenter.resume();
     newShotBarPresenter.resume();
   }
 
   @Override protected void onPause() {
     super.onPause();
     detailPresenter.pause();
-    pinShotPresenter.pause();
     newShotBarPresenter.pause();
   }
 
@@ -305,12 +300,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             onShotUsernameClick(username);
           }
         }, //
-        numberFormatUtil, new ShotClickListener() {
-
-      @Override public void onClick(ShotModel shot) {
-        pinShotPresenter.pinToProfile(shot);
-      }
-    }, new OnParentShownListener() {
+        numberFormatUtil,  new OnParentShownListener() {
       @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
         linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
         if (repliesNumber == 0) {
@@ -581,7 +571,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   //region View methods
   @Override public void renderShot(ShotModel shotModel) {
     detailAdapter.renderMainShot(shotModel);
-    pinShotPresenter.initialize(this, shotModel);
     setupStreamTitle();
   }
 
@@ -663,22 +652,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
 
   @Override public void hideDraftsButton() {
     newShotBarViewDelegate.hideDraftsButton();
-  }
-
-  @Override public void notifyPinnedShot(ShotModel shotModel) {
-    detailPresenter.initialize(this, shotModel);
-  }
-
-  @Override public void showPinned() {
-    feedbackMessage.show(getView(), R.string.shot_pinned);
-  }
-
-  @Override public void hidePinShotButton() {
-    detailAdapter.hidePinToProfileButton();
-  }
-
-  @Override public void showPinShotButton() {
-    detailAdapter.showPinToProfileContainer();
   }
 
   @Override public void showLoading() {
