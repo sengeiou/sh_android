@@ -56,6 +56,8 @@ public class RemotePollRepository implements ExternalPollRepository {
     PollEntity pollById = localPollDataSource.getPollById(pollEntity.getIdPoll());
     if (pollById != null && pollById.getVoteStatus().equals(PollStatus.IGNORED)) {
       pollEntity.setVoteStatus(PollStatus.IGNORED);
+    } else if (pollById != null && pollById.getVoteStatus().equals(PollStatus.HASSEENRESULTS)) {
+      pollEntity.setVoteStatus(PollStatus.HASSEENRESULTS);
     } else {
       pollEntity.setVoteStatus(pollEntity.getUserHasVoted() ? PollStatus.VOTED : PollStatus.VOTE);
     }
