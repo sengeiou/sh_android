@@ -169,7 +169,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">フィルター: 大切なショット</string>
