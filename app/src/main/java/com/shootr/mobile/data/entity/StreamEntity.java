@@ -28,6 +28,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private Long contributorCount;
     private List<String> idUserContributors;
     private int iAmContributor;
+    private int totalFollowingWatchers;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -243,5 +244,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     @Override public String getSearcheableType() {
         return SearchableType.STREAM;
+    }
+
+    public int getTotalFollowingWatchers() {
+        return totalFollowingWatchers;
+    }
+
+    public void setTotalFollowingWatchers(int totalFollowingWatchers) {
+        this.totalFollowingWatchers = totalFollowingWatchers;
     }
 }

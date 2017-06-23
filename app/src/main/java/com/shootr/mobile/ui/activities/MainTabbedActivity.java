@@ -19,7 +19,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabReselectListener;
@@ -34,7 +33,6 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
-import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DeeplinkingNavigator;
@@ -47,12 +45,7 @@ import javax.inject.Inject;
 
 public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements MainScreenView {
 
-  private static final int TAB_WITH_DISCOVER = 1;
-  private static final int TAB_WITH_DISCOVER_TIMELINE = 2;
-  private static final int TAB_WITHOUT_DISCOVER = 3;
   public static final int REQUEST_NEW_STREAM = 3;
-  private static final int ANIMATION_DURATION = 200;
-  private static final int ANIMATION_TRANSLATION = 500;
   private static final String EXTRA_UPDATE_NEEDED = "update_needed";
   private static final String EXTRA_MULTIPLE_ACTIVITIES = "multiple_activities";
   private static final int ACTIVITY_FRAGMENT = 1;
@@ -110,7 +103,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void sendOpenToMixpanel() {
     analyticsTool.identify(sessionRepository.getCurrentUser());
   }
-
 
   private void setupBottomBar(Bundle savedInstanceState) {
     bottomBar.setItems(R.xml.bottombar_menu);
@@ -331,12 +323,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     startActivityForResult(intent, REQUEST_NEW_STREAM);
   }
 
-  public void navigateToChannelsList() {
-    sendChannelClickToMixpanel(getSource());
-    Intent intent = new Intent(this, ChannelsContainerActivity.class);
-    startActivity(intent);
-  }
-
   private String getSource() {
     @IdRes int tabItemId = bottomBar.getCurrentTabId();
     switch (tabItemId) {
@@ -347,16 +333,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       default:
         return activitySource;
     }
-  }
-
-  private void sendChannelClickToMixpanel(String source) {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(this);
-    builder.setActionId(analyticsActionInbox);
-    builder.setLabelId(analyticsLabelInbox);
-    builder.setSource(source);
-    builder.setUser(sessionRepository.getCurrentUser());
-    analyticsTool.analyticsSendAction(builder);
   }
 
   private void navigateToDiscoverSearch() {
@@ -370,8 +346,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void setupChannelBadge(int count) {
-    if (currentFragment != null
-        && !(currentFragment instanceof ChannelsContainerFragment)) {
+    if (currentFragment != null && !(currentFragment instanceof ChannelsContainerFragment)) {
       showMessagesBadge(count);
     }
   }
@@ -379,18 +354,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   private void showMessagesBadge(int count) {
     if (channelTab != null) {
       channelTab.setBadgeCount(count);
-    }
-  }
-
-  private void setupBadge(int unreadChannels, boolean isFollowingChannels) {
-    if (menu != null) {
-      if (unreadChannels > 0) {
-        CustomActionItemBadge.update(this, menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), isFollowingChannels, unreadChannels);
-      } else {
-        ActionItemBadge.update(this, menu.findItem(R.id.menu_channel),
-            menu.findItem(R.id.menu_channel).getIcon(), ActionItemBadge.BadgeStyles.RED, null);
-      }
     }
   }
 }

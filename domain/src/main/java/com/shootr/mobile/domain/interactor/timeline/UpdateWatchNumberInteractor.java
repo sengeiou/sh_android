@@ -12,6 +12,7 @@ public class UpdateWatchNumberInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final BusPublisher busPublisher;
+  private boolean localOnly;
 
   private Interactor.CompletedCallback callback;
 
@@ -22,13 +23,14 @@ public class UpdateWatchNumberInteractor implements Interactor {
     this.busPublisher = busPublisher;
   }
 
-  public void updateWatchNumber(CompletedCallback callback) {
+  public void updateWatchNumber(boolean localOnly, CompletedCallback callback) {
     this.callback = callback;
+    this.localOnly = localOnly;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    busPublisher.post(new WatchUpdateRequest.Event());
+    busPublisher.post(new WatchUpdateRequest.Event(localOnly));
     notifyLoaded();
   }
 

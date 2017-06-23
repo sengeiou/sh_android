@@ -1,9 +1,11 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.content.Context;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
+import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
@@ -33,6 +35,7 @@ import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -62,8 +65,10 @@ public class MainScreenPresenterTest {
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
     @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
     @Mock GetLocalStreamInteractor getStreamInteractor;
+    @Mock ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
     @Mock StreamModelMapper streamModelMapper;
     @Mock AnalyticsTool analyticsTool;
+    @Mock Context context;
     private MainScreenPresenter mainScreenPresenter;
 
     @Before public void setUp() throws Exception {
@@ -73,11 +78,11 @@ public class MainScreenPresenterTest {
         mainScreenPresenter =
           new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
               sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor,
-              getMutedStreamsInteractor, unwatchStreamInteractor, sessionRepository,
+              shouldUpdateDeviceInfoInteractor, getMutedStreamsInteractor, unwatchStreamInteractor, sessionRepository,
               userModelMapper, badgeCount, getFollowingInteractor,
               getPrivateMessagesChannelsInteractor,
               getFollowingIdsInteractor, getStreamInteractor, streamModelMapper, bus, busPublisher,
-              analyticsTool);
+              context, analyticsTool);
         mainScreenPresenter.setView(view);
         User user = new User();
         user.setIdWatchingStream(ID_STREAM);
@@ -102,9 +107,10 @@ public class MainScreenPresenterTest {
     }
 
     @Test public void shouldSendDeviceInfo() throws Exception {
+        setupShouldUpdateDeviceCallback();
         mainScreenPresenter.initialize(view);
 
-        verify(sendDeviceInfoInteractor).sendDeviceInfo();
+        verify(sendDeviceInfoInteractor, never()).sendDeviceInfo(anyString());
     }
 
     @Test public void shouldUpdateActivityBadge() throws Exception {
@@ -139,6 +145,16 @@ public class MainScreenPresenterTest {
                 return null;
             }
         }).when(getCurrentUserInteractor).getCurrentUser(any(Interactor.Callback.class));
+    }
+
+    private void setupShouldUpdateDeviceCallback() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
+                callback.onLoaded(false);
+                return null;
+            }
+        }).when(shouldUpdateDeviceInfoInteractor).getDeviceInfo(any(Interactor.Callback.class));
     }
 
     private User user() {

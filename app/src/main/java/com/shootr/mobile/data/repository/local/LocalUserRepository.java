@@ -3,11 +3,13 @@ package com.shootr.mobile.data.repository.local;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
+import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
@@ -26,16 +28,19 @@ public class LocalUserRepository implements UserRepository {
     private final UserDataSource localUserDataSource;
     private final SuggestedPeopleDataSource localSuggestedPeopleDataSource;
     private final UserEntityMapper userEntityMapper;
+    private final StreamEntityMapper streamEntityMapper;
     private final SyncableUserEntityFactory syncableUserEntityFactory;
     private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
 
     @Inject public LocalUserRepository(SessionRepository sessionRepository, @Local UserDataSource userDataSource,
-      @Local SuggestedPeopleDataSource localSuggestedPeopleDataSource, UserEntityMapper userEntityMapper,
-      SyncableUserEntityFactory syncableUserEntityFactory, SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
+        @Local SuggestedPeopleDataSource localSuggestedPeopleDataSource, UserEntityMapper userEntityMapper,
+        StreamEntityMapper streamEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory,
+        SuggestedPeopleEntityMapper suggestedPeopleEntityMapper) {
         this.sessionRepository = sessionRepository;
         this.localUserDataSource = userDataSource;
         this.localSuggestedPeopleDataSource = localSuggestedPeopleDataSource;
         this.userEntityMapper = userEntityMapper;
+        this.streamEntityMapper = streamEntityMapper;
         this.syncableUserEntityFactory = syncableUserEntityFactory;
         this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
     }
@@ -86,10 +91,10 @@ public class LocalUserRepository implements UserRepository {
         throw new IllegalArgumentException("Find Participants has no local implementation");
     }
 
-    @Override public void updateWatch(User user) {
+    @Override public Stream updateWatch(User user) {
         UserEntity entity = userEntityMapper.transform(user);
         entity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-        localUserDataSource.updateWatch(entity);
+        return streamEntityMapper.transform(localUserDataSource.updateWatch(entity));
     }
 
     @Override public void synchronizeFollow() {

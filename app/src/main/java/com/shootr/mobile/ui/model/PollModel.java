@@ -4,6 +4,7 @@ import java.util.List;
 
 public class PollModel {
 
+  private final long ONE_HOUR_MILISECONDS = 3600000;
   private String idPoll;
   private String idStream;
   private String idUser;
@@ -15,6 +16,8 @@ public class PollModel {
   private List<PollOptionModel> pollOptionModels;
   private String streamTitle;
   private String votePrivacy;
+  private Long expirationDate;
+  private boolean verifiedPoll;
 
   public String getIdPoll() {
     return idPoll;
@@ -102,5 +105,38 @@ public class PollModel {
 
   public void setVotePrivacy(String votePrivacy) {
     this.votePrivacy = votePrivacy;
+  }
+
+  public Long getExpirationDate() {
+    return expirationDate;
+  }
+
+  public void setExpirationDate(Long expirationDate) {
+    this.expirationDate = expirationDate;
+  }
+
+  public boolean isExpired() {
+    if (this.expirationDate != null) {
+      return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean isLessThanHourToExpire() {
+    if (this.expirationDate != null) {
+      return (this.expirationDate - System.currentTimeMillis() < ONE_HOUR_MILISECONDS) ? true
+          : false;
+    } else {
+      return false;
+    }
+  }
+
+  public boolean isVerifiedPoll() {
+    return verifiedPoll;
+  }
+
+  public void setVerifiedPoll(boolean verifiedPoll) {
+    this.verifiedPoll = verifiedPoll;
   }
 }

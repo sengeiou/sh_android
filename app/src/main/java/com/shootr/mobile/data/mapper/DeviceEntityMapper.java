@@ -22,6 +22,11 @@ public class DeviceEntityMapper {
         device.setOsVer(entity.getOsVer());
         device.setAppVer(entity.getAppVer());
         device.setLocale(entity.getLocale());
+        device.setDeviceUUID(entity.getDeviceUUID());
+        device.setApplicationId(entity.getApplicationId());
+        device.setAdvertisingId(entity.getAdvertisingId());
+        device.setTelephoneId(entity.getTelephoneId());
+        device.setAttestation(entity.getAttestation());
         return device;
     }
 
@@ -35,6 +40,11 @@ public class DeviceEntityMapper {
         entity.setOsVer(device.getOsVer());
         entity.setAppVer(device.getAppVer());
         entity.setLocale(device.getLocale());
+        entity.setDeviceUUID(device.getDeviceUUID());
+        entity.setApplicationId(device.getApplicationId());
+        entity.setAdvertisingId(device.getAdvertisingId());
+        entity.setTelephoneId(device.getTelephoneId());
+        entity.setAttestation(device.getAttestation());
         return entity;
     }
 }

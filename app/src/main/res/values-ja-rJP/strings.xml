@@ -54,7 +54,6 @@
   <string name="block_user_dialog_message">無視すると、このユーザーのショットは全て見られなくなります。</string>
   <string name="block_user_error"> 無視するためにはフォローを解除する必要があります。</string>
   <string name="cancel">キャンセル</string>
-  <string name="cancel_hide_shot" formatted="false">キャンセル</string>
   <string name="change_password_button_text">完了</string>
   <string name="change_password_logout_message">パスワードが変更されました。再度ログインしてください。</string>
   <string name="change_photo">写真を変更</string>
@@ -64,8 +63,6 @@
   <string name="check_in_show_case">チェックインしてストリーム内にいると伝える</string>
   <!-- Errors -->
   <string name="communication_error">インターネット接続に問題があります。接続をご確認の上、もう一度お試しください。</string>
-  <string name="confirmation_hide_shot_message" formatted="false">ピン留めを解除</string>
-  <string name="confirm_hide_shot" formatted="false">表示を解除</string>
   <string name="connection_lost">接続が中断されました</string>
   <string name="contributors_empty">投稿者はいません</string>
   <string name="copied_to_clipboard">クリップボードにコピーされました</string>
@@ -169,7 +166,6 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">投票できません</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorites_emtpy">お気に入りはありません</string>
   <string name="favorite_streams_push_settings">お気に入りのストリーム</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">フィルター: 大切なショット</string>
@@ -211,7 +207,6 @@
   <string name="menu_copy_text">テキストをコピー</string>
   <string name="menu_highlight_shot">ハイライト</string>
   <string name="menu_holding_shots">作成者のショットを表示する</string>
-  <string name="menu_pin_shot">プロフィールにピン留め</string>
   <string name="menu_profile_chage_password">パスワードを変更</string>
   <string name="menu_remove_favorite">お気に入りから外す</string>
   <string name="menu_save_photo">画像を保存</string>
@@ -219,11 +214,28 @@
   <string name="menu_search_streams">検索</string>
   <string name="menu_search_timeline">タイムラインを検索</string>
   <string name="menu_share_shot_via">共有する</string>
+  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_share_shot_via_shootr">リシュート</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">写真</string>
   <!-- TimeUtils -->
   <string name="minutes">分</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minute left</item>
+    <item quantity="other">%d minutes left</item>
+  </plurals>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour left</item>
+    <item quantity="other">%d hours left</item>
+  </plurals>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second left</item>
+    <item quantity="other">%d seconds left</item>
+  </plurals>
+  <plurals name="days_left">
+    <item quantity="one">%d day left</item>
+    <item quantity="other">%d days left</item>
+  </plurals>
   <string name="multiple_activities_action">見る</string>
   <string name="multiple_activity_notification">新しいショット: %d件</string>
   <string name="mute">通知をオフ</string>
@@ -265,6 +277,7 @@
   <string name="notification_shot_sending">ショットを送信中…</string>
   <string name="notification_shot_sent">ショットが送信されました</string>
   <string name="now">今</string>
+  <string name="poll_manual_close">at any time</string>
   <string name="no_intent_handler">このアクションを実施するために使用可能なアプリがありません。</string>
   <string name="off_push_settings">オフ</string>
   <string name="ok">OK</string>
@@ -278,8 +291,6 @@
   <string name="photo_edit_remove">削除する</string>
   <string name="photo_edit_remove_confirmation">写真を削除しますか？</string>
   <string name="photo_edit_take">カメラ</string>
-  <string name="pinned_shot_activity">プロフィールにピン留め</string>
-  <string name="pinned_shot_activity_with_comment">プロフィールにピン留め: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">いいえ</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">現在の参加者やストリームをお気に入り登録しているユーザーに、通知が送信されます。</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">通知する</string>
@@ -377,7 +388,6 @@
   <string name="share_via">共有する</string>
   <string name="share_via_shootr">リシュート</string>
   <string name="shoot_all_button">全て送信</string>
-  <string name="shot_pinned">完了しました</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="other">%s件の返信</item>
     <item quantity="zero">%s件の返信</item>

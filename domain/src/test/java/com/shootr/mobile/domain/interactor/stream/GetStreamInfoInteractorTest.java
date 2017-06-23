@@ -10,6 +10,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
@@ -49,7 +50,7 @@ public class GetStreamInfoInteractorTest {
 
     interactor =
         new GetStreamInfoInteractor(interactorHandler, postExecutionThread, localUserRepository,
-            remoteUserRepository, remoteStreamRepository, localStreamRepository, sessionRepository);
+            remoteStreamRepository, localStreamRepository, sessionRepository);
   }
 
   @Test public void shouldNotifyStreamInfoWhenObtainInfoFromRepository() throws Exception {
@@ -83,6 +84,7 @@ public class GetStreamInfoInteractorTest {
 
   private Stream stream() {
     Stream stream = new Stream();
+    stream.setWatchers(new ArrayList<User>());
     stream.setId(STREAM_ID);
     return stream;
   }

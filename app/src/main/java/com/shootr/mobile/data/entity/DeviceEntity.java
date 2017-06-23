@@ -10,6 +10,11 @@ public class DeviceEntity {
     private String osVer;
     private String appVer;
     private String locale;
+    private String deviceUUID;
+    private String applicationId;
+    private String advertisingId;
+    private String telephoneId;
+    private String attestation;
 
     public String getIdDevice() {
         return idDevice;
@@ -73,5 +78,45 @@ public class DeviceEntity {
 
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    public String getDeviceUUID() {
+        return deviceUUID;
+    }
+
+    public void setDeviceUUID(String deviceUUID) {
+        this.deviceUUID = deviceUUID;
+    }
+
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+    }
+
+    public String getAdvertisingId() {
+        return advertisingId;
+    }
+
+    public void setAdvertisingId(String advertisingId) {
+        this.advertisingId = advertisingId;
+    }
+
+    public String getTelephoneId() {
+        return telephoneId;
+    }
+
+    public void setTelephoneId(String telephoneId) {
+        this.telephoneId = telephoneId;
+    }
+
+    public String getAttestation() {
+        return attestation;
+    }
+
+    public void setAttestation(String attestation) {
+        this.attestation = attestation;
     }
 }

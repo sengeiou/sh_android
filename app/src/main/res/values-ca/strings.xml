@@ -56,7 +56,6 @@
   <string name="block_user_dialog_message">Aquest usuari no et molestarà ni a tu ni als participants dels teus streams.</string>
   <string name="block_user_error">Per bloquejar aquest usuari has de deixar de seguir-lo.</string>
   <string name="cancel">Cancel·lar</string>
-  <string name="cancel_hide_shot" formatted="false">Cancel·lar</string>
   <string name="change_password_button_text">FET</string>
   <string name="change_password_logout_message">La contrasenya ha canviat. Reinicia sessió.</string>
   <string name="change_photo">Canviar foto</string>
@@ -66,13 +65,16 @@
   <string name="check_in_show_case">Fes check-in per dir que ets aquí</string>
   <!-- Errors -->
   <string name="communication_error">Hi ha un problema de connexió a Internet. Comprova la teva connexió i prova un altre cop.</string>
-  <string name="confirmation_hide_shot_message" formatted="false">Treure del perfil</string>
-  <string name="confirm_hide_shot" formatted="false">Treure</string>
   <string name="connection_lost">S\'ha perdut la connexió</string>
   <string name="contributors_empty">No n\'hi ha</string>
   <string name="copied_to_clipboard">Text copiat al portapapers.</string>
   <string name="current_password_hint">Contrasenya actual</string>
   <string name="days">d</string>
+  <plurals name="days_left">
+    <item quantity="one">%d dia</item>
+    <item quantity="other">%d dies</item>
+    <item quantity="zero">%d dia</item>
+  </plurals>
   <string name="delete_shot_confirmation_message">Eliminar shot?</string>
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">Descartar canvis?</string>
@@ -181,6 +183,11 @@
   <string name="following_messages_title_plural">SEGUINT (%d)</string>
   <string name="highlight_shot_dialog">El shot deixarà d\'estar destacat</string>
   <string name="hours">h</string>
+  <plurals name="hours_left">
+    <item quantity="one">%d hora</item>
+    <item quantity="other">%d hores</item>
+    <item quantity="zero">%d hora</item>
+  </plurals>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">Sense missatges</string>
   <string name="include_listing_empty">No hi ha streams</string>
@@ -195,6 +202,7 @@
   <string name="intro_streams_text">L\'app de missatgeria on els xats són oberts. S\'anomenen streams.</string>
   <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
+  <string name="left">Temps restant: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic a l\'enllaç</item>
     <item quantity="other">%s clics a l\'enllaç</item>
@@ -214,19 +222,25 @@
   <string name="menu_copy_text">Copiar text</string>
   <string name="menu_highlight_shot">Destacar</string>
   <string name="menu_holding_shots">Mostrar els shots de l\'administrador</string>
-  <string name="menu_pin_shot">Fixar al perfil</string>
   <string name="menu_profile_chage_password">Canviar contrasenya</string>
   <string name="menu_remove_favorite">Deixar de seguir</string>
   <string name="menu_save_photo">Desar imatge</string>
   <string name="menu_search_participants">Buscar participants</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
+  <string name="menu_share_poll_via_shootr">Compartir enquesta</string>
   <string name="menu_share_shot_via">Compartir via…</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
+  <string name="messages">Missatges</string>
   <!-- TimeUtils -->
   <string name="minutes">m</string>
+  <plurals name="minutes_left">
+    <item quantity="one">%d minut</item>
+    <item quantity="other">%d minuts</item>
+    <item quantity="zero">%d minut</item>
+  </plurals>
   <string name="multiple_activities_action">VEURE</string>
   <string name="multiple_activity_notification">%d notificacions noves</string>
   <string name="mute">Silenciar</string>
@@ -274,6 +288,9 @@
   <string name="now">ara</string>
   <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
+  <string name="official_poll_button_text">Anar a Notificacions</string>
+  <string name="official_poll_description">Per raons de seguretat, per votar cal desbloquejar les notificacions de Shootr en el teu dispositiu. Pots configurar les notificiacions al teu perfil.</string>
+  <string name="official_poll_title">Enquesta oficial</string>
   <string name="off_push_settings">Cap</string>
   <string name="ok">OK</string>
   <string name="on_boarding_add_favorites">Streams populars</string>
@@ -286,17 +303,16 @@
   <string name="photo_edit_remove">Treure</string>
   <string name="photo_edit_remove_confirmation">Esborrar foto?</string>
   <string name="photo_edit_take">Càmera</string>
-  <string name="pinned_shot_activity">Ha fixat al perfil</string>
-  <string name="pinned_shot_activity_with_comment">Ha fixat al perfil: </string>
   <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
   <string name="pin_message_notification_confirmation_text" formatted="false">La notificació s\'enviarà als seguidors i participants actuals de l\'stream.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_ignore">Llevar enquesta</string>
   <string name="poll_live_results">Resultats en viu</string>
+  <string name="poll_manual_close">Aquesta enquesta pot acabar en qualsevol moment</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Enquesta</string>
-  <string name="poll_results">Resultat final</string>
+  <string name="poll_results">Veure resultats</string>
   <string name="poll_results_dialog">Un cop vistos els resultats no podràs votar en aquesta enquesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">Veure</string>
@@ -381,6 +397,11 @@
   <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="search_users_hint">Buscar usuaris</string>
   <string name="seconds">s</string>
+  <plurals name="seconds_left">
+    <item quantity="one">%d segon</item>
+    <item quantity="other">%d segons</item>
+    <item quantity="zero">%d segon</item>
+  </plurals>
   <string name="shared_poll">Ha compartit l\'enquesta %s</string>
   <string name="shared_shot_activity">Reshot de %s</string>
   <string name="shared_shot_activity_with_comment">"Reshot: "</string>
@@ -397,7 +418,6 @@
   <string name="share_via">Compartir via…</string>
   <string name="share_via_shootr">Reshoot</string>
   <string name="shoot_all_button">Enviar tot</string>
-  <string name="shot_pinned">Ancorat</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="one">%s resposta</item>
     <item quantity="other">%s respostes</item>
@@ -477,6 +497,7 @@
   <string name="update_warning_button">Actualitzar ara</string>
   <string name="update_warning_message">Hem fet millores que requereixen actualitzar-se a la darrera versió de Shootr.</string>
   <string name="user_blocked">Usuari bloquejat</string>
+  <string name="user_cannot_vote_alert_description">Només és possible un vot per dispositiu i per usuari</string>
   <string name="user_not_found">Usuari no trobat.</string>
   <string name="user_not_found_message">Usuari no trobat.</string>
   <string name="user_unblocked">Desbloquejat</string>
@@ -496,5 +517,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="messages">Missatges</string>
 </resources>

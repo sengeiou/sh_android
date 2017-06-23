@@ -14,7 +14,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
 
   public PollEntity fromCursor(Cursor c) {
     PollEntity pollEntity = new PollEntity();
-    pollEntity.setHasVoted(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HAS_VOTED)));
+    pollEntity.setUserHasVoted(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HAS_VOTED)) == 1L);
     pollEntity.setIdPoll(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_POLL)));
     pollEntity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_STREAM)));
     pollEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_USER)));
@@ -23,12 +23,15 @@ public class PollEntityDBMapper extends GenericDBMapper {
     pollEntity.setVoteStatus(c.getString(c.getColumnIndex(DatabaseContract.PollTable.VOTE_STATUS)));
     pollEntity.setQuestion(c.getString(c.getColumnIndex(DatabaseContract.PollTable.QUESTION)));
     pollEntity.setVotePrivacy(c.getString(c.getColumnIndex(DatabaseContract.PollTable.VOTE_PRIVACY)));
+    pollEntity.setExpirationDate(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.EXPIRATION_DATE)));
+    pollEntity.setVerifiedPoll(
+        c.getLong(c.getColumnIndex(DatabaseContract.PollTable.VERIFIED_POLL)) == 1L);
     return pollEntity;
   }
 
   public ContentValues toContentValues(PollEntity pollEntity) {
     ContentValues cv = new ContentValues();
-    cv.put(DatabaseContract.PollTable.HAS_VOTED, pollEntity.getHasVoted());
+    cv.put(DatabaseContract.PollTable.HAS_VOTED, pollEntity.getUserHasVoted() ? 1L : 0L);
     cv.put(DatabaseContract.PollTable.ID_POLL, pollEntity.getIdPoll());
     cv.put(DatabaseContract.PollTable.ID_STREAM, pollEntity.getIdStream());
     cv.put(DatabaseContract.PollTable.ID_USER, pollEntity.getIdStream());
@@ -38,6 +41,9 @@ public class PollEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PollTable.VOTE_STATUS,
         pollEntity.getVoteStatus() != null ? pollEntity.getVoteStatus() : PollStatus.VOTE);
     cv.put(DatabaseContract.PollTable.VOTE_PRIVACY, pollEntity.getVotePrivacy());
+    cv.put(DatabaseContract.PollTable.EXPIRATION_DATE, pollEntity.getExpirationDate());
+    cv.put(DatabaseContract.PollTable.VERIFIED_POLL,
+        pollEntity.getVerifiedPoll() != null && pollEntity.getVerifiedPoll() ? 1L : 0L);
     return cv;
   }
 }

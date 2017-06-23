@@ -65,17 +65,12 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   @BindView(R.id.all_shots_list) RecyclerView shotsList;
   @BindView(R.id.timeline_empty) View emptyView;
   @BindView(R.id.all_shots_loading) View loadingView;
-  @BindString(R.string.shot_shared_message) String shotShared;
-  @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
-  @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
-  @BindString(R.string.cancel_hide_shot) String cancelHideShotAlertDialogMessage;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;
   @BindString(R.string.analytics_label_nice) String analyticsLabelNice;
   @BindString(R.string.analytics_action_share_shot) String analyticsActionShareShot;
   @BindString(R.string.analytics_label_share_shot) String analyticsLabelShareShot;
   @BindString(R.string.analytics_action_external_share) String analyticsActionExternalShare;
   @BindString(R.string.analytics_label_external_share) String analyticsLabelExternalShare;
-
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_source_all_shots) String allShotsSource;
 

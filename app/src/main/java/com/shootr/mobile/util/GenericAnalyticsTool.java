@@ -187,7 +187,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String idShot = builder.getIdShot();
     String loginType = builder.getLoginType();
     Boolean newContent = builder.hasNewContent();
-    Boolean firstSession = null;
+    Boolean firstSession = false;
     if (user != null) {
       firstSession = (getSignUpDatePlusHour(user.getSignUpDate()).compareTo(new Date()) > 0);
     }

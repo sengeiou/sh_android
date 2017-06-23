@@ -63,36 +63,40 @@ public class SelectStreamInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
-    Stream selectedStream = getSelectedStream();
-    recentSearchRepository.putRecentStream(selectedStream, getCurrentTime());
     if (isSelectingCurrentWatchingStream(currentUser)) {
-      notifyLoaded(selectedStream);
+      selectStreamFromRemote();
     } else {
+      selectStreamAndUpdateWatch(currentUser);
+    }
+  }
 
-      if (selectedStream != null) {
-        User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
-        sessionRepository.setTimelineFilterActivated(false);
-        sessionRepository.setCurrentUser(updatedUser);
-        notifyLoaded(selectedStream);
-        remoteUserRepository.updateWatch(updatedUser);
-      } else {
-        notifyError(new ServerCommunicationException(new Throwable()));
-      }
+  private void selectStreamAndUpdateWatch(User currentUser) {
+    Stream selectedStream = localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
+    if (selectedStream != null) {
+      recentSearchRepository.putRecentStream(selectedStream, getCurrentTime());
+      User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
+      sessionRepository.setTimelineFilterActivated(false);
+      sessionRepository.setCurrentUser(updatedUser);
+      notifyLoaded(remoteUserRepository.updateWatch(updatedUser));
+    }
+  }
+
+  private void selectStreamFromRemote() {
+    Stream stream = getSelectedStream();
+    if (stream != null) {
+      notifyLoaded(stream);
+    } else {
+      notifyError(new ServerCommunicationException(new Throwable()));
     }
   }
 
   private Stream getSelectedStream() {
-    Stream selectedStream =
-        localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
-    if (selectedStream == null) {
-      try {
-        selectedStream =
-            remoteStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
-      } catch (ServerCommunicationException error) {
-        notifyError(error);
-      }
+    try {
+      return remoteStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
+    } catch (ServerCommunicationException error) {
+      notifyError(error);
     }
-    return selectedStream;
+    return localStreamRepository.getStreamById(idSelectedStream, StreamMode.TYPES_STREAM);
   }
 
   private boolean isSelectingCurrentWatchingStream(User currentUser) {

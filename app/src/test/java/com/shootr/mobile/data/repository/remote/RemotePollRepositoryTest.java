@@ -99,7 +99,7 @@ public class RemotePollRepositoryTest {
   @NonNull private PollEntity pollEntity() {
     PollEntity pollEntity = new PollEntity();
     pollEntity.setIdPoll(ID_POLL);
-    pollEntity.setHasVoted(1L);
+    pollEntity.setUserHasVoted(true);
     pollEntity.setIdStream(ID_STREAM);
     pollEntity.setPollOptions(Collections.<PollOptionEntity>emptyList());
     pollEntity.setPublished(1L);

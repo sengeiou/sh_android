@@ -20,7 +20,7 @@ public class BottomOffsetDecoration extends RecyclerView.ItemDecoration {
     int position = parent.getChildPosition(view);
     if (parent.getLayoutManager() instanceof GridLayoutManager) {
       GridLayoutManager grid = ((GridLayoutManager) parent.getLayoutManager());
-      if ((dataSize - position) <= grid.getSpanCount()) {
+      if ((dataSize - position) == 1) {
         outRect.set(0, 0, 0, bottomOffset);
       } else {
         outRect.set(0, 0, 0, 0);

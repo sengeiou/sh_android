@@ -17,7 +17,6 @@ import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -26,7 +25,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -94,7 +92,7 @@ public class SelectStreamInteractorTest {
 
   @Test public void selectingCurrentStreamDoesNotifyUi() throws Exception {
     setupOldWatchingStream();
-    when(localStreamRepository.getStreamById(OLD_STREAM_ID, TYPES_STREAM)).thenReturn(oldStream());
+    when(remoteStreamRepository.getStreamById(OLD_STREAM_ID, TYPES_STREAM)).thenReturn(oldStream());
 
     interactor.selectStream(OLD_STREAM_ID, dummyCallback, errorCallback);
 
@@ -112,19 +110,10 @@ public class SelectStreamInteractorTest {
     verify(remoteUserRepository, never()).updateWatch(any(User.class));
   }
 
-  @Test public void shouldNotifyCallbackBeforeSettingWatchInRemoteRepository() throws Exception {
-    when(localStreamRepository.getStreamById(NEW_STREAM_ID, TYPES_STREAM)).thenReturn(newStream());
-    InOrder inOrder = inOrder(dummyCallback, remoteUserRepository);
-
-    interactor.selectStream(NEW_STREAM_ID, dummyCallback, errorCallback);
-
-    inOrder.verify(dummyCallback).onLoaded(anyStream());
-    inOrder.verify(remoteUserRepository).updateWatch(any(User.class));
-  }
-
   @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowaServerComunicationError()
       throws Exception {
-    when(localStreamRepository.getStreamById(OLD_STREAM_ID, TYPES_STREAM)).thenReturn(null);
+    setupOldWatchingStream();
+    when(remoteStreamRepository.getStreamById(OLD_STREAM_ID, TYPES_STREAM)).thenReturn(null);
     doThrow(ServerCommunicationException.class).
         when(remoteStreamRepository).getStreamById(OLD_STREAM_ID, TYPES_STREAM);
 

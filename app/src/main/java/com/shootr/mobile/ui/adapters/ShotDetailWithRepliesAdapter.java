@@ -53,7 +53,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
     private final AndroidTimeUtils timeUtils;
     private final OnParentShownListener onParentShownListener;
     private final OnNiceShotListener onNiceShotListener;
-    private final ShotClickListener onClickListenerPinToProfile;
     private final ShotClickListener nicesClickListener;
     private final OnUrlClickListener onUrlClickListener;
     private final ShareClickListener reshootClickListener;
@@ -73,7 +72,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         ShotClickListener replyShotClickListener, ShotClickListener streamClickListener,
         ShotClickListener imageClickListener, OnVideoClickListener videoClickListener,
         OnUsernameClickListener onUsernameClickListener, NumberFormatUtil numberFormatUtil,
-        ShotClickListener onClickListenerPinToProfile, OnParentShownListener onParentShownListener,
+        OnParentShownListener onParentShownListener,
         OnNiceShotListener onNiceShotListener, ShotClickListener nicesClickListener,
         OnUrlClickListener onUrlClickListener, TimeFormatter timeFormatter, Resources resources,
         AndroidTimeUtils timeUtils, ShareClickListener reshootClickListener,
@@ -87,7 +86,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.videoClickListener = videoClickListener;
         this.onUsernameClickListener = onUsernameClickListener;
         this.numberFormatUtil = numberFormatUtil;
-        this.onClickListenerPinToProfile = onClickListenerPinToProfile;
         this.onParentShownListener = onParentShownListener;
         this.nicesClickListener = nicesClickListener;
         this.onUrlClickListener = onUrlClickListener;
@@ -101,20 +99,6 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
         this.itemElevation = resources.getDimension(R.dimen.card_elevation);
         this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
         this.nicerTextSpannableBuilder = new NicerTextSpannableBuilder();
-    }
-
-    public void hidePinToProfileButton() {
-        if (mainShot != null) {
-            mainShot.setCanBePinned(false);
-            notifyItemChanged(getPositionMainShot());
-        }
-    }
-
-    public void showPinToProfileContainer() {
-        if (mainShot != null) {
-            mainShot.setCanBePinned(true);
-            notifyItemChanged(getPositionMainShot());
-        }
     }
 
     public void disableStreamTitle() {
@@ -253,9 +237,7 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
           onUsernameClickListener,
           timeFormatter, numberFormatUtil, resources,
           onNiceShotListener,
-          onClickListenerPinToProfile,
           nicesClickListener,
-          shotTextSpannableBuilder,
           nicerTextSpannableBuilder, onUrlClickListener, reshootClickListener, shareClickListener);
     }
 

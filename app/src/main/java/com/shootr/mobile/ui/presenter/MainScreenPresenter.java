@@ -1,6 +1,14 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.content.Context;
+import android.support.annotation.NonNull;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.safetynet.SafetyNet;
+import com.google.android.gms.safetynet.SafetyNetApi;
 import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BadgeChanged;
@@ -9,6 +17,7 @@ import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
@@ -31,7 +40,11 @@ import com.shootr.mobile.ui.views.MainScreenView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.List;
+import java.util.Random;
 import javax.inject.Inject;
 
 public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, UnwatchDone.Receiver,
@@ -41,6 +54,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
   private final SendShotEventStatsIneteractor sendShotEventStatsIneteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
+  private final ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
   private final GetMutedStreamsInteractor getMutedStreamsInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final SessionRepository sessionRepository;
@@ -53,6 +67,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final StreamModelMapper streamModelMapper;
   private final Bus bus;
   private final BusPublisher busPublisher;
+  private final Context context;
   private AnalyticsTool analyticsTool;
 
   private MainScreenView mainScreenView;
@@ -62,22 +77,25 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private int unreadFollowChannels = 0;
   private StreamModel streamModel;
 
+  private GoogleApiClient googleApiClient;
+
   @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
       SendShotEventStatsIneteractor sendShotEventStatsIneteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
-      GetMutedStreamsInteractor getMutedStreamsInteractor,
+      ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
       UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
       GetFollowingInteractor followingInteractor,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
       GetFollowingIdsInteractor getFollowingIdsInteractor,
       GetLocalStreamInteractor getStreamInteractor, StreamModelMapper streamModelMapper,
-      @Main Bus bus, BusPublisher busPublisher, AnalyticsTool analyticsTool) {
+      @Main Bus bus, BusPublisher busPublisher, @ApplicationContext Context context, AnalyticsTool analyticsTool) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
+    this.shouldUpdateDeviceInfoInteractor = getDeviceInfoInteractor;
     this.getMutedStreamsInteractor = getMutedStreamsInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.sessionRepository = sessionRepository;
@@ -90,6 +108,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.streamModelMapper = streamModelMapper;
     this.bus = bus;
     this.busPublisher = busPublisher;
+    this.context = context;
     this.analyticsTool = analyticsTool;
   }
 
@@ -102,14 +121,23 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.loadCurrentUser();
     this.getFollows();
     this.getMuted();
-    this.sendDeviceInfo();
+    this.setupDeviceInfo();
     this.sendShotEventStats();
     this.updateActivityBadge();
     this.loadConnectedStream();
   }
 
-  private void sendDeviceInfo() {
-    sendDeviceInfoInteractor.sendDeviceInfo();
+  private void setupDeviceInfo() {
+
+    shouldUpdateDeviceInfoInteractor.getDeviceInfo(new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean needsUpdate) {
+        if (needsUpdate) {
+          buildGoogleApiClient();
+          startVerification();
+        }
+      }
+    });
+
   }
 
   private void getFollows() {
@@ -261,5 +289,47 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       mainScreenView.updateChannelBadge(event.getUnreadChannels(),
           false);
     }
+  }
+
+  private synchronized void buildGoogleApiClient() {
+    googleApiClient = new GoogleApiClient.Builder(context)
+        .addApi(SafetyNet.API)
+        .build();
+    googleApiClient.connect();
+  }
+
+  private byte[] getRequestNonce() {
+
+    String data = String.valueOf(System.currentTimeMillis());
+
+    ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+    byte[] bytes = new byte[24];
+    Random random = new SecureRandom();
+    random.nextBytes(bytes);
+    try {
+      byteStream.write(bytes);
+      byteStream.write(data.getBytes());
+      byteStream.write(sessionRepository.getCurrentUserId().getBytes());
+    } catch (IOException e) {
+      return null;
+    }
+
+    return byteStream.toByteArray();
+  }
+
+  private void startVerification() {
+
+    final byte[] nonce = getRequestNonce();
+    SafetyNet.SafetyNetApi.attest(googleApiClient, nonce)
+        .setResultCallback(new ResultCallback<SafetyNetApi.AttestationResult>() {
+          @Override
+          public void onResult(@NonNull SafetyNetApi.AttestationResult attestationResult) {
+            Status status = attestationResult.getStatus();
+            if (status.isSuccess()) {
+              String jwsResult = attestationResult.getJwsResult();
+              sendDeviceInfoInteractor.sendDeviceInfo(jwsResult);
+            }
+          }
+        });
   }
 }

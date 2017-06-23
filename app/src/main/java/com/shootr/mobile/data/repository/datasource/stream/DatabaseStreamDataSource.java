@@ -27,7 +27,7 @@ public class DatabaseStreamDataSource implements StreamDataSource {
   }
 
   @Override public StreamEntity putStream(StreamEntity streamEntity) {
-    return putStream(streamEntity, false);
+    return streamEntity != null ? putStream(streamEntity, false) : null;
   }
 
   @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {

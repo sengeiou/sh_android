@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/setup_notification_background"
+    tools:context="com.shootr.mobile.ui.activities.SetupNotificationsActivity"
+    >
+
+  <ImageView
+      android:layout_width="96dp"
+      android:layout_height="96dp"
+      android:src="@drawable/ic_poll"
+      />
+
+  <TextView
+      android:id="@+id/textView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="64dp"
+      android:fontFamily="sans-serif-medium"
+      android:text="@string/official_poll_title"
+      android:textColor="@color/black"
+
+      android:textSize="20sp"
+      />
+
+  <TextView
+      android:layout_width="288dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:textSize="14sp"
+      android:gravity="center"
+      android:text="@string/official_poll_description"
+      />
+
+  <Button
+      android:id="@+id/button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/official_poll_button_text"
+      android:layout_marginTop="40dp"
+      />
+</LinearLayout>

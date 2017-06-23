@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import java.io.IOException;
@@ -40,7 +41,7 @@ public interface UserApiService {
     @GET("/user/streamParticipants/{idStream}/search") List<UserEntity> findParticipants(
       @Path("idStream") String idStream, @Query("query") String query) throws IOException, ApiException;
 
-    @PUT("/user/watch/{idStream}") Response watch(@Path("idStream") String idStream)
+    @PUT("/user/watch/{idStream}") StreamEntity watch(@Path("idStream") String idStream)
       throws IOException, ApiException;
 
     @PUT("/user/unwatch") Response unwatch() throws IOException, ApiException;

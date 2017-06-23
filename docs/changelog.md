@@ -13,6 +13,18 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.37.0] - 2017-06-23
+
+### Changed
+- Participants counter
+
+
+### Added
+- Secure poll
+- Remaining time in poll
+- User has voted
+
+
 ## [1.36.0] - 2017-06-01
 
 ### Changed

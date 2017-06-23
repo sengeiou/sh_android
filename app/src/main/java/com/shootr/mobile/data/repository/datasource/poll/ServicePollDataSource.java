@@ -7,6 +7,7 @@ import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.entity.PollVoteRequestEntity;
 import com.shootr.mobile.domain.exception.PollDeletedException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.UserCannotVoteDueToDeviceRequestException;
 import com.shootr.mobile.domain.exception.UserCannotVoteRequestException;
 import com.shootr.mobile.domain.exception.UserHasVotedRequestException;
 import java.io.IOException;
@@ -70,7 +71,8 @@ public class ServicePollDataSource implements PollDataSource {
   }
 
   @Override public PollEntity vote(String idPoll, String idPollOption, boolean isPrivateVote)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException,
+      UserCannotVoteDueToDeviceRequestException {
     try {
       PollVoteRequestEntity pollVoteRequestEntity = new PollVoteRequestEntity();
       pollVoteRequestEntity.setVotePrivacy(isPrivateVote);
@@ -82,6 +84,8 @@ public class ServicePollDataSource implements PollDataSource {
         throw new UserCannotVoteRequestException(e);
       } else if (e.getErrorInfo().code() == 7002) {
         throw new UserHasVotedRequestException(e);
+      } else if (e.getErrorInfo().code() == 7003) {
+        throw new UserCannotVoteDueToDeviceRequestException(e);
       } else {
         throw new ServerCommunicationException(e);
       }

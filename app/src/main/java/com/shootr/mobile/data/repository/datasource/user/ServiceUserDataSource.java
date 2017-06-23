@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.UserApiService;
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.exception.EmailAlreadyExistsException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -101,12 +102,13 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public void updateWatch(UserEntity userEntity) {
+    @Override public StreamEntity updateWatch(UserEntity userEntity) {
         try {
             if (userEntity.getIdWatchingStream() != null) {
-                userApiService.watch(userEntity.getIdWatchingStream());
+                return userApiService.watch(userEntity.getIdWatchingStream());
             } else {
                 userApiService.unwatch();
+                return null;
             }
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);

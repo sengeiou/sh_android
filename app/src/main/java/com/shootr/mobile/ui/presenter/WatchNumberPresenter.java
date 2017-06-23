@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.bus.StreamChanged;
 import com.shootr.mobile.domain.bus.WatchUpdateRequest;
 import com.shootr.mobile.domain.interactor.stream.WatchNumberInteractor;
 import com.shootr.mobile.ui.views.WatchNumberView;
@@ -9,7 +8,7 @@ import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import javax.inject.Inject;
 
-public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver, StreamChanged.Receiver {
+public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Receiver {
 
     private final Bus bus;
     private final WatchNumberInteractor watchNumberInteractor;
@@ -34,11 +33,10 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     public void initialize(WatchNumberView watchNumberView, String idStream) {
         this.setView(watchNumberView);
         this.setIdStream(idStream);
-        this.retrieveData();
     }
 
-    protected void retrieveData() {
-        watchNumberInteractor.loadWatchersNumber(idStream, new WatchNumberInteractor.Callback() {
+    protected void retrieveData(boolean localOnly) {
+        watchNumberInteractor.loadWatchersNumber(idStream, localOnly, new WatchNumberInteractor.Callback() {
             @Override public void onLoaded(Integer[] count) {
                 setViewWathingCount(count);
             }
@@ -64,7 +62,7 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     @Override public void resume() {
         bus.register(this);
         if (hasBeenPaused) {
-            this.retrieveData();
+            this.retrieveData(false);
         }
     }
 
@@ -74,14 +72,6 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
     }
 
     @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
-        retrieveData();
-    }
-
-    @Subscribe @Override public void onStreamChanged(StreamChanged.Event event) {
-        if (event.getNewStreamId() != null) {
-            retrieveData();
-        } else {
-            watchNumberView.hideWatchingPeopleCount();
-        }
+        retrieveData(event.isLocalOnly());
     }
 }

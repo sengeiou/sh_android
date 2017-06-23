@@ -112,7 +112,7 @@ public class StreamTimelinePresenterTest {
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         streamHoldingTimelineInteractorsWrapper, selectStreamInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, callCtaCheckInInteractor, reshootInteractor,
-        undoReshootInteractor, getStreamInteractor, shotModelMapper,
+        undoReshootInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
         createStreamInteractor,
@@ -744,7 +744,9 @@ public class StreamTimelinePresenterTest {
   @Test public void shouldLoadStreamIfInitializedWithoutAuthorIdUser() throws Exception {
     presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
 
-    verify(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    verify(selectStreamInteractor).selectStream(anyString(),
+        any(SelectStreamInteractor.Callback.class),
+        any(SelectStreamInteractor.ErrorCallback.class));
   }
 
   @Test public void shouldShowEmptyWhenShotDeletedAndNoMoreShotsInTimeline() throws Exception {
@@ -1010,7 +1012,7 @@ public class StreamTimelinePresenterTest {
     return shot;
   }
 
-  private Stream selectedStream() {
+  private StreamSearchResult selectedStream() {
     Stream stream = new Stream();
     stream.setId(SELECTED_STREAM_ID);
     stream.setTopic(TOPIC);
@@ -1018,7 +1020,9 @@ public class StreamTimelinePresenterTest {
     stream.setDescription(DESCRIPTION);
     stream.setAuthorId(ID_AUTHOR);
     stream.setReadWriteMode("PUBLIC");
-    return stream;
+    StreamSearchResult streamSearchResult = new StreamSearchResult();
+    streamSearchResult.setStream(stream);
+    return streamSearchResult;
   }
 
   private Stream selectedViewOnlyStream() {
@@ -1040,16 +1044,18 @@ public class StreamTimelinePresenterTest {
     return stream;
   }
 
-  private Stream selectedStreamWithEmptyTopic() {
-    Stream stream = selectedStream();
+  private StreamSearchResult selectedStreamWithEmptyTopic() {
+    Stream stream = selectedStream().getStream();
     stream.setReadWriteMode("PUBLIC");
     stream.setTopic("");
-    return stream;
+    StreamSearchResult streamSearchResult = new StreamSearchResult();
+    streamSearchResult.setStream(stream);
+    return streamSearchResult;
   }
 
   private StreamSearchResult streamResult() {
     StreamSearchResult streamSearchResult = new StreamSearchResult();
-    streamSearchResult.setStream(selectedStream());
+    streamSearchResult.setStream(selectedStream().getStream());
     return streamSearchResult;
   }
 
@@ -1159,10 +1165,11 @@ public class StreamTimelinePresenterTest {
   private void setupGetStreamInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((GetStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedStream());
+        ((SelectStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(selectedStream());
         return null;
       }
-    }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }).when(selectStreamInteractor).selectStream(anyString(), any(SelectStreamInteractor.Callback.class), any(
+        Interactor.ErrorCallback.class));
   }
 
   private void setupGetStreamInteractorCallbackWithoutTopic() {
@@ -1178,17 +1185,18 @@ public class StreamTimelinePresenterTest {
   private void setupGetStreamInteractorCallbackWithEmptyTopic() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((GetStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(
+        ((SelectStreamInteractor.Callback) invocation.getArguments()[1]).onLoaded(
             selectedStreamWithEmptyTopic());
         return null;
       }
-    }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
+    }).when(selectStreamInteractor).selectStream(anyString(), any(SelectStreamInteractor.Callback.class), any(
+        Interactor.ErrorCallback.class));
   }
 
   private void setupCreateStreamInteractorCallbackWithTopic() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStream());
+        ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStream().getStream());
         return null;
       }
     }).when(createStreamInteractor)
@@ -1200,7 +1208,7 @@ public class StreamTimelinePresenterTest {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(
-            selectedStreamWithEmptyTopic());
+            selectedStreamWithEmptyTopic().getStream());
         return null;
       }
     }).when(createStreamInteractor)

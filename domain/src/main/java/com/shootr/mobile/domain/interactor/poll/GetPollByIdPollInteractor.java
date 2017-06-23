@@ -28,6 +28,7 @@ public class GetPollByIdPollInteractor implements Interactor {
   private Callback<Poll> callback;
   private ErrorCallback errorCallback;
   private String idPoll;
+  private boolean hasVoted;
 
   @Inject public GetPollByIdPollInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, InternalPollRepository localPollRepository,
@@ -38,17 +39,18 @@ public class GetPollByIdPollInteractor implements Interactor {
     this.remotePollRepository = remotePollRepository;
   }
 
-  public void loadPollByIdPoll(String idPoll, Callback<Poll> callback,
+  public void loadPollByIdPoll(String idPoll, boolean hasVoted, Callback<Poll> callback,
       ErrorCallback errorCallback) {
     this.idPoll = idPoll;
     this.callback = callback;
+    this.hasVoted = hasVoted;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
     try {
-      obtainPollFromRepository(remotePollRepository);
+      obtainPollFromRepository(hasVoted ? localPollRepository : remotePollRepository);
     } catch (ServerCommunicationException error) {
       obtainPollFromRepository(localPollRepository);
       notifyError(error);

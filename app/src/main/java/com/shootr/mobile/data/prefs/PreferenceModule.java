@@ -19,6 +19,10 @@ import javax.inject.Singleton;
         return new StringPreference(preferences, "session_token", null);
     }
 
+    @Provides @Singleton @DeviceId StringPreference provideDeviceId(SharedPreferences preferences) {
+        return new StringPreference(preferences, "device_id", null);
+    }
+
     @Provides @Singleton @NotificationsEnabled BooleanPreference providesNotificationsEnabled(
       SharedPreferences preferences) {
         return new BooleanPreference(preferences, "global_notifications_enabled", DEFAULT_NOTIFICATIONS_ENABLED);

@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository;
 
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
+import com.shootr.mobile.data.prefs.DeviceId;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
@@ -21,6 +22,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final BooleanPreference timelineFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
   private final BooleanPreference publicVoteAlertPreference;
+  private final StringPreference deviceIdPreference;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
   private User currentUser;
@@ -31,12 +33,14 @@ public class SessionRepositoryImpl implements SessionRepository {
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
-      CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
+      @DeviceId StringPreference deviceIdPreference, CrashReportTool crashReportTool,
+      AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.timelineFilterPreference = timelineFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.publicVoteAlertPreference = publicVoteAlertPreference;
+    this.deviceIdPreference = deviceIdPreference;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
@@ -82,6 +86,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     lastTimeFilteredPreference.delete();
     timelineFilterPreference.delete();
     publicVoteAlertPreference.delete();
+    deviceIdPreference.delete();
     analyticsTool.reset();
     currentUser = null;
   }
@@ -108,5 +113,13 @@ public class SessionRepositoryImpl implements SessionRepository {
     } catch (Exception e) {
       this.synchroTime = REFRESH_INTERVAL_SECONDS;
     }
+  }
+
+  @Override public String getDeviceId() {
+    return deviceIdPreference.get();
+  }
+
+  @Override public void setDeviceId(String device) {
+    deviceIdPreference.set(device);
   }
 }

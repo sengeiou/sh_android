@@ -47,7 +47,6 @@ import com.shootr.mobile.ui.base.BaseToolbarActivity;
 import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
-import com.shootr.mobile.ui.fragments.FavoritesFragment;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.GenericSearchFragment;
@@ -86,7 +85,6 @@ import javax.inject.Singleton;
     MainTabbedActivity.class,
     ResetPasswordActivity.class,
     ListingActivity.class,
-    FavoritesFragment.class,
     ActivityTimelineFragment.class,
     WhaleActivity.class,
     EmailConfirmationActivity.class,

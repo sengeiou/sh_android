@@ -83,10 +83,6 @@ public class StreamInfo {
         }
 
         public Builder currentUserWatching(User currentUserWatching) {
-            //TODO: this is a ñapa. Eliminar este hack cuando se mergee con participants-info
-            if (currentUserWatching != null) {
-                streamInfo.getWatchers().add(0, currentUserWatching);
-            }
             streamInfo.setCurrentUserWatching(currentUserWatching);
             return this;
         }

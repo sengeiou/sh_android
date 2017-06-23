@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.SharePollInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollOption;
+import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
@@ -18,11 +19,14 @@ import javax.inject.Inject;
 public class PollResultsPresenter implements Presenter {
 
   private static final long ZERO_VOTES = 0;
+  private static final long REFRESH_INTERVAL_MILLISECONDS_SEC = 1 * 1000;
+  private static final long REFRESH_INTERVAL_MILLISECONDS_MIN = 60 * 1000;
   private final GetPollByIdPollInteractor getPollByIdPollInteractor;
   private final PollModelMapper pollModelMapper;
   private final IgnorePollInteractor ignorePollInteractor;
   private final SharePollInteractor sharePollInteractor;
   private final ErrorMessageFactory errorMessageFactory;
+  private final Poller poller;
 
   private PollResultsView pollResultsView;
   private boolean hasBeenPaused;
@@ -33,28 +37,30 @@ public class PollResultsPresenter implements Presenter {
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
       PollModelMapper pollModelMapper, IgnorePollInteractor ignorePollInteractor,
-      SharePollInteractor sharePollInteractor, ErrorMessageFactory errorMessageFactory) {
+      SharePollInteractor sharePollInteractor, ErrorMessageFactory errorMessageFactory,
+      Poller poller) {
     this.getPollByIdPollInteractor = getPollByIdPollInteractor;
     this.pollModelMapper = pollModelMapper;
     this.ignorePollInteractor = ignorePollInteractor;
     this.sharePollInteractor = sharePollInteractor;
     this.errorMessageFactory = errorMessageFactory;
+    this.poller = poller;
   }
 
-  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream) {
+  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream, boolean hasVoted) {
     setView(pollResultsView);
     this.idPoll = idPoll;
     this.idStream = idStream;
-    loadPoll();
+    loadPoll(hasVoted);
   }
 
   protected void setView(PollResultsView pollResultsView) {
     this.pollResultsView = pollResultsView;
   }
 
-  private void loadPoll() {
+  private void loadPoll(boolean hasVoted) {
     pollResultsView.showLoading();
-    getPollByIdPollInteractor.loadPollByIdPoll(idPoll, new Interactor.Callback<Poll>() {
+    getPollByIdPollInteractor.loadPollByIdPoll(idPoll, hasVoted, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         orderPollOptions(poll);
         handlePollModel(poll);
@@ -73,7 +79,8 @@ public class PollResultsPresenter implements Presenter {
     if (pollModel != null) {
       idPoll = pollModel.getIdPoll();
       pollResultsView.renderPollResults(pollModel);
-      showPollVotes();
+      showPollVotesTimeToExpire(pollModel.getExpirationDate());
+      setupPoller();
     }
   }
 
@@ -83,9 +90,10 @@ public class PollResultsPresenter implements Presenter {
     }
   }
 
-  private void showPollVotes() {
+  private void showPollVotesTimeToExpire(Long expirationDate) {
     countPollVotes();
-    pollResultsView.showPollVotes(pollVotes);
+    pollResultsView.showPollVotesTimeToExpire(pollVotes,
+        (expirationDate != null) ? expirationDate : -1, pollModel.isExpired());
   }
 
   private void countPollVotes() {
@@ -95,15 +103,38 @@ public class PollResultsPresenter implements Presenter {
     }
   }
 
+  private void setupPoller() {
+    this.poller.init(REFRESH_INTERVAL_MILLISECONDS_SEC, new Runnable() {
+      @Override public void run() {
+        showPollVotesTimeToExpire(pollModel.getExpirationDate());
+        if (!pollModel.isLessThanHourToExpire()
+            && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
+          poller.stopPolling();
+          poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
+          poller.startPolling();
+        } else if (pollModel.isLessThanHourToExpire()
+            && poller.getIntervalMilliseconds() == REFRESH_INTERVAL_MILLISECONDS_MIN) {
+          poller.stopPolling();
+          poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_SEC);
+          poller.startPolling();
+        } else if (pollModel.isExpired()) {
+          poller.stopPolling();
+        }
+      }
+    });
+    poller.startPolling();
+  }
+
   @Override public void resume() {
     if (hasBeenPaused) {
       pollVotes = ZERO_VOTES;
-      loadPoll();
+      loadPoll(false);
     }
   }
 
   @Override public void pause() {
     hasBeenPaused = true;
+    poller.stopPolling();
   }
 
   public void ignorePoll() {

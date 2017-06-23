@@ -72,7 +72,6 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.HighlightedShotPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
-import com.shootr.mobile.ui.presenter.PinShotPresenter;
 import com.shootr.mobile.ui.presenter.ReportShotPresenter;
 import com.shootr.mobile.ui.presenter.StreamPollIndicatorPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
@@ -80,7 +79,6 @@ import com.shootr.mobile.ui.presenter.StreamTimelinePresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
 import com.shootr.mobile.ui.views.HighlightedShotsView;
 import com.shootr.mobile.ui.views.NewShotBarView;
-import com.shootr.mobile.ui.views.PinShotView;
 import com.shootr.mobile.ui.views.ReportShotView;
 import com.shootr.mobile.ui.views.StreamPollView;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
@@ -118,7 +116,7 @@ import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
-    ReportShotView, PinShotView, StreamPollView, HighlightedShotsView {
+    ReportShotView, StreamPollView, HighlightedShotsView {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -139,7 +137,6 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject WatchNumberPresenter watchNumberPresenter;
   @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
   @Inject ReportShotPresenter reportShotPresenter;
-  @Inject PinShotPresenter pinShotPresenter;
   @Inject StreamPollIndicatorPresenter streamPollIndicatorPresenter;
   @Inject HighlightedShotPresenter highlightedShotPresenter;
   @Inject LocaleProvider localeProvider;
@@ -510,7 +507,6 @@ public class StreamTimelineFragment extends BaseFragment
   private void initializePresentersWithStreamAuthorId(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser, streamMode);
-    pinShotPresenter.initialize(this);
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
@@ -522,7 +518,6 @@ public class StreamTimelineFragment extends BaseFragment
   private void initializePresenters(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
     streamTimelinePresenter.initialize(this, idStream, streamMode);
-    pinShotPresenter.initialize(this);
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);
@@ -777,7 +772,7 @@ public class StreamTimelineFragment extends BaseFragment
   private void checkIfEndOfListVisible() {
     int lastItemPosition = shotsTimeline.getAdapter().getItemCount() - 1;
     int lastVisiblePosition = preCachingLayoutManager.findLastVisibleItemPosition();
-    if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+    if (lastItemPosition > 40 && lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
       streamTimelinePresenter.showingLastShot(adapter.getLastShot());
     }
   }
@@ -959,19 +954,25 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null) {
+    if (watchNumberCount != null && !isFilterActivated) {
+      toolbarDecorator.showSubtitle();
       toolbarDecorator.setSubtitle(
           getContext().getString(R.string.stream_subtitle_pattern_multiple_participants,
               formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWINGS].longValue()),
               formatNumberUtils.formatNumbers(watchNumberCount[PARTICIPANTS].longValue())));
+    } else {
+      toolbarDecorator.hideSubtitle();
     }
   }
 
   private void updateParticipants() {
-    if (watchNumberCount != null) {
+    if (watchNumberCount != null && !isFilterActivated) {
+      toolbarDecorator.showSubtitle();
       toolbarDecorator.setSubtitle(getContext().getResources()
           .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[1],
               formatNumberUtils.formatNumbers(watchNumberCount[1].longValue())));
+    } else {
+      toolbarDecorator.hideSubtitle();
     }
   }
 
@@ -1285,22 +1286,6 @@ public class StreamTimelineFragment extends BaseFragment
     feedbackMessage.showLong(getView(), messageForError);
   }
 
-  public void notifyPinnedShot(ShotModel shotModel) {
-    adapter.onPinnedShot(shotModel);
-  }
-
-  public void showPinned() {
-    feedbackMessage.show(getView(), R.string.shot_pinned);
-  }
-
-  @Override public void hidePinShotButton() {
-        /* no-op */
-  }
-
-  @Override public void showPinShotButton() {
-        /* no-op */
-  }
-
   @Override public void openNewShotView() {
     newShotBarContainer.getNewShotBarViewDelegate().openNewShotView();
   }
@@ -1376,10 +1361,6 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void run() {
         highlightedShotPresenter.highlightShot(shotModel.getIdShot());
       }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
-      }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
@@ -1421,8 +1402,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void showAuthorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel,
       final HighlightedShot highlightedShot) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1436,10 +1417,6 @@ public class StreamTimelineFragment extends BaseFragment
       @Override public void run() {
         highlightedShotPresenter.onDismissHighlightShot(highlightedShot.getIdHighlightedShot(),
             streamAuthorIdUser);
-      }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
@@ -1483,8 +1460,8 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showContributorContextMenuWithPinAndHighlight(final ShotModel shotModel) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1497,10 +1474,6 @@ public class StreamTimelineFragment extends BaseFragment
         }).addAction(R.string.menu_highlight_shot, new Runnable() {
       @Override public void run() {
         highlightedShotPresenter.highlightShot(shotModel.getIdShot());
-      }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
@@ -1516,8 +1489,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override
   public void showContributorContextMenuWithPinAndDismissHighlight(final ShotModel shotModel) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1530,10 +1503,6 @@ public class StreamTimelineFragment extends BaseFragment
         }).addAction(R.string.remove_highlight, new Runnable() {
       @Override public void run() {
         highlightedShotPresenter.onMenuDismissHighlightShot();
-      }
-    }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
       }
     }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
@@ -1548,8 +1517,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override
   public void showContributorContextMenuWithoutPinAndHighlight(final ShotModel shotModel) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1581,8 +1550,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override
   public void showContributorContextMenuWithoutPinAndDismissHighlight(final ShotModel shotModel) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1618,32 +1587,36 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void run() {
             highlightedShotPresenter.highlightShot(shotModel.getIdShot());
           }
-        }).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
-        new Runnable() {
+        })
+        .addAction(
+            shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+            new Runnable() {
+              @Override public void run() {
+                if (shotModel.isReshooted()) {
+                  streamTimelinePresenter.undoReshoot(shotModel);
+                } else {
+                  streamTimelinePresenter.reshoot(shotModel);
+                  sendReshootAnalytics(shotModel);
+                }
+              }
+            })
+        .addAction(R.string.menu_share_shot_via, new Runnable() {
           @Override public void run() {
-            if (shotModel.isReshooted()) {
-              streamTimelinePresenter.undoReshoot(shotModel);
-            } else {
-              streamTimelinePresenter.reshoot(shotModel);
-              sendReshootAnalytics(shotModel);
-            }
+            shareShotIntent(shotModel);
+            sendShareExternalShotAnalytics(shotModel);
           }
-        }).addAction(R.string.menu_share_shot_via, new Runnable() {
-      @Override public void run() {
-        shareShotIntent(shotModel);
-        sendShareExternalShotAnalytics(shotModel);
-      }
-    }).addAction(R.string.menu_copy_text, new Runnable() {
-      @Override public void run() {
-        copyShotCommentToClipboard(shotModel);
-      }
-    }).show();
+        })
+        .addAction(R.string.menu_copy_text, new Runnable() {
+          @Override public void run() {
+            copyShotCommentToClipboard(shotModel);
+          }
+        })
+        .show();
   }
 
   @Override public void showContributorContextMenuWithDismissHighlight(final ShotModel shotModel) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1716,31 +1689,36 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void run() {
             highlightedShotPresenter.highlightShot(shotModel.getIdShot());
           }
-        }).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
-        new Runnable() {
+        })
+        .addAction(
+            shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+            new Runnable() {
+              @Override public void run() {
+                if (shotModel.isReshooted()) {
+                  streamTimelinePresenter.undoReshoot(shotModel);
+                } else {
+                  streamTimelinePresenter.reshoot(shotModel);
+                  sendReshootAnalytics(shotModel);
+                }
+              }
+            })
+        .addAction(R.string.menu_share_shot_via, new Runnable() {
           @Override public void run() {
-            if (shotModel.isReshooted()) {
-              streamTimelinePresenter.undoReshoot(shotModel);
-            } else {
-              streamTimelinePresenter.reshoot(shotModel);
-              sendReshootAnalytics(shotModel);
-            }
+            shareShotIntent(shotModel);
+            sendShareExternalShotAnalytics(shotModel);
           }
-        }).addAction(R.string.menu_share_shot_via, new Runnable() {
-      @Override public void run() {
-        shareShotIntent(shotModel);
-        sendShareExternalShotAnalytics(shotModel);
-      }
-    }).addAction(R.string.menu_copy_text, new Runnable() {
-      @Override public void run() {
-        copyShotCommentToClipboard(shotModel);
-      }
-    }).addAction(R.string.report_context_menu_delete, new Runnable() {
-      @Override public void run() {
-        openDeleteConfirmation(shotModel);
-      }
-    }).show();
+        })
+        .addAction(R.string.menu_copy_text, new Runnable() {
+          @Override public void run() {
+            copyShotCommentToClipboard(shotModel);
+          }
+        })
+        .addAction(R.string.report_context_menu_delete, new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        })
+        .show();
   }
 
   @Override public void showHolderContextMenuWithDismissHighlight(final ShotModel shotModel) {
@@ -1749,31 +1727,36 @@ public class StreamTimelineFragment extends BaseFragment
           @Override public void run() {
             highlightedShotPresenter.onMenuDismissHighlightShot();
           }
-        }).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
-        new Runnable() {
+        })
+        .addAction(
+            shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+            new Runnable() {
+              @Override public void run() {
+                if (shotModel.isReshooted()) {
+                  streamTimelinePresenter.undoReshoot(shotModel);
+                } else {
+                  streamTimelinePresenter.reshoot(shotModel);
+                  sendReshootAnalytics(shotModel);
+                }
+              }
+            })
+        .addAction(R.string.menu_share_shot_via, new Runnable() {
           @Override public void run() {
-            if (shotModel.isReshooted()) {
-              streamTimelinePresenter.undoReshoot(shotModel);
-            } else {
-              streamTimelinePresenter.reshoot(shotModel);
-              sendReshootAnalytics(shotModel);
-            }
+            shareShotIntent(shotModel);
+            sendShareExternalShotAnalytics(shotModel);
           }
-        }).addAction(R.string.menu_share_shot_via, new Runnable() {
-      @Override public void run() {
-        shareShotIntent(shotModel);
-        sendShareExternalShotAnalytics(shotModel);
-      }
-    }).addAction(R.string.menu_copy_text, new Runnable() {
-      @Override public void run() {
-        copyShotCommentToClipboard(shotModel);
-      }
-    }).addAction(R.string.report_context_menu_delete, new Runnable() {
-      @Override public void run() {
-        openDeleteConfirmation(shotModel);
-      }
-    }).show();
+        })
+        .addAction(R.string.menu_copy_text, new Runnable() {
+          @Override public void run() {
+            copyShotCommentToClipboard(shotModel);
+          }
+        })
+        .addAction(R.string.report_context_menu_delete, new Runnable() {
+          @Override public void run() {
+            openDeleteConfirmation(shotModel);
+          }
+        })
+        .show();
   }
 
   @Override public void goToReport(String sessionToken, ShotModel shotModel) {
@@ -1805,8 +1788,8 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showAuthorContextMenuWithPin(final ShotModel shotModel) {
-    new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1816,11 +1799,7 @@ public class StreamTimelineFragment extends BaseFragment
               sendReshootAnalytics(shotModel);
             }
           }
-        }).addAction(R.string.menu_pin_shot, new Runnable() {
-      @Override public void run() {
-        pinShotPresenter.pinToProfile(shotModel);
-      }
-    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         shareShotIntent(shotModel);
         sendShareExternalShotAnalytics(shotModel);
@@ -1853,8 +1832,8 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
-    return new CustomContextMenu.Builder(getActivity()).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    return new CustomContextMenu.Builder(getActivity()).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1954,7 +1933,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void goToPollLiveResults(String idPoll, String idStream) {
     Intent intent =
-        PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream);
+        PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream,
+            false);
     startActivity(intent);
   }
 
