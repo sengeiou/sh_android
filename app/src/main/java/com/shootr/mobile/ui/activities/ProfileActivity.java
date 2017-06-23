@@ -133,9 +133,6 @@ public class ProfileActivity extends BaseActivity
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
   @BindString(R.string.analytics_screen_userProfile) String analyticsScreenUserProfile;
-  @BindString(R.string.confirmation_hide_shot_message) String confirmationMessage;
-  @BindString(R.string.confirm_hide_shot) String confirmHideShotAlertDialogMessage;
-  @BindString(R.string.cancel_hide_shot) String cancelHideShotAlertDialogMessage;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
   @BindString(R.string.analytics_action_nice) String analyticsActionNice;

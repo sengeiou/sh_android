@@ -56,7 +56,6 @@
   <string name="block_user_dialog_message">Este usuario no te molestará ni a ti ni a los participantes de tus streams.</string>
   <string name="block_user_error">Para bloquear a este usuario debes dejar de seguirle. </string>
   <string name="cancel">Cancelar</string>
-  <string name="cancel_hide_shot" formatted="false">Cancelar</string>
   <string name="change_password_button_text">HECHO</string>
   <string name="change_password_logout_message">La contraseña ha cambiado. Debes reiniciar sesión.</string>
   <string name="change_photo">Cambiar foto</string>
@@ -66,13 +65,16 @@
   <string name="check_in_show_case">Haz check-in para decir que estás aquí</string>
   <!-- Errors -->
   <string name="communication_error">Hay un problema de conexión a Internet. Comprueba tu conexión y prueba otra vez.</string>
-  <string name="confirmation_hide_shot_message" formatted="false">Quitar shot</string>
-  <string name="confirm_hide_shot" formatted="false">Quitar</string>
   <string name="connection_lost">Se ha perdido la conexión</string>
   <string name="contributors_empty">No hay</string>
   <string name="copied_to_clipboard">Texto copiado al portapapeles.</string>
   <string name="current_password_hint">Contraseña actual</string>
   <string name="days">d</string>
+  <plurals name="days_left">
+    <item quantity="one">%d día</item>
+    <item quantity="other">%d días</item>
+    <item quantity="zero">%d día</item>
+  </plurals>
   <string name="delete_shot_confirmation_message">¿Eliminar shot?</string>
   <string name="discard">Descartar</string>
   <string name="discard_profile_confirmation">¿Descartar cambios?</string>
@@ -181,6 +183,11 @@
   <string name="following_messages_title_plural">SIGUIENDO (%d)</string>
   <string name="highlight_shot_dialog">El shot dejará de estar destacado</string>
   <string name="hours">h</string>
+  <plurals name="hours_left">
+    <item quantity="one">%d hora</item>
+    <item quantity="other">%d horas</item>
+    <item quantity="zero">%d hora</item>
+  </plurals>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">No hay mensajes</string>
   <string name="include_listing_empty">No hay streams</string>
@@ -195,6 +202,7 @@
   <string name="intro_streams_text">La app de mensajería donde los chats son abiertos. Se llaman streams.</string>
   <string name="invite_friends_message">Hola! Te recomiendo Shootr: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">En estos momentos la atención al usuario es en inglés.</string>
+  <string name="left">Tiempo restante: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic en el enlace</item>
     <item quantity="other">%s clics en el enlace</item>
@@ -220,29 +228,18 @@
   <string name="menu_search_participants">Buscar participantes</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
-  <string name="menu_share_shot_via">Compartir vía…</string>
   <string name="menu_share_poll_via_shootr">Compartir encuesta</string>
+  <string name="menu_share_shot_via">Compartir vía…</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Foto</string>
+  <string name="messages">Mensajes</string>
   <!-- TimeUtils -->
-  <string name="left">Tiempo restante: %s</string>
   <string name="minutes">m</string>
   <plurals name="minutes_left">
     <item quantity="one">%d minuto</item>
     <item quantity="other">%d minutos</item>
-  </plurals>
-  <plurals name="hours_left">
-    <item quantity="one">%d hora</item>
-    <item quantity="other">%d horas</item>
-  </plurals>
-  <plurals name="seconds_left">
-    <item quantity="one">%d segundo</item>
-    <item quantity="other">%d segundos</item>
-  </plurals>
-  <plurals name="days_left">
-    <item quantity="one">%d día</item>
-    <item quantity="other">%d días</item>
+    <item quantity="zero">%d minuto</item>
   </plurals>
   <string name="multiple_activities_action">VER</string>
   <string name="multiple_activity_notification">%d notificaciones nuevas</string>
@@ -289,9 +286,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloqueado este usuario. Desbloquea para enviar mensajes.</string>
   <string name="now">ahora</string>
-  <string name="poll_manual_close">Esta encuesta puede acabar en cualquier momento</string>
   <string name="no_filter_shots">No hay shots tuyos o de cuentas verificadas.</string>
   <string name="no_intent_handler">No hay aplicaciones disponibles para ejecutar esta acción.</string>
+  <string name="official_poll_button_text">Ir a Notificaciones</string>
+  <string name="official_poll_description">Por razones de seguridad, para votar debes desbloquear las notificaciones de Shootr en tu dispositivo. Puedes configurar tus notificaciones en tu perfil.</string>
+  <string name="official_poll_title">Encuesta oficial</string>
   <string name="off_push_settings">Ninguna</string>
   <string name="ok">OK</string>
   <string name="on_boarding_add_favorites">Streams populares</string>
@@ -310,9 +309,10 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
   <string name="poll_live_results">Resultados en vivo</string>
+  <string name="poll_manual_close">Esta encuesta puede finalizar en cualquier momento</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Encuesta</string>
-  <string name="poll_results">Resultado final</string>
+  <string name="poll_results">Ver resultados</string>
   <string name="poll_results_dialog">Una vez vistos los resultados no podrás votar en esta encuesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">Ver</string>
@@ -397,6 +397,11 @@
   <string name="restore_stream_snackbar_action">Restaurar</string>
   <string name="search_users_hint">Buscar usuarios</string>
   <string name="seconds">s</string>
+  <plurals name="seconds_left">
+    <item quantity="one">%d segundo</item>
+    <item quantity="other">%d segundos</item>
+    <item quantity="zero">%d segundo</item>
+  </plurals>
   <string name="shared_poll">Ha compartido la encuesta %s</string>
   <string name="shared_shot_activity">Reshot de %s</string>
   <string name="shared_shot_activity_with_comment">"Reshot: "</string>
@@ -436,7 +441,7 @@
   <string name="stream_detail_menu_data_info">Números</string>
   <string name="stream_detail_mute">Silenciar</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">Sigue a (stream)</string>
+  <string name="stream_favorited_activity_text_pattern">Sigue (stream)</string>
   <string name="stream_list_empty">No hay resultados</string>
   <string name="stream_media_empty_title">No hay fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hay más archivos</string>
@@ -492,6 +497,7 @@
   <string name="update_warning_button">Actualizar ahora</string>
   <string name="update_warning_message">Hemos hecho mejoras que requieren actualizarse a la última versión de Shootr.</string>
   <string name="user_blocked">Usuario bloqueado</string>
+  <string name="user_cannot_vote_alert_description">Solo es posible un voto por dispositivo y por usuario</string>
   <string name="user_not_found">Usuario no encontrado.</string>
   <string name="user_not_found_message">Usuario no encontrado.</string>
   <string name="user_unblocked">Desbloqueado</string>
@@ -511,8 +517,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="messages">Mensajes</string>
-  <string name="official_poll_title">Encuesta oficial</string>
-  <string name="official_poll_description">Por razones de seguridad, para votar es necesario desbloquear las notificaciones de Shootr en tu dispositivo. Puedes configurar tus notificaciones en tu perfil.</string>
-  <string name="official_poll_button_text">Ir a Notificaciones</string>
 </resources>

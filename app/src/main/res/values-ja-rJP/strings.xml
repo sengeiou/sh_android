@@ -54,7 +54,6 @@
   <string name="block_user_dialog_message">無視すると、このユーザーのショットは全て見られなくなります。</string>
   <string name="block_user_error"> 無視するためにはフォローを解除する必要があります。</string>
   <string name="cancel">キャンセル</string>
-  <string name="cancel_hide_shot" formatted="false">キャンセル</string>
   <string name="change_password_button_text">完了</string>
   <string name="change_password_logout_message">パスワードが変更されました。再度ログインしてください。</string>
   <string name="change_photo">写真を変更</string>
@@ -64,8 +63,6 @@
   <string name="check_in_show_case">チェックインしてストリーム内にいると伝える</string>
   <!-- Errors -->
   <string name="communication_error">インターネット接続に問題があります。接続をご確認の上、もう一度お試しください。</string>
-  <string name="confirmation_hide_shot_message" formatted="false">ピン留めを解除</string>
-  <string name="confirm_hide_shot" formatted="false">表示を解除</string>
   <string name="connection_lost">接続が中断されました</string>
   <string name="contributors_empty">投稿者はいません</string>
   <string name="copied_to_clipboard">クリップボードにコピーされました</string>

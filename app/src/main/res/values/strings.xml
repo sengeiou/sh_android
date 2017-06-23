@@ -56,7 +56,6 @@
   <string name="block_user_dialog_message">This user will not disturb you nor the participants in your streams.</string>
   <string name="block_user_error">To block this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
-  <string formatted="false" name="cancel_hide_shot">Cancel</string>
   <string name="change_password_button_text">DONE</string>
   <string name="change_password_logout_message">Password changed. Must sign in again…</string>
   <string name="change_photo">Change photo</string>
@@ -66,29 +65,31 @@
   <string name="check_in_show_case">Check-in to say you\'re here</string>
   <!-- Errors -->
   <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
-  <string formatted="false" name="confirmation_hide_shot_message">Unpin shot</string>
-  <string formatted="false" name="confirm_hide_shot">Unpin</string>
   <string name="connection_lost">The network connection was lost</string>
   <string name="contributors_empty">No contributors</string>
   <string name="copied_to_clipboard">Text copied to clipboard.</string>
   <string name="current_password_hint">Current password</string>
   <string name="days">d</string>
+  <plurals name="days_left">
+    <item quantity="one">%d day</item>
+    <item quantity="other">%d days </item>
+  </plurals>
   <string name="delete_shot_confirmation_message">Delete shot?</string>
   <string name="discard">Discard</string>
   <string name="discard_profile_confirmation">Discard changes?</string>
   <string name="dismiss_highlight_shot">Dismiss</string>
   <string name="done">Done</string>
   <string name="done_label">Done</string>
-  <string formatted="false" name="done_pin_topic">Pin</string>
+  <string name="done_pin_topic" formatted="false">Pin</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
   <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
   <string name="drafts_action_discard">Discard</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">No Drafts</string>
-  <string formatted="false" name="drawer_activity_me">Me</string>
+  <string name="drawer_activity_me" formatted="false">Me</string>
   <string name="drawer_activity_title">Activity</string>
-  <string formatted="false" name="drawer_following_activity_title">Following</string>
+  <string name="drawer_following_activity_title" formatted="false">Following</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Users</string>
   <string name="edit_stream">Edit</string>
@@ -181,6 +182,10 @@
   <string name="following_messages_title_plural">FOLLOWING (%d)</string>
   <string name="highlight_shot_dialog">Dismiss highlighted shot?</string>
   <string name="hours">h</string>
+  <plurals name="hours_left">
+    <item quantity="one">%d hour </item>
+    <item quantity="other">%d hours </item>
+  </plurals>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">No messages</string>
   <string name="include_listing_empty">No streams</string>
@@ -194,7 +199,8 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
   <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
-  <string formatted="false" name="language_support_alert">We currently support English only.</string>
+  <string name="language_support_alert" formatted="false">We currently support English only.</string>
+  <string name="left">%s left</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s link click</item>
     <item quantity="other">%s link clicks</item>
@@ -220,29 +226,17 @@
   <string name="menu_search_participants">Search for participants</string>
   <string name="menu_search_streams">Search</string>
   <string name="menu_search_timeline">Search timeline</string>
+  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_share_shot_via">Share via…</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
-  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_stream_edit_info">Info</string>
   <string name="menu_stream_edit_photo">Photo</string>
+  <string name="messages">Messages</string>
   <!-- TimeUtils -->
-  <string name="left">%s left</string>
   <string name="minutes">m</string>
   <plurals name="minutes_left">
     <item quantity="one">%d minute </item>
     <item quantity="other">%d minutes </item>
-  </plurals>
-  <plurals name="hours_left">
-    <item quantity="one">%d hour </item>
-    <item quantity="other">%d hours </item>
-  </plurals>
-  <plurals name="seconds_left">
-    <item quantity="one">%d second</item>
-    <item quantity="other">%d seconds</item>
-  </plurals>
-  <plurals name="days_left">
-    <item quantity="one">%d day</item>
-    <item quantity="other">%d days </item>
   </plurals>
   <string name="multiple_activities_action">GO</string>
   <string name="multiple_activity_notification">%d new Activity notifications</string>
@@ -289,9 +283,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">You blocked this user. Unblock to shoot a message. </string>
   <string name="now">now</string>
-  <string name="poll_manual_close">This poll may end at any time</string>
-  <string name="no_filter_shots">No shots by you or verified accounts</string>
+  <string name="no_filter_shots">No shots by you or verified accounts.</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
+  <string name="official_poll_button_text">Go to Notifications</string>
+  <string name="official_poll_description">For security reasons, in order to vote you must unblock Shootr push notifications in your device. You can adjust your push notifications on your profile.</string>
+  <string name="official_poll_title">Official poll</string>
   <string name="off_push_settings">Off</string>
   <string name="ok">OK</string>
   <string name="on_boarding_add_favorites">Popular streams</string>
@@ -304,15 +300,16 @@
   <string name="photo_edit_remove">Remove</string>
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
   <string name="photo_edit_take">Camera</string>
-  <string formatted="false" name="pin_message_notification_confirmation_no">No</string>
-  <string formatted="false" name="pin_message_notification_confirmation_text">Notification will be sent to the stream\'s followers and current participants.</string>
-  <string formatted="false" name="pin_message_notification_confirmation_yes">Notify</string>
-  <string formatted="false" name="pin_topic">Pin message</string>
+  <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to the stream\'s followers and current participants.</string>
+  <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
+  <string name="pin_topic" formatted="false">Pin message</string>
   <string name="poll_ignore">Dismiss poll</string>
   <string name="poll_live_results">Live results</string>
+  <string name="poll_manual_close">This poll may end at any time</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Poll</string>
-  <string name="poll_results">Final result</string>
+  <string name="poll_results">View results</string>
   <string name="poll_results_dialog">Once you see the results you won\'t be able to vote in this poll.</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">View</string>
@@ -396,9 +393,13 @@
   <string name="restore_stream_snackbar_action">Restore</string>
   <string name="search_users_hint">Search for users</string>
   <string name="seconds">s</string>
+  <plurals name="seconds_left">
+    <item quantity="one">%d second</item>
+    <item quantity="other">%d seconds</item>
+  </plurals>
   <string name="shared_poll">Shared poll %s</string>
-  <string name="shared_shot_activity">Reshot from %s</string>
-  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
+  <string name="shared_shot_activity">Reshot  from %s</string>
+  <string name="shared_shot_activity_with_comment">Reshot:</string>
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Poll %s</string>
@@ -428,7 +429,7 @@
   <string name="stream_data_info_favorites">Followers</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
-  <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
+  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Edit stream</string>
   <string name="stream_detail_media">Media</string>
@@ -472,12 +473,12 @@
   <string name="title_activity_stream_data_info">Stats</string>
   <string name="title_activity_stream_media">Media</string>
   <string name="title_activity_support">Support</string>
-  <string formatted="false" name="title_menu_photo">Photo</string>
-  <string formatted="false" name="title_pin_message_notification">Notify message?</string>
-  <string formatted="false" name="topic">Message</string>
+  <string name="title_menu_photo" formatted="false">Photo</string>
+  <string name="title_pin_message_notification" formatted="false">Notify message?</string>
+  <string name="topic" formatted="false">Message</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">%s participant        </item>
-    <item quantity="other">%s participants       </item>
+    <item quantity="one">%s participant\n        </item>
+    <item quantity="other">%s participants\n        </item>
     <item quantity="zero">%s participants</item>
   </plurals>
   <string name="undo_reshoot">Undo reshoot</string>
@@ -492,6 +493,7 @@
   <string name="update_warning_button">Update now</string>
   <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
   <string name="user_blocked">Blocked User</string>
+  <string name="user_cannot_vote_alert_description">Only allowed one vote per device and per user</string>
   <string name="user_not_found">User not found.</string>
   <string name="user_not_found_message">User not found.</string>
   <string name="user_unblocked">Unblocked</string>
@@ -504,14 +506,12 @@
   <string name="voted_public_poll">Voted \"%1$s\" in (question) in %2$s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
-  <string formatted="false" name="watch_profile_photo">View</string>
+  <string name="watch_profile_photo" formatted="false">View</string>
   <string name="welcome_get_started_button">Got it</string>
   <string name="welcome_shootr_title">Follow people to always read their messages</string>
   <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
-  <string name="messages">Messages</string>
   <string name="title_activity_setup_notifications">SetupNotificationsActivity</string>
-  <string name="user_cannot_vote_alert_description">Descripción de alerta</string>
 </resources>

@@ -56,7 +56,6 @@
   <string name="block_user_dialog_message">该用户不会再打扰你和你的 stream 的参与者。</string>
   <string name="block_user_error">要封锁该用户请取消关注。</string>
   <string name="cancel">取消</string>
-  <string name="cancel_hide_shot" formatted="false">取消</string>
   <string name="change_password_button_text">完成</string>
   <string name="change_password_logout_message">密码已被更改。需重新登录…</string>
   <string name="change_photo">更改照片</string>
@@ -66,13 +65,15 @@
   <string name="check_in_show_case">签到告诉大家你在这里。</string>
   <!-- Errors -->
   <string name="communication_error">存在网络连接问题。检查你的网络连接再试一次。</string>
-  <string name="confirmation_hide_shot_message" formatted="false">解除钉选</string>
-  <string name="confirm_hide_shot" formatted="false">解除钉选</string>
   <string name="connection_lost">网络连接丢失</string>
   <string name="contributors_empty">沒有合作者</string>
   <string name="copied_to_clipboard">文章已复制到剪贴板。</string>
   <string name="current_password_hint">当前密码</string>
   <string name="days">日</string>
+  <plurals name="days_left">
+    <item quantity="other">%d 天</item>
+    <item quantity="zero">%d 天</item>
+  </plurals>
   <string name="delete_shot_confirmation_message">删除shot？</string>
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消变更？</string>
@@ -107,22 +108,6 @@
   <string name="entered_just_now">刚刚在线</string>
   <string name="entered_long_time_ago">在很多天前登录</string>
   <string name="entered_minutes_ago">在%d分钟前登录</string>
-  <plurals name="minutes_left">
-    <item quantity="one">%d minute left</item>
-    <item quantity="other">%d minutes left</item>
-  </plurals>
-  <plurals name="hours_left">
-    <item quantity="one">%d hour left</item>
-    <item quantity="other">%d hours left</item>
-  </plurals>
-  <plurals name="seconds_left">
-    <item quantity="one">%d second left</item>
-    <item quantity="other">%d seconds left</item>
-  </plurals>
-  <plurals name="days_left">
-    <item quantity="one">%d day left</item>
-    <item quantity="other">%d days left</item>
-  </plurals>
   <string name="error_adding_contributor">无法新增超过100以上的合作者</string>
   <string name="error_deleted_shot">这条shot已被删除</string>
   <string name="error_facebook_login">不能用Facebook登录。请稍后再试。</string>
@@ -197,6 +182,10 @@
   <string name="following_messages_title_plural">正在关注 (%d)</string>
   <string name="highlight_shot_dialog">删除置顶 shot</string>
   <string name="hours">h</string>
+  <plurals name="hours_left">
+    <item quantity="other">%d 小时</item>
+    <item quantity="zero">%d 小时</item>
+  </plurals>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">没有信息</string>
   <string name="include_listing_empty">没有streams</string>
@@ -211,6 +200,7 @@
   <string name="intro_streams_text">通讯软件已经开通。\n他们叫做streams。</string>
   <string name="invite_friends_message">嘿，让我们一起使用Shootr吧: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">我们目前只支持英语。</string>
+  <string name="left">剩余时间: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="other">%s次链接点击</item>
     <item quantity="zero">%s次链接点击</item>
@@ -234,13 +224,18 @@
   <string name="menu_search_participants">查找参与者</string>
   <string name="menu_search_streams">查找</string>
   <string name="menu_search_timeline">查找时间线</string>
+  <string name="menu_share_poll_via_shootr">分享投票</string>
   <string name="menu_share_shot_via">分享到…</string>
-  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">信息</string>
   <string name="menu_stream_edit_photo">图片</string>
+  <string name="messages">私信</string>
   <!-- TimeUtils -->
   <string name="minutes">分</string>
+  <plurals name="minutes_left">
+    <item quantity="other">%d 分</item>
+    <item quantity="zero">%d 分</item>
+  </plurals>
   <string name="multiple_activities_action">瞅</string>
   <string name="multiple_activity_notification">%d新的动态消息</string>
   <string name="mute">静音</string>
@@ -285,9 +280,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">你封锁了该用户，取消封锁来发送消息。</string>
   <string name="now">现在</string>
-  <string name="poll_manual_close">at any time</string>
   <string name="no_filter_shots">没有你的 shots 或者认证用户的</string>
   <string name="no_intent_handler">沒有应用程序可用来处理此行为。\n</string>
+  <string name="official_poll_button_text">转至通知</string>
+  <string name="official_poll_description">为安全起见，投票前需要打开设备的 Shootr 通知。您可以在用户设置里面更改。</string>
+  <string name="official_poll_title">正式投票</string>
   <string name="off_push_settings">关闭</string>
   <string name="ok">好的</string>
   <string name="on_boarding_add_favorites">热门 streams</string>
@@ -306,9 +303,10 @@
   <string name="pin_topic" formatted="false">钉选信息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">当前投票结果</string>
+  <string name="poll_manual_close">这个投票随时都可能结束</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">投票</string>
-  <string name="poll_results">最终结果</string>
+  <string name="poll_results">查看结果</string>
   <string name="poll_results_dialog">一旦看到结果，将无法投票。</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">查看</string>
@@ -390,6 +388,10 @@
   <string name="restore_stream_snackbar_action">复原</string>
   <string name="search_users_hint">查找用户</string>
   <string name="seconds">秒</string>
+  <plurals name="seconds_left">
+    <item quantity="other">%d 秒</item>
+    <item quantity="zero">%d 秒</item>
+  </plurals>
   <string name="shared_poll">分享了投票 %s</string>
   <string name="shared_shot_activity">Reshot 了 %s</string>
   <string name="shared_shot_activity_with_comment">"Reshot: "</string>
@@ -484,6 +486,7 @@
   <string name="update_warning_button">现在更新</string>
   <string name="update_warning_message">我们已经做出改善，请更新你的Shootr到最新版本。</string>
   <string name="user_blocked">封锁用户</string>
+  <string name="user_cannot_vote_alert_description">每个用户和每个手机只能投一次</string>
   <string name="user_not_found">用户无法查找。</string>
   <string name="user_not_found_message">用户无法被找到。</string>
   <string name="user_unblocked">取消封锁</string>
@@ -502,5 +505,4 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
-  <string name="messages">私信</string>
 </resources>

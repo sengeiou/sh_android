@@ -56,7 +56,6 @@
   <string name="block_user_dialog_message">該用戶不會再打擾你和你的 stream 的參與者。</string>
   <string name="block_user_error">要封鎖該用戶請取消關注。</string>
   <string name="cancel">取消</string>
-  <string name="cancel_hide_shot" formatted="false">取消</string>
   <string name="change_password_button_text">完成</string>
   <string name="change_password_logout_message">密碼已更改。必須重新登錄…</string>
   <string name="change_photo">更改相片</string>
@@ -66,13 +65,15 @@
   <string name="check_in_show_case">簽到告訴大家你在這裡。</string>
   <!-- Errors -->
   <string name="communication_error">網絡連接發生問題。請查檢查您的連接，然後重試。</string>
-  <string name="confirmation_hide_shot_message" formatted="false">解除釘選</string>
-  <string name="confirm_hide_shot" formatted="false">解除釘選</string>
   <string name="connection_lost">網絡連接中斷</string>
   <string name="contributors_empty">沒有合作者</string>
   <string name="copied_to_clipboard">文字已複製到剪貼板。</string>
   <string name="current_password_hint">目前的密碼</string>
   <string name="days">日</string>
+  <plurals name="days_left">
+    <item quantity="other">%d 天</item>
+    <item quantity="zero">%d 天</item>
+  </plurals>
   <string name="delete_shot_confirmation_message">刪除shot?</string>
   <string name="discard">取消</string>
   <string name="discard_profile_confirmation">取消變更？</string>
@@ -107,22 +108,6 @@
   <string name="entered_just_now">剛登入</string>
   <string name="entered_long_time_ago">多天前登入</string>
   <string name="entered_minutes_ago">%d分鐘前登入</string>
-  <plurals name="minutes_left">
-    <item quantity="one">%d minute left</item>
-    <item quantity="other">%d minutes left</item>
-  </plurals>
-  <plurals name="hours_left">
-    <item quantity="one">%d hour left</item>
-    <item quantity="other">%d hours left</item>
-  </plurals>
-  <plurals name="seconds_left">
-    <item quantity="one">%d second left</item>
-    <item quantity="other">%d seconds left</item>
-  </plurals>
-  <plurals name="days_left">
-    <item quantity="one">%d day left</item>
-    <item quantity="other">%d days left</item>
-  </plurals>
   <string name="error_adding_contributor">無法新增超過100以上的合作者</string>
   <string name="error_deleted_shot">這個shot已被刪除</string>
   <string name="error_facebook_login">不能用Facebook登錄。請稍後再試</string>
@@ -197,6 +182,10 @@
   <string name="following_messages_title_plural">關注中 (%d)</string>
   <string name="highlight_shot_dialog">刪除置頂 shot</string>
   <string name="hours">小時</string>
+  <plurals name="hours_left">
+    <item quantity="other">%d 小時</item>
+    <item quantity="zero">%d 小時</item>
+  </plurals>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">沒有信息</string>
   <string name="include_listing_empty">沒有 Streams</string>
@@ -211,6 +200,7 @@
   <string name="intro_streams_text">一個開放對話的通訊軟件。所有開放的對話叫 Streams。</string>
   <string name="invite_friends_message">嘿，一起使用Shootr吧: http://shootr.com/</string>
   <string name="language_support_alert" formatted="false">我們目前只支持英文。</string>
+  <string name="left">剩餘時間: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="other">%s次鏈接點擊</item>
     <item quantity="zero">%s次鏈接點擊</item>
@@ -234,13 +224,18 @@
   <string name="menu_search_participants">搜尋參與者</string>
   <string name="menu_search_streams">搜尋</string>
   <string name="menu_search_timeline">搜尋timeline</string>
+  <string name="menu_share_poll_via_shootr">分享投票</string>
   <string name="menu_share_shot_via">透過以下方式分享：</string>
-  <string name="menu_share_poll_via_shootr">Share poll</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">信息</string>
   <string name="menu_stream_edit_photo">相片</string>
+  <string name="messages">私信</string>
   <!-- TimeUtils -->
   <string name="minutes">分</string>
+  <plurals name="minutes_left">
+    <item quantity="other">%d 分</item>
+    <item quantity="zero">%d 分</item>
+  </plurals>
   <string name="multiple_activities_action">瞅</string>
   <string name="multiple_activity_notification">%d個動態消息通知</string>
   <string name="mute">靜音</string>
@@ -284,9 +279,11 @@
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">你封鎖了該用戶，取消封鎖來發送消息。</string>
   <string name="now">現在</string>
-  <string name="poll_manual_close">at any time</string>
   <string name="no_filter_shots">沒有你的 shots 或者認證用戶的</string>
   <string name="no_intent_handler">沒有應用程式可用來處理此行動。\n</string>
+  <string name="official_poll_button_text">轉至通知</string>
+  <string name="official_poll_description">為安全起見，投票前需要打開設備的通知Shootr。您可以在用戶設置裡面更改。</string>
+  <string name="official_poll_title">正式投票</string>
   <string name="off_push_settings">關閉</string>
   <string name="ok">OK</string>
   <string name="on_boarding_add_favorites">熱門 Streams</string>
@@ -305,9 +302,10 @@
   <string name="pin_topic" formatted="false">釘選訊息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">當前投票結果</string>
+  <string name="poll_manual_close">這個投票隨時都可能結束</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">投票</string>
-  <string name="poll_results">最終結果</string>
+  <string name="poll_results">查看結果</string>
   <string name="poll_results_dialog">一旦看到結果，將無法投票。</string>
   <string name="poll_results_pct">(%s%%)</string>
   <string name="poll_view">查看</string>
@@ -389,6 +387,10 @@
   <string name="restore_stream_snackbar_action">復原</string>
   <string name="search_users_hint">查找用戶</string>
   <string name="seconds">秒</string>
+  <plurals name="seconds_left">
+    <item quantity="other">%d 秒</item>
+    <item quantity="zero">%d 秒</item>
+  </plurals>
   <string name="shared_poll">分享了投票 %s</string>
   <string name="shared_shot_activity">Reshot 了 %s</string>
   <string name="shared_shot_activity_with_comment">"Reshot: "</string>
@@ -483,6 +485,7 @@
   <string name="update_warning_button">立即更新</string>
   <string name="update_warning_message">我們已經作出了改善，請更新到Shootr的最新版本。</string>
   <string name="user_blocked">封鎖用戶</string>
+  <string name="user_cannot_vote_alert_description">每個用戶和每個手機只能投一次</string>
   <string name="user_not_found">找不到用戶。</string>
   <string name="user_not_found_message">用户无法被找到。</string>
   <string name="user_unblocked">取消封鎖</string>
@@ -501,5 +504,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
-  <string name="messages">私信</string>
 </resources>
