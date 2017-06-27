@@ -73,6 +73,7 @@
           android:ellipsize="end"
           android:paddingLeft="8dp"
           android:layout_marginRight="4dp"
+          android:maxLines="5"
           tools:text="This is a very long text and it should be cutted off in some point because it's to ugly" />
 
         <FrameLayout
