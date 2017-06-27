@@ -399,7 +399,7 @@
   </plurals>
   <string name="shared_poll">Shared poll %s</string>
   <string name="shared_shot_activity">Reshot  from %s</string>
-  <string name="shared_shot_activity_with_comment">Reshot:</string>
+  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Poll %s</string>
@@ -422,7 +422,7 @@
   <string name="shot_timeline_empty_title">No Shots</string>
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
   <string name="sign_out_message">Signing out…</string>
-  <string name="started_shooting_activity_text_pattern">Started shooting on (stream)</string>
+  <string name="started_shooting_activity_text_pattern">Started shooting on %s</string>
   <string name="started_shooting_push_settings">Started shooting alert</string>
   <string name="stream_checked">Checked in</string>
   <string name="stream_check_in_activity_text_pattern">Checked in to (stream)</string>
@@ -514,4 +514,5 @@
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
   <string name="title_activity_setup_notifications">SetupNotificationsActivity</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Started shooting on %s: "</string>
 </resources>
