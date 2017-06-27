@@ -427,7 +427,7 @@
   <string name="shot_timeline_empty_title">Nenhum shot</string>
   <string name="showing_shots_by_holder">Shots do administrador.</string>
   <string name="sign_out_message">Finalizando sessão…</string>
-  <string name="started_shooting_activity_text_pattern">Escreveu em (stream)</string>
+  <string name="started_shooting_activity_text_pattern">Escreveu em %s</string>
   <string name="started_shooting_push_settings">Aviso de novo shot</string>
   <string name="stream_checked">Pronto!</string>
   <string name="stream_check_in_activity_text_pattern">Você realizou o check-in em (stream)</string>
@@ -517,4 +517,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Escreveu em %s: "</string>
 </resources>

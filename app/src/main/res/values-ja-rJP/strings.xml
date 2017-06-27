@@ -396,7 +396,7 @@
   <string name="shot_timeline_empty_title">ショットはありません</string>
   <string name="showing_shots_by_holder">管理者のショット。</string>
   <string name="sign_out_message">ログアウトしています…</string>
-  <string name="started_shooting_activity_text_pattern">(stream)に投稿しました</string>
+  <string name="started_shooting_activity_text_pattern">%sに投稿しました</string>
   <string name="started_shooting_push_settings">新規ショットの通知</string>
   <string name="stream_checked">完了</string>
   <string name="stream_check_in_activity_text_pattern">(stream)にチェックインしました</string>
@@ -484,4 +484,5 @@
   <string name="add_to_favorites">add to favorites</string>
   <string name="remove_favorite">remove</string>
   <string name="undo_reshoot">Undo reshoot</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"%sに投稿しました: "</string>
 </resources>

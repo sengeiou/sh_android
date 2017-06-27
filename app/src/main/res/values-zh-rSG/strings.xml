@@ -416,7 +416,7 @@
   <string name="shot_timeline_empty_title">没有shots</string>
   <string name="showing_shots_by_holder">管理员发布了shots。</string>
   <string name="sign_out_message">正在登出…</string>
-  <string name="started_shooting_activity_text_pattern">已在(stream)发布信息</string>
+  <string name="started_shooting_activity_text_pattern">已在%s发布信息</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">签到</string>
   <string name="stream_check_in_activity_text_pattern">你已经在 (stream) 签到</string>
@@ -505,4 +505,5 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"已在%s发布信息: "</string>
 </resources>

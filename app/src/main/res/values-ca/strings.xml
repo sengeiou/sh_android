@@ -427,7 +427,7 @@
   <string name="shot_timeline_empty_title">No hi ha shots</string>
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>
-  <string name="started_shooting_activity_text_pattern">Ha escrit a (stream)</string>
+  <string name="started_shooting_activity_text_pattern">Ha escrit a %s</string>
   <string name="started_shooting_push_settings">Avís de nou shot</string>
   <string name="stream_checked">Fet</string>
   <string name="stream_check_in_activity_text_pattern">Ha fet check-in a (stream)</string>
@@ -517,4 +517,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrit a %s: "</string>
 </resources>
