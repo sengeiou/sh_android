@@ -7,65 +7,83 @@ import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.LastDatabaseVersion;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
+import com.shootr.mobile.data.repository.local.LocalDeviceRepository;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
+import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import javax.inject.Inject;
 
 public class DatabaseVersionUtils implements DatabaseUtils {
 
-    private final IntPreference lastDatabaseVersion;
-    private final Version currentVersion;
-    private final SQLiteOpenHelper dbOpenHelper;
-    private final Context context;
-    private final BooleanPreference shouldShowIntro;
-    private final CacheUtils cacheUtils;
+  private final IntPreference lastDatabaseVersion;
+  private final Version currentVersion;
+  private final SQLiteOpenHelper dbOpenHelper;
+  private final Context context;
+  private final BooleanPreference shouldShowIntro;
+  private final CacheUtils cacheUtils;
+  private final LocalDeviceRepository localDeviceRepository;
+  private Device device;
 
-    @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
-      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper,
-      @ShouldShowIntro BooleanPreference shouldShowIntro, CacheUtils cacheUtils) {
-        this.lastDatabaseVersion = lastDatabaseVersion;
-        this.currentVersion = currentVersion;
-        this.context = context;
-        this.dbOpenHelper = dbOpenHelper;
-        this.shouldShowIntro = shouldShowIntro;
-        this.cacheUtils = cacheUtils;
-    }
+  @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
+      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion,
+      SQLiteOpenHelper dbOpenHelper, @ShouldShowIntro BooleanPreference shouldShowIntro,
+      CacheUtils cacheUtils, LocalDeviceRepository localDeviceRepository) {
+    this.lastDatabaseVersion = lastDatabaseVersion;
+    this.currentVersion = currentVersion;
+    this.context = context;
+    this.dbOpenHelper = dbOpenHelper;
+    this.shouldShowIntro = shouldShowIntro;
+    this.cacheUtils = cacheUtils;
+    this.localDeviceRepository = localDeviceRepository;
+  }
 
-    public void clearDataOnNewerVersion() {
-        if (needsToClearData()) {
-            resetAppData();
-        }
+  public void clearDataOnNewerVersion() {
+    if (needsToClearData()) {
+      resetAppData();
     }
+  }
 
-    @Override public void clearDataOnLogout() {
-        resetAppData();
-        deleteCache();
-    }
+  @Override public void clearDataOnLogout() {
+    resetAppData();
+    deleteCache();
+  }
 
-    protected void resetAppData() {
-        boolean previousShouldShowIntro = shouldShowIntro.get();
-        clearDatabase();
-        updateStoredDatabaseVersion();
-        shouldShowIntro.set(previousShouldShowIntro);
-    }
+  protected void resetAppData() {
+    boolean previousShouldShowIntro = shouldShowIntro.get();
+    getDeviceInfo();
+    clearDatabase();
+    updateStoredDatabaseVersion();
+    shouldShowIntro.set(previousShouldShowIntro);
+    putDeviceInfo();
+  }
 
-    private void clearDatabase() {
-        dbOpenHelper.close();
-        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
-    }
+  private void getDeviceInfo() {
+    device = localDeviceRepository.getCurrentDevice();
+  }
 
-    private void updateStoredDatabaseVersion() {
-        int databaseVersion = currentVersion.getDatabaseVersion();
-        lastDatabaseVersion.set(databaseVersion);
+  private void putDeviceInfo() {
+    if (device != null) {
+      localDeviceRepository.putDevice(device);
     }
+  }
 
-    private boolean needsToClearData() {
-        int lastVersion = this.lastDatabaseVersion.get();
-        int currentDatabaseVersion = currentVersion.getDatabaseVersion();
-        return lastVersion < currentDatabaseVersion;
-    }
+  private void clearDatabase() {
+    dbOpenHelper.close();
+    context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
+  }
 
-    private void deleteCache() {
-        cacheUtils.deleteCache(context);
-    }
+  private void updateStoredDatabaseVersion() {
+    int databaseVersion = currentVersion.getDatabaseVersion();
+    lastDatabaseVersion.set(databaseVersion);
+  }
+
+  private boolean needsToClearData() {
+    int lastVersion = this.lastDatabaseVersion.get();
+    int currentDatabaseVersion = currentVersion.getDatabaseVersion();
+    return lastVersion < currentDatabaseVersion;
+  }
+
+  private void deleteCache() {
+    cacheUtils.deleteCache(context);
+  }
 }
