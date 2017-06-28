@@ -428,6 +428,7 @@
   <string name="showing_shots_by_holder">Shots do administrador.</string>
   <string name="sign_out_message">Finalizando sessão…</string>
   <string name="started_shooting_activity_text_pattern">Escreveu em (stream)</string>
+  <string name="important_started_shooting_activity_text_pattern">On (stream)</string>
   <string name="started_shooting_push_settings">Aviso de novo shot</string>
   <string name="stream_checked">Pronto!</string>
   <string name="stream_check_in_activity_text_pattern">Você realizou o check-in em (stream)</string>

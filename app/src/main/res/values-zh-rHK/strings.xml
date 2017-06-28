@@ -416,6 +416,8 @@
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出...</string>
   <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
+  <string name="important_started_shooting_activity_text_pattern">On (stream)</string>
+  <string name="important_started_shooting_activity_notext_pattern">On (stream)</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">簽到</string>
   <string name="stream_check_in_activity_text_pattern">你已經在 (steam) 簽到</string>

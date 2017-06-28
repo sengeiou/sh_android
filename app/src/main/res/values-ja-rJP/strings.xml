@@ -397,6 +397,7 @@
   <string name="showing_shots_by_holder">管理者のショット。</string>
   <string name="sign_out_message">ログアウトしています…</string>
   <string name="started_shooting_activity_text_pattern">(stream)に投稿しました</string>
+  <string name="important_started_shooting_activity_text_pattern">On (stream)</string>
   <string name="started_shooting_push_settings">新規ショットの通知</string>
   <string name="stream_checked">完了</string>
   <string name="stream_check_in_activity_text_pattern">(stream)にチェックインしました</string>
