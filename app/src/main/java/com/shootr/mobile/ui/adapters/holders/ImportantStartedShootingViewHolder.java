@@ -11,11 +11,11 @@ import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 
-public class StartedShootingViewHolder extends StreamActivityViewHolder {
+public class ImportantStartedShootingViewHolder extends StreamActivityViewHolder {
 
     private final ActivityFavoriteClickListener activityFavoriteClickListener;
 
-    public StartedShootingViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+    public ImportantStartedShootingViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
         OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClick,
         ActivityFavoriteClickListener activityFavoriteClickListener) {
         super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClick);
@@ -23,7 +23,7 @@ public class StartedShootingViewHolder extends StreamActivityViewHolder {
     }
 
     @NonNull protected String getCommentPattern() {
-        return getContext().getString(R.string.started_shooting_activity_text_pattern);
+        return getContext().getString(R.string.important_started_shooting_activity_text_pattern);
     }
 
     @Override protected void renderFavorite(final ActivityModel activityModel) {
