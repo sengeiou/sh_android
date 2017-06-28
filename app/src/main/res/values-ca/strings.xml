@@ -428,6 +428,8 @@
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrit a %s</string>
+  <string name="important_started_shooting_activity_text_pattern">A (stream):</string>
+  <string name="important_started_shooting_activity_notext_pattern">A (stream)</string>
   <string name="started_shooting_push_settings">Avís de nou shot</string>
   <string name="stream_checked">Fet</string>
   <string name="stream_check_in_activity_text_pattern">Ha fet check-in a (stream)</string>
