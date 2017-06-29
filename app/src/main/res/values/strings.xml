@@ -423,8 +423,8 @@
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
   <string name="sign_out_message">Signing out…</string>
   <string name="started_shooting_activity_text_pattern">Started shooting on %s</string>
-  <string name="important_started_shooting_activity_text_pattern">On (stream):</string>
-  <string name="important_started_shooting_activity_notext_pattern">On (stream)</string>
+  <string name="important_started_shooting_activity_text_pattern">On %s:</string>
+  <string name="important_started_shooting_activity_notext_pattern">On %s</string>
   <string name="started_shooting_push_settings">Started shooting alert</string>
   <string name="stream_checked">Checked in</string>
   <string name="stream_check_in_activity_text_pattern">Checked in to (stream)</string>

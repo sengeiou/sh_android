@@ -417,8 +417,8 @@
   <string name="showing_shots_by_holder">管理员发布了shots。</string>
   <string name="sign_out_message">正在登出…</string>
   <string name="started_shooting_activity_text_pattern">已在%s发布信息</string>
-  <string name="important_started_shooting_activity_text_pattern">On (stream)</string>
-  <string name="important_started_shooting_activity_notext_pattern">On (stream)</string>
+  <string name="important_started_shooting_activity_text_pattern">On %s:</string>
+  <string name="important_started_shooting_activity_notext_pattern">On %s</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">签到</string>
   <string name="stream_check_in_activity_text_pattern">你已经在 (stream) 签到</string>
