@@ -254,6 +254,14 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
             onShotClick);
     }
 
+    private ImportantStartedShootingViewHolder onCreateImportantStartedShootingViewHolder(ViewGroup parent) {
+        return new ImportantStartedShootingViewHolder(createActivityView(parent),
+            imageLoader,
+            timeUtils,
+            avatarClickListener,
+            onShotClick, activityFavoriteClickListener);
+    }
+
     private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent) {
         return new NiceShotViewHolder(createActivityView(parent),
           imageLoader,
