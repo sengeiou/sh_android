@@ -136,6 +136,7 @@ public class NicersActivity extends BaseToolbarDecoratedActivity
         builder.setLabelId(analyticsLabelFollow);
         builder.setSource(nicersSource);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIsStrategic(user.isStrategic());
         builder.setIdTargetUser(user.getIdUser());
         builder.setTargetUsername(user.getUsername());
         analyticsTool.analyticsSendAction(builder);

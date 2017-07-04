@@ -152,6 +152,7 @@ public class FindParticipantsActivity extends BaseToolbarDecoratedActivity
         builder.setLabelId(analyticsLabelFollow);
         builder.setSource(findParticipantsSource);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIsStrategic(user.isStrategic());
         builder.setIdTargetUser(user.getIdUser());
         builder.setTargetUsername(user.getUsername());
         analyticsTool.analyticsSendAction(builder);
