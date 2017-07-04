@@ -27,11 +27,13 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
         activityModel.setUsername(userInfo.getUsername());
         activityModel.setIdUser(userInfo.getIdUser());
         activityModel.setUserPhoto(userInfo.getAvatar());
+        activityModel.setStrategic(userInfo.isStrategic());
 
         Activity.ActivityStreamInfo streamInfo = activity.getStreamInfo();
         if (streamInfo != null) {
             activityModel.setIdStream(streamInfo.getIdStream());
             activityModel.setStreamTitle(streamInfo.getStreamTitle());
+            activityModel.setStrategic(streamInfo.isStrategic());
         }
 
         activityModel.setIdTargetUser(activity.getIdTargetUser());

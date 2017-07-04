@@ -155,9 +155,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         openPollVote(idPoll, streamTitle);
       }
     }, new ActivityFollowUnfollowListener() {
-      @Override public void onFollow(String idUser, String username) {
+      @Override public void onFollow(String idUser, String username, Boolean isStrategic) {
         timelinePresenter.followUser(idUser);
-        sendFollowAnalytics(idUser, username);
+        sendFollowAnalytics(idUser, username, isStrategic);
       }
 
       @Override public void onUnfollow(String idUser, String username) {
@@ -201,7 +201,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
+  private void sendFollowAnalytics(String idTargetUser, String targetUsername,
+      Boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFollow);
@@ -209,6 +210,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idTargetUser);
     builder.setTargetUsername(targetUsername);
+    builder.setIsStrategic(isStrategic);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
