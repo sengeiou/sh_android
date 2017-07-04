@@ -32,7 +32,7 @@ public class UserEntity extends Synchronized
     private Long receivedReactions;
     private Long numMutuals;
     private Boolean firstSessionActivation;
-    private int strategic;
+    private Boolean strategic;
 
     public UserEntity() {
     }
@@ -270,11 +270,11 @@ public class UserEntity extends Synchronized
         this.firstSessionActivation = firstSessionActivation;
     }
 
-    public int getStrategic() {
+    public Boolean isStrategic() {
         return strategic;
     }
 
-    public void setStrategic(int strategic) {
+    public void setStrategic(Boolean strategic) {
         this.strategic = strategic;
     }
 
