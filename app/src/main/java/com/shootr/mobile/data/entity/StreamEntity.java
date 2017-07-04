@@ -33,7 +33,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private Boolean strategic;
 
     public StreamEntity() {
-        setFollowableType(FollowableType.STREAM);
+        setResultType(FollowableType.STREAM);
     }
 
     public List<UserEntity> getWatchers() {

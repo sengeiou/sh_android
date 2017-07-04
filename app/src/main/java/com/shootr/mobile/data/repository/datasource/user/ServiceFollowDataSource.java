@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
+import com.shootr.mobile.data.api.entity.FollowingsEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.UserApiService;
@@ -94,6 +95,15 @@ public class ServiceFollowDataSource implements FollowDataSource {
     @Override public List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp) {
         try {
             return userApiService.getFollows(idUser, page, timestamp);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override
+    public FollowingsEntity getFollowings(String idUser, String[] type, Long maxTimestamp) {
+        try {
+            return userApiService.getFollowing(idUser, type, maxTimestamp);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

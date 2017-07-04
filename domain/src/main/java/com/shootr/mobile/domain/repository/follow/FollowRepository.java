@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.repository.follow;
 
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
+import com.shootr.mobile.domain.model.Following;
 import java.util.List;
 
 public interface FollowRepository {
@@ -16,5 +17,7 @@ public interface FollowRepository {
     List<String> getBlockedIdUsers();
 
     List<String> getMutualIdUsers();
+
+    Following getFollowing(String idUser, String[] type, Long maxTimestamp);
 
 }

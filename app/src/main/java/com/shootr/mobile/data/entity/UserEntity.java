@@ -36,7 +36,7 @@ public class UserEntity extends FollowableEntity
     private Boolean strategic;
 
     public UserEntity() {
-        setFollowableType(FollowableType.USER);
+        setResultType(FollowableType.USER);
     }
 
     public Long getCreatedStreamsCount() {

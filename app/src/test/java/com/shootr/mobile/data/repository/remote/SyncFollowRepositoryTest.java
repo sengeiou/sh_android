@@ -37,7 +37,7 @@ public class SyncFollowRepositoryTest {
         MockitoAnnotations.initMocks(this);
         syncFollowRepository = new SyncFollowRepository(sessionRepository,
           localFollowDataSource,
-          remoteFollowDataSource, syncTrigger,
+          remoteFollowDataSource, followingEntityMapper, syncTrigger,
           userCache);
     }
 

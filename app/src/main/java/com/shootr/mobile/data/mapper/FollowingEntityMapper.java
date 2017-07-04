@@ -10,12 +10,12 @@ import com.shootr.mobile.domain.model.Following;
 import java.util.ArrayList;
 import javax.inject.Inject;
 
-public class FollowingMapper {
+public class FollowingEntityMapper {
 
   private final UserEntityMapper userEntityMapper;
   private final StreamEntityMapper streamEntityMapper;
 
-  @Inject public FollowingMapper(UserEntityMapper userEntityMapper, StreamEntityMapper streamEntityMapper) {
+  @Inject public FollowingEntityMapper(UserEntityMapper userEntityMapper, StreamEntityMapper streamEntityMapper) {
     this.userEntityMapper = userEntityMapper;
     this.streamEntityMapper = streamEntityMapper;
   }
@@ -24,15 +24,15 @@ public class FollowingMapper {
 
     Following following = new Following();
 
-    following.setMaxTimestamp(value.getPaginationApiEntity().getMaxTimestamp());
-    following.setSinceTimestamp(value.getPaginationApiEntity().getSinceTimestamp());
+    following.setMaxTimestamp(value.getPagination().getMaxTimestamp());
+    following.setSinceTimestamp(value.getPagination().getSinceTimestamp());
 
     ArrayList<Followable> followables = new ArrayList<>();
 
     for (FollowableEntity followableEntity : value.getData()) {
-      if (followableEntity.getFollowableType().equals(FollowableType.STREAM)) {
+      if (followableEntity.getResultType().equals(FollowableType.STREAM)) {
         followables.add(streamEntityMapper.transform((StreamEntity) followableEntity));
-      } else if (followableEntity.getFollowableType().equals(FollowableType.USER)) {
+      } else if (followableEntity.getResultType().equals(FollowableType.USER)) {
         followables.add(userEntityMapper.transform((UserEntity) followableEntity));
       }
     }

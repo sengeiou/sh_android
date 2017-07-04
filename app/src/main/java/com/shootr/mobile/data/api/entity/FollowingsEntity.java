@@ -5,15 +5,15 @@ import java.util.List;
 
 public class FollowingsEntity {
 
-  PaginationApiEntity paginationApiEntity;
+  PaginationApiEntity pagination;
   List<FollowableEntity> data;
 
-  public PaginationApiEntity getPaginationApiEntity() {
-    return paginationApiEntity;
+  public PaginationApiEntity getPagination() {
+    return pagination;
   }
 
-  public void setPaginationApiEntity(PaginationApiEntity paginationApiEntity) {
-    this.paginationApiEntity = paginationApiEntity;
+  public void setPagination(PaginationApiEntity pagination) {
+    this.pagination = pagination;
   }
 
   public List<FollowableEntity> getData() {
