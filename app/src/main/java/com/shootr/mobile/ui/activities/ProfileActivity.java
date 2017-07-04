@@ -527,6 +527,7 @@ public class ProfileActivity extends BaseActivity
     builder.setSource(profileSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idUser);
+    builder.setIsStrategic(profilePresenter.getIsStrategic());
     builder.setTargetUsername(profilePresenter.getUsername());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
