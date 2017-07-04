@@ -27,6 +27,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean isCurrentUserContributor;
     private boolean isFavorite;
     private int totalFollowingWatchers;
+    private boolean isStrategic;
 
     public Boolean isRemoved() {
         return removed;
@@ -206,6 +207,13 @@ public class StreamModel implements Serializable, SearchableModel {
         isCurrentUserContributor = currentUserContributor;
     }
 
+    public boolean isStrategic() {
+        return isStrategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+        isStrategic = strategic;
+    }
 
     public boolean isFavorite() {
         return isFavorite;

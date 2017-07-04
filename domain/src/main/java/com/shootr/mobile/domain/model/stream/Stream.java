@@ -32,6 +32,7 @@ public class Stream implements Searchable {
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFavorite;
+    private boolean isStrategic;
     private int totalFollowingWatchers;
 
     public Boolean isRemoved() {
@@ -274,6 +275,14 @@ public class Stream implements Searchable {
 
     public void setCurrentUserContributor(boolean currentUserContributor) {
         isCurrentUserContributor = currentUserContributor;
+    }
+
+    public boolean isStrategic() {
+        return isStrategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+        isStrategic = strategic;
     }
 
     public boolean isFavorite() {
