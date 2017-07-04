@@ -1,12 +1,14 @@
 package com.shootr.mobile.domain.model.user;
 
 import com.shootr.mobile.domain.model.EntityMetadata;
+import com.shootr.mobile.domain.model.Followable;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.util.Comparator;
 import java.util.Date;
 
-public class User implements Searchable {
+public class User implements Searchable, Followable {
 
   private String idUser;
   private String username;
@@ -263,6 +265,10 @@ public class User implements Searchable {
 
   @Override public String getSearchableType() {
     return SearchableType.USER;
+  }
+
+  @Override public String getFollowableType() {
+    return FollowableType.USER;
   }
 
   public static class UsernameComparator implements Comparator<User> {

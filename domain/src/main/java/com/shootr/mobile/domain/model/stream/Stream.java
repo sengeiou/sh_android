@@ -1,5 +1,7 @@
 package com.shootr.mobile.domain.model.stream;
 
+import com.shootr.mobile.domain.model.Followable;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.user.User;
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Stream implements Searchable {
+public class Stream implements Searchable, Followable {
 
     private String id;
     private String authorId;
@@ -217,8 +219,12 @@ public class Stream implements Searchable {
         this.readWriteMode = readWriteMode;
     }
 
-    @Override public String getSearchableType() {
+    @Override public String getFollowableType() {
         return SearchableType.STREAM;
+    }
+
+    @Override public String getSearchableType() {
+        return FollowableType.STREAM;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {
