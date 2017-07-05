@@ -11,7 +11,6 @@ import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -119,7 +118,7 @@ public class FollowPresenter implements Presenter {
     addToFavoritesInteractor.addToFavorites(streamModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            /* no-op */;
+            /* no-op */
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {

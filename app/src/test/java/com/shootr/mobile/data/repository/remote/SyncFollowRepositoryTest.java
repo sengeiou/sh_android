@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.Synchronized;
+import com.shootr.mobile.data.mapper.FollowsEntityMapper;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.remote.cache.UserCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
@@ -28,6 +29,7 @@ public class SyncFollowRepositoryTest {
     @Mock SessionRepository sessionRepository;
     @Mock FollowDataSource localFollowDataSource;
     @Mock FollowDataSource remoteFollowDataSource;
+    @Mock FollowsEntityMapper followingEntityMapper;
     @Mock SyncTrigger syncTrigger;
     @Mock UserCache userCache;
 

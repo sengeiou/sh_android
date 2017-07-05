@@ -26,7 +26,8 @@ public class GetFollowingListInteractor implements Interactor {
     this.followRepository = followRepository;
   }
 
-  public void getFollowingList(String idUser, Long maxTimestamp, Callback<Follows> callback, ErrorCallback errorCallback) {
+  public void getFollowingList(String idUser, Long maxTimestamp, Callback<Follows> callback,
+      ErrorCallback errorCallback) {
     this.idUser = idUser;
     this.maxTimestamp = maxTimestamp;
     this.callback = callback;
