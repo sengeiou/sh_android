@@ -158,6 +158,7 @@ public class GenericSearchFragment extends BaseFragment
     builder.setSource(discoverSearchSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(stream.getTitle());
+    builder.setIsStrategic(stream.isStrategic());
     builder.setIdStream(stream.getIdStream());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
