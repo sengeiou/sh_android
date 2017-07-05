@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.data.repository.local.LocalDeviceRepository;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,6 +28,7 @@ public class DatabaseVersionUtilsTest {
     @Mock SQLiteOpenHelper dbOpenHelper;
     @Mock BooleanPreference shouldShowIntro;
     @Mock CacheUtils cacheUtils;
+    @Mock LocalDeviceRepository localDeviceRepository;
 
     private DatabaseVersionUtils databaseVersionUtils;
 
@@ -37,7 +39,7 @@ public class DatabaseVersionUtilsTest {
           version,
           dbOpenHelper,
           shouldShowIntro,
-          cacheUtils);
+          cacheUtils, localDeviceRepository);
     }
 
     @Test public void shouldUpdateDatabaseVersionIfTheresNoVersion() {
