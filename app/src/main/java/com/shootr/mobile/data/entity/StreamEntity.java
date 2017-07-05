@@ -31,6 +31,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private int iAmContributor;
     private int totalFollowingWatchers;
     private Boolean strategic;
+    private Boolean following;
 
     public StreamEntity() {
         setResultType(FollowableType.STREAM);
@@ -266,5 +267,13 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setTotalFollowingWatchers(int totalFollowingWatchers) {
         this.totalFollowingWatchers = totalFollowingWatchers;
+    }
+
+    public Boolean getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Boolean following) {
+        this.following = following;
     }
 }
