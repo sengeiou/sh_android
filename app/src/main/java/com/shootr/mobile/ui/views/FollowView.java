@@ -24,4 +24,6 @@ public interface FollowView {
   void registerAnalytics(boolean followers);
 
   void renderItems(FollowModel followings);
+
+  void renderMoreItems(FollowModel followings);
 }

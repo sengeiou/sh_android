@@ -11,12 +11,14 @@ import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.FollowModelMapper;
 import com.shootr.mobile.ui.views.FollowView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.Date;
 import javax.inject.Inject;
 
 public class FollowPresenter implements Presenter {
@@ -34,6 +36,9 @@ public class FollowPresenter implements Presenter {
   private FollowView followView;
   private String idUser;
   private int followType;
+  private long maxTimestamp;
+  private boolean isLoadingItems;
+  private boolean mightHaveMoreItems;
 
   @Inject public FollowPresenter(AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
@@ -57,35 +62,57 @@ public class FollowPresenter implements Presenter {
     this.followView = followView;
     this.idUser = idUser;
     this.followType = followType;
+    maxTimestamp = new Date().getTime();
+    loadFollows(true);
+  }
+
+  private void loadFollows(boolean firstLoad) {
+    isLoadingItems = true;
     if (followType == UserFollowingRelationship.FOLLOWING) {
-      loadFollowing();
+      loadFollowing(firstLoad);
     } else {
-      loadFollower();
+      loadFollower(firstLoad);
     }
   }
 
-  public void loadFollowing() {
-    getFollowingListInteractor.getFollowingList(idUser, 0L, new Interactor.Callback<Follows>() {
+  public void loadFollowing(final boolean firtLoad) {
+    getFollowingListInteractor.getFollowingList(idUser, maxTimestamp, new Interactor.Callback<Follows>() {
       @Override public void onLoaded(Follows following) {
-        followView.renderItems(followingModelMapper.transform(following));
+        renderItems(following, firtLoad);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        followView.showError(error.getMessage());
+        showError(error);
       }
     });
   }
 
-  private void loadFollower() {
-    getFollowerListInteractor.getFollowerList(idUser, 0L, new Interactor.Callback<Follows>() {
+  private void showError(ShootrException error) {
+    followView.showError(error.getMessage());
+    isLoadingItems = false;
+  }
+
+  private void loadFollower(final boolean firstLoad) {
+    getFollowerListInteractor.getFollowerList(idUser, maxTimestamp, new Interactor.Callback<Follows>() {
       @Override public void onLoaded(Follows follows) {
-        followView.renderItems(followingModelMapper.transform(follows));
+        renderItems(follows, firstLoad);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        followView.showError(error.getMessage());
+        showError(error);
       }
     });
+  }
+
+  private void renderItems(Follows follows, boolean firstLoad) {
+    isLoadingItems = false;
+    maxTimestamp = follows.getMaxTimestamp();
+    if (firstLoad) {
+      followView.renderItems(followingModelMapper.transform(follows));
+    } else {
+      followView.renderMoreItems(followingModelMapper.transform(follows));
+    }
+    mightHaveMoreItems = maxTimestamp != 0L;
   }
 
   public void addToFavorites(final StreamModel streamModel) {
@@ -151,4 +178,9 @@ public class FollowPresenter implements Presenter {
         });
   }
 
+  public void showingLastShot() {
+    if (!isLoadingItems && mightHaveMoreItems) {
+      loadFollows(false);
+    }
+  }
 }

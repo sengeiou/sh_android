@@ -113,4 +113,9 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     ((StreamModel) items.get(index)).setFavorite(false);
     notifyDataSetChanged();
   }
+
+  public void addItems(List<SearchableModel> items) {
+    this.items.addAll(items);
+    notifyDataSetChanged();
+  }
 }

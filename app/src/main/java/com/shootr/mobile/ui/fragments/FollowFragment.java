@@ -65,8 +65,9 @@ public class FollowFragment extends BaseFragment
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
 
-  String idUser;
-  int followType;
+  private String idUser;
+  private int followType;
+  private LinearLayoutManager layoutManager;
 
   public static FollowFragment newInstance(String userId, Integer followType) {
     FollowFragment fragment = new FollowFragment();
@@ -109,6 +110,27 @@ public class FollowFragment extends BaseFragment
     userList.setLayoutManager(new LinearLayoutManager(getContext()));
     setupViews();
     followPresenter.initialize(this, idUser, followType);
+    userList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+        super.onScrollStateChanged(recyclerView, newState);
+      }
+
+      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        super.onScrolled(recyclerView, dx, dy);
+
+        if (userList != null) {
+          checkIfEndOfListVisible();
+        }
+      }
+    });
+  }
+
+  private void checkIfEndOfListVisible() {
+    int lastItemPosition = userList.getAdapter().getItemCount() - 1;
+    int lastVisiblePosition = layoutManager.findLastVisibleItemPosition();
+    if (lastItemPosition == lastVisiblePosition && lastItemPosition >= 0) {
+      followPresenter.showingLastShot();
+    }
   }
 
   private void initializeStreamListAdapter() {
@@ -242,6 +264,10 @@ public class FollowFragment extends BaseFragment
     adapter.notifyDataSetChanged();
   }
 
+  @Override public void renderMoreItems(FollowModel followings) {
+    adapter.addItems(followings.getData());
+  }
+
   private void setupRemoveFromFavoriteDialog(final StreamModel streamModel) {
     Spanned text;
 
@@ -268,7 +294,8 @@ public class FollowFragment extends BaseFragment
   }
 
   private void setupViews() {
-    userList.setLayoutManager(new LinearLayoutManager(getContext()));
+    layoutManager = new LinearLayoutManager(getContext());
+    userList.setLayoutManager(layoutManager);
     initializeStreamListAdapter();
   }
 
