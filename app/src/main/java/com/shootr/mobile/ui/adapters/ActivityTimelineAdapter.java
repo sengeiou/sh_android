@@ -8,6 +8,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.holders.FollowActivityViewHolder;
 import com.shootr.mobile.ui.adapters.holders.GenericActivityViewHolder;
+import com.shootr.mobile.ui.adapters.holders.ImportantStartedShootingViewHolder;
 import com.shootr.mobile.ui.adapters.holders.MentionViewHolder;
 import com.shootr.mobile.ui.adapters.holders.NiceShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.OpenedViewHolder;
@@ -58,6 +59,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
   public static final int TYPE_POLL_SHARED = 14;
   public static final int TYPE_POLL_FINISHED = 15;
   public static final int TYPE_WAKE_UP_SHOT = 16;
+  public static final int TYPE_IMPORTANT_STARTED_SHOOTING = 17;
 
   private final ImageLoader imageLoader;
   private final AndroidTimeUtils timeUtils;
@@ -133,6 +135,8 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
           return TYPE_POLL_FINISHED;
         case ActivityType.WAKE_UP_SHOT:
           return TYPE_WAKE_UP_SHOT;
+        case ActivityType.IMPORTANT_STARTED_SHOOTING:
+          return TYPE_IMPORTANT_STARTED_SHOOTING;
         default:
           return TYPE_GENERIC_ACTIVITY;
       }
@@ -179,6 +183,9 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
         return onCreatePollFinishedViewHolder(parent);
       case TYPE_WAKE_UP_SHOT:
         return onCreateWakeUpViewHolder(parent);
+      case TYPE_IMPORTANT_STARTED_SHOOTING:
+        return onCreateImportantStartedShootingViewHolder(parent);
+
       default:
         throw new IllegalStateException("View type %d not handled");
     }
@@ -222,6 +229,12 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
   private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {
     return new StartedShootingViewHolder(createActivityView(parent), imageLoader, timeUtils,
         avatarClickListener, onShotClick);
+  }
+
+  private ImportantStartedShootingViewHolder onCreateImportantStartedShootingViewHolder(
+      ViewGroup parent) {
+    return new ImportantStartedShootingViewHolder(createActivityView(parent), imageLoader,
+        timeUtils, avatarClickListener, onShotClick);
   }
 
   private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent) {
