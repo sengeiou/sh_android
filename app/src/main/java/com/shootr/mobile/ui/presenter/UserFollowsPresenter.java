@@ -1,11 +1,13 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetFollowingListInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
+import com.shootr.mobile.domain.model.Following;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -20,6 +22,7 @@ public class UserFollowsPresenter implements Presenter {
 
     private final GetUserFollowingInteractor getUserFollowingInteractor;
     private final GetUserFollowersInteractor getUserFollowersInteractor;
+    private final GetFollowingListInteractor getFollowingListInteractor;
     private final FollowInteractor followInteractor;
     private final UnfollowInteractor unfollowInteractor;
     private final ErrorMessageFactory errorMessageFactory;
@@ -32,10 +35,13 @@ public class UserFollowsPresenter implements Presenter {
     private boolean isInLastPage = false;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
-      GetUserFollowersInteractor getUserFollowersInteractor, FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+        GetUserFollowersInteractor getUserFollowersInteractor,
+        GetFollowingListInteractor getFollowingListInteractor, FollowInteractor followInteractor,
+        UnfollowInteractor unfollowInteractor, ErrorMessageFactory errorMessageFactory,
+        UserModelMapper userModelMapper) {
         this.getUserFollowingInteractor = getUserFollowingInteractor;
         this.getUserFollowersInteractor = getUserFollowersInteractor;
+        this.getFollowingListInteractor = getFollowingListInteractor;
         this.followInteractor = followInteractor;
         this.unfollowInteractor = unfollowInteractor;
         this.errorMessageFactory = errorMessageFactory;
@@ -66,7 +72,7 @@ public class UserFollowsPresenter implements Presenter {
     }
 
     private void getFollowingUsers() {
-        getUserFollowingInteractor.obtainFollowing(userId, page, new Interactor.Callback<List<User>>() {
+        /*getUserFollowingInteractor.obtainFollowing(userId, page, new Interactor.Callback<List<User>>() {
             @Override public void onLoaded(List<User> users) {
                 userFollowsView.setLoadingView(false);
                 handleUsersInView(users);
@@ -76,7 +82,18 @@ public class UserFollowsPresenter implements Presenter {
                 userFollowsView.setLoadingView(false);
                 userFollowsView.showError(errorMessageFactory.getMessageForError(error));
             }
+        });*/
+
+        getFollowingListInteractor.getFollowingList(userId, 0L, new Interactor.Callback<Following>() {
+            @Override public void onLoaded(Following following) {
+                userFollowsView.setLoadingView(false);
+            }
+        }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+
+            }
         });
+
     }
 
     private void getFollowerUsers() {
