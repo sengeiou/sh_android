@@ -60,7 +60,7 @@ public class FollowPresenter implements Presenter {
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-
+        followView.showError(error.getMessage());
       }
     });
   }
