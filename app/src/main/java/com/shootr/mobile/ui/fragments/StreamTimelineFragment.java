@@ -480,6 +480,7 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setStreamName((streamTitle != null) ? streamTitle
         : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(streamTimelinePresenter.isStrategic());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
