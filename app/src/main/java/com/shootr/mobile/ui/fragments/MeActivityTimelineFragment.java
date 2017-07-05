@@ -177,9 +177,10 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
         setupUnFollowDialog(idUser, username);
       }
     }, new ActivityFavoriteClickListener() {
-      @Override public void onFavoriteClick(String idStream, String streamTitle) {
+      @Override
+      public void onFavoriteClick(String idStream, String streamTitle, boolean isStrategic) {
         timelinePresenter.addFavorite(idStream);
-        sendFavoriteAnalytics(idStream, streamTitle);
+        sendFavoriteAnalytics(idStream, streamTitle, isStrategic);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
@@ -217,7 +218,7 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  private void sendFavoriteAnalytics(String idStream, String streamTitle) {
+  private void sendFavoriteAnalytics(String idStream, String streamTitle, boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
@@ -226,6 +227,7 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(streamTitle);
     builder.setIdStream(idStream);
+    builder.setIsStrategic(isStrategic);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
