@@ -427,7 +427,9 @@
   <string name="shot_timeline_empty_title">No hay shots</string>
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
-  <string name="started_shooting_activity_text_pattern">Ha escrito en (stream)</string>
+  <string name="started_shooting_activity_text_pattern">Ha escrito en %s</string>
+  <string name="important_started_shooting_activity_text_pattern">En %s:</string>
+  <string name="important_started_shooting_activity_notext_pattern">En %s</string>
   <string name="started_shooting_push_settings">Aviso de nuevo shot</string>
   <string name="stream_checked">Hecho</string>
   <string name="stream_check_in_activity_text_pattern">Ha hecho check-in en (stream)</string>
@@ -517,4 +519,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrito en %s: "</string>
 </resources>

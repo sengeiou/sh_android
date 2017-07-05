@@ -415,7 +415,9 @@
   <string name="shot_timeline_empty_title">沒有Shots</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出...</string>
-  <string name="started_shooting_activity_text_pattern">開始於(stream)發怖訊息</string>
+  <string name="started_shooting_activity_text_pattern">開始於%s發怖訊息</string>
+  <string name="important_started_shooting_activity_text_pattern">On %s:</string>
+  <string name="important_started_shooting_activity_notext_pattern">On %s</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">簽到</string>
   <string name="stream_check_in_activity_text_pattern">你已經在 (steam) 簽到</string>
@@ -504,4 +506,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"開始於%s發怖訊息: "</string>
 </resources>
