@@ -109,6 +109,14 @@ public class ServiceFollowDataSource implements FollowDataSource {
         }
     }
 
+    @Override public FollowsEntity getFollowers(String idUser, String[] type, Long maxTimestamp) {
+        try {
+            return userApiService.getFollowers(idUser, type, maxTimestamp);
+        } catch (IOException | ApiException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }

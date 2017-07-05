@@ -30,4 +30,6 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp);
 
     FollowsEntity getFollowings(String idUser, String[] type, Long maxTimestamp);
+
+    FollowsEntity getFollowers(String idUser, String[] type, Long maxTimestamp);
 }

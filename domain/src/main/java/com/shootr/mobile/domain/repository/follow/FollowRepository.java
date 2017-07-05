@@ -20,4 +20,5 @@ public interface FollowRepository {
 
     Follows getFollowing(String idUser, String[] type, Long maxTimestamp);
 
+    Follows getFollowers(String idUser, String[] type, Long maxTimestamp);
 }

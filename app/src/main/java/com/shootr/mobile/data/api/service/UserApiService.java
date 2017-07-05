@@ -78,4 +78,8 @@ public interface UserApiService {
     @GET("/followable/following") FollowsEntity getFollowing(@Query("idUser") String idUser,
         @Query("resultType") String[] type, @Query("sinceTimestamp") Long timestamp)
         throws IOException, ApiException;
+
+    @GET("/followable/followers") FollowsEntity getFollowers(@Query("idUser") String idUser,
+        @Query("resultType") String[] type, @Query("sinceTimestamp") Long timestamp)
+        throws IOException, ApiException;
 }

@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetFollowerListInteractor;
 import com.shootr.mobile.domain.interactor.GetFollowingListInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
@@ -10,6 +11,7 @@ import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.FollowModelMapper;
@@ -25,38 +27,59 @@ public class FollowPresenter implements Presenter {
   private final UnfollowInteractor unfollowInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
   private final GetFollowingListInteractor getFollowingListInteractor;
+  private final GetFollowerListInteractor getFollowerListInteractor;
   private final FollowModelMapper followingModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
   private FollowView followView;
   private String idUser;
+  private int followType;
 
   @Inject public FollowPresenter(AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor,
       GetFollowingListInteractor getFollowingListInteractor,
-      FollowModelMapper followingModelMapper, ErrorMessageFactory errorMessageFactory) {
+      GetFollowerListInteractor getFollowerListInteractor, FollowModelMapper followingModelMapper,
+      ErrorMessageFactory errorMessageFactory) {
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
     this.getFollowingListInteractor = getFollowingListInteractor;
+    this.getFollowerListInteractor = getFollowerListInteractor;
     this.followingModelMapper = followingModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
 
-  public void initialize(FollowView followView, String idUser) {
+  public void initialize(FollowView followView, String idUser, int followType) {
     this.followView = followView;
     this.idUser = idUser;
-    loadFollowing(idUser);
+    this.followType = followType;
+    if (followType == UserFollowingRelationship.FOLLOWING) {
+      loadFollowing();
+    } else {
+      loadFollower();
+    }
   }
 
-  public void loadFollowing(String idUser) {
+  public void loadFollowing() {
     getFollowingListInteractor.getFollowingList(idUser, 0L, new Interactor.Callback<Follows>() {
       @Override public void onLoaded(Follows following) {
         followView.renderItems(followingModelMapper.transform(following));
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        followView.showError(error.getMessage());
+      }
+    });
+  }
+
+  private void loadFollower() {
+    getFollowerListInteractor.getFollowerList(idUser, 0L, new Interactor.Callback<Follows>() {
+      @Override public void onLoaded(Follows follows) {
+        followView.renderItems(followingModelMapper.transform(follows));
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {

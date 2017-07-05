@@ -108,7 +108,7 @@ public class FollowFragment extends BaseFragment
     ButterKnife.bind(this, getView());
     userList.setLayoutManager(new LinearLayoutManager(getContext()));
     setupViews();
-    followPresenter.initialize(this, idUser);
+    followPresenter.initialize(this, idUser, followType);
   }
 
   private void initializeStreamListAdapter() {

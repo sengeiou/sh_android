@@ -119,6 +119,10 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
         return followingEntityMapper.map(remoteFollowDataSource.getFollowings(idUser, type, maxTimestamp));
     }
 
+    @Override public Follows getFollowers(String idUser, String[] type, Long maxTimestamp) {
+        return followingEntityMapper.map(remoteFollowDataSource.getFollowers(idUser, type, maxTimestamp));
+    }
+
     @Override public void dispatchSync() {
         List<FollowEntity> pendingEntities = localFollowDataSource.getEntitiesNotSynchronized();
         for (FollowEntity entity : pendingEntities) {
