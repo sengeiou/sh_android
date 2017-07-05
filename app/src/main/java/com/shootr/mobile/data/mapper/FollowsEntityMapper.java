@@ -1,28 +1,28 @@
 package com.shootr.mobile.data.mapper;
 
-import com.shootr.mobile.data.api.entity.FollowingsEntity;
+import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.entity.FollowableEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.model.Followable;
 import com.shootr.mobile.domain.model.FollowableType;
-import com.shootr.mobile.domain.model.Following;
+import com.shootr.mobile.domain.model.Follows;
 import java.util.ArrayList;
 import javax.inject.Inject;
 
-public class FollowingEntityMapper {
+public class FollowsEntityMapper {
 
   private final UserEntityMapper userEntityMapper;
   private final StreamEntityMapper streamEntityMapper;
 
-  @Inject public FollowingEntityMapper(UserEntityMapper userEntityMapper, StreamEntityMapper streamEntityMapper) {
+  @Inject public FollowsEntityMapper(UserEntityMapper userEntityMapper, StreamEntityMapper streamEntityMapper) {
     this.userEntityMapper = userEntityMapper;
     this.streamEntityMapper = streamEntityMapper;
   }
 
-  public Following map(FollowingsEntity value) {
+  public Follows map(FollowsEntity value) {
 
-    Following following = new Following();
+    Follows following = new Follows();
 
     following.setMaxTimestamp(value.getPagination().getMaxTimestamp());
     following.setSinceTimestamp(value.getPagination().getSinceTimestamp());

@@ -41,7 +41,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String ID_SHOT = "idShot";
   private static final String LOGIN_TYPE = "loginType";
   private static final String FAVORITES = "Favorites";
-  private static final String FOLLOWING = "Following";
+  private static final String FOLLOWING = "Follows";
   private static final String FOLLOWERS = "Followers";
   private static final String SIGNUP_METHOD = "Signup method";
   private static final String EMAIL = "$email";

@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.views;
 
-import com.shootr.mobile.ui.model.FollowingModel;
+import com.shootr.mobile.ui.model.FollowModel;
 import com.shootr.mobile.ui.model.UserModel;
 
 public interface FollowView {
@@ -23,5 +23,5 @@ public interface FollowView {
 
   void registerAnalytics(boolean followers);
 
-  void renderItems(FollowingModel followings);
+  void renderItems(FollowModel followings);
 }

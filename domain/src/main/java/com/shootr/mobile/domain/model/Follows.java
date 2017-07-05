@@ -2,7 +2,7 @@ package com.shootr.mobile.domain.model;
 
 import java.util.List;
 
-public class Following {
+public class Follows {
 
   private long maxTimestamp;
   private long sinceTimestamp;

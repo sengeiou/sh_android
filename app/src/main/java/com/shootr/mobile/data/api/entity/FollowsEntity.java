@@ -3,7 +3,7 @@ package com.shootr.mobile.data.api.entity;
 import com.shootr.mobile.data.entity.FollowableEntity;
 import java.util.List;
 
-public class FollowingsEntity {
+public class FollowsEntity {
 
   PaginationApiEntity pagination;
   List<FollowableEntity> data;

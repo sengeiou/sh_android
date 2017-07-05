@@ -249,7 +249,7 @@
     <item name="android:text">@string/profile_follow</item>
   </style>
 
-  <!--Following button-->
+  <!--Follows button-->
   <style name="FollowingButton">
     <item name="android:background">@drawable/btn_follow</item>
   </style>

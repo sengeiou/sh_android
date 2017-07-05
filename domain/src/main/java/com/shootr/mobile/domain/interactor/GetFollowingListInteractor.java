@@ -3,7 +3,7 @@ package com.shootr.mobile.domain.interactor;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.model.FollowableType;
-import com.shootr.mobile.domain.model.Following;
+import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ public class GetFollowingListInteractor implements Interactor {
 
   private String idUser;
   private Long maxTimestamp;
-  private Callback<Following> callback;
+  private Callback<Follows> callback;
   private ErrorCallback errorCallback;
 
   @Inject public GetFollowingListInteractor(InteractorHandler interactorHandler,
@@ -26,7 +26,7 @@ public class GetFollowingListInteractor implements Interactor {
     this.followRepository = followRepository;
   }
 
-  public void getFollowingList(String idUser, Long maxTimestamp, Callback<Following> callback, ErrorCallback errorCallback) {
+  public void getFollowingList(String idUser, Long maxTimestamp, Callback<Follows> callback, ErrorCallback errorCallback) {
     this.idUser = idUser;
     this.maxTimestamp = maxTimestamp;
     this.callback = callback;
@@ -36,7 +36,7 @@ public class GetFollowingListInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      Following following =
+      Follows following =
           followRepository.getFollowing(idUser, FollowableType.FOLLOWABLE_TYPES, maxTimestamp);
       notifyLoaded(following);
     } catch (ShootrException error) {
@@ -44,7 +44,7 @@ public class GetFollowingListInteractor implements Interactor {
     }
   }
 
-  private void notifyLoaded(final Following result) {
+  private void notifyLoaded(final Follows result) {
     postExecutionThread.post(new Runnable() {
       @Override public void run() {
         callback.onLoaded(result);

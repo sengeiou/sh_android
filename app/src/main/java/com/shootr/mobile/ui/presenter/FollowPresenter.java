@@ -8,11 +8,11 @@ import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
-import com.shootr.mobile.domain.model.Following;
+import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
-import com.shootr.mobile.ui.model.mappers.FollowingModelMapper;
+import com.shootr.mobile.ui.model.mappers.FollowModelMapper;
 import com.shootr.mobile.ui.views.FollowView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ public class FollowPresenter implements Presenter {
   private final UnfollowInteractor unfollowInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
   private final GetFollowingListInteractor getFollowingListInteractor;
-  private final FollowingModelMapper followingModelMapper;
+  private final FollowModelMapper followingModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
   private FollowView followView;
@@ -36,7 +36,7 @@ public class FollowPresenter implements Presenter {
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor,
       GetFollowingListInteractor getFollowingListInteractor,
-      FollowingModelMapper followingModelMapper, ErrorMessageFactory errorMessageFactory) {
+      FollowModelMapper followingModelMapper, ErrorMessageFactory errorMessageFactory) {
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.followInteractor = followInteractor;
@@ -54,8 +54,8 @@ public class FollowPresenter implements Presenter {
   }
 
   public void loadFollowing(String idUser) {
-    getFollowingListInteractor.getFollowingList(idUser, 0L, new Interactor.Callback<Following>() {
-      @Override public void onLoaded(Following following) {
+    getFollowingListInteractor.getFollowingList(idUser, 0L, new Interactor.Callback<Follows>() {
+      @Override public void onLoaded(Follows following) {
         followView.renderItems(followingModelMapper.transform(following));
       }
     }, new Interactor.ErrorCallback() {

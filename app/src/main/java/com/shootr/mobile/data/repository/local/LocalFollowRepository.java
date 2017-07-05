@@ -5,7 +5,7 @@ import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
-import com.shootr.mobile.domain.model.Following;
+import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.follow.FollowRepository;
@@ -60,7 +60,7 @@ public class LocalFollowRepository implements FollowRepository {
         return followDataSource.getMutuals();
     }
 
-    @Override public Following getFollowing(String idUser, String[] type, Long maxTimestamp) {
+    @Override public Follows getFollowing(String idUser, String[] type, Long maxTimestamp) {
         throw new IllegalArgumentException("Not local implementation");
     }
 

@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.api.service;
 
-import com.shootr.mobile.data.api.entity.FollowingsEntity;
+import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.api.entity.UserApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.BlockEntity;
@@ -75,7 +75,7 @@ public interface UserApiService {
     List<UserEntity> getRelatedUsers(@Query("idUser") String idUser,
         @Query("modifiedTimestamp") Long timestamp) throws IOException, ApiException;
 
-    @GET("/followable/following") FollowingsEntity getFollowing(@Query("idUser") String idUser,
+    @GET("/followable/following") FollowsEntity getFollowing(@Query("idUser") String idUser,
         @Query("resultType") String[] type, @Query("sinceTimestamp") Long timestamp)
         throws IOException, ApiException;
 }

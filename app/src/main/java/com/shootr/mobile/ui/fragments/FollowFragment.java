@@ -26,7 +26,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnSearchStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
-import com.shootr.mobile.ui.model.FollowingModel;
+import com.shootr.mobile.ui.model.FollowModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.FollowPresenter;
@@ -235,7 +235,7 @@ public class FollowFragment extends BaseFragment
 
   }
 
-  @Override public void renderItems(FollowingModel followings) {
+  @Override public void renderItems(FollowModel followings) {
     userList.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
     adapter.setItems(followings.getData());
