@@ -30,10 +30,9 @@ public class OnBoardingStreamPresenter implements Presenter {
   private boolean streamsLoaded = false;
   private boolean getStartedClicked = false;
   private ArrayList<String> favoritesIdStream = new ArrayList<>();
-  private HashMap<String, String> favoritesInfo = new HashMap<>();
+  private HashMap<String, ShortStream> favoritesInfo = new HashMap<>();
 
-  @Inject
-  public OnBoardingStreamPresenter(StreamsListInteractor streamsListInteractor,
+  @Inject public OnBoardingStreamPresenter(StreamsListInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
       AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
       ErrorMessageFactory errorMessageFactory,
@@ -82,8 +81,10 @@ public class OnBoardingStreamPresenter implements Presenter {
     for (OnBoardingStreamModel onBoardingStreamModel : onBoardingStreamModels) {
       if (onBoardingStreamModel.isFavorite()) {
         favoritesIdStream.add(onBoardingStreamModel.getStreamModel().getIdStream());
-        favoritesInfo.put(onBoardingStreamModel.getStreamModel().getIdStream(),
-            onBoardingStreamModel.getStreamModel().getTitle());
+        ShortStream shortStream = new ShortStream();
+        shortStream.setStrategic(onBoardingStreamModel.getStreamModel().isStrategic());
+        shortStream.setTitle(onBoardingStreamModel.getStreamModel().getTitle());
+        favoritesInfo.put(onBoardingStreamModel.getStreamModel().getIdStream(), shortStream);
       }
     }
   }
@@ -110,31 +111,36 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   private void sendFavorites() {
     if (!favoritesIdStream.isEmpty()) {
-      addSuggestedfavoritesInteractor.addSuggestedFavorites(favoritesIdStream, new Interactor.CompletedCallback() {
-        @Override public void onCompleted() {
-          sendAnalytics();
-          checkStreamsLoaded();
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-          showViewError(error);
-        }
-      });
+      addSuggestedfavoritesInteractor.addSuggestedFavorites(favoritesIdStream,
+          new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+              sendAnalytics();
+              checkStreamsLoaded();
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              showViewError(error);
+            }
+          });
     } else {
       checkStreamsLoaded();
     }
   }
 
   private void sendAnalytics() {
-    for (Map.Entry<String, String> entry : favoritesInfo.entrySet()) {
-      onBoardingView.sendAnalytics(entry.getKey(), entry.getValue());
+    for (Map.Entry<String, ShortStream> entry : favoritesInfo.entrySet()) {
+      onBoardingView.sendAnalytics(entry.getKey(), entry.getValue().getTitle(),
+          entry.getValue().isStrategic());
     }
   }
 
-  public void putFavorite(String idStream, String streamTitle) {
+  public void putFavorite(String idStream, String streamTitle, boolean isStrategic) {
     if (!favoritesIdStream.contains(idStream)) {
       favoritesIdStream.add(idStream);
-      favoritesInfo.put(idStream, streamTitle);
+      ShortStream shortStream = new ShortStream();
+      shortStream.setTitle(streamTitle);
+      shortStream.setStrategic(isStrategic);
+      favoritesInfo.put(idStream, shortStream);
     }
   }
 
@@ -171,5 +177,26 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   @Override public void pause() {
     /* no-op */
+  }
+
+  private class ShortStream {
+    private String title;
+    private boolean strategic;
+
+    public String getTitle() {
+      return title;
+    }
+
+    public void setTitle(String title) {
+      this.title = title;
+    }
+
+    public boolean isStrategic() {
+      return strategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+      this.strategic = strategic;
+    }
   }
 }
