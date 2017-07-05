@@ -70,7 +70,8 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
       adapter = new OnBoardingStreamsAdapter(new OnBoardingFavoriteClickListener() {
         @Override public void onFavoriteClick(OnBoardingStreamModel onBoardingStream) {
           presenter.putFavorite(onBoardingStream.getStreamModel().getIdStream(),
-              onBoardingStream.getStreamModel().getTitle());
+              onBoardingStream.getStreamModel().getTitle(),
+              onBoardingStream.getStreamModel().isStrategic());
           adapter.updateFavorite(onBoardingStream);
         }
 
@@ -103,7 +104,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     adapter.notifyDataSetChanged();
   }
 
-  @Override public void sendAnalytics(String idStream, String streamTitle) {
+  @Override public void sendAnalytics(String idStream, String streamTitle, boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(this);
     builder.setActionId(analyticsActionFavoriteStream);
@@ -111,6 +112,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     builder.setSource(onBoardingSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(streamTitle);
+    builder.setIsStrategic(isStrategic);
     builder.setIdStream(idStream);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);

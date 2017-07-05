@@ -155,18 +155,19 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         openPollVote(idPoll, streamTitle);
       }
     }, new ActivityFollowUnfollowListener() {
-      @Override public void onFollow(String idUser, String username) {
+      @Override public void onFollow(String idUser, String username, Boolean isStrategic) {
         timelinePresenter.followUser(idUser);
-        sendFollowAnalytics(idUser, username);
+        sendFollowAnalytics(idUser, username, isStrategic);
       }
 
       @Override public void onUnfollow(String idUser, String username) {
         setupUnFollowDialog(idUser, username);
       }
     }, new ActivityFavoriteClickListener() {
-      @Override public void onFavoriteClick(String idStream, String streamTitle) {
+      @Override
+      public void onFavoriteClick(String idStream, String streamTitle, boolean isStrategic) {
         timelinePresenter.addFavorite(idStream);
-        sendFavoriteAnalytics(idStream, streamTitle);
+        sendFavoriteAnalytics(idStream, streamTitle, isStrategic);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
@@ -201,7 +202,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  private void sendFollowAnalytics(String idTargetUser, String targetUsername) {
+  private void sendFollowAnalytics(String idTargetUser, String targetUsername,
+      Boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFollow);
@@ -209,11 +211,12 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idTargetUser);
     builder.setTargetUsername(targetUsername);
+    builder.setIsStrategic(isStrategic);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  private void sendFavoriteAnalytics(String idStream, String streamTitle) {
+  private void sendFavoriteAnalytics(String idStream, String streamTitle, boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
@@ -221,6 +224,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     builder.setSource(activitySource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(streamTitle);
+    builder.setIsStrategic(isStrategic);
     builder.setIdStream(idStream);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);

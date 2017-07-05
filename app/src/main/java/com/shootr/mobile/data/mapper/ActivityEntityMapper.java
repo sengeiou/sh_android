@@ -29,6 +29,7 @@ public class ActivityEntityMapper {
             Activity.ActivityStreamInfo eventInfo = new Activity.ActivityStreamInfo();
             eventInfo.setIdStream(activityEntity.getIdStream());
             eventInfo.setStreamTitle(activityEntity.getStreamTitle());
+            eventInfo.setStrategic(activityEntity.isStrategic());
             activity.setStreamInfo(eventInfo);
         }
 
@@ -36,6 +37,7 @@ public class ActivityEntityMapper {
         userInfo.setIdUser(activityEntity.getIdUser());
         userInfo.setUsername(activityEntity.getUsername());
         userInfo.setAvatar(activityEntity.getUserPhoto());
+        userInfo.setStrategic(activityEntity.isStrategic());
         activity.setUserInfo(userInfo);
 
         activity.setIdTargetUser(activityEntity.getIdTargetUser());

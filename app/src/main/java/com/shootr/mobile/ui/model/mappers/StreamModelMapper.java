@@ -41,6 +41,7 @@ public class StreamModelMapper {
         streamModel.setVerifiedUser(stream.isVerifiedUser());
         streamModel.setFavorite(stream.isFavorite());
         streamModel.setTotalFollowingWatchers(stream.getTotalFollowingWatchers());
+        streamModel.setStrategic(stream.isStrategic());
         return streamModel;
     }
 

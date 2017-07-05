@@ -6,6 +6,7 @@ public class EmbedUserApiEntity {
     private String userName;
     private String name;
     private String photo;
+    private boolean strategic;
 
     private Long birth;
     private Long modified;
@@ -65,5 +66,13 @@ public class EmbedUserApiEntity {
 
     public void setRevision(Integer revision) {
         this.revision = revision;
+    }
+
+    public Boolean isStrategic() {
+        return strategic;
+    }
+
+    public void setStrategic(Boolean strategic) {
+        this.strategic = strategic;
     }
 }

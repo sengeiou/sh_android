@@ -223,6 +223,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(streamsSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(streamResultModel.getStreamModel().isStrategic());
     builder.setStreamName(streamResultModel.getStreamModel().getTitle());
     builder.setIdStream(streamResultModel.getStreamModel().getIdStream());
     analyticsTool.analyticsSendAction(builder);

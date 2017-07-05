@@ -228,6 +228,7 @@ public class AllParticipantsActivity extends BaseToolbarDecoratedActivity
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
+    builder.setIsStrategic(user.isStrategic());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }

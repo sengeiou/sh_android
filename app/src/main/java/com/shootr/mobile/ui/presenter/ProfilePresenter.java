@@ -596,6 +596,10 @@ public class ProfilePresenter implements Presenter {
     return userModel.getUsername();
   }
 
+  public Boolean getIsStrategic() {
+    return userModel.isStrategic();
+  }
+
   public void onChannelClick() {
     if (userModel != null) {
       if (isCurrentUser()) {

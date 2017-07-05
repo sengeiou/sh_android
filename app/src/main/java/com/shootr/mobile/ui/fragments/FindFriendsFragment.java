@@ -94,6 +94,7 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
     builder.setLabelId(analyticsLabelFollow);
     builder.setSource(discoverUserSearch);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(user.isStrategic());
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);

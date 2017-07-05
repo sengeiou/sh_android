@@ -57,6 +57,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
     contentValues.put(UserTable.NUM_MUTUALS, entity.getNumMutuals());
     contentValues.put(UserTable.FIRST_SESSION_ACTIVATION,
         (entity.isFirstSessionActivation() == null ? false : entity.isFirstSessionActivation()));
+    contentValues.put(UserTable.STRATEGIC, entity.isStrategic());
     setSynchronizedtoContentValues(entity, contentValues);
   }
 
@@ -96,6 +97,8 @@ public class UserEntityDBMapper extends GenericDBMapper {
     entity.setFirstSessionActivation(
         (cursor.getInt(cursor.getColumnIndex(UserTable.FIRST_SESSION_ACTIVATION)) == 1) ? true
             : false);
+    entity.setStrategic(
+        (cursor.getInt(cursor.getColumnIndex(UserTable.STRATEGIC)) == 1) ? true : false);
     setSynchronizedfromCursor(cursor, entity);
   }
 

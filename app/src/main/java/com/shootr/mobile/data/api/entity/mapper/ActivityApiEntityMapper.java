@@ -24,6 +24,7 @@ public class ActivityApiEntityMapper {
         activityEntity.setUsername(userApiEntity.getUserName());
         activityEntity.setIdUser(userApiEntity.getIdUser());
         activityEntity.setUserPhoto(userApiEntity.getPhoto());
+        activityEntity.setStrategic(userApiEntity.isStrategic());
 
         EmbedUserApiEntity targetUser = activityApiEntity.getTargetUser();
         if (targetUser != null) {

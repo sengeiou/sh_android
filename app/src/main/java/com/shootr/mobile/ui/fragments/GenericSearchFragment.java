@@ -158,6 +158,7 @@ public class GenericSearchFragment extends BaseFragment
     builder.setSource(discoverSearchSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(stream.getTitle());
+    builder.setIsStrategic(stream.isStrategic());
     builder.setIdStream(stream.getIdStream());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
@@ -170,6 +171,7 @@ public class GenericSearchFragment extends BaseFragment
     builder.setLabelId(analyticsLabelFollow);
     builder.setSource(discoverUserSearch);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(user.isStrategic());
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);

@@ -20,6 +20,7 @@ public class ActivityModel {
     private String pollQuestion;
     private boolean amIFollowing;
     private boolean isFavorite;
+    private boolean strategic;
     private String pollOptionText;
 
     public String getUserPhoto() {
@@ -148,6 +149,14 @@ public class ActivityModel {
 
     public void setFavorite(boolean favorite) {
         isFavorite = favorite;
+    }
+
+    public boolean isStrategic() {
+        return strategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+        this.strategic = strategic;
     }
 
     public String getPollOptionText() {

@@ -11,7 +11,7 @@ public interface OnBoardingView {
 
   void renderOnBoardingList(List<OnBoardingStreamModel> onBoardingStreamModels);
 
-  void sendAnalytics(String idStream, String streamTitle);
+  void sendAnalytics(String idStream, String streamTitle, boolean isStrategic);
 
   void goToStreamList();
 

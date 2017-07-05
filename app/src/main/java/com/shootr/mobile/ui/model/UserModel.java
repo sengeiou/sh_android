@@ -26,6 +26,7 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private Boolean socialLogin;
   private Long createdStreamsCount;
   private Long favoritedStreamsCount;
+  private boolean isStrategic;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -153,6 +154,14 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   public void setJoinStreamTimestamp(Long joinStreamTimestamp) {
     this.joinStreamTimestamp = joinStreamTimestamp;
+  }
+
+  public boolean isStrategic() {
+    return isStrategic;
+  }
+
+  public void setStrategic(boolean strategic) {
+    isStrategic = strategic;
   }
 
   @Override public UserModel clone() {

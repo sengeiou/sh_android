@@ -223,6 +223,7 @@ public class Activity {
     private String idUser;
     private String username;
     private String avatar;
+    private boolean strategic;
 
     public String getAvatar() {
       return avatar;
@@ -246,6 +247,14 @@ public class Activity {
 
     public void setIdUser(String idUser) {
       this.idUser = idUser;
+    }
+
+    public boolean isStrategic() {
+      return strategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+      this.strategic = strategic;
     }
 
     @Override public boolean equals(Object o) {
@@ -276,6 +285,7 @@ public class Activity {
     private String idStream;
     private String streamTitle;
     private String idUser;
+    private boolean strategic;
 
     public String getStreamTitle() {
       return streamTitle;
@@ -291,6 +301,14 @@ public class Activity {
 
     public void setIdStream(String idStream) {
       this.idStream = idStream;
+    }
+
+    public boolean isStrategic() {
+      return strategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+      this.strategic = strategic;
     }
 
     @Override public boolean equals(Object o) {

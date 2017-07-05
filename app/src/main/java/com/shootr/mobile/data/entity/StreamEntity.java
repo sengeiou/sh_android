@@ -29,6 +29,7 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private List<String> idUserContributors;
     private int iAmContributor;
     private int totalFollowingWatchers;
+    private Boolean strategic;
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -224,6 +225,14 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setContributorCount(Long contributorCount) {
         this.contributorCount = contributorCount;
+    }
+
+    public Boolean isStrategic() {
+        return strategic;
+    }
+
+    public void setStrategic(Boolean strategic) {
+        this.strategic = strategic;
     }
 
     public List<String> getIdUserContributors() {

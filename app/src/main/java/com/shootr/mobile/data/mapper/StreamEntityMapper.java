@@ -50,6 +50,7 @@ public class StreamEntityMapper {
     stream.setReadWriteMode(streamEntity.getReadWriteMode());
     stream.setVerifiedUser(
         (streamEntity.getVerifiedUser() != null) ? (streamEntity.getVerifiedUser() == 1) : false);
+    stream.setStrategic(streamEntity.isStrategic());
     stream.setContributorCount(streamEntity.getContributorCount());
     if (streamEntity.getIdUserContributors() != null) {
       stream.setCurrentUserContributor(
@@ -106,5 +107,6 @@ public class StreamEntityMapper {
     entityTemplate.setiAmContributor(stream.isCurrentUserContributor() ? 1 : 0);
     entityTemplate.setContributorCount(stream.getContributorCount());
     entityTemplate.setTotalFollowingWatchers(stream.getTotalFollowingWatchers());
+    entityTemplate.setStrategic(stream.isStrategic());
   }
 }

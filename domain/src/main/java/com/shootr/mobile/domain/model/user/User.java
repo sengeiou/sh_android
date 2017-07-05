@@ -40,6 +40,7 @@ public class User implements Searchable {
   private Long receivedReactions;
   private Long numMutuals;
   private Boolean firstSessionActivation;
+  private boolean isStrategic;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -175,6 +176,14 @@ public class User implements Searchable {
 
   public void setSocialLogin(boolean socialLogin) {
     this.socialLogin = socialLogin;
+  }
+
+  public boolean isStrategic() {
+    return isStrategic;
+  }
+
+  public void setStrategic(boolean strategic) {
+    isStrategic = strategic;
   }
 
   @Override public boolean equals(Object o) {

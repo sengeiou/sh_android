@@ -20,6 +20,7 @@ public class ActivityEntity extends Synchronized {
     private String idPoll;
     private String pollQuestion;
     private String pollOptionText;
+    private boolean strategic;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -141,5 +142,13 @@ public class ActivityEntity extends Synchronized {
 
     public void setPollOptionText(String pollOptionText) {
         this.pollOptionText = pollOptionText;
+    }
+
+    public boolean isStrategic() {
+        return strategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+        this.strategic = strategic;
     }
 }
