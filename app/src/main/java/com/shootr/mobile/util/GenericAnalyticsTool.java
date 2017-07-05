@@ -296,6 +296,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         props.put(FAVORITES, user.getFavoritedStreamsCount());
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
+        props.put(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
         if (firstSession != null) {
           props.put(FIRST_SESSION, firstSession);
         }
