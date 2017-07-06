@@ -7,9 +7,7 @@ import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.LastDatabaseVersion;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
-import com.shootr.mobile.data.repository.local.LocalDeviceRepository;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
-import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.repository.DatabaseUtils;
 import javax.inject.Inject;
 
@@ -21,20 +19,17 @@ public class DatabaseVersionUtils implements DatabaseUtils {
   private final Context context;
   private final BooleanPreference shouldShowIntro;
   private final CacheUtils cacheUtils;
-  private final LocalDeviceRepository localDeviceRepository;
-  private Device device;
 
   @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
       @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion,
       SQLiteOpenHelper dbOpenHelper, @ShouldShowIntro BooleanPreference shouldShowIntro,
-      CacheUtils cacheUtils, LocalDeviceRepository localDeviceRepository) {
+      CacheUtils cacheUtils) {
     this.lastDatabaseVersion = lastDatabaseVersion;
     this.currentVersion = currentVersion;
     this.context = context;
     this.dbOpenHelper = dbOpenHelper;
     this.shouldShowIntro = shouldShowIntro;
     this.cacheUtils = cacheUtils;
-    this.localDeviceRepository = localDeviceRepository;
   }
 
   public void clearDataOnNewerVersion() {
@@ -50,21 +45,9 @@ public class DatabaseVersionUtils implements DatabaseUtils {
 
   protected void resetAppData() {
     boolean previousShouldShowIntro = shouldShowIntro.get();
-    getDeviceInfo();
     clearDatabase();
     updateStoredDatabaseVersion();
     shouldShowIntro.set(previousShouldShowIntro);
-    putDeviceInfo();
-  }
-
-  private void getDeviceInfo() {
-    device = localDeviceRepository.getCurrentDevice();
-  }
-
-  private void putDeviceInfo() {
-    if (device != null) {
-      localDeviceRepository.putDevice(device);
-    }
   }
 
   private void clearDatabase() {
