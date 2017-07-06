@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
+import com.shootr.mobile.ui.fragments.FollowFragment;
 import com.shootr.mobile.ui.fragments.UserFollowsFragment;
 import timber.log.Timber;
 
@@ -68,7 +69,7 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
     }
 
     private void setUserListFragment() {
-        UserFollowsFragment userFollowsFragment = UserFollowsFragment.newInstance(userId, followType);
+        FollowFragment userFollowsFragment = FollowFragment.newInstance(userId, followType);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         //TODO check que no hubiera ya uno? necesario?
         transaction.add(R.id.container, userFollowsFragment, UserFollowsFragment.TAG);

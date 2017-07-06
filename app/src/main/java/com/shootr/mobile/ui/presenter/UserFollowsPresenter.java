@@ -32,8 +32,10 @@ public class UserFollowsPresenter implements Presenter {
     private boolean isInLastPage = false;
 
     @Inject public UserFollowsPresenter(GetUserFollowingInteractor getUserFollowingInteractor,
-      GetUserFollowersInteractor getUserFollowersInteractor, FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor, ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper) {
+        GetUserFollowersInteractor getUserFollowersInteractor,
+        FollowInteractor followInteractor,
+        UnfollowInteractor unfollowInteractor, ErrorMessageFactory errorMessageFactory,
+        UserModelMapper userModelMapper) {
         this.getUserFollowingInteractor = getUserFollowingInteractor;
         this.getUserFollowersInteractor = getUserFollowersInteractor;
         this.followInteractor = followInteractor;

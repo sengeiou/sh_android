@@ -27,6 +27,9 @@ import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.api.service.UserSettingsApiService;
 import com.shootr.mobile.data.api.service.VideoApiService;
+import com.shootr.mobile.data.entity.FollowableEntity;
+import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.util.GsonAdapter;
 import com.shootr.mobile.util.JsonAdapter;
@@ -118,6 +121,12 @@ import timber.log.Timber;
   }
 
   @Provides @Singleton Gson provideGson() {
+
+    final RuntimeTypeAdapterFactory<FollowableEntity> typeFactory = RuntimeTypeAdapterFactory
+        .of(FollowableEntity.class, "resultType")
+        .registerSubtype(StreamEntity.class, "STREAM")
+        .registerSubtype(UserEntity.class, "USER");
+
     return new GsonBuilder() //
         .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
           @Override public Date deserialize(JsonElement json, Type typeOfT,
@@ -129,7 +138,7 @@ import timber.log.Timber;
           public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(src.getTime());
           }
-        }).create();
+        }).registerTypeAdapterFactory(typeFactory).create();
   }
 
   @Provides @Singleton JsonAdapter provideJsonAdapter(Gson gson) {

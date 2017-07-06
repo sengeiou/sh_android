@@ -1,9 +1,10 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.util.List;
 
-public class StreamEntity extends Synchronized implements Comparable<StreamEntity>, SearchableEntity {
+public class StreamEntity extends FollowableEntity implements Comparable<StreamEntity>, SearchableEntity {
 
     private String idStream;
     private String idUser;
@@ -30,6 +31,11 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
     private int iAmContributor;
     private int totalFollowingWatchers;
     private Boolean strategic;
+    private Boolean following;
+
+    public StreamEntity() {
+        setResultType(FollowableType.STREAM);
+    }
 
     public List<UserEntity> getWatchers() {
         return watchers;
@@ -261,5 +267,13 @@ public class StreamEntity extends Synchronized implements Comparable<StreamEntit
 
     public void setTotalFollowingWatchers(int totalFollowingWatchers) {
         this.totalFollowingWatchers = totalFollowingWatchers;
+    }
+
+    public Boolean getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Boolean following) {
+        this.following = following;
     }
 }

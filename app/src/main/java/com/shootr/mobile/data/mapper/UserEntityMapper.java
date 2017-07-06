@@ -49,7 +49,7 @@ public class UserEntityMapper {
     user.setNumMutuals(userEntity.getNumMutuals());
     user.setFirstSessionActivation(userEntity.isFirstSessionActivation());
     user.setFollower(isFollower);
-    user.setFollowing(isFollowing);
+    user.setFollowing(userEntity.isFollowing() == null ? false : userEntity.isFollowing());
 
     user.setJoinStreamDate(userEntity.getJoinStreamDate());
     user.setReceivedReactions(
@@ -96,6 +96,7 @@ public class UserEntityMapper {
     userEntity.setAnalyticsUserType(user.getAnalyticsUserType());
     userEntity.setReceivedReactions(user.getReceivedReactions());
     userEntity.setStrategic(user.isStrategic());
+    userEntity.setFollowing(user.isFollowing());
 
     return userEntity;
   }

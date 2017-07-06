@@ -60,6 +60,9 @@ public class StreamEntityMapper {
     }
 
     stream.setTotalFollowingWatchers(streamEntity.getTotalFollowingWatchers());
+    if (streamEntity.getFollowing() != null) {
+      stream.setFavorite(streamEntity.getFollowing());
+    }
     return stream;
   }
 
