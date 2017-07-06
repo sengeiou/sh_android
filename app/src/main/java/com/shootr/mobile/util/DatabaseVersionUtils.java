@@ -39,7 +39,9 @@ public class DatabaseVersionUtils implements DatabaseUtils {
 
   public void clearDataOnNewerVersion() {
     if (needsToClearData()) {
+      getDeviceInfo();
       resetAppData();
+      putDeviceInfo();
     }
   }
 
@@ -50,11 +52,9 @@ public class DatabaseVersionUtils implements DatabaseUtils {
 
   protected void resetAppData() {
     boolean previousShouldShowIntro = shouldShowIntro.get();
-    getDeviceInfo();
     clearDatabase();
     updateStoredDatabaseVersion();
     shouldShowIntro.set(previousShouldShowIntro);
-    putDeviceInfo();
   }
 
   private void getDeviceInfo() {
