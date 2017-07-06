@@ -63,4 +63,9 @@ import javax.inject.Singleton;
     BooleanPreference providePublicVoteAlertPreference(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "public_vote_alert", true);
     }
+
+    @Provides @Singleton @DevicePref DevicePreferences provideDevicePreferences(
+        SharedPreferences preferences) {
+        return new DevicePreferences(preferences, "device_preference", null);
+    }
 }

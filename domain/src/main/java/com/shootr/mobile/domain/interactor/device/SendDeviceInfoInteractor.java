@@ -43,6 +43,7 @@ public class SendDeviceInfoInteractor implements Interactor {
             Device remoteDevice = remoteDeviceRepository.putDevice(device);
             localDeviceRepository.putDevice(remoteDevice);
             sessionRepository.setDeviceId(remoteDevice.getIdDevice());
+            sessionRepository.setDevice(remoteDevice);
         } catch (ShootrException e) {
             /* fail silently */
         }
