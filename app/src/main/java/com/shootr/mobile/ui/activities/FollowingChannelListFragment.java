@@ -95,7 +95,9 @@ public class FollowingChannelListFragment extends BaseFragment
   }
 
   @Override public void hideLoading() {
-    loadingView.setVisibility(View.GONE);
+    if (loadingView != null) {
+      loadingView.setVisibility(View.GONE);
+    }
   }
 
   @Override public void showEmpty() {
@@ -125,7 +127,11 @@ public class FollowingChannelListFragment extends BaseFragment
   }
 
   @Override public void updateTitle(int unreads) {
-    ((ChannelsContainerFragment) getParentFragment()).setTabTitle(this, unreads);
+    try {
+      ((ChannelsContainerFragment) getParentFragment()).setTabTitle(this, unreads);
+    } catch (NullPointerException error) {
+      /* no-op */
+    }
   }
 
   @Override public void onResume() {

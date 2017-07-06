@@ -131,7 +131,7 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
     try {
       ((ChannelsContainerFragment) getParentFragment()).setTabTitle(this, unreads);
     } catch (NullPointerException error) {
-      crashReportTool.logException(error);
+      /* no-op */
     }
   }
 
