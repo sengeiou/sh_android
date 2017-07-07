@@ -322,7 +322,6 @@
     </activity>
     <activity
         android:name=".ui.activities.SetupNotificationsActivity"
-        android:label="@string/title_activity_setup_notifications"
         android:theme="@style/ShootrTheme">
     </activity>
   </application>

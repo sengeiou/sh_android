@@ -50,8 +50,7 @@ public class UserFollowsPresenterTest {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper = new UserModelMapper(streamJoinDateFormatter);
         presenter = new UserFollowsPresenter(getUserFollowingInteractor,
-          getUserFollowersInteractor,
-          followInteractor,
+          getUserFollowersInteractor, followInteractor,
           unfollowInteractor,
           errorMessageFactory,
           userModelMapper);

@@ -36,6 +36,7 @@ public interface AnalyticsTool {
     String idTargetUser;
     String targetUsername;
     String notificationName;
+    Boolean isStrategic;
     String pushRedirection;
     String streamName;
     String idStream;
@@ -131,6 +132,14 @@ public interface AnalyticsTool {
 
     public void setTargetUsername(String targetUsername) {
       this.targetUsername = targetUsername;
+    }
+
+    public Boolean getIsStrategic() {
+      return isStrategic;
+    }
+
+    public void setIsStrategic(Boolean isStrategic) {
+      this.isStrategic = isStrategic;
     }
 
     public String getStreamName() {

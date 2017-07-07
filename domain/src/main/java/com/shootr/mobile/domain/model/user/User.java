@@ -1,12 +1,14 @@
 package com.shootr.mobile.domain.model.user;
 
 import com.shootr.mobile.domain.model.EntityMetadata;
+import com.shootr.mobile.domain.model.Followable;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.util.Comparator;
 import java.util.Date;
 
-public class User implements Searchable {
+public class User implements Searchable, Followable {
 
   private String idUser;
   private String username;
@@ -40,6 +42,7 @@ public class User implements Searchable {
   private Long receivedReactions;
   private Long numMutuals;
   private Boolean firstSessionActivation;
+  private boolean isStrategic;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -177,6 +180,14 @@ public class User implements Searchable {
     this.socialLogin = socialLogin;
   }
 
+  public boolean isStrategic() {
+    return isStrategic;
+  }
+
+  public void setStrategic(boolean strategic) {
+    isStrategic = strategic;
+  }
+
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (!(o instanceof User)) return false;
@@ -254,6 +265,10 @@ public class User implements Searchable {
 
   @Override public String getSearchableType() {
     return SearchableType.USER;
+  }
+
+  @Override public String getFollowableType() {
+    return FollowableType.USER;
   }
 
   public static class UsernameComparator implements Comparator<User> {

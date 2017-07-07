@@ -3,11 +3,14 @@ package com.shootr.mobile.data.repository;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.DeviceId;
+import com.shootr.mobile.data.prefs.DevicePref;
+import com.shootr.mobile.data.prefs.DevicePreferences;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
+import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -23,6 +26,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final StringPreference lastTimeFilteredPreference;
   private final BooleanPreference publicVoteAlertPreference;
   private final StringPreference deviceIdPreference;
+  private final DevicePreferences devicePreference;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
   private User currentUser;
@@ -33,14 +37,15 @@ public class SessionRepositoryImpl implements SessionRepository {
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
-      @DeviceId StringPreference deviceIdPreference, CrashReportTool crashReportTool,
-      AnalyticsTool analyticsTool) {
+      @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
+      CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.timelineFilterPreference = timelineFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.publicVoteAlertPreference = publicVoteAlertPreference;
     this.deviceIdPreference = deviceIdPreference;
+    this.devicePreference = devicePreference;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
@@ -121,5 +126,13 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Override public void setDeviceId(String device) {
     deviceIdPreference.set(device);
+  }
+
+  @Override public void setDevice(Device device) {
+    devicePreference.set(device);
+  }
+
+  @Override public Device getDevice() {
+    return devicePreference.get();
   }
 }

@@ -281,6 +281,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     builder.setLabelId(analyticsLabelFollow);
     builder.setSource(streamDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(user.isStrategic());
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);

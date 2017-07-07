@@ -1,62 +1,31 @@
 package com.shootr.mobile.ui.adapters.holders;
 
-import android.support.annotation.NonNull;
 import android.view.View;
-import com.sackcentury.shinebuttonlib.ShineButton;
+import butterknife.BindString;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 
-public class StartedShootingViewHolder extends StreamActivityViewHolder {
+public class StartedShootingViewHolder extends ShotActivityViewHolder {
 
-    private final ActivityFavoriteClickListener activityFavoriteClickListener;
+    @BindString(R.string.started_shooting_activity_text_pattern) String startedShootingPattern;
+    @BindString(R.string.started_shooting_activity_text_pattern_with_comment) String startedShootingPatternWithComment;
 
     public StartedShootingViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
-        OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClick,
-        ActivityFavoriteClickListener activityFavoriteClickListener) {
-        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClick);
-        this.activityFavoriteClickListener = activityFavoriteClickListener;
+        OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener) {
+        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClickListener);
     }
 
-    @NonNull protected String getCommentPattern() {
-        return getContext().getString(R.string.started_shooting_activity_text_pattern);
+    @Override protected String getActivitySimpleComment(ActivityModel activity) {
+        return String.format(startedShootingPattern, activity.getStreamTitle());
     }
 
-    @Override protected void renderFavorite(final ActivityModel activityModel) {
-        if (activityModel.getShot().getImage() == null
-            || activityModel.getShot().getImage().getImageUrl() == null) {
-            image.setVisibility(View.GONE);
-            favoriteButton.setVisibility(View.GONE);
-            favoriteButton.setChecked(activityModel.isFavorite());
-            favoriteButton.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View view) {
-                    if (((ShineButton) view).isChecked()) {
-                        activityFavoriteClickListener.onFavoriteClick(activityModel.getIdStream(),
-                            activityModel.getStreamTitle());
-                    } else {
-                        activityFavoriteClickListener.onRemoveFavoriteClick(
-                            activityModel.getIdStream());
-                    }
-                }
-            });
-        } else {
-            image.setVisibility(View.VISIBLE);
-            favoriteButton.setVisibility(View.GONE);
-        }
-    }
-
-    @Override protected void renderImage(ActivityModel activity) {
-        String shotImage = activity.getShot().getImage().getImageUrl();
-        if (shotImage != null) {
-            image.setVisibility(View.VISIBLE);
-            imageLoader.load(shotImage, image);
-        } else {
-            image.setVisibility(View.GONE);
-        }
+    @Override
+    protected String getActivityCommentPrefix(ActivityModel activity) {
+        return String.format(startedShootingPatternWithComment, activity.getStreamTitle());
     }
 
 }

@@ -1,5 +1,7 @@
 package com.shootr.mobile.domain.model.stream;
 
+import com.shootr.mobile.domain.model.Followable;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.user.User;
@@ -8,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Stream implements Searchable {
+public class Stream implements Searchable, Followable {
 
     private String id;
     private String authorId;
@@ -32,6 +34,7 @@ public class Stream implements Searchable {
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFavorite;
+    private boolean isStrategic;
     private int totalFollowingWatchers;
 
     public Boolean isRemoved() {
@@ -216,8 +219,12 @@ public class Stream implements Searchable {
         this.readWriteMode = readWriteMode;
     }
 
-    @Override public String getSearchableType() {
+    @Override public String getFollowableType() {
         return SearchableType.STREAM;
+    }
+
+    @Override public String getSearchableType() {
+        return FollowableType.STREAM;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {
@@ -274,6 +281,14 @@ public class Stream implements Searchable {
 
     public void setCurrentUserContributor(boolean currentUserContributor) {
         isCurrentUserContributor = currentUserContributor;
+    }
+
+    public boolean isStrategic() {
+        return isStrategic;
+    }
+
+    public void setStrategic(boolean strategic) {
+        isStrategic = strategic;
     }
 
     public boolean isFavorite() {

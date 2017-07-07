@@ -247,6 +247,7 @@ public class ContributorsActivity extends BaseToolbarDecoratedActivity
         builder.setLabelId(analyticsLabelFollow);
         builder.setSource(contributorsSource);
         builder.setUser(sessionRepository.getCurrentUser());
+        builder.setIsStrategic(user.isStrategic());
         builder.setIdTargetUser(user.getIdUser());
         builder.setTargetUsername(user.getUsername());
         analyticsTool.analyticsSendAction(builder);

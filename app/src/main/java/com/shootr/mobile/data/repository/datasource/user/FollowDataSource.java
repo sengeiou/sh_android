@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
+import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
@@ -27,4 +28,8 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     List<String> getMutuals();
 
     List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp);
+
+    FollowsEntity getFollowings(String idUser, String[] type, Long maxTimestamp);
+
+    FollowsEntity getFollowers(String idUser, String[] type, Long maxTimestamp);
 }

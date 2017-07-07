@@ -92,9 +92,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor, ReshootInteractor reshootInteractor,
-      UndoReshootInteractor undoReshootInteractor,
-      ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper, @Main Bus bus,
-      ErrorMessageFactory errorMessageFactory, Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
+      UndoReshootInteractor undoReshootInteractor, ShotModelMapper shotModelMapper,
+      StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
+      Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       CreateStreamInteractor createStreamInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
       SessionRepository sessionRepository) {
@@ -787,5 +787,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         streamTimelineView.showError(errorMessageFactory.getMessageForError(error));
       }
     });
+  }
+
+  public Boolean isStrategic() {
+    return streamModel.isStrategic();
   }
 }

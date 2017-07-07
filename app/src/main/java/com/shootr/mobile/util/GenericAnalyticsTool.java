@@ -41,7 +41,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String ID_SHOT = "idShot";
   private static final String LOGIN_TYPE = "loginType";
   private static final String FAVORITES = "Favorites";
-  private static final String FOLLOWING = "Following";
+  private static final String FOLLOWING = "Follows";
   private static final String FOLLOWERS = "Followers";
   private static final String SIGNUP_METHOD = "Signup method";
   private static final String EMAIL = "$email";
@@ -55,6 +55,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String NUM_MUTUALS = "Mutuals";
   private static final String FIRST_SESSION_ACTIVATION = "firstSessionActivation";
   private static final String FIRST_SESSION = "firstSession";
+  private static final String STRATEGIC = "strategic";
   private static final String NOTIFICATIONS = "notifications";
   private static final String NEW_CONTENT = "newContent";
   private final String ACTION = "action";
@@ -186,6 +187,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String idPoll = builder.getIdPoll();
     String idShot = builder.getIdShot();
     String loginType = builder.getLoginType();
+    Boolean isStrategic = builder.getIsStrategic();
     Boolean newContent = builder.hasNewContent();
     Boolean firstSession = false;
     if (user != null) {
@@ -194,8 +196,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
     sendGoogleAnalytics(context, action, actionId, labelId);
     sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
-        pushRedirection, idStream, stream, idPoll, idShot, loginType, firstSession, newContent,
-        context);
+        pushRedirection, idStream, stream, idPoll, idShot, loginType, firstSession, isStrategic,
+        newContent, context);
   }
 
   private Date getSignUpDatePlusHour(Date date) {
@@ -284,7 +286,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
       String targetUsername, String notificationName, String pushRedirection, String idStream,
       String streamName, String idPoll, String idShot, String loginType, Boolean firstSession,
-      Boolean newContent, Context context) {
+      Boolean isStrategic, Boolean newContent, Context context) {
     try {
       JSONObject props = new JSONObject();
       if (user != null) {
@@ -296,11 +298,15 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         props.put(FAVORITES, user.getFavoritedStreamsCount());
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
+        props.put(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
         if (firstSession != null) {
           props.put(FIRST_SESSION, firstSession);
         }
       }
 
+      if (isStrategic != null) {
+        props.put(STRATEGIC, isStrategic);
+      }
       if (idStream != null) {
         props.put(ID_STREAM, idStream);
       }

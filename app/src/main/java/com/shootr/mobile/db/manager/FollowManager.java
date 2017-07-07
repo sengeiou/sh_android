@@ -92,7 +92,7 @@ public class FollowManager extends AbstractManager {
     }
 
     /**
-     * Retrieve a Following User
+     * Retrieve a Follows User
      */
     public List<String> getUserFollowingIds(String idUser) {
         List<String> userIds = new ArrayList<>();

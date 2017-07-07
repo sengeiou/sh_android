@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.37.2] - 2017-07-7
+
+### Changed
+- Following/Follower
+
+
+### Added
+- Mantener device al actualizar
+- Contenido del shot en started shooting
+- Important starting shooting activity
+- First session activation en mixpanel
+- Strategic follower
+
 ## [1.37.0] - 2017-06-23
 
 ### Changed

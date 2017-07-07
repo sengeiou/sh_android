@@ -13,59 +13,60 @@ import javax.inject.Inject;
 
 public class DatabaseVersionUtils implements DatabaseUtils {
 
-    private final IntPreference lastDatabaseVersion;
-    private final Version currentVersion;
-    private final SQLiteOpenHelper dbOpenHelper;
-    private final Context context;
-    private final BooleanPreference shouldShowIntro;
-    private final CacheUtils cacheUtils;
+  private final IntPreference lastDatabaseVersion;
+  private final Version currentVersion;
+  private final SQLiteOpenHelper dbOpenHelper;
+  private final Context context;
+  private final BooleanPreference shouldShowIntro;
+  private final CacheUtils cacheUtils;
 
-    @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
-      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion, SQLiteOpenHelper dbOpenHelper,
-      @ShouldShowIntro BooleanPreference shouldShowIntro, CacheUtils cacheUtils) {
-        this.lastDatabaseVersion = lastDatabaseVersion;
-        this.currentVersion = currentVersion;
-        this.context = context;
-        this.dbOpenHelper = dbOpenHelper;
-        this.shouldShowIntro = shouldShowIntro;
-        this.cacheUtils = cacheUtils;
-    }
+  @Inject public DatabaseVersionUtils(@ApplicationContext Context context,
+      @LastDatabaseVersion IntPreference lastDatabaseVersion, Version currentVersion,
+      SQLiteOpenHelper dbOpenHelper, @ShouldShowIntro BooleanPreference shouldShowIntro,
+      CacheUtils cacheUtils) {
+    this.lastDatabaseVersion = lastDatabaseVersion;
+    this.currentVersion = currentVersion;
+    this.context = context;
+    this.dbOpenHelper = dbOpenHelper;
+    this.shouldShowIntro = shouldShowIntro;
+    this.cacheUtils = cacheUtils;
+  }
 
-    public void clearDataOnNewerVersion() {
-        if (needsToClearData()) {
-            resetAppData();
-        }
+  public void clearDataOnNewerVersion() {
+    if (needsToClearData()) {
+      resetAppData();
     }
+  }
 
-    @Override public void clearDataOnLogout() {
-        resetAppData();
-        deleteCache();
-    }
+  @Override public void clearDataOnLogout() {
+    resetAppData();
+    deleteCache();
+  }
 
-    protected void resetAppData() {
-        boolean previousShouldShowIntro = shouldShowIntro.get();
-        clearDatabase();
-        updateStoredDatabaseVersion();
-        shouldShowIntro.set(previousShouldShowIntro);
-    }
+  protected void resetAppData() {
+    boolean previousShouldShowIntro = shouldShowIntro.get();
+    clearDatabase();
+    updateStoredDatabaseVersion();
+    shouldShowIntro.set(previousShouldShowIntro);
+  }
 
-    private void clearDatabase() {
-        dbOpenHelper.close();
-        context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
-    }
+  private void clearDatabase() {
+    dbOpenHelper.close();
+    context.deleteDatabase(ShootrDbOpenHelper.DATABASE_NAME);
+  }
 
-    private void updateStoredDatabaseVersion() {
-        int databaseVersion = currentVersion.getDatabaseVersion();
-        lastDatabaseVersion.set(databaseVersion);
-    }
+  private void updateStoredDatabaseVersion() {
+    int databaseVersion = currentVersion.getDatabaseVersion();
+    lastDatabaseVersion.set(databaseVersion);
+  }
 
-    private boolean needsToClearData() {
-        int lastVersion = this.lastDatabaseVersion.get();
-        int currentDatabaseVersion = currentVersion.getDatabaseVersion();
-        return lastVersion < currentDatabaseVersion;
-    }
+  private boolean needsToClearData() {
+    int lastVersion = this.lastDatabaseVersion.get();
+    int currentDatabaseVersion = currentVersion.getDatabaseVersion();
+    return lastVersion < currentDatabaseVersion;
+  }
 
-    private void deleteCache() {
-        cacheUtils.deleteCache(context);
-    }
+  private void deleteCache() {
+    cacheUtils.deleteCache(context);
+  }
 }

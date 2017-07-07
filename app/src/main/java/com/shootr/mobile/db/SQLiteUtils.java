@@ -62,6 +62,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FIRST_SESSION_ACTIVATION
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.STRATEGIC
+      + " INTEGER NULL,"
+      + DatabaseContract.UserTable.FOLLOWING
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -378,6 +382,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS
       + " NUMBER NULL,"
+      + DatabaseContract.UserTable.STRATEGIC
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -434,6 +440,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS
       + " NUMBER NULL,"
+      + DatabaseContract.UserTable.STRATEGIC
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -600,6 +608,10 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FIRST_SESSION_ACTIVATION
       + " LONG NULL,"
+      + DatabaseContract.UserTable.STRATEGIC
+  + " INTEGER NULL,"
+      + DatabaseContract.UserTable.FOLLOWING
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED

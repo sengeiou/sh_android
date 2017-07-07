@@ -4,12 +4,14 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.Synchronized;
+import com.shootr.mobile.data.mapper.FollowsEntityMapper;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.remote.cache.UserCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -25,15 +27,18 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
     private final SessionRepository sessionRepository;
     private final FollowDataSource localFollowDataSource;
     private final FollowDataSource remoteFollowDataSource;
+    private final FollowsEntityMapper followingEntityMapper;
     private final SyncTrigger syncTrigger;
     private final UserCache userCache;
 
     @Inject
     public SyncFollowRepository(SessionRepository sessionRepository, @Local FollowDataSource localFollowDataSource,
-      @Remote FollowDataSource remoteFollowDataSource, SyncTrigger syncTrigger, UserCache userCache) {
+        @Remote FollowDataSource remoteFollowDataSource,
+        FollowsEntityMapper followingEntityMapper, SyncTrigger syncTrigger, UserCache userCache) {
         this.sessionRepository = sessionRepository;
         this.localFollowDataSource = localFollowDataSource;
         this.remoteFollowDataSource = remoteFollowDataSource;
+        this.followingEntityMapper = followingEntityMapper;
         this.syncTrigger = syncTrigger;
         this.userCache = userCache;
     }
@@ -108,6 +113,14 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
             }
         }
         return followedIdUsers;
+    }
+
+    @Override public Follows getFollowing(String idUser, String[] type, Long maxTimestamp) {
+        return followingEntityMapper.map(remoteFollowDataSource.getFollowings(idUser, type, maxTimestamp));
+    }
+
+    @Override public Follows getFollowers(String idUser, String[] type, Long maxTimestamp) {
+        return followingEntityMapper.map(remoteFollowDataSource.getFollowers(idUser, type, maxTimestamp));
     }
 
     @Override public void dispatchSync() {

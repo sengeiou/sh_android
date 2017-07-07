@@ -1,10 +1,11 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 import timber.log.Timber;
 
-public class UserEntity extends Synchronized
+public class UserEntity extends FollowableEntity
     implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity {
 
     private String idUser;
@@ -32,8 +33,11 @@ public class UserEntity extends Synchronized
     private Long receivedReactions;
     private Long numMutuals;
     private Boolean firstSessionActivation;
+    private Boolean strategic;
+    private Boolean following;
 
     public UserEntity() {
+        setResultType(FollowableType.USER);
     }
 
     public Long getCreatedStreamsCount() {
@@ -269,7 +273,23 @@ public class UserEntity extends Synchronized
         this.firstSessionActivation = firstSessionActivation;
     }
 
+    public Boolean isStrategic() {
+        return strategic;
+    }
+
+    public void setStrategic(Boolean strategic) {
+        this.strategic = strategic;
+    }
+
     @Override public String getSearcheableType() {
         return SearchableType.USER;
+    }
+
+    public Boolean isFollowing() {
+        return following;
+    }
+
+    public void setFollowing(Boolean following) {
+        this.following = following;
     }
 }
