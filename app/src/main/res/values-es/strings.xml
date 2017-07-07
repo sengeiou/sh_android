@@ -56,6 +56,7 @@
   <string name="block_user_dialog_message">Este usuario no te molestará ni a ti ni a los participantes de tus streams.</string>
   <string name="block_user_error">Para bloquear a este usuario debes dejar de seguirle. </string>
   <string name="cancel">Cancelar</string>
+  <string name="cancel_hide_shot" formatted="false">Cancelar</string>
   <string name="change_password_button_text">HECHO</string>
   <string name="change_password_logout_message">La contraseña ha cambiado. Debes reiniciar sesión.</string>
   <string name="change_photo">Cambiar foto</string>
@@ -172,7 +173,7 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">No se puede votar</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorite_streams_push_settings">Streams seguidos</string>
+  <string name="favorite_streams_push_settings">Streams que sigo</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtrado por: Importante</string>
   <string name="finished_poll">Resultado de la encuesta %s</string>
@@ -181,6 +182,7 @@
   <string name="following_list_empty">No sigues a nadie</string>
   <string name="following_messages_title">SIGUIENDO</string>
   <string name="following_messages_title_plural">SIGUIENDO (%d)</string>
+  <string name="go_to_stream">Ir al stream</string>
   <string name="highlight_shot_dialog">El shot dejará de estar destacado</string>
   <string name="hours">h</string>
   <plurals name="hours_left">
@@ -188,6 +190,8 @@
     <item quantity="other">%d horas</item>
     <item quantity="zero">%d hora</item>
   </plurals>
+  <string name="important_started_shooting_activity_notext_pattern">En %s</string>
+  <string name="important_started_shooting_activity_text_pattern">"En %s: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">No hay mensajes</string>
   <string name="include_listing_empty">No hay streams</string>
@@ -309,7 +313,7 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
   <string name="poll_live_results">Resultados en vivo</string>
-  <string name="poll_manual_close">Esta encuesta puede finalizar en cualquier momento</string>
+  <string name="poll_manual_close">Tiempo restante: No definido</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Encuesta</string>
   <string name="poll_results">Ver resultados</string>
@@ -353,7 +357,7 @@
   <string name="push_settings_people_follow">De la gente que sigo</string>
   <string name="read_write_mode_public_description">Cualquiera puede escribir</string>
   <string name="read_write_mode_public_title">Público</string>
-  <string name="read_write_mode_view_only_description">Pueden escribir el administrador y los colaboradores</string>
+  <string name="read_write_mode_view_only_description">Tú y los colaboradores podéis escribir</string>
   <string name="read_write_mode_view_only_title">Solo lectura</string>
   <string name="registration_create_button_text">Crear cuenta</string>
   <string name="remove">Borrar</string>
@@ -412,8 +416,11 @@
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
   <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
+  <string name="share_stream_button">Compartir</string>
+  <string name="share_stream_description">Trae gente y empieza a divertirte.</string>
   <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
+  <string name="share_stream_title">Comparte el stream</string>
   <string name="share_stream_via_shootr">Compartir vía Shootr</string>
   <string name="share_via">Compartir vía…</string>
   <string name="share_via_shootr">Reshoot</string>
@@ -428,8 +435,7 @@
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
   <string name="started_shooting_activity_text_pattern">Ha escrito en %s</string>
-  <string name="important_started_shooting_activity_text_pattern">En %s:</string>
-  <string name="important_started_shooting_activity_notext_pattern">En %s</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrito en %s: "</string>
   <string name="started_shooting_push_settings">Aviso de nuevo shot</string>
   <string name="stream_checked">Hecho</string>
   <string name="stream_check_in_activity_text_pattern">Ha hecho check-in en (stream)</string>
@@ -440,7 +446,7 @@
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
   <string name="stream_detail_media">Archivos</string>
-  <string name="stream_detail_menu_data_info">Números</string>
+  <string name="stream_detail_menu_data_info">Estadísticas</string>
   <string name="stream_detail_mute">Silenciar</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">Sigue (stream)</string>
@@ -477,7 +483,7 @@
   <string name="title_activity_login_email">Iniciar sesión</string>
   <string name="title_activity_registration_email">Registrarse con email</string>
   <string name="title_activity_reset_password">Restaurar contraseña</string>
-  <string name="title_activity_stream_data_info">Números</string>
+  <string name="title_activity_stream_data_info">Estadísticas</string>
   <string name="title_activity_stream_media">Archivos</string>
   <string name="title_activity_support">Soporte</string>
   <string name="title_menu_photo" formatted="false">Foto</string>
@@ -519,5 +525,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrito en %s: "</string>
 </resources>

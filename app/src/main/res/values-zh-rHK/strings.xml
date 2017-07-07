@@ -56,6 +56,7 @@
   <string name="block_user_dialog_message">該用戶不會再打擾你和你的 stream 的參與者。</string>
   <string name="block_user_error">要封鎖該用戶請取消關注。</string>
   <string name="cancel">取消</string>
+  <string name="cancel_hide_shot" formatted="false">取消</string>
   <string name="change_password_button_text">完成</string>
   <string name="change_password_logout_message">密碼已更改。必須重新登錄…</string>
   <string name="change_photo">更改相片</string>
@@ -171,7 +172,7 @@
   <string name="error_user_cannot_check">user cannot check</string>
   <string name="error_user_cannot_vote">不能投票</string>
   <string name="facebookID">389647124570169</string>
-  <string name="favorite_streams_push_settings">已關注的 streams</string>
+  <string name="favorite_streams_push_settings">关注的 stream</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">按重要性篩選</string>
   <string name="finished_poll">%s 投票結果</string>
@@ -180,12 +181,15 @@
   <string name="following_list_empty">沒有跟關注任何人</string>
   <string name="following_messages_title">關注中</string>
   <string name="following_messages_title_plural">關注中 (%d)</string>
+  <string name="go_to_stream">進入到 stream</string>
   <string name="highlight_shot_dialog">刪除置頂 shot</string>
   <string name="hours">小時</string>
   <plurals name="hours_left">
     <item quantity="other">%d 小時</item>
     <item quantity="zero">%d 小時</item>
   </plurals>
+  <string name="important_started_shooting_activity_notext_pattern">在  %s</string>
+  <string name="important_started_shooting_activity_text_pattern">"在  %s: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">沒有信息</string>
   <string name="include_listing_empty">沒有 Streams</string>
@@ -302,7 +306,7 @@
   <string name="pin_topic" formatted="false">釘選訊息</string>
   <string name="poll_ignore">忽略投票</string>
   <string name="poll_live_results">當前投票結果</string>
-  <string name="poll_manual_close">這個投票隨時都可能結束</string>
+  <string name="poll_manual_close">剩餘時間: 沒定義</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">投票</string>
   <string name="poll_results">查看結果</string>
@@ -345,7 +349,7 @@
   <string name="push_settings_people_follow">我關注的用戶</string>
   <string name="read_write_mode_public_description">每个人皆可shoot</string>
   <string name="read_write_mode_public_title">公開</string>
-  <string name="read_write_mode_view_only_description">管理員與貢獻者可以shoot</string>
+  <string name="read_write_mode_view_only_description">你和合作者們可以寫</string>
   <string name="read_write_mode_view_only_title">私人編輯</string>
   <string name="registration_create_button_text">建立帳戶</string>
   <string name="remove">清除</string>
@@ -401,8 +405,11 @@
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s在%2$s發怖了訊息</string>
   <string name="share_stream_activity_text_pattern">分享了(stream)</string>
+  <string name="share_stream_button">分享</string>
+  <string name="share_stream_description">帶人來一起娛樂。</string>
   <string name="share_stream_message">在Shootr看看%1$s: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">在Shootr看看%s</string>
+  <string name="share_stream_title">分享你的 stream</string>
   <string name="share_stream_via_shootr">通過 Shootr 分享</string>
   <string name="share_via">透過以下方式分享：</string>
   <string name="share_via_shootr">Reshoot</string>
@@ -415,9 +422,8 @@
   <string name="shot_timeline_empty_title">沒有Shots</string>
   <string name="showing_shots_by_holder">顯示創立者的shots。</string>
   <string name="sign_out_message">正在登出...</string>
-  <string name="started_shooting_activity_text_pattern">開始於%s發怖訊息</string>
-  <string name="important_started_shooting_activity_text_pattern">On %s:</string>
-  <string name="important_started_shooting_activity_notext_pattern">On %s</string>
+  <string name="started_shooting_activity_text_pattern">在 %s 發布信息</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"在 %s 發布信息: "</string>
   <string name="started_shooting_push_settings">新的 shot 提醒</string>
   <string name="stream_checked">簽到</string>
   <string name="stream_check_in_activity_text_pattern">你已經在 (steam) 簽到</string>
@@ -465,7 +471,7 @@
   <string name="title_activity_login_email">登入</string>
   <string name="title_activity_registration_email">以電郵註冊</string>
   <string name="title_activity_reset_password">重設密碼</string>
-  <string name="title_activity_stream_data_info">数据</string>
+  <string name="title_activity_stream_data_info">數據</string>
   <string name="title_activity_stream_media">媒體</string>
   <string name="title_activity_support">支援</string>
   <string name="title_menu_photo" formatted="false">照片</string>
@@ -506,5 +512,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">我們將會回來。</string>
   <string name="yes">是</string>
-  <string name="started_shooting_activity_text_pattern_with_comment">"開始於%s發怖訊息: "</string>
 </resources>
