@@ -188,8 +188,8 @@
     <item quantity="other">%d 小時</item>
     <item quantity="zero">%d 小時</item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">在  (stream)</string>
-  <string name="important_started_shooting_activity_text_pattern">"在  (stream): "</string>
+  <string name="important_started_shooting_activity_notext_pattern">在  %s</string>
+  <string name="important_started_shooting_activity_text_pattern">"在  %s: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">沒有信息</string>
   <string name="include_listing_empty">沒有 Streams</string>

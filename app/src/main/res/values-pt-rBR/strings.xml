@@ -190,8 +190,8 @@
     <item quantity="other">%d horas</item>
     <item quantity="zero">%d hora</item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">Em (stream)</string>
-  <string name="important_started_shooting_activity_text_pattern">"Em (stream): "</string>
+  <string name="important_started_shooting_activity_notext_pattern">Em %s</string>
+  <string name="important_started_shooting_activity_text_pattern">"Em %s: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">Não há mensagens</string>
   <string name="include_listing_empty">Nenhum stream</string>
