@@ -4,7 +4,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.shootr.mobile.db.manager.ContributorManager;
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.db.manager.FollowManager;
-import com.shootr.mobile.db.manager.ShotEventManager;
+import com.shootr.mobile.db.manager.ShootrEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.db.mappers.BlockEntityDBMapper;
@@ -12,7 +12,7 @@ import com.shootr.mobile.db.mappers.ContributorDBMapper;
 import com.shootr.mobile.db.mappers.DeviceEntityDBMapper;
 import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import com.shootr.mobile.db.mappers.ShotEntityDBMapper;
-import com.shootr.mobile.db.mappers.ShotEventEntityDBMapper;
+import com.shootr.mobile.db.mappers.ShootrEventEntityDBMapper;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import dagger.Module;
@@ -48,8 +48,8 @@ import javax.inject.Singleton;
         return new ContributorManager(openHelper, mapper);
     }
 
-    @Provides @Singleton ShotEventManager provideShotEventManager(SQLiteOpenHelper openHelper,
-        ShotEventEntityDBMapper mapper) {
-        return new ShotEventManager(openHelper, mapper);
+    @Provides @Singleton ShootrEventManager provideShotEventManager(SQLiteOpenHelper openHelper,
+        ShootrEventEntityDBMapper mapper) {
+        return new ShootrEventManager(openHelper, mapper);
     }
 }

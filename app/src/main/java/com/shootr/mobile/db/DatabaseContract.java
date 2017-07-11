@@ -506,20 +506,20 @@ public class DatabaseContract {
     };
   }
 
-  public static final class ShotEventTable {
+  public static final class ShootrEventTable {
 
-    private ShotEventTable() {
+    private ShootrEventTable() {
 
     }
 
-    public static final String TABLE = "ShotEvent";
+    public static final String TABLE = "ShootrEvent";
 
-    public static final String ID_SHOT = "idShot";
+    public static final String ID_KEY = "idKey";
     public static final String TYPE = "type";
     public static final String TIMESTAMP = "timestamp";
 
     public static final String[] PROJECTION = {
-        ID_SHOT, TYPE, TIMESTAMP
+        ID_KEY, TYPE, TIMESTAMP
     };
   }
 
