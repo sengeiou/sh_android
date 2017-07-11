@@ -3,26 +3,26 @@ package com.shootr.mobile.ui.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class UrlModel implements Serializable {
+public class StreamIndexModel implements Serializable {
 
-  private String url;
-  private String displayUrl;
+  private String idStream;
+  private String streamTitle;
   private ArrayList<Integer> indices;
 
-  public String getUrl() {
-    return url;
+  public String getIdStream() {
+    return idStream;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setIdStream(String idStream) {
+    this.idStream = idStream;
   }
 
-  public String getDisplayUrl() {
-    return displayUrl;
+  public String getStreamTitle() {
+    return streamTitle;
   }
 
-  public void setDisplayUrl(String displayUrl) {
-    this.displayUrl = displayUrl;
+  public void setStreamTitle(String streamTitle) {
+    this.streamTitle = streamTitle;
   }
 
   public ArrayList<Integer> getIndices() {
