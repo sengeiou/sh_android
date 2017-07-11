@@ -17,7 +17,6 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
-import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.model.BaseMessageModel;
