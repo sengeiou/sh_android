@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
-import com.shootr.mobile.data.entity.ShotEventEntity;
+import com.shootr.mobile.data.entity.ShootrEventEntity;
 import com.shootr.mobile.db.manager.ShotEventManager;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,23 +14,23 @@ public class DatabaseShotEventDataSource implements ShotEventDataSource {
         this.shotEventManager = shotEventManager;
     }
 
-    @Override public void clickLink(ShotEventEntity shotEventEntity) {
-        shotEventManager.clickLink(shotEventEntity);
+    @Override public void clickLink(ShootrEventEntity shootrEventEntity) {
+        shotEventManager.clickLink(shootrEventEntity);
     }
 
-    @Override public void viewHighlightedShot(ShotEventEntity shotEventEntity) {
-        shotEventManager.viewHighlightedShot(shotEventEntity);
+    @Override public void viewHighlightedShot(ShootrEventEntity shootrEventEntity) {
+        shotEventManager.viewHighlightedShot(shootrEventEntity);
     }
 
-    @Override public void shotDetailViewed(ShotEventEntity shotEventEntity) {
-        shotEventManager.shotDetailViewed(shotEventEntity);
+    @Override public void shotDetailViewed(ShootrEventEntity shootrEventEntity) {
+        shotEventManager.shotDetailViewed(shootrEventEntity);
     }
 
     @Override public void sendShotEvents() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_DATABASE);
     }
 
-    public List<ShotEventEntity> getEvents() {
+    public List<ShootrEventEntity> getEvents() {
         return shotEventManager.getEvents();
     }
 

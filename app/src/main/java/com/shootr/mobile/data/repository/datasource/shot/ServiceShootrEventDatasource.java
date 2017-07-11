@@ -2,7 +2,7 @@ package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.ShotEventApiService;
-import com.shootr.mobile.data.entity.ShotEventEntity;
+import com.shootr.mobile.data.entity.ShootrEventEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.util.List;
@@ -21,13 +21,13 @@ public class ServiceShotEventDatasource implements ShotEventDataSource {
     this.databaseShotEventDataSource = databaseShotEventDataSource;
   }
 
-  @Override public void clickLink(ShotEventEntity shotEventEntity) {
+  @Override public void clickLink(ShootrEventEntity shootrEventEntity) {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 
   @Override public void sendShotEvents() {
     try {
-      List<ShotEventEntity> shotEventEntities = databaseShotEventDataSource.getEvents();
+      List<ShootrEventEntity> shotEventEntities = databaseShotEventDataSource.getEvents();
       if (shotEventEntities != null && shotEventEntities.size() > 0) {
         shotEventApiService.sendShotEvents(shotEventEntities);
         databaseShotEventDataSource.deleteShotEvents();
@@ -43,11 +43,11 @@ public class ServiceShotEventDatasource implements ShotEventDataSource {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 
-  @Override public void viewHighlightedShot(ShotEventEntity shotEventEntity) {
+  @Override public void viewHighlightedShot(ShootrEventEntity shootrEventEntity) {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 
-  @Override public void shotDetailViewed(ShotEventEntity shotEventEntity) {
+  @Override public void shotDetailViewed(ShootrEventEntity shootrEventEntity) {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 }
