@@ -4,16 +4,16 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.shot.ShotEventRepository;
+import com.shootr.mobile.domain.repository.shot.ShootrEventRepository;
 import javax.inject.Inject;
 
 public class SendShotEventStatsIneteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
-  private final ShotEventRepository remoteEventRepository;
+  private final ShootrEventRepository remoteEventRepository;
 
   @Inject public SendShotEventStatsIneteractor(InteractorHandler interactorHandler,
-      @Remote ShotEventRepository remoteEventRepository) {
+      @Remote ShootrEventRepository remoteEventRepository) {
     this.interactorHandler = interactorHandler;
     this.remoteEventRepository = remoteEventRepository;
   }

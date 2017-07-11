@@ -1,40 +1,44 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.entity.ShootrEventEntity;
-import com.shootr.mobile.db.manager.ShotEventManager;
+import com.shootr.mobile.db.manager.ShootrEventManager;
 import java.util.List;
 import javax.inject.Inject;
 
-public class DatabaseShotEventDataSource implements ShotEventDataSource {
+public class DatabaseShootrEventDataSource implements ShootrEventDataSource {
 
-    private final ShotEventManager shotEventManager;
+    private final ShootrEventManager shootrEventManager;
     public static final String METHOD_NOT_VALID_FOR_DATABASE = "Method not valid for database";
 
-    @Inject public DatabaseShotEventDataSource(ShotEventManager shotEventManager) {
-        this.shotEventManager = shotEventManager;
+    @Inject public DatabaseShootrEventDataSource(ShootrEventManager shootrEventManager) {
+        this.shootrEventManager = shootrEventManager;
     }
 
     @Override public void clickLink(ShootrEventEntity shootrEventEntity) {
-        shotEventManager.clickLink(shootrEventEntity);
+        shootrEventManager.clickLink(shootrEventEntity);
     }
 
     @Override public void viewHighlightedShot(ShootrEventEntity shootrEventEntity) {
-        shotEventManager.viewHighlightedShot(shootrEventEntity);
+        shootrEventManager.viewHighlightedShot(shootrEventEntity);
     }
 
     @Override public void shotDetailViewed(ShootrEventEntity shootrEventEntity) {
-        shotEventManager.shotDetailViewed(shootrEventEntity);
+        shootrEventManager.shotDetailViewed(shootrEventEntity);
     }
 
     @Override public void sendShotEvents() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_DATABASE);
     }
 
+    @Override public void sendUserProfileEvent() {
+
+    }
+
     public List<ShootrEventEntity> getEvents() {
-        return shotEventManager.getEvents();
+        return shootrEventManager.getEvents();
     }
 
     @Override public void deleteShotEvents() {
-        shotEventManager.deleteShotEvents();
+        shootrEventManager.deleteShotEvents();
     }
 }

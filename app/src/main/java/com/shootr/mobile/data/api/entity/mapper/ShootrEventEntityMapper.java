@@ -7,9 +7,9 @@ import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ShotEventEntityMapper {
+public class ShootrEventEntityMapper {
 
-    @Inject public ShotEventEntityMapper() {
+    @Inject public ShootrEventEntityMapper() {
     }
 
     public ShootrEventEntity transform(ShootrEvent shootrEvent) {
@@ -18,7 +18,7 @@ public class ShotEventEntityMapper {
         }
 
         ShootrEventEntity shootrEventEntity = new ShootrEventEntity();
-        shootrEventEntity.setIdShot(shootrEvent.getIdShot());
+        shootrEventEntity.setId(shootrEvent.getId());
         shootrEventEntity.setType(shootrEvent.getType());
         shootrEventEntity.setTimestamp(new Date().getTime());
 
@@ -30,7 +30,7 @@ public class ShotEventEntityMapper {
             return null;
         }
         ShootrEvent shootrEvent = new ShootrEvent();
-        shootrEvent.setIdShot(shootrEvent.getIdShot());
+        shootrEvent.setId(shootrEvent.getId());
         shootrEvent.setType(shootrEvent.getType());
 
         return shootrEvent;

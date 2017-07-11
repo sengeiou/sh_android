@@ -1,23 +1,23 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.api.exception.ApiException;
-import com.shootr.mobile.data.api.service.ShotEventApiService;
+import com.shootr.mobile.data.api.service.ShootrEventApiService;
 import com.shootr.mobile.data.entity.ShootrEventEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ServiceShotEventDatasource implements ShotEventDataSource {
+public class ServiceShootrEventDatasource implements ShootrEventDataSource {
 
   public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
 
-  private final ShotEventApiService shotEventApiService;
-  private final DatabaseShotEventDataSource databaseShotEventDataSource;
+  private final ShootrEventApiService shootrEventApiService;
+  private final DatabaseShootrEventDataSource databaseShotEventDataSource;
 
-  @Inject public ServiceShotEventDatasource(ShotEventApiService shotEventApiService,
-      DatabaseShotEventDataSource databaseShotEventDataSource) {
-    this.shotEventApiService = shotEventApiService;
+  @Inject public ServiceShootrEventDatasource(ShootrEventApiService shootrEventApiService,
+      DatabaseShootrEventDataSource databaseShotEventDataSource) {
+    this.shootrEventApiService = shootrEventApiService;
     this.databaseShotEventDataSource = databaseShotEventDataSource;
   }
 
@@ -29,7 +29,7 @@ public class ServiceShotEventDatasource implements ShotEventDataSource {
     try {
       List<ShootrEventEntity> shotEventEntities = databaseShotEventDataSource.getEvents();
       if (shotEventEntities != null && shotEventEntities.size() > 0) {
-        shotEventApiService.sendShotEvents(shotEventEntities);
+        shootrEventApiService.sendShootrEvents(shotEventEntities);
         databaseShotEventDataSource.deleteShotEvents();
       }
     } catch (IOException | ApiException e) {
@@ -37,6 +37,10 @@ public class ServiceShotEventDatasource implements ShotEventDataSource {
     } catch (Exception error) {
       throw new ServerCommunicationException(error);
     }
+  }
+
+  @Override public void sendUserProfileEvent() {
+
   }
 
   @Override public void deleteShotEvents() {

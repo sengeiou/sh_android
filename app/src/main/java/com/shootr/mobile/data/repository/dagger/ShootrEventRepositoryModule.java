@@ -18,26 +18,26 @@ import javax.inject.Singleton;
         LocalShootrEventRepository.class, DatabaseShootrEventDataSource.class,
     },
     complete = false,
-    library = true) public class ShotEventRepositoryModule {
+    library = true) public class ShootrEventRepositoryModule {
 
   @Provides @Singleton @Remote ShootrEventRepository provideRemoteShotEventRepository(
-      RemoteShootrEventRepository remoteShotEventRepository) {
-    return remoteShotEventRepository;
+      RemoteShootrEventRepository remoteShootrEventRepository) {
+    return remoteShootrEventRepository;
   }
 
   @Provides @Singleton @Remote ShootrEventDataSource provideServiceShotEventDatasource(
-      ServiceShootrEventDatasource serviceShotEventDatasource) {
-    return serviceShotEventDatasource;
+      ServiceShootrEventDatasource serviceShootrEventDatasource) {
+    return serviceShootrEventDatasource;
   }
 
   @Provides @Singleton @Local ShootrEventRepository provideLocalShotEventRepository(
-      LocalShootrEventRepository localShotEventRepository) {
-    return localShotEventRepository;
+      LocalShootrEventRepository localShootrEventRepository) {
+    return localShootrEventRepository;
   }
 
   @Provides @Singleton @Local ShootrEventDataSource provideLocalShotEventDataSource(
-      DatabaseShootrEventDataSource databaseShotEventDataSource) {
-    return databaseShotEventDataSource;
+      DatabaseShootrEventDataSource databaseShootrEventDataSource) {
+    return databaseShootrEventDataSource;
   }
 }
 

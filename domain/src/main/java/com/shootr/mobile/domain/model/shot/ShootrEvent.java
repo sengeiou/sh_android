@@ -1,16 +1,16 @@
 package com.shootr.mobile.domain.model.shot;
 
-public class ShotEvent {
+public class ShootrEvent {
 
-  private String idShot;
+  private String id;
   private String type;
 
-  public String getIdShot() {
-    return idShot;
+  public String getId() {
+    return id;
   }
 
-  public void setIdShot(String idShot) {
-    this.idShot = idShot;
+  public void setId(String id) {
+    this.id = id;
   }
 
   public String getType() {

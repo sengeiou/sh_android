@@ -12,13 +12,13 @@ package com.shootr.mobile.db.manager;
     import java.util.List;
     import javax.inject.Inject;
 
-public class ShotEventManager extends AbstractManager {
+public class ShootrEventManager extends AbstractManager {
 
-  private static final String SHOT_EVENT_TABLE = DatabaseContract.ShotEventTable.TABLE;
+  private static final String SHOT_EVENT_TABLE = DatabaseContract.ShootrEventTable.TABLE;
 
   private final ShootrEventEntityDBMapper shootrEventEntityDBMapper;
 
-  @Inject public ShotEventManager(SQLiteOpenHelper dbHelper,
+  @Inject public ShootrEventManager(SQLiteOpenHelper dbHelper,
       ShootrEventEntityDBMapper shootrEventEntityDBMapper) {
     super(dbHelper);
     this.shootrEventEntityDBMapper = shootrEventEntityDBMapper;
@@ -43,7 +43,7 @@ public class ShotEventManager extends AbstractManager {
   }
 
   public void shotDetailViewed(ShootrEventEntity shootrEventEntity) {
-    if (shootrEventEntity != null && shootrEventEntity.getIdShot() != null) {
+    if (shootrEventEntity != null && shootrEventEntity.getId() != null) {
       shootrEventEntity.setType(ShotEventType.SHOT_DETAIL_VIEW);
       ContentValues contentValues = shootrEventEntityDBMapper.toContentValues(shootrEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
@@ -54,7 +54,7 @@ public class ShotEventManager extends AbstractManager {
   public List<ShootrEventEntity> getEvents() {
     List<ShootrEventEntity> shotEventEntities = new ArrayList<>();
     Cursor c =
-        getReadableDatabase().query(SHOT_EVENT_TABLE, DatabaseContract.ShotEventTable.PROJECTION,
+        getReadableDatabase().query(SHOT_EVENT_TABLE, DatabaseContract.ShootrEventTable.PROJECTION,
             null, null, null, null, null);
     if (c.getCount() > 0) {
       c.moveToFirst();

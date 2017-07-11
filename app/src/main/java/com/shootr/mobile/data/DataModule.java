@@ -18,7 +18,7 @@ import com.shootr.mobile.db.manager.AbstractManager;
 import com.shootr.mobile.db.manager.ContributorManager;
 import com.shootr.mobile.db.manager.DeviceManager;
 import com.shootr.mobile.db.manager.FollowManager;
-import com.shootr.mobile.db.manager.ShotEventManager;
+import com.shootr.mobile.db.manager.ShootrEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -125,7 +125,7 @@ import static android.content.Context.MODE_PRIVATE;
 
         ContributorManager.class,
 
-        ShotEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class,
+        ShootrEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class,
         FollowFragment.class,
     },
     includes = {
