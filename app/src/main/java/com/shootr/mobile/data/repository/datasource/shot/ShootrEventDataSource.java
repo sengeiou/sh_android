@@ -14,5 +14,7 @@ public interface ShootrEventDataSource {
 
     void viewUserProfileEvent(ShootrEventEntity shootrEventEntity);
 
-    void deleteShotEvents();
+    void deleteShootrEvents();
+
+    void getShootrEvents();
 }

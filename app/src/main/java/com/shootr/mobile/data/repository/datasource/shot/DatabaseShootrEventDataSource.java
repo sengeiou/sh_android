@@ -38,7 +38,11 @@ public class DatabaseShootrEventDataSource implements ShootrEventDataSource {
         return shootrEventManager.getEvents();
     }
 
-    @Override public void deleteShotEvents() {
+    @Override public void deleteShootrEvents() {
         shootrEventManager.deleteShotEvents();
+    }
+
+    @Override public void getShootrEvents() {
+        throw new IllegalStateException(METHOD_NOT_VALID_FOR_DATABASE);
     }
 }

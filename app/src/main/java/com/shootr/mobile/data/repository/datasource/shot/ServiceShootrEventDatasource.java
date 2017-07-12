@@ -2,7 +2,9 @@ package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.ShootrEventApiService;
+import com.shootr.mobile.data.entity.SearchItemEntity;
 import com.shootr.mobile.data.entity.ShootrEventEntity;
+import com.shootr.mobile.data.repository.datasource.stream.DatabaseRecentSearchDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import java.io.IOException;
 import java.util.List;
@@ -14,11 +16,14 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
 
   private final ShootrEventApiService shootrEventApiService;
   private final DatabaseShootrEventDataSource databaseShotEventDataSource;
+  private final DatabaseRecentSearchDataSource databaseRecentSearchDataSource;
 
   @Inject public ServiceShootrEventDatasource(ShootrEventApiService shootrEventApiService,
-      DatabaseShootrEventDataSource databaseShotEventDataSource) {
+      DatabaseShootrEventDataSource databaseShotEventDataSource,
+      DatabaseRecentSearchDataSource databaseRecentSearchDataSource) {
     this.shootrEventApiService = shootrEventApiService;
     this.databaseShotEventDataSource = databaseShotEventDataSource;
+    this.databaseRecentSearchDataSource = databaseRecentSearchDataSource;
   }
 
   @Override public void clickLink(ShootrEventEntity shootrEventEntity) {
@@ -30,7 +35,7 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
       List<ShootrEventEntity> shotEventEntities = databaseShotEventDataSource.getEvents();
       if (shotEventEntities != null && shotEventEntities.size() > 0) {
         shootrEventApiService.sendShootrEvents(shotEventEntities);
-        databaseShotEventDataSource.deleteShotEvents();
+        databaseShotEventDataSource.deleteShootrEvents();
       }
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
@@ -43,8 +48,19 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 
-  @Override public void deleteShotEvents() {
+  @Override public void deleteShootrEvents() {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
+  }
+
+  @Override public void getShootrEvents() {
+    try {
+      List<SearchItemEntity> searchItemEntities = shootrEventApiService.getRecentList();
+        databaseRecentSearchDataSource.putRecentSearchItems(searchItemEntities);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    } catch (Exception error) {
+      throw new ServerCommunicationException(error);
+    }
   }
 
   @Override public void viewHighlightedShot(ShootrEventEntity shootrEventEntity) {
