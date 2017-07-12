@@ -4,7 +4,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.ShootrEvent;
-import com.shootr.mobile.domain.model.shot.ShotEventType;
+import com.shootr.mobile.domain.model.shot.ShootrEventType;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.shot.ShootrEventRepository;
 import javax.inject.Inject;
@@ -38,7 +38,7 @@ public class ViewHighlightedShotEventInteractor implements Interactor {
 
   private void countViewEvent() {
     ShootrEvent shootrEvent = new ShootrEvent();
-    shootrEvent.setType(ShotEventType.SHOT_VIEW);
+    shootrEvent.setType(ShootrEventType.SHOT_VIEW);
     shootrEvent.setId(idShot);
     localShootrEventRepository.viewHighlightedShot(shootrEvent);
   }

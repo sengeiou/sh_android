@@ -7,7 +7,7 @@ package com.shootr.mobile.db.manager;
     import com.shootr.mobile.data.entity.ShootrEventEntity;
     import com.shootr.mobile.db.DatabaseContract;
     import com.shootr.mobile.db.mappers.ShootrEventEntityDBMapper;
-    import com.shootr.mobile.domain.model.shot.ShotEventType;
+    import com.shootr.mobile.domain.model.shot.ShootrEventType;
     import java.util.ArrayList;
     import java.util.List;
     import javax.inject.Inject;
@@ -26,7 +26,7 @@ public class ShootrEventManager extends AbstractManager {
 
   public void clickLink(ShootrEventEntity shootrEventEntity) {
     if (shootrEventEntity != null) {
-      shootrEventEntity.setType(ShotEventType.SHOT_LINK_CLICK);
+      shootrEventEntity.setType(ShootrEventType.SHOT_LINK_CLICK);
       ContentValues contentValues = shootrEventEntityDBMapper.toContentValues(shootrEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);
@@ -35,7 +35,7 @@ public class ShootrEventManager extends AbstractManager {
 
   public void viewHighlightedShot(ShootrEventEntity shootrEventEntity) {
     if (shootrEventEntity != null) {
-      shootrEventEntity.setType(ShotEventType.SHOT_VIEW);
+      shootrEventEntity.setType(ShootrEventType.SHOT_VIEW);
       ContentValues contentValues = shootrEventEntityDBMapper.toContentValues(shootrEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);
@@ -44,7 +44,7 @@ public class ShootrEventManager extends AbstractManager {
 
   public void shotDetailViewed(ShootrEventEntity shootrEventEntity) {
     if (shootrEventEntity != null && shootrEventEntity.getId() != null) {
-      shootrEventEntity.setType(ShotEventType.SHOT_DETAIL_VIEW);
+      shootrEventEntity.setType(ShootrEventType.SHOT_DETAIL_VIEW);
       ContentValues contentValues = shootrEventEntityDBMapper.toContentValues(shootrEventEntity);
       getWritableDatabase().insertWithOnConflict(SHOT_EVENT_TABLE, null, contentValues,
           SQLiteDatabase.CONFLICT_REPLACE);

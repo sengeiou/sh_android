@@ -4,7 +4,7 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.ShootrEvent;
-import com.shootr.mobile.domain.model.shot.ShotEventType;
+import com.shootr.mobile.domain.model.shot.ShootrEventType;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.shot.ShootrEventRepository;
 import javax.inject.Inject;
@@ -39,7 +39,7 @@ public class ClickShotLinkEventInteractor implements Interactor {
   private void countClickLinkEvent() {
     ShootrEvent shootrEvent = new ShootrEvent();
     shootrEvent.setId(idShot);
-    shootrEvent.setType(ShotEventType.SHOT_LINK_CLICK);
+    shootrEvent.setType(ShootrEventType.SHOT_LINK_CLICK);
     localShootrEventRepository.clickLink(shootrEvent);
   }
 

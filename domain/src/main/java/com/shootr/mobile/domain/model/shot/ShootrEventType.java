@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.model.shot;
 
-public interface ShotEventType {
+public interface ShootrEventType {
 
   String SHOT_VIEW = "SHOT_VIEW";
   String SHOT_DETAIL_VIEW = "SHOT_DETAIL_VIEW";
