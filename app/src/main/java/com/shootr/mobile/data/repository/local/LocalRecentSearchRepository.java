@@ -53,6 +53,11 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
     }
   }
 
+  @Override public boolean isRecentSearchEmpty()
+  {
+    return localRecentSearchDataSource.isRecentSearchEmpty();
+  }
+
   @Override public List<Searchable> getDefaultSearch() {
     List<Searchable> searchables = new ArrayList<>();
     List<RecentSearchEntity> searchableEntities = localRecentSearchDataSource.getRecentSearches();

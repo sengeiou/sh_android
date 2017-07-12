@@ -16,9 +16,10 @@ import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
+import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
@@ -64,6 +65,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
   private final GetFollowingIdsInteractor getFollowingIdsInteractor;
   private final GetLocalStreamInteractor getStreamInteractor;
+  private final GetShootrEventsInteractor getShootrEventsInteractor;
   private final StreamModelMapper streamModelMapper;
   private final Bus bus;
   private final BusPublisher busPublisher;
@@ -83,14 +85,17 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
       SendShotEventStatsIneteractor sendShotEventStatsIneteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
-      ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor, GetMutedStreamsInteractor getMutedStreamsInteractor,
+      ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor,
+      GetMutedStreamsInteractor getMutedStreamsInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
       UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
       GetFollowingInteractor followingInteractor,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
       GetFollowingIdsInteractor getFollowingIdsInteractor,
-      GetLocalStreamInteractor getStreamInteractor, StreamModelMapper streamModelMapper,
-      @Main Bus bus, BusPublisher busPublisher, @ApplicationContext Context context, AnalyticsTool analyticsTool) {
+      GetLocalStreamInteractor getStreamInteractor,
+      GetShootrEventsInteractor getShootrEventsInteractor, StreamModelMapper streamModelMapper,
+      @Main Bus bus, BusPublisher busPublisher, @ApplicationContext Context context,
+      AnalyticsTool analyticsTool) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
@@ -105,6 +110,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
     this.getFollowingIdsInteractor = getFollowingIdsInteractor;
     this.getStreamInteractor = getStreamInteractor;
+    this.getShootrEventsInteractor = getShootrEventsInteractor;
     this.streamModelMapper = streamModelMapper;
     this.bus = bus;
     this.busPublisher = busPublisher;
@@ -121,6 +127,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.loadCurrentUser();
     this.getFollows();
     this.getMuted();
+    this.getRecentSearch();
     this.setupDeviceInfo();
     this.sendShotEventStats();
     this.updateActivityBadge();
@@ -137,11 +144,14 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
         }
       }
     });
-
   }
 
   private void getFollows() {
     followingInteractor.synchronizeFollow();
+  }
+
+  private void getRecentSearch() {
+    getShootrEventsInteractor.synchronizeShootrEvents();
   }
 
   private void getMuted() {
@@ -283,18 +293,14 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   @Subscribe @Override public void onBadgeChanged(ChannelsBadgeChanged.Event event) {
     if (event.getUnreadFollowChannels() > 0) {
-      mainScreenView.updateChannelBadge(event.getUnreadChannels(),
-          true);
+      mainScreenView.updateChannelBadge(event.getUnreadChannels(), true);
     } else {
-      mainScreenView.updateChannelBadge(event.getUnreadChannels(),
-          false);
+      mainScreenView.updateChannelBadge(event.getUnreadChannels(), false);
     }
   }
 
   private synchronized void buildGoogleApiClient() {
-    googleApiClient = new GoogleApiClient.Builder(context)
-        .addApi(SafetyNet.API)
-        .build();
+    googleApiClient = new GoogleApiClient.Builder(context).addApi(SafetyNet.API).build();
     googleApiClient.connect();
   }
 

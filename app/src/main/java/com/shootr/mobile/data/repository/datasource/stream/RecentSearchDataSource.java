@@ -15,4 +15,6 @@ public interface RecentSearchDataSource {
     List<RecentSearchEntity> getRecentSearches();
 
     void putRecentSearchItems(List<SearchItemEntity> searchItemEntities);
+
+    boolean isRecentSearchEmpty();
 }

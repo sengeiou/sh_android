@@ -37,4 +37,8 @@ public class LocalShootrEventRepository implements ShootrEventRepository {
   @Override public void viewUserProfileEvent(ShootrEvent shootrEvent) {
     shootrEventDataSource.viewUserProfileEvent(shootrEventEntityMapper.transform(shootrEvent));
   }
+
+  @Override public void getShootrEvents() {
+    throw new IllegalStateException("Method not valid for local repository");
+  }
 }

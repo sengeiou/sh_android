@@ -62,4 +62,8 @@ public class DatabaseRecentSearchDataSource implements RecentSearchDataSource {
       position++;
     }
   }
+
+  @Override public boolean isRecentSearchEmpty() {
+    return recentSearchManager.isRecentSearchEmpty();
+  }
 }

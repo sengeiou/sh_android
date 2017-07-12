@@ -35,6 +35,11 @@ public class RecentSearchManager extends AbstractManager {
     this.userManager = userManager;
   }
 
+  public boolean isRecentSearchEmpty() {
+    List<RecentSearchEntity> recentSearches = readRecentSearchesFromDB();
+    return recentSearches.isEmpty();
+  }
+
   public List<RecentSearchEntity> readRecentSearches() {
     List<RecentSearchEntity> recentSearches = readRecentSearchesFromDB();
     List<String> streamsIds = new ArrayList<>();

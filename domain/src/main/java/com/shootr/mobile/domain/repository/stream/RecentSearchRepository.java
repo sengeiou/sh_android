@@ -12,4 +12,6 @@ public interface RecentSearchRepository {
   void putRecentUser(User user, long currentTime);
 
   List<Searchable> getDefaultSearch();
+
+  boolean isRecentSearchEmpty();
 }
