@@ -1,7 +1,6 @@
 package com.shootr.mobile.domain.interactor;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.shot.ShootrEventRepository;
 import com.shootr.mobile.domain.repository.stream.RecentSearchRepository;
@@ -27,13 +26,11 @@ public class GetShootrEventsInteractor implements Interactor {
 
   @Override public void execute() throws Exception {
     try {
-      if(remoteRecentSearchRepository.isRecentSearchEmpty()) {
+      if (remoteRecentSearchRepository.isRecentSearchEmpty()) {
         remoteShootrEventRepository.getShootrEvents();
       }
     } catch (ServerCommunicationException networkError) {
             /* swallow silently */
     }
   }
-
-
 }

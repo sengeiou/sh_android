@@ -48,13 +48,11 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
 
   @Override public void putRecentUser(User user, long currentTime) {
     if (user != null) {
-      localRecentSearchDataSource.putRecentUser(userEntityMapper.transform(user),
-          currentTime);
+      localRecentSearchDataSource.putRecentUser(userEntityMapper.transform(user), currentTime);
     }
   }
 
-  @Override public boolean isRecentSearchEmpty()
-  {
+  @Override public boolean isRecentSearchEmpty() {
     return localRecentSearchDataSource.isRecentSearchEmpty();
   }
 
@@ -66,13 +64,14 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
         switch (searchableEntity.getSearchableType()) {
           case SearchableType.STREAM:
             searchables.add(streamEntityMapper.transform(searchableEntity.getStream(),
-                localFavoriteDataSource.getFavoriteByIdStream(searchableEntity.getStream().getIdStream()) != null));
+                localFavoriteDataSource.getFavoriteByIdStream(
+                    searchableEntity.getStream().getIdStream()) != null));
             break;
           case SearchableType.USER:
             UserEntity userEntity = searchableEntity.getUser();
             searchables.add(
-                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(),
-                    false, isFollowing(userEntity.getIdUser())));
+                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(), false,
+                    isFollowing(userEntity.getIdUser())));
             break;
           default:
             break;
