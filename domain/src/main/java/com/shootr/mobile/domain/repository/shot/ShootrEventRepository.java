@@ -12,5 +12,5 @@ public interface ShootrEventRepository {
 
     void sendShotEvents();
 
-    void sendUserProfileEvent();
+    void viewUserProfileEvent(ShootrEvent shootrEvent);
 }

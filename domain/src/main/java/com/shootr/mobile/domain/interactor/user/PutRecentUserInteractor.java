@@ -3,6 +3,8 @@ package com.shootr.mobile.domain.interactor.user;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.shot.ShootrEvent;
+import com.shootr.mobile.domain.model.shot.ShootrEventType;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
@@ -40,11 +42,18 @@ public class PutRecentUserInteractor implements Interactor {
   @Override public void execute() throws Exception {
     try {
       recentSearchRepository.putRecentUser(user, getCurrentTime());
-      remoteShootrEventRepository.sendUserProfileEvent();
+      sendShootrEventUserProfile();
       localUserRepository.putUser(user);
     } catch (ServerCommunicationException error) {
         /* no-op */
     }
+  }
+
+  private void sendShootrEventUserProfile() {
+    ShootrEvent shootrEvent = new ShootrEvent();
+    shootrEvent.setType(ShootrEventType.USER_PROFILE_VIEWED);
+    shootrEvent.setId(user.getIdUser());
+    remoteShootrEventRepository.viewUserProfileEvent(shootrEvent);
   }
 
   private long getCurrentTime() {

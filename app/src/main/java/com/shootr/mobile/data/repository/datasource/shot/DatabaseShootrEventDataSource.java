@@ -30,8 +30,8 @@ public class DatabaseShootrEventDataSource implements ShootrEventDataSource {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_DATABASE);
     }
 
-    @Override public void sendUserProfileEvent() {
-
+    @Override public void viewUserProfileEvent(ShootrEventEntity shootrEventEntity) {
+        shootrEventManager.viewUserProfileEvent(shootrEventEntity);
     }
 
     public List<ShootrEventEntity> getEvents() {

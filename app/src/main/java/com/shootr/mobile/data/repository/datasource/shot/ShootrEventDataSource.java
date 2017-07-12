@@ -12,7 +12,7 @@ public interface ShootrEventDataSource {
 
     void sendShotEvents();
 
-    void sendUserProfileEvent();
+    void viewUserProfileEvent(ShootrEventEntity shootrEventEntity);
 
     void deleteShotEvents();
 }

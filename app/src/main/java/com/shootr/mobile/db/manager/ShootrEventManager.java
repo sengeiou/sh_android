@@ -69,4 +69,8 @@ public class ShootrEventManager extends AbstractManager {
   public void deleteShotEvents() {
     getWritableDatabase().delete(SHOT_EVENT_TABLE, null, null);
   }
+
+  public void viewUserProfileEvent(ShootrEventEntity shootrEventEntity) {
+
+  }
 }

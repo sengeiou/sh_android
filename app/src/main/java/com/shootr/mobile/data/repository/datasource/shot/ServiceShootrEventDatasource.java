@@ -39,8 +39,8 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
     }
   }
 
-  @Override public void sendUserProfileEvent() {
-
+  @Override public void viewUserProfileEvent(ShootrEventEntity shootrEventEntity) {
+    throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }
 
   @Override public void deleteShotEvents() {

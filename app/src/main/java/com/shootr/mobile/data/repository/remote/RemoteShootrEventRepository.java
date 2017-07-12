@@ -33,7 +33,7 @@ public class RemoteShootrEventRepository implements ShootrEventRepository {
     shootrEventDataSource.sendShotEvents();
   }
 
-  @Override public void sendUserProfileEvent() {
-
+  @Override public void viewUserProfileEvent(ShootrEvent shootrEvent) {
+    throw new IllegalStateException(METHOD_NOT_VALID_FOR_REPOSITORY);
   }
 }
