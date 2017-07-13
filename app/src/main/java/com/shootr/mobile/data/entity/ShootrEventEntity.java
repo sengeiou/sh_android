@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-public class ShotEventEntity {
+public class ShootrEventEntity {
 
     private String id;
     private String type;
@@ -22,11 +22,11 @@ public class ShotEventEntity {
         this.timestamp = timestamp;
     }
 
-    public String getIdShot() {
+    public String getId() {
         return id;
     }
 
-    public void setIdShot(String idShot) {
-        this.id = idShot;
+    public void setId(String id) {
+        this.id = id;
     }
 }

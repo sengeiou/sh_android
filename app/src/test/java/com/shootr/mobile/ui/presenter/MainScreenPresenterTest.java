@@ -3,10 +3,11 @@ package com.shootr.mobile.ui.presenter;
 import android.content.Context;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
-import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
@@ -52,7 +53,7 @@ public class MainScreenPresenterTest {
     @Mock TimeUtils timeUtils;
     @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
-    @Mock SendShotEventStatsIneteractor sendShoEventStatsIneteractor;
+    @Mock SendShootrEventStatsInteractor sendShoEventStatsIneteractor;
     @Mock GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
     @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
     @Mock SessionRepository sessionRepository;
@@ -68,6 +69,7 @@ public class MainScreenPresenterTest {
     @Mock ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
     @Mock StreamModelMapper streamModelMapper;
     @Mock AnalyticsTool analyticsTool;
+    @Mock GetShootrEventsInteractor getShootrEventsInteractor;
     @Mock Context context;
     private MainScreenPresenter mainScreenPresenter;
 
@@ -81,7 +83,8 @@ public class MainScreenPresenterTest {
               shouldUpdateDeviceInfoInteractor, getMutedStreamsInteractor, unwatchStreamInteractor, sessionRepository,
               userModelMapper, badgeCount, getFollowingInteractor,
               getPrivateMessagesChannelsInteractor,
-              getFollowingIdsInteractor, getStreamInteractor, streamModelMapper, bus, busPublisher,
+              getFollowingIdsInteractor, getStreamInteractor, getShootrEventsInteractor,
+              streamModelMapper, bus, busPublisher,
               context, analyticsTool);
         mainScreenPresenter.setView(view);
         User user = new User();

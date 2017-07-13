@@ -177,8 +177,6 @@ public class ProfileActivity extends BaseActivity
   private String idUser;
   private String username;
 
-  private int mScrollOffset = 4;
-
   public static Intent getIntent(Context context, String idUser) {
     Intent i = new Intent(context, ProfileActivity.class);
     i.putExtra(EXTRA_USER, idUser);
