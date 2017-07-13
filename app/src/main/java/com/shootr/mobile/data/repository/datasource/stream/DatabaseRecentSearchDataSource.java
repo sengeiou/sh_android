@@ -46,7 +46,7 @@ public class DatabaseRecentSearchDataSource implements RecentSearchDataSource {
   }
 
   @Override public void putRecentSearchItems(FollowsEntity followsEntity) {
-    int position = 0;
+    int position = followsEntity.getData().size();
     for (FollowableEntity followableEntity : followsEntity.getData()) {
       switch (followableEntity.getResultType()) {
         case SearchableType.STREAM:
@@ -60,7 +60,7 @@ public class DatabaseRecentSearchDataSource implements RecentSearchDataSource {
         default:
           break;
       }
-      position++;
+      position--;
     }
   }
 
