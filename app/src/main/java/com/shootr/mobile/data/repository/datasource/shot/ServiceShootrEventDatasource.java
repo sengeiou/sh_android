@@ -3,7 +3,6 @@ package com.shootr.mobile.data.repository.datasource.shot;
 import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.ShootrEventApiService;
-import com.shootr.mobile.data.entity.SearchItemEntity;
 import com.shootr.mobile.data.entity.ShootrEventEntity;
 import com.shootr.mobile.data.repository.datasource.stream.DatabaseRecentSearchDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -56,7 +55,7 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
   @Override public void getShootrEvents() {
     try {
       FollowsEntity recentList = shootrEventApiService.getRecentList();
-        databaseRecentSearchDataSource.putRecentSearchItems(recentList);
+      databaseRecentSearchDataSource.putRecentSearchItems(recentList);
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     } catch (Exception error) {
