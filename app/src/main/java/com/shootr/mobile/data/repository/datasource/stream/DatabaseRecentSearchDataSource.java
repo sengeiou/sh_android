@@ -1,7 +1,8 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
+import com.shootr.mobile.data.api.entity.FollowsEntity;
+import com.shootr.mobile.data.entity.FollowableEntity;
 import com.shootr.mobile.data.entity.RecentSearchEntity;
-import com.shootr.mobile.data.entity.SearchItemEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.repository.datasource.user.DatabaseUserDataSource;
@@ -44,17 +45,17 @@ public class DatabaseRecentSearchDataSource implements RecentSearchDataSource {
     return recentSearchManager.readRecentSearches();
   }
 
-  @Override public void putRecentSearchItems(List<SearchItemEntity> searchItemEntities) {
+  @Override public void putRecentSearchItems(FollowsEntity followsEntity) {
     int position = 0;
-    for (SearchItemEntity searchItemEntity : searchItemEntities) {
-      switch (searchItemEntity.getType()) {
+    for (FollowableEntity followableEntity : followsEntity.getData()) {
+      switch (followableEntity.getResultType()) {
         case SearchableType.STREAM:
-          putRecentStream(searchItemEntity.getStreamEntity(), position);
-          databaseStreamDataSource.putStream(searchItemEntity.getStreamEntity());
+          putRecentStream((StreamEntity) followableEntity, position);
+          databaseStreamDataSource.putStream((StreamEntity) followableEntity);
           break;
         case SearchableType.USER:
-          putRecentUser(searchItemEntity.getUserEntity(), position);
-          databaseUserDataSource.putUser(searchItemEntity.getUserEntity());
+          putRecentUser((UserEntity) followableEntity, position);
+          databaseUserDataSource.putUser((UserEntity) followableEntity);
           break;
         default:
           break;

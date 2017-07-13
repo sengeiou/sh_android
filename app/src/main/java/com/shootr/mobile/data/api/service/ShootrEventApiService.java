@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.api.service;
 
+import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
-import com.shootr.mobile.data.entity.SearchItemEntity;
 import com.shootr.mobile.data.entity.ShootrEventEntity;
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +16,7 @@ public interface ShootrEventApiService {
       throws ApiException, IOException;
 
 
-  @GET("/userActivity/") List<SearchItemEntity> getRecentList()
+  @GET("/userActivity") FollowsEntity getRecentList()
       throws IOException, ApiException;
 
 }

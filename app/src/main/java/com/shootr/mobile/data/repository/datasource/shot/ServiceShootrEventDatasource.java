@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
+import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.ShootrEventApiService;
 import com.shootr.mobile.data.entity.SearchItemEntity;
@@ -54,8 +55,8 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
 
   @Override public void getShootrEvents() {
     try {
-      List<SearchItemEntity> searchItemEntities = shootrEventApiService.getRecentList();
-        databaseRecentSearchDataSource.putRecentSearchItems(searchItemEntities);
+      FollowsEntity recentList = shootrEventApiService.getRecentList();
+        databaseRecentSearchDataSource.putRecentSearchItems(recentList);
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     } catch (Exception error) {
