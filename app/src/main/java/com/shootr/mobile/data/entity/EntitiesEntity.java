@@ -6,6 +6,7 @@ public class EntitiesEntity {
 
   private ArrayList<UrlEntity> urls;
   private ArrayList<BaseMessagePollEntity> polls;
+  private ArrayList<StreamIndexEntity> streams;
 
   public ArrayList<UrlEntity> getUrls() {
     return urls;
@@ -23,10 +24,19 @@ public class EntitiesEntity {
     this.polls = polls;
   }
 
+  public ArrayList<StreamIndexEntity> getStreams() {
+    return streams;
+  }
+
+  public void setStreams(ArrayList<StreamIndexEntity> streams) {
+    this.streams = streams;
+  }
+
   @Override public String toString() {
     return "EntitiesEntity{" +
         "urls=" + urls +
         ", polls=" + polls +
+        ", streams=" + streams +
         '}';
   }
 }

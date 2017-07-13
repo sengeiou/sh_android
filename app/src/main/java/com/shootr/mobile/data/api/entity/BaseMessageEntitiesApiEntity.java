@@ -6,7 +6,7 @@ public class BaseMessageEntitiesApiEntity {
 
   private ArrayList<UrlApiEntity> urls;
   private ArrayList<BaseMessagePollApiEntity> polls;
-
+  private ArrayList<StreamIndexApiEntity> streams;
 
   public ArrayList<UrlApiEntity> getUrls() {
     return urls;
@@ -22,5 +22,13 @@ public class BaseMessageEntitiesApiEntity {
 
   public void setPolls(ArrayList<BaseMessagePollApiEntity> polls) {
     this.polls = polls;
+  }
+
+  public ArrayList<StreamIndexApiEntity> getStreams() {
+    return streams;
+  }
+
+  public void setStreams(ArrayList<StreamIndexApiEntity> streams) {
+    this.streams = streams;
   }
 }

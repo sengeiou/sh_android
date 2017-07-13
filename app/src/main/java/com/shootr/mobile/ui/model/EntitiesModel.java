@@ -7,6 +7,7 @@ public class EntitiesModel implements Serializable {
 
   private ArrayList<UrlModel> urls;
   private ArrayList<BaseMessagePollModel> polls;
+  private ArrayList<StreamIndexModel> streams;
 
   public ArrayList<UrlModel> getUrls() {
     return urls;
@@ -22,5 +23,13 @@ public class EntitiesModel implements Serializable {
 
   public void setPolls(ArrayList<BaseMessagePollModel> polls) {
     this.polls = polls;
+  }
+
+  public ArrayList<StreamIndexModel> getStreams() {
+    return streams;
+  }
+
+  public void setStreams(ArrayList<StreamIndexModel> streams) {
+    this.streams = streams;
   }
 }

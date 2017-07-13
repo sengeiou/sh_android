@@ -4,11 +4,13 @@ import com.shootr.mobile.data.entity.BaseMessagePollEntity;
 import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.PrivateMessageEntity;
+import com.shootr.mobile.data.entity.StreamIndexEntity;
 import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Entities;
 import com.shootr.mobile.domain.model.shot.Poll;
+import com.shootr.mobile.domain.model.shot.StreamIndex;
 import com.shootr.mobile.domain.model.shot.Url;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,10 +135,24 @@ public class PrivateMessageEntityMapper {
         PrivateMessageEntity privateMessageEntity) {
         if (privateMessage.getEntities() != null) {
             EntitiesEntity entitiesEntity = new EntitiesEntity();
-            setupUrlsEntitiies(privateMessage, entitiesEntity);
+            setupUrlsEntities(privateMessage, entitiesEntity);
             setupPollEntities(privateMessage, entitiesEntity);
+            setupStreamEntities(privateMessage, entitiesEntity);
             privateMessageEntity.setEntities(entitiesEntity);
         }
+    }
+
+    private void setupStreamEntities(PrivateMessage privateMessage, EntitiesEntity entitiesEntity) {
+        ArrayList<StreamIndexEntity> streamIndexEntities = new ArrayList<>();
+
+        for (StreamIndex streamIndex : privateMessage.getEntities().getStreams()) {
+            StreamIndexEntity streamIndexEntity = new StreamIndexEntity();
+            streamIndexEntity.setStreamTitle(streamIndex.getStreamTitle());
+            streamIndexEntity.setIdStream(streamIndex.getIdStream());
+            streamIndexEntity.setIndices(streamIndex.getIndices());
+            streamIndexEntities.add(streamIndexEntity);
+        }
+        entitiesEntity.setStreams(streamIndexEntities);
     }
 
     private void setupPollEntities(PrivateMessage privateMessage, EntitiesEntity entitiesEntity) {
@@ -152,7 +168,7 @@ public class PrivateMessageEntityMapper {
         entitiesEntity.setPolls(baseMessagePollEntities);
     }
 
-    private void setupUrlsEntitiies(PrivateMessage privateMessage, EntitiesEntity entitiesEntity) {
+    private void setupUrlsEntities(PrivateMessage privateMessage, EntitiesEntity entitiesEntity) {
         ArrayList<UrlEntity> urlEntities = new ArrayList<>();
         for (Url urlApiEntity : privateMessage.getEntities().getUrls()) {
             UrlEntity urlEntity = new UrlEntity();
