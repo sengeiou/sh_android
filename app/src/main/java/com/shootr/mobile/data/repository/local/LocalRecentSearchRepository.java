@@ -7,8 +7,8 @@ import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Searchable;
-import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.Local;
@@ -59,11 +59,11 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
     try {
       for (RecentSearchEntity searchableEntity : searchableEntities) {
         switch (searchableEntity.getSearchableType()) {
-          case SearchableType.STREAM:
+          case FollowableType.STREAM:
             searchables.add(streamEntityMapper.transform(searchableEntity.getStream(),
                 localFavoriteDataSource.getFavoriteByIdStream(searchableEntity.getStream().getIdStream()) != null));
             break;
-          case SearchableType.USER:
+          case FollowableType.USER:
             UserEntity userEntity = searchableEntity.getUser();
             searchables.add(
                 userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(),
