@@ -201,16 +201,21 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         streamDetailPresenter.clickMedia();
       }
     }, // media
-        new CompoundButton.OnCheckedChangeListener() {
-          @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-            if (isChecked) {
-              streamDetailPresenter.onMuteChecked();
-              sendMuteAnalytics();
-            } else {
-              streamDetailPresenter.onUnmuteChecked();
-            }
+        new View.OnClickListener() {
+          @Override public void onClick(View view) {
+            startActivity(
+                UserFollowsContainerActivity.getIntentStreamsFollowersIntent(getBaseContext(), idStream));
           }
-        }, new View.OnClickListener() {
+        }, new CompoundButton.OnCheckedChangeListener() {
+      @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        if (isChecked) {
+          streamDetailPresenter.onMuteChecked();
+          sendMuteAnalytics();
+        } else {
+          streamDetailPresenter.onUnmuteChecked();
+        }
+      }
+    }, new View.OnClickListener() {
       @Override public void onClick(View view) {
         streamDetailPresenter.clickAllParticipants();
       }
@@ -259,7 +264,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             .create()
             .show();
       }
-    }); //follow
+    }, numberFormatUtil); //follow
     recyclerView.setAdapter(adapter);
     recyclerView.setLayoutManager(new LinearLayoutManager(this));
   }
@@ -519,6 +524,10 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     streamPictureWithoutText.setVisibility(View.VISIBLE);
   }
 
+  @Override public void showStreamFollower(int streamFollowers) {
+    adapter.setFollowersNumber(streamFollowers);
+  }
+
   private void changeToolbarColor(Bitmap bitmap) {
     try {
       blurLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_40));
@@ -665,35 +674,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   }
 
   @Override public void setFollowingNumber(Integer numberOfFollowing, Integer totalWatchers) {
-    if (numberOfFollowing == 0) {
-      streamSubtitle.setVisibility(View.VISIBLE);
-      streamSubtitle.setText(
-          getResources().getQuantityString(R.plurals.total_watchers_pattern, totalWatchers,
-              totalWatchers));
-    } else {
-      streamSubtitle.setVisibility(View.VISIBLE);
-      loadSubtitle(numberOfFollowing, totalWatchers);
-    }
-  }
-
-  public void loadSubtitle(Integer numberOfFollowing, Integer totalWatchers) {
-    if (numberOfFollowing <= 0) {
-      if (totalWatchers == 1) {
-        String participants =
-            getResources().getQuantityString(R.plurals.total_watchers_pattern, totalWatchers,
-                numberFormatUtil.formatNumbers(totalWatchers.longValue()));
-        streamSubtitle.setText(participants);
-      } else {
-        String participants =
-            getResources().getQuantityString(R.plurals.total_watchers_pattern, totalWatchers,
-                numberFormatUtil.formatNumbers(totalWatchers.longValue()));
-        streamSubtitle.setText(participants);
-      }
-    } else {
-      streamSubtitle.setText(getString(R.string.stream_subtitle_pattern_multiple_participants,
-          numberFormatUtil.formatNumbers(numberOfFollowing.longValue()),
-          numberFormatUtil.formatNumbers(totalWatchers.longValue())));
-    }
+    adapter.setFollowingNumber(numberOfFollowing, totalWatchers);
   }
 
   @Override public void showStreamShared() {

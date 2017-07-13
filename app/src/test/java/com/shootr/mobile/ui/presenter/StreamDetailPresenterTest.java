@@ -544,6 +544,7 @@ public class StreamDetailPresenterTest {
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
+    stream.setTotalFavorites(THREE_WATCHERS);
     stream.setPicture(PICTURE_URL);
     stream.setContributorCount(1L);
     return stream;
@@ -554,6 +555,7 @@ public class StreamDetailPresenterTest {
     streamModel.setIdStream(SELECTED_STREAM_ID);
     streamModel.setTitle(SELECTED_STREAM_TITLE);
     streamModel.setAuthorId(STREAM_AUTHOR_ID);
+    streamModel.setTotalFavorites(THREE_WATCHERS);
     streamModel.setTotalWatchers(NO_WATCHERS);
     streamModel.setPicture(PICTURE_URL);
     streamModel.setContributorCount(CONTRIBUTORS_COUNT);
@@ -566,6 +568,7 @@ public class StreamDetailPresenterTest {
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
+    stream.setTotalFavorites(THREE_WATCHERS);
     stream.setPicture(PICTURE_URL);
     stream.setContributorCount(CONTRIBUTORS_COUNT);
     return stream;
@@ -576,6 +579,7 @@ public class StreamDetailPresenterTest {
     stream.setId(SELECTED_STREAM_ID);
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
+    stream.setTotalFavorites(THREE_WATCHERS);
     stream.setTotalWatchers(NO_WATCHERS);
     stream.setContributorCount(CONTRIBUTORS_COUNT);
     return stream;
@@ -586,6 +590,7 @@ public class StreamDetailPresenterTest {
     stream.setId(SELECTED_STREAM_ID);
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
+    stream.setTotalFavorites(THREE_WATCHERS);
     stream.setTotalWatchers(FIFTY_PLUS_WATCHERS);
     stream.setContributorCount(CONTRIBUTORS_COUNT);
     return stream;

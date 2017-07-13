@@ -69,6 +69,11 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         throw new IllegalArgumentException("no local implementation");
     }
 
+    @Override
+    public FollowsEntity getStreamFollowers(String idStream, String[] type, Long maxTimestamp) {
+        throw new IllegalArgumentException("no local implementation");
+    }
+
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {
         return followManager.getFollowsNotSynchronized();
     }

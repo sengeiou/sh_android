@@ -1,8 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
-import com.shootr.mobile.domain.interactor.GetFollowerListInteractor;
-import com.shootr.mobile.domain.interactor.GetFollowingListInteractor;
+import com.shootr.mobile.domain.interactor.GetStreamFollowersListInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -11,7 +10,6 @@ import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.FollowModelMapper;
@@ -20,70 +18,49 @@ import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.Date;
 import javax.inject.Inject;
 
-public class FollowPresenter implements Presenter {
+public class StreamFollowersPresenter implements Presenter {
 
   private final AddToFavoritesInteractor addToFavoritesInteractor;
   private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
-  private final GetFollowingListInteractor getFollowingListInteractor;
-  private final GetFollowerListInteractor getFollowerListInteractor;
+  private final GetStreamFollowersListInteractor getStreamFollowersListInteractor;
   private final FollowModelMapper followingModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
 
   private FollowView followView;
-  private String idUser;
-  private int followType;
+  private String idStream;
   private long maxTimestamp;
   private boolean isLoadingItems;
   private boolean mightHaveMoreItems;
 
-  @Inject public FollowPresenter(AddToFavoritesInteractor addToFavoritesInteractor,
+  @Inject public StreamFollowersPresenter(AddToFavoritesInteractor addToFavoritesInteractor,
       RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor,
-      GetFollowingListInteractor getFollowingListInteractor,
-      GetFollowerListInteractor getFollowerListInteractor, FollowModelMapper followingModelMapper,
+      GetStreamFollowersListInteractor getStreamFollowersListInteractor, FollowModelMapper followingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
-    this.getFollowingListInteractor = getFollowingListInteractor;
-    this.getFollowerListInteractor = getFollowerListInteractor;
+    this.getStreamFollowersListInteractor = getStreamFollowersListInteractor;
     this.followingModelMapper = followingModelMapper;
     this.errorMessageFactory = errorMessageFactory;
   }
 
-  public void initialize(FollowView followView, String idUser, int followType) {
+  public void initialize(FollowView followView, String idStream) {
     this.followView = followView;
-    this.idUser = idUser;
-    this.followType = followType;
+    this.idStream = idStream;
     maxTimestamp = new Date().getTime();
     loadFollows(true);
   }
 
   private void loadFollows(boolean firstLoad) {
     isLoadingItems = true;
-    if (followType == UserFollowingRelationship.FOLLOWING) {
-      loadFollowing(firstLoad);
-    } else {
-      loadFollower(firstLoad);
-    }
-  }
-
-  public void loadFollowing(final boolean firtLoad) {
-    getFollowingListInteractor.getFollowingList(idUser, maxTimestamp, new Interactor.Callback<Follows>() {
-      @Override public void onLoaded(Follows following) {
-        renderItems(following, firtLoad);
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        showError(error);
-      }
-    });
+    loadFollowers(firstLoad);
   }
 
   private void showError(ShootrException error) {
@@ -91,8 +68,8 @@ public class FollowPresenter implements Presenter {
     isLoadingItems = false;
   }
 
-  private void loadFollower(final boolean firstLoad) {
-    getFollowerListInteractor.getFollowerList(idUser, maxTimestamp, new Interactor.Callback<Follows>() {
+  private void loadFollowers(final boolean firstLoad) {
+    getStreamFollowersListInteractor.getFollowerList(idStream, maxTimestamp, new Interactor.Callback<Follows>() {
       @Override public void onLoaded(Follows follows) {
         renderItems(follows, firstLoad);
       }

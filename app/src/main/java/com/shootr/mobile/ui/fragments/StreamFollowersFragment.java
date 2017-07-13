@@ -29,7 +29,7 @@ import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.FollowModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
-import com.shootr.mobile.ui.presenter.FollowPresenter;
+import com.shootr.mobile.ui.presenter.StreamFollowersPresenter;
 import com.shootr.mobile.ui.views.FollowView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -39,11 +39,10 @@ import com.shootr.mobile.util.ShareManager;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class FollowFragment extends BaseFragment
+public class StreamFollowersFragment extends BaseFragment
     implements FollowView {
 
-  private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
-  private static final String ARGUMENT_USER_ID = "userId";
+  private static final String ARGUMENT_STREAM_ID = "streamId";
 
   private SearchAdapter adapter;
 
@@ -56,12 +55,9 @@ public class FollowFragment extends BaseFragment
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
   @BindString(R.string.analytics_source_followers) String followsSource;
   @BindString(R.string.analytics_source_following) String followingsSource;
-  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
-  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.follower_list_empty) String noFollowersSource;
-  @BindString(R.string.following_list_empty) String noFollowingsSource;
 
-  @Inject FollowPresenter followPresenter;
+  @Inject StreamFollowersPresenter followPresenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject ShareManager shareManager;
   @Inject InitialsLoader initialsLoader;
@@ -69,20 +65,18 @@ public class FollowFragment extends BaseFragment
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
 
-  private String idUser;
-  private int followType;
+  private String streamId;
   private LinearLayoutManager layoutManager;
 
-  public static FollowFragment newInstance(String userId, Integer followType) {
-    FollowFragment fragment = new FollowFragment();
-    fragment.setArguments(createArguments(userId, followType));
+  public static StreamFollowersFragment newInstance(String streamId) {
+    StreamFollowersFragment fragment = new StreamFollowersFragment();
+    fragment.setArguments(createArguments(streamId));
     return fragment;
   }
 
-  public static Bundle createArguments(String userId, Integer followType) {
+  public static Bundle createArguments(String userId) {
     Bundle bundle = new Bundle();
-    bundle.putString(ARGUMENT_USER_ID, userId);
-    bundle.putInt(ARGUMENT_FOLLOW_TYPE, followType);
+    bundle.putString(ARGUMENT_STREAM_ID, userId);
     return bundle;
   }
 
@@ -101,8 +95,7 @@ public class FollowFragment extends BaseFragment
   public void injectArguments() {
     Bundle arguments = getArguments();
     if (arguments != null) {
-      idUser = arguments.getString(ARGUMENT_USER_ID);
-      followType = arguments.getInt(ARGUMENT_FOLLOW_TYPE);
+      streamId = arguments.getString(ARGUMENT_STREAM_ID);
     } else {
       Timber.w("UserFollowsFragment has null arguments, which might cause a NullPointerException");
     }
@@ -113,7 +106,7 @@ public class FollowFragment extends BaseFragment
     ButterKnife.bind(this, getView());
     userList.setLayoutManager(new LinearLayoutManager(getContext()));
     setupViews();
-    followPresenter.initialize(this, idUser, followType);
+    followPresenter.initialize(this, streamId);
     userList.addOnScrollListener(new RecyclerView.OnScrollListener() {
       @Override public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
         super.onScrollStateChanged(recyclerView, newState);
@@ -201,36 +194,28 @@ public class FollowFragment extends BaseFragment
   }
 
   private void sendFavoriteAnalytics(StreamModel stream) {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    /*AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
-    if (followType == 0) {
-      builder.setSource(followsSource);
-    } else {
-      builder.setSource(followingsSource);
-    }
+    builder.setSource(discoverSearchSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(stream.getTitle());
     builder.setIdStream(stream.getIdStream());
     analyticsTool.analyticsSendAction(builder);
-    analyticsTool.appsFlyerSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);*/
   }
 
   private void sendAnalytics(UserModel user) {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    /*AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFollow);
     builder.setLabelId(analyticsLabelFollow);
-    if (followType == 0) {
-      builder.setSource(followsSource);
-    } else {
-      builder.setSource(followingsSource);
-    }
+    builder.setSource(discoverUserSearch);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
-    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.analyticsSendAction(builder);*/
   }
 
   @Override public void showContent() {

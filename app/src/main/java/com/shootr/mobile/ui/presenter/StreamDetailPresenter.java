@@ -217,6 +217,7 @@ public class StreamDetailPresenter implements Presenter {
     this.renderWatchersList(streamInfo);
     this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
     this.getContributorsNumber();
+    renderStreamFollowers(streamInfo.getStream().getTotalFavorites());
     if (streamModel.amIAuthor()) {
       this.setupRemoveStreamMenuOption();
     }
@@ -233,6 +234,10 @@ public class StreamDetailPresenter implements Presenter {
       streamDetailView.hideRestoreButton();
       streamDetailView.showRemoveStreamButton();
     }
+  }
+
+  private void renderStreamFollowers(int streamFollowers) {
+    streamDetailView.showStreamFollower(streamFollowers);
   }
 
   private void showViewDetail() {

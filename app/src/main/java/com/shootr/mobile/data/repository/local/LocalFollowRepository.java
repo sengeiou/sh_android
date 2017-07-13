@@ -68,6 +68,10 @@ public class LocalFollowRepository implements FollowRepository {
         throw new IllegalArgumentException("Not local implementation");
     }
 
+    @Override public Follows getStreamFollowers(String idStream, String[] type, Long maxTimestamp) {
+        throw new IllegalArgumentException("Not local implementation");
+    }
+
     @NonNull protected FollowEntity createFollow(String idUser) {
         FollowEntity followEntity = new FollowEntity();
         followEntity.setIdUser(sessionRepository.getCurrentUserId());

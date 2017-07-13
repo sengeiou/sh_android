@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
@@ -18,6 +19,7 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.action_name) TextView name;
     @BindView(R.id.action_number) TextView optionalNumber;
     @BindView(R.id.menu_container) FrameLayout container;
+    @BindString(R.string.listing_title_holding) String adminResource;
 
     public ActionViewHolder(View itemView) {
         super(itemView);
@@ -43,6 +45,11 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
             optionalNumber.setVisibility(View.VISIBLE);
             optionalNumber.setText(String.valueOf(number));
         }
+    }
+
+    public void showAdminMark() {
+        optionalNumber.setVisibility(View.VISIBLE);
+        optionalNumber.setText(adminResource);
     }
 
     public void disable() {

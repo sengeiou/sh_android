@@ -92,4 +92,6 @@ public interface StreamDetailView extends DataTransferView {
     void hidePicture();
 
     void showNoTextPicture();
+
+    void showStreamFollower(int streamFollowers);
 }
