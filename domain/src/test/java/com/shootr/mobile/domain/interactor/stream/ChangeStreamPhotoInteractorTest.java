@@ -47,17 +47,17 @@ public class ChangeStreamPhotoInteractorTest {
   }
 
   @Test public void shouldNotifyLoadedWhenChangeStreamPhoto() throws Exception {
-    when(photoService.uploadStreamImageAndGetUrl(any(File.class), anyString())).thenReturn(URL);
+    when(photoService.uploadStreamImageAndGetIdMedia(any(File.class), anyString())).thenReturn(URL);
     when(localStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
 
     interactor.changeStreamPhoto(ID_STREAM, file(), callback, errorCallback);
 
-    verify(callback).onLoaded(any(Stream.class));
+    verify(callback).onLoaded(anyString());
   }
 
   @Test public void shouldNotifyErrorWhenImageResizerThrowsException() throws Exception {
     doThrow(IOException.class).when(imageResizer).getResizedImageFile(file());
-    when(photoService.uploadStreamImageAndGetUrl(any(File.class), anyString())).thenReturn(URL);
+    when(photoService.uploadStreamImageAndGetIdMedia(any(File.class), anyString())).thenReturn(URL);
     when(localStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
 
     interactor.changeStreamPhoto(ID_STREAM, file(), callback, errorCallback);
@@ -67,7 +67,7 @@ public class ChangeStreamPhotoInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowsException() throws Exception {
     doThrow(ServerCommunicationException.class).when(photoService)
-        .uploadStreamImageAndGetUrl(any(File.class), anyString());
+        .uploadStreamImageAndGetIdMedia(any(File.class), anyString());
     when(localStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
 
     interactor.changeStreamPhoto(ID_STREAM, file(), callback, errorCallback);

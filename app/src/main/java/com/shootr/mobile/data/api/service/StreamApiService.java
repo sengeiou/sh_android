@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
@@ -70,5 +71,8 @@ public interface StreamApiService {
       throws IOException, ApiException;
 
   @DELETE("/mute/{idStream}") Response unmute(@Path("idStream") String idStream)
+      throws IOException, ApiException;
+
+  @PUT("/stream/") StreamEntity updateStream(@Body StreamUpdateParameters streamUpdateParameters)
       throws IOException, ApiException;
 }

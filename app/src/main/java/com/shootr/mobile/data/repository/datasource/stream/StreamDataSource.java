@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.util.List;
 
 public interface StreamDataSource {
@@ -12,6 +13,10 @@ public interface StreamDataSource {
   StreamEntity putStream(StreamEntity streamEntity, Boolean notifyStreamMessage);
 
   StreamEntity putStream(StreamEntity streamEntity);
+
+  StreamEntity createStream(StreamEntity streamEntity);
+
+  StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters);
 
   List<StreamEntity> putStreams(List<StreamEntity> streams);
 

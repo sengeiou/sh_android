@@ -5,8 +5,6 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.PhotoService;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
@@ -55,11 +53,8 @@ public class ChangeStreamPhotoInteractor implements Interactor {
   @Override public void execute() throws Exception {
     try {
       File resizedImageFile = imageResizer.getResizedImageFile(photoFile);
-      String imageUrl = photoService.uploadStreamImageAndGetUrl(resizedImageFile, idStream);
-      Stream stream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
-      stream.setPicture(imageUrl);
-      Stream remoteStream = remoteStreamRepository.putStream(stream);
-      notifyLoaded(remoteStream);
+      String idMedia = photoService.uploadStreamImageAndGetIdMedia(resizedImageFile, idStream);
+      notifyLoaded(idMedia);
     } catch (IOException e) {
       notifyError(new ServerCommunicationException(e));
     } catch (ServerCommunicationException e) {
@@ -70,10 +65,10 @@ public class ChangeStreamPhotoInteractor implements Interactor {
     }
   }
 
-  private void notifyLoaded(final Stream remoteStream) {
+  private void notifyLoaded(final String idMedia) {
     postExecutionThread.post(new Runnable() {
       public void run() {
-        callback.onLoaded(remoteStream);
+        callback.onLoaded(idMedia);
       }
     });
   }
@@ -88,6 +83,6 @@ public class ChangeStreamPhotoInteractor implements Interactor {
 
   public interface Callback {
 
-    void onLoaded(Stream stream);
+    void onLoaded(String idMedia);
   }
 }

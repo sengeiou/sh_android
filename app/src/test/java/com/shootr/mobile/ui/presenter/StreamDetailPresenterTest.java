@@ -114,46 +114,6 @@ public class StreamDetailPresenterTest {
     verify(streamDetailView).setFollowingNumber(0, FIFTY_PLUS_WATCHERS);
   }
 
-  @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoIsNull() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-    setupStreamInfoCallback();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-    presenter.photoClick();
-
-    verify(streamDetailView).showPhotoOptions();
-  }
-
-  @Test public void shouldOpenEditPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-    setupStreamInfoCallbackWithPhoto();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-    presenter.photoClick();
-
-    verify(streamDetailView).showPhotoOptions();
-  }
-
-  @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-    setupStreamInfoCallback();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-    presenter.photoClick();
-
-    verify(streamDetailView, never()).showPhotoOptions();
-  }
-
-  @Test public void shouldNotOpenEditPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-    setupStreamInfoCallbackWithPhoto();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-    presenter.photoClick();
-
-    verify(streamDetailView, never()).showPhotoOptions();
-  }
-
   @Test public void shouldZoomPhotoIfIAmNotAuthorAndPhotoNotNull() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     setupStreamInfoCallbackWithPhoto();
@@ -164,29 +124,9 @@ public class StreamDetailPresenterTest {
     verify(streamDetailView).zoomPhoto(PICTURE_URL);
   }
 
-  @Test public void shouldZoomPhotoIfIAmAuthorAndPhotoNotNull() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-    setupStreamInfoCallbackWithPhoto();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-    presenter.photoClick();
-
-    verify(streamDetailView).showPhotoOptions();
-  }
-
   @Test public void shouldNotZoomPhotoIfIAmNotAuthorAndPhotoNull() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
     setupStreamWithoutPictureInfoCallback();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-    presenter.photoClick();
-
-    verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
-  }
-
-  @Test public void shouldNotZoomPhotoIfIAmAuthorAndPhotoNull() throws Exception {
-    when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
-    setupStreamInfoCallback();
 
     presenter.initialize(streamDetailView, ID_STREAM);
     presenter.photoClick();

@@ -125,15 +125,13 @@ import static android.content.Context.MODE_PRIVATE;
         WritePermissionManager.class,
 
         ContributorManager.class,
-        
+
         ShootrEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class,
         FollowFragment.class, StreamFollowersFragment.class
-
-    },
-    includes = {
-        ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
-        InteractorModule.class, RepositoryModule.class, ServiceModule.class,
-    },
+    }, includes = {
+    ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
+    InteractorModule.class, RepositoryModule.class, ServiceModule.class,
+},
     complete = false,
     library = true) public class DataModule {
 

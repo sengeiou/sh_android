@@ -27,11 +27,9 @@ import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
@@ -156,24 +154,6 @@ public class StreamDetailPresenter implements Presenter {
     loadStreamInfo();
   }
 
-  public void photoSelected(File photoFile) {
-    streamDetailView.showLoadingPictureUpload();
-    changeStreamPhotoInteractor.changeStreamPhoto(streamModel.getIdStream(), photoFile,
-        new ChangeStreamPhotoInteractor.Callback() {
-          @Override public void onLoaded(Stream stream) {
-            renderStreamInfo(stream);
-            streamDetailView.hideLoadingPictureUpload();
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showEditPicturePlaceholderIfEmpty();
-            streamDetailView.hideLoadingPictureUpload();
-            showImageUploadError();
-            Timber.e(error, "Error changing stream photo");
-          }
-        });
-  }
-
   private void showEditPicturePlaceholderIfEmpty() {
     if (streamModel.getPicture() == null) {
       streamDetailView.showEditPicturePlaceholder();
@@ -251,21 +231,13 @@ public class StreamDetailPresenter implements Presenter {
   //endregion
 
   public void photoClick() {
-    if (streamModel.amIAuthor() && streamModel.getPicture() != null) {
-      streamDetailView.showPhotoOptions();
-    } else if (streamModel.amIAuthor() && streamModel.getPicture() == null) {
-      streamDetailView.showPhotoPicker();
-    } else if (!streamModel.amIAuthor() && streamModel.getPicture() != null) {
-      zoomPhoto();
-    }
-  }
-
-  public void viewPhotoClicked() {
     zoomPhoto();
   }
 
-  public void zoomPhoto() {
-    streamDetailView.zoomPhoto(streamModel.getPicture());
+  private void zoomPhoto() {
+    if (streamModel.getPicture() != null) {
+      streamDetailView.zoomPhoto(streamModel.getPicture());
+    }
   }
 
   //region renders

@@ -10,5 +10,5 @@ public interface PhotoService {
 
     List<String> uploadShotImageAndGetUrl(File imageFile) throws IOException;
 
-    String uploadStreamImageAndGetUrl(File imageFile, String idEvent) throws IOException;
+    String uploadStreamImageAndGetIdMedia(File imageFile, String idEvent) throws IOException;
 }

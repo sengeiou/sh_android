@@ -9,9 +9,9 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -57,7 +57,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final ErrorMessageFactory errorMessageFactory;
   private final Poller poller;
   private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
-  private final CreateStreamInteractor createStreamInteractor;
+  private final UpdateStreamInteractor updateStreamInteractor;
   private final GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private final SessionRepository sessionRepository;
 
@@ -95,7 +95,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       UndoReshootInteractor undoReshootInteractor, ShotModelMapper shotModelMapper,
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
-      CreateStreamInteractor createStreamInteractor,
+      UpdateStreamInteractor updateStreamInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
       SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
@@ -112,7 +112,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.errorMessageFactory = errorMessageFactory;
     this.poller = poller;
     this.updateWatchNumberInteractor = updateWatchNumberInteractor;
-    this.createStreamInteractor = createStreamInteractor;
+    this.updateStreamInteractor = updateStreamInteractor;
     this.getNewFilteredShotsInteractor = getNewFilteredShotsInteractor;
     this.sessionRepository = sessionRepository;
   }
@@ -651,25 +651,22 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void sendStream(String topic, Boolean notifyMessage) {
-    String title = filterTitle(streamTitle);
-    String description = filterDescription(streamDescription);
     topic = trimTopicAndNullWhenEmpty(topic);
 
-    createStreamInteractor.sendStream(streamId, title, description, streamModel.getReadWriteMode(),
-        topic, false, notifyMessage, new CreateStreamInteractor.Callback() {
-          @Override public void onLoaded(Stream stream) {
-            streamTopic = stream.getTopic();
-            if (streamTopic != null && !streamTopic.isEmpty()) {
-              streamTimelineView.showPinnedMessage(streamTopic);
-            } else {
-              streamTimelineView.hidePinnedMessage();
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-          }
-        });
+    updateStreamInteractor.updateStreamMessage(streamId, topic, notifyMessage, new UpdateStreamInteractor.Callback() {
+      @Override public void onLoaded(Stream stream) {
+        streamTopic = stream.getTopic();
+        if (streamTopic != null && !streamTopic.isEmpty()) {
+          streamTimelineView.showPinnedMessage(streamTopic);
+        } else {
+          streamTimelineView.hidePinnedMessage();
+        }
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+      }
+    });
   }
 
   private String trimTopicAndNullWhenEmpty(String streamTopic) {

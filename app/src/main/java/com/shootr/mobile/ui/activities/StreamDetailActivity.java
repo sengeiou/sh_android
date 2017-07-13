@@ -1,22 +1,18 @@
 package com.shootr.mobile.ui.activities;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,10 +35,8 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
-import com.cocosw.bottomsheet.BottomSheet;
 import com.eftimoff.androidplayer.Player;
 import com.eftimoff.androidplayer.actions.property.PropertyAction;
-import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.StreamDetailAdapter;
@@ -65,18 +59,12 @@ import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar;
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
-import timber.log.Timber;
 
 public class StreamDetailActivity extends BaseActivity implements StreamDetailView {
 
   private static final int REQUEST_EDIT_STREAM = 3;
-  private static final int REQUEST_CHOOSE_PHOTO = 0;
-  private static final int REQUEST_TAKE_PHOTO = 5;
-  private static final int REQUEST_CROP_PHOTO = 88;
 
   private static final String EXTRA_STREAM_ID = "streamId";
   private static final int NO_CONTRIBUTORS = 0;
@@ -344,13 +332,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         && resultCode == NewStreamActivity.RESULT_EXIT_STREAM) {
       setResult(NewStreamActivity.RESULT_EXIT_STREAM);
       finish();
-    } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
-      cropGalleryPicture(data);
-    } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-      cropCameraPicture();
-    } else if (requestCode == REQUEST_CROP_PHOTO && resultCode == Activity.RESULT_OK) {
-      File photoFile = getCameraPhotoFile();
-      streamDetailPresenter.photoSelected(photoFile);
     }
   }
 
@@ -363,23 +344,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     builder.setSource(streamDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
-  }
-
-  private void cropCameraPicture() {
-    Intent intent = new Intent(this, CropPictureActivity.class);
-    intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, true);
-    intent.putExtra(CropPictureActivity.EXTRA_URI, "");
-    intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "cropUpload.jpg");
-    startActivityForResult(intent, REQUEST_CROP_PHOTO);
-  }
-
-  private void cropGalleryPicture(Intent data) {
-    Uri selectedImageUri = data.getData();
-    Intent intent = new Intent(this, CropPictureActivity.class);
-    intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, false);
-    intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "cropUpload.jpg");
-    intent.putExtra(CropPictureActivity.EXTRA_URI, selectedImageUri.toString());
-    startActivityForResult(intent, REQUEST_CROP_PHOTO);
   }
 
   @Override protected void onResume() {
@@ -401,41 +365,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     streamDetailPresenter.photoClick();
   }
 
-  private void choosePhotoFromGallery() {
-    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-    startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
-  }
-
-  private void takePhotoFromCamera() {
-    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-    File pictureTemporaryFile = getCameraPhotoFile();
-    if (!pictureTemporaryFile.exists()) {
-      try {
-        pictureTemporaryFile.getParentFile().mkdirs();
-        pictureTemporaryFile.createNewFile();
-      } catch (IOException e) {
-        crashReportTool.logException("No se pudo crear el archivo temporal para la foto de perfil");
-      }
-    }
-    Uri temporaryPhotoUri = FileProvider.getUriForFile(StreamDetailActivity.this,
-        BuildConfig.APPLICATION_ID + ".provider", pictureTemporaryFile);
-    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
-    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-  }
-
-  private File getCameraPhotoFile() {
-    File photoFile = new File(getExternalFilesDir("tmp"), "cropUpload.jpg");
-    if (!photoFile.exists()) {
-      try {
-        photoFile.getParentFile().mkdirs();
-        photoFile.createNewFile();
-      } catch (IOException e) {
-        Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
-        throw new IllegalStateException(e);
-      }
-    }
-    return photoFile;
-  }
   //endregion
 
   //region View methods
@@ -552,49 +481,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     }
   }
 
-  @Override public void showPhotoOptions() {
-    new BottomSheet.Builder(this).title(R.string.title_menu_photo)
-        .sheet(R.menu.photo_options_bottom_sheet)
-        .listener(new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-              case R.id.menu_photo_view:
-                streamDetailPresenter.viewPhotoClicked();
-                break;
-              case R.id.menu_photo_gallery:
-                handlePhotoSelectionFromGallery();
-                break;
-              case R.id.menu_photo_take:
-                takePhotoFromCamera();
-                break;
-              default:
-                break;
-            }
-          }
-        })
-        .show();
-  }
-
-  public void handlePhotoSelectionFromGallery() {
-    if (writePermissionManager.hasWritePermission()) {
-      choosePhotoFromGallery();
-    } else {
-      writePermissionManager.requestWritePermissionToUser();
-    }
-  }
-
   @Override public void showEditPicturePlaceholder() {
     streamPicture.setImageResource(R.drawable.ic_stream_picture_edit);
-  }
-
-  @Override public void showLoadingPictureUpload() {
-    streamPicture.setVisibility(View.GONE);
-    streamPictureLoading.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void hideLoadingPictureUpload() {
-    streamPicture.setVisibility(View.VISIBLE);
-    streamPictureLoading.setVisibility(View.GONE);
   }
 
   @Override public void zoomPhoto(String picture) {
@@ -724,26 +612,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
   @Override public void showContributorsNumber(Integer contributorsNumber, boolean isStreamAuthor) {
     adapter.setContributorsNumber(contributorsNumber, isStreamAuthor);
-  }
-
-  @Override public void showPhotoPicker() {
-    new BottomSheet.Builder(this).title(R.string.title_menu_photo)
-        .sheet(R.menu.photo_picker_bottom_sheet)
-        .listener(new DialogInterface.OnClickListener() {
-          @Override public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-              case R.id.menu_photo_gallery:
-                handlePhotoSelectionFromGallery();
-                break;
-              case R.id.menu_photo_take:
-                takePhotoFromCamera();
-                break;
-              default:
-                break;
-            }
-          }
-        })
-        .show();
   }
 
   @Override public void showRestoreStreamButton() {

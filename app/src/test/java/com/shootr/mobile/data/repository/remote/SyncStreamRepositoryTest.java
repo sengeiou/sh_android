@@ -13,7 +13,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.never;
@@ -118,14 +117,14 @@ public class SyncStreamRepositoryTest {
   }
 
   @Test public void shouldPutStreamInLocalWhenCallPutStream() throws Exception {
-    when(remoteStreamDataSource.putStream(any(StreamEntity.class), anyBoolean())).thenReturn(
+    when(remoteStreamDataSource.createStream(any(StreamEntity.class))).thenReturn(
         streamEntity());
     when(syncableStreamEntityFactory.updatedOrNewEntity(any(Stream.class))).thenReturn(
         streamEntity());
 
-    syncStreamRepository.putStream(stream(), NOTIFY, NOTIFY_MESSAGE);
+    syncStreamRepository.putStream(stream(), NOTIFY);
 
-    verify(localStreamDataSource).putStream(any(StreamEntity.class), anyBoolean());
+    verify(localStreamDataSource).putStream(any(StreamEntity.class));
   }
 
   private Stream stream() {

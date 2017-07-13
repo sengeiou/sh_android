@@ -1,9 +1,11 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -37,15 +39,16 @@ public class NewStreamPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock NewStreamView newStreamView;
     @Mock SessionRepository sessionRepository;
+    @Mock ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
+    @Mock UpdateStreamInteractor updateStreamInteractor;
 
     private NewStreamPresenter presenter;
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
-        presenter = new NewStreamPresenter(createStreamInteractor,
-          getStreamInteractor,
-          selectStreamInteractor,
+        presenter = new NewStreamPresenter(createStreamInteractor, updateStreamInteractor,
+            getStreamInteractor, changeStreamPhotoInteractor, selectStreamInteractor,
           streamModelMapper,
           errorMessageFactory);
     }
@@ -58,7 +61,7 @@ public class NewStreamPresenterTest {
 
     @Test public void shouldCloseScreenWithResultWhenEditStreamWithoutTopic() throws Exception {
         setupGetStreamInteractorCallbackWithEmptyTopic();
-        setupCreateStreamInteractorCallbackWithEmptyTopic();
+        setupUpdateStreamInteractorCallbackWithEmptyTopic();
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         presenter.initialize(newStreamView, STREAM_ID);
 
@@ -75,7 +78,7 @@ public class NewStreamPresenterTest {
 
         presenter.confirmNotify(TITLE, DESCRIPTION, MODE, true);
 
-        verify(newStreamView).closeScreenWithResult(anyString());
+        verify(newStreamView).goToShareStream(anyString());
     }
 
     private void setupGetStreamInteractorCallbackWithEmptyTopic() {
@@ -87,20 +90,38 @@ public class NewStreamPresenterTest {
         }).when(getStreamInteractor).loadStream(anyString(), any(GetStreamInteractor.Callback.class));
     }
 
+    private void setupUpdateStreamInteractorCallbackWithEmptyTopic() {
+        doAnswer(new Answer() {
+            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+                ((UpdateStreamInteractor.Callback) invocation.getArguments()[5])
+                    .onLoaded(selectedStreamWithNullTopic());
+                return null;
+            }
+        }).when(updateStreamInteractor)
+            .updateStream(
+                anyString(),
+                anyString(),
+                anyString(),
+                anyInt(),
+                anyString(),
+                any(UpdateStreamInteractor.Callback.class),
+                any(Interactor.ErrorCallback.class));
+    }
+
+
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[7])
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[5])
                   .onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
         }).when(createStreamInteractor)
-          .sendStream(anyString(),
+          .sendStream(
             anyString(),
             anyString(),
             anyInt(),
             anyString(),
-            anyBoolean(),
             anyBoolean(),
             any(CreateStreamInteractor.Callback.class),
             any(Interactor.ErrorCallback.class));

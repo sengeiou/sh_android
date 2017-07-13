@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Stream implements Searchable, Followable {
+public class Stream implements Searchable, Followable, Validable {
 
     private String id;
     private String authorId;
@@ -36,6 +36,7 @@ public class Stream implements Searchable, Followable {
     private boolean isFavorite;
     private boolean isStrategic;
     private int totalFollowingWatchers;
+    private String photoIdMedia;
 
     public Boolean isRemoved() {
         return removed;
@@ -227,6 +228,14 @@ public class Stream implements Searchable, Followable {
         return FollowableType.STREAM;
     }
 
+    @Override public String getTitleToValidate() {
+        return title;
+    }
+
+    @Override public String getDescriptionToValidate() {
+        return description;
+    }
+
     public static class StreamExplicitComparator implements Comparator<Stream> {
 
         private Map<String, Integer> indexMap = new HashMap<>();
@@ -305,5 +314,13 @@ public class Stream implements Searchable, Followable {
 
     public void setTotalFollowingWatchers(int totalFollowingWatchers) {
         this.totalFollowingWatchers = totalFollowingWatchers;
+    }
+
+    public String getPhotoIdMedia() {
+        return photoIdMedia;
+    }
+
+    public void setPhotoIdMedia(String photoIdMedia) {
+        this.photoIdMedia = photoIdMedia;
     }
 }

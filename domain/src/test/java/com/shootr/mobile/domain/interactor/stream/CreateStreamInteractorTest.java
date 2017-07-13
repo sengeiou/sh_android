@@ -34,6 +34,7 @@ public class CreateStreamInteractorTest {
   private static final String SHORT_TITLE = "a";
   private static final String USER_ID = "userId";
   private static final String USER_NAME = "userName";
+  private static final String ID_MEDIA = "idMedia";
   @Mock PostExecutionThread postExecutionThread;
   @Mock SessionRepository sessionRepository;
   @Mock ExternalStreamRepository remoteStreamRepository;
@@ -54,12 +55,12 @@ public class CreateStreamInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor =
         new CreateStreamInteractor(interactorHandler, postExecutionThread, sessionRepository,
-            remoteStreamRepository, localStreamRepository, localeProvider, localUserRepository);
+            remoteStreamRepository, localeProvider, localUserRepository);
   }
 
   @Test public void shouldThrowsDomainValidationExceptionWhenIsNotAValidStream() throws Exception {
 
-    interactor.sendStream(null, SHORT_TITLE, DESCRIPTION, PUBLIC_MODE, TOPIC, NOTIFY, NOTIFY_TOPIC,
+    interactor.sendStream(SHORT_TITLE, DESCRIPTION, PUBLIC_MODE, ID_MEDIA, NOTIFY,
         callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
@@ -69,7 +70,7 @@ public class CreateStreamInteractorTest {
     when(localStreamRepository.getStreamById(ID_STREAM, StreamMode.TYPES_STREAM)).thenReturn(
         new Stream());
 
-    interactor.sendStream(ID_STREAM, TITLE, DESCRIPTION, PUBLIC_MODE, TOPIC, NOTIFY, NOTIFY_TOPIC,
+    interactor.sendStream(TITLE, DESCRIPTION, PUBLIC_MODE, ID_MEDIA, NOTIFY,
         callback, errorCallback);
 
     verify(callback).onLoaded(any(Stream.class));

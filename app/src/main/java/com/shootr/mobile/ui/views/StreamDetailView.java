@@ -15,13 +15,7 @@ public interface StreamDetailView extends DataTransferView {
 
     void setStreamPicture(String picture);
 
-    void showPhotoOptions();
-
     void showEditPicturePlaceholder();
-
-    void showLoadingPictureUpload();
-
-    void hideLoadingPictureUpload();
 
     void zoomPhoto(String picture);
 
@@ -64,8 +58,6 @@ public interface StreamDetailView extends DataTransferView {
     void hideContributorsNumber(boolean isAuthorStream);
 
     void showContributorsNumber(Integer contributorsNumber, boolean isAuthorStream);
-
-    void showPhotoPicker();
 
     void showRestoreStreamButton();
 

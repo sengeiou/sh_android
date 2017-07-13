@@ -81,16 +81,16 @@
   <string name="dismiss_highlight_shot">Dismiss</string>
   <string name="done">Done</string>
   <string name="done_label">Done</string>
-  <string name="done_pin_topic" formatted="false">Pin</string>
+  <string formatted="false" name="done_pin_topic">Pin</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
   <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
   <string name="drafts_action_discard">Discard</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">No Drafts</string>
-  <string name="drawer_activity_me" formatted="false">Me</string>
+  <string formatted="false" name="drawer_activity_me">Me</string>
   <string name="drawer_activity_title">Activity</string>
-  <string name="drawer_following_activity_title" formatted="false">Following</string>
+  <string formatted="false" name="drawer_following_activity_title">Following</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Users</string>
   <string name="edit_stream">Edit</string>
@@ -203,7 +203,7 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
   <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
-  <string name="language_support_alert" formatted="false">We currently support English only.</string>
+  <string formatted="false" name="language_support_alert">We currently support English only.</string>
   <string name="left">%s left</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s link click</item>
@@ -304,10 +304,10 @@
   <string name="photo_edit_remove">Remove</string>
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
   <string name="photo_edit_take">Camera</string>
-  <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
-  <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to the stream\'s followers and current participants.</string>
-  <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
-  <string name="pin_topic" formatted="false">Pin message</string>
+  <string formatted="false" name="pin_message_notification_confirmation_no">No</string>
+  <string formatted="false" name="pin_message_notification_confirmation_text">Notification will be sent to the stream\'s followers and current participants.</string>
+  <string formatted="false" name="pin_message_notification_confirmation_yes">Notify</string>
+  <string formatted="false" name="pin_topic">Pin message</string>
   <string name="poll_ignore">Dismiss poll</string>
   <string name="poll_live_results">Live results</string>
   <string name="poll_manual_close">Remaining time: Not defined</string>
@@ -437,7 +437,7 @@
   <string name="stream_data_info_favorites">Followers</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
-  <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
+  <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Edit stream</string>
   <string name="stream_detail_media">Media</string>
@@ -481,9 +481,9 @@
   <string name="title_activity_stream_data_info">Statistics</string>
   <string name="title_activity_stream_media">Media</string>
   <string name="title_activity_support">Support</string>
-  <string name="title_menu_photo" formatted="false">Photo</string>
-  <string name="title_pin_message_notification" formatted="false">Notify message?</string>
-  <string name="topic" formatted="false">Message</string>
+  <string formatted="false" name="title_menu_photo">Photo</string>
+  <string formatted="false" name="title_pin_message_notification">Notify message?</string>
+  <string formatted="false" name="topic">Message</string>
   <plurals name="total_watchers_pattern">
     <item quantity="one">%s participant       </item>
     <item quantity="other">%s participants        </item>
@@ -514,7 +514,7 @@
   <string name="voted_public_poll">Voted \"%1$s\" in (question) in %2$s</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
-  <string name="watch_profile_photo" formatted="false">View</string>
+  <string formatted="false" name="watch_profile_photo">View</string>
   <string name="welcome_get_started_button">Got it</string>
   <string name="welcome_shootr_title">Follow people to always read their messages</string>
   <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>

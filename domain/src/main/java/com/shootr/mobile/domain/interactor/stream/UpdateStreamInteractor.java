@@ -9,69 +9,83 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
-import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
 import java.util.List;
 import javax.inject.Inject;
 
-public class CreateStreamInteractor implements Interactor {
+public class UpdateStreamInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final SessionRepository sessionRepository;
   private final ExternalStreamRepository remoteStreamRepository;
-  private final LocaleProvider localeProvider;
-  private final UserRepository localUserRepository;
 
+  private String idStream;
   private String title;
   private String description;
+  private String topic;
   private String idMedia;
-  private boolean notifyCreation;
   private Callback callback;
   private ErrorCallback errorCallback;
 
+  private boolean notifyTopicMessage;
   private String streamMode;
 
-  @Inject public CreateStreamInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      ExternalStreamRepository remoteStreamRepository,
-      LocaleProvider localeProvider,
-      @Local UserRepository localUserRepository) {
+  private boolean isEditingTopic = false;
+
+
+  @Inject public UpdateStreamInteractor(InteractorHandler interactorHandler,
+      PostExecutionThread postExecutionThread,
+      ExternalStreamRepository remoteStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.sessionRepository = sessionRepository;
     this.remoteStreamRepository = remoteStreamRepository;
-    this.localeProvider = localeProvider;
-    this.localUserRepository = localUserRepository;
   }
 
-  public void sendStream(String title, String description, Integer streamMode,
-      String idMedia, boolean notifyCreation, Callback callback,
+  public void updateStream(String idStream, String title, String description, Integer streamMode,
+      String idMedia, Callback callback,
       ErrorCallback errorCallback) {
+    this.idStream = idStream;
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
     this.idMedia = idMedia;
-    this.notifyCreation = notifyCreation;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  public void updateStreamMessage(String idStream, String topic, Boolean notifyTopicMessage, Callback callback,
+      ErrorCallback errorCallback) {
+    isEditingTopic = true;
+    this.idStream = idStream;
+    this.topic = topic == null ? "" : topic;
+    this.notifyTopicMessage = notifyTopicMessage;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    Stream stream = streamFromParameters();
-    if (validateStream(stream)) {
-      try {
-        Stream savedStream = sendStreamToServer(stream, notifyCreation);
-        notifyLoaded(savedStream);
-      } catch (ShootrException e) {
-        handleServerError(e);
+    StreamUpdateParameters streamUpdateParameters = streamFromParameters();
+
+    if (isEditingTopic) {
+      sendAndNotify(streamUpdateParameters);
+    } else {
+      if (validateStream(streamUpdateParameters)) {
+        sendAndNotify(streamUpdateParameters);
       }
+    }
+  }
+
+  private void sendAndNotify(StreamUpdateParameters streamUpdateParameters) {
+    try {
+      Stream savedStream = sendStreamToServer(streamUpdateParameters);
+      notifyLoaded(savedStream);
+    } catch (ShootrException e) {
+      handleServerError(e);
     }
   }
 
@@ -79,30 +93,27 @@ public class CreateStreamInteractor implements Interactor {
     return streamMode == 0 ? StreamMode.PUBLIC : StreamMode.VIEW_ONLY;
   }
 
-  private Stream streamFromParameters() {
-    Stream stream = new Stream();
+  private StreamUpdateParameters streamFromParameters() {
+    StreamUpdateParameters streamUpdateParameters = new StreamUpdateParameters();
 
-    stream.setCountry(localeProvider.getCountry());
-    stream.setTitle(title);
-    stream.setDescription(removeDescriptionLineBreaks(description));
-    stream.setReadWriteMode(streamMode);
-    String currentUserId = sessionRepository.getCurrentUserId();
-    stream.setAuthorId(currentUserId);
-    stream.setAuthorUsername(localUserRepository.getUserById(currentUserId).getUsername());
-    stream.setTotalFavorites(0);
-    stream.setTotalWatchers(0);
-    if (idMedia != null) {
-      stream.setPhotoIdMedia(idMedia);
-    }
-    return stream;
+    streamUpdateParameters.setIdStream(idStream);
+    streamUpdateParameters.setIdMedia(idMedia);
+    streamUpdateParameters.setTitle(title);
+    streamUpdateParameters.setDescription(removeDescriptionLineBreaks(description));
+    streamUpdateParameters.setIdMedia(idMedia);
+    streamUpdateParameters.setReadWriteMode(streamMode);
+    streamUpdateParameters.setTopic(topic);
+    streamUpdateParameters.setNotifyMessage(notifyTopicMessage);
+
+    return streamUpdateParameters;
   }
 
-  private Stream sendStreamToServer(Stream stream, boolean notify) {
-    return remoteStreamRepository.putStream(stream, notify);
+  private Stream sendStreamToServer(StreamUpdateParameters streamUpdateParameters) {
+    return remoteStreamRepository.updateStream(streamUpdateParameters);
   }
 
   //region Validation
-  private boolean validateStream(Stream stream) {
+  private boolean validateStream(StreamUpdateParameters stream) {
     List<FieldValidationError> validationErrors = new StreamValidator().validate(stream);
     if (validationErrors.isEmpty()) {
       return true;
@@ -114,7 +125,7 @@ public class CreateStreamInteractor implements Interactor {
 
   private String removeDescriptionLineBreaks(String description) {
     if (description == null || description.isEmpty()) {
-      return null;
+      return "";
     } else {
       return description.replace("\n", "").replace("\r", "");
     }
