@@ -20,7 +20,7 @@ import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
-import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
@@ -53,7 +53,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   private final GetCurrentUserInteractor getCurrentUserInteractor;
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
-  private final SendShotEventStatsIneteractor sendShotEventStatsIneteractor;
+  private final SendShootrEventStatsInteractor sendShootrEventStatsInteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
   private final ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
   private final GetMutedStreamsInteractor getMutedStreamsInteractor;
@@ -83,7 +83,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
-      SendShotEventStatsIneteractor sendShotEventStatsIneteractor,
+      SendShootrEventStatsInteractor sendShootrEventStatsInteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
       ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor,
       GetMutedStreamsInteractor getMutedStreamsInteractor,
@@ -98,7 +98,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       AnalyticsTool analyticsTool) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
-    this.sendShotEventStatsIneteractor = sendShotEventStatsIneteractor;
+    this.sendShootrEventStatsInteractor = sendShootrEventStatsInteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
     this.shouldUpdateDeviceInfoInteractor = getDeviceInfoInteractor;
     this.getMutedStreamsInteractor = getMutedStreamsInteractor;
@@ -159,7 +159,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   }
 
   private void sendShotEventStats() {
-    sendShotEventStatsIneteractor.sendShotsStats();
+    sendShootrEventStatsInteractor.sendShootrEvents();
   }
 
   private void loadCurrentUser() {

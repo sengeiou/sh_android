@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
-import com.shootr.mobile.domain.interactor.shot.SendShotEventStatsIneteractor;
+import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
@@ -53,7 +53,7 @@ public class MainScreenPresenterTest {
     @Mock TimeUtils timeUtils;
     @Mock GetCurrentUserInteractor getCurrentUserInteractor;
     @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
-    @Mock SendShotEventStatsIneteractor sendShoEventStatsIneteractor;
+    @Mock SendShootrEventStatsInteractor sendShoEventStatsIneteractor;
     @Mock GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
     @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
     @Mock SessionRepository sessionRepository;
