@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.38.0] - 2017-07-14
+
+### Added
+- Stream new streams
+- New Stream and share
+- Stream followers
+- Server side recent
+
 ## [1.37.2] - 2017-07-7
 
 ### Changed
