@@ -107,7 +107,11 @@ public class FollowPresenter implements Presenter {
     isLoadingItems = false;
     maxTimestamp = follows.getMaxTimestamp();
     if (firstLoad) {
-      followView.renderItems(followingModelMapper.transform(follows));
+      if (!follows.getData().isEmpty()) {
+        followView.renderItems(followingModelMapper.transform(follows));
+      } else {
+        followView.showNoFollowing();
+      }
     } else {
       followView.renderMoreItems(followingModelMapper.transform(follows));
     }

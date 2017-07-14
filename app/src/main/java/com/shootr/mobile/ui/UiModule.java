@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
 import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
+import com.shootr.mobile.ui.activities.ShareStreamActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDataInfoActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
@@ -110,7 +111,7 @@ import javax.inject.Singleton;
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
     OnBoardingStreamActivity.class,
-    GenericSearchFragment.class, ChannelsContainerFragment.class
+    GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class
   },
   complete = false) public class UiModule {
 

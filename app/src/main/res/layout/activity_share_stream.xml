@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/setup_notification_background"
+    tools:context="com.shootr.mobile.ui.activities.SetupNotificationsActivity"
+    >
+
+  <com.shootr.mobile.ui.widgets.AvatarView
+      android:id="@+id/stream_photo"
+      android:layout_width="96dp"
+      android:layout_height="96dp"
+      android:src="@drawable/ic_poll"
+      />
+
+  <TextView
+      android:id="@+id/stream_title"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="64dp"
+      android:fontFamily="sans-serif-medium"
+      android:text="@string/share_stream_title"
+      android:textColor="@color/black"
+      android:textSize="20sp"
+      />
+
+  <TextView
+      android:layout_width="288dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:textSize="14sp"
+      android:gravity="center"
+      android:text="@string/share_stream_description"
+      />
+
+  <Button
+      android:id="@+id/share_stream"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/share_stream_button"
+      android:layout_marginTop="40dp"
+      />
+
+  <TextView
+      android:id="@+id/go_to_stream_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="24dp"
+      android:gravity="center"
+      android:textAllCaps="true"
+      android:text="@string/go_to_stream"
+      android:textSize="14sp"
+      android:textColor="@color/primary"
+      android:clickable="true"
+      android:background="?selectableItemBackground"
+      android:paddingBottom="16dp"
+      android:paddingLeft="8dp"
+      android:paddingRight="8dp"
+      android:paddingTop="16dp"
+
+      />
+</LinearLayout>

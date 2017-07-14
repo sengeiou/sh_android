@@ -5,12 +5,14 @@ import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.StreamIndexEntity;
 import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Entities;
 import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
+import com.shootr.mobile.domain.model.shot.StreamIndex;
 import com.shootr.mobile.domain.model.shot.Url;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,6 +93,7 @@ public class ShotEntityMapper {
       EntitiesEntity entitiesEntity = new EntitiesEntity();
       setupUrls(shot, entitiesEntity);
       setupPolls(shot, entitiesEntity);
+      setupStreams(shot, entitiesEntity);
       shotEntity.setEntities(entitiesEntity);
     }
   }
@@ -105,6 +108,18 @@ public class ShotEntityMapper {
       baseMessagePollEntities.add(baseMessagePollEntity);
     }
     entitiesEntity.setPolls(baseMessagePollEntities);
+  }
+
+  private void setupStreams(Shot shot, EntitiesEntity entitiesEntity) {
+    ArrayList<StreamIndexEntity> streamIndexEntities = new ArrayList<>();
+    for (StreamIndex stream : shot.getEntities().getStreams()) {
+      StreamIndexEntity streamIndexEntity = new StreamIndexEntity();
+      streamIndexEntity.setIndices(stream.getIndices());
+      streamIndexEntity.setIdStream(stream.getIdStream());
+      streamIndexEntity.setStreamTitle(stream.getStreamTitle());
+      streamIndexEntities.add(streamIndexEntity);
+    }
+    entitiesEntity.setStreams(streamIndexEntities);
   }
 
   private void setupUrls(Shot shot, EntitiesEntity entitiesEntity) {
@@ -196,8 +211,22 @@ public class ShotEntityMapper {
       Entities entities = new Entities();
       setupUrls(shotEntity, entities);
       setupPolls(shotEntity, entities);
+      setupStreams(shotEntity, entities);
       shot.setEntities(entities);
     }
+  }
+
+  private void setupStreams(ShotEntity shotEntity, Entities entities) {
+    ArrayList<StreamIndex> streams = new ArrayList<>();
+    for (StreamIndexEntity streamApiEntity : shotEntity.getEntities().getStreams()) {
+      StreamIndex streamIndex = new StreamIndex();
+      streamIndex.setIdStream(streamApiEntity.getIdStream());
+      streamIndex.setStreamTitle(streamApiEntity.getStreamTitle());
+      streamIndex.setIndices(streamApiEntity.getIndices());
+      streams.add(streamIndex);
+    }
+
+    entities.setStreams(streams);
   }
 
   private void setupPolls(ShotEntity shotEntity, Entities entities) {

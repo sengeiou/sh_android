@@ -19,6 +19,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -36,22 +37,27 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
   private static final int TYPE_PARTICIPANT = 6;
   private static final int TYPE_DESCRIPTION = 7;
   private static final int TYPE_ALL_PARTICIPANTS = 8;
+  private static final int TYPE_FOLLOWERS = 9;
 
-  private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 6;
+  private static final int EXTRA_ITEMS_ABOVE_PARTICIPANTS = 7;
 
   private final View.OnClickListener onAuthorClickListener;
   private final View.OnClickListener onContributorsClickListener;
   private final View.OnClickListener onMediaClickListener;
   private final View.OnClickListener onAllParticipantsClickListener;
+  private final View.OnClickListener onFollowersClickListener;
   private final OnUserClickListener onUserClickListener;
   private final OnFollowUnfollowListener onFollowUnfollowListener;
   private final ImageLoader imageLoader;
   private final CompoundButton.OnCheckedChangeListener onCheckedChangeListener;
   private final OnFollowUnfollowStreamListener onFollowUnfollowStreamListener;
+  private final NumberFormatUtil numberFormatUtil;
   private ActionViewHolder authorViewHolder;
   private ActionViewHolder mediaViewHolder;
   private ActionViewHolder contributorViewHolder;
+  private ActionViewHolder followersViewHolder;
   private SwitchViewHolder muteViewHolder;
+  private SeparatorViewHolder separatorViewHolder;
   private AllParticipantsViewHolder allParticipantsViewHolder;
 
   private List<UserModel> participants = Collections.emptyList();
@@ -60,6 +66,7 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
   private String authorName;
   private String description;
   private int contributorsNumber;
+  private int followersNumber;
   private boolean isCurrentUserStreamAuthor;
 
   private final Set<String> keepFollowButtonIds = new HashSet<>();
@@ -70,19 +77,22 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
   public StreamDetailAdapter(ImageLoader imageLoader, View.OnClickListener onAuthorClickListener,
       View.OnClickListener onContributorsClickListener, View.OnClickListener onMediaClickListener,
-      CompoundButton.OnCheckedChangeListener onCheckedChangeListener,
+      View.OnClickListener onFollowersClickListener, CompoundButton.OnCheckedChangeListener onCheckedChangeListener,
       View.OnClickListener onAllParticipantsClickListener, OnUserClickListener onUserClickListener,
       OnFollowUnfollowListener onFollowUnfollowListener,
-      OnFollowUnfollowStreamListener onFollowUnfollowStreamListener) {
+      OnFollowUnfollowStreamListener onFollowUnfollowStreamListener,
+      NumberFormatUtil numberFormatUtil) {
     this.onAuthorClickListener = onAuthorClickListener;
     this.onContributorsClickListener = onContributorsClickListener;
     this.onMediaClickListener = onMediaClickListener;
+    this.onFollowersClickListener = onFollowersClickListener;
     this.onCheckedChangeListener = onCheckedChangeListener;
     this.onAllParticipantsClickListener = onAllParticipantsClickListener;
     this.onUserClickListener = onUserClickListener;
     this.imageLoader = imageLoader;
     this.onFollowUnfollowListener = onFollowUnfollowListener;
     this.onFollowUnfollowStreamListener = onFollowUnfollowStreamListener;
+    this.numberFormatUtil = numberFormatUtil;
   }
 
   public void setAuthorName(String authorName) {
@@ -121,14 +131,16 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
       case 0:
         return TYPE_DESCRIPTION;
       case 1:
-        return TYPE_AUTHOR;
+        return TYPE_FOLLOWERS;
       case 2:
-        return TYPE_CONTRIBUTOR;
+        return TYPE_AUTHOR;
       case 3:
-        return TYPE_MEDIA;
+        return TYPE_CONTRIBUTOR;
       case 4:
-        return TYPE_MUTE;
+        return TYPE_MEDIA;
       case 5:
+        return TYPE_MUTE;
+      case 6:
         return TYPE_PARTICIPANTS_TITLE;
       default:
         return TYPE_PARTICIPANT;
@@ -155,6 +167,8 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return setupParticipantViewHolder(parent, inflater);
       case TYPE_ALL_PARTICIPANTS:
         return setupAllParticipantsViewHolder(parent, inflater);
+      case TYPE_FOLLOWERS:
+        return setupFollowersViewHolder(parent, inflater);
       default:
         throw new IllegalStateException("No holder declared for view type " + viewType);
     }
@@ -182,8 +196,11 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
   @NonNull private RecyclerView.ViewHolder setupSeparatorViewHolder(ViewGroup parent,
       LayoutInflater inflater) {
     View v;
-    v = inflater.inflate(R.layout.item_card_title_separator, parent, false);
-    return new SeparatorViewHolder(v);
+    if (separatorViewHolder == null) {
+      v = inflater.inflate(R.layout.stream_detail_separator, parent, false);
+      separatorViewHolder = new SeparatorViewHolder(v, numberFormatUtil);
+    }
+    return separatorViewHolder;
   }
 
   @NonNull
@@ -239,6 +256,18 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     return contributorViewHolder;
   }
 
+  private RecyclerView.ViewHolder setupFollowersViewHolder(ViewGroup parent,
+      LayoutInflater inflater) {
+    View v;
+    if (followersViewHolder == null) {
+      v = inflater.inflate(R.layout.item_menu_action, parent, false);
+      v.setOnClickListener(onFollowersClickListener);
+      followersViewHolder = new ActionViewHolder(v);
+    }
+    return followersViewHolder;
+  }
+
+
   @Override public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
     switch (getItemViewType(position)) {
       case TYPE_DESCRIPTION:
@@ -250,15 +279,26 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
       case TYPE_AUTHOR:
         authorViewHolder.setIcon(R.drawable.ic_stream_author_24_gray50);
         authorViewHolder.setName(authorName);
+        authorViewHolder.showAdminMark();
         break;
       case TYPE_CONTRIBUTOR:
-        contributorViewHolder.setIcon(R.drawable.ic_contributors);
+        contributorViewHolder.setIcon(R.drawable.ic_people_outline);
         contributorViewHolder.setName(R.string.title_activity_contributors);
         contributorViewHolder.setNumber(contributorsNumber);
         if (contributorsNumber == 0 && !isCurrentUserStreamAuthor) {
           contributorViewHolder.disable();
         } else {
           contributorViewHolder.enable();
+        }
+        break;
+      case TYPE_FOLLOWERS:
+        followersViewHolder.setIcon(R.drawable.ic_contributors);
+        followersViewHolder.setName(R.string.stream_followers);
+        followersViewHolder.setNumber(followersNumber);
+        if (followersNumber == 0) {
+          followersViewHolder.disable();
+        } else {
+          followersViewHolder.enable();
         }
         break;
       case TYPE_MEDIA:
@@ -276,6 +316,9 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         break;
       case TYPE_ALL_PARTICIPANTS:
         allParticipantsViewHolder.setVisible(isAllParticipantsVisible);
+        break;
+      case TYPE_PARTICIPANTS_TITLE:
+        ((SeparatorViewHolder) viewHolder).showTitle();
         break;
       default:
     }
@@ -314,6 +357,19 @@ public class StreamDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     this.isCurrentUserStreamAuthor = isCurrentUserStreamAuthor;
     if (contributorViewHolder != null) {
       contributorViewHolder.setNumber(contributorsNumber);
+    }
+  }
+
+  public void setFollowersNumber(Integer followersNumber) {
+    this.followersNumber = followersNumber;
+    if (followersViewHolder != null) {
+      followersViewHolder.setNumber(followersNumber);
+    }
+  }
+
+  public void setFollowingNumber(Integer numberOfFollowing, Integer totalWatchers) {
+    if (separatorViewHolder != null) {
+      separatorViewHolder.setFollowingNumber(numberOfFollowing, totalWatchers);
     }
   }
 

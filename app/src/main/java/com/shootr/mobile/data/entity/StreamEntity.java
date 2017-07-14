@@ -32,6 +32,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private int totalFollowingWatchers;
     private Boolean strategic;
     private Boolean following;
+    private String photoIdMedia;
 
     public StreamEntity() {
         setResultType(FollowableType.STREAM);
@@ -275,5 +276,13 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setFollowing(Boolean following) {
         this.following = following;
+    }
+
+    public String getPhotoIdMedia() {
+        return photoIdMedia;
+    }
+
+    public void setPhotoIdMedia(String photoIdMedia) {
+        this.photoIdMedia = photoIdMedia;
     }
 }

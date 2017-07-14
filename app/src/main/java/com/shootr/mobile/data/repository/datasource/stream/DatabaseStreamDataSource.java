@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.db.manager.StreamManager;
+import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -28,6 +29,16 @@ public class DatabaseStreamDataSource implements StreamDataSource {
 
   @Override public StreamEntity putStream(StreamEntity streamEntity) {
     return streamEntity != null ? putStream(streamEntity, false) : null;
+  }
+
+  @Override
+  public StreamEntity createStream(StreamEntity streamEntity) {
+    return putStream(streamEntity);
+  }
+
+  @Override
+  public StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters) {
+    throw new IllegalStateException("Not allowed in local");
   }
 
   @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {

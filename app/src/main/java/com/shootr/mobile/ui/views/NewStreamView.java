@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.views.base.DataTransferView;
+import java.io.File;
 
 public interface NewStreamView extends DataTransferView {
 
@@ -19,4 +20,20 @@ public interface NewStreamView extends DataTransferView {
     void showDescription(String description);
 
     void setModeValue(Integer readWriteMode);
+
+    void showPhotoOptions();
+
+    void showPhotoPicker();
+
+    void zoomPhoto(String picture);
+
+    void setStreamPhoto(String picture, String title);
+
+    void loadDefaultPhoto();
+
+    void showPhotoSelected(File photoFile);
+
+    void goToShareStream(String id);
+
+  void showEditPhotoPlaceHolder();
 }

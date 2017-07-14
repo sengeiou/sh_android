@@ -6,6 +6,7 @@ public class Entities {
 
   private ArrayList<Url> urls;
   private ArrayList<Poll> polls;
+  private ArrayList<StreamIndex> streams;
 
   public ArrayList<Url> getUrls() {
     return urls;
@@ -21,5 +22,13 @@ public class Entities {
 
   public void setPolls(ArrayList<Poll> polls) {
     this.polls = polls;
+  }
+
+  public ArrayList<StreamIndex> getStreams() {
+    return streams;
+  }
+
+  public void setStreams(ArrayList<StreamIndex> streams) {
+    this.streams = streams;
   }
 }

@@ -56,6 +56,10 @@ public class FollowFragment extends BaseFragment
   @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
   @BindString(R.string.analytics_source_followers) String followsSource;
   @BindString(R.string.analytics_source_following) String followingsSource;
+  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
+  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.follower_list_empty) String noFollowersSource;
+  @BindString(R.string.following_list_empty) String noFollowingsSource;
 
   @Inject FollowPresenter followPresenter;
   @Inject FeedbackMessage feedbackMessage;
@@ -197,28 +201,36 @@ public class FollowFragment extends BaseFragment
   }
 
   private void sendFavoriteAnalytics(StreamModel stream) {
-    /*AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
-    builder.setSource(discoverSearchSource);
+    if (followType == 0) {
+      builder.setSource(followsSource);
+    } else {
+      builder.setSource(followingsSource);
+    }
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(stream.getTitle());
     builder.setIdStream(stream.getIdStream());
     analyticsTool.analyticsSendAction(builder);
-    analyticsTool.appsFlyerSendAction(builder);*/
+    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void sendAnalytics(UserModel user) {
-    /*AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFollow);
     builder.setLabelId(analyticsLabelFollow);
-    builder.setSource(discoverUserSearch);
+    if (followType == 0) {
+      builder.setSource(followsSource);
+    } else {
+      builder.setSource(followingsSource);
+    }
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(user.getIdUser());
     builder.setTargetUsername(user.getUsername());
-    analyticsTool.analyticsSendAction(builder);*/
+    analyticsTool.analyticsSendAction(builder);
   }
 
   @Override public void showContent() {
@@ -242,7 +254,9 @@ public class FollowFragment extends BaseFragment
   }
 
   @Override public void showNoFollowing() {
-
+    progressBar.setVisibility(View.GONE);
+    emptyTextView.setVisibility(View.VISIBLE);
+    emptyTextView.setText(noFollowersSource);
   }
 
   @Override public void showProgressView() {

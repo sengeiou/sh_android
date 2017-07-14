@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
-import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
@@ -26,45 +25,39 @@ public class CreateStreamInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final SessionRepository sessionRepository;
   private final ExternalStreamRepository remoteStreamRepository;
-  private final StreamRepository localStreamRepository;
   private final LocaleProvider localeProvider;
   private final UserRepository localUserRepository;
 
-  private String idStream;
   private String title;
   private String description;
-  private String topic;
+  private String idMedia;
   private boolean notifyCreation;
   private Callback callback;
   private ErrorCallback errorCallback;
 
-  private boolean notifyTopicMessage;
   private String streamMode;
 
   @Inject public CreateStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
       ExternalStreamRepository remoteStreamRepository,
-      @Local StreamRepository localStreamRepository, LocaleProvider localeProvider,
+      LocaleProvider localeProvider,
       @Local UserRepository localUserRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.sessionRepository = sessionRepository;
     this.remoteStreamRepository = remoteStreamRepository;
-    this.localStreamRepository = localStreamRepository;
     this.localeProvider = localeProvider;
     this.localUserRepository = localUserRepository;
   }
 
-  public void sendStream(String idStream, String title, String description, Integer streamMode,
-      String topic, boolean notifyCreation, Boolean notifyTopicMessage, Callback callback,
+  public void sendStream(String title, String description, Integer streamMode,
+      String idMedia, boolean notifyCreation, Callback callback,
       ErrorCallback errorCallback) {
-    this.idStream = idStream;
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
-    this.topic = topic;
+    this.idMedia = idMedia;
     this.notifyCreation = notifyCreation;
-    this.notifyTopicMessage = notifyTopicMessage;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -74,7 +67,7 @@ public class CreateStreamInteractor implements Interactor {
     Stream stream = streamFromParameters();
     if (validateStream(stream)) {
       try {
-        Stream savedStream = sendStreamToServer(stream, notifyCreation, notifyTopicMessage);
+        Stream savedStream = sendStreamToServer(stream, notifyCreation);
         notifyLoaded(savedStream);
       } catch (ShootrException e) {
         handleServerError(e);
@@ -87,31 +80,25 @@ public class CreateStreamInteractor implements Interactor {
   }
 
   private Stream streamFromParameters() {
-    Stream stream;
-    if (isNewStream()) {
-      stream = new Stream();
-      stream.setCountry(localeProvider.getCountry());
-    } else {
-      stream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
-    }
+    Stream stream = new Stream();
+
+    stream.setCountry(localeProvider.getCountry());
     stream.setTitle(title);
     stream.setDescription(removeDescriptionLineBreaks(description));
     stream.setReadWriteMode(streamMode);
-    stream.setTopic(topic);
     String currentUserId = sessionRepository.getCurrentUserId();
     stream.setAuthorId(currentUserId);
     stream.setAuthorUsername(localUserRepository.getUserById(currentUserId).getUsername());
     stream.setTotalFavorites(0);
     stream.setTotalWatchers(0);
+    if (idMedia != null) {
+      stream.setPhotoIdMedia(idMedia);
+    }
     return stream;
   }
 
-  private boolean isNewStream() {
-    return idStream == null;
-  }
-
-  private Stream sendStreamToServer(Stream stream, boolean notify, Boolean notifyTopicMessage) {
-    return remoteStreamRepository.putStream(stream, notify, notifyTopicMessage);
+  private Stream sendStreamToServer(Stream stream, boolean notify) {
+    return remoteStreamRepository.putStream(stream, notify);
   }
 
   //region Validation

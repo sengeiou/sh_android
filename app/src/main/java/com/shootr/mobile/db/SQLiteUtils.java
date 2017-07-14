@@ -781,14 +781,14 @@ public class SQLiteUtils {
         + DatabaseContract.RecentSearchTable.ITEM_TYPE
         + "))";
 
-    public static final String CREATE_TABLE_SHOT_EVENT = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.ShotEventTable.TABLE
+    public static final String CREATE_TABLE_SHOOTR_EVENT = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.ShootrEventTable.TABLE
         + " ("
-        + DatabaseContract.ShotEventTable.ID_SHOT
+        + DatabaseContract.ShootrEventTable.ID_KEY
         + " TEXT NOT NULL,"
-        + DatabaseContract.ShotEventTable.TYPE
+        + DatabaseContract.ShootrEventTable.TYPE
         + " TEXT NULL,"
-        + DatabaseContract.ShotEventTable.TIMESTAMP
+        + DatabaseContract.ShootrEventTable.TIMESTAMP
         + " INTEGER NULL)";
 
     public static final String CREATE_TABLE_SYNCHRO = "CREATE TABLE IF NOT EXISTS "

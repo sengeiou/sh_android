@@ -3,10 +3,12 @@ package com.shootr.mobile.data.api.entity.mapper;
 import com.shootr.mobile.data.api.entity.BaseMessagePollApiEntity;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
+import com.shootr.mobile.data.api.entity.StreamIndexApiEntity;
 import com.shootr.mobile.data.api.entity.UrlApiEntity;
 import com.shootr.mobile.data.entity.BaseMessagePollEntity;
 import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.StreamIndexEntity;
 import com.shootr.mobile.data.entity.UrlEntity;
 import java.util.ArrayList;
 import java.util.Date;
@@ -87,9 +89,24 @@ public class ShotApiEntityMapper {
     if (shotApiEntity.getEntities() != null) {
       EntitiesEntity entitiesEntity = new EntitiesEntity();
       setupUrls(shotApiEntity, entitiesEntity);
+      setupStreams(shotApiEntity, entitiesEntity);
       setupPollsEntities(shotApiEntity, entitiesEntity);
       shotEntity.setEntities(entitiesEntity);
     }
+  }
+
+  private void setupStreams(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {
+    ArrayList<StreamIndexEntity> streamsEntities = new ArrayList<>();
+    if (shotApiEntity.getEntities() != null) {
+      for (StreamIndexApiEntity streamIndexApiEntity : shotApiEntity.getEntities().getStreams()) {
+        StreamIndexEntity streamIndexEntity = new StreamIndexEntity();
+        streamIndexEntity.setStreamTitle(streamIndexApiEntity.getStreamTitle());
+        streamIndexEntity.setIdStream(streamIndexApiEntity.getIdStream());
+        streamIndexEntity.setIndices(streamIndexApiEntity.getIndices());
+        streamsEntities.add(streamIndexEntity);
+      }
+    }
+    entitiesEntity.setStreams(streamsEntities);
   }
 
   private void setupPollsEntities(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {

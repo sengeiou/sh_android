@@ -17,20 +17,19 @@ import android.view.MotionEvent;
 import android.widget.TextView;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
+import com.shootr.mobile.ui.model.StreamIndexModel;
 import com.shootr.mobile.ui.model.UrlModel;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class BaseMessageTextView extends TextView {
 
-  private static final String POLL_TYPE = "POLL";
-  private static final String URL_TYPE = "URL";
   public static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
   public static final String DEFAULT_SCHEMA = "http://";
-  public static final int START = 0;
   private static final String USERNAME_REGEX = "@[-_A-Za-z0-9]{3,25}";
 
   private BaseMessageModel baseMessageModel;
@@ -50,7 +49,8 @@ public class BaseMessageTextView extends TextView {
   }
 
   @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-  public BaseMessageTextView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+  public BaseMessageTextView(Context context, AttributeSet attrs, int defStyleAttr,
+      int defStyleRes) {
     super(context, attrs, defStyleAttr, defStyleRes);
   }
 
@@ -76,7 +76,41 @@ public class BaseMessageTextView extends TextView {
       spanUrls(stringBuilder);
       spanPollQuestions(stringBuilder);
       spanMentions(stringBuilder);
+      spanStreams(stringBuilder);
       setText(stringBuilder, BufferType.SPANNABLE);
+    }
+  }
+
+  private void spanStreams(SpannableStringBuilder stringBuilder) {
+    if (baseMessageModel.getEntitiesModel() != null) {
+      for (final StreamIndexModel streamIndexModel : baseMessageModel.getEntitiesModel()
+          .getStreams()) {
+
+        try {
+          if (streamIndexModel.getStreamTitle() != null) {
+            StreamTitleSpan streamTitleSpan = new StreamTitleSpan(streamIndexModel.getIdStream(),
+                streamIndexModel.getStreamTitle(), "") {
+              @Override
+              public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
+                openStream(streamId, streamTitle);
+              }
+            };
+
+            Pattern termsPattern =
+                Pattern.compile(Pattern.quote(streamIndexModel.getStreamTitle()));
+            Matcher termsMatcher = termsPattern.matcher(stringBuilder.toString());
+            if (termsMatcher.find()) {
+              int termsStart = termsMatcher.start();
+              int termsEnd = termsMatcher.end();
+              stringBuilder.replace(termsStart, termsEnd, streamIndexModel.getStreamTitle());
+              stringBuilder.setSpan(streamTitleSpan, termsStart, termsEnd,
+                  Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+          }
+        } catch (IndexOutOfBoundsException error) {
+          /* no-op */
+        }
+      }
     }
   }
 
@@ -105,8 +139,8 @@ public class BaseMessageTextView extends TextView {
 
           String textToReplace = stringBuilder.toString().substring(start, end);
 
-          stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener),
-              start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+          stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener), start,
+              end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
           stringBuilder.replace(start, end, urlModel.getDisplayUrl());
 
@@ -156,9 +190,14 @@ public class BaseMessageTextView extends TextView {
 
   private void openPoll(String idPoll) {
     Context context = getContext();
-    Intent pollVoteIntent =
-        PollVoteActivity.newIntentWithIdPoll(context, idPoll, null);
+    Intent pollVoteIntent = PollVoteActivity.newIntentWithIdPoll(context, idPoll, null);
     context.startActivity(pollVoteIntent);
+  }
+
+  private void openStream(String idStream, String streamTitle) {
+    Context context = getContext();
+    Intent streamIntent = StreamTimelineActivity.newIntent(context, idStream, streamTitle, null);
+    context.startActivity(streamIntent);
   }
 
   @Override public boolean onTouchEvent(@NonNull MotionEvent event) {
@@ -214,7 +253,8 @@ public class BaseMessageTextView extends TextView {
     return false;
   }
 
-  private BaseMessagePressableSpan getTouchedSpan(MotionEvent event, TextView widget, Spannable buffer) {
+  private BaseMessagePressableSpan getTouchedSpan(MotionEvent event, TextView widget,
+      Spannable buffer) {
     int x = (int) event.getX();
     int y = (int) event.getY();
 
@@ -228,7 +268,8 @@ public class BaseMessageTextView extends TextView {
     int line = layout.getLineForVertical(y);
     int off = layout.getOffsetForHorizontal(line, x);
 
-    BaseMessagePressableSpan[] pressedSpans = buffer.getSpans(off, off, BaseMessagePressableSpan.class);
+    BaseMessagePressableSpan[] pressedSpans =
+        buffer.getSpans(off, off, BaseMessagePressableSpan.class);
 
     BaseMessagePressableSpan pressedSpan = null;
 

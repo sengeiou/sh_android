@@ -1,12 +1,18 @@
 package com.shootr.mobile.ui.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
@@ -22,21 +28,34 @@ import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import com.cocosw.bottomsheet.BottomSheet;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.StreamReadWriteModeAdapter;
 import com.shootr.mobile.ui.presenter.NewStreamPresenter;
 import com.shootr.mobile.ui.views.NewStreamView;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FloatLabelLayout;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
+import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
+import com.shootr.mobile.util.WritePermissionManager;
+import java.io.File;
+import java.io.IOException;
 import javax.inject.Inject;
+import timber.log.Timber;
 
 public class NewStreamActivity extends BaseToolbarDecoratedActivity implements NewStreamView {
 
     public static final int RESULT_EXIT_STREAM = 3;
+    private static final int REQUEST_CHOOSE_PHOTO = 0;
+    private static final int REQUEST_TAKE_PHOTO = 5;
+    private static final int REQUEST_CROP_PHOTO = 88;
     public static final String KEY_STREAM_ID = "stream_id";
     public static final String SOURCE = "source";
 
@@ -46,12 +65,17 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
     @Inject SessionRepository sessionRepository;
+    @Inject CrashReportTool crashReportTool;
+    @Inject WritePermissionManager writePermissionManager;
+    @Inject ImageLoader imageLoader;
 
     @BindView(R.id.new_stream_title) EditText titleView;
     @BindView(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
     @BindView(R.id.new_stream_title_error) TextView titleErrorView;
     @BindView(R.id.new_stream_description) EditText descriptionView;
     @BindView(R.id.stream_read_write_mode) AppCompatSpinner readWriteModeSpinner;
+    @BindView(R.id.cat_avatar) View streamPictureContainer;
+    @BindView(R.id.stream_avatar) AvatarView streamPhoto;
 
     @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
     @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
@@ -78,6 +102,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
+        writePermissionManager.init(this);
         String idStreamToEdit = getIntent().getStringExtra(KEY_STREAM_ID);
 
         setupActionbar(idStreamToEdit);
@@ -250,6 +275,83 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         readWriteModeSpinner.setSelection(readWriteMode);
     }
 
+    @Override public void showPhotoOptions() {
+        new BottomSheet.Builder(this).title(R.string.title_menu_photo)
+            .sheet(R.menu.photo_options_bottom_sheet_new_stream)
+            .listener(new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case R.id.menu_photo_view:
+                            presenter.viewPhotoClicked();
+                            break;
+                        case R.id.menu_photo_gallery:
+                            handlePhotoSelectionFromGallery();
+                            break;
+                        case R.id.menu_photo_take:
+                            takePhotoFromCamera();
+                            break;
+                        case R.id.menu_photo_remove:
+                            presenter.removePhoto();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            })
+            .show();
+
+    }
+
+    @Override public void showPhotoPicker() {
+        new BottomSheet.Builder(this).title(R.string.title_menu_photo)
+            .sheet(R.menu.photo_picker_bottom_sheet_new_stream)
+            .listener(new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+                    switch (which) {
+                        case R.id.menu_photo_gallery:
+                            handlePhotoSelectionFromGallery();
+                            break;
+                        case R.id.menu_photo_take:
+                            takePhotoFromCamera();
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            })
+            .show();
+    }
+
+    @Override public void zoomPhoto(String picture) {
+        Bundle animationBundle = ActivityOptionsCompat.makeScaleUpAnimation(streamPictureContainer,
+            streamPictureContainer.getLeft(), streamPictureContainer.getTop(),
+            streamPictureContainer.getWidth(), streamPictureContainer.getBottom()).toBundle();
+        Intent photoIntent = PhotoViewActivity.getIntentForActivity(this, picture);
+        ActivityCompat.startActivity(this, photoIntent, animationBundle);
+    }
+
+    @Override public void setStreamPhoto(String picture, String title) {
+        imageLoader.loadProfilePhoto(picture, streamPhoto, title);
+    }
+
+    @Override public void loadDefaultPhoto() {
+        imageLoader.loadStreamPicture(null, streamPhoto);
+    }
+
+    @Override public void showPhotoSelected(File photoFile) {
+        imageLoader.load(photoFile, streamPhoto);
+    }
+
+    @Override public void goToShareStream(String id) {
+        Intent intent = ShareStreamActivity.newIntent(this, id);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override public void showEditPhotoPlaceHolder() {
+        streamPhoto.setImageResource(R.drawable.ic_stream_picture_edit);
+    }
+
     @Override public void showLoading() {
         doneMenuItem.setActionView(R.layout.item_list_loading);
     }
@@ -279,4 +381,83 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     }
 
     //endregion
+
+    @OnClick(R.id.cat_avatar) public void onPhotoClick() {
+        presenter.photoClick();
+    }
+
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
+            cropGalleryPicture(data);
+        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            cropCameraPicture();
+        } else if (requestCode == REQUEST_CROP_PHOTO && resultCode == Activity.RESULT_OK) {
+            File photoFile = getCameraPhotoFile();
+            presenter.photoSelected(photoFile);
+        }
+    }
+
+    private void cropCameraPicture() {
+        Intent intent = new Intent(this, CropPictureActivity.class);
+        intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, true);
+        intent.putExtra(CropPictureActivity.EXTRA_URI, "");
+        intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "cropUpload.jpg");
+        startActivityForResult(intent, REQUEST_CROP_PHOTO);
+    }
+
+    private void cropGalleryPicture(Intent data) {
+        Uri selectedImageUri = data.getData();
+        Intent intent = new Intent(this, CropPictureActivity.class);
+        intent.putExtra(CropPictureActivity.EXTRA_PHOTO_TYPE, false);
+        intent.putExtra(CropPictureActivity.EXTRA_IMAGE_NAME, "cropUpload.jpg");
+        intent.putExtra(CropPictureActivity.EXTRA_URI, selectedImageUri.toString());
+        startActivityForResult(intent, REQUEST_CROP_PHOTO);
+    }
+
+    private File getCameraPhotoFile() {
+        File photoFile = new File(getExternalFilesDir("tmp"), "cropUpload.jpg");
+        if (!photoFile.exists()) {
+            try {
+                photoFile.getParentFile().mkdirs();
+                photoFile.createNewFile();
+            } catch (IOException e) {
+                Timber.e(e, "No se pudo crear el archivo temporal para la foto de perfil");
+                throw new IllegalStateException(e);
+            }
+        }
+        return photoFile;
+    }
+
+    public void handlePhotoSelectionFromGallery() {
+        if (writePermissionManager.hasWritePermission()) {
+            choosePhotoFromGallery();
+        } else {
+            writePermissionManager.requestWritePermissionToUser();
+        }
+    }
+
+    private void takePhotoFromCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File pictureTemporaryFile = getCameraPhotoFile();
+        if (!pictureTemporaryFile.exists()) {
+            try {
+                pictureTemporaryFile.getParentFile().mkdirs();
+                pictureTemporaryFile.createNewFile();
+            } catch (IOException e) {
+                crashReportTool.logException("No se pudo crear el archivo temporal para la foto de perfil");
+            }
+        }
+        Uri temporaryPhotoUri = FileProvider.getUriForFile(NewStreamActivity.this,
+            BuildConfig.APPLICATION_ID + ".provider", pictureTemporaryFile);
+        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
+        startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    }
+
+    private void choosePhotoFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
+    }
+
 }

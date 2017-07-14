@@ -21,8 +21,8 @@ import com.shootr.mobile.data.api.service.PollApiService;
 import com.shootr.mobile.data.api.service.PrivateMessagesApiService;
 import com.shootr.mobile.data.api.service.ResetPasswordApiService;
 import com.shootr.mobile.data.api.service.SearchApiService;
+import com.shootr.mobile.data.api.service.ShootrEventApiService;
 import com.shootr.mobile.data.api.service.ShotApiService;
-import com.shootr.mobile.data.api.service.ShotEventApiService;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.api.service.UserSettingsApiService;
@@ -170,8 +170,8 @@ import timber.log.Timber;
     return restAdapter.create(PollApiService.class);
   }
 
-  @Provides ShotEventApiService provideShotEventApiService(RestAdapter restAdapter) {
-    return restAdapter.create(ShotEventApiService.class);
+  @Provides ShootrEventApiService provideShotEventApiService(RestAdapter restAdapter) {
+    return restAdapter.create(ShootrEventApiService.class);
   }
 
   @Provides PrivateMessagesApiService providePrivateMessageApiService(RestAdapter restAdapter) {

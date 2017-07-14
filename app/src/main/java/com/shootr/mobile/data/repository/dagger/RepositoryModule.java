@@ -23,7 +23,7 @@ import javax.inject.Singleton;
         PollRepositoryModule.class,
         UserSettingsRepositoryModule.class,
         RecentStreamRepositoryModule.class,
-        ShotEventRepositoryModule.class,
+        ShootrEventRepositoryModule.class,
         SynchroModule.class,
         PrivateMessageRepositoryModule.class,
         PrivateMessageChannelRepositoryModule.class,

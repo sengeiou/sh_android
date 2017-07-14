@@ -8,6 +8,7 @@ import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
@@ -56,17 +57,23 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
     }
 
     @Override public Stream putStream(Stream stream) {
-        return putStream(stream, false, false);
+        return putStream(stream, false);
     }
 
-    @Override public Stream putStream(Stream stream, boolean notify, boolean notifyMessage) {
+    @Override public Stream putStream(Stream stream, boolean notify) {
         StreamEntity currentOrNewEntity = syncableStreamEntityFactory.updatedOrNewEntity(stream);
         currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 
-        StreamEntity remoteStreamEntity = remoteStreamDataSource.putStream(currentOrNewEntity, notifyMessage);
+        StreamEntity remoteStreamEntity = remoteStreamDataSource.createStream(currentOrNewEntity);
         markEntityAsSynchronized(remoteStreamEntity);
-        localStreamDataSource.putStream(remoteStreamEntity, notifyMessage);
+        localStreamDataSource.putStream(remoteStreamEntity);
         return streamEntityMapper.transform(remoteStreamEntity);
+    }
+
+    @Override public Stream updateStream(StreamUpdateParameters streamUpdateParameters) {
+        StreamEntity streamEntity = remoteStreamDataSource.updateStream(streamUpdateParameters);
+        localStreamDataSource.putStream(streamEntity);
+        return streamEntityMapper.transform(streamEntity);
     }
 
     @Override public void shareStream(String idStream) {

@@ -525,4 +525,11 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="stream_followers">Seguidores</string>
+  <string name="participants">Participantes</string>
+  <plurals name="stream_detail_participants">
+    <item quantity="one">%s participante</item>
+    <item quantity="other">%s participantes</item>
+    <item quantity="zero">%s participantes</item>
+  </plurals>
 </resources>

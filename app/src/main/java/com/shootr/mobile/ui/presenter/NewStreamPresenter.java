@@ -4,9 +4,11 @@ import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.validation.FieldValidationError;
@@ -15,6 +17,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.NewStreamView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -24,7 +27,9 @@ public class NewStreamPresenter implements Presenter {
     public static final int MINIMUM_TITLE_LENGTH = 3;
 
     private final CreateStreamInteractor createStreamInteractor;
+    private final UpdateStreamInteractor updateStreamInteractor;
     private final GetStreamInteractor getStreamInteractor;
+    private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
     private final SelectStreamInteractor selectStreamInteractor;
     private final StreamModelMapper streamModelMapper;
     private final ErrorMessageFactory errorMessageFactory;
@@ -36,14 +41,20 @@ public class NewStreamPresenter implements Presenter {
     private String currentTitle;
     private boolean notifyCreation;
     private String currentStreamTopic;
+    private String newIdMedia;
+    private StreamModel streamModel;
+    private boolean removePhoto;
 
     //region Initialization
     @Inject
     public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
-                              GetStreamInteractor getStreamInteractor, SelectStreamInteractor selectStreamInteractor,
-                              StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
+        UpdateStreamInteractor updateStreamInteractor, GetStreamInteractor getStreamInteractor,
+        ChangeStreamPhotoInteractor changeStreamPhotoInteractor, SelectStreamInteractor selectStreamInteractor,
+        StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory) {
         this.createStreamInteractor = createStreamInteractor;
+        this.updateStreamInteractor = updateStreamInteractor;
         this.getStreamInteractor = getStreamInteractor;
+        this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
         this.selectStreamInteractor = selectStreamInteractor;
         this.streamModelMapper = streamModelMapper;
         this.errorMessageFactory = errorMessageFactory;
@@ -54,6 +65,8 @@ public class NewStreamPresenter implements Presenter {
         this.isNewStream = optionalIdStreamToEdit == null;
         if (!isNewStream) {
             this.preloadStreamToEdit(optionalIdStreamToEdit);
+        } else {
+            newStreamView.showEditPhotoPlaceHolder();
         }
         updateDoneButtonStatus();
     }
@@ -68,11 +81,17 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private void setDefaultStreamInfo(StreamModel streamModel) {
+        this.streamModel = streamModel;
         preloadedStreamId = streamModel.getIdStream();
         String preloadedTitle = streamModel.getTitle();
         newStreamView.setStreamTitle(preloadedTitle);
         newStreamView.showDescription(streamModel.getDescription());
         newStreamView.setModeValue(streamModel.getReadWriteMode());
+        if (streamModel.getPicture() != null) {
+            newStreamView.setStreamPhoto(streamModel.getPicture(), streamModel.getTitle());
+        } else {
+            newStreamView.showEditPhotoPlaceHolder();
+        }
         if (currentTitle == null) {
             preloadedTitle = streamModel.getTitle();
             currentTitle = preloadedTitle;
@@ -109,36 +128,43 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private void createStream(String streamTitle, String streamDescription, Integer streamMode) {
-        sendStream(null, streamTitle, streamDescription, streamMode);
+        sendStream(streamTitle, streamDescription, streamMode);
     }
 
     private void editStream(String preloadedStreamId, String streamTitle, String streamDescription,
                             Integer streamMode) {
-        sendStream(preloadedStreamId, streamTitle, streamDescription, streamMode);
+        updateStream(preloadedStreamId, streamTitle, streamDescription, streamMode);
     }
 
-    private void sendStream(String preloadedStreamId, String streamTitle, String streamDescription,
-                            Integer streamMode) {
-        createStreamInteractor.sendStream(preloadedStreamId,
-                streamTitle,
-                streamDescription,
-                streamMode,
-                currentStreamTopic,
-                notifyCreation,
-                false,
-                new CreateStreamInteractor.Callback() {
-                    @Override
-                    public void onLoaded(Stream stream) {
-                        streamCreated(stream);
-                        seletStream(stream);
-                    }
-                },
-                new Interactor.ErrorCallback() {
-                    @Override
-                    public void onError(ShootrException error) {
-                        streamCreationError(error);
-                    }
-                });
+    private void updateStream(String preloadedStreamId, String streamTitle, String streamDescription,
+        Integer streamMode) {
+        updateStreamInteractor.updateStream(preloadedStreamId, streamTitle, streamDescription,
+            streamMode, newIdMedia, new UpdateStreamInteractor.Callback() {
+                @Override public void onLoaded(Stream stream) {
+                    streamCreated(stream);
+                    seletStream(stream);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    streamCreationError(error);
+                }
+            });
+    }
+
+    private void sendStream(String streamTitle, String streamDescription,
+        Integer streamMode) {
+
+        createStreamInteractor.sendStream(streamTitle, streamDescription, streamMode, newIdMedia,
+            notifyCreation, new CreateStreamInteractor.Callback() {
+                @Override public void onLoaded(Stream stream) {
+                    streamCreated(stream);
+                    seletStream(stream);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    streamCreationError(error);
+                }
+            });
     }
 
     protected void seletStream(Stream stream) {
@@ -156,7 +182,11 @@ public class NewStreamPresenter implements Presenter {
     }
 
     private void streamCreated(Stream stream) {
-        newStreamView.closeScreenWithResult(stream.getId());
+        if (!isNewStream) {
+            newStreamView.closeScreenWithResult(stream.getId());
+        } else {
+            newStreamView.goToShareStream(stream.getId());
+        }
     }
 
     private void streamCreationError(ShootrException error) {
@@ -225,6 +255,21 @@ public class NewStreamPresenter implements Presenter {
         return currentTitle != null && currentTitle.length() >= MINIMUM_TITLE_LENGTH;
     }
 
+    public void photoSelected(final File photoFile) {
+        changeStreamPhotoInteractor.changeStreamPhoto(null, photoFile,
+            new ChangeStreamPhotoInteractor.Callback() {
+                @Override public void onLoaded(String idMedia) {
+                    newIdMedia = idMedia;
+                    newStreamView.showPhotoSelected(photoFile);
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    Timber.e(error, "Error changing stream photo");
+                }
+            });
+    }
+
+
     //endregion
 
     @Override
@@ -235,5 +280,26 @@ public class NewStreamPresenter implements Presenter {
     @Override
     public void pause() {
         /* no-op */
+    }
+
+    public void photoClick() {
+        if (!isNewStream && streamModel.getPicture() != null) {
+            newStreamView.showPhotoOptions();
+        } else {
+            newStreamView.showPhotoPicker();
+        }
+    }
+
+    public void viewPhotoClicked() {
+        zoomPhoto();
+    }
+
+    public void zoomPhoto() {
+        newStreamView.zoomPhoto(streamModel.getPicture());
+    }
+
+    public void removePhoto() {
+        newIdMedia = " ";
+        newStreamView.showEditPhotoPlaceHolder();
     }
 }

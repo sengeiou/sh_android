@@ -8,10 +8,10 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
-import com.shootr.mobile.domain.interactor.stream.CreateStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.ReloadStreamTimelineInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
@@ -97,11 +97,11 @@ public class StreamTimelinePresenterTest {
   @Mock ReloadStreamTimelineInteractor reloadStreamTimelineInteractor;
   @Mock GetStreamInteractor getStreamInteractor;
   @Mock UpdateWatchNumberInteractor updateWatchNumberInteractor;
-  @Mock CreateStreamInteractor createStreamInteractor;
   @Captor ArgumentCaptor<Boolean> booleanArgumentCaptor;
   @Mock SessionRepository sessionRepository;
   @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
   @Mock GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
+  @Mock UpdateStreamInteractor updateStreamInteractor;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
 
@@ -115,8 +115,7 @@ public class StreamTimelinePresenterTest {
         undoReshootInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
-        createStreamInteractor,
-        getNewFilteredShotsInteractor, sessionRepository);
+        updateStreamInteractor, getNewFilteredShotsInteractor, sessionRepository);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
   }
@@ -1196,24 +1195,25 @@ public class StreamTimelinePresenterTest {
   private void setupCreateStreamInteractorCallbackWithTopic() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(selectedStream().getStream());
+        ((UpdateStreamInteractor.Callback) invocation.getArguments()[3]).onLoaded(
+            selectedStream().getStream());
         return null;
       }
-    }).when(createStreamInteractor)
-        .sendStream(anyString(), anyString(), anyString(), anyInt(), anyString(), anyBoolean(),
-            anyBoolean(), any(CreateStreamInteractor.Callback.class), anyErrorCallback());
+    }).when(updateStreamInteractor)
+        .updateStreamMessage(anyString(), anyString(), anyBoolean(),
+            any(UpdateStreamInteractor.Callback.class), anyErrorCallback());
   }
 
   private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((CreateStreamInteractor.Callback) invocation.getArguments()[7]).onLoaded(
+        ((UpdateStreamInteractor.Callback) invocation.getArguments()[3]).onLoaded(
             selectedStreamWithEmptyTopic().getStream());
         return null;
       }
-    }).when(createStreamInteractor)
-        .sendStream(anyString(), anyString(), anyString(), anyInt(), anyString(), anyBoolean(),
-            anyBoolean(), any(CreateStreamInteractor.Callback.class), anyErrorCallback());
+    }).when(updateStreamInteractor)
+        .updateStreamMessage(anyString(), anyString(), anyBoolean(),
+            any(UpdateStreamInteractor.Callback.class), anyErrorCallback());
   }
 
   private void setupFirstShotPosition() {

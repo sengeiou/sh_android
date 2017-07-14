@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -34,19 +35,29 @@ public class ServiceStreamDataSource implements StreamDataSource {
   }
 
   @Override public StreamEntity putStream(StreamEntity streamEntity, Boolean notifyMessage) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public StreamEntity putStream(StreamEntity streamEntity) {
+    return putStream(streamEntity, false);
+  }
+
+  @Override
+  public StreamEntity createStream(StreamEntity streamEntity) {
     try {
-      if (streamEntity.getIdStream() == null) {
-        return streamApiService.createStream(streamEntity);
-      } else {
-        return streamApiService.updateStream(streamEntity, notifyMessage);
-      }
+      return streamApiService.createStream(streamEntity);
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     }
   }
 
-  @Override public StreamEntity putStream(StreamEntity streamEntity) {
-    return putStream(streamEntity, false);
+  @Override
+  public StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters) {
+    try {
+      return streamApiService.updateStream(streamUpdateParameters);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
   }
 
   @Override public List<StreamEntity> putStreams(List<StreamEntity> streams) {
