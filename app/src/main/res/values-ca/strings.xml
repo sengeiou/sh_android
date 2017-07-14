@@ -525,4 +525,11 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
+  <plurals name="stream_detail_participants">
+    <item quantity="one">%s participant</item>
+    <item quantity="other">%s participants</item>
+    <item quantity="zero">%s participants</item>
+  </plurals>
+  <string name="participants">Participants</string>
+  <string name="stream_followers">Seguidors</string>
 </resources>

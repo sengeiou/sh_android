@@ -513,4 +513,10 @@
   <string name="whale_retry_button_text">好的</string>
   <string name="whale_title_default">我们将会回来</string>
   <string name="yes">是的</string>
+  <string name="participants">参与者</string>
+  <string name="stream_followers">关注者</string>
+  <plurals name="stream_detail_participants">
+    <item quantity="other">%s 参与者</item>
+    <item quantity="zero">%s 参与者</item>
+  </plurals>
 </resources>
