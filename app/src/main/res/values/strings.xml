@@ -524,9 +524,9 @@
   <string name="participants">Participants</string>
   <string name="stream_followers">Followers</string>
   <plurals name="stream_detail_participants">
-    <item quantity="one">%s Participant       </item>
-    <item quantity="other">%s Participants        </item>
-    <item quantity="zero">%s Participants</item>
+    <item quantity="one">%s participant</item>
+    <item quantity="other">%s participants</item>
+    <item quantity="zero">%s participants</item>
   </plurals>
   <string name="stream_detail_following">Following %s</string>
 </resources>
