@@ -2,12 +2,14 @@ package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.shot.Poll;
+import com.shootr.mobile.domain.model.shot.StreamIndex;
 import com.shootr.mobile.domain.model.shot.Url;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.PrivateMessageModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
+import com.shootr.mobile.ui.model.StreamIndexModel;
 import com.shootr.mobile.ui.model.UrlModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,8 +70,22 @@ public class PrivateMessageModelMapper {
       EntitiesModel entitiesModel = new EntitiesModel();
       setupUrls(privateMessage, entitiesModel);
       setupPolls(privateMessage, entitiesModel);
+      setupStreams(privateMessage, entitiesModel);
       model.setEntitiesModel(entitiesModel);
     }
+  }
+
+  private void setupStreams(PrivateMessage privateMessage, EntitiesModel entitiesModel) {
+    ArrayList<StreamIndexModel> streamIndexModels = new ArrayList<>();
+    for (StreamIndex streamIndex : privateMessage.getEntities().getStreams()) {
+      StreamIndexModel streamIndexModel = new StreamIndexModel();
+      streamIndexModel.setIndices(streamIndex.getIndices());
+      streamIndexModel.setIdStream(streamIndex.getIdStream());
+      streamIndexModel.setStreamTitle(streamIndex.getStreamTitle());
+      streamIndexModels.add(streamIndexModel);
+    }
+
+    entitiesModel.setStreams(streamIndexModels);
   }
 
   private void setupPolls(PrivateMessage privateMessage, EntitiesModel entitiesModel) {
