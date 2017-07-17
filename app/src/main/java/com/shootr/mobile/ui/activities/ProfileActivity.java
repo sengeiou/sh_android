@@ -661,10 +661,14 @@ public class ProfileActivity extends BaseActivity
   }
 
   private void setupInitials(UserModel userModel) {
-    String initials = initialsLoader.getLetters(userModel.getUsername());
-    int backgroundColor = initialsLoader.getColorForLetters(initials);
-    TextDrawable textDrawable = initialsLoader.getRectTextDrawable(initials, backgroundColor);
-    avatarImageView.setImageDrawable(textDrawable);
+    try {
+      String initials = initialsLoader.getLetters(userModel.getUsername());
+      int backgroundColor = initialsLoader.getColorForLetters(initials);
+      TextDrawable textDrawable = initialsLoader.getRectTextDrawable(initials, backgroundColor);
+      avatarImageView.setImageDrawable(textDrawable);
+    } catch (NullPointerException error) {
+      avatarImageView.setImageResource(R.drawable.ic_contact_picture_default);
+    }
   }
 
   @Override public void navigateToListing(String idUser, boolean isCurrentUser) {
