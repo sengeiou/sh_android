@@ -190,6 +190,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     Boolean isStrategic = builder.getIsStrategic();
     Boolean newContent = builder.hasNewContent();
     Boolean firstSession = false;
+    user = builder.getUser();
     if (user != null) {
       firstSession = (getSignUpDatePlusHour(user.getSignUpDate()).compareTo(new Date()) > 0);
     }
