@@ -10,8 +10,6 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
-
 public class FollowActivityViewHolder extends GenericActivityViewHolder {
 
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -35,10 +33,14 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
   }
 
   @Override protected void renderText(ActivityModel activity) {
-    checkNotNull(currentUserId,
-        "Follow ViewHolder must know the current user's id. Use setCurrentUser(String) before rendering");
-    text.setText(formatActivityComment(activity, currentUserId));
-    renderFollowButton(activity, currentUserId);
+    try {
+      if (currentUserId != null) {
+        text.setText(formatActivityComment(activity, currentUserId));
+        renderFollowButton(activity, currentUserId);
+      }
+    } catch (Exception e) {
+      /* no-op */
+    }
   }
 
   protected void renderFollowButton(final ActivityModel activity, String currentUserId) {
