@@ -23,7 +23,7 @@
   <string name="activity_login_email_id_hint">Nombre de usuario o email</string>
   <string name="activity_login_email_password_hint">Contraseña</string>
   <string name="activity_login_register_email">Registrarse con email</string>
-  <string name="activity_login_register_facebook">Entrar con Facebook</string>
+  <string name="activity_login_register_facebook">Continuar con Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Iniciar sesión</string>
   <string name="activity_new_stream_title">Nuevo stream</string>
@@ -190,8 +190,8 @@
     <item quantity="other">%d horas</item>
     <item quantity="zero">%d hora</item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">En %s</string>
-  <string name="important_started_shooting_activity_text_pattern">"En %s: "</string>
+  <string name="important_started_shooting_activity_notext_pattern">Ha publicado</string>
+  <string name="important_started_shooting_activity_text_pattern">"Ha publicado: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">No hay mensajes</string>
   <string name="include_listing_empty">No hay streams</string>
@@ -265,8 +265,8 @@
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nuevo mensaje…</string>
   <string name="next">Siguiente</string>
-  <string name="niced_by">"Nice de "</string>
-  <string name="niced_shot_activity">Ha hecho nice</string>
+  <string name="niced_by">Nice de</string>
+  <string name="niced_shot_activity">Ha hecho nice a %s</string>
   <string name="niced_shot_activity_with_comment">"Ha hecho nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
@@ -300,8 +300,9 @@
   <string name="on_boarding_add_favorites">Streams populares</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
-  <string name="opened_activity_text_pattern">Ha creado (stream)</string>
+  <string name="opened_activity_text_pattern">Ha creado este stream</string>
   <string name="order_poll_option">%1$s. %2$s</string>
+  <string name="participants">Participantes</string>
   <string name="participants_list_empty">No hay participantes</string>
   <string name="photo_edit_gallery">Galería</string>
   <string name="photo_edit_remove">Quitar</string>
@@ -352,7 +353,7 @@
   <string name="public_vote">Voto Público</string>
   <string name="public_vote_dialog">Para hacerlo privado, pulsa el candado antes de votar.</string>
   <string name="public_vote_title_dialog">Tu voto será público</string>
-  <string name="publish_poll">%s Nueva encuesta</string>
+  <string name="publish_poll">Nueva encuesta %s</string>
   <string name="push_settings_everyone">De todos</string>
   <string name="push_settings_people_follow">De la gente que sigo</string>
   <string name="read_write_mode_public_description">Cualquiera puede escribir</string>
@@ -415,9 +416,9 @@
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
-  <string name="share_stream_activity_text_pattern">Ha compartido (stream)</string>
-  <string name="share_stream_button">Compartir</string>
-  <string name="share_stream_description">Trae gente y empieza a divertirte.</string>
+  <string name="share_stream_activity_text_pattern">Ha compartido este stream</string>
+  <string name="share_stream_button">Compartir ahora</string>
+  <string name="share_stream_description">Seguro que conoces a mucha gente que le gustará tu stream. Compártelo ahora en tus redes sociales o web, trae a gente y empieza a disfrutar.</string>
   <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Echa un vistazo a %s en Shootr</string>
   <string name="share_stream_title">Comparte el stream</string>
@@ -434,11 +435,11 @@
   <string name="shot_timeline_empty_title">No hay shots</string>
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
-  <string name="started_shooting_activity_text_pattern">Ha escrito en %s</string>
-  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrito en %s: "</string>
+  <string name="started_shooting_activity_text_pattern">Ha escrito</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrito: "</string>
   <string name="started_shooting_push_settings">Aviso de nuevo shot</string>
   <string name="stream_checked">Hecho</string>
-  <string name="stream_check_in_activity_text_pattern">Ha hecho check-in en (stream)</string>
+  <string name="stream_check_in_activity_text_pattern">Ha hecho check-in</string>
   <string name="stream_data_info_favorites">Seguidores</string>
   <string name="stream_data_info_participants">Participantes</string>
   <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
@@ -448,8 +449,14 @@
   <string name="stream_detail_media">Archivos</string>
   <string name="stream_detail_menu_data_info">Estadísticas</string>
   <string name="stream_detail_mute">Silenciar</string>
+  <plurals name="stream_detail_participants">
+    <item quantity="one">%s participante</item>
+    <item quantity="other">%s participantes</item>
+    <item quantity="zero">%s participantes</item>
+  </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">Sigue (stream)</string>
+  <string name="stream_favorited_activity_text_pattern">Sigue este stream</string>
+  <string name="stream_followers">Seguidores</string>
   <string name="stream_list_empty">No hay resultados</string>
   <string name="stream_media_empty_title">No hay fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hay más archivos</string>
@@ -514,7 +521,7 @@
     <item quantity="other">%s visualizaciones</item>
     <item quantity="zero">%s visualizaciones</item>
   </plurals>
-  <string name="voted_poll">Ha votado en (question) en %s</string>
+  <string name="voted_poll">Ha votado en (question)</string>
   <string name="voted_public_poll">Ha votado \"%s\" en (question)</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
@@ -525,11 +532,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
-  <string name="participants">Participantes</string>
-  <string name="stream_followers">Seguidores</string>
-  <plurals name="stream_detail_participants">
-    <item quantity="one">%s participante</item>
-    <item quantity="other">%s participantes</item>
-    <item quantity="zero">%s participantes</item>
-  </plurals>
+  <string name="stream_detail_following">Siguiendo %s</string>
 </resources>

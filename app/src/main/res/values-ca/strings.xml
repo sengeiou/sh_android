@@ -23,7 +23,7 @@
   <string name="activity_login_email_id_hint">Nom d\'usuari o email</string>
   <string name="activity_login_email_password_hint">Contrasenya</string>
   <string name="activity_login_register_email">Registrar-se amb email</string>
-  <string name="activity_login_register_facebook">Entrar amb Facebook</string>
+  <string name="activity_login_register_facebook">Continuar amb Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Iniciar sessió</string>
   <string name="activity_new_stream_title">Nou stream</string>
@@ -190,8 +190,8 @@
     <item quantity="other">%d hores</item>
     <item quantity="zero">%d hora</item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">A %s</string>
-  <string name="important_started_shooting_activity_text_pattern">"A %s: "</string>
+  <string name="important_started_shooting_activity_notext_pattern">Ha publicat</string>
+  <string name="important_started_shooting_activity_text_pattern">"Ha publicat: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">Sense missatges</string>
   <string name="include_listing_empty">No hi ha streams</string>
@@ -263,10 +263,10 @@
   <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
   <string name="new_stream_description_label">Descripció</string>
   <string name="new_stream_title_label">Títol</string>
-  <string name="new_topic" formatted="false">Nou missatge...</string>
+  <string name="new_topic" formatted="false">Nou missatge…</string>
   <string name="next">Següent</string>
   <string name="niced_by">"Nice de "</string>
-  <string name="niced_shot_activity">Ha fet nice</string>
+  <string name="niced_shot_activity">Ha fet nice a %s</string>
   <string name="niced_shot_activity_with_comment">"Ha fet nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
@@ -300,8 +300,9 @@
   <string name="on_boarding_add_favorites">Streams populars</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Entrar a Shootr</string>
-  <string name="opened_activity_text_pattern">Ha creat (stream)</string>
+  <string name="opened_activity_text_pattern">Ha creat aquest stream</string>
   <string name="order_poll_option">%1$s. %2$s</string>
+  <string name="participants">Participants</string>
   <string name="participants_list_empty">No hi ha participants</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Treure</string>
@@ -352,7 +353,7 @@
   <string name="public_vote">Vot Públic</string>
   <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
   <string name="public_vote_title_dialog">El teu vot serà públic</string>
-  <string name="publish_poll">%s Nova enquesta</string>
+  <string name="publish_poll">Nova enquesta %s</string>
   <string name="push_settings_everyone">De tothom</string>
   <string name="push_settings_people_follow">De la gent que segueixo</string>
   <string name="read_write_mode_public_description">Tothom pot escriure</string>
@@ -415,9 +416,9 @@
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
-  <string name="share_stream_activity_text_pattern">Ha compartit (stream)</string>
-  <string name="share_stream_button">Compartir</string>
-  <string name="share_stream_description">Porta gent i comença a divertir-te.</string>
+  <string name="share_stream_activity_text_pattern">Ha compartit aquest stream</string>
+  <string name="share_stream_button">Compartir ara</string>
+  <string name="share_stream_description">Segurament coneixes a molta gent a qui li agradarà el teu stream. Comparteix-lo ara a les teves xarxes socials o web, porta gent i comença a gaudir.</string>
   <string name="share_stream_message">Fes una ullada a %1$s a Shootr: https://web.shootr.com/st/%2$s</string>
   <string name="share_stream_subject">Fes una ullada a %s a Shootr</string>
   <string name="share_stream_title">Comparteix l\'stream</string>
@@ -434,11 +435,11 @@
   <string name="shot_timeline_empty_title">No hi ha shots</string>
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>
-  <string name="started_shooting_activity_text_pattern">Ha escrit a %s</string>
-  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrit a %s: "</string>
+  <string name="started_shooting_activity_text_pattern">Ha escrit</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Ha escrit: "</string>
   <string name="started_shooting_push_settings">Avís de nou shot</string>
   <string name="stream_checked">Fet</string>
-  <string name="stream_check_in_activity_text_pattern">Ha fet check-in a (stream)</string>
+  <string name="stream_check_in_activity_text_pattern">Ha fet check-in</string>
   <string name="stream_data_info_favorites">Seguidors</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
@@ -448,8 +449,14 @@
   <string name="stream_detail_media">Arxius</string>
   <string name="stream_detail_menu_data_info">Nombres</string>
   <string name="stream_detail_mute">Silenciar</string>
+  <plurals name="stream_detail_participants">
+    <item quantity="one">%s participant</item>
+    <item quantity="other">%s participants</item>
+    <item quantity="zero">%s participants</item>
+  </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">Segueix (stream)</string>
+  <string name="stream_favorited_activity_text_pattern">Segueix aquest stream</string>
+  <string name="stream_followers">Seguidors</string>
   <string name="stream_list_empty">No hi ha resultats</string>
   <string name="stream_media_empty_title">No hi ha fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hi ha més arxius</string>
@@ -514,7 +521,7 @@
     <item quantity="other">%s visualitzacions</item>
     <item quantity="zero">%s visualitzacions</item>
   </plurals>
-  <string name="voted_poll">Ha votat a (question) a %s</string>
+  <string name="voted_poll">Ha votat a (question)</string>
   <string name="voted_public_poll">Ha votat \"%s\" a (question)</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
@@ -525,11 +532,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <plurals name="stream_detail_participants">
-    <item quantity="one">%s participant</item>
-    <item quantity="other">%s participants</item>
-    <item quantity="zero">%s participants</item>
-  </plurals>
-  <string name="participants">Participants</string>
-  <string name="stream_followers">Seguidors</string>
+  <string name="stream_detail_following">Seguint %s</string>
 </resources>
