@@ -188,8 +188,8 @@
     <item quantity="one">%d hour </item>
     <item quantity="other">%d hours </item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">Has posted</string>
-  <string name="important_started_shooting_activity_text_pattern">"Has posted: "</string>
+  <string name="important_started_shooting_activity_notext_pattern">Shot</string>
+  <string name="important_started_shooting_activity_text_pattern">"Shot: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">No messages</string>
   <string name="include_listing_empty">No streams</string>
