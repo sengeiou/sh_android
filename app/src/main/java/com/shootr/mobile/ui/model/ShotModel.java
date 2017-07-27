@@ -28,6 +28,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private boolean niced;
     private boolean reshooted;
     private boolean isMyshot;
+    private boolean hasMedia;
 
     public String getIdShot() {
         return idShot;
@@ -223,6 +224,14 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
     public void setReshooted(boolean reshooted) {
         this.reshooted = reshooted;
+    }
+
+    public boolean hasMedia() {
+        return hasMedia;
+    }
+
+    public void setHasMedia(boolean hasMedia) {
+        this.hasMedia = hasMedia;
     }
 
     @Override public int compareTo(ShotModel shotModel) {

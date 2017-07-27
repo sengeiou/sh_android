@@ -51,6 +51,7 @@ public class ShotModelMapper {
     shotModel.setReplyUsername(shot.getParentShotUsername());
     shotModel.setParentShotId(shot.getParentShotId());
     shotModel.setVideoUrl(shot.getVideoUrl());
+    shotModel.setHasMedia(shotImageModel.getImageUrl() != null || shot.getVideoUrl() != null);
     shotModel.setVideoTitle(shot.getVideoTitle());
     shotModel.setVideoDuration(durationToText(shot.getVideoDuration()));
     shotModel.setNiceCount(shot.getNiceCount());
