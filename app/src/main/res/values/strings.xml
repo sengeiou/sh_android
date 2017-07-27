@@ -188,8 +188,8 @@
     <item quantity="one">%d hour </item>
     <item quantity="other">%d hours </item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">In %s</string>
-  <string name="important_started_shooting_activity_text_pattern">"In %s: "</string>
+  <string name="important_started_shooting_activity_notext_pattern">Ha publicado</string>
+  <string name="important_started_shooting_activity_text_pattern">"Ha publicado: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">No messages</string>
   <string name="include_listing_empty">No streams</string>
@@ -263,7 +263,7 @@
   <string name="new_topic" formatted="false">New message…</string>
   <string name="next">Next</string>
   <string name="niced_by">"Niced by "</string>
-  <string name="niced_shot_activity">Niced</string>
+  <string name="niced_shot_activity">Niced this from %s</string>
   <string name="niced_shot_activity_with_comment">"Niced: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
@@ -297,7 +297,7 @@
   <string name="on_boarding_add_favorites">Popular streams</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Enter Shootr</string>
-  <string name="opened_activity_text_pattern">Opened (stream)</string>
+  <string name="opened_activity_text_pattern">Opened this stream</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants_list_empty">No participants</string>
   <string name="photo_edit_gallery">Gallery</string>
@@ -349,7 +349,7 @@
   <string name="public_vote">Public Vote</string>
   <string name="public_vote_dialog">To make it private, tap on the lock icon before you vote.</string>
   <string name="public_vote_title_dialog">Your vote will be public</string>
-  <string name="publish_poll">%1$s New poll in %2$s</string>
+  <string name="publish_poll">%s New poll</string>
   <string name="push_settings_everyone">From Everyone</string>
   <string name="push_settings_people_follow">From People I Follow</string>
   <string name="read_write_mode_public_description">Anyone can shoot</string>
@@ -410,7 +410,7 @@
   <string name="share_shot_chooser_title">Share</string>
   <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
-  <string name="share_stream_activity_text_pattern">Shared (stream)</string>
+  <string name="share_stream_activity_text_pattern">Shared this stream</string>
   <string name="share_stream_button">Share</string>
   <string name="share_stream_description">Bring in people and start having fun.</string>
   <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s</string>
@@ -429,11 +429,11 @@
   <string name="shot_timeline_empty_title">No Shots</string>
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
   <string name="sign_out_message">Signing out…</string>
-  <string name="started_shooting_activity_text_pattern">Started shooting on %s</string>
-  <string name="started_shooting_activity_text_pattern_with_comment">"Started shooting on %s: "</string>
+  <string name="started_shooting_activity_text_pattern">Started shooting</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">"Started shooting: "</string>
   <string name="started_shooting_push_settings">Started shooting alert</string>
   <string name="stream_checked">Checked in</string>
-  <string name="stream_check_in_activity_text_pattern">Checked in to (stream)</string>
+  <string name="stream_check_in_activity_text_pattern">Checked in</string>
   <string name="stream_data_info_favorites">Followers</string>
   <string name="stream_data_info_participants">Participants</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
@@ -444,7 +444,7 @@
   <string name="stream_detail_menu_data_info">Stats</string>
   <string name="stream_detail_mute">Mute</string>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">Followed (stream)</string>
+  <string name="stream_favorited_activity_text_pattern">Followed this stream</string>
   <string name="stream_list_empty">No results</string>
   <string name="stream_media_empty_title">No photos or videos</string>
   <string name="stream_media_no_more_media">No more media</string>
@@ -510,8 +510,8 @@
     <item quantity="other">%s views</item>
     <item quantity="zero">%s views</item>
   </plurals>
-  <string name="voted_poll">Voted in (question) in %s</string>
-  <string name="voted_public_poll">Voted \"%1$s\" in (question) in %2$s</string>
+  <string name="voted_poll">Voted in (question)</string>
+  <string name="voted_public_poll">Voted \"%s\" in (question)</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
   <string formatted="false" name="watch_profile_photo">View</string>

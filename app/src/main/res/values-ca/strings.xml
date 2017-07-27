@@ -352,7 +352,7 @@
   <string name="public_vote">Vot Públic</string>
   <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
   <string name="public_vote_title_dialog">El teu vot serà públic</string>
-  <string name="publish_poll">%1$s Nova enquesta a %2$s</string>
+  <string name="publish_poll">%s Nova enquesta</string>
   <string name="push_settings_everyone">De tothom</string>
   <string name="push_settings_people_follow">De la gent que segueixo</string>
   <string name="read_write_mode_public_description">Tothom pot escriure</string>
@@ -515,7 +515,7 @@
     <item quantity="zero">%s visualitzacions</item>
   </plurals>
   <string name="voted_poll">Ha votat a (question) a %s</string>
-  <string name="voted_public_poll">Ha votat \"%1$s\" a (question) a %2$s</string>
+  <string name="voted_public_poll">Ha votat \"%s\" a (question)</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>

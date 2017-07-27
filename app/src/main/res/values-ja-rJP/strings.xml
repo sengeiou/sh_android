@@ -329,7 +329,7 @@
   <string name="profile_support">サポート</string>
   <string name="profile_updated">プロフィールが更新されました</string>
   <string name="promoted">プロモーション</string>
-  <string name="publish_poll">%1$s：%2$sに新しいアンケート</string>
+  <string name="publish_poll">%s：に新しいアンケート</string>
   <string name="push_settings_everyone">全員から（既定）</string>
   <string name="push_settings_people_follow">フォロー中の人からのみ</string>
   <string name="read_write_mode_public_description">誰でも表示、投稿できます</string>

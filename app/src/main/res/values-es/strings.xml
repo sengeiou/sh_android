@@ -352,7 +352,7 @@
   <string name="public_vote">Voto Público</string>
   <string name="public_vote_dialog">Para hacerlo privado, pulsa el candado antes de votar.</string>
   <string name="public_vote_title_dialog">Tu voto será público</string>
-  <string name="publish_poll">%1$s Nueva encuesta en %2$s</string>
+  <string name="publish_poll">%s Nueva encuesta</string>
   <string name="push_settings_everyone">De todos</string>
   <string name="push_settings_people_follow">De la gente que sigo</string>
   <string name="read_write_mode_public_description">Cualquiera puede escribir</string>
@@ -515,7 +515,7 @@
     <item quantity="zero">%s visualizaciones</item>
   </plurals>
   <string name="voted_poll">Ha votado en (question) en %s</string>
-  <string name="voted_public_poll">Ha votado \"%1$s\" en (question) en %2$s</string>
+  <string name="voted_public_poll">Ha votado \"%s\" en (question)</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">Ver</string>

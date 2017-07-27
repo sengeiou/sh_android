@@ -29,7 +29,7 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
 
   protected CharSequence formatActivityComment(final ActivityModel activity) {
     activity.setComment(itemView.getResources()
-        .getString(R.string.publish_poll, activity.getPollQuestion(), activity.getStreamTitle()));
+        .getString(R.string.publish_poll, activity.getPollQuestion()));
     return pollQuestionSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(), activity.getStreamTitle(),
         activity.getPollQuestion(),
         activity.getComment(), onPollQuestionClickListener);

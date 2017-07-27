@@ -344,7 +344,7 @@
   <string name="public_vote">公開投票</string>
   <string name="public_vote_dialog">為了不公開投票結果，在投票之前請點擊鎖。</string>
   <string name="public_vote_title_dialog">你的投票將是公開的</string>
-  <string name="publish_poll">%1$s %2$s 新的投票</string>
+  <string name="publish_poll">%s 新的投票</string>
   <string name="push_settings_everyone">任何用戶</string>
   <string name="push_settings_people_follow">我關注的用戶</string>
   <string name="read_write_mode_public_description">每个人皆可shoot</string>
@@ -502,7 +502,7 @@
     <item quantity="zero">%s次查看</item>
   </plurals>
   <string name="voted_poll">投了 (question) 在 %s</string>
-  <string name="voted_public_poll">在 %2$s 的 (question) 投了 \"%1$s\"</string>
+  <string name="voted_public_poll">在 的 (question) 投了 \"%s\"</string>
   <string name="watching_stream_connected">已連接</string>
   <string name="watching_stream_connected_muted">已連接(靜音)</string>
   <string name="watch_profile_photo" formatted="false">點開</string>

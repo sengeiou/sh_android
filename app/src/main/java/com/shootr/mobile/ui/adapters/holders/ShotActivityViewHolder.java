@@ -16,7 +16,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     private final ImageLoader imageLoader;
     private final OnShotClick onShotClickListener;
 
-    @BindColor(R.color.gray_60) int shotCommentColor;
+    @BindColor(R.color.material_black) int shotCommentColor;
 
     public ShotActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener) {

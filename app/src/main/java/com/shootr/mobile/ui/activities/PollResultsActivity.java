@@ -51,6 +51,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @BindView(R.id.poll_votes) TextView pollVoteNumber;
 
   @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
+  @BindString(R.string.timeline_poll_results) String pollResultsResource;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PercentageUtils percentageUtils;
@@ -201,6 +202,10 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     startActivity(intent);
     finish();
+  }
+
+  @Override public void showClosed() {
+    getToolbarDecorator().setTitle(pollResultsResource);
   }
 
   @Override protected void onResume() {

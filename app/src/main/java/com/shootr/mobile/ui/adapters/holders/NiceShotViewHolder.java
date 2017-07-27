@@ -20,7 +20,7 @@ public class NiceShotViewHolder extends ShotActivityViewHolder {
     }
 
     @Override protected String getActivitySimpleComment(ActivityModel activity) {
-        return nicedShotText;
+        return String.format(nicedShotText, activity.getShot().getUsername());
     }
 
     @Override protected String getActivityCommentPrefix(ActivityModel activity) {

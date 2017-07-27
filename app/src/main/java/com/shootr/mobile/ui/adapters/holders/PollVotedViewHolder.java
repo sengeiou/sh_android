@@ -30,11 +30,10 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
   protected CharSequence formatActivityComment(final ActivityModel activity) {
     if (activity.getPollOptionText() != null && !activity.getPollOptionText().isEmpty()) {
       activity.setComment(itemView.getResources()
-          .getString(R.string.voted_public_poll, activity.getPollOptionText(),
-              activity.getStreamTitle()));
+          .getString(R.string.voted_public_poll, activity.getPollOptionText()));
     } else {
       activity.setComment(
-          itemView.getResources().getString(R.string.voted_poll, activity.getStreamTitle()));
+          itemView.getResources().getString(R.string.voted_poll));
     }
     return pollVotedSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(),
         activity.getStreamTitle(), activity.getPollQuestion(), activity.getComment(),

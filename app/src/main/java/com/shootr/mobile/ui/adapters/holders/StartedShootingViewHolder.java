@@ -20,12 +20,12 @@ public class StartedShootingViewHolder extends ShotActivityViewHolder {
     }
 
     @Override protected String getActivitySimpleComment(ActivityModel activity) {
-        return String.format(startedShootingPattern, activity.getStreamTitle());
+        return startedShootingPattern;
     }
 
     @Override
     protected String getActivityCommentPrefix(ActivityModel activity) {
-        return String.format(startedShootingPatternWithComment, activity.getStreamTitle());
+        return startedShootingPatternWithComment;
     }
 
 }

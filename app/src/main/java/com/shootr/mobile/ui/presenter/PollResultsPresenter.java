@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.poll.IgnorePollInteractor;
 import com.shootr.mobile.domain.interactor.poll.SharePollInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollOption;
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
@@ -65,6 +66,9 @@ public class PollResultsPresenter implements Presenter {
         orderPollOptions(poll);
         handlePollModel(poll);
         pollResultsView.hideLoading();
+        if (poll.getStatus().equals(PollStatus.CLOSED)) {
+          pollResultsView.showClosed();
+        }
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
