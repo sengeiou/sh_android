@@ -13,6 +13,26 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.39.0] - 2017-07-28
+
+### Added
+- Stream from activity
+
+
+### Changed
+- Reshoot button in timeline
+
+### Fixed
+- Stream photo update
+- Share streams and shots
+- Mixpanel
+
+## [1.37.2] - 2017-07-7
+
+### Changed
+- Following/Follower
+
+
 ## [1.38.0] - 2017-07-14
 
 ### Added
