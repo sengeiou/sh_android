@@ -141,7 +141,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupShotActions(final ShotModel shot, final OnReshootClickListener onReshootClickListener) {
-    if (shot.isVerifiedUser() || shot.isMine()) {
+    if (shot.isVerifiedUser() || (shot.isMine() && shot.hasMedia())) {
       actionsContainer.setVisibility(View.VISIBLE);
       if (shot.isReshooted()) {
         reshootAction.setBackgroundDrawable(reshootAction.getResources().getDrawable(R.drawable.blue_round_layout));

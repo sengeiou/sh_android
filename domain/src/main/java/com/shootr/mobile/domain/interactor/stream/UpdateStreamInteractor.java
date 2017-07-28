@@ -97,10 +97,10 @@ public class UpdateStreamInteractor implements Interactor {
     StreamUpdateParameters streamUpdateParameters = new StreamUpdateParameters();
 
     streamUpdateParameters.setIdStream(idStream);
-    streamUpdateParameters.setIdMedia(idMedia);
+    streamUpdateParameters.setPhotoIdMedia(idMedia);
     streamUpdateParameters.setTitle(title);
     streamUpdateParameters.setDescription(removeDescriptionLineBreaks(description));
-    streamUpdateParameters.setIdMedia(idMedia);
+    streamUpdateParameters.setPhotoIdMedia(idMedia);
     streamUpdateParameters.setReadWriteMode(streamMode);
     streamUpdateParameters.setTopic(topic);
     streamUpdateParameters.setNotifyMessage(notifyTopicMessage);

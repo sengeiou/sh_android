@@ -9,6 +9,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
@@ -30,6 +31,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.shot_image) ImageView image;
     @BindView(R.id.activity_follow_button) FollowButton followButton;
     @BindView(R.id.favorite_stream_indicator) ShineButton favoriteButton;
+    @BindView(R.id.stream_name) TextView streamName;
 
     public GenericActivityViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener) {
@@ -47,6 +49,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         renderAvatar(activity);
         renderImage(activity);
         renderFavorite(activity);
+        renderStreamName(activity);
     }
 
     protected void renderText(ActivityModel activity) {
@@ -82,5 +85,22 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
     protected void renderFavorite(ActivityModel activityModel) {
         favoriteButton.setVisibility(View.GONE);
+    }
+
+    protected void renderStreamName(final ActivityModel activityModel) {
+        if (activityModel.getStreamTitle() != null && !activityModel.getStreamTitle().isEmpty()) {
+            streamName.setVisibility(View.VISIBLE);
+            streamName.setText(activityModel.getStreamTitle());
+
+            streamName.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View view) {
+                    if (activityModel.getIdStream() != null) {
+                        view.getContext()
+                            .startActivity(StreamTimelineActivity.newIntent(view.getContext(),
+                                activityModel.getIdStream()));
+                    }
+                }
+            });
+        }
     }
 }

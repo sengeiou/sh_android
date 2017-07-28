@@ -6,7 +6,7 @@ public class StreamUpdateParameters implements Validable {
   private String description;
   private String topic;
   private String title;
-  private String idMedia;
+  private String photoIdMedia;
   private String readWriteMode;
   private boolean notifyPinMessage;
 
@@ -34,12 +34,12 @@ public class StreamUpdateParameters implements Validable {
     this.title = title;
   }
 
-  public String getIdMedia() {
-    return idMedia;
+  public String getPhotoIdMedia() {
+    return photoIdMedia;
   }
 
-  public void setIdMedia(String idMedia) {
-    this.idMedia = idMedia;
+  public void setPhotoIdMedia(String photoIdMedia) {
+    this.photoIdMedia = photoIdMedia;
   }
 
   public String getReadWriteMode() {

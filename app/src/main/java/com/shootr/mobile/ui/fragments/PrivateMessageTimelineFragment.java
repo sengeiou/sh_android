@@ -498,11 +498,13 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
     try {
-      newShotsNotificatorContainer.setVisibility(View.VISIBLE);
-      String indicatorText =
-          getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
-              numberNewShots);
-      newShotsNotificatorText.setText(indicatorText);
+      if (newShotsNotificatorContainer != null) {
+        newShotsNotificatorContainer.setVisibility(View.VISIBLE);
+        String indicatorText =
+            getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
+                numberNewShots);
+        newShotsNotificatorText.setText(indicatorText);
+      }
     } catch (NullPointerException error) {
       crashReportTool.logException(error);
     }

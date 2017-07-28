@@ -25,7 +25,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
     }
 
     @Override protected void renderText(ActivityModel activity) {
-        text.setText(formatActivityComment(activity));
+        text.setText(getCommentPattern());
         text.setMovementMethod(new LinkMovementMethod());
     }
 
