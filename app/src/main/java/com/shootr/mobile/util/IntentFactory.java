@@ -50,7 +50,7 @@ public interface IntentFactory {
       String shotUrl = String.format(urlPattern, shotModel.getIdShot(), locale);
       String subject =
           String.format(subjectPattern, shotModel.getUsername(), shotModel.getStreamTitle());
-      String sharedText = String.format(messagePattern, shotModel.getComment(), shotUrl);
+      String sharedText = String.format(messagePattern, shotUrl);
 
       return ShareCompat.IntentBuilder.from(launchActivity)
           .setType("text/plain")

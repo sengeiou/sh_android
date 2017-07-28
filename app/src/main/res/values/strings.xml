@@ -409,8 +409,8 @@
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Poll %s</string>
   <string name="share_shot_chooser_title">Share</string>
-  <string name="share_shot_message">%1$s %2$s</string>
-  <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
+  <string name="share_shot_message">%s</string>
+  <string name="share_shot_subject">Shot by %1$s on %2$s</string>
   <string name="share_stream_activity_text_pattern">Shared this stream</string>
   <string name="share_stream_button">Share now</string>
   <string name="share_stream_description">Surely you have lots of people out there who would like your stream. Share it now through your social media or website, bring in people and start having fun.</string>
