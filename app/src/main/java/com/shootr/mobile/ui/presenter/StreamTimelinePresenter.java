@@ -653,20 +653,21 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private void sendStream(String topic, Boolean notifyMessage) {
     topic = trimTopicAndNullWhenEmpty(topic);
 
-    updateStreamInteractor.updateStreamMessage(streamId, topic, notifyMessage, new UpdateStreamInteractor.Callback() {
-      @Override public void onLoaded(Stream stream) {
-        streamTopic = stream.getTopic();
-        if (streamTopic != null && !streamTopic.isEmpty()) {
-          streamTimelineView.showPinnedMessage(streamTopic);
-        } else {
-          streamTimelineView.hidePinnedMessage();
-        }
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-      }
-    });
+    updateStreamInteractor.updateStreamMessage(streamId, topic, notifyMessage,
+        new UpdateStreamInteractor.Callback() {
+          @Override public void onLoaded(Stream stream) {
+            streamTopic = stream.getTopic();
+            if (streamTopic != null && !streamTopic.isEmpty()) {
+              streamTimelineView.showPinnedMessage(streamTopic);
+            } else {
+              streamTimelineView.hidePinnedMessage();
+            }
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+          }
+        });
   }
 
   private String trimTopicAndNullWhenEmpty(String streamTopic) {
@@ -766,14 +767,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     });
   }
 
-  public boolean isViewOnlyStream() {
-    return isViewOnlyStream;
-  }
-
-  public void setViewOnlyStream(boolean viewOnlyStream) {
-    isViewOnlyStream = viewOnlyStream;
-  }
-
   public void undoReshoot(final ShotModel shot) {
     undoReshootInteractor.undoReshoot(shot.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
@@ -787,6 +780,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   public Boolean isStrategic() {
+    if (streamModel == null) {
+      return false;
+    }
     return streamModel.isStrategic();
   }
 }
