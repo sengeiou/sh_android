@@ -116,7 +116,7 @@ public class ShootrPhotoService implements PhotoService {
         } catch (JSONException e) {
             ShootrError jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR,
               "JSONException",
-              "Error while parsing response JSON. Response received:" + response.body().string());
+              "Error while parsing response JSON. Response received:" + response.networkResponse().toString());
             throw new ShootrServerException(jsonError);
         }
     }
@@ -128,7 +128,7 @@ public class ShootrPhotoService implements PhotoService {
         } catch (JSONException e) {
             ShootrError jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR,
               "JSONException",
-              "Error while parsing response JSON. Response received:" + response.body().string());
+              "Error while parsing response JSON. Response received:" + response.networkResponse().toString());
             throw new ShootrServerException(jsonError);
         }
     }
@@ -140,7 +140,7 @@ public class ShootrPhotoService implements PhotoService {
         } catch (JSONException e) {
             ShootrError jsonError = new ShootrPhotoUploadError(ShootrError.ERROR_CODE_UNKNOWN_ERROR,
               "JSONException",
-              "Error while parsing response JSON. Response received:" + response.body().string());
+              "Error while parsing response JSON. Response received:" + response.networkResponse().toString());
             throw new ShootrServerException(jsonError);
         }
     }
