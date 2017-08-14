@@ -11,6 +11,7 @@ public class BaseMessageApiEntity {
   private String videoTitle;
   private Long videoDuration;
   private BaseMessageEntitiesApiEntity entities;
+  private String imageIdMedia;
 
   public String getComment() {
     return comment;
@@ -74,5 +75,13 @@ public class BaseMessageApiEntity {
 
   public void setEntities(BaseMessageEntitiesApiEntity entities) {
     this.entities = entities;
+  }
+
+  public String getImageIdMedia() {
+    return imageIdMedia;
+  }
+
+  public void setImageIdMedia(String imageIdMedia) {
+    this.imageIdMedia = imageIdMedia;
   }
 }

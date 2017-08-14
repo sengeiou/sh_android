@@ -84,6 +84,7 @@ public class ShotEntityMapper {
         shotEntity.getReshootedTime() != null ? new Date(shotEntity.getReshootedTime()) : null);
 
     setupEntities(shot, shotEntity);
+    shot.setImageIdMedia(shotEntity.getImageIdMedia());
 
     return shot;
   }
@@ -203,6 +204,7 @@ public class ShotEntityMapper {
     shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
     setupEntityUrls(shotEntity, shot);
+    shotEntity.setImageIdMedia(shot.getImageIdMedia());
     return shotEntity;
   }
 
