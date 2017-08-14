@@ -4,7 +4,6 @@ import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
@@ -37,7 +36,6 @@ public class StreamDetailPresenter implements Presenter {
 
   //region Dependencies
   private final GetStreamInfoInteractor streamInfoInteractor;
-  private final ChangeStreamPhotoInteractor changeStreamPhotoInteractor;
   private final ShareStreamInteractor shareStreamInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
@@ -66,7 +64,6 @@ public class StreamDetailPresenter implements Presenter {
   private Integer totalWatchers;
 
   @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
-      ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
       ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor,
       UnfollowInteractor unfollowInteractor,
       GetFavoriteStatusInteractor getFavoriteStatusInteractor,
@@ -79,7 +76,6 @@ public class StreamDetailPresenter implements Presenter {
       StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
     this.streamInfoInteractor = streamInfoInteractor;
-    this.changeStreamPhotoInteractor = changeStreamPhotoInteractor;
     this.shareStreamInteractor = shareStreamInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
@@ -302,10 +298,6 @@ public class StreamDetailPresenter implements Presenter {
     streamDetailView.hideLoading();
   }
   //endregion
-
-  private void showImageUploadError() {
-    streamDetailView.showError(errorMessageFactory.getImageUploadErrorMessage());
-  }
 
   public void clickMedia() {
     streamDetailView.navigateToMedia(idStream, streamMediaCount);

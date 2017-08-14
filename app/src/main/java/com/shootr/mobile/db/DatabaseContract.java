@@ -370,27 +370,6 @@ public class DatabaseContract {
     };
   }
 
-  public static final class SuggestedPeopleTable extends UserTable {
-
-    private SuggestedPeopleTable() {
-
-    }
-
-    public static final String TABLE = "SuggestedPeople";
-
-    public static final String RELEVANCE = "relevance";
-    public static final String CREATED_STREAMS_COUNT = "createdStreamsCount";
-    public static final String FAVORITED_STREAMS_COUNT = "favoritedStreamsCount";
-
-    public static final String[] PROJECTION = {
-        ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
-        NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM,
-        WATCHING_STREAM_TITLE, WATCHING_SYNCHRONIZED, SOCIAL_LOGIN, RECEIVED_REACTIONS,
-        ANALYTICS_USER_TYPE, BIRTH, RELEVANCE, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT,
-        FIRST_SESSION_ACTIVATION, FOLLOWING, NUM_MUTUALS, STRATEGIC, MODIFIED, DELETED, REVISION, SYNCHRONIZED
-    };
-  }
-
   public static final class ContributorTable implements SyncColumns {
 
     private ContributorTable() {

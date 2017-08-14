@@ -41,7 +41,7 @@ def versionRevision = 1
 
 def isSnapshot = true
 def isPreProduction = false
-def databaseVersion = 55
+def databaseVersion = 56
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -224,7 +224,7 @@ dependencies {
   compile 'com.sloydev:collapsingavatartoolbar:1.1.0'
   compile 'com.github.bumptech.glide:glide:3.7.0'
   compile 'com.github.bumptech.glide:okhttp-integration:1.3.1@aar'
-  compile 'com.fewlaps.quitnowcache:quitnow-cache:1.5.0'
+  compile 'com.fewlaps.quitnowcache:quitnow-cache:3.0.0'
   compile 'io.reactivex:rxjava:1.1.6'
   compile 'io.reactivex:rxandroid:1.2.1'
   compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'

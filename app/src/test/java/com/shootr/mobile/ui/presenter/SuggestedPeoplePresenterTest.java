@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
@@ -19,12 +20,14 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -32,6 +35,7 @@ import static org.mockito.Mockito.verify;
 public class SuggestedPeoplePresenterTest {
 
   private static final String USER_ID = "userId";
+  public static final long ANY_DATE = 1501846780374L;
   @Mock GetSuggestedPeopleInteractor getSuggestedPeopleInteractor;
   @Mock FollowInteractor followInteractor;
   @Mock UnfollowInteractor unfollowInteractor;
@@ -39,15 +43,18 @@ public class SuggestedPeoplePresenterTest {
   @Mock SuggestedPeopleView suggestedPeopleView;
   @Mock DateRangeTextProvider dateRangeTextProvider;
   @Mock TimeUtils timeUtils;
+  @Mock LongPreference cacheTimeKeepAlive;
 
   private SuggestedPeoplePresenter presenter;
+  private SuggestedPeoplePresenter spyPresenter;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     UserModelMapper userModelMapper =
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
     presenter = new SuggestedPeoplePresenter(getSuggestedPeopleInteractor, followInteractor,
-        unfollowInteractor, userModelMapper, errorMessageFactory);
+        unfollowInteractor, userModelMapper, errorMessageFactory, cacheTimeKeepAlive);
+    spyPresenter = Mockito.spy(presenter);
     presenter.setView(suggestedPeopleView);
   }
 
@@ -60,7 +67,7 @@ public class SuggestedPeoplePresenterTest {
   }
 
   @Test public void shouldShowErrorWhenObtainSuggestedPeopleThrowsError() throws Exception {
-    setupSugestedPeopleErrorCallback();
+    setupSuggestedPeopleErrorCallback();
 
     presenter.initialize(suggestedPeopleView);
 
@@ -139,28 +146,28 @@ public class SuggestedPeoplePresenterTest {
             any(Interactor.ErrorCallback.class));
   }
 
-  private void setupSugestedPeopleErrorCallback() {
+  private void setupSuggestedPeopleErrorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.ErrorCallback errorCallback =
-            (Interactor.ErrorCallback) invocation.getArguments()[1];
+            (Interactor.ErrorCallback) invocation.getArguments()[2];
         errorCallback.onError(any(ShootrException.class));
         return null;
       }
     }).when(getSuggestedPeopleInteractor)
-        .loadSuggestedPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadSuggestedPeople(anyLong(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetSuggestedPeopleCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<List<SuggestedPeople>> callback =
-            (Interactor.Callback<List<SuggestedPeople>>) invocation.getArguments()[0];
+            (Interactor.Callback<List<SuggestedPeople>>) invocation.getArguments()[1];
         callback.onLoaded(suggestedPeople());
         return null;
       }
     }).when(getSuggestedPeopleInteractor)
-        .loadSuggestedPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadSuggestedPeople(anyLong(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private List<SuggestedPeople> suggestedPeople() {
