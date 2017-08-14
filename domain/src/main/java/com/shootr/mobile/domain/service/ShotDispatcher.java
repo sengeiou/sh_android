@@ -34,6 +34,7 @@ public class ShotDispatcher implements MessageSender {
   private static final int IMAGE_URL = 0;
   private static final int IMAGE_WIDTH = 1;
   private static final int IMAGE_HEIGHT = 2;
+  private static final int ID_MEDIA = 3;
   private final QueueRepository queueRepository;
   private final ShootrShotService shootrShotService;
   private final BusPublisher busPublisher;
@@ -219,6 +220,7 @@ public class ShotDispatcher implements MessageSender {
       queuedShot.getBaseMessage().setImage(shotImage.get(IMAGE_URL));
       queuedShot.getBaseMessage().setImageWidth(Long.valueOf(shotImage.get(IMAGE_WIDTH)));
       queuedShot.getBaseMessage().setImageHeight(Long.valueOf(shotImage.get(IMAGE_HEIGHT)));
+      queuedShot.getBaseMessage().setImageIdMedia(shotImage.get(ID_MEDIA));
       queuedShot.getImageFile().delete();
       queuedShot.setImageFile(null);
     }
