@@ -41,31 +41,10 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/shot_media_content"
             android:layout_toRightOf="@+id/activity_avatar"
+            android:orientation="vertical"
             >
-            <TextView
-                android:id="@+id/ativity_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:maxWidth="176dp"
-                android:paddingLeft="8dp"
-                android:textColor="@color/gray_10"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                tools:text="Ignasi"
-                />
 
-            <TextView
-                android:id="@+id/activity_timestamp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="8dp"
-                android:paddingTop="2dp"
-                android:singleLine="true"
-                android:textColor="@color/gray_60"
-                tools:text="22m"
-                />
+
         </LinearLayout>
 
         <com.shootr.mobile.ui.widgets.ClickableTextView
@@ -89,25 +68,12 @@
             android:id="@+id/shot_media_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/activity_text"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:paddingTop="8dp"
+            android:paddingTop="4dp"
             >
-
-            <ImageView
-                android:id="@+id/shot_image"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="2dp"
-                android:scaleType="centerCrop"
-                android:visibility="gone"
-                tools:src="@drawable/sample_avatar"
-                tools:visibility="visible"
-                />
 
             <com.sackcentury.shinebuttonlib.ShineButton
                 android:id="@+id/favorite_stream_indicator"
@@ -137,6 +103,17 @@
                 android:layout_width="@dimen/follow_button_width"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
+                />
+            <ImageView
+                android:id="@+id/shot_image"
+                android:layout_width="44dp"
+                android:layout_height="44dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="2dp"
+                android:scaleType="centerCrop"
+                android:visibility="gone"
+                tools:src="@drawable/sample_avatar"
+                tools:visibility="visible"
                 />
         </FrameLayout>
 

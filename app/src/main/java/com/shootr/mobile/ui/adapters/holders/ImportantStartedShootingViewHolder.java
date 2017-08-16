@@ -3,7 +3,6 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.view.View;
 import butterknife.BindString;
 import com.shootr.mobile.R;
-
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.model.ActivityModel;

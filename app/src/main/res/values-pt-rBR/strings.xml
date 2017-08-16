@@ -33,7 +33,7 @@
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condições de uso</string>
   <string name="activity_registration_password_hint">Senha</string>
   <string name="activity_registration_username_hint">Nome de usuário</string>
-  <string name="activity_started_following_you">Te segue</string>
+  <string name="activity_started_following_you">te segue</string>
   <string name="activity_timeline_empty_title">Nenhuma atividade</string>
   <string name="added_contributor">Adicionado</string>
   <string name="added_to_favorites">Seguindo</string>
@@ -190,8 +190,8 @@
     <item quantity="other">%d horas</item>
     <item quantity="zero">%d hora</item>
   </plurals>
-  <string name="important_started_shooting_activity_notext_pattern">Publicou</string>
-  <string name="important_started_shooting_activity_text_pattern">"Publicou: "</string>
+  <string name="important_started_shooting_activity_notext_pattern">" publicou"</string>
+  <string name="important_started_shooting_activity_text_pattern">" publicou: "</string>
   <!-- When there are no private message channels -->
   <string name="include_listing_channels_empty">Não há mensagens</string>
   <string name="include_listing_empty">Nenhum stream</string>
@@ -220,7 +220,7 @@
   <string name="listing_title_holding">Administrador</string>
   <string name="loading_activity_message">Carregando…</string>
   <string name="main_activity_title">Atividade</string>
-  <string name="mentioned_shot_activity_with_comment">Te mencionou: </string>
+  <string name="mentioned_shot_activity_with_comment">" te mencionou: "</string>
   <string name="menu_all_shots">Mostrar todos os shots</string>
   <string name="menu_check_in">Check-in</string>
   <string name="menu_copy_text">Copiar texto</string>
@@ -265,9 +265,9 @@
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nova mensagem…</string>
   <string name="next">Próximo</string>
-  <string name="niced_by">"Nice de "</string>
-  <string name="niced_shot_activity">Deu um nice a %s</string>
-  <string name="niced_shot_activity_with_comment">"Deu um nice: "</string>
+  <string name="niced_by">Nice de</string>
+  <string name="niced_shot_activity">" deu um nice a %s"</string>
+  <string name="niced_shot_activity_with_comment">" deu um nice: "</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -300,7 +300,7 @@
   <string name="on_boarding_add_favorites">Streams populares</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Entrar em Shootr</string>
-  <string name="opened_activity_text_pattern">Criou este stream</string>
+  <string name="opened_activity_text_pattern">" criou este stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants">Participantes</string>
   <string name="participants_list_empty">Nenhum participante</string>
@@ -372,8 +372,8 @@
   <string name="remove_stream_confirmation">Apagar stream?</string>
   <string name="remove_stream_label">Apagar stream</string>
   <string name="remove_stream_listing_context_menu">Apagar</string>
-  <string name="replied_activity" formatted="false">Respondido</string>
-  <string name="replied_activity_with_comment" formatted="false">Respondido:</string>
+  <string name="replied_activity" formatted="false">" respondido"</string>
+  <string name="replied_activity_with_comment" formatted="false">" respondido:"</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d resposta</item>
     <item quantity="other">%d respostas</item>
@@ -408,15 +408,15 @@
     <item quantity="zero">%d segundo</item>
   </plurals>
   <string name="shared_poll">Questionário compartilhado %s</string>
-  <string name="shared_shot_activity">Reshot de %s</string>
-  <string name="shared_shot_activity_with_comment">"Reshot: "</string>
+  <string name="shared_shot_activity">" reshot de %s"</string>
+  <string name="shared_shot_activity_with_comment">" reshot: "</string>
   <string name="shared_stream_notification">Stream compartilhado</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Questionário %s</string>
   <string name="share_shot_chooser_title">Compartilhar</string>
   <string name="share_shot_message">%s</string>
   <string name="share_shot_subject">Shot de %1$s em %2$s</string>
-  <string name="share_stream_activity_text_pattern">Compartilhou este stream</string>
+  <string name="share_stream_activity_text_pattern">" compartilhou este stream"</string>
   <string name="share_stream_button">Compartilhar agora</string>
   <string name="share_stream_description">Certeza que você conhece muita gente que gostará do seu stream. Compartilhe agora em suas redes sociais ou site, traga o pessoal e divirta-se.</string>
   <string name="share_stream_message">Confira %1$s em Shootr: https://web.shootr.com/st/%2$s</string>
@@ -435,11 +435,11 @@
   <string name="shot_timeline_empty_title">Nenhum shot</string>
   <string name="showing_shots_by_holder">Shots do administrador.</string>
   <string name="sign_out_message">Finalizando sessão…</string>
-  <string name="started_shooting_activity_text_pattern">Escreveu</string>
-  <string name="started_shooting_activity_text_pattern_with_comment">"Escreveu: "</string>
+  <string name="started_shooting_activity_text_pattern">" escreveu"</string>
+  <string name="started_shooting_activity_text_pattern_with_comment">" escreveu: "</string>
   <string name="started_shooting_push_settings">Aviso de novo shot</string>
   <string name="stream_checked">Pronto!</string>
-  <string name="stream_check_in_activity_text_pattern">Fez check-in</string>
+  <string name="stream_check_in_activity_text_pattern">" fez check-in"</string>
   <string name="stream_data_info_favorites">Seguidores</string>
   <string name="stream_data_info_participants">Participantes</string>
   <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
@@ -521,8 +521,8 @@
     <item quantity="other">%s visualizações</item>
     <item quantity="zero">%s visualizações</item>
   </plurals>
-  <string name="voted_poll">Votou em (question)</string>
-  <string name="voted_public_poll">Votou \"%s\" em (question)</string>
+  <string name="voted_poll">" Votou em (question)"</string>
+  <string name="voted_public_poll">" Votou \"%s\" em (question)"</string>
   <string name="watching_stream_connected">conectado</string>
   <string name="watching_stream_connected_muted">conectado (silenciado)</string>
   <string name="watch_profile_photo" formatted="false">ver</string>
