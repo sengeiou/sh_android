@@ -1,12 +1,24 @@
 package com.shootr.mobile.data.mapper;
 
+import com.shootr.mobile.data.api.entity.BaseMessagePollApiEntity;
 import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
+import com.shootr.mobile.data.api.entity.StreamIndexApiEntity;
+import com.shootr.mobile.data.api.entity.UrlApiEntity;
+import com.shootr.mobile.data.entity.BaseMessagePollEntity;
+import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.StreamIndexEntity;
+import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
+import com.shootr.mobile.domain.model.shot.Entities;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
+import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.shot.StreamIndex;
+import com.shootr.mobile.domain.model.shot.Url;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -76,8 +88,61 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setNicedTime(shotApiEntity.getNicedTime());
     highlightedShot.setReshooted(shotApiEntity.getReshooted());
     highlightedShot.setReshootedTime(shotApiEntity.getReshootedTime());
+    setupEntities(shotApiEntity, highlightedShot);
 
     return highlightedShot;
+  }
+
+  private void setupEntities(ShotApiEntity shotApiEntity, HighlightedShotEntity shotEntity) {
+    if (shotApiEntity.getEntities() != null) {
+      EntitiesEntity entitiesEntity = new EntitiesEntity();
+      setupUrls(shotApiEntity, entitiesEntity);
+      setupStreams(shotApiEntity, entitiesEntity);
+      setupPollsEntities(shotApiEntity, entitiesEntity);
+      shotEntity.setEntities(entitiesEntity);
+    }
+  }
+
+  private void setupStreams(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {
+    ArrayList<StreamIndexEntity> streamsEntities = new ArrayList<>();
+    if (shotApiEntity.getEntities() != null) {
+      for (StreamIndexApiEntity streamIndexApiEntity : shotApiEntity.getEntities().getStreams()) {
+        StreamIndexEntity streamIndexEntity = new StreamIndexEntity();
+        streamIndexEntity.setStreamTitle(streamIndexApiEntity.getStreamTitle());
+        streamIndexEntity.setIdStream(streamIndexApiEntity.getIdStream());
+        streamIndexEntity.setIndices(streamIndexApiEntity.getIndices());
+        streamsEntities.add(streamIndexEntity);
+      }
+    }
+    entitiesEntity.setStreams(streamsEntities);
+  }
+
+  private void setupPollsEntities(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {
+    ArrayList<BaseMessagePollEntity> pollEntities = new ArrayList<>();
+
+    for (BaseMessagePollApiEntity baseMessagePollApiEntity : shotApiEntity.getEntities()
+        .getPolls()) {
+      BaseMessagePollEntity baseMessagePollEntity = new BaseMessagePollEntity();
+      baseMessagePollEntity.setIdPoll(baseMessagePollApiEntity.getIdPoll());
+      baseMessagePollEntity.setIndices(baseMessagePollApiEntity.getIndices());
+      baseMessagePollEntity.setPollQuestion(baseMessagePollApiEntity.getPollQuestion());
+      pollEntities.add(baseMessagePollEntity);
+    }
+    entitiesEntity.setPolls(pollEntities);
+  }
+
+  private void setupUrls(ShotApiEntity shotApiEntity, EntitiesEntity entitiesEntity) {
+    ArrayList<UrlEntity> urlEntities = new ArrayList<>();
+    if (shotApiEntity.getEntities() != null) {
+      for (UrlApiEntity urlApiEntity : shotApiEntity.getEntities().getUrls()) {
+        UrlEntity urlEntity = new UrlEntity();
+        urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
+        urlEntity.setUrl(urlApiEntity.getUrl());
+        urlEntity.setIndices(urlApiEntity.getIndices());
+        urlEntities.add(urlEntity);
+      }
+    }
+    entitiesEntity.setUrls(urlEntities);
   }
 
   public List<HighlightedShotEntity> transform(List<HighlightedShotApiEntity> value) {
@@ -144,6 +209,7 @@ public class HighlightedShotEntityMapper {
         value.getReshootedTime() != null ? new Date(value.getReshootedTime()) : new Date());
     shot.setNicedTime(value.getNicedTime() != null ? new Date(value.getNicedTime()) : new Date());
     shot.setNiced(value.getNiced());
+    setupEntities(shot, value);
 
     highlightedShot.setShot(shot);
 
@@ -156,5 +222,54 @@ public class HighlightedShotEntityMapper {
       highlightedShotEntities.add(mapToDomain(highlightedShotApiEntity));
     }
     return highlightedShotEntities;
+  }
+
+  private void setupEntities(Shot shot, ShotEntity shotEntity) {
+    if (shotEntity.getEntities() != null) {
+      Entities entities = new Entities();
+      setupUrls(shotEntity, entities);
+      setupPolls(shotEntity, entities);
+      setupStreams(shotEntity, entities);
+      shot.setEntities(entities);
+    }
+  }
+
+  private void setupStreams(ShotEntity shotEntity, Entities entities) {
+    ArrayList<StreamIndex> streams = new ArrayList<>();
+    for (StreamIndexEntity streamApiEntity : shotEntity.getEntities().getStreams()) {
+      StreamIndex streamIndex = new StreamIndex();
+      streamIndex.setIdStream(streamApiEntity.getIdStream());
+      streamIndex.setStreamTitle(streamApiEntity.getStreamTitle());
+      streamIndex.setIndices(streamApiEntity.getIndices());
+      streams.add(streamIndex);
+    }
+
+    entities.setStreams(streams);
+  }
+
+  private void setupPolls(ShotEntity shotEntity, Entities entities) {
+    ArrayList<Poll> polls = new ArrayList<>();
+
+    for (BaseMessagePollEntity baseMessagePollEntity : shotEntity.getEntities().getPolls()) {
+      Poll poll = new Poll();
+      poll.setIdPoll(baseMessagePollEntity.getIdPoll());
+      poll.setIndices(baseMessagePollEntity.getIndices());
+      poll.setPollQuestion(baseMessagePollEntity.getPollQuestion());
+      polls.add(poll);
+    }
+    entities.setPolls(polls);
+  }
+
+  private void setupUrls(ShotEntity shotEntity, Entities entities) {
+    ArrayList<Url> urls = new ArrayList<>();
+    for (UrlEntity urlApiEntity : shotEntity.getEntities().getUrls()) {
+      Url url = new Url();
+      url.setDisplayUrl(urlApiEntity.getDisplayUrl());
+      url.setUrl(urlApiEntity.getUrl());
+      url.setIndices(urlApiEntity.getIndices());
+      urls.add(url);
+    }
+
+    entities.setUrls(urls);
   }
 }
