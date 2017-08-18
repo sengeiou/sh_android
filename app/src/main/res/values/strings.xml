@@ -53,7 +53,7 @@
   <string name="block_unblock_user">Unblock</string>
   <string name="block_user_dialog_block">Block</string>
   <string name="block_user_dialog_cancel">Cancel</string>
-  <string name="block_user_dialog_message">This user will not disturb you nor the participants in your streams.</string>
+  <string name="block_user_dialog_message">This user won\'t disturb you or the participants in your streams, and won\'t be able to find your profile or see any of your content.</string>
   <string name="block_user_error">To block this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
   <string name="cancel_hide_shot" formatted="false">Cancel</string>
@@ -409,8 +409,8 @@
   <string name="share_poll_subject">Poll %s</string>
   <string name="share_shot_chooser_title">Share</string>
   <string name="share_shot_message">%s</string>
-  <string name="share_shot_subject">Shot by %1$s on %2$s</string>
-  <string name="share_stream_activity_text_pattern">" shared this stream"</string>
+  <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
+  <string name="share_stream_activity_text_pattern"> shared this stream</string>
   <string name="share_stream_button">Share now</string>
   <string name="share_stream_description">Surely you have lots of people out there who would like your stream. Share it now through your social media or website, bring in people and start having fun.</string>
   <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s</string>
@@ -440,6 +440,7 @@
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Edit stream</string>
+  <string name="stream_detail_following">Following %s</string>
   <string name="stream_detail_media">Media</string>
   <string name="stream_detail_menu_data_info">Stats</string>
   <string name="stream_detail_mute">Mute</string>
@@ -516,8 +517,8 @@
     <item quantity="other">%s views</item>
     <item quantity="zero">%s views</item>
   </plurals>
-  <string name="voted_poll">" Voted in (question)"</string>
-  <string name="voted_public_poll">" Voted \"%s\" in (question)"</string>
+  <string name="voted_poll">" voted in (question)"</string>
+  <string name="voted_public_poll">" voted \"%s\" in (question)"</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
   <string name="watch_profile_photo" formatted="false">View</string>
@@ -527,5 +528,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
-  <string name="stream_detail_following">Following %s</string>
 </resources>

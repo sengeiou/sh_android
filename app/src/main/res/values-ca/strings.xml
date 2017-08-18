@@ -53,14 +53,13 @@
   <string name="block_unblock_user">Desbloquejar</string>
   <string name="block_user_dialog_block">Bloquejar</string>
   <string name="block_user_dialog_cancel">Cancel·lar</string>
-  <string name="block_user_dialog_message">Aquest usuari no et molestarà ni a tu ni als participants dels teus streams.</string>
+  <string name="block_user_dialog_message">Aquest usuari no et molestarà ni a tu ni als participants dels teus streams. Tampoc podrà trobar el teu perfil ni veure el teu contingut.</string>
   <string name="block_user_error">Per bloquejar aquest usuari has de deixar de seguir-lo.</string>
   <string name="cancel">Cancel·lar</string>
   <string name="cancel_hide_shot" formatted="false">Cancel·lar</string>
   <string name="change_password_button_text">FET</string>
   <string name="change_password_logout_message">La contrasenya ha canviat. Reinicia sessió.</string>
   <string name="change_photo">Canviar foto</string>
-  <string name="checkin_activity_text_pattern">Checked in on (stream)</string>
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
   <string name="check_in_show_case">Fes check-in per dir que ets aquí</string>
@@ -414,7 +413,7 @@
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Enquesta %s</string>
   <string name="share_shot_chooser_title">Compartir</string>
-  <string name="share_shot_message">%s</string>
+  <string name="share_shot_message">%1$s %2$s</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
   <string name="share_stream_activity_text_pattern">" ha compartit aquest stream"</string>
   <string name="share_stream_button">Compartir ara</string>
@@ -446,6 +445,7 @@
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
+  <string name="stream_detail_following">Seguint %s</string>
   <string name="stream_detail_media">Arxius</string>
   <string name="stream_detail_menu_data_info">Nombres</string>
   <string name="stream_detail_mute">Silenciar</string>
@@ -521,8 +521,8 @@
     <item quantity="other">%s visualitzacions</item>
     <item quantity="zero">%s visualitzacions</item>
   </plurals>
-  <string name="voted_poll">" Ha votat a (question)"</string>
-  <string name="voted_public_poll">" Ha votat \"%s\" a (question)"</string>
+  <string name="voted_poll">" ha votat a (question)"</string>
+  <string name="voted_public_poll">" ha votat \"%s\" a (question)"</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>
@@ -532,5 +532,4 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="stream_detail_following">Seguint %s</string>
 </resources>
