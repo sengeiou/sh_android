@@ -15,8 +15,6 @@ import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.Preconditions;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -92,7 +90,6 @@ public class GetStreamInfoInteractor implements Interactor {
     if (!localOnly) {
       watchers.addAll(stream.getWatchers());
       setupFollowing(watchers);
-      sortWatchersListByJoinStreamDate(watchers);
       removeCurrentUserFromWatchers(watchers);
       watchers.add(0, currentUser);
       if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
@@ -112,18 +109,6 @@ public class GetStreamInfoInteractor implements Interactor {
       watcher.setFollowing(localUserRepository.isFollowing(watcher.getIdUser()));
       watcher.setMe(sessionRepository.getCurrentUserId().equals(watcher.getIdUser()));
     }
-  }
-
-  private List<User> sortWatchersListByJoinStreamDate(List<User> watchesFromPeople) {
-    Collections.sort(watchesFromPeople, new Comparator<User>() {
-      @Override public int compare(User userModel, User t1) {
-        Boolean isFollowingUserModel = userModel.isFollowing();
-        Boolean t1IsFollowing = t1.isFollowing();
-        return t1.getJoinStreamDate().compareTo(userModel.getJoinStreamDate())
-            - isFollowingUserModel.compareTo(t1IsFollowing);
-      }
-    });
-    return watchesFromPeople;
   }
 
   private List<User> removeCurrentUserFromWatchers(List<User> watchers) {

@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.repository.dagger;
 
-import com.shootr.mobile.data.repository.datasource.user.DatabaseSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.DatabaseUserDataSource;
 import com.shootr.mobile.data.repository.datasource.user.ServiceSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.ServiceUserDataSource;
@@ -36,11 +35,6 @@ import javax.inject.Singleton;
 
     @Provides @Singleton @Remote UserDataSource provideRemoteUserDataSource(ServiceUserDataSource userDataSource) {
         return userDataSource;
-    }
-
-    @Provides @Singleton @Local SuggestedPeopleDataSource provideLocalSuggestedPeopleDataSource(
-      DatabaseSuggestedPeopleDataSource suggestedPeopleDataSource) {
-        return suggestedPeopleDataSource;
     }
 
     @Provides @Singleton @Remote SuggestedPeopleDataSource provideSuggestedPeopleDataSource(

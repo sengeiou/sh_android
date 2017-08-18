@@ -5,10 +5,10 @@ import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
-import com.shootr.mobile.data.repository.datasource.user.CachedSuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.datasource.user.SuggestedPeopleDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
+import com.shootr.mobile.data.repository.remote.cache.SuggestedPeopleCache;
 import com.shootr.mobile.data.repository.remote.cache.UserCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
@@ -36,7 +36,6 @@ public class SyncUserRepositoryCacheTest {
     @Mock UserDataSource remoteUserDataSource;
     @Mock SessionRepository sessionRepository;
     @Mock SuggestedPeopleDataSource remoteSuggestedPeopleDataSource;
-    @Mock CachedSuggestedPeopleDataSource cachedSugestedPeopleDataSource;
     @Mock FollowDataSource localfollowDataSource;
     @Mock StreamDataSource localStreamDataSource;
     @Mock UserEntityMapper userEntityMapper;
@@ -49,6 +48,7 @@ public class SyncUserRepositoryCacheTest {
     @Mock FollowDataSource serviceFollowDataSource;
     @Mock SynchroDataSource localSynchroDataSource;
     @Mock AndroidTimeUtils androidTimeUtils;
+    @Mock SuggestedPeopleCache suggestedPeopleCache;
     private SyncUserRepository syncUserRepository;
 
     @Before public void setUp() throws Exception {
@@ -57,12 +57,12 @@ public class SyncUserRepositoryCacheTest {
           remoteUserDataSource,
           sessionRepository,
           remoteSuggestedPeopleDataSource,
-          cachedSugestedPeopleDataSource,
           localfollowDataSource,
           userEntityMapper, localStreamDataSource, suggestedPeopleEntityMapper,
           syncableUserEntityFactory, streamEntityMapper, syncTrigger,
           bus,
-          userCache, serviceFollowDataSource, localSynchroDataSource, androidTimeUtils);
+          userCache, serviceFollowDataSource, localSynchroDataSource, androidTimeUtils,
+            suggestedPeopleCache);
     }
 
     @Test public void shouldNotCallRemoteRepoWhenCacheReturnsData() throws Exception {

@@ -68,4 +68,9 @@ import javax.inject.Singleton;
         SharedPreferences preferences) {
         return new DevicePreferences(preferences, "device_preference", null);
     }
+
+    @Provides @Singleton @CacheTimeKeepAlive LongPreference provideCacheTimeKeepAlivePreferences(
+        SharedPreferences preferences) {
+        return new LongPreference(preferences, "cache_TimeKeep_Alive", 0);
+    }
 }

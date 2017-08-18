@@ -88,7 +88,7 @@ public class StreamDetailPresenterTest {
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     UserModelMapper userModelMapper =
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-    presenter = new StreamDetailPresenter(streamInfoInteractor, changeStreamPhotoInteractor,
+    presenter = new StreamDetailPresenter(streamInfoInteractor,
         shareStreamInteractor, followInteractor, unfollowInteractor, getFavoriteStatusInteractor,
         selectStreamInteractor,
         getMutedStreamsInteractor, muteInteractor, unmuteInteractor,

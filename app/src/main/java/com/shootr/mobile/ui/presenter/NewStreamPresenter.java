@@ -299,7 +299,7 @@ public class NewStreamPresenter implements Presenter {
     }
 
     public void removePhoto() {
-        newIdMedia = " ";
+        newIdMedia = "";
         newStreamView.showEditPhotoPlaceHolder();
     }
 }

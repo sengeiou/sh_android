@@ -1,11 +1,13 @@
 package com.shootr.mobile.data.repository;
 
 import com.shootr.mobile.data.prefs.BooleanPreference;
+import com.shootr.mobile.data.prefs.CacheTimeKeepAlive;
 import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.DeviceId;
 import com.shootr.mobile.data.prefs.DevicePref;
 import com.shootr.mobile.data.prefs.DevicePreferences;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
+import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
@@ -22,6 +24,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private static final int REFRESH_INTERVAL_SECONDS = 10;
   private final StringPreference sessionTokenPreference;
   private final StringPreference currentUserIdPreference;
+  private final LongPreference cacheTimeKeepAlive;
   private final BooleanPreference timelineFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
   private final BooleanPreference publicVoteAlertPreference;
@@ -34,6 +37,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
       @CurrentUserId StringPreference currentUserIdPreference,
+      @CacheTimeKeepAlive LongPreference cacheTimeKeepAlive,
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
@@ -41,6 +45,7 @@ public class SessionRepositoryImpl implements SessionRepository {
       CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
+    this.cacheTimeKeepAlive = cacheTimeKeepAlive;
     this.timelineFilterPreference = timelineFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.publicVoteAlertPreference = publicVoteAlertPreference;
@@ -92,6 +97,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     timelineFilterPreference.delete();
     publicVoteAlertPreference.delete();
     deviceIdPreference.delete();
+    cacheTimeKeepAlive.delete();
     analyticsTool.reset();
     currentUser = null;
   }

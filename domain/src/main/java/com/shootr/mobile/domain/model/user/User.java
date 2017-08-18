@@ -188,21 +188,6 @@ public class User implements Searchable, Followable {
     isStrategic = strategic;
   }
 
-  @Override public boolean equals(Object o) {
-    if (this == o) return true;
-    if (!(o instanceof User)) return false;
-
-    User user = (User) o;
-
-    if (!idUser.equals(user.idUser)) return false;
-
-    return true;
-  }
-
-  @Override public int hashCode() {
-    return idUser.hashCode();
-  }
-
   public String getIdWatchingStream() {
     return idWatchingStream;
   }
@@ -312,5 +297,18 @@ public class User implements Searchable, Followable {
 
   public void setFirstSessionActivation(Boolean firstSessionActivation) {
     this.firstSessionActivation = firstSessionActivation;
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    User user = (User) o;
+
+    return idUser.equals(user.idUser);
+  }
+
+  @Override public int hashCode() {
+    return idUser.hashCode();
   }
 }

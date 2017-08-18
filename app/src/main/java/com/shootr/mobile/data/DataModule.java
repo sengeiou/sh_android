@@ -3,6 +3,7 @@ package com.shootr.mobile.data;
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.v4.util.LruCache;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
@@ -21,6 +22,7 @@ import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShootrEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
+import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DeviceFactory;
 import com.shootr.mobile.domain.utils.ImageResizer;
@@ -127,7 +129,7 @@ import static android.content.Context.MODE_PRIVATE;
         ContributorManager.class,
 
         ShootrEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class,
-        FollowFragment.class, StreamFollowersFragment.class
+        FollowFragment.class, StreamFollowersFragment.class, LruCache.class
     }, includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
     InteractorModule.class, RepositoryModule.class, ServiceModule.class,
@@ -138,6 +140,7 @@ import static android.content.Context.MODE_PRIVATE;
   static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
   private static final long TIMEOUT_SECONDS = 30;
   private static final long TIMEOUT_CONNECT_SECONDS = 15;
+  private static final int LRU_CACHE_SIZE = 100;
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -280,5 +283,9 @@ import static android.content.Context.MODE_PRIVATE;
 
   @Provides @Singleton RandomUtils providesRandomUtils(LoginTypeUtils loginTypeUtils) {
     return loginTypeUtils;
+  }
+
+  @Provides @Singleton LruCache<String, SuggestedPeople> provideLruCache() {
+    return new LruCache(LRU_CACHE_SIZE);
   }
 }
