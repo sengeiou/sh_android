@@ -13,6 +13,18 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.40.0] - 2017-08-18
+
+### Changed
+- Activity UI
+- Whot to follow
+
+### Fixed
+- Fllowing counter
+- Highlighted shot entities
+- Fix remove photo
+
+
 ## [1.39.0] - 2017-07-28
 
 ### Added
