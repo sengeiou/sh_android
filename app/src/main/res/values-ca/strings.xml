@@ -413,7 +413,7 @@
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Enquesta %s</string>
   <string name="share_shot_chooser_title">Compartir</string>
-  <string name="share_shot_message">%1$s %2$s</string>
+  <string name="share_shot_message">%s</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
   <string name="share_stream_activity_text_pattern">" ha compartit aquest stream"</string>
   <string name="share_stream_button">Compartir ara</string>
