@@ -507,7 +507,7 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Update now</string>
   <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
-  <string name="user_blocked">Blocked User</string>
+  <string name="user_blocked">This user won\'t disturb you or the participants in your streams, and won\'t be able to find your profile or see any of your content.</string>
   <string name="user_cannot_vote_alert_description">Only allowed one vote per device and per user</string>
   <string name="user_not_found">User not found.</string>
   <string name="user_not_found_message">User not found.</string>
