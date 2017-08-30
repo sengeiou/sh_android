@@ -47,6 +47,7 @@ public class PrivateMessageEntityMapper {
     privateMessage.setVideoDuration(privateMessageEntity.getVideoDuration());
     privateMessage.setMetadata(metadataMapper.metadataFromEntity(privateMessageEntity));
     setupEntities(privateMessageEntity, privateMessage);
+    privateMessage.setImageIdMedia(privateMessageEntity.getImageIdMedia());
 
     return privateMessage;
   }
@@ -140,6 +141,7 @@ public class PrivateMessageEntityMapper {
     privateMessageEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     metadataMapper.fillEntityWithMetadata(privateMessageEntity, privateMessage.getMetadata());
     setupEntities(privateMessage, privateMessageEntity);
+    privateMessageEntity.setImageIdMedia(privateMessage.getImageIdMedia());
 
     return privateMessageEntity;
   }

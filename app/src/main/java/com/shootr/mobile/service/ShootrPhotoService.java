@@ -38,7 +38,7 @@ public class ShootrPhotoService implements PhotoService {
         this.sessionRepository = sessionRepository;
         this.jsonAdapter = jsonAdapter;
         uploadProfilePhotoEndpoint = endpoint.getUrl() + "/media/upload/img/profile";
-        uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/baseMessage";
+        uploadShotPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/";
         uploadStreamPhotoEndpoint = endpoint.getUrl() + "/media/upload/img/";
     }
 
@@ -204,6 +204,7 @@ public class ShootrPhotoService implements PhotoService {
         image.add(responseJson.optString("imageUrl"));
         image.add(responseJson.optString("imageWidth"));
         image.add(responseJson.optString("imageHeight"));
+        image.add(responseJson.optString("idMedia"));
         return image;
     }
 

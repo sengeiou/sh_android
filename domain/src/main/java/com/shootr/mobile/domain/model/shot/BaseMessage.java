@@ -14,6 +14,7 @@ public abstract class BaseMessage implements Sendable {
   private BaseMessageUserInfo userInfo;
   private EntityMetadata metadata;
   private Entities entities;
+  private String imageIdMedia;
 
   public String getComment() {
     return comment;
@@ -159,5 +160,13 @@ public abstract class BaseMessage implements Sendable {
 
   public void setEntities(Entities entities) {
     this.entities = entities;
+  }
+
+  public String getImageIdMedia() {
+    return imageIdMedia;
+  }
+
+  public void setImageIdMedia(String imageIdMedia) {
+    this.imageIdMedia = imageIdMedia;
   }
 }
