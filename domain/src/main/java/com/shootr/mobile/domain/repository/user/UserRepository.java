@@ -50,4 +50,8 @@ public interface UserRepository {
     void forceUpdatePeople();
 
     List<String> getFollowingIds(String userId);
+
+    void mute(String idUser);
+
+    void unMute(String idUser);
 }

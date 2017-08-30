@@ -53,4 +53,12 @@ public class DatabasePrivateMessageChannelDataSource implements PrivateMessageCh
   @Override public void markPrivateMessageChannelDeleted(String channelId) {
     privateMessageChannelManager.markPrivateMessageChannelDeleted(channelId);
   }
+
+  @Override public void setPrivateMessageChannelMuted(String idUser) {
+    privateMessageChannelManager.setPrivateMessageChannelMuted(idUser);
+  }
+
+  @Override public void setPrivateMessageChannelUnMuted(String idUser) {
+    privateMessageChannelManager.setPrivateMessageChannelUnMuted(idUser);
+  }
 }

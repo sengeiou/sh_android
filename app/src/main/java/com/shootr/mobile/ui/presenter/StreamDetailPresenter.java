@@ -5,7 +5,6 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -41,7 +40,6 @@ public class StreamDetailPresenter implements Presenter {
   private final UnfollowInteractor unfollowInteractor;
   private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
-  private final GetMutedStreamsInteractor getMutedStreamsInteractor;
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInteractor;
   private final RemoveStreamInteractor removeStreamInteractor;
@@ -68,7 +66,7 @@ public class StreamDetailPresenter implements Presenter {
       UnfollowInteractor unfollowInteractor,
       GetFavoriteStatusInteractor getFavoriteStatusInteractor,
       SelectStreamInteractor selectStreamInteractor,
-      GetMutedStreamsInteractor getMutedStreamsInteractor, MuteInteractor muteInteractor,
+      MuteInteractor muteInteractor,
       UnmuteInteractor unmuteInteractor, RemoveStreamInteractor removeStreamInteractor,
       RestoreStreamInteractor restoreStreamInteractor,
       AddToFavoritesInteractor addToFavoritesInteractor,
@@ -81,7 +79,6 @@ public class StreamDetailPresenter implements Presenter {
     this.unfollowInteractor = unfollowInteractor;
     this.getFavoriteStatusInteractor = getFavoriteStatusInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
-    this.getMutedStreamsInteractor = getMutedStreamsInteractor;
     this.muteInteractor = muteInteractor;
     this.unmuteInteractor = unmuteInteractor;
     this.removeStreamInteractor = removeStreamInteractor;
@@ -101,7 +98,6 @@ public class StreamDetailPresenter implements Presenter {
   public void initialize(final StreamDetailView streamDetailView, final String idStream) {
     setView(streamDetailView);
     this.idStream = idStream;
-    this.loadMutedStatus();
     this.loadFavoriteStatus();
     this.loadStreamInfo();
   }
@@ -115,11 +111,7 @@ public class StreamDetailPresenter implements Presenter {
   }
 
   public void loadMutedStatus() {
-    getMutedStreamsInteractor.loadMutedStreamsIdsFromLocal(new Interactor.Callback<List<String>>() {
-      @Override public void onLoaded(List<String> ids) {
-        streamDetailView.setMuteStatus(ids.contains(idStream));
-      }
-    });
+    streamDetailView.setMuteStatus(streamModel.isMuted());
   }
 
   public void addStreamAsFavorite() {
@@ -199,6 +191,7 @@ public class StreamDetailPresenter implements Presenter {
     }
     this.showViewDetail();
     this.hideViewLoading();
+    this.loadMutedStatus();
   }
 
   private void setupRemoveStreamMenuOption() {

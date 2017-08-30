@@ -1052,6 +1052,10 @@ public class StreamTimelineFragment extends BaseFragment
     /*no-op*/
   }
 
+  @Override public void setMuted(boolean isMuted) {
+    /*no-op*/
+  }
+
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
     try {
       newShotsNotificatorContainer.setVisibility(View.VISIBLE);

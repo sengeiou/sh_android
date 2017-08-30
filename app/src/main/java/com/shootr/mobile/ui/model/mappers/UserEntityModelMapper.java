@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.model.UserModel;
         userModel.setFavoritedStreamsCount(user.getFavoritedStreamsCount());
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userModel.setVerifiedUser(user.getVerifiedUser() == 1);
+        userModel.setMuted(user.isMuted());
         return userModel;
     }
 

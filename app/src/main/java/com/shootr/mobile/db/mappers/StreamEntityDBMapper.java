@@ -56,6 +56,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
       contentValues.put(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR, 0);
     }
     contentValues.put(DatabaseContract.StreamTable.STRATEGIC, streamEntity.isStrategic());
+    contentValues.put(DatabaseContract.StreamTable.MUTED, streamEntity.isMuted());
     contentValues.put(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS,
         streamEntity.getTotalFollowingWatchers());
     setSynchronizedtoContentValues(streamEntity, contentValues);
@@ -102,6 +103,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR)));
     streamEntity.setStrategic(
         (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.STRATEGIC)) == 1) ? true : false);
+    streamEntity.setMuted(
+        (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MUTED)) == 1) ? true : false);
     streamEntity.setTotalFollowingWatchers(
         c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS)));
     setSynchronizedfromCursor(c, streamEntity);

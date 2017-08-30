@@ -12,4 +12,8 @@ public interface StreamSearchDataSource {
     void deleteDefaultStreams();
 
     StreamSearchEntity getStreamResult(String idStream);
+
+    void mute(String idStream);
+
+    void unmute(String idStream);
 }

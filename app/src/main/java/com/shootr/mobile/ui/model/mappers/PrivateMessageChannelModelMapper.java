@@ -24,6 +24,7 @@ public class PrivateMessageChannelModelMapper {
     model.setRead(privateMessageChannel.isRead());
     model.setLastMessageTime(privateMessageChannel.getLastMessageTime());
     model.setLastMessageComment(privateMessageChannel.getLastMessageComment());
+    model.setMuted(privateMessageChannel.isMuted());
 
     return model;
   }

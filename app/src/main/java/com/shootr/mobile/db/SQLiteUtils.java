@@ -66,6 +66,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.FOLLOWING
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.MUTED
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -297,22 +299,6 @@ public class SQLiteUtils {
       + DatabaseContract.BlockTable.ID_BLOCKED_USER
       + "))";
 
-    public static final String CREATE_TABLE_MUTE = "CREATE TABLE IF NOT EXISTS "
-      + DatabaseContract.MuteTable.TABLE
-      + " ("
-      + DatabaseContract.MuteTable.ID_MUTED_STREAM
-      + " TEXT NOT NULL PRIMARY KEY, "
-      + DatabaseContract.SyncColumns.BIRTH
-      + " DATETIME NOT NULL,"
-      + DatabaseContract.SyncColumns.MODIFIED
-      + " DATETIME NOT NULL,"
-      + DatabaseContract.SyncColumns.DELETED
-      + " DATETIME NULL,"
-      + DatabaseContract.SyncColumns.REVISION
-      + " INT NOT NULL,"
-      + DatabaseContract.SyncColumns.SYNCHRONIZED
-      + " CHAR(1) NULL)";
-
     public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.DeviceTable.TABLE
       + " ("
@@ -382,7 +368,9 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS
       + " NUMBER NULL,"
-      + DatabaseContract.UserTable.STRATEGIC
+      + DatabaseContract.StreamTable.STRATEGIC
+      + " INTEGER NULL,"
+      + DatabaseContract.StreamTable.MUTED
       + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
@@ -440,7 +428,9 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS
       + " NUMBER NULL,"
-      + DatabaseContract.UserTable.STRATEGIC
+      + DatabaseContract.StreamTable.STRATEGIC
+      + " INTEGER NULL,"
+      + DatabaseContract.StreamTable.MUTED
       + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
@@ -742,6 +732,8 @@ public class SQLiteUtils {
         + " INTEGER NULL,"
         + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT
         + " TEXT NULL,"
+        + DatabaseContract.PrivateMessageChannelTable.MUTED
+        + " INTEGER NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
         + DatabaseContract.SyncColumns.MODIFIED

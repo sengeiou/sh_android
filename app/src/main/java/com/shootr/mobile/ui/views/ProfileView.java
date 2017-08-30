@@ -82,6 +82,10 @@ public interface ProfileView {
 
     void hideVerifiedUser();
 
+    void showUserMuted();
+
+    void hideUserMuted();
+
     void showStreamsCount();
 
     void setStreamsCount(Integer streams);
@@ -99,6 +103,10 @@ public interface ProfileView {
     void goToReportEmail(String currentUserId, String idUser);
 
     void showBlockUserButton();
+
+    void showMuteUserButton();
+
+    void showUnmuteUserButton();
 
     void showBlockedMenu(UserModel userModel);
 

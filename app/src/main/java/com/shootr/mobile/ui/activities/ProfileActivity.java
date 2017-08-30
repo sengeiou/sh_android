@@ -107,6 +107,7 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.toolbar) Toolbar toolbar;
   @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
   @BindView(R.id.channel_button) FloatingActionButton channelButton;
+  @BindView(R.id.user_muted) ImageView userMuted;
 
   @BindView(R.id.profile_marks_followers) TextView followersTextView;
   @BindView(R.id.profile_marks_following) TextView followingTextView;
@@ -145,6 +146,8 @@ public class ProfileActivity extends BaseActivity
   @BindString(R.string.analytics_source_friends) String whoToFollowSource;
   @BindString(R.string.block_unblock_user) String unblockUser;
   @BindString(R.string.report_context_menu_block) String blockUser;
+  @BindString(R.string.context_menu_mute) String muteUser;
+  @BindString(R.string.context_menu_unmute) String unmuteUser;
 
   @Inject ImageLoader imageLoader;
   @Inject IntentFactory intentFactory;
@@ -170,6 +173,7 @@ public class ProfileActivity extends BaseActivity
   private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder muteUserMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder settingsMenuItem = new MenuItemValueHolder();
   private UserListAdapter suggestedPeopleAdapter;
   private PreCachingLayoutManager preCachingLayoutManager;
@@ -257,29 +261,30 @@ public class ProfileActivity extends BaseActivity
       final OnUsernameClickListener onUsernameClickListener,
       final OnVideoClickListener videoClickListener, final OnNiceShotListener onNiceShotListener) {
 
-    profileShotsAdapter = new ProfileShotAdapter(imageLoader, avatarClickListener,
-        videoClickListener, onNiceShotListener, timeUtils, new ShotClickListener() {
-      @Override public void onClick(ShotModel shot) {
-        openShot(shot);
-      }
-    }, new OnShotLongClick() {
-      @Override public void onShotLongClick(ShotModel shot) {
-        reportShotPresenter.onShotLongPressed(shot);
-      }
-    }, new OnUrlClickListener() {
-      @Override public void onClick() {
+    profileShotsAdapter =
+        new ProfileShotAdapter(imageLoader, avatarClickListener, videoClickListener,
+            onNiceShotListener, timeUtils, new ShotClickListener() {
+          @Override public void onClick(ShotModel shot) {
+            openShot(shot);
+          }
+        }, new OnShotLongClick() {
+          @Override public void onShotLongClick(ShotModel shot) {
+            reportShotPresenter.onShotLongPressed(shot);
+          }
+        }, new OnUrlClickListener() {
+          @Override public void onClick() {
         /* no-op */
-      }
-    }, new OnReshootClickListener() {
-      @Override public void onReshootClick(ShotModel shot) {
-        profilePresenter.reshoot(shot);
-        sendShareShotAnalythics(shot);
-      }
+          }
+        }, new OnReshootClickListener() {
+          @Override public void onReshootClick(ShotModel shot) {
+            profilePresenter.reshoot(shot);
+            sendShareShotAnalythics(shot);
+          }
 
-      @Override public void onUndoReshootClick(ShotModel shot) {
-        profilePresenter.undoReshoot(shot);
-      }
-    }, numberFormatUtil);
+          @Override public void onUndoReshootClick(ShotModel shot) {
+            profilePresenter.undoReshoot(shot);
+          }
+        }, numberFormatUtil);
 
     preCachingLayoutManager = new PreCachingLayoutManager(this);
     shotsList.setLayoutManager(preCachingLayoutManager);
@@ -361,6 +366,7 @@ public class ProfileActivity extends BaseActivity
     supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
     changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
     blockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_block_user));
+    muteUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_mute_user));
     reportUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_report_user));
     settingsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_settings));
     return super.onCreateOptionsMenu(menu);
@@ -389,6 +395,9 @@ public class ProfileActivity extends BaseActivity
         return true;
       case R.id.menu_profile_settings:
         startActivity(new Intent(this, SettingsActivity.class));
+        return true;
+      case R.id.menu_profile_mute_user:
+        profilePresenter.muteMenuClicked();
         return true;
       default:
         return super.onOptionsItemSelected(item);
@@ -729,6 +738,15 @@ public class ProfileActivity extends BaseActivity
     Intents.maybeStartActivity(this, reportEmailIntent);
   }
 
+  @Override public void showMuteUserButton() {
+    muteUserMenuItem.setVisible(true);
+    muteUserMenuItem.setTitle(muteUser);
+  }
+
+  @Override public void showUnmuteUserButton() {
+    muteUserMenuItem.setTitle(unmuteUser);
+  }
+
   @Override public void showBlockUserButton() {
     blockUserMenuItem.setVisible(true);
     blockUserMenuItem.setTitle(blockUser);
@@ -935,6 +953,18 @@ public class ProfileActivity extends BaseActivity
     userVerified.setVisibility(View.GONE);
   }
 
+  @Override public void showUserMuted() {
+    userMuted.setVisibility(View.VISIBLE);
+    showUnmuteUserButton();
+    profilePresenter.setUserMuted(true);
+  }
+
+  @Override public void hideUserMuted() {
+    userMuted.setVisibility(View.GONE);
+    showMuteUserButton();
+    profilePresenter.setUserMuted(false);
+  }
+
   @Override public void showStreamsCount() {
     /* no-op */
   }
@@ -1123,8 +1153,8 @@ public class ProfileActivity extends BaseActivity
 
   private CustomContextMenu.Builder getBaseContextMenuOptions(final ShotModel shotModel) {
     final Context context = this;
-    return new CustomContextMenu.Builder(this).addAction(shotModel.isReshooted() ?
-            R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
+    return new CustomContextMenu.Builder(this).addAction(
+        shotModel.isReshooted() ? R.string.undo_reshoot : R.string.menu_share_shot_via_shootr,
         new Runnable() {
           @Override public void run() {
             if (shotModel.isReshooted()) {
@@ -1199,7 +1229,6 @@ public class ProfileActivity extends BaseActivity
   @OnClick(R.id.streams_tab_container) public void onStreamsClick() {
     profilePresenter.clickListing();
   }
-
 
   private void closeFabMenu() {
     if (floatingMenu != null) {

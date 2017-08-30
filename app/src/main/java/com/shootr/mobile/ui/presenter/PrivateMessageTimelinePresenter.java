@@ -100,6 +100,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
               timelineView.setTitle(privateMessageChannelModel.getTitle());
               timelineView.setImage(privateMessageChannelModel.getImageUrl(),
                   privateMessageChannelModel.getTitle());
+              timelineView.setMuted(privateMessageChannelModel.isMuted());
               showMessagesInView(privateMessageTimeline);
             }
           }
@@ -257,6 +258,10 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
         });
   }
 
+  private void updateMutedState(boolean isMuted) {
+    view.setMuted(isMuted);
+  }
+
   private void updateTimelineLiveSettings() {
     hasBeenPaused = false;
   }
@@ -363,6 +368,8 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   @Override public void resume() {
     bus.register(this);
     startPollingShots();
+    loadTimeline(view, channelId, idTargetUser);
+    updateMutedState(privateMessageChannelModel.isMuted());
     if (hasBeenPaused) {
       isFirstLoad = false;
       isTimelineInitialized = false;

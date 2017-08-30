@@ -6,8 +6,8 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.stream.MuteRepository;
+import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -16,21 +16,21 @@ public class UnmuteInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final MuteRepository localMuteRepository;
-  private final MuteRepository remoteMuteRepository;
   private final BusPublisher busPublisher;
+  private final ExternalStreamRepository remoteStreamRepository;
+  private final StreamRepository localStreamRepository;
 
   private String idStream;
   private CompletedCallback callback;
 
   @Inject public UnmuteInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, @Local MuteRepository localMuteRepository,
-      @Remote MuteRepository remoteMuteRepository, BusPublisher busPublisher) {
+      PostExecutionThread postExecutionThread, BusPublisher busPublisher,
+      ExternalStreamRepository remoteStreamRepository, @Local StreamRepository localStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
-    this.localMuteRepository = localMuteRepository;
-    this.remoteMuteRepository = remoteMuteRepository;
     this.busPublisher = busPublisher;
+    this.remoteStreamRepository = remoteStreamRepository;
+    this.localStreamRepository = localStreamRepository;
   }
 
   public void unmute(String idStream, CompletedCallback callback) {
@@ -40,8 +40,9 @@ public class UnmuteInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    localMuteRepository.unmute(idStream);
-    remoteMuteRepository.unmute(idStream);
+    localStreamRepository.unMute(idStream);
+    notifyAdditionToBus();
+    remoteStreamRepository.unMute(idStream);
     notifyCompleted();
   }
 

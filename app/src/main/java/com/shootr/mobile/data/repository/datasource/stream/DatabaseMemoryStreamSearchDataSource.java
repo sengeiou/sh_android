@@ -78,6 +78,14 @@ import javax.inject.Singleton;
         }
     }
 
+    @Override public void mute(String idStream) {
+        streamManager.muteStreamSearchResult(idStream);
+    }
+
+    @Override public void unmute(String idStream) {
+        streamManager.unMuteStreamSearchResult(idStream);
+    }
+
     private Map<String, Integer> getWatchersCountByStreams() {
         String currentUserId = sessionRepository.getCurrentUserId();
 

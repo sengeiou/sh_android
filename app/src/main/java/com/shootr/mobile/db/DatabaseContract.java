@@ -70,13 +70,15 @@ public class DatabaseContract {
     public static final String FIRST_SESSION_ACTIVATION = "firstSessionActivation";
     public static final String STRATEGIC = "strategic";
     public static final String FOLLOWING = "following";
+    public static final String MUTED = "muted";
 
     public static final String[] PROJECTION = {
         ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
         NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM,
         WATCHING_STREAM_TITLE, WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT,
         FAVORITED_STREAMS_COUNT, SOCIAL_LOGIN, RECEIVED_REACTIONS, ANALYTICS_USER_TYPE, NUM_MUTUALS,
-        FIRST_SESSION_ACTIVATION, STRATEGIC, FOLLOWING, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        FIRST_SESSION_ACTIVATION, STRATEGIC, FOLLOWING, MUTED, BIRTH, MODIFIED, DELETED, REVISION,
+        SYNCHRONIZED
     };
   }
 
@@ -166,19 +168,6 @@ public class DatabaseContract {
     };
   }
 
-  public static final class MuteTable implements SyncColumns {
-
-    private MuteTable() {
-            /* no instances */
-    }
-
-    public static final String TABLE = "Mute";
-    public static final String ID_MUTED_STREAM = "idMutedStream";
-
-    public static final String[] PROJECTION =
-        { ID_MUTED_STREAM, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED };
-  }
-
   public static final class DeviceTable {
 
     private DeviceTable() {
@@ -232,13 +221,14 @@ public class DatabaseContract {
     public static final String I_AM_CONTRIBUTOR = "iAmContributor";
     public static final String TOTAL_FOLLOWING_WATCHERS = "totalFollowingWatchers";
     public static final String STRATEGIC = "strategic";
+    public static final String MUTED = "muted";
 
     public static final String[] PROJECTION = {
         ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, LANDSCAPE_PHOTO,
         DESCRIPTION, TOPIC, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES,
         TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE,
         VERIFIED_USER, CONTRIBUTORS_COUNT, I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC,
-        REMOVED, DELETED, REVISION, SYNCHRONIZED
+        MUTED, REMOVED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -252,8 +242,8 @@ public class DatabaseContract {
         WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, LANDSCAPE_PHOTO, DESCRIPTION,
         TOPIC, REMOVED, MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS,
         TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE, VERIFIED_USER, CONTRIBUTORS_COUNT,
-        I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC, BIRTH, MODIFIED, DELETED, REVISION,
-        SYNCHRONIZED
+        I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC, MUTED, BIRTH, MODIFIED, DELETED,
+        REVISION, SYNCHRONIZED
     };
   }
 
@@ -531,12 +521,13 @@ public class DatabaseContract {
     public static final String TITLE = "title";
     public static final String IMAGE = "image";
     public static final String READ = "read";
+    public static final String MUTED = "muted";
     public static final String LAST_MESSAGE_TIME = "lastMessageTime";
     public static final String LAST_MESSAGE_COMMENT = "lastMessageComment";
 
     public static final String[] PROJECTION = {
         ID_TARGET_USER, ID_PRIVATE_MESSAGE_CHANNEL, TITLE, IMAGE, READ, LAST_MESSAGE_TIME,
-        LAST_MESSAGE_COMMENT, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        LAST_MESSAGE_COMMENT, MUTED, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 

@@ -2,7 +2,6 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
@@ -40,7 +39,6 @@ public class FavoritesListPresenterTest {
     @Mock ErrorMessageFactory errorMessageFactory;
     @Mock Bus bus;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
-    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
     @Mock MuteInteractor muteInteractor;
     @Mock UnmuteInteractor unmuteInterator;
 
@@ -52,7 +50,6 @@ public class FavoritesListPresenterTest {
           shareStreamInteractor,
           removeFromFavoritesInteractor,
           unwatchStreamInteractor,
-          getMutedStreamsInteractor,
           muteInteractor,
           unmuteInterator,
           streamResultModelMapper,

@@ -21,7 +21,6 @@ import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Truss;
-import java.util.Collections;
 import java.util.List;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -32,7 +31,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   private final OnFavoriteClickListener onFavoriteClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
-  private List<String> mutedStreamIds;
   private OnUnwatchClickListener unwatchClickListener;
   private boolean showsFavoritesText = false;
   private boolean isWatchingStateEnabled = false;
@@ -55,25 +53,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
   public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
-      InitialsLoader initialsLoader, List<String> mutedStreamIds) {
-    super(itemView);
-    this.onStreamClickListener = onStreamClickListener;
-    this.onFavoriteClickListener = onFavoriteClickListener;
-    this.imageLoader = imageLoader;
-    this.initialsLoader = initialsLoader;
-    this.mutedStreamIds = mutedStreamIds;
-    ButterKnife.bind(this, itemView);
-  }
-
-  public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
-      OnFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
       InitialsLoader initialsLoader) {
     super(itemView);
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
-    this.mutedStreamIds = Collections.emptyList();
     ButterKnife.bind(this, itemView);
   }
 
@@ -179,7 +164,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
   public void setMutedVisibility(StreamResultModel streamResultModel) {
     if (!isWatchingStateEnabled) {
-      if (streamIsMuted(streamResultModel.getStreamModel().getIdStream())) {
+      if (streamResultModel.getStreamModel().isMuted()) {
         mute.setVisibility(View.VISIBLE);
       } else {
         mute.setVisibility(View.GONE);
@@ -187,10 +172,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     } else {
       mute.setVisibility(View.GONE);
     }
-  }
-
-  public boolean streamIsMuted(String idStream) {
-    return mutedStreamIds != null && mutedStreamIds.contains(idStream);
   }
 
   private void setClickListener(final StreamResultModel streamResult) {
@@ -262,7 +243,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   }
 
   private CharSequence getConnectedSubtitle(StreamModel stream) {
-    if (streamIsMuted(stream.getIdStream())) {
+    if (stream.isMuted()) {
       return new Truss().pushSpan(
           new TextAppearanceSpan(itemView.getContext(), R.style.InlineConnectedAppearance))
           .append(connectedAndMuted)
@@ -279,10 +260,6 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
   public void setShowsFavoritesText(Boolean showFavoritesText) {
     this.showsFavoritesText = showFavoritesText;
-  }
-
-  public void setMutedStreamIds(List<String> mutedStreamsIds) {
-    this.mutedStreamIds = mutedStreamsIds;
   }
 
   void setupFavoriteClickListener(final StreamResultModel streamResult) {

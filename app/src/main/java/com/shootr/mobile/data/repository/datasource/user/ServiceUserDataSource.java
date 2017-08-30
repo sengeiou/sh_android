@@ -160,6 +160,22 @@ public class ServiceUserDataSource implements UserDataSource {
         throw new RuntimeException("Method not implemented for service.");
     }
 
+    @Override public void mute(String idUser) {
+        try {
+            userApiService.mute(idUser);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void unMute(String idUser) {
+        try {
+            userApiService.unMute(idUser);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         throw new RuntimeException("Server DataSource can't access synchronization fields");
     }

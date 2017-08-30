@@ -5,7 +5,6 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
@@ -30,8 +29,6 @@ import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.StreamDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
@@ -74,7 +71,6 @@ public class StreamDetailPresenterTest {
   @Mock TimeUtils timeUtils;
   @Mock StreamDetailView streamDetailView;
   @Mock SelectStreamInteractor selectStreamInteractor;
-  @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
   @Mock MuteInteractor muteInteractor;
   @Mock UnmuteInteractor unmuteInteractor;
   @Mock RemoveStreamInteractor removeStreamInteractor;
@@ -88,13 +84,12 @@ public class StreamDetailPresenterTest {
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     UserModelMapper userModelMapper =
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-    presenter = new StreamDetailPresenter(streamInfoInteractor,
-        shareStreamInteractor, followInteractor, unfollowInteractor, getFavoriteStatusInteractor,
-        selectStreamInteractor,
-        getMutedStreamsInteractor, muteInteractor, unmuteInteractor,
-        removeStreamInteractor, restoreStreamInteractor, addToFavoritesInteractor,
-        removeFromFavoritesInteractor, streamModelMapper, userModelMapper,
-        errorMessageFactory);
+    presenter =
+        new StreamDetailPresenter(streamInfoInteractor, shareStreamInteractor, followInteractor,
+            unfollowInteractor, getFavoriteStatusInteractor, selectStreamInteractor, muteInteractor,
+            unmuteInteractor, removeStreamInteractor, restoreStreamInteractor,
+            addToFavoritesInteractor, removeFromFavoritesInteractor, streamModelMapper,
+            userModelMapper, errorMessageFactory);
     presenter.setView(streamDetailView);
   }
 
@@ -132,22 +127,6 @@ public class StreamDetailPresenterTest {
     presenter.photoClick();
 
     verify(streamDetailView, never()).zoomPhoto(PICTURE_URL);
-  }
-
-  @Test public void shouldShowMuteCheckedIfStreamIsMuted() throws Exception {
-    setupMutedStreamCallback();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-
-    verify(streamDetailView).setMuteStatus(true);
-  }
-
-  @Test public void shouldShowMuteUncheckedIfStreamIsNotMuted() throws Exception {
-    setupNoStreamMutedCallback();
-
-    presenter.initialize(streamDetailView, ID_STREAM);
-
-    verify(streamDetailView).setMuteStatus(false);
   }
 
   @Test public void shouldNeverSelectStreamIfNoStreamInOnResume() throws Exception {
@@ -287,28 +266,6 @@ public class StreamDetailPresenterTest {
             any(Interactor.ErrorCallback.class));
   }
 
-  public void setupNoStreamMutedCallback() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<String>> callback =
-            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-        callback.onLoaded(Collections.<String>emptyList());
-        return null;
-      }
-    }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
-  }
-
-  public void setupMutedStreamCallback() {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<String>> callback =
-            (Interactor.Callback<List<String>>) invocation.getArguments()[0];
-        callback.onLoaded(Arrays.asList(ID_STREAM));
-        return null;
-      }
-    }).when(getMutedStreamsInteractor).loadMutedStreamsIdsFromLocal(any(Interactor.Callback.class));
-  }
-
   private void setupStreamWithoutPictureInfoCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -352,7 +309,6 @@ public class StreamDetailPresenterTest {
             (GetStreamInfoInteractor.Callback) any(Interactor.Callback.class),
             any(Interactor.ErrorCallback.class));
   }
-
 
   public void setupStreamInfoCallbackWithPhoto() {
     doAnswer(new Answer() {

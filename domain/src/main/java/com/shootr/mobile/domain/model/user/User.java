@@ -43,6 +43,7 @@ public class User implements Searchable, Followable {
   private Long numMutuals;
   private Boolean firstSessionActivation;
   private boolean isStrategic;
+  private boolean muted;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -186,6 +187,14 @@ public class User implements Searchable, Followable {
 
   public void setStrategic(boolean strategic) {
     isStrategic = strategic;
+  }
+
+  public boolean isMuted() {
+    return muted;
+  }
+
+  public void setMuted(boolean muted) {
+    this.muted = muted;
   }
 
   public String getIdWatchingStream() {

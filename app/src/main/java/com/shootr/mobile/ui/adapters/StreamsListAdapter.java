@@ -27,7 +27,6 @@ public class StreamsListAdapter extends
   private OnStreamClickListener onStreamClickListener;
   private OnUnwatchClickListener onUnwatchClickListener;
   private OnFavoriteClickListener onFavoriteClickListener;
-  private List<String> mutedStreamsIds;
 
   public StreamsListAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
       OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener,
@@ -56,7 +55,7 @@ public class StreamsListAdapter extends
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
     StreamResultViewHolder watchingViewHolder =
         new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-            imageLoader, initialsLoader, mutedStreamsIds);
+            imageLoader, initialsLoader);
     watchingViewHolder.enableWatchingState(onUnwatchClickListener);
     return watchingViewHolder;
   }
@@ -73,13 +72,12 @@ public class StreamsListAdapter extends
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
     return new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-        imageLoader, initialsLoader, mutedStreamsIds);
+        imageLoader, initialsLoader);
   }
 
   @Override
   protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
     StreamResultModel stream = getHeader();
-    ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
     ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite, position, hasToShowRankNumber);
   }
 
@@ -89,20 +87,11 @@ public class StreamsListAdapter extends
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
     StreamResultModel stream = getItem(position);
-    ((StreamResultViewHolder) viewHolder).setMutedStreamIds(mutedStreamsIds);
     ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite,
         position, hasToShowRankNumber);
   }
 
   public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {
     this.onUnwatchClickListener = onUnwatchClickListener;
-  }
-
-  public void setMutedStreamIds(List<String> mutedStreamIds) {
-    this.mutedStreamsIds = mutedStreamIds;
-  }
-
-  public List<String> getMutedStreamIds() {
-    return mutedStreamsIds;
   }
 }

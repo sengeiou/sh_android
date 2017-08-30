@@ -374,6 +374,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     }
   }
 
+  private void setMutedUser(boolean isMuted) {
+    toolbarDecorator.setMutedUser(isMuted);
+  }
+
   private void setStreamTitleClickListener(final String idChannel) {
     toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
@@ -494,6 +498,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void setImage(String avatarImage, String username) {
     setAvatarImage(avatarImage, username);
+  }
+
+  @Override public void setMuted(boolean isMuted) {
+    setMutedUser(isMuted);
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {

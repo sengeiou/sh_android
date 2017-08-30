@@ -22,7 +22,6 @@ import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
@@ -56,7 +55,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final SendShootrEventStatsInteractor sendShootrEventStatsInteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
   private final ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
-  private final GetMutedStreamsInteractor getMutedStreamsInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
@@ -86,7 +84,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       SendShootrEventStatsInteractor sendShootrEventStatsInteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
       ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor,
-      GetMutedStreamsInteractor getMutedStreamsInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
       UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
       GetFollowingInteractor followingInteractor,
@@ -101,7 +98,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.sendShootrEventStatsInteractor = sendShootrEventStatsInteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
     this.shouldUpdateDeviceInfoInteractor = getDeviceInfoInteractor;
-    this.getMutedStreamsInteractor = getMutedStreamsInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.sessionRepository = sessionRepository;
     this.userModelMapper = userModelMapper;
@@ -126,7 +122,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     setView(mainScreenView);
     this.loadCurrentUser();
     this.getFollows();
-    this.getMuted();
     this.getRecentSearch();
     this.setupDeviceInfo();
     this.sendShotEventStats();
@@ -152,10 +147,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   private void getRecentSearch() {
     getShootrEventsInteractor.synchronizeShootrEvents();
-  }
-
-  private void getMuted() {
-    getMutedStreamsInteractor.loadMutedStreamIds();
   }
 
   private void sendShotEventStats() {

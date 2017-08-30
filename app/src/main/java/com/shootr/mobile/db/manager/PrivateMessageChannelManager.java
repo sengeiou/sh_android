@@ -169,4 +169,21 @@ public class PrivateMessageChannelManager extends AbstractManager {
     getWritableDatabase().update(DatabaseContract.PrivateMessageChannelTable.TABLE, contentValues,
         where, whereArgs);
   }
+
+  public void setPrivateMessageChannelMuted(String idUser) {
+    updatePrivateMessageChannelMutedState(idUser, true);
+  }
+
+  public void setPrivateMessageChannelUnMuted(String idUser) {
+    updatePrivateMessageChannelMutedState(idUser, false);
+  }
+
+  private void updatePrivateMessageChannelMutedState(String idUser, boolean isMuted) {
+    String whereClause = DatabaseContract.PrivateMessageChannelTable.ID_TARGET_USER + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idUser) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.PrivateMessageChannelTable.MUTED, isMuted ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.PrivateMessageChannelTable.TABLE, values,
+        whereClause, whereArguments);
+  }
 }

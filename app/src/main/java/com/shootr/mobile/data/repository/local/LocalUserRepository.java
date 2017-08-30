@@ -6,6 +6,7 @@ import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
+import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageChannelDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.data.repository.remote.cache.SuggestedPeopleCache;
 import com.shootr.mobile.data.repository.sync.SyncableUserEntityFactory;
@@ -31,12 +32,14 @@ public class LocalUserRepository implements UserRepository {
   private final SyncableUserEntityFactory syncableUserEntityFactory;
   private final SuggestedPeopleEntityMapper suggestedPeopleEntityMapper;
   private final SuggestedPeopleCache suggestedPeopleCache;
+  private final PrivateMessageChannelDataSource privateMessageChannelDataSource;
 
   @Inject public LocalUserRepository(SessionRepository sessionRepository,
       @Local UserDataSource userDataSource, UserEntityMapper userEntityMapper,
       StreamEntityMapper streamEntityMapper, SyncableUserEntityFactory syncableUserEntityFactory,
       SuggestedPeopleEntityMapper suggestedPeopleEntityMapper,
-      SuggestedPeopleCache suggestedPeopleCache) {
+      SuggestedPeopleCache suggestedPeopleCache,
+      @Local PrivateMessageChannelDataSource privateMessageChannelDataSource) {
     this.sessionRepository = sessionRepository;
     this.localUserDataSource = userDataSource;
     this.userEntityMapper = userEntityMapper;
@@ -44,6 +47,7 @@ public class LocalUserRepository implements UserRepository {
     this.syncableUserEntityFactory = syncableUserEntityFactory;
     this.suggestedPeopleEntityMapper = suggestedPeopleEntityMapper;
     this.suggestedPeopleCache = suggestedPeopleCache;
+    this.privateMessageChannelDataSource = privateMessageChannelDataSource;
   }
 
   @Override public List<User> getPeople() {
@@ -157,5 +161,15 @@ public class LocalUserRepository implements UserRepository {
 
   @Override public List<String> getFollowingIds(String userId) {
     return localUserDataSource.getFollowingIds(userId);
+  }
+
+  @Override public void mute(String idUser) {
+    localUserDataSource.mute(idUser);
+    privateMessageChannelDataSource.setPrivateMessageChannelMuted(idUser);
+  }
+
+  @Override public void unMute(String idUser) {
+    localUserDataSource.unMute(idUser);
+    privateMessageChannelDataSource.setPrivateMessageChannelUnMuted(idUser);
   }
 }

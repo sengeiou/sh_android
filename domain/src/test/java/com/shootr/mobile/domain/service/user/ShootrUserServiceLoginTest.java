@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
-import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +42,6 @@ public class ShootrUserServiceLoginTest {
   @Mock DatabaseUtils databaseUtils;
   @Mock NicerRepository nicerRepository;
   @Mock ExternalFavoriteRepository favoriteRepository;
-  @Mock MuteRepository muteRepository;
 
   private ShootrUserService shootrUserService;
 
@@ -53,7 +51,7 @@ public class ShootrUserServiceLoginTest {
         new ShootrUserService(localUserRepository, sessionRepository, createAccountGateway,
             loginGateway, resetPasswordGateway, changePasswordGateway, confirmEmailGateway,
             remoteStreamRepository, remoteUserRepository, resetPasswordEmailGateway, databaseUtils,
-            nicerRepository, muteRepository, favoriteRepository);
+            nicerRepository, favoriteRepository);
   }
 
   @Test public void shouldCreateSessionWhenLoginCorrect() throws Exception {

@@ -2,7 +2,6 @@ package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
-import com.shootr.mobile.data.entity.MuteStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.io.IOException;
@@ -50,8 +49,6 @@ public interface StreamApiService {
   @GET("/stream/help/") StreamEntity getHelpStream(@Query("country") String country,
       @Query("language") String language) throws IOException, ApiException;
 
-  @GET("/mute/") List<MuteStreamEntity> getMuteStreams() throws IOException, ApiException;
-
   @PUT("/stream/{idStream}/remove") Response removeStream(@Path("idStream") String idStream)
       throws IOException, ApiException;
 
@@ -64,15 +61,16 @@ public interface StreamApiService {
   @POST("/stream/{idStream}/share") Response shareStream(@Path("idStream") String idStream)
       throws ApiException, IOException;
 
-  @POST("/mute/{idStream}") Response mute(@Path("idStream") String idStream)
-      throws ApiException, IOException;
-
   @POST("/stream") StreamEntity createStream(@Body StreamEntity streamEntity)
       throws IOException, ApiException;
 
-  @DELETE("/mute/{idStream}") Response unmute(@Path("idStream") String idStream)
-      throws IOException, ApiException;
 
   @PUT("/stream/") StreamEntity updateStream(@Body StreamUpdateParameters streamUpdateParameters)
+      throws IOException, ApiException;
+
+  @POST("/stream/{idStream}/mute") Response mute(@Path("idStream") String idStream)
+      throws IOException, ApiException;
+
+  @DELETE("/stream/{idStream}/mute") Response unMute(@Path("idStream") String idStream)
       throws IOException, ApiException;
 }

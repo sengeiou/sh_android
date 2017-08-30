@@ -42,4 +42,8 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
     List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
 
     List<String> getFollowingIds(String userId);
+
+    void mute(String idUser);
+
+    void unMute(String idUser);
 }

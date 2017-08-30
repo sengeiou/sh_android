@@ -377,6 +377,8 @@
   <string name="reply_name_pattern">%1$s to %2$s</string>
   <string name="reply_placeholder_pattern">Respond to %s…</string>
   <string name="report_context_menu_block">Block</string>
+  <string name="context_menu_mute">Mute Notifications</string>
+  <string name="context_menu_unmute">Unmute</string>
   <string name="report_context_menu_delete">Delete</string>
   <string name="report_context_menu_report">Report</string>
   <string name="report_context_menu_unblock">Unblock</string>

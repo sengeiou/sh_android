@@ -17,7 +17,6 @@ import javax.inject.Singleton;
         NiceShotRepositoryModule.class,
         DeviceRepositoryModule.class,
         FollowRepositoryModule.class,
-        MuteRepositoryModule.class,
         NicerRepositoryModule.class,
         ContributorRepositoryModule.class,
         PollRepositoryModule.class,

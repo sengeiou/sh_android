@@ -81,4 +81,12 @@ public class DatabaseStreamDataSource implements StreamDataSource {
       System.out.println("NumberFormatException: " + nfe.getMessage());
     }
   }
+
+  @Override public void mute(String idStream) {
+    streamManager.mute(idStream);
+  }
+
+  @Override public void unMute(String idStream) {
+    streamManager.unMute(idStream);
+  }
 }

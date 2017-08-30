@@ -229,4 +229,21 @@ public class UserManager extends AbstractManager {
     queryResults.close();
     return result;
   }
+
+  public void mute(String idUser) {
+    muteUnmute(idUser, true);
+  }
+
+  public void unMute(String idUser) {
+    muteUnmute(idUser, false);
+  }
+
+  private void muteUnmute(String idUser, boolean mute) {
+    String whereClause = DatabaseContract.UserTable.ID + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idUser) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.UserTable.MUTED, mute ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.UserTable.TABLE, values, whereClause,
+        whereArguments);
+  }
 }

@@ -37,6 +37,7 @@ public class Stream implements Searchable, Followable, Validable {
     private boolean isStrategic;
     private int totalFollowingWatchers;
     private String photoIdMedia;
+    private boolean muted;
 
     public Boolean isRemoved() {
         return removed;
@@ -314,6 +315,14 @@ public class Stream implements Searchable, Followable, Validable {
 
     public void setTotalFollowingWatchers(int totalFollowingWatchers) {
         this.totalFollowingWatchers = totalFollowingWatchers;
+    }
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    public void setMuted(boolean muted) {
+        this.muted = muted;
     }
 
     public String getPhotoIdMedia() {

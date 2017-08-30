@@ -35,4 +35,8 @@ public interface StreamDataSource {
   String getLastTimeFilteredStream(String idStream);
 
   void putLastTimeFiltered(String idStream, String lastTimeFiltered);
+
+  void mute(String idStream);
+
+  void unMute(String idStream);
 }

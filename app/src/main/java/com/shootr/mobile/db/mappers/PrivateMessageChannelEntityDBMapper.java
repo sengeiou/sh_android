@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import com.shootr.mobile.data.entity.PrivateMessageChannelEntity;
 import com.shootr.mobile.data.entity.PrivateMessageEntity;
+import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.domain.model.privateMessageChannel.LastMessageType;
 import java.util.Date;
@@ -32,7 +33,10 @@ public class PrivateMessageChannelEntityDBMapper extends GenericDBMapper {
     lastPrivateMessage.setComment(c.getString(
         c.getColumnIndex(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT)));
     privateMessageChannel.setLastPrivateMessage(lastPrivateMessage);
-
+    UserEntity userEntity = new UserEntity();
+    userEntity.setIdUser(privateMessageChannel.getIdTargetUser());
+    userEntity.setMuted(c.getInt(c.getColumnIndex(DatabaseContract.PrivateMessageChannelTable.MUTED)) == 1);
+    privateMessageChannel.setTargetUser(userEntity);
     setSynchronizedfromCursor(c, privateMessageChannel);
     return privateMessageChannel;
   }
@@ -47,6 +51,8 @@ public class PrivateMessageChannelEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PrivateMessageChannelTable.IMAGE, privateMessageChannel.getImage());
     cv.put(DatabaseContract.PrivateMessageChannelTable.READ,
         privateMessageChannel.getRead() ? 1 : 0);
+    cv.put(DatabaseContract.PrivateMessageChannelTable.MUTED,
+        privateMessageChannel.getTargetUser().isMuted() ? 1 : 0);
     if (privateMessageChannel.getLastPrivateMessage() != null) {
       cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME,
           privateMessageChannel.getLastPrivateMessage().getBirth().getTime());
