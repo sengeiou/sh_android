@@ -243,7 +243,7 @@
   </plurals>
   <string name="multiple_activities_action">GO</string>
   <string name="multiple_activity_notification">%d new Activity notifications</string>
-  <string name="mute">Mute</string>
+  <string name="mute">Mute notifications</string>
   <string name="new_activity_notification">New activity</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">New followers</string>
@@ -377,8 +377,8 @@
   <string name="reply_name_pattern">%1$s to %2$s</string>
   <string name="reply_placeholder_pattern">Respond to %s…</string>
   <string name="report_context_menu_block">Block</string>
-  <string name="context_menu_mute">Mute Notifications</string>
-  <string name="context_menu_unmute">Unmute</string>
+  <string name="context_menu_mute">Mute notifications</string>
+  <string name="context_menu_unmute">Unmute notifications</string>
   <string name="report_context_menu_delete">Delete</string>
   <string name="report_context_menu_report">Report</string>
   <string name="report_context_menu_unblock">Unblock</string>
@@ -505,7 +505,7 @@
   <string name="unfollow_dialog_message">Unfollow %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Yes</string>
-  <string name="unmute">Unmute</string>
+  <string name="unmute">Unmute notifications</string>
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Update now</string>
   <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>

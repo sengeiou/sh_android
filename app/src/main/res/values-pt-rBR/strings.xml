@@ -246,7 +246,7 @@
   </plurals>
   <string name="multiple_activities_action">VER</string>
   <string name="multiple_activity_notification">%d novas notificações</string>
-  <string name="mute">Silenciar</string>
+  <string name="mute">Silenciar notificações</string>
   <string name="new_activity_notification">Nova atividade</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Novos seguidores</string>
@@ -264,7 +264,7 @@
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nova mensagem…</string>
   <string name="next">Próximo</string>
-  <string name="niced_by">Nice de</string>
+  <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">" deu um nice a %s"</string>
   <string name="niced_shot_activity_with_comment">" deu um nice: "</string>
   <string name="nicers">Nicers</string>
@@ -381,6 +381,8 @@
   <string name="reply_name_pattern">%1$s a %2$s</string>
   <string name="reply_placeholder_pattern">Responder a %s…</string>
   <string name="report_context_menu_block">Bloquear</string>
+  <string name="context_menu_mute">Silenciar notificações</string>
+  <string name="context_menu_unmute">Ativar notificações</string>
   <string name="report_context_menu_delete">Eliminar</string>
   <string name="report_context_menu_report">Reportar</string>
   <string name="report_context_menu_unblock">Desbloquear</string>
@@ -511,7 +513,7 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Atualizar agora</string>
   <string name="update_warning_message">Fizemos melhorias que requerem que se atualize Shootr a sua última versão.</string>
-  <string name="user_blocked">Usuário bloqueado</string>
+  <string name="user_blocked">Este usuário não incomodará você nem os participantes dos seus streams. Também não poderá achar o seu perfil nem ver o seu conteúdo.</string>
   <string name="user_cannot_vote_alert_description">Somente é permitido um voto por dispositivo e usuário</string>
   <string name="user_not_found">Usuário não encontrado.</string>
   <string name="user_not_found_message">Usuário não encontrado</string>

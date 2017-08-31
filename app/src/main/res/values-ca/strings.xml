@@ -246,7 +246,7 @@
   </plurals>
   <string name="multiple_activities_action">VEURE</string>
   <string name="multiple_activity_notification">%d notificacions noves</string>
-  <string name="mute">Silenciar</string>
+  <string name="mute">Silenciar notificacions</string>
   <string name="new_activity_notification">Nova activitat</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Nous seguidors</string>
@@ -381,6 +381,8 @@
   <string name="reply_name_pattern">%1$s a %2$s</string>
   <string name="reply_placeholder_pattern">Respondre a %s…</string>
   <string name="report_context_menu_block">Bloquejar</string>
+  <string name="context_menu_mute">Silenciar notificacions</string>
+  <string name="context_menu_unmute">Activar notificacions</string>
   <string name="report_context_menu_delete">Eliminar</string>
   <string name="report_context_menu_report">Reportar</string>
   <string name="report_context_menu_unblock">Desbloquejar</string>
@@ -507,11 +509,11 @@
   <string name="unfollow_dialog_message">Deixar de seguir a %s?</string>
   <string name="unfollow_dialog_no">No</string>
   <string name="unfollow_dialog_yes">Sí</string>
-  <string name="unmute">Treure silenci</string>
+  <string name="unmute">Activar notificacions</string>
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Actualitzar ara</string>
   <string name="update_warning_message">Hem fet millores que requereixen actualitzar-se a la darrera versió de Shootr.</string>
-  <string name="user_blocked">Usuari bloquejat</string>
+  <string name="user_blocked">Aquest usuari no et molestarà ni a tu ni als participants dels teus streams. Tampoc podrà trobar el teu perfil ni veure el teu contingut.</string>
   <string name="user_cannot_vote_alert_description">Només és possible un vot per dispositiu i per usuari</string>
   <string name="user_not_found">Usuari no trobat.</string>
   <string name="user_not_found_message">Usuari no trobat.</string>
