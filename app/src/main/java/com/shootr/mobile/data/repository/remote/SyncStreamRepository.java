@@ -96,6 +96,14 @@ public class SyncStreamRepository implements StreamRepository, SyncableRepositor
         throw new RuntimeException("Method not implemented yet!");
     }
 
+    @Override public void mute(String idStream) {
+        remoteStreamDataSource.mute(idStream);
+    }
+
+    @Override public void unMute(String idStream) {
+      remoteStreamDataSource.unMute(idStream);
+    }
+
     @Override public Stream getBlogStream(String country, String language) {
         StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, language);
         if (blogStream != null) {

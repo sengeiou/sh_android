@@ -26,10 +26,6 @@ public class NullFavoritesListView implements FavoritesListView {
         /* no-op */
     }
 
-    @Override public void setMutedStreamIds(List<String> mutedStreamIds) {
-        /* no-op */
-    }
-
     @Override public void showContextMenuWithUnmute(StreamResultModel stream) {
         /* no-op */
     }

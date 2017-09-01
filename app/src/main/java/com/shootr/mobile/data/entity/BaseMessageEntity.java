@@ -19,6 +19,7 @@ public class BaseMessageEntity extends Synchronized {
   private String videoTitle;
   private Long videoDuration;
   private EntitiesEntity entities;
+  private String imageIdMedia;
 
 
   public String getIdUser() {
@@ -107,5 +108,13 @@ public class BaseMessageEntity extends Synchronized {
 
   public void setEntities(EntitiesEntity entities) {
     this.entities = entities;
+  }
+
+  public String getImageIdMedia() {
+    return imageIdMedia;
+  }
+
+  public void setImageIdMedia(String imageIdMedia) {
+    this.imageIdMedia = imageIdMedia;
   }
 }

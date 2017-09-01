@@ -237,6 +237,40 @@ public class StreamManager extends AbstractManager {
         values, SQLiteDatabase.CONFLICT_REPLACE);
   }
 
+  public void mute(String idStream) {
+    muteUnmute(idStream, true);
+  }
+
+  public void unMute(String idStream) {
+    muteUnmute(idStream, false);
+  }
+
+  public void muteStreamSearchResult(String idStream) {
+    muteUnmuteStreamSearchResult(idStream, true);
+  }
+
+  public void unMuteStreamSearchResult(String idStream) {
+    muteUnmuteStreamSearchResult(idStream, false);
+  }
+
+  private void muteUnmute(String idStream, boolean mute) {
+    String whereClause = DatabaseContract.StreamTable.ID_STREAM + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.StreamTable.MUTED, mute ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.StreamTable.TABLE, values, whereClause,
+        whereArguments);
+  }
+
+  private void muteUnmuteStreamSearchResult(String idStream, boolean mute) {
+    String whereClause = DatabaseContract.StreamSearchTable.ID_STREAM + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.StreamSearchTable.MUTED, mute ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.StreamSearchTable.TABLE, values, whereClause,
+        whereArguments);
+  }
+
   public Long getLastTimeFilteredStream(String streamId) {
     String whereClause = DatabaseContract.StreamFilterTable.ID_STREAM + " = ?";
 

@@ -26,6 +26,8 @@ public interface TimelineView extends LoadDataView {
 
   void setImage(String avatarImage, String username);
 
+  void setMuted(boolean isMuted);
+
   void showNewShotsIndicator(Integer numberNewShots);
 
   void hideNewShotsIndicator();

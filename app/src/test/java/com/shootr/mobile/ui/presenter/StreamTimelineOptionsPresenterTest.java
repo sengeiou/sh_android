@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
@@ -23,105 +23,106 @@ import static org.mockito.Mockito.verify;
 
 public class StreamTimelineOptionsPresenterTest {
 
-    private static final String STUB_STREAM_ID = "stream_id";
+  private static final String STUB_STREAM_ID = "stream_id";
 
-    @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
-    @Mock AddToFavoritesInteractor addToFavoritesInteractor;
-    @Mock StreamTimelineOptionsView streamTimelineOptionsView;
-    @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
-    @Mock ErrorMessageFactory errorMessageFactory;
-    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
-    @Mock MuteInteractor muteInteractor;
-    @Mock UnmuteInteractor unmuteInteractor;
+  @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
+  @Mock AddToFavoritesInteractor addToFavoritesInteractor;
+  @Mock StreamTimelineOptionsView streamTimelineOptionsView;
+  @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  @Mock ErrorMessageFactory errorMessageFactory;
+  @Mock MuteInteractor muteInteractor;
+  @Mock UnmuteInteractor unmuteInteractor;
+  @Mock GetStreamInteractor getStreamInteractor;
 
-    private StreamTimelineOptionsPresenter presenter;
+  private StreamTimelineOptionsPresenter presenter;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        presenter = new StreamTimelineOptionsPresenter(getFavoriteStatusInteractor,
-          addToFavoritesInteractor,
-          removeFromFavoritesInteractor,
-          getMutedStreamsInteractor,
-          muteInteractor,
-          unmuteInteractor,
-          errorMessageFactory);
-        presenter.setView(streamTimelineOptionsView);
-    }
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    presenter =
+        new StreamTimelineOptionsPresenter(getFavoriteStatusInteractor, addToFavoritesInteractor,
+            removeFromFavoritesInteractor, muteInteractor, unmuteInteractor, getStreamInteractor,
+            errorMessageFactory);
+    presenter.setView(streamTimelineOptionsView);
+  }
 
-    @Test public void shouldShowRemoveFromFavoritesButtonWhenInitializedIfIsFavorite() throws Exception {
-        setupFavoriteStatusCallbacks(true);
+  @Test public void shouldShowRemoveFromFavoritesButtonWhenInitializedIfIsFavorite()
+      throws Exception {
+    setupFavoriteStatusCallbacks(true);
 
-        presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
+    presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
 
-        verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
-    }
+    verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
+  }
 
-    @Test public void shouldShowAddToFavoritesButtonWhenInitializeIfStreamIsNotFavorite() throws Exception {
-        setupFavoriteStatusCallbacks(false);
+  @Test public void shouldShowAddToFavoritesButtonWhenInitializeIfStreamIsNotFavorite()
+      throws Exception {
+    setupFavoriteStatusCallbacks(false);
 
-        presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
+    presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
 
-        verify(streamTimelineOptionsView).showAddToFavoritesButton();
-    }
+    verify(streamTimelineOptionsView).showAddToFavoritesButton();
+  }
 
-    @Test public void shouldHideAddToFavoritesButtonWhenAddToFavorite() throws Exception {
-        setupAddToFavoriteCallbacks();
+  @Test public void shouldHideAddToFavoritesButtonWhenAddToFavorite() throws Exception {
+    setupAddToFavoriteCallbacks();
 
-        presenter.addToFavorites();
+    presenter.addToFavorites();
 
-        verify(streamTimelineOptionsView).hideAddToFavoritesButton();
-    }
+    verify(streamTimelineOptionsView).hideAddToFavoritesButton();
+  }
 
-    @Test public void shouldShowRemoveFromFavoritesButtonWhenAddToFavorites() throws Exception {
-        setupAddToFavoriteCallbacks();
+  @Test public void shouldShowRemoveFromFavoritesButtonWhenAddToFavorites() throws Exception {
+    setupAddToFavoriteCallbacks();
 
-        presenter.addToFavorites();
+    presenter.addToFavorites();
 
-        verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
-    }
+    verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
+  }
 
-    @Test public void shouldHideRemoveFromFavoritesButtonWhenRemoveFromFavorites() throws Exception {
-        setupRemoveFromFavoriteCallbacks();
+  @Test public void shouldHideRemoveFromFavoritesButtonWhenRemoveFromFavorites() throws Exception {
+    setupRemoveFromFavoriteCallbacks();
 
-        presenter.removeFromFavorites();
+    presenter.removeFromFavorites();
 
-        verify(streamTimelineOptionsView).hideRemoveFromFavoritesButton();
-    }
+    verify(streamTimelineOptionsView).hideRemoveFromFavoritesButton();
+  }
 
-    @Test public void shouldShowAddToFavoritesButtonWhenRemoveFromFavorites() throws Exception {
-        setupRemoveFromFavoriteCallbacks();
+  @Test public void shouldShowAddToFavoritesButtonWhenRemoveFromFavorites() throws Exception {
+    setupRemoveFromFavoriteCallbacks();
 
-        presenter.removeFromFavorites();
+    presenter.removeFromFavorites();
 
-        verify(streamTimelineOptionsView).showAddToFavoritesButton();
-    }
+    verify(streamTimelineOptionsView).showAddToFavoritesButton();
+  }
 
-    private void setupRemoveFromFavoriteCallbacks() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
-                return null;
-            }
-        }).when(removeFromFavoritesInteractor)
-          .removeFromFavorites(anyString(), any(Interactor.CompletedCallback.class));
-    }
+  private void setupRemoveFromFavoriteCallbacks() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
+        return null;
+      }
+    }).when(removeFromFavoritesInteractor)
+        .removeFromFavorites(anyString(), any(Interactor.CompletedCallback.class));
+  }
 
-    private void setupAddToFavoriteCallbacks() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
-                return null;
-            }
-        }).when(addToFavoritesInteractor)
-          .addToFavorites(anyString(), any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
-    }
+  private void setupAddToFavoriteCallbacks() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
+        return null;
+      }
+    }).when(addToFavoritesInteractor)
+        .addToFavorites(anyString(), any(Interactor.CompletedCallback.class),
+            any(Interactor.ErrorCallback.class));
+  }
 
-    private void setupFavoriteStatusCallbacks(final boolean isFavorite) {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((Interactor.Callback) invocation.getArguments()[1]).onLoaded(isFavorite);
-                return null;
-            }
-        }).when(getFavoriteStatusInteractor).loadFavoriteStatus(anyString(), any(Interactor.Callback.class));
-    }
+  private void setupFavoriteStatusCallbacks(final boolean isFavorite) {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        ((Interactor.Callback) invocation.getArguments()[1]).onLoaded(isFavorite);
+        return null;
+      }
+    }).when(getFavoriteStatusInteractor)
+        .loadFavoriteStatus(anyString(), any(Interactor.Callback.class));
+  }
 }

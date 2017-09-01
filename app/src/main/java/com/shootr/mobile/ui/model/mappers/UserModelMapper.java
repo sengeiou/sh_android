@@ -37,6 +37,7 @@ public class UserModelMapper {
         userModel.setSocialLogin(user.isSocialLogin());
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userModel.setStrategic(user.isStrategic());
+        userModel.setMuted(user.isMuted());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));

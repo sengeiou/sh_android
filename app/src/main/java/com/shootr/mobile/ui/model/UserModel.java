@@ -27,6 +27,7 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private Long createdStreamsCount;
   private Long favoritedStreamsCount;
   private boolean isStrategic;
+  private boolean muted;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -162,6 +163,14 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   public void setStrategic(boolean strategic) {
     isStrategic = strategic;
+  }
+
+  public boolean isMuted() {
+    return muted;
+  }
+
+  public void setMuted(boolean muted) {
+    this.muted = muted;
   }
 
   @Override public UserModel clone() {

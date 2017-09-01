@@ -23,4 +23,8 @@ public interface PrivateMessageChannelDataSource {
   List<PrivateMessageChannelEntity> getPrivateMessageChannelsNotSynchronized();
 
   void markPrivateMessageChannelDeleted(String channelId);
+
+  void setPrivateMessageChannelMuted(String idUser);
+
+  void setPrivateMessageChannelUnMuted(String idUser);
 }

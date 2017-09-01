@@ -381,9 +381,17 @@ public class SyncUserRepository
     throw new IllegalArgumentException("No remote implementation");
   }
 
+  @Override public void mute(String idUser) {
+    remoteUserDataSource.mute(idUser);
+  }
+
+  @Override public void unMute(String idUser) {
+    remoteUserDataSource.unMute(idUser);
+  }
+
   @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
     try {
-      //TODO test if calll this method is necesary forceUpdatePeopleAndMe();
+      //TODO test if call this method is necesary forceUpdatePeopleAndMe();
     } catch (ServerCommunicationException networkError) {
       Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
             /* swallow silently */

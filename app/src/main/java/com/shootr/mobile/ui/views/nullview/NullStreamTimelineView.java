@@ -70,6 +70,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void setMuted(boolean isMuted) {
+        /*no-op*/
+    }
+
     @Override public void showNewShotsIndicator(Integer numberNewShots) {
         /* no-op */
     }

@@ -15,11 +15,11 @@ import timber.log.Timber;
 
 public class BitmapImageResizer implements ImageResizer {
 
-  private static final int MAX_SIZE = 1080;
+  private static final int MAX_SIZE = 2400;
   private static final long MAX_WEIGHT_KB = 300;
 
   public static final String OUTPUT_IMAGE_NAME = "profileUploadResized.jpg";
-  public static final int INITIAL_COMPRESSION_QUALITY = 100;
+  public static final int INITIAL_COMPRESSION_QUALITY = 90;
   public static final int COMPRESSION_QUALITY_DECREMENT = 5;
 
   private final Context context;
@@ -148,22 +148,17 @@ public class BitmapImageResizer implements ImageResizer {
   private File storeCompressedImageInFile(Bitmap bitmapResized) throws IOException {
     File imageFile = new File(getOutputDirectory(), getOutputImageName());
 
-    int compressionQuality = INITIAL_COMPRESSION_QUALITY;
-    boolean needsCompression = true;
+    Timber.i("Performing JPEG compression with quality of %d", INITIAL_COMPRESSION_QUALITY);
+    FileOutputStream compressedImageStream = new FileOutputStream(imageFile);
+    bitmapResized.compress(Bitmap.CompressFormat.JPEG, INITIAL_COMPRESSION_QUALITY,
+        compressedImageStream);
+    // Check size
+    compressedImageStream.flush();
 
-    while (needsCompression) {
-      Timber.i("Performing JPEG compression with quality of %d", compressionQuality);
-      FileOutputStream compressedImageStream = new FileOutputStream(imageFile);
-      bitmapResized.compress(Bitmap.CompressFormat.JPEG, compressionQuality, compressedImageStream);
-      // Check size
-      compressedImageStream.flush();
+    long imageSizeInKb = imageFile.length() / 1000;
+    Timber.i("Image size: %s KB", imageSizeInKb);
+    compressedImageStream.close();
 
-      long imageSizeInKb = imageFile.length() / 1000;
-      Timber.i("Image size: %s KB", imageSizeInKb);
-      needsCompression = imageSizeInKb > MAX_WEIGHT_KB && compressionQuality > 0;
-      compressionQuality -= COMPRESSION_QUALITY_DECREMENT;
-      compressedImageStream.close();
-    }
     return imageFile;
   }
 

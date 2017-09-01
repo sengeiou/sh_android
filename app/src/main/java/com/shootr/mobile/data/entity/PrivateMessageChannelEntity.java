@@ -8,6 +8,7 @@ public class PrivateMessageChannelEntity  extends Synchronized {
   private String image;
   private Boolean read;
   private PrivateMessageEntity lastPrivateMessage;
+  private UserEntity targetUser;
 
 
   public String getIdPrivateMessageChannel() {
@@ -56,5 +57,13 @@ public class PrivateMessageChannelEntity  extends Synchronized {
 
   public void setLastPrivateMessage(PrivateMessageEntity lastPrivateMessage) {
     this.lastPrivateMessage = lastPrivateMessage;
+  }
+
+  public UserEntity getTargetUser() {
+    return targetUser;
+  }
+
+  public void setTargetUser(UserEntity targetUser) {
+    this.targetUser = targetUser;
   }
 }

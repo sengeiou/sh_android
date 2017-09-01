@@ -21,7 +21,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.nice.NicerRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
-import com.shootr.mobile.domain.repository.stream.MuteRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.io.IOException;
 import javax.inject.Inject;
@@ -40,7 +39,6 @@ public class ShootrUserService {
   private final ResetPasswordEmailGateway resetPasswordEmailGateway;
   private final DatabaseUtils databaseUtils;
   private final NicerRepository nicerRepository;
-  private final MuteRepository muteRepository;
   private final ExternalFavoriteRepository favoriteRepository;
 
   @Inject public ShootrUserService(@Local UserRepository localUserRepository,
@@ -49,8 +47,7 @@ public class ShootrUserService {
       ChangePasswordGateway changePasswordGateway, ConfirmEmailGateway confirmEmailGateway,
       ExternalStreamRepository remoteStreamRepository, @Remote UserRepository remoteUserRepository,
       ResetPasswordEmailGateway resetPasswordEmailGateway, DatabaseUtils databaseUtils,
-      NicerRepository nicerRepository, @Remote MuteRepository muteRepository,
-      ExternalFavoriteRepository favoriteRepository) {
+      NicerRepository nicerRepository, ExternalFavoriteRepository favoriteRepository) {
     this.localUserRepository = localUserRepository;
     this.sessionRepository = sessionRepository;
     this.createAccountGateway = createAccountGateway;
@@ -63,7 +60,6 @@ public class ShootrUserService {
     this.resetPasswordEmailGateway = resetPasswordEmailGateway;
     this.databaseUtils = databaseUtils;
     this.nicerRepository = nicerRepository;
-    this.muteRepository = muteRepository;
     this.favoriteRepository = favoriteRepository;
   }
 
@@ -94,16 +90,11 @@ public class ShootrUserService {
       remoteStreamRepository.getStreamById(visibleEventId, StreamMode.TYPES_STREAM);
     }
     storeFavoritesStreams(loginResult);
-    storeMuteStreams();
     remoteUserRepository.getPeople();
   }
 
   private void storeFavoritesStreams(LoginResult loginResult) {
     favoriteRepository.getFavorites(loginResult.getUser().getIdUser());
-  }
-
-  private void storeMuteStreams() {
-    muteRepository.getMutedIdStreams();
   }
 
   private void storeSession(LoginResult loginResult) {

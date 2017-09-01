@@ -35,6 +35,7 @@ public class MessageChannelViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.container) LinearLayout container;
   @BindView(R.id.unread_messages_indicator) TextView unreadMessages;
   @BindView(R.id.channel_timestamp) TextView timestamp;
+  @BindView(R.id.user_muted) ImageView userMuted;
 
   @BindString(R.string.private_message_video) String video;
   @BindString(R.string.private_message_image) String image;
@@ -57,6 +58,7 @@ public class MessageChannelViewHolder extends RecyclerView.ViewHolder {
     title.setText(privateMessageChannelModel.getTitle());
     setupLastComment(privateMessageChannelModel);
     setupChannelPicture(privateMessageChannelModel);
+    setupUserMuted(privateMessageChannelModel);
     container.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         channelClickListener.onChannelClick(privateMessageChannelModel.getIdPrivateMessageChannel(),
@@ -117,6 +119,14 @@ public class MessageChannelViewHolder extends RecyclerView.ViewHolder {
       picture.setVisibility(View.GONE);
       pictureWithoutText.setVisibility(View.VISIBLE);
       setupInitials(privateMessageChannelModel);
+    }
+  }
+
+  private void setupUserMuted(PrivateMessageChannelModel privateMessageChannelModel) {
+    if (privateMessageChannelModel.isMuted()) {
+      userMuted.setVisibility(View.VISIBLE);
+    } else {
+      userMuted.setVisibility(View.GONE);
     }
   }
 

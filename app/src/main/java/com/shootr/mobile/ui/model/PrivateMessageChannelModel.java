@@ -10,6 +10,7 @@ public class PrivateMessageChannelModel {
   private Boolean read;
   private Long lastMessageTime;
   private String lastMessageComment;
+  private boolean isMuted;
 
   public String getIdPrivateMessageChannel() {
     return idPrivateMessageChannel;
@@ -73,6 +74,14 @@ public class PrivateMessageChannelModel {
 
   public void setLastMessageComment(String lastMessageComment) {
     this.lastMessageComment = lastMessageComment;
+  }
+
+  public boolean isMuted() {
+    return isMuted;
+  }
+
+  public void setMuted(boolean muted) {
+    isMuted = muted;
   }
 }
 

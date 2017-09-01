@@ -9,6 +9,7 @@ public class PrivateMessageChannel {
   private boolean read;
   private Long lastMessageTime;
   private String lastMessageComment;
+  private boolean muted;
 
   public String getIdPrivateMessageChanel() {
     return idPrivateMessageChanel;
@@ -64,5 +65,13 @@ public class PrivateMessageChannel {
 
   public void setLastMessageComment(String lastMessageComment) {
     this.lastMessageComment = lastMessageComment;
+  }
+
+  public boolean isMuted() {
+    return muted;
+  }
+
+  public void setMuted(boolean muted) {
+    this.muted = muted;
   }
 }

@@ -29,6 +29,7 @@ public class PrivateMessageChannelEntityMapper {
       privateMessageChannel.setLastMessageComment(
           privateMessageChannelEntity.getLastPrivateMessage().getComment());
     }
+    privateMessageChannel.setMuted(privateMessageChannelEntity.getTargetUser().isMuted());
     return privateMessageChannel;
   }
 

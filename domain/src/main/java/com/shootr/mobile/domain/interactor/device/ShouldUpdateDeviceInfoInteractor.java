@@ -49,7 +49,11 @@ public class ShouldUpdateDeviceInfoInteractor implements Interactor {
     Device device = localDeviceRepository.getCurrentDevice();
     if (device == null) {
       device = sessionRepository.getDevice();
+      if (device != null) {
+        localDeviceRepository.putDevice(device);
+      }
     }
+
     return device;
   }
 

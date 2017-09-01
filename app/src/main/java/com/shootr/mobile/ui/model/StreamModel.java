@@ -28,6 +28,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean isFavorite;
     private int totalFollowingWatchers;
     private boolean isStrategic;
+    private boolean muted;
 
     public Boolean isRemoved() {
         return removed;
@@ -213,6 +214,14 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setStrategic(boolean strategic) {
         isStrategic = strategic;
+    }
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    public void setMuted(boolean muted) {
+        this.muted = muted;
     }
 
     public boolean isFavorite() {

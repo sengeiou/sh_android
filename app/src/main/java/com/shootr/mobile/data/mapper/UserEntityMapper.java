@@ -57,6 +57,7 @@ public class UserEntityMapper {
     user.setAnalyticsUserType(
         userEntity.getAnalyticsUserType() == null ? "NORMAL" : userEntity.getAnalyticsUserType());
     user.setStrategic(userEntity.isStrategic());
+    user.setMuted(userEntity.isMuted() != null ? userEntity.isMuted() : false);
     user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
     user.setCreatedStreamsCount(userEntity.getCreatedStreamsCount());
@@ -97,6 +98,7 @@ public class UserEntityMapper {
     userEntity.setReceivedReactions(user.getReceivedReactions());
     userEntity.setStrategic(user.isStrategic());
     userEntity.setFollowing(user.isFollowing());
+    userEntity.setMuted(user.isMuted());
 
     return userEntity;
   }

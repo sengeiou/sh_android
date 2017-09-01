@@ -9,7 +9,6 @@ import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetMutedStreamsInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
@@ -64,7 +63,6 @@ public class MainScreenPresenterTest {
     @Mock BusPublisher busPublisher;
     @Mock MainScreenView view;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
-    @Mock GetMutedStreamsInteractor getMutedStreamsInteractor;
     @Mock GetLocalStreamInteractor getStreamInteractor;
     @Mock ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
     @Mock StreamModelMapper streamModelMapper;
@@ -80,7 +78,7 @@ public class MainScreenPresenterTest {
         mainScreenPresenter =
           new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
               sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor,
-              shouldUpdateDeviceInfoInteractor, getMutedStreamsInteractor, unwatchStreamInteractor, sessionRepository,
+              shouldUpdateDeviceInfoInteractor, unwatchStreamInteractor, sessionRepository,
               userModelMapper, badgeCount, getFollowingInteractor,
               getPrivateMessagesChannelsInteractor,
               getFollowingIdsInteractor, getStreamInteractor, getShootrEventsInteractor,

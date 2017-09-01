@@ -13,8 +13,10 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
+import com.shootr.mobile.domain.interactor.user.MuteUserInteractor;
 import com.shootr.mobile.domain.interactor.user.PutRecentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
+import com.shootr.mobile.domain.interactor.user.UnMuteUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
@@ -52,6 +54,8 @@ public class ProfilePresenter implements Presenter {
   private final UploadUserPhotoInteractor uploadUserPhotoInteractor;
   private final RemoveUserPhotoInteractor removeUserPhotoInteractor;
   private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
+  private final MuteUserInteractor muteUserInteractor;
+  private final UnMuteUserInteractor unMuteUserInteractor;
   private final SessionRepository sessionRepository;
   private final ErrorMessageFactory errorMessageFactory;
   private final UserModelMapper userModelMapper;
@@ -64,6 +68,7 @@ public class ProfilePresenter implements Presenter {
   private boolean hasBeenPaused = false;
   private boolean uploadingPhoto = false;
   private boolean isBlocked = false;
+  private boolean isMuted = false;
   private boolean refreshOnlyLocal = false;
   private boolean hasLoadedBlocks = false;
 
@@ -77,9 +82,10 @@ public class ProfilePresenter implements Presenter {
       GetProfileShotTimelineInteractor getProfileShotTimelineInteractor,
       UploadUserPhotoInteractor uploadUserPhotoInteractor,
       RemoveUserPhotoInteractor removeUserPhotoInteractor,
-      GetBlockedIdUsersInteractor getBlockedIdUsersInteractor, SessionRepository sessionRepository,
-      ErrorMessageFactory errorMessageFactory, UserModelMapper userModelMapper,
-      ShotModelMapper shotModelMapper) {
+      GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
+      MuteUserInteractor muteUserInteractor, UnMuteUserInteractor unMuteUserInteractor,
+      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory,
+      UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
     this.putRecentUserInteractor = putRecentUserInteractor;
     this.getUserByIdInteractor = getUserByIdInteractor;
     this.getUserByUsernameInteractor = getUserByUsernameInteractor;
@@ -94,6 +100,8 @@ public class ProfilePresenter implements Presenter {
     this.uploadUserPhotoInteractor = uploadUserPhotoInteractor;
     this.removeUserPhotoInteractor = removeUserPhotoInteractor;
     this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
+    this.muteUserInteractor = muteUserInteractor;
+    this.unMuteUserInteractor = unMuteUserInteractor;
     this.sessionRepository = sessionRepository;
     this.errorMessageFactory = errorMessageFactory;
     this.userModelMapper = userModelMapper;
@@ -147,6 +155,7 @@ public class ProfilePresenter implements Presenter {
       putRecentUserInteractor.putRecentUser(user);
       profileView.hideEditMenu();
       subscribeUIObserverToObservable(getBlockedIdsObservable());
+      setupMutedUserIcon();
     }
   }
 
@@ -163,6 +172,14 @@ public class ProfilePresenter implements Presenter {
       profileView.showVerifiedUser();
     } else {
       profileView.hideVerifiedUser();
+    }
+  }
+
+  private void setupMutedUserIcon() {
+    if (userModel.isMuted()) {
+      profileView.showUserMuted();
+    } else {
+      profileView.hideUserMuted();
     }
   }
 
@@ -533,6 +550,7 @@ public class ProfilePresenter implements Presenter {
         } else {
           profileView.showReportUserButton();
           profileView.showBlockUserButton();
+          profileView.showMuteUserButton();
         }
         subscriber.onCompleted();
       }
@@ -563,11 +581,39 @@ public class ProfilePresenter implements Presenter {
     handleBlockMenu(isBlocked);
   }
 
+  private void muteUser(String idUser) {
+    muteUserInteractor.mute(idUser, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        profileView.showUserMuted();
+      }
+    });
+  }
+
+  private void unMuteUser(String idUser) {
+    unMuteUserInteractor.unMute(idUser, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        profileView.hideUserMuted();
+      }
+    });
+  }
+
+  public void muteMenuClicked() {
+    handleMuteMenu(isMuted);
+  }
+
   private void handleBlockMenu(Boolean isBlocked) {
     if (!isBlocked) {
       profileView.blockUser(userModel);
     } else {
       profileView.showBlockedMenu(userModel);
+    }
+  }
+
+  private void handleMuteMenu(Boolean isMuted) {
+    if (!isMuted) {
+      muteUser(profileIdUser);
+    } else {
+      unMuteUser(profileIdUser);
     }
   }
 
@@ -610,5 +656,9 @@ public class ProfilePresenter implements Presenter {
 
   public void setUserBlocked(boolean isBlocked) {
     this.isBlocked = isBlocked;
+  }
+
+  public void setUserMuted(boolean isMuted) {
+    this.isMuted = isMuted;
   }
 }

@@ -35,6 +35,7 @@ public class UserEntity extends FollowableEntity
     private Boolean firstSessionActivation;
     private Boolean strategic;
     private Boolean following;
+    private Boolean muted;
 
     public UserEntity() {
         setResultType(FollowableType.USER);
@@ -291,5 +292,13 @@ public class UserEntity extends FollowableEntity
 
     public void setFollowing(Boolean following) {
         this.following = following;
+    }
+
+    public Boolean isMuted() {
+        return muted;
+    }
+
+    public void setMuted(Boolean muted) {
+        this.muted = muted;
     }
 }

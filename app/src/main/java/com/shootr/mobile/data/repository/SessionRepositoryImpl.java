@@ -97,6 +97,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     timelineFilterPreference.delete();
     publicVoteAlertPreference.delete();
     deviceIdPreference.delete();
+    devicePreference.delete();
     cacheTimeKeepAlive.delete();
     analyticsTool.reset();
     currentUser = null;

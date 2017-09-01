@@ -119,4 +119,20 @@ public class ServiceStreamDataSource implements StreamDataSource {
   @Override public void putLastTimeFiltered(String idStream, String lastTimeFiltered) {
     throw new RuntimeException("Method not implemented yet!");
   }
+
+  @Override public void mute(String idStream) {
+    try {
+      streamApiService.mute(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void unMute(String idStream) {
+    try {
+      streamApiService.unMute(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
 }

@@ -64,6 +64,16 @@
           android:textSize="16sp"
           tools:text="Titulo Dos líneas"
           />
+      <ImageView
+          android:id="@+id/user_muted"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:paddingLeft="4dp"
+          android:src="@drawable/ic_muted_stream"
+          android:visibility="gone"
+          tools:visibility="visible"
+          />
     </LinearLayout>
 
     <LinearLayout

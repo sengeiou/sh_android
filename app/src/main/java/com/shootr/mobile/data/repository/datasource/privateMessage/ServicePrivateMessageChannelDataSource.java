@@ -71,6 +71,14 @@ public class ServicePrivateMessageChannelDataSource implements PrivateMessageCha
     throw new IllegalArgumentException("method not implemented");
   }
 
+  @Override public void setPrivateMessageChannelMuted(String idUser) {
+    throw new IllegalArgumentException("method not implemented");
+  }
+
+  @Override public void setPrivateMessageChannelUnMuted(String idUser) {
+    throw new IllegalArgumentException("method not implemented");
+  }
+
   @Override public void removePrivateMessageChannel(String idPrivateMessageChannel) {
     try {
       privateMessagesApiService.removePrivateMessageChannel(idPrivateMessageChannel);

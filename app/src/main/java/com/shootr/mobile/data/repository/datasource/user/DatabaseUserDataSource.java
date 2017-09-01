@@ -102,6 +102,14 @@ public class DatabaseUserDataSource implements UserDataSource {
         return followManager.getUserFollowingIds(userId);
     }
 
+    @Override public void mute(String idUser) {
+        userManager.unMute(idUser);
+    }
+
+    @Override public void unMute(String idUser) {
+        userManager.mute(idUser);
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }

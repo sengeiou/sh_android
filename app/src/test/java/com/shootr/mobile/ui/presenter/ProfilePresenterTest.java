@@ -13,8 +13,10 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByUsernameInteractor;
 import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
+import com.shootr.mobile.domain.interactor.user.MuteUserInteractor;
 import com.shootr.mobile.domain.interactor.user.PutRecentUserInteractor;
 import com.shootr.mobile.domain.interactor.user.RemoveUserPhotoInteractor;
+import com.shootr.mobile.domain.interactor.user.UnMuteUserInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UploadUserPhotoInteractor;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
@@ -84,6 +86,8 @@ public class ProfilePresenterTest {
   @Mock PutRecentUserInteractor putRecentUserInteractor;
   @Mock GetProfileShotTimelineInteractor getProfileShotTimelineInteractor;
   @Mock UndoReshootInteractor undoReshootInteractor;
+  @Mock MuteUserInteractor muteUserInteractor;
+  @Mock UnMuteUserInteractor unMuteUserInteractor;
 
   @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -98,7 +102,8 @@ public class ProfilePresenterTest {
         getUserByUsernameInteractor, logoutInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, reshootInteractor, undoReshootInteractor, followInteractor,
         unfollowInteractor, getProfileShotTimelineInteractor, uploadUserPhotoInteractor,
-        removeUserPhotoInteractor, getBlockedIdUsersInteractor, sessionRepository,
+        removeUserPhotoInteractor, getBlockedIdUsersInteractor, muteUserInteractor,
+        unMuteUserInteractor, sessionRepository,
         errorMessageFactory, userModelMapper, shotModelMapper);
     profilePresenter.setView(profileView);
   }
@@ -560,6 +565,22 @@ public class ProfilePresenterTest {
 
     verify(uploadUserPhotoInteractor).uploadUserPhoto(any(File.class), anyCompletedCallback(),
         anyErrorCallback());
+  }
+
+  @Test public void shouldCallbackMuteInteractorWhenMutePressed() throws Exception {
+    profilePresenter.setUserMuted(false);
+
+    profilePresenter.muteMenuClicked();
+
+    verify(muteUserInteractor).mute(anyString(), any(Interactor.CompletedCallback.class));
+  }
+
+  @Test public void shouldCallbackUnmuteInteractorWhenUnmutePressed() throws Exception {
+    profilePresenter.setUserMuted(true);
+
+    profilePresenter.muteMenuClicked();
+
+    verify(unMuteUserInteractor).unMute(anyString(), any(Interactor.CompletedCallback.class));
   }
 
   @Test public void shouldLoadProfileAgainWhenPhotoUploaded() throws Exception {
