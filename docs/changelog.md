@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.41.0] - 2017-09-01
+
+### Added
+- New Block User
+- Mute Users notifications
+
+### Changed
+- Mute Streams notifications
+
+### Fixed
+- Fix notifications. Clean device info on logout
+
+
 ## [1.40.0] - 2017-08-18
 
 ### Changed
