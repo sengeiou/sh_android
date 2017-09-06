@@ -63,7 +63,9 @@ public class StreamEntityMapper {
     if (streamEntity.getFollowing() != null) {
       stream.setFavorite(streamEntity.getFollowing());
     }
-    stream.setMuted(streamEntity.isMuted());
+    if (streamEntity.isMuted() != null) {
+      stream.setMuted(streamEntity.isMuted());
+    }
     stream.setPhotoIdMedia(streamEntity.getPhotoIdMedia());
     return stream;
   }
