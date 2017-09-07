@@ -218,8 +218,12 @@ public class ShotDispatcher implements MessageSender {
     if (queuedShot.getBaseMessage().getImage() == null && queuedShot.getImageFile() != null) {
       List<String> shotImage = shootrShotService.uploadShotImage(queuedShot.getImageFile());
       queuedShot.getBaseMessage().setImage(shotImage.get(IMAGE_URL));
-      queuedShot.getBaseMessage().setImageWidth(Long.valueOf(shotImage.get(IMAGE_WIDTH)));
-      queuedShot.getBaseMessage().setImageHeight(Long.valueOf(shotImage.get(IMAGE_HEIGHT)));
+      try {
+        queuedShot.getBaseMessage().setImageWidth(Long.valueOf(shotImage.get(IMAGE_WIDTH)));
+        queuedShot.getBaseMessage().setImageHeight(Long.valueOf(shotImage.get(IMAGE_HEIGHT)));
+      } catch (NumberFormatException e) {
+        /* no-op */
+      }
       queuedShot.getBaseMessage().setImageIdMedia(shotImage.get(ID_MEDIA));
       queuedShot.getImageFile().delete();
       queuedShot.setImageFile(null);
@@ -244,10 +248,12 @@ public class ShotDispatcher implements MessageSender {
     shotQueueListener.onShotFailed(queuedShot, e);
     busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));
   }
+
   private void notifyShotSendingHasBlockedUser(QueuedShot queuedShot, Exception e) {
     shotQueueListener.onPrivateMessageBlockedUser(queuedShot, e);
     busPublisher.post(new MessageFailed.Event(queuedShot.getBaseMessage()));
   }
+
   private void notifyPrivateMessageNotAllowed(QueuedShot queuedShot, Exception e) {
     shotQueueListener.onPrivateMessageNotAllowed(queuedShot, e);
     busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));
