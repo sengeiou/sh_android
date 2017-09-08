@@ -352,7 +352,7 @@
   <string name="public_vote">Vot Públic</string>
   <string name="public_vote_dialog">Per fer-lo privat, prem el cadenat abans de votar.</string>
   <string name="public_vote_title_dialog">El teu vot serà públic</string>
-  <string name="publish_poll">Nova enquesta %s</string>
+  <string name="publish_poll">" Nova enquesta %s"</string>
   <string name="push_settings_everyone">De tothom</string>
   <string name="push_settings_people_follow">De la gent que segueixo</string>
   <string name="read_write_mode_public_description">Tothom pot escriure</string>

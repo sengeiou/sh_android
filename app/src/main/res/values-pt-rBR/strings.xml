@@ -352,7 +352,7 @@
   <string name="public_vote">Voto Público</string>
   <string name="public_vote_dialog">Para que seja anônimo, clique no cadeado antes de votar.</string>
   <string name="public_vote_title_dialog">Seu voto será público</string>
-  <string name="publish_poll">Nova enquete %s</string>
+  <string name="publish_poll">" Nova enquete %s"</string>
   <string name="push_settings_everyone">De todos</string>
   <string name="push_settings_people_follow">Das pessoas que sigo</string>
   <string name="read_write_mode_public_description">Qualquer um pode escrever</string>

@@ -349,7 +349,7 @@
   <string name="public_vote">Public Vote</string>
   <string name="public_vote_dialog">To make it private, tap on the lock icon before you vote.</string>
   <string name="public_vote_title_dialog">Your vote will be public</string>
-  <string name="publish_poll">New poll %s</string>
+  <string name="publish_poll">" New poll %s"</string>
   <string name="push_settings_everyone">From Everyone</string>
   <string name="push_settings_people_follow">From People I Follow</string>
   <string name="read_write_mode_public_description">Anyone can shoot</string>
