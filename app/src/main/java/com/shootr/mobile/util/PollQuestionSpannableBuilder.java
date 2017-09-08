@@ -9,8 +9,8 @@ import java.util.regex.Pattern;
 
 public class PollQuestionSpannableBuilder {
 
-  public CharSequence formatWithPollQuestionSpans(final String idPoll, final String streamTitle, String question,
-      CharSequence comment, final OnPollQuestionClickListener clickListener) {
+  public CharSequence formatWithPollQuestionSpans(final String idPoll, final String streamTitle,
+      String question, CharSequence comment, final OnPollQuestionClickListener clickListener) {
 
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
 
@@ -19,14 +19,14 @@ public class PollQuestionSpannableBuilder {
         clickListener.onPollQuestionClick(idPoll, streamTitle);
       }
     };
-    spannableBuilder.setSpan(pollQuestionSpan, 0, question.length(),
-        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+    spannableBuilder.setSpan(pollQuestionSpan, comment.length() - question.length(),
+        comment.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
     return spannableBuilder;
   }
 
-  public CharSequence formatPollQuestionSpans(final String idPoll, final String streamTitle, String question,
-      CharSequence comment, final OnPollQuestionClickListener clickListener) {
+  public CharSequence formatPollQuestionSpans(final String idPoll, final String streamTitle,
+      String question, CharSequence comment, final OnPollQuestionClickListener clickListener) {
     SpannableStringBuilder spannableBuilder = new SpannableStringBuilder(comment);
     question = question.trim();
     Pattern pattern = Pattern.compile(Pattern.quote(question));

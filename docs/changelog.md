@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+
+## [1.41.1] - 2017-09-08
+
+### Fixed
+- On activity, strings resources and link part of a poll
+- Null pointers on stream mapper, privateMessageChannel and user mapper on SocialLogin and Muted
+- Prevent to follow yourself
+
 ## [1.41.0] - 2017-09-01
 
 ### Added

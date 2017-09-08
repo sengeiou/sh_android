@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.executor.TestPostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import org.junit.Before;
@@ -23,15 +24,17 @@ public class UnfollowInteractorTest {
   @Mock FollowRepository remoteFollowRepository;
   @Mock UserRepository remoteUserRepository;
   @Mock Interactor.CompletedCallback callback;
+  @Mock SessionRepository sessionRepository;
 
   @Before
   public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     InteractorHandler interactorHandler = new TestInteractorHandler();
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
+    when(sessionRepository.getCurrentUserId()).thenReturn("ID");
     unfollowInteractor =
         new UnfollowInteractor(interactorHandler, postExecutionThread, localFollowRepository,
-            remoteFollowRepository, remoteUserRepository);
+            remoteFollowRepository, remoteUserRepository, sessionRepository);
   }
 
   @Test

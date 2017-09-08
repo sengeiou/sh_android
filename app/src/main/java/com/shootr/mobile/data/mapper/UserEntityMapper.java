@@ -45,7 +45,7 @@ public class UserEntityMapper {
         }
       }
     }
-    user.setSocialLogin(userEntity.getSocialLogin());
+    user.setSocialLogin(userEntity.getSocialLogin() == null ? false : userEntity.getSocialLogin());
     user.setNumMutuals(userEntity.getNumMutuals());
     user.setFirstSessionActivation(userEntity.isFirstSessionActivation());
     user.setFollower(isFollower);

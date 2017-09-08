@@ -24,7 +24,7 @@ Se recomienda hacer ./gradlew lint para comprobar que no falten strings traducid
   - La versión de BDD se debe haber cambiado durante el desarrollo si se modifica el contrato de la BDD, pero antes de publicar la release conviene asegurarse de que se ha incrementado si era necesario.
   - Se actualiza el Changelog.
   - Todo esto en un commit tipo `Bump version for vX.Y.z final release` o parecido.
-4. Finalizar la release con `git flow release finish`. Se realizará un merge con master, se creará un tag, y se realizará un merge del tag con develop. Comprobar que ests en master (se suele hacer automáticamente).
+4. Finalizar la release con `git flow release finish`. Se realizará un merge con master, se creará un tag, y se realizará un merge del tag con develop. Comprobar que estás en master (se suele hacer automáticamente).
 5. En develop, incrementar el número de revisión y quitar el flag de snapshot. Es el típico commit con mensaje `Bump version for next release vX.Y.z-snapshot`
 6. Hacer push de master, develop, **y tags** (git push --tags).
 7. En master se tiene la última versión de release, por lo que se hace ./gradlew clean build para generar una apk.
