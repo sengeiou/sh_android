@@ -29,7 +29,10 @@ public class PrivateMessageChannelEntityMapper {
       privateMessageChannel.setLastMessageComment(
           privateMessageChannelEntity.getLastPrivateMessage().getComment());
     }
-    privateMessageChannel.setMuted(privateMessageChannelEntity.getTargetUser().isMuted());
+    if (privateMessageChannelEntity.getTargetUser() != null) {
+      privateMessageChannel.setMuted(privateMessageChannelEntity.getTargetUser().isMuted() != null
+          ? privateMessageChannelEntity.getTargetUser().isMuted() : false);
+    }
     return privateMessageChannel;
   }
 
