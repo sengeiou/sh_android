@@ -4,9 +4,10 @@ import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import javax.inject.Inject;
 
@@ -19,18 +20,20 @@ public class UnfollowInteractor implements Interactor {
     private final FollowRepository localFollowRepository;
     private final FollowRepository remoteFollowRepository;
     private final UserRepository remoteUserRepository;
+    private final SessionRepository sessionRepository;
 
     private String idUser;
     private CompletedCallback callback;
 
     @Inject public UnfollowInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository,
-      @Remote UserRepository remoteUserRepository) {
+        @Local FollowRepository localFollowRepository, @Remote FollowRepository remoteFollowRepository,
+        @Remote UserRepository remoteUserRepository, SessionRepository sessionRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
         this.localFollowRepository = localFollowRepository;
         this.remoteFollowRepository = remoteFollowRepository;
         this.remoteUserRepository = remoteUserRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     public void unfollow(String idUser, CompletedCallback callback) {
@@ -40,10 +43,12 @@ public class UnfollowInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        localFollowRepository.unfollow(idUser);
-        remoteFollowRepository.unfollow(idUser);
-        updateUserInLocal();
-        notifyCompleted();
+        if (!sessionRepository.getCurrentUserId().equals(idUser)) {
+            localFollowRepository.unfollow(idUser);
+            remoteFollowRepository.unfollow(idUser);
+            updateUserInLocal();
+            notifyCompleted();
+        }
     }
 
     protected void updateUserInLocal() {
