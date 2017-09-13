@@ -29,7 +29,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
     this.postExecutionThread = postExecutionThread;
   }
 
-  public void loadMutedStreamsIdsFromLocal(Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
+  public void loadOnBoardingStreams(Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);

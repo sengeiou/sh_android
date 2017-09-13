@@ -56,7 +56,7 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   private void loadOnBoardingStreams() {
     onBoardingView.showLoading();
-    getOnBoardingStreamInteractor.loadMutedStreamsIdsFromLocal(
+    getOnBoardingStreamInteractor.loadOnBoardingStreams(
         new Interactor.Callback<List<OnBoarding>>() {
           @Override public void onLoaded(List<OnBoarding> onBoardingStreams) {
             onBoardingView.hideLoading();
