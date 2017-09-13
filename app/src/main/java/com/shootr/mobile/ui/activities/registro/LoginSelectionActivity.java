@@ -29,7 +29,6 @@ import com.facebook.login.LoginResult;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
-import com.shootr.mobile.data.prefs.LoginType;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
 import com.shootr.mobile.data.prefs.StringPreference;
@@ -83,7 +82,6 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject GetUserByIdInteractor getUserByIdInteractor;
   @Inject GetStreamInteractor getStreamById;
   @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
-  @Inject @LoginType StringPreference loginTypePreference;
   @Inject LocaleProvider localeProvider;
   @Inject IntentFactory intentFactory;
   @Inject SessionRepository sessionRepository;
@@ -93,7 +91,6 @@ public class LoginSelectionActivity extends BaseActivity {
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
-  private boolean shouldShowLongLogin;
 
   @Override protected int getLayoutResource() {
     return R.layout.activity_login;
@@ -103,15 +100,6 @@ public class LoginSelectionActivity extends BaseActivity {
     ButterKnife.bind(this);
     setupDisclaimerLinks();
     setupStatusBarColor();
-    setupLoginIntro();
-  }
-
-  private void setupLoginIntro() {
-    if (loginTypePreference.get() == null) {
-      loginTypePreference.set(loginTypeUtils.shouldShowLongLogin() ? analyticsActionLongLogin
-          : analyticsActionShortLogin);
-    }
-    shouldShowLongLogin = loginTypePreference.get().equals(analyticsActionLongLogin);
   }
 
   private void setupStatusBarColor() {
@@ -220,18 +208,11 @@ public class LoginSelectionActivity extends BaseActivity {
   }
 
   private void sendOpenAppFirstTimeAnalytics() {
-    analyticsTool.sendOpenAppMixPanelAnalytics(analyticsActionOpenApp,
-        shouldShowLongLogin ? analyticsActionLongLogin
-            : analyticsActionShortLogin, getBaseContext());
+    analyticsTool.sendOpenAppMixPanelAnalytics(analyticsActionOpenApp, getBaseContext());
   }
 
   private void setupIntro() {
-    if (shouldShowLongLogin) {
-      startActivity(new Intent(this, IntroActivity.class));
-      finish();
-    } else {
-      setupFacebook();
-    }
+    setupFacebook();
   }
 
   private void retrieveOnUpgradeInfo() {
@@ -324,9 +305,7 @@ public class LoginSelectionActivity extends BaseActivity {
   }
 
   private void sendSignUpAnalythics() {
-    analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(),
-        analyticsActionSignup,
-        shouldShowLongLogin ? analyticsActionLongLogin : analyticsActionShortLogin,
+    analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(), analyticsActionSignup,
         getBaseContext());
   }
 
@@ -336,9 +315,6 @@ public class LoginSelectionActivity extends BaseActivity {
 
   @OnClick(R.id.login_btn_email) public void registerWithEmail() {
     Intent intent = new Intent(this, EmailRegistrationActivity.class);
-    intent.putExtra(EmailRegistrationActivity.LOGIN_TYPE,
-        shouldShowLongLogin ? analyticsActionLongLogin
-            : analyticsActionShortLogin);
     startActivity(intent);
   }
 

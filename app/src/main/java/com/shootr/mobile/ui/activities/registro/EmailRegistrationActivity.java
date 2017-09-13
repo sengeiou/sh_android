@@ -25,8 +25,6 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
-    public static final String LOGIN_TYPE = "loginType";
-    public String loginType;
     @BindView(R.id.registration_email) EditText emailInput;
     @BindView(R.id.registration_username) EditText usernameInput;
     @BindView(R.id.registration_password) EditText passwordInput;
@@ -52,7 +50,6 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override protected void initializeViews(Bundle savedInstanceState) {
         ButterKnife.bind(this);
-        loginType = getIntent().getStringExtra(LOGIN_TYPE);
     }
 
     @Override protected void initializePresenter() {
@@ -172,7 +169,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void navigateToWelcomePage() {
-        analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(), analyticsActionSignup, loginType, this);
+        analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(), analyticsActionSignup, this);
         finish();
         Intent navigateToWelcomePageIntent = new Intent(this, OnBoardingStreamActivity.class);
         navigateToWelcomePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
