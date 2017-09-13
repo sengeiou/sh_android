@@ -42,7 +42,6 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-import com.shootr.mobile.ui.activities.IntroActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
