@@ -6,7 +6,7 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddSuggestedfavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetOnBoardingStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
-import com.shootr.mobile.domain.model.stream.OnBoardingStream;
+import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.ui.model.OnBoardingStreamModel;
 import com.shootr.mobile.ui.model.mappers.OnBoardingStreamModelMapper;
@@ -57,8 +57,8 @@ public class OnBoardingStreamPresenter implements Presenter {
   private void loadOnBoardingStreams() {
     onBoardingView.showLoading();
     getOnBoardingStreamInteractor.loadMutedStreamsIdsFromLocal(
-        new Interactor.Callback<List<OnBoardingStream>>() {
-          @Override public void onLoaded(List<OnBoardingStream> onBoardingStreams) {
+        new Interactor.Callback<List<OnBoarding>>() {
+          @Override public void onLoaded(List<OnBoarding> onBoardingStreams) {
             onBoardingView.hideLoading();
             if (!onBoardingStreams.isEmpty()) {
               List<OnBoardingStreamModel> onBoardingStreamModels =

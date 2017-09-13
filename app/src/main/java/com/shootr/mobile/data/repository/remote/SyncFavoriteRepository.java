@@ -12,7 +12,7 @@ import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.model.stream.Favorite;
-import com.shootr.mobile.domain.model.stream.OnBoardingStream;
+import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import java.util.List;
@@ -25,7 +25,7 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
   private final InternalFavoriteDatasource localFavoriteDataSource;
   private final FavoriteEntityMapper favoriteEntityMapper;
   private final SyncableFavoriteEntityFactory syncableFavoriteEntityFactory;
-  private final OnBoardingStreamEntityMapper suggestedStreamEntityMapper;
+  private final OnBoardingStreamEntityMapper onBoardingStreamEntityMapper;
   private final SyncTrigger syncTrigger;
   private final SessionRepository sessionRepository;
 
@@ -38,7 +38,7 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
     this.localFavoriteDataSource = localFavoriteDataSource;
     this.favoriteEntityMapper = favoriteEntityMapper;
     this.syncableFavoriteEntityFactory = syncableFavoriteEntityFactory;
-    this.suggestedStreamEntityMapper = suggestedStreamEntityMapper;
+    this.onBoardingStreamEntityMapper = suggestedStreamEntityMapper;
     this.syncTrigger = syncTrigger;
     this.sessionRepository = sessionRepository;
   }
@@ -73,8 +73,8 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
     return favoriteEntityMapper.transformEntities(remoteFavorites);
   }
 
-  @Override public List<OnBoardingStream> getOnBoardingStreams(String locale) {
-    return suggestedStreamEntityMapper.map(remoteFavoriteDataSource.getOnBoardingStreams(locale));
+  @Override public List<OnBoarding> getOnBoardingStreams(String locale) {
+    return onBoardingStreamEntityMapper.map(remoteFavoriteDataSource.getOnBoardingStreams(locale));
   }
 
   @Override public void addSuggestedFavorites(List<String> idStreams) {

@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.model.stream.OnBoardingStream;
+import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
@@ -19,7 +19,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
 
   private ErrorCallback errorCallback;
-  private Callback<List<OnBoardingStream>> callback;
+  private Callback<List<OnBoarding>> callback;
 
   @Inject public GetOnBoardingStreamInteractor(ExternalFavoriteRepository externalFavoriteRepository,
       LocaleProvider localeProvider, InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
@@ -29,7 +29,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
     this.postExecutionThread = postExecutionThread;
   }
 
-  public void loadMutedStreamsIdsFromLocal(Callback<List<OnBoardingStream>> callback, ErrorCallback errorCallback) {
+  public void loadMutedStreamsIdsFromLocal(Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -56,7 +56,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
     return locale;
   }
 
-  private void notifyResult(final List<OnBoardingStream> suggestedStream) {
+  private void notifyResult(final List<OnBoarding> suggestedStream) {
     postExecutionThread.post(new Runnable() {
       @Override public void run() {
         callback.onLoaded(suggestedStream);

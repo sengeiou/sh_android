@@ -5,12 +5,13 @@ import com.shootr.mobile.data.api.entity.mapper.FavoriteApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.FavoriteApiService;
 import com.shootr.mobile.data.entity.FavoriteEntity;
+import com.shootr.mobile.data.entity.OnBoardingEntity;
 import com.shootr.mobile.data.entity.OnBoardingFavoritesEntity;
-import com.shootr.mobile.data.entity.OnBoardingStreamEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.repository.Local;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,10 +58,10 @@ public class ServiceFavoriteDataSource implements ExternalFavoriteDatasource {
         }
     }
 
-    @Override public List<OnBoardingStreamEntity> getOnBoardingStreams(String locale) {
+    @Override public List<OnBoardingEntity> getOnBoardingStreams(String locale) {
         try {
-            List<OnBoardingStreamEntity> onBoardingStreamEntities =
-                favoriteApiService.getFavoritesOnboarding(locale);
+            List<OnBoardingEntity> onBoardingStreamEntities =
+                favoriteApiService.getFavoritesOnboarding(FollowableType.STREAM, locale);
             if (onBoardingStreamEntities != null) {
                 storeOnBoardingStreams(onBoardingStreamEntities);
                 return onBoardingStreamEntities;
@@ -72,9 +73,11 @@ public class ServiceFavoriteDataSource implements ExternalFavoriteDatasource {
         }
     }
 
-    private void storeOnBoardingStreams(List<OnBoardingStreamEntity> onBoardingStreamEntities) {
-        for (OnBoardingStreamEntity onBoardingStreamEntity : onBoardingStreamEntities) {
-            localStreamDataSource.putStream(onBoardingStreamEntity.getStreamEntity());
+    private void storeOnBoardingStreams(List<OnBoardingEntity> onBoardingStreamEntities) {
+        for (OnBoardingEntity onBoardingStreamEntity : onBoardingStreamEntities) {
+            if (onBoardingStreamEntity.getStreamEntity() != null) {
+                localStreamDataSource.putStream(onBoardingStreamEntity.getStreamEntity());
+            }
         }
     }
 
