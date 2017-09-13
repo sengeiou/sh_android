@@ -73,8 +73,8 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
     return favoriteEntityMapper.transformEntities(remoteFavorites);
   }
 
-  @Override public List<OnBoarding> getOnBoardingStreams(String locale) {
-    return onBoardingStreamEntityMapper.map(remoteFavoriteDataSource.getOnBoardingStreams(locale));
+  @Override public List<OnBoarding> getOnBoardingStreams(String type, String locale) {
+    return onBoardingStreamEntityMapper.map(remoteFavoriteDataSource.getOnBoardingStreams(type, locale));
   }
 
   @Override public void addSuggestedFavorites(List<String> idStreams) {

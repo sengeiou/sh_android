@@ -11,7 +11,6 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
-import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.repository.Local;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,10 +57,10 @@ public class ServiceFavoriteDataSource implements ExternalFavoriteDatasource {
         }
     }
 
-    @Override public List<OnBoardingEntity> getOnBoardingStreams(String locale) {
+    @Override public List<OnBoardingEntity> getOnBoardingStreams(String type, String locale) {
         try {
             List<OnBoardingEntity> onBoardingStreamEntities =
-                favoriteApiService.getFavoritesOnboarding(FollowableType.STREAM, locale);
+                favoriteApiService.getFavoritesOnboarding(type, locale);
             if (onBoardingStreamEntities != null) {
                 storeOnBoardingStreams(onBoardingStreamEntities);
                 return onBoardingStreamEntities;

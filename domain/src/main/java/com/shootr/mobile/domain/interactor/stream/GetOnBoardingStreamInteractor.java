@@ -21,6 +21,8 @@ public class GetOnBoardingStreamInteractor implements Interactor {
   private ErrorCallback errorCallback;
   private Callback<List<OnBoarding>> callback;
 
+  private String type;
+
   @Inject public GetOnBoardingStreamInteractor(ExternalFavoriteRepository externalFavoriteRepository,
       LocaleProvider localeProvider, InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
     this.externalFavoriteRepository = externalFavoriteRepository;
@@ -29,9 +31,10 @@ public class GetOnBoardingStreamInteractor implements Interactor {
     this.postExecutionThread = postExecutionThread;
   }
 
-  public void loadOnBoardingStreams(Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
+  public void loadOnBoardingStreams(String type, Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
+    this.type = type;
     interactorHandler.execute(this);
   }
 
@@ -42,7 +45,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
   private void loadOnBoardingStreams() {
     try {
       String locale = getLocale();
-      notifyResult(externalFavoriteRepository.getOnBoardingStreams(locale));
+      notifyResult(externalFavoriteRepository.getOnBoardingStreams(type, locale));
     } catch (ServerCommunicationException error) {
             notifyError(error);
     }

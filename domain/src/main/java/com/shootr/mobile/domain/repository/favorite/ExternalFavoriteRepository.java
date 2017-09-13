@@ -8,7 +8,7 @@ public interface ExternalFavoriteRepository extends FavoriteRepository {
 
   List<Favorite> getFavorites(String userId);
 
-  List<OnBoarding> getOnBoardingStreams(String locale);
+  List<OnBoarding> getOnBoardingStreams(String type, String locale);
 
   void addSuggestedFavorites(List<String> idStreams);
 }
