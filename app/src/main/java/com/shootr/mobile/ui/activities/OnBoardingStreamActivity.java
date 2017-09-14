@@ -83,7 +83,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @Override protected void initializePresenter() {
-    presenter.initialize(this);
+    presenter.initialize(this, OnBoardingStreamPresenter.STREAM_ONBOARDING);
   }
 
   @Override public void showLoading() {
@@ -116,11 +116,13 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  @Override public void goToStreamList() {
+  @Override public void goToUserOnboardingList() {
     finish();
-    Intent i = new Intent(this, MainTabbedActivity.class);
+    //TODO ir a la pantalla del onboarding de usuarios
+    //TODO esto comentado ha de ir en el metodo goToStream de la pantalla de users
+    /*Intent i = new Intent(this, MainTabbedActivity.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    startActivity(i);
+    startActivity(i);*/
   }
 
   @Override public void hideGetStarted() {
@@ -132,7 +134,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @OnClick(R.id.get_started_button) public void onGetStartedClick() {
-    presenter.getStartedClicked();
+    presenter.continueClicked();
   }
 
   private void animateView(final View viewToShow) {

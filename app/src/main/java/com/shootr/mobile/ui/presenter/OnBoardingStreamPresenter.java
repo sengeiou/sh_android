@@ -22,6 +22,9 @@ import javax.inject.Inject;
 
 public class OnBoardingStreamPresenter implements Presenter {
 
+  public static final String STREAM_ONBOARDING = "streamOnBoarding";
+  public static final String USER_ONBOARDING = "streamOnBoarding";
+
   private final StreamsListInteractor streamsListInteractor;
   private final GetOnBoardingStreamInteractor getOnBoardingStreamInteractor;
   private final AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor;
@@ -49,10 +52,14 @@ public class OnBoardingStreamPresenter implements Presenter {
     this.onBoardingView = welcomePageView;
   }
 
-  public void initialize(OnBoardingView welcomePageView) {
+  public void initialize(OnBoardingView welcomePageView, String onBoardingType) {
     setView(welcomePageView);
-    loadOnBoardingStreams();
-    loadDefaultStreams();
+    if (onBoardingType.equals(STREAM_ONBOARDING)) {
+      loadOnBoardingStreams();
+      loadDefaultStreams();
+    } else {
+      //TODO cargar users
+    }
   }
 
   private void loadOnBoardingStreams() {
@@ -68,7 +75,7 @@ public class OnBoardingStreamPresenter implements Presenter {
               onBoardingView.renderOnBoardingList(
                   onBoardingStreamModelMapper.transform(onBoardingStreams));
             } else {
-              onBoardingView.goToStreamList();
+              onBoardingView.goToUserOnboardingList();
             }
           }
         }, new Interactor.ErrorCallback() {
@@ -91,7 +98,7 @@ public class OnBoardingStreamPresenter implements Presenter {
       @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
         streamsLoaded = true;
         if (getStartedClicked) {
-          onBoardingView.goToStreamList();
+          onBoardingView.goToUserOnboardingList();
         }
       }
     }, new Interactor.ErrorCallback() {
@@ -101,7 +108,7 @@ public class OnBoardingStreamPresenter implements Presenter {
     });
   }
 
-  public void getStartedClicked() {
+  public void continueClicked() {
     getStartedClicked = true;
     sendFavorites();
   }
@@ -148,7 +155,7 @@ public class OnBoardingStreamPresenter implements Presenter {
   private void checkStreamsLoaded() {
     onBoardingView.hideGetStarted();
     if (streamsLoaded) {
-      onBoardingView.goToStreamList();
+      onBoardingView.goToUserOnboardingList();
     } else {
       onBoardingView.showLoading();
     }

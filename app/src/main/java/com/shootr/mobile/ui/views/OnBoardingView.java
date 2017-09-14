@@ -13,7 +13,7 @@ public interface OnBoardingView {
 
   void sendStreamAnalytics(String idStream, String streamTitle, boolean isStrategic);
 
-  void goToStreamList();
+  void goToUserOnboardingList();
 
   void hideGetStarted();
 
