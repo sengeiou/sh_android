@@ -240,6 +240,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   protected void selectStream() {
+    if (isFirstLoad) {
+      streamTimelineView.showCheckingForShots();
+    }
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
         StreamModel model = streamModelMapper.transform(streamSearchResult.getStream());
