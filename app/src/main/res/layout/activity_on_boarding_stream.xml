@@ -5,8 +5,7 @@
     android:id="@+id/activity_on_boarding_stream"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+
     android:background="#fafafa"
     tools:context="com.shootr.mobile.ui.activities.OnBoardingStreamActivity"
     android:visibility="gone"
@@ -19,19 +18,6 @@
       android:layout_centerHorizontal="true"
       android:visibility="gone"
       tools:visibility="visible" />
-  <TextView
-      android:id="@+id/title"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textColor="@color/material_black"
-      android:text="@string/on_boarding_add_favorites"
-      android:textSize="20sp"
-      android:fontFamily="sans-serif-medium"
-      android:paddingRight="16dp"
-      android:paddingLeft="16dp"
-      android:layout_marginBottom="8dp"
-      android:layout_marginTop="32dp"
-      />
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/streams_list"
@@ -39,6 +25,7 @@
       android:layout_height="match_parent"
       android:layout_below="@+id/title"
       android:layout_above="@+id/get_started_button"
+      android:layoutAnimation="@anim/layout_animation_from_bottom"
       />
 
   <Button

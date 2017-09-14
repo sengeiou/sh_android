@@ -4,12 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -29,6 +30,7 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -77,7 +79,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
           presenter.removeFavorite(onBoardingStream.getStreamModel().getIdStream());
           adapter.updateFavorite(onBoardingStream);
         }
-      }, imageLoader, initialsLoader);
+      }, imageLoader, initialsLoader, OnBoardingStreamsAdapter.STREAM_ONBOARDING);
     }
     return adapter;
   }
@@ -98,7 +100,12 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
 
   @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingStreamModels) {
     container.setVisibility(View.VISIBLE);
-    adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
+    ArrayList<OnBoardingModel> auxList = new ArrayList<>();
+    for (int i = 0; i < 30; i++) {
+      auxList.addAll(onBoardingStreamModels);
+    }
+    auxList.addAll(onBoardingStreamModels);
+    adapter.setOnBoardingStreamModelList(auxList);
     adapter.notifyDataSetChanged();
   }
 

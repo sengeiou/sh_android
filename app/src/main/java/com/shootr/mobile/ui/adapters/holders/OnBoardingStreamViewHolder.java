@@ -28,18 +28,15 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_picture) ImageView picture;
   @BindView(R.id.stream_picture_without_text) ImageView pictureWithoutText;
   @BindView(R.id.stream_title) TextView title;
-  @BindView(R.id.stream_muted) ImageView mute;
   @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
-  @BindView(R.id.stream_card) CardView favoriteCardview;
   @BindView(R.id.stream_verified) ImageView streamVerified;
   @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
   @Nullable @BindView(R.id.stream_actions_container) View actionsContainer;
+  @BindView(R.id.stream_rank) TextView rankNumber;
   @BindView(R.id.user_follow_button) FollowButton followButton;
 
-  @BindString(R.string.watching_stream_connected) String connected;
-  @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
 
   public OnBoardingStreamViewHolder(View itemView,
       OnBoardingFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
@@ -57,6 +54,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     renderSubtitle(onBoardingStreamModel.getStreamModel());
     handleFavorite(onBoardingStreamModel);
     setupStreamPicture(onBoardingStreamModel.getStreamModel());
+    rankNumber.setVisibility(View.GONE);
   }
 
   private void setVerifiedVisibility(StreamModel streamModel) {
@@ -124,7 +122,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
 
   private void setupFavoriteClickListener(final OnBoardingModel onBoardingStreamModel) {
     if (onFavoriteClickListener != null) {
-      favoriteCardview.setOnClickListener(new View.OnClickListener() {
+      itemView.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           handleFavoriteStatus(onBoardingStreamModel);
         }

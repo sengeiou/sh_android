@@ -263,10 +263,10 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   @Override public void goToTimeline(StreamModel streamModel) {
+    //TODO poner esto como antes, sólo es de pruebas
     if (streamModel != null) {
-      startActivity(
-          StreamTimelineActivity.newIntent(this, streamModel.getIdStream(), streamModel.getTitle(),
-              streamModel.getAuthorId()));
+      startActivity(new Intent(
+          this, OnBoardingStreamActivity.class));
     }
   }
 
