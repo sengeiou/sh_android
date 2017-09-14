@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.stream.OnBoarding;
-import com.shootr.mobile.ui.model.OnBoardingStreamModel;
+import com.shootr.mobile.ui.model.OnBoardingModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -14,12 +14,12 @@ public class OnBoardingStreamModelMapper {
     this.streamModelMapper = streamModelMapper;
   }
 
-  public OnBoardingStreamModel transform(OnBoarding onBoardingStream) {
+  public OnBoardingModel transform(OnBoarding onBoardingStream) {
     if (onBoardingStream == null) {
       return null;
     }
 
-    OnBoardingStreamModel onBoardingStreamModel = new OnBoardingStreamModel();
+    OnBoardingModel onBoardingStreamModel = new OnBoardingModel();
 
     onBoardingStreamModel.setFavorite(onBoardingStream.isFavorite());
     onBoardingStreamModel.setStreamModel(streamModelMapper.transform(onBoardingStream.getStream()));
@@ -27,8 +27,8 @@ public class OnBoardingStreamModelMapper {
     return onBoardingStreamModel;
   }
 
-  public List<OnBoardingStreamModel> transform(List<OnBoarding> onBoardingStreams) {
-    ArrayList<OnBoardingStreamModel> onBoardingStreamModels = new ArrayList<>();
+  public List<OnBoardingModel> transform(List<OnBoarding> onBoardingStreams) {
+    ArrayList<OnBoardingModel> onBoardingStreamModels = new ArrayList<>();
     for (OnBoarding onBoardingStream : onBoardingStreams) {
       onBoardingStreamModels.add(transform(onBoardingStream));
     }

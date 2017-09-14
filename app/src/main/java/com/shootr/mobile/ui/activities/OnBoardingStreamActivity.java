@@ -22,7 +22,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.adapters.OnBoardingStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
-import com.shootr.mobile.ui.model.OnBoardingStreamModel;
+import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.ui.presenter.OnBoardingStreamPresenter;
 import com.shootr.mobile.ui.views.OnBoardingView;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -68,14 +68,12 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   private OnBoardingStreamsAdapter getOnBoardingAdapter() {
     if (adapter == null) {
       adapter = new OnBoardingStreamsAdapter(new OnBoardingFavoriteClickListener() {
-        @Override public void onFavoriteClick(OnBoardingStreamModel onBoardingStream) {
-          presenter.putFavorite(onBoardingStream.getStreamModel().getIdStream(),
-              onBoardingStream.getStreamModel().getTitle(),
-              onBoardingStream.getStreamModel().isStrategic());
+        @Override public void onFavoriteClick(OnBoardingModel onBoardingStream) {
+          presenter.putFavorite(onBoardingStream);
           adapter.updateFavorite(onBoardingStream);
         }
 
-        @Override public void onRemoveFavoriteClick(OnBoardingStreamModel onBoardingStream) {
+        @Override public void onRemoveFavoriteClick(OnBoardingModel onBoardingStream) {
           presenter.removeFavorite(onBoardingStream.getStreamModel().getIdStream());
           adapter.updateFavorite(onBoardingStream);
         }
@@ -98,13 +96,13 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     progressBar.setVisibility(GONE);
   }
 
-  @Override public void renderOnBoardingList(List<OnBoardingStreamModel> onBoardingStreamModels) {
+  @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingStreamModels) {
     container.setVisibility(View.VISIBLE);
     adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
     adapter.notifyDataSetChanged();
   }
 
-  @Override public void sendAnalytics(String idStream, String streamTitle, boolean isStrategic) {
+  @Override public void sendStreamAnalytics(String idStream, String streamTitle, boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(this);
     builder.setActionId(analyticsActionFavoriteStream);

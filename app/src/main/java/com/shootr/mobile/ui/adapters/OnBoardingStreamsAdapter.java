@@ -12,7 +12,7 @@ import android.view.animation.DecelerateInterpolator;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.holders.OnBoardingStreamViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
-import com.shootr.mobile.ui.model.OnBoardingStreamModel;
+import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import java.util.List;
@@ -23,7 +23,7 @@ public class OnBoardingStreamsAdapter extends RecyclerView.Adapter<RecyclerView.
   private static final int TYPE_USER = 1;
   private static final int UNKNOWN = -1;
 
-  private List<OnBoardingStreamModel> onBoardingStreamModelList;
+  private List<OnBoardingModel> onBoardingStreamModelList;
   private final OnBoardingFavoriteClickListener onFavoriteClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
@@ -38,7 +38,7 @@ public class OnBoardingStreamsAdapter extends RecyclerView.Adapter<RecyclerView.
     this.onFavoriteClickListener = onFavoriteClickListener;
   }
 
-  public void setOnBoardingStreamModelList(List<OnBoardingStreamModel> onBoardingStreamModelList) {
+  public void setOnBoardingStreamModelList(List<OnBoardingModel> onBoardingStreamModelList) {
     this.onBoardingStreamModelList = onBoardingStreamModelList;
   }
 
@@ -105,7 +105,7 @@ public class OnBoardingStreamsAdapter extends RecyclerView.Adapter<RecyclerView.
     return screenHeight;
   }
 
-  public void updateFavorite(OnBoardingStreamModel onBoardingStreamModel) {
+  public void updateFavorite(OnBoardingModel onBoardingStreamModel) {
     int position = onBoardingStreamModelList.indexOf(onBoardingStreamModel);
     onBoardingStreamModelList.get(position).setFavorite(!onBoardingStreamModel.isFavorite());
   }

@@ -13,7 +13,7 @@ import com.amulyakhare.textdrawable.TextDrawable;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
-import com.shootr.mobile.ui.model.OnBoardingStreamModel;
+import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
@@ -51,7 +51,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     ButterKnife.bind(this, itemView);
   }
 
-  public void render(OnBoardingStreamModel onBoardingStreamModel) {
+  public void render(OnBoardingModel onBoardingStreamModel) {
     this.setupFavoriteClickListener(onBoardingStreamModel);
     title.setText(onBoardingStreamModel.getStreamModel().getTitle());
     renderSubtitle(onBoardingStreamModel.getStreamModel());
@@ -67,7 +67,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private void handleFavorite(OnBoardingStreamModel onBoardingStreamModel) {
+  private void handleFavorite(OnBoardingModel onBoardingStreamModel) {
     if (onBoardingStreamModel.isFavorite()) {
       showIsFavorite();
     } else {
@@ -122,7 +122,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private void setupFavoriteClickListener(final OnBoardingStreamModel onBoardingStreamModel) {
+  private void setupFavoriteClickListener(final OnBoardingModel onBoardingStreamModel) {
     if (onFavoriteClickListener != null) {
       favoriteCardview.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
@@ -137,7 +137,7 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  private void handleFavoriteStatus(OnBoardingStreamModel onBoardingStreamModel) {
+  private void handleFavoriteStatus(OnBoardingModel onBoardingStreamModel) {
     if (onBoardingStreamModel.isFavorite()) {
       onFavoriteClickListener.onRemoveFavoriteClick(onBoardingStreamModel);
       followButton.setFollowing(false);

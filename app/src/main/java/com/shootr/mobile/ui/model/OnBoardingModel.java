@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.model;
 
-public class OnBoardingStreamModel {
+public class OnBoardingModel {
 
   private StreamModel streamModel;
   private UserModel userModel;
