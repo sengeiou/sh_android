@@ -129,7 +129,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.newShotsNumber = 0;
     this.lastRefreshDate = 0L;
     this.shotModels = new TreeSet<>();
-    setIdAuthor(idAuthor);
+    if (idAuthor != null) {
+      setIdAuthor(idAuthor);
+    }
     this.setView(streamTimelineView);
     this.selectStream();
     setupPoller();
@@ -146,18 +148,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         this.streamTimelineView.showHoldingShots();
       }
     }
-  }
-
-  public void initialize(final StreamTimelineView streamTimelineView, String idStream,
-      Integer streamMode) {
-    this.streamId = idStream;
-    this.setStreamMode(streamMode);
-    this.newShotsNumber = 0;
-    this.lastRefreshDate = 0L;
-    this.shotModels = new TreeSet<>();
-    this.setView(streamTimelineView);
-    this.selectStream();
-    setupPoller();
   }
 
   public boolean isInitialized() {

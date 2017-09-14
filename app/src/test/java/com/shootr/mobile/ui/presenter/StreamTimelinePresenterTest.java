@@ -421,7 +421,7 @@ public class StreamTimelinePresenterTest {
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupIsNotFirstLoadAndIsFirstPosition();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
     presenter.refresh();
 
     verify(streamTimelineView).addShots(anyListOf(ShotModel.class));
@@ -435,7 +435,7 @@ public class StreamTimelinePresenterTest {
     setupIsNotFirstLoadAndIsFirstPosition();
     presenter.setStreamMode(VIEW_ONLY);
 
-    presenter.initialize(streamTimelineView, ID_STREAM, VIEW_ONLY);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, VIEW_ONLY);
     presenter.refresh();
 
     verify(streamTimelineView).addShots(anyListOf(ShotModel.class));
@@ -564,7 +564,7 @@ public class StreamTimelinePresenterTest {
     setupOldListSize();
     setupNewShotsNumbers();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
     presenter.refresh();
 
     verify(streamTimelineView, never()).showNewShotsIndicator(anyInt());
@@ -734,14 +734,14 @@ public class StreamTimelinePresenterTest {
     setupDeleteLocalShotsInteractorCallback();
     setupReloadStreamTimelineInteractorCallback();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
     presenter.onAllStreamShotsClick();
 
     verify(streamTimelineView).showHoldingShots();
   }
 
   @Test public void shouldLoadStreamIfInitializedWithoutAuthorIdUser() throws Exception {
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
 
     verify(selectStreamInteractor).selectStream(anyString(),
         any(SelectStreamInteractor.Callback.class),
@@ -778,7 +778,7 @@ public class StreamTimelinePresenterTest {
   }
 
   @Test public void shouldCallPollerWhenInitializeWithIdStream() throws Exception {
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
 
     verify(poller).init(anyLong(), any(Runnable.class));
   }
@@ -851,7 +851,7 @@ public class StreamTimelinePresenterTest {
   @Test public void shouldLoadStreamTimelineWhenResumedWithPausedValue() throws Exception {
     setupSelectStreamInteractorCallbacksStream();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
 
     presenter.pause();
     presenter.resume();
@@ -865,7 +865,7 @@ public class StreamTimelinePresenterTest {
       throws Exception {
     setupSelectStreamInteractorCallbacksStream();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, VIEW_ONLY);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, VIEW_ONLY);
     presenter.setStreamMode(VIEW_ONLY);
 
     presenter.pause();
@@ -879,7 +879,7 @@ public class StreamTimelinePresenterTest {
   @Test public void shouldLoadStreamTimelineWhenInitializeWithNoPausedValue() throws Exception {
     setupSelectStreamInteractorCallbacksStream();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
 
     verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(), anyBoolean(),
         booleanArgumentCaptor.capture(), anyInt(), anyCallback());
@@ -890,7 +890,7 @@ public class StreamTimelinePresenterTest {
       throws Exception {
     setupSelectStreamInteractorCallbacksStream();
 
-    presenter.initialize(streamTimelineView, ID_STREAM, VIEW_ONLY);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, VIEW_ONLY);
     presenter.setStreamMode(VIEW_ONLY);
 
     verify(timelineInteractorWrapper, atLeastOnce()).loadTimeline(anyString(), anyBoolean(),
@@ -903,7 +903,7 @@ public class StreamTimelinePresenterTest {
 
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
-    presenter.initialize(streamTimelineView, ID_STREAM, PUBLIC);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, PUBLIC);
 
     presenter.setStreamMode(PUBLIC);
     presenter.pause();
@@ -920,7 +920,7 @@ public class StreamTimelinePresenterTest {
 
     setupLoadTimelineInteractorCallbacks(timelineWithShots());
     setupRefreshTimelineInteractorCallbacks(timelineWithShots());
-    presenter.initialize(streamTimelineView, ID_STREAM, VIEW_ONLY);
+    presenter.initialize(streamTimelineView, ID_STREAM, null, VIEW_ONLY);
 
     presenter.setStreamMode(VIEW_ONLY);
     presenter.pause();
