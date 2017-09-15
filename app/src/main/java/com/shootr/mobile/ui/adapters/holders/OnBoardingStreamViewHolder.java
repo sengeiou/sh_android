@@ -1,12 +1,10 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.support.annotation.Nullable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.amulyakhare.textdrawable.TextDrawable;
