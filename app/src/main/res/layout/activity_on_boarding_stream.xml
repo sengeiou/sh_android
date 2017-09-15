@@ -5,10 +5,9 @@
     android:id="@+id/activity_on_boarding_stream"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    android:background="#fafafa"
     tools:context="com.shootr.mobile.ui.activities.OnBoardingStreamActivity"
     android:visibility="gone"
+    tools:visibility="visible"
     >
 
   <ProgressBar android:id="@+id/get_started_progress"
@@ -23,10 +22,34 @@
       android:id="@+id/streams_list"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:layout_below="@+id/title"
-      android:layout_above="@+id/get_started_button"
-      android:layoutAnimation="@anim/layout_animation_from_bottom"
+      android:layout_above="@+id/continue_container"
       />
+
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="1dp"
+      android:background="#dddddd"
+      android:layout_below="@+id/streams_list"/>
+
+  <LinearLayout
+      android:id="@+id/continue_container"
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:layout_alignParentBottom="true"
+      android:gravity="center"
+      android:foregroundTint="@color/white"
+      android:background="?selectableItemBackground"
+      >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="continuar"
+        android:textAllCaps="true"
+        android:padding="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/primary"
+        />
+  </LinearLayout>
 
   <Button
       android:id="@+id/get_started_button"
@@ -37,6 +60,6 @@
       android:layout_marginTop="8dp"
       android:layout_marginLeft="@dimen/activity_horizontal_margin"
       android:layout_marginRight="@dimen/activity_horizontal_margin"
-      android:visibility="visible"
+      android:visibility="gone"
       />
 </RelativeLayout>

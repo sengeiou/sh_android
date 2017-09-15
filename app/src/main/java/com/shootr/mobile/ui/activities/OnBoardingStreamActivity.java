@@ -12,6 +12,8 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import butterknife.BindString;
@@ -64,6 +66,8 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     animateView(getStartedButton);
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     streamsList.setLayoutManager(layoutManager);
+    LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_from_bottom);
+    streamsList.setLayoutAnimation(animation);
     streamsList.setAdapter(getOnBoardingAdapter());
   }
 
@@ -100,12 +104,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
 
   @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingStreamModels) {
     container.setVisibility(View.VISIBLE);
-    ArrayList<OnBoardingModel> auxList = new ArrayList<>();
-    for (int i = 0; i < 30; i++) {
-      auxList.addAll(onBoardingStreamModels);
-    }
-    auxList.addAll(onBoardingStreamModels);
-    adapter.setOnBoardingStreamModelList(auxList);
+    adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
     adapter.notifyDataSetChanged();
   }
 
@@ -140,7 +139,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     feedbackMessage.show(getView(), errorMessage);
   }
 
-  @OnClick(R.id.get_started_button) public void onGetStartedClick() {
+  @OnClick(R.id.continue_container) public void onGetStartedClick() {
     presenter.continueClicked();
   }
 
