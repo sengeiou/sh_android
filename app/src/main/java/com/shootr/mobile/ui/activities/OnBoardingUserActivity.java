@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.adapters.OnBoardingStreamsAdapter;
+import com.shootr.mobile.ui.adapters.OnBoardingAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.OnBoardingModel;
@@ -35,15 +36,15 @@ import javax.inject.Inject;
 
 import static android.view.View.GONE;
 
-public class OnBoardingStreamActivity extends BaseActivity implements OnBoardingView {
+public class OnBoardingUserActivity extends BaseActivity implements OnBoardingView {
 
-  @BindView(R.id.streams_list) RecyclerView streamsList;
+  @BindView(R.id.users_list) RecyclerView usersList;
   @BindView(R.id.get_started_button) Button getStartedButton;
   @BindView(R.id.get_started_progress) ProgressBar progressBar;
-  @BindView(R.id.activity_on_boarding_stream) RelativeLayout container;
+  @BindView(R.id.activity_on_boarding_user) RelativeLayout container;
   @BindString(R.string.analytics_source_on_boarding) String onBoardingSource;
-  @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
-  @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
+  @BindString(R.string.analytics_label_follow) String analyticsLabelFollow;
 
   @Inject ImageLoader imageLoader;
   @Inject InitialsLoader initialsLoader;
@@ -52,80 +53,80 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
 
-  private OnBoardingStreamsAdapter adapter;
+  private OnBoardingAdapter adapter;
 
   @Override protected int getLayoutResource() {
-    return R.layout.activity_on_boarding_stream;
+    return R.layout.activity_on_boarding_user;
   }
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
     animateView(getStartedButton);
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-    streamsList.setLayoutManager(layoutManager);
+    usersList.setLayoutManager(layoutManager);
     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_from_bottom);
-    streamsList.setLayoutAnimation(animation);
-    streamsList.setAdapter(getOnBoardingAdapter());
+    usersList.setLayoutAnimation(animation);
+    usersList.setAdapter(getOnBoardingAdapter());
   }
 
-  private OnBoardingStreamsAdapter getOnBoardingAdapter() {
+  private OnBoardingAdapter getOnBoardingAdapter() {
     if (adapter == null) {
-      adapter = new OnBoardingStreamsAdapter(new OnBoardingFavoriteClickListener() {
-        @Override public void onFavoriteClick(OnBoardingModel onBoardingStream) {
-          presenter.putFavorite(onBoardingStream);
-          adapter.updateFavorite(onBoardingStream);
+      adapter = new OnBoardingAdapter(new OnBoardingFavoriteClickListener() {
+        @Override public void onFavoriteClick(OnBoardingModel onBoardingUser) {
+          presenter.putUserFavorite(onBoardingUser);
+          adapter.updateFavorite(onBoardingUser);
         }
 
-        @Override public void onRemoveFavoriteClick(OnBoardingModel onBoardingStream) {
-          presenter.removeFavorite(onBoardingStream.getStreamModel().getIdStream());
-          adapter.updateFavorite(onBoardingStream);
+        @Override public void onRemoveFavoriteClick(OnBoardingModel onBoardingUser) {
+          presenter.removeUserFavorite(onBoardingUser.getUserModel().getIdUser());
+          adapter.updateFavorite(onBoardingUser);
         }
-      }, imageLoader, initialsLoader, OnBoardingStreamsAdapter.STREAM_ONBOARDING);
+      }, imageLoader, initialsLoader, OnBoardingAdapter.USER_ONBOARDING);
     }
     return adapter;
   }
 
   @Override protected void initializePresenter() {
-    presenter.initialize(this, OnBoardingStreamPresenter.STREAM_ONBOARDING);
+    presenter.initialize(this, OnBoardingStreamPresenter.USER_ONBOARDING);
   }
 
   @Override public void showLoading() {
-    streamsList.setVisibility(GONE);
+    usersList.setVisibility(GONE);
     progressBar.setVisibility(View.VISIBLE);
   }
 
   @Override public void hideLoading() {
-    streamsList.setVisibility(View.VISIBLE);
+    usersList.setVisibility(View.VISIBLE);
     progressBar.setVisibility(GONE);
   }
 
-  @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingStreamModels) {
+  @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingModels) {
     container.setVisibility(View.VISIBLE);
-    adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
+    adapter.setOnBoardingModelList(onBoardingModels);
     adapter.notifyDataSetChanged();
   }
 
   @Override public void sendStreamAnalytics(String idStream, String streamTitle, boolean isStrategic) {
+    /* no-op */
+  }
+
+  @Override public void sendUserAnalytics(boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(this);
-    builder.setActionId(analyticsActionFavoriteStream);
-    builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setActionId(analyticsActionFollow);
+    builder.setLabelId(analyticsLabelFollow);
     builder.setSource(onBoardingSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setStreamName(streamTitle);
     builder.setIsStrategic(isStrategic);
-    builder.setIdStream(idStream);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  @Override public void goToUserOnboardingList() {
+  @Override public void goNextScreen() {
     finish();
-    //TODO ir a la pantalla del onboarding de usuarios
-    //TODO esto comentado ha de ir en el metodo goToStream de la pantalla de users
-    /*Intent i = new Intent(this, MainTabbedActivity.class);
+    Intent i = new Intent(this, MainTabbedActivity.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    startActivity(i);*/
+    startActivity(i);
   }
 
   @Override public void hideGetStarted() {

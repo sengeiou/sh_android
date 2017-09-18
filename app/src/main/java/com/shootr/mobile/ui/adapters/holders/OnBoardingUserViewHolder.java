@@ -1,42 +1,33 @@
 package com.shootr.mobile.ui.adapters.holders;
 
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.amulyakhare.textdrawable.TextDrawable;
-import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.model.OnBoardingModel;
-import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 
-public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
+public class OnBoardingUserViewHolder extends RecyclerView.ViewHolder {
 
   private final OnBoardingFavoriteClickListener onFavoriteClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
 
-  @BindView(R.id.stream_picture) ImageView picture;
-  @BindView(R.id.stream_picture_without_text) ImageView pictureWithoutText;
-  @BindView(R.id.stream_title) TextView title;
-  @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
-  @BindView(R.id.stream_verified) ImageView streamVerified;
-  @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
-  @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
-  @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
-  @Nullable @BindView(R.id.stream_actions_container) View actionsContainer;
-  @BindView(R.id.stream_rank) TextView rankNumber;
+  @BindView(R.id.user_avatar) AvatarView avatar;
+  @BindView(R.id.user_name) TextView title;
+  @BindView(R.id.user_username) TextView subtitle;
   @BindView(R.id.user_follow_button) FollowButton followButton;
 
 
-  public OnBoardingStreamViewHolder(View itemView,
+  public OnBoardingUserViewHolder(View itemView,
       OnBoardingFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
       InitialsLoader initialsLoader) {
     super(itemView);
@@ -46,88 +37,67 @@ public class OnBoardingStreamViewHolder extends RecyclerView.ViewHolder {
     ButterKnife.bind(this, itemView);
   }
 
-  public void render(OnBoardingModel onBoardingStreamModel) {
-    this.setupFavoriteClickListener(onBoardingStreamModel);
-    title.setText(onBoardingStreamModel.getStreamModel().getTitle());
-    renderSubtitle(onBoardingStreamModel.getStreamModel());
-    handleFavorite(onBoardingStreamModel);
-    setupStreamPicture(onBoardingStreamModel.getStreamModel());
-    rankNumber.setVisibility(View.GONE);
-  }
-
-  private void setVerifiedVisibility(StreamModel streamModel) {
-    if (streamModel.isVerifiedUser()) {
-      streamVerified.setVisibility(View.VISIBLE);
-    } else {
-      streamVerified.setVisibility(View.GONE);
-    }
+  public void render(OnBoardingModel onBoardingModel) {
+    this.setupFavoriteClickListener(onBoardingModel);
+    title.setText(onBoardingModel.getStreamModel().getTitle());
+    handleFavorite(onBoardingModel);
+    setTitle(onBoardingModel.getUserModel());
+    setupUsername(getUsernameForSubtitle(onBoardingModel.getUserModel()));
+    setupPhoto(onBoardingModel.getUserModel());
   }
 
   private void handleFavorite(OnBoardingModel onBoardingStreamModel) {
     if (onBoardingStreamModel.isFavorite()) {
-      showIsFavorite();
+      showIsFollowing();
     } else {
-      showIsNotFavorite();
+      showIsNotFollowing();
     }
   }
 
-  private void showIsFavorite() {
+  private void showIsFollowing() {
     followButton.setVisibility(View.VISIBLE);
     followButton.setFollowing(true);
   }
 
-  private void showIsNotFavorite() {
+  private void showIsNotFollowing() {
     followButton.setVisibility(View.VISIBLE);
     followButton.setFollowing(false);
   }
 
-  private void setupStreamPicture(StreamModel streamModel) {
-    String pictureUrl = streamModel.getPicture();
-    if (pictureUrl != null) {
-      picture.setVisibility(View.VISIBLE);
-      pictureWithoutText.setVisibility(View.GONE);
-      imageLoader.loadStreamPicture(pictureUrl, picture);
+  private void setupPhoto(UserModel userModel) {
+    String photo = userModel.getPhoto();
+    imageLoader.loadProfilePhoto(photo, avatar, userModel.getUsername());
+  }
+
+  private String getUsernameForSubtitle(UserModel item) {
+    return String.format("@%s", item.getUsername());
+  }
+
+  private void setupUsername(String username) {
+    subtitle.setText(username);
+    subtitle.setVisibility(View.VISIBLE);
+  }
+
+  private void setTitle(UserModel userModel) {
+    title.setText(userModel.getName());
+    if (userModel.isVerifiedUser()) {
+      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
+      title.setCompoundDrawablePadding(6);
     } else {
-      picture.setVisibility(View.GONE);
-      pictureWithoutText.setVisibility(View.VISIBLE);
-      setupInitials(streamModel);
+      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
   }
 
-  private void setupInitials(StreamModel streamModel) {
-    String initials = initialsLoader.getLetters(streamModel.getTitle());
-    int backgroundColor = initialsLoader.getColorForLetters(initials);
-    TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
-    pictureWithoutText.setImageDrawable(textDrawable);
-  }
-
-  private void renderSubtitle(StreamModel stream) {
-    setupAuthorAndDescriptionSubtitle(stream);
-    setVerifiedVisibility(stream);
-  }
-
-  private void setupAuthorAndDescriptionSubtitle(StreamModel stream) {
-    if (subtitle != null && subtitleDescription != null) {
-      subtitle.setText(stream.getAuthorUsername());
-      if (stream.getDescription() != null) {
-        subtitleDescription.setVisibility(View.VISIBLE);
-        subtitleDescription.setText(stream.getDescription());
-      } else {
-        subtitleDescription.setVisibility(View.GONE);
-      }
-    }
-  }
-
-  private void setupFavoriteClickListener(final OnBoardingModel onBoardingStreamModel) {
+  private void setupFavoriteClickListener(final OnBoardingModel onBoardingUserModel) {
     if (onFavoriteClickListener != null) {
       itemView.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          handleFavoriteStatus(onBoardingStreamModel);
+          handleFavoriteStatus(onBoardingUserModel);
         }
       });
       followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          handleFavoriteStatus(onBoardingStreamModel);
+          handleFavoriteStatus(onBoardingUserModel);
         }
       });
     }
