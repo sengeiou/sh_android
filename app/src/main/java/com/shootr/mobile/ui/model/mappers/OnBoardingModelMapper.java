@@ -6,32 +6,36 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class OnBoardingStreamModelMapper {
+public class OnBoardingModelMapper {
 
   private final StreamModelMapper streamModelMapper;
+  private final UserModelMapper userModelMapper;
 
-  @Inject public OnBoardingStreamModelMapper(StreamModelMapper streamModelMapper) {
+  @Inject public OnBoardingModelMapper(StreamModelMapper streamModelMapper,
+      UserModelMapper userModelMapper) {
     this.streamModelMapper = streamModelMapper;
+    this.userModelMapper = userModelMapper;
   }
 
-  public OnBoardingModel transform(OnBoarding onBoardingStream) {
-    if (onBoardingStream == null) {
+  public OnBoardingModel transform(OnBoarding onBoarding) {
+    if (onBoarding == null) {
       return null;
     }
 
-    OnBoardingModel onBoardingStreamModel = new OnBoardingModel();
+    OnBoardingModel onBoardingModel = new OnBoardingModel();
 
-    onBoardingStreamModel.setFavorite(onBoardingStream.isFavorite());
-    onBoardingStreamModel.setStreamModel(streamModelMapper.transform(onBoardingStream.getStream()));
+    onBoardingModel.setFavorite(onBoarding.isFavorite());
+    onBoardingModel.setStreamModel(streamModelMapper.transform(onBoarding.getStream()));
+    onBoardingModel.setUserModel(userModelMapper.transform(onBoarding.getUser()));
 
-    return onBoardingStreamModel;
+    return onBoardingModel;
   }
 
-  public List<OnBoardingModel> transform(List<OnBoarding> onBoardingStreams) {
-    ArrayList<OnBoardingModel> onBoardingStreamModels = new ArrayList<>();
-    for (OnBoarding onBoardingStream : onBoardingStreams) {
-      onBoardingStreamModels.add(transform(onBoardingStream));
+  public List<OnBoardingModel> transform(List<OnBoarding> onBoardings) {
+    ArrayList<OnBoardingModel> onBoardingModels = new ArrayList<>();
+    for (OnBoarding onBoarding : onBoardings) {
+      onBoardingModels.add(transform(onBoarding));
     }
-    return onBoardingStreamModels;
+    return onBoardingModels;
   }
 }
