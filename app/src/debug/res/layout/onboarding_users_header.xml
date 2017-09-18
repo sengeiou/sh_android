@@ -14,7 +14,7 @@
       android:layout_gravity="center"
       android:gravity="center"
       android:textColor="@color/white"
-      android:text="@string/onboarding_streams_header"
+      android:text="@string/onboarding_users_header"
       android:fontFamily="sans-serif"
       android:textSize="22sp"
       />
