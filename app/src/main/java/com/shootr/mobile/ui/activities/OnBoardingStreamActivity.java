@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -125,11 +126,9 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
 
   @Override public void goNextScreen() {
     finish();
-    //TODO ir a la pantalla del onboarding de usuarios
-    //TODO esto comentado ha de ir en el metodo goToStream de la pantalla de users
-    /*Intent i = new Intent(this, MainTabbedActivity.class);
+    Intent i = new Intent(this, OnBoardingUserActivity.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-    startActivity(i);*/
+    startActivity(i);
   }
 
   @Override public void hideGetStarted() {
