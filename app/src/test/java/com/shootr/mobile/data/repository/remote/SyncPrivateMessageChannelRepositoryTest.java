@@ -4,7 +4,6 @@ import com.shootr.mobile.data.entity.PrivateMessageChannelEntity;
 import com.shootr.mobile.data.mapper.PrivateMessageChannelEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
 import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageChannelDataSource;
-import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageDataSource;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import java.util.Collections;
