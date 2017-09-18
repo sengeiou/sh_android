@@ -6,13 +6,14 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddSuggestedfavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetOnBoardingStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
+import com.shootr.mobile.domain.interactor.user.GetOnBoardingUserInteractor;
 import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
-import com.shootr.mobile.ui.model.mappers.OnBoardingStreamModelMapper;
+import com.shootr.mobile.ui.model.mappers.OnBoardingModelMapper;
 import com.shootr.mobile.ui.views.OnBoardingView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.ArrayList;
@@ -28,9 +29,10 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   private final StreamsListInteractor streamsListInteractor;
   private final GetOnBoardingStreamInteractor getOnBoardingStreamInteractor;
+  private final GetOnBoardingUserInteractor getOnBoardingUserInteractor;
   private final AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor;
   private final ErrorMessageFactory errorMessageFactory;
-  private final OnBoardingStreamModelMapper onBoardingStreamModelMapper;
+  private final OnBoardingModelMapper onBoardingModelMapper;
 
   private OnBoardingView onBoardingView;
   private boolean streamsLoaded = false;
@@ -40,14 +42,14 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   @Inject public OnBoardingStreamPresenter(StreamsListInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
-      AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
-      ErrorMessageFactory errorMessageFactory,
-      OnBoardingStreamModelMapper onBoardingStreamModelMapper) {
+      GetOnBoardingUserInteractor getOnBoardingUserInteractor, AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
+      ErrorMessageFactory errorMessageFactory, OnBoardingModelMapper onBoardingModelMapper) {
     this.streamsListInteractor = streamsListInteractor;
     this.getOnBoardingStreamInteractor = getOnBoardingStreamInteractor;
+    this.getOnBoardingUserInteractor = getOnBoardingUserInteractor;
     this.addSuggestedfavoritesInteractor = addSuggestedfavoritesInteractor;
     this.errorMessageFactory = errorMessageFactory;
-    this.onBoardingStreamModelMapper = onBoardingStreamModelMapper;
+    this.onBoardingModelMapper = onBoardingModelMapper;
   }
 
   protected void setView(OnBoardingView welcomePageView) {
@@ -58,9 +60,9 @@ public class OnBoardingStreamPresenter implements Presenter {
     setView(welcomePageView);
     if (onBoardingType.equals(STREAM_ONBOARDING)) {
       loadOnBoardingStreams();
-      loadDefaultStreams();
     } else {
-      //TODO cargar users
+      loadOnBoardingUsers();
+      loadDefaultStreams();
     }
   }
 
@@ -72,10 +74,33 @@ public class OnBoardingStreamPresenter implements Presenter {
             onBoardingView.hideLoading();
             if (!onBoardingStreams.isEmpty()) {
               List<OnBoardingModel> onBoardingStreamModels =
-                  onBoardingStreamModelMapper.transform(onBoardingStreams);
+                  onBoardingModelMapper.transform(onBoardingStreams);
               storeDefaultFavorites(onBoardingStreamModels);
               onBoardingView.renderOnBoardingList(
-                  onBoardingStreamModelMapper.transform(onBoardingStreams));
+                  onBoardingModelMapper.transform(onBoardingStreams));
+            } else {
+              onBoardingView.goNextScreen();
+            }
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            showViewError(error);
+          }
+        });
+  }
+
+  private void loadOnBoardingUsers() {
+    onBoardingView.showLoading();
+    getOnBoardingUserInteractor.loadOnBoardingUsers(FollowableType.USER,
+        new Interactor.Callback<List<OnBoarding>>() {
+          @Override public void onLoaded(List<OnBoarding> onBoardingUsers) {
+            onBoardingView.hideLoading();
+            if (!onBoardingUsers.isEmpty()) {
+              List<OnBoardingModel> onBoardingUsersModels =
+                  onBoardingModelMapper.transform(onBoardingUsers);
+              storeDefaultFavorites(onBoardingUsersModels);
+              onBoardingView.renderOnBoardingList(
+                  onBoardingModelMapper.transform(onBoardingUsers));
             } else {
               onBoardingView.goNextScreen();
             }
