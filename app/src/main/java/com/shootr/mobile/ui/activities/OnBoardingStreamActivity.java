@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.adapters.OnBoardingStreamsAdapter;
+import com.shootr.mobile.ui.adapters.OnBoardingAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.OnBoardingModel;
@@ -52,7 +52,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
 
-  private OnBoardingStreamsAdapter adapter;
+  private OnBoardingAdapter adapter;
 
   @Override protected int getLayoutResource() {
     return R.layout.activity_on_boarding_stream;
@@ -68,9 +68,9 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     streamsList.setAdapter(getOnBoardingAdapter());
   }
 
-  private OnBoardingStreamsAdapter getOnBoardingAdapter() {
+  private OnBoardingAdapter getOnBoardingAdapter() {
     if (adapter == null) {
-      adapter = new OnBoardingStreamsAdapter(new OnBoardingFavoriteClickListener() {
+      adapter = new OnBoardingAdapter(new OnBoardingFavoriteClickListener() {
         @Override public void onFavoriteClick(OnBoardingModel onBoardingStream) {
           presenter.putFavorite(onBoardingStream);
           adapter.updateFavorite(onBoardingStream);
@@ -80,7 +80,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
           presenter.removeFavorite(onBoardingStream.getStreamModel().getIdStream());
           adapter.updateFavorite(onBoardingStream);
         }
-      }, imageLoader, initialsLoader, OnBoardingStreamsAdapter.STREAM_ONBOARDING);
+      }, imageLoader, initialsLoader, OnBoardingAdapter.STREAM_ONBOARDING);
     }
     return adapter;
   }
@@ -99,9 +99,9 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     progressBar.setVisibility(GONE);
   }
 
-  @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingStreamModels) {
+  @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingModels) {
     container.setVisibility(View.VISIBLE);
-    adapter.setOnBoardingStreamModelList(onBoardingStreamModels);
+    adapter.setOnBoardingModelList(onBoardingModels);
     adapter.notifyDataSetChanged();
   }
 
@@ -119,7 +119,11 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  @Override public void goToUserOnboardingList() {
+  @Override public void sendUserAnalytics(boolean isStrategic) {
+    /* no-op */
+  }
+
+  @Override public void goNextScreen() {
     finish();
     //TODO ir a la pantalla del onboarding de usuarios
     //TODO esto comentado ha de ir en el metodo goToStream de la pantalla de users

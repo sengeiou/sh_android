@@ -7,7 +7,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.OnBoardingStreamsAdapter;
+import com.shootr.mobile.ui.adapters.OnBoardingAdapter;
 
 public class OnBoardingHeaderViewHolder extends RecyclerView.ViewHolder {
 
@@ -23,7 +23,7 @@ public class OnBoardingHeaderViewHolder extends RecyclerView.ViewHolder {
   }
 
   public void render() {
-    if (type.equals(OnBoardingStreamsAdapter.STREAM_ONBOARDING)) {
+    if (type.equals(OnBoardingAdapter.STREAM_ONBOARDING)) {
       text.setText(streamsHeader);
     } else {
       //TODO
