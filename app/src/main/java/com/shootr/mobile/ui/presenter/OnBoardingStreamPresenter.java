@@ -42,7 +42,8 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   @Inject public OnBoardingStreamPresenter(StreamsListInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
-      GetOnBoardingUserInteractor getOnBoardingUserInteractor, AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
+      GetOnBoardingUserInteractor getOnBoardingUserInteractor,
+      AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
       ErrorMessageFactory errorMessageFactory, OnBoardingModelMapper onBoardingModelMapper) {
     this.streamsListInteractor = streamsListInteractor;
     this.getOnBoardingStreamInteractor = getOnBoardingStreamInteractor;
@@ -74,10 +75,9 @@ public class OnBoardingStreamPresenter implements Presenter {
             onBoardingView.hideLoading();
             if (!onBoardingStreams.isEmpty()) {
               List<OnBoardingModel> onBoardingStreamModels =
-                  onBoardingModelMapper.transform(onBoardingStreams);
+                  onBoardingModelMapper.transform(onBoardingStreams, FollowableType.STREAM);
               storeDefaultFavorites(onBoardingStreamModels);
-              onBoardingView.renderOnBoardingList(
-                  onBoardingModelMapper.transform(onBoardingStreams));
+              onBoardingView.renderOnBoardingList(onBoardingStreamModels);
             } else {
               onBoardingView.goNextScreen();
             }
@@ -97,10 +97,9 @@ public class OnBoardingStreamPresenter implements Presenter {
             onBoardingView.hideLoading();
             if (!onBoardingUsers.isEmpty()) {
               List<OnBoardingModel> onBoardingUsersModels =
-                  onBoardingModelMapper.transform(onBoardingUsers);
+                  onBoardingModelMapper.transform(onBoardingUsers, FollowableType.USER);
               storeDefaultFavorites(onBoardingUsersModels);
-              onBoardingView.renderOnBoardingList(
-                  onBoardingModelMapper.transform(onBoardingUsers));
+              onBoardingView.renderOnBoardingList(onBoardingUsersModels);
             } else {
               onBoardingView.goNextScreen();
             }
@@ -194,11 +193,7 @@ public class OnBoardingStreamPresenter implements Presenter {
 
   private void checkStreamsLoaded() {
     onBoardingView.hideGetStarted();
-    if (streamsLoaded) {
-      onBoardingView.goNextScreen();
-    } else {
-      onBoardingView.showLoading();
-    }
+    onBoardingView.goNextScreen();
   }
 
   private void showViewError(ShootrException error) {
