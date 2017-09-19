@@ -25,7 +25,7 @@ import com.shootr.mobile.ui.adapters.OnBoardingAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.OnBoardingModel;
-import com.shootr.mobile.ui.presenter.OnBoardingStreamPresenter;
+import com.shootr.mobile.ui.presenter.OnBoardingPresenter;
 import com.shootr.mobile.ui.views.OnBoardingView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -48,7 +48,7 @@ public class OnBoardingUserActivity extends BaseActivity implements OnBoardingVi
 
   @Inject ImageLoader imageLoader;
   @Inject InitialsLoader initialsLoader;
-  @Inject OnBoardingStreamPresenter presenter;
+  @Inject OnBoardingPresenter presenter;
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
@@ -87,7 +87,7 @@ public class OnBoardingUserActivity extends BaseActivity implements OnBoardingVi
   }
 
   @Override protected void initializePresenter() {
-    presenter.initialize(this, OnBoardingStreamPresenter.USER_ONBOARDING);
+    presenter.initialize(this, OnBoardingPresenter.USER_ONBOARDING);
   }
 
   @Override public void showLoading() {
