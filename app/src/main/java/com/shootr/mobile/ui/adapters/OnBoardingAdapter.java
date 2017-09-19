@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.ui.adapters.holders.OnBoardingHeaderViewHolder;
 import com.shootr.mobile.ui.adapters.holders.OnBoardingStreamViewHolder;
 import com.shootr.mobile.ui.adapters.holders.OnBoardingUserViewHolder;
@@ -18,7 +19,6 @@ public class OnBoardingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
   public static final String USER_ONBOARDING = "user";
   public static final String STREAM_ONBOARDING = "stream";
-
 
   private static final int TYPE_HEADER = 0;
   private static final int TYPE_STREAM = 1;
@@ -71,16 +71,17 @@ public class OnBoardingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
       return new OnBoardingStreamViewHolder(view, onFavoriteClickListener, imageLoader,
           initialsLoader);
     } else if (viewType == TYPE_USER) {
-      View view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_list_user, parent, false);
+      View view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_user, parent, false);
       return new OnBoardingUserViewHolder(view, onFavoriteClickListener, imageLoader,
           initialsLoader);
     } else if (viewType == TYPE_HEADER) {
       View view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.onboarding_header, parent, false);
+          .inflate(onBoardingType.equals(FollowableType.STREAM) ? R.layout.onboarding_streams_header
+              : R.layout.onboarding_users_header, parent, false);
       return new OnBoardingHeaderViewHolder(view, onBoardingType);
     } else {
-      return  null;
+      return null;
     }
   }
 
@@ -88,7 +89,7 @@ public class OnBoardingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     if (holder.getItemViewType() == TYPE_STREAM) {
       ((OnBoardingStreamViewHolder) holder).render(onBoardingModelList.get(position - 1));
     } else if (holder.getItemViewType() == TYPE_USER) {
-      //TODO
+      ((OnBoardingUserViewHolder) holder).render(onBoardingModelList.get(position - 1));
     } else if (holder.getItemViewType() == TYPE_HEADER) {
       ((OnBoardingHeaderViewHolder) holder).render();
     }
