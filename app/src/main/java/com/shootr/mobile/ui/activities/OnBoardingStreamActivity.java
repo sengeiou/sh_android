@@ -127,7 +127,6 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Override public void goNextScreen() {
     finish();
     Intent i = new Intent(this, OnBoardingUserActivity.class);
-    i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     startActivity(i);
   }
 
