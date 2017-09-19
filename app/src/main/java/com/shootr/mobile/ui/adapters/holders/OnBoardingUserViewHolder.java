@@ -6,7 +6,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -22,10 +21,9 @@ public class OnBoardingUserViewHolder extends RecyclerView.ViewHolder {
   private final InitialsLoader initialsLoader;
 
   @BindView(R.id.user_avatar) AvatarView avatar;
-  @BindView(R.id.user_name) TextView title;
-  @BindView(R.id.user_username) TextView subtitle;
+  @BindView(R.id.user_name) TextView name;
+  @BindView(R.id.user_username) TextView username;
   @BindView(R.id.user_follow_button) FollowButton followButton;
-
 
   public OnBoardingUserViewHolder(View itemView,
       OnBoardingFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
@@ -39,9 +37,9 @@ public class OnBoardingUserViewHolder extends RecyclerView.ViewHolder {
 
   public void render(OnBoardingModel onBoardingModel) {
     this.setupFavoriteClickListener(onBoardingModel);
-    title.setText(onBoardingModel.getStreamModel().getTitle());
+    name.setText(onBoardingModel.getUserModel().getUsername());
     handleFavorite(onBoardingModel);
-    setTitle(onBoardingModel.getUserModel());
+    setName(onBoardingModel.getUserModel());
     setupUsername(getUsernameForSubtitle(onBoardingModel.getUserModel()));
     setupPhoto(onBoardingModel.getUserModel());
   }
@@ -74,17 +72,18 @@ public class OnBoardingUserViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupUsername(String username) {
-    subtitle.setText(username);
-    subtitle.setVisibility(View.VISIBLE);
+    this.username.setText(username);
+    this.username.setVisibility(View.VISIBLE);
   }
 
-  private void setTitle(UserModel userModel) {
-    title.setText(userModel.getName());
+  private void setName(UserModel userModel) {
+    name.setText(userModel.getName());
     if (userModel.isVerifiedUser()) {
-      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
-      title.setCompoundDrawablePadding(6);
+      name.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list,
+          0);
+      name.setCompoundDrawablePadding(6);
     } else {
-      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+      name.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
     }
   }
 
