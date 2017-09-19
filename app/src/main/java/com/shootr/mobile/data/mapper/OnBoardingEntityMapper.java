@@ -20,7 +20,7 @@ public class OnBoardingEntityMapper {
   public OnBoarding map(OnBoardingEntity value) {
     OnBoarding suggestedStream = new OnBoarding();
     suggestedStream.setStream(streamEntityMapper.transform(value.getStreamEntity()));
-    suggestedStream.setUser(userEntityMapper.transform(value.getUserEntity()));
+    suggestedStream.setUser(userEntityMapper.transform(value.getUser()));
     suggestedStream.setDefaultValue(value.isFavorite());
     return suggestedStream;
   }

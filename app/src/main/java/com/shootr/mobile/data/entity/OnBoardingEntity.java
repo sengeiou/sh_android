@@ -3,7 +3,7 @@ package com.shootr.mobile.data.entity;
 public class OnBoardingEntity {
 
   private StreamEntity stream;
-  private UserEntity userEntity;
+  private UserEntity user;
   private boolean defaultStatus;
 
   public StreamEntity getStreamEntity() {
@@ -22,11 +22,11 @@ public class OnBoardingEntity {
     this.defaultStatus = favorite;
   }
 
-  public UserEntity getUserEntity() {
-    return userEntity;
+  public UserEntity getUser() {
+    return user;
   }
 
-  public void setUserEntity(UserEntity userEntity) {
-    this.userEntity = userEntity;
+  public void setUser(UserEntity user) {
+    this.user = user;
   }
 }
