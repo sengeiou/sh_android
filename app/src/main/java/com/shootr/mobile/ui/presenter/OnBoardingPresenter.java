@@ -153,7 +153,7 @@ public class OnBoardingPresenter implements Presenter {
               showViewError(error);
             }
           });
-    } else if(!favoriteUsers.isEmpty()){
+    } else if (!favoriteUsers.isEmpty()) {
       ArrayList<String> itemsIds = new ArrayList<>(favoriteUsers.keySet());
       addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.USER,
           new Interactor.CompletedCallback() {
@@ -166,7 +166,7 @@ public class OnBoardingPresenter implements Presenter {
               showViewError(error);
             }
           });
-    }else {
+    } else {
       checkStreamsLoaded();
     }
   }
