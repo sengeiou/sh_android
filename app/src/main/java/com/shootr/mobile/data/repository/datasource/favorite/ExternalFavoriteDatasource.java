@@ -8,8 +8,8 @@ public interface ExternalFavoriteDatasource extends FavoriteDataSource {
 
   List<FavoriteEntity> getFavorites(String userId);
 
-  List<OnBoardingEntity> getOnBoardingStreams(String type, String locale);
+  List<OnBoardingEntity> getOnBoarding(String type, String locale);
 
-  void addFavorites(List<String> idStreams);
+  void addFavorites(List<String> idOnBoardings, String type);
 
 }

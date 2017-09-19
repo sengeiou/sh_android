@@ -5,12 +5,14 @@ import com.shootr.mobile.data.api.entity.mapper.FavoriteApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.FavoriteApiService;
 import com.shootr.mobile.data.entity.FavoriteEntity;
+import com.shootr.mobile.data.entity.FollowableEntity;
 import com.shootr.mobile.data.entity.OnBoardingEntity;
 import com.shootr.mobile.data.entity.OnBoardingFavoritesEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.repository.Local;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,12 +59,14 @@ public class ServiceFavoriteDataSource implements ExternalFavoriteDatasource {
         }
     }
 
-    @Override public List<OnBoardingEntity> getOnBoardingStreams(String type, String locale) {
+    @Override public List<OnBoardingEntity> getOnBoarding(String type, String locale) {
         try {
             List<OnBoardingEntity> onBoardingStreamEntities =
                 favoriteApiService.getFavoritesOnboarding(type, locale);
             if (onBoardingStreamEntities != null) {
-                storeOnBoardingStreams(onBoardingStreamEntities);
+                if(type.equals(FollowableType.STREAM)) {
+                    storeOnBoardingStreams(onBoardingStreamEntities);
+                }
                 return onBoardingStreamEntities;
             } else {
                 return new ArrayList<>();
@@ -80,16 +84,22 @@ public class ServiceFavoriteDataSource implements ExternalFavoriteDatasource {
         }
     }
 
-    @Override public void addFavorites(List<String> idStreams) {
+    @Override public void addFavorites(List<String> idOnBoardings, String type) {
         try {
             OnBoardingFavoritesEntity onBoardingFavoritesEntity = new OnBoardingFavoritesEntity();
-            onBoardingFavoritesEntity.setIdStream(idStreams);
+          if(type.equals(FollowableType.STREAM)) {
+            onBoardingFavoritesEntity.setIdStream(idOnBoardings);
+          }
+          else if(type.equals(FollowableType.USER)) {
+            onBoardingFavoritesEntity.setIdUser(idOnBoardings);
+          }
             List<FavoriteApiEntity> favoriteApiEntities =
                 favoriteApiService.addOnBoardingFavorites(onBoardingFavoritesEntity);
+          if(type.equals(FollowableType.STREAM)) {
             for (FavoriteApiEntity favoriteApiEntity : favoriteApiEntities) {
-                localFavoriteDataSource.putFavorite(
-                    favoriteApiEntityMapper.transform(favoriteApiEntity));
+              localFavoriteDataSource.putFavorite(favoriteApiEntityMapper.transform(favoriteApiEntity));
             }
+          }
         } catch (ApiException | IOException error) {
             throw new ServerCommunicationException(error);
         } catch (StreamAlreadyInFavoritesException e) {

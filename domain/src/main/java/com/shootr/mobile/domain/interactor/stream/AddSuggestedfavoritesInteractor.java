@@ -19,7 +19,8 @@ public class AddSuggestedfavoritesInteractor implements Interactor {
   private Interactor.CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
 
-  private List<String> idStreams;
+  private List<String> idOnBoardings;
+  private String type;
 
   @Inject public AddSuggestedfavoritesInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -29,17 +30,18 @@ public class AddSuggestedfavoritesInteractor implements Interactor {
     this.remoteFavoriteRepository = remoteFavoriteRepository;
   }
 
-  public void addSuggestedFavorites(List<String> idStreams, CompletedCallback completedCallback,
+  public void addSuggestedFavorites(List<String> idOnBoardings, String type, CompletedCallback completedCallback,
       ErrorCallback errorCallback) {
     this.completedCallback = completedCallback;
     this.errorCallback = errorCallback;
-    this.idStreams = idStreams;
+    this.idOnBoardings = idOnBoardings;
+    this.type = type;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
     try {
-      remoteFavoriteRepository.addSuggestedFavorites(idStreams);
+      remoteFavoriteRepository.addSuggestedFavorites(idOnBoardings, type);
       notifyLoaded();
     } catch (ServerCommunicationException error) {
       notifyError(new StreamIsAlreadyInFavoritesException(error));
