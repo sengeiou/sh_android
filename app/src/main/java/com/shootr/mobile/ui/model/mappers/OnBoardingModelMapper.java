@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
+import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.ui.model.OnBoardingModel;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class OnBoardingModelMapper {
     this.userModelMapper = userModelMapper;
   }
 
-  public OnBoardingModel transform(OnBoarding onBoarding) {
+  public OnBoardingModel transform(OnBoarding onBoarding, String type) {
     if (onBoarding == null) {
       return null;
     }
@@ -25,16 +26,19 @@ public class OnBoardingModelMapper {
     OnBoardingModel onBoardingModel = new OnBoardingModel();
 
     onBoardingModel.setFavorite(onBoarding.isFavorite());
-    onBoardingModel.setStreamModel(streamModelMapper.transform(onBoarding.getStream()));
-    onBoardingModel.setUserModel(userModelMapper.transform(onBoarding.getUser()));
+    if (type.equals(FollowableType.STREAM)) {
+      onBoardingModel.setStreamModel(streamModelMapper.transform(onBoarding.getStream()));
+    } else if (type.equals(FollowableType.USER)) {
+      onBoardingModel.setUserModel(userModelMapper.transform(onBoarding.getUser()));
+    }
 
     return onBoardingModel;
   }
 
-  public List<OnBoardingModel> transform(List<OnBoarding> onBoardings) {
+  public List<OnBoardingModel> transform(List<OnBoarding> onBoardings, String type) {
     ArrayList<OnBoardingModel> onBoardingModels = new ArrayList<>();
     for (OnBoarding onBoarding : onBoardings) {
-      onBoardingModels.add(transform(onBoarding));
+      onBoardingModels.add(transform(onBoarding, type));
     }
     return onBoardingModels;
   }
