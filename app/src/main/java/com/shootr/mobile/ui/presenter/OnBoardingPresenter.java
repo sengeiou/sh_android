@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
-public class OnBoardingStreamPresenter implements Presenter {
+public class OnBoardingPresenter implements Presenter {
 
   public static final String STREAM_ONBOARDING = "streamOnBoarding";
   public static final String USER_ONBOARDING = "userOnBoarding";
@@ -40,7 +40,7 @@ public class OnBoardingStreamPresenter implements Presenter {
   private HashMap<String, StreamModel> favoriteStreams = new HashMap<>();
   private HashMap<String, UserModel> favoriteUsers = new HashMap<>();
 
-  @Inject public OnBoardingStreamPresenter(StreamsListInteractor streamsListInteractor,
+  @Inject public OnBoardingPresenter(StreamsListInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
       GetOnBoardingUserInteractor getOnBoardingUserInteractor,
       AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
@@ -142,7 +142,7 @@ public class OnBoardingStreamPresenter implements Presenter {
   private void sendFavorites() {
     if (!favoriteStreams.isEmpty()) {
       ArrayList<String> itemsIds = new ArrayList<>(favoriteStreams.keySet());
-      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds,
+      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.STREAM,
           new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               sendStreamAnalytics();
@@ -153,7 +153,20 @@ public class OnBoardingStreamPresenter implements Presenter {
               showViewError(error);
             }
           });
-    } else {
+    } else if(!favoriteUsers.isEmpty()){
+      ArrayList<String> itemsIds = new ArrayList<>(favoriteUsers.keySet());
+      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.USER,
+          new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+              sendStreamAnalytics();
+              checkStreamsLoaded();
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              showViewError(error);
+            }
+          });
+    }else {
       checkStreamsLoaded();
     }
   }
