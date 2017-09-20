@@ -518,7 +518,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void initializePresenters(String idStream, String streamAuthorIdUser,
       Integer streamMode) {
-    streamTimelinePresenter.initialize(this, idStream, streamMode);
+    streamTimelinePresenter.initialize(this, idStream, streamAuthorIdUser, streamMode);
     newShotBarPresenter.initializeWithIdStreamAuthor(this, idStream, streamAuthorIdUser, true);
     watchNumberPresenter.initialize(this, idStream);
     streamTimelineOptionsPresenter.initialize(this, idStream);

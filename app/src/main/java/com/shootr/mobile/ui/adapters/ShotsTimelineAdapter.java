@@ -311,7 +311,7 @@ public class ShotsTimelineAdapter
 
   private void insertNewShots(List<ShotModel> newShotList, int position, int size) {
     shots.addAll(position, newShotList);
-    notifyItemRangeInserted(position, size);
+    notifyDataSetChanged();
   }
 
   public void onPinnedShot(ShotModel shotModel) {

@@ -91,7 +91,6 @@ public class FindStreamsFragment extends BaseFragment implements SearchStreamVie
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
-        searchItemsPresenter.selectStream(stream);
         navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
       }
 
