@@ -14,6 +14,13 @@ Etiquetas para el changelog:
 ## [Unreleased]
 
 
+## [1.41.2] - 2017-09-20
+
+### Fixed
+- Change the timestamp of everyshot on screen when new appears
+- Enter shot from search is now smooth
+- Crash on PrivateMessageChannel with muted users
+
 ## [1.41.1] - 2017-09-08
 
 ### Fixed
