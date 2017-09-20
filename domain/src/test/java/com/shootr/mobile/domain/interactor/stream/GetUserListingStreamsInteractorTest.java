@@ -61,7 +61,7 @@ public class GetUserListingStreamsInteractorTest {
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor = new GetUserListingStreamsInteractor(interactorHandler, postExecutionThread,
         localStreamSearchRepository, remoteStreamSearchRepository, localStreamRepository,
-        remoteStreamRepository, remoteFavoriteRepository);
+        remoteStreamRepository, remoteFavoriteRepository, remoteFollowRepository);
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
   }
 
