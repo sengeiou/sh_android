@@ -8,7 +8,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.Followable;
 import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Follows;
-import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.model.stream.Listing;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
@@ -47,7 +46,8 @@ public class GetUserListingStreamsInteractor implements Interactor {
       @Remote StreamSearchRepository remoteStreamSearchRepository,
       @Local StreamRepository localStreamRepository,
       ExternalStreamRepository remoteStreamRepository,
-      ExternalFavoriteRepository remoteFavoriteRepository, @Remote FollowRepository remoteFollowRepository) {
+      ExternalFavoriteRepository remoteFavoriteRepository,
+      @Remote FollowRepository remoteFollowRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamSearchRepository = localStreamSearchRepository;
@@ -79,9 +79,9 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
   private void loadRemoteFavoriteIds() {
     Follows following =
-        remoteFollowRepository.getFollowing(idUser, new String[]{FollowableType.STREAM}, null);
+        remoteFollowRepository.getFollowing(idUser, new String[] { FollowableType.STREAM }, null);
     for (Followable follow : following.getData()) {
-      favoriteStreams.add((Stream)follow);
+      favoriteStreams.add((Stream) follow);
     }
   }
 
