@@ -15,6 +15,7 @@ import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -50,6 +51,7 @@ public class GetUserListingStreamsInteractorTest {
   @Mock ExternalStreamRepository remoteStreamRepository;
   @Mock ExternalFavoriteRepository remoteFavoriteRepository;
   @Mock InternalFavoriteRepository localFavoriteRepository;
+  @Mock FollowRepository remoteFollowRepository;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock SessionRepository sessionRepository;
   @Spy SpyCallback<Listing> spyCallback = new SpyCallback<>();
@@ -60,8 +62,7 @@ public class GetUserListingStreamsInteractorTest {
     InteractorHandler interactorHandler = new TestInteractorHandler();
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
     interactor = new GetUserListingStreamsInteractor(interactorHandler, postExecutionThread,
-        localStreamSearchRepository, remoteStreamSearchRepository, localStreamRepository,
-        remoteStreamRepository, remoteFavoriteRepository, remoteFollowRepository);
+        localStreamSearchRepository, remoteStreamSearchRepository, remoteFollowRepository);
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
   }
 
