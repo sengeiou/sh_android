@@ -39,7 +39,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
   private String idUser;
   private Callback<Listing> callback;
   private ErrorCallback errorCallback;
-  private List<Stream> favoriteStreams = new ArrayList<>();
+  private List<Stream> favoriteStreams;
 
   @Inject public GetUserListingStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -60,6 +60,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
   public void loadUserListingStreams(Callback<Listing> callback, ErrorCallback errorCallback,
       String idUser) {
+    favoriteStreams = new ArrayList<>();
     this.callback = callback;
     this.errorCallback = errorCallback;
     this.idUser = idUser;
