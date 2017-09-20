@@ -5,7 +5,6 @@ import com.shootr.mobile.data.entity.SynchroEntity;
 import com.shootr.mobile.data.mapper.PrivateMessageChannelEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
 import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageChannelDataSource;
-import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageDataSource;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.domain.repository.Local;
@@ -26,7 +25,6 @@ public class RemotePrivateMessageChannelRepository implements PrivateMessageChan
   private final AndroidTimeUtils androidTimeUtils;
 
   @Inject public RemotePrivateMessageChannelRepository(
-      @Remote PrivateMessageDataSource remotePrivateMessageChannelDataSource,
       @Local PrivateMessageChannelDataSource privateMessageChannelDataSource,
       @Remote PrivateMessageChannelDataSource remoteMessageChannelDataSource,
       PrivateMessageChannelEntityMapper privateMessageChannelEntityMapper,

@@ -4,7 +4,6 @@ import com.shootr.mobile.data.entity.PrivateMessageChannelEntity;
 import com.shootr.mobile.data.mapper.PrivateMessageChannelEntityMapper;
 import com.shootr.mobile.data.repository.datasource.SynchroDataSource;
 import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageChannelDataSource;
-import com.shootr.mobile.data.repository.datasource.privateMessage.PrivateMessageDataSource;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import java.util.Collections;
@@ -26,7 +25,6 @@ public class SyncPrivateMessageChannelRepositoryTest {
   @Mock StreamDataSource localStreamDataSource;
   @Mock PrivateMessageChannelDataSource localPrivateMessageChannelDataSource;
   @Mock PrivateMessageChannelDataSource remotePrivateMessageChannelDataSource;
-  @Mock PrivateMessageDataSource remotePrivateMessageDataSource;
   @Mock PrivateMessageChannelEntityMapper privateMessageChannelEntityMapper;
   @Mock SynchroDataSource synchroDataSource;
   @Mock AndroidTimeUtils androidTimeUtils;
@@ -36,10 +34,8 @@ public class SyncPrivateMessageChannelRepositoryTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     remotePrivateMessageChannelRepository =
-        new RemotePrivateMessageChannelRepository(remotePrivateMessageDataSource,
-            localPrivateMessageChannelDataSource,
-            remotePrivateMessageChannelDataSource,
-            privateMessageChannelEntityMapper,
+        new RemotePrivateMessageChannelRepository(localPrivateMessageChannelDataSource,
+            remotePrivateMessageChannelDataSource, privateMessageChannelEntityMapper,
             synchroDataSource, androidTimeUtils);
   }
 

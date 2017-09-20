@@ -35,7 +35,8 @@ public class PrivateMessageChannelEntityDBMapper extends GenericDBMapper {
     privateMessageChannel.setLastPrivateMessage(lastPrivateMessage);
     UserEntity userEntity = new UserEntity();
     userEntity.setIdUser(privateMessageChannel.getIdTargetUser());
-    userEntity.setMuted(c.getInt(c.getColumnIndex(DatabaseContract.PrivateMessageChannelTable.MUTED)) == 1);
+    userEntity.setMuted(
+        c.getInt(c.getColumnIndex(DatabaseContract.PrivateMessageChannelTable.MUTED)) == 1);
     privateMessageChannel.setTargetUser(userEntity);
     setSynchronizedfromCursor(c, privateMessageChannel);
     return privateMessageChannel;
@@ -52,15 +53,18 @@ public class PrivateMessageChannelEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PrivateMessageChannelTable.READ,
         privateMessageChannel.getRead() ? 1 : 0);
     cv.put(DatabaseContract.PrivateMessageChannelTable.MUTED,
-        privateMessageChannel.getTargetUser().isMuted() ? 1 : 0);
+        (privateMessageChannel.getTargetUser().isMuted() != null) ?
+            (privateMessageChannel.getTargetUser().isMuted() ? 1 : 0) : 0);
     if (privateMessageChannel.getLastPrivateMessage() != null) {
       cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME,
           privateMessageChannel.getLastPrivateMessage().getBirth().getTime());
       if (privateMessageChannel.getLastPrivateMessage().getComment() == null) {
         if (privateMessageChannel.getLastPrivateMessage().getVideoUrl() != null) {
-          cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT, LastMessageType.VIDEO);
+          cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT,
+              LastMessageType.VIDEO);
         } else if (privateMessageChannel.getLastPrivateMessage().getImage() != null) {
-          cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT, LastMessageType.IMAGE);
+          cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT,
+              LastMessageType.IMAGE);
         }
       } else {
         cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT,
