@@ -33,7 +33,6 @@ public class ListingListPresenter implements Presenter {
     private boolean hasBeenPaused = false;
     private List<StreamResultModel> listingStreams;
     private List<StreamResultModel> listingUserFavoritedStreams;
-    private List<StreamResultModel> favoriteStreams;
     private boolean isCurrentUser;
     private String idStreamToRemove;
 
@@ -73,7 +72,6 @@ public class ListingListPresenter implements Presenter {
     }
 
     private void renderListing() {
-        this.loadFavoriteStreams();
         this.startLoadingListing();
     }
 
@@ -113,25 +111,12 @@ public class ListingListPresenter implements Presenter {
         }
     }
 
-    public void loadFavoriteStreams() {
-        getFavoriteStreamsInteractor
-          .loadFavoriteStreamsFromLocalOnly(new Interactor.Callback<List<StreamSearchResult>>() {
-            @Override public void onLoaded(List<StreamSearchResult> favorites) {
-                favoriteStreams = streamResultModelMapper.transform(favorites);
-                renderStreams();
-            }
-        });
-    }
-
     private void renderStreams() {
         if (listingStreams != null) {
             listingView.renderHoldingStreams(listingStreams);
         }
         if (listingUserFavoritedStreams != null) {
             listingView.renderFavoritedStreams(listingUserFavoritedStreams);
-        }
-        if (favoriteStreams != null) {
-            listingView.setCurrentUserFavorites(favoriteStreams);
         }
         listingView.updateStreams();
     }
@@ -143,7 +128,6 @@ public class ListingListPresenter implements Presenter {
                   if (isCurrentUser) {
                       loadUserListingStreams();
                   }
-                  loadFavoriteStreams();
               }
           },
           new Interactor.ErrorCallback() {
@@ -160,7 +144,6 @@ public class ListingListPresenter implements Presenter {
                   if (isCurrentUser) {
                       loadUserListingStreams();
                   }
-                  loadFavoriteStreams();
               }
           });
     }
@@ -198,13 +181,13 @@ public class ListingListPresenter implements Presenter {
     public void openContextualMenu(StreamResultModel stream) {
         if (isCurrentUser && stream.getStreamModel().getAuthorId().equals(profileIdUser) && !stream.getStreamModel()
           .isRemoved()) {
-            if (favoriteStreams.contains(stream)) {
+            if (stream.isFavorited()) {
                 listingView.showCurrentUserContextMenuWithoutAddFavorite(stream);
             } else {
                 listingView.showCurrentUserContextMenuWithAddFavorite(stream);
             }
         } else {
-            if (favoriteStreams.contains(stream)) {
+            if (stream.isFavorited()) {
                 listingView.showContextMenuWithoutAddFavorite(stream);
             } else {
                 listingView.showContextMenuWithAddFavorite(stream);
@@ -222,7 +205,6 @@ public class ListingListPresenter implements Presenter {
             removeStreamInteractor.removeStream(idStreamToRemove, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
                     loadListing();
-                    loadFavoriteStreams();
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -235,7 +217,6 @@ public class ListingListPresenter implements Presenter {
     @Override public void resume() {
         if (hasBeenPaused) {
             loadListing();
-            loadFavoriteStreams();
         }
     }
 
