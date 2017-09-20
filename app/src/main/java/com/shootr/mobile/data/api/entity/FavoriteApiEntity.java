@@ -4,26 +4,26 @@ import com.shootr.mobile.data.entity.StreamEntity;
 
 public class FavoriteApiEntity {
 
-    private String idUser;
-    private String idStream;
+    private String idUsers;
+    private String idStreams;
     private Integer order;
 
     private StreamEntity stream;
 
     public String getIdUser() {
-        return idUser;
+        return idUsers;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setIdUser(String idUsers) {
+        this.idUsers = idUsers;
     }
 
     public String getIdStream() {
-        return idStream;
+        return idStreams;
     }
 
-    public void setIdStream(String idStream) {
-        this.idStream = idStream;
+    public void setIdStream(String idStreams) {
+        this.idStreams = idStreams;
     }
 
     public Integer getOrder() {
@@ -41,4 +41,5 @@ public class FavoriteApiEntity {
     public void setStream(StreamEntity stream) {
         this.stream = stream;
     }
+
 }

@@ -4,22 +4,22 @@ import java.util.List;
 
 public class OnBoardingFavoritesEntity {
 
-  private List<String> idStream;
-  private List<String> idUser;
+  private List<String> idStreams;
+  private List<String> idUsers;
 
-  public List<String> getIdStream() {
-    return idStream;
+  public List<String> getIdStreams() {
+    return idStreams;
   }
 
-  public void setIdStream(List<String> idStream) {
-    this.idStream = idStream;
+  public void setIdStreams(List<String> idStreams) {
+    this.idStreams = idStreams;
   }
 
-  public List<String> getIdUser() {
-    return idUser;
+  public List<String> getIdUsers() {
+    return idUsers;
   }
 
-  public void setIdUser(List<String> idUser) {
-    this.idUser = idUser;
+  public void setIdUsers(List<String> idUsers) {
+    this.idUsers = idUsers;
   }
 }
