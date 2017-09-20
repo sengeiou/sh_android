@@ -103,7 +103,6 @@ public class GenericSearchFragment extends BaseFragment
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
-        searchItemsPresenter.selectStream(stream);
         navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
       }
 
