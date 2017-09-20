@@ -39,7 +39,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
   private String idUser;
   private Callback<Listing> callback;
   private ErrorCallback errorCallback;
-  private List<String> favoriteIds;
+  private List<Stream> favoriteStreams = new ArrayList<>();
 
   @Inject public GetUserListingStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -78,18 +78,14 @@ public class GetUserListingStreamsInteractor implements Interactor {
 
   private void loadRemoteFavoriteIds() {
     Follows following =
-        remoteFollowRepository.getFollowing(idUser, new String[]{FollowableType.STREAM}, 0L);
-    //List<Favorite> favorites = remoteFavoriteRepository.getFavorites(idUser);
-    favoriteIds = new ArrayList<>(following.getData().size());
+        remoteFollowRepository.getFollowing(idUser, new String[]{FollowableType.STREAM}, null);
     for (Followable follow : following.getData()) {
-      favoriteIds.add(((Stream)follow).getId());
+      favoriteStreams.add((Stream)follow);
     }
   }
 
   private void loadUserListingStreamsFromRemote() throws ServerCommunicationException {
     try {
-      List<Stream> favoriteStreams = new ArrayList<>();
-      favoriteStreams = loadStreams(favoriteStreams);
       List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
 
@@ -101,21 +97,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
   }
 
-  private List<Stream> loadStreams(List<Stream> favoriteStreams) {
-    if (!favoriteIds.isEmpty()) {
-      favoriteStreams =
-          localStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
-      if (favoriteStreams.isEmpty()) {
-        favoriteStreams =
-            remoteStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
-      }
-    }
-    return favoriteStreams;
-  }
-
   private void loadUserListingStreamsFromLocal() {
-    List<Stream> favoriteStreams =
-        localStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
     List<StreamSearchResult> holdingStreamResults =
         loadUserListingStreamsFromRepository(localStreamSearchRepository);
     Listing listing = getListing(favoriteStreams, holdingStreamResults);
