@@ -52,9 +52,11 @@ public class PrivateMessageChannelEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PrivateMessageChannelTable.IMAGE, privateMessageChannel.getImage());
     cv.put(DatabaseContract.PrivateMessageChannelTable.READ,
         privateMessageChannel.getRead() ? 1 : 0);
-    cv.put(DatabaseContract.PrivateMessageChannelTable.MUTED,
-        (privateMessageChannel.getTargetUser().isMuted() != null) ?
-            (privateMessageChannel.getTargetUser().isMuted() ? 1 : 0) : 0);
+    if(privateMessageChannel.getTargetUser() != null) {
+      cv.put(DatabaseContract.PrivateMessageChannelTable.MUTED,
+          (privateMessageChannel.getTargetUser().isMuted() != null) ? (
+              privateMessageChannel.getTargetUser().isMuted() ? 1 : 0) : 0);
+    }
     if (privateMessageChannel.getLastPrivateMessage() != null) {
       cv.put(DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME,
           privateMessageChannel.getLastPrivateMessage().getBirth().getTime());
