@@ -30,9 +30,6 @@ public class GetUserListingStreamsInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final InternalStreamSearchRepository localStreamSearchRepository;
   private final StreamSearchRepository remoteStreamSearchRepository;
-  private final StreamRepository localStreamRepository;
-  private final ExternalStreamRepository remoteStreamRepository;
-  private final ExternalFavoriteRepository remoteFavoriteRepository;
   private final FollowRepository remoteFollowRepository;
 
   private String idUser;
@@ -44,17 +41,11 @@ public class GetUserListingStreamsInteractor implements Interactor {
       PostExecutionThread postExecutionThread,
       InternalStreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository,
-      @Local StreamRepository localStreamRepository,
-      ExternalStreamRepository remoteStreamRepository,
-      ExternalFavoriteRepository remoteFavoriteRepository,
       @Remote FollowRepository remoteFollowRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamSearchRepository = localStreamSearchRepository;
     this.remoteStreamSearchRepository = remoteStreamSearchRepository;
-    this.localStreamRepository = localStreamRepository;
-    this.remoteStreamRepository = remoteStreamRepository;
-    this.remoteFavoriteRepository = remoteFavoriteRepository;
     this.remoteFollowRepository = remoteFollowRepository;
   }
 
