@@ -87,21 +87,13 @@ public class ServiceFavoriteDataSource implements ExternalFavoriteDatasource {
     try {
       OnBoardingFavoritesEntity onBoardingFavoritesEntity = new OnBoardingFavoritesEntity();
       if (type.equals(FollowableType.STREAM)) {
-        onBoardingFavoritesEntity.setIdStream(idOnBoardings);
+        onBoardingFavoritesEntity.setIdStreams(idOnBoardings);
       } else if (type.equals(FollowableType.USER)) {
-        onBoardingFavoritesEntity.setIdUser(idOnBoardings);
+        onBoardingFavoritesEntity.setIdUsers(idOnBoardings);
       }
-      List<FavoriteApiEntity> favoriteApiEntities =
-          favoriteApiService.addOnBoardingFavorites(onBoardingFavoritesEntity);
-      if (type.equals(FollowableType.STREAM)) {
-        for (FavoriteApiEntity favoriteApiEntity : favoriteApiEntities) {
-          localFavoriteDataSource.putFavorite(favoriteApiEntityMapper.transform(favoriteApiEntity));
-        }
-      }
+      favoriteApiService.addOnBoardingFavorites(onBoardingFavoritesEntity);
     } catch (ApiException | IOException error) {
       throw new ServerCommunicationException(error);
-    } catch (StreamAlreadyInFavoritesException e) {
-            /* no -op */
     }
   }
 

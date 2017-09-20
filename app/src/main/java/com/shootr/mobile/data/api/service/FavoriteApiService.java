@@ -28,7 +28,7 @@ public interface FavoriteApiService {
     @GET("/onboarding") List<OnBoardingEntity> getFavoritesOnboarding(@Query("type") String type,
         @Query("locale") String locale) throws ApiException, IOException;
 
-    @POST("/favorite/bulk") List<FavoriteApiEntity> addOnBoardingFavorites(
+    @POST("/followable/bulk") List<OnBoardingFavoritesEntity> addOnBoardingFavorites(
         @Body OnBoardingFavoritesEntity onBoardingFavoritesEntity) throws ApiException, IOException;
 
 }
