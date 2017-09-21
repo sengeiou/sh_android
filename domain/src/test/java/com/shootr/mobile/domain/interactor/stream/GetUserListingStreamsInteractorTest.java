@@ -85,6 +85,8 @@ public class GetUserListingStreamsInteractorTest {
         listingStreams());
     when(remoteStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
         favoriteStreams());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -200,9 +202,10 @@ public class GetUserListingStreamsInteractorTest {
 
   private List<Stream> favoriteStreams() {
     List<Stream> streams = new ArrayList<>();
-    for (Favorite favorite : favorites()) {
+    for (Followable follow : follow().getData()) {
       Stream stream = new Stream();
-      stream.setId(favorite.getIdStream());
+      stream.setId(((Stream)follow).getId());
+      stream.setAuthorId(ID_USER);
       streams.add(stream);
     }
     return streams;
