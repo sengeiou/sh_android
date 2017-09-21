@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/com_facebook_blue" />
-    <corners android:radius="2dip"/>
+  <gradient
+      android:angle="135"
+      android:endColor="#03B2D9"
+      android:startColor="#D3AE00" />
 </shape>

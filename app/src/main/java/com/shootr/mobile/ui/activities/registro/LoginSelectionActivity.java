@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities.registro;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.view.Window;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -63,6 +64,7 @@ public class LoginSelectionActivity extends BaseActivity {
   @BindView(R.id.login_progress) View loading;
   @BindView(R.id.login_buttons) View buttonsContainer;
   @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
+  @BindView(R.id.container) RelativeLayout container;
 
   @BindString(R.string.error_facebook_login) String facebookError;
   @BindString(R.string.error_login_facebook_method) String facebookMethodError;
@@ -99,12 +101,25 @@ public class LoginSelectionActivity extends BaseActivity {
     ButterKnife.bind(this);
     setupDisclaimerLinks();
     setupStatusBarColor();
+    setupBackground();
   }
 
+  private void setupBackground() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+      AnimationDrawable animationDrawable = (AnimationDrawable) container.getBackground();
+      animationDrawable.setEnterFadeDuration(2000);
+      animationDrawable.setExitFadeDuration(4000);
+      animationDrawable.start();
+    }
+  }
+  
   private void setupStatusBarColor() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      Window window = getWindow();
-      window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
+    View decorView = getWindow().getDecorView();
+    int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+    decorView.setSystemUiVisibility(uiOptions);
+    android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
+      actionBar.hide();
     }
   }
 
@@ -339,5 +354,10 @@ public class LoginSelectionActivity extends BaseActivity {
 
   private void showFacebookError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    setupStatusBarColor();
   }
 }

@@ -534,4 +534,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="login_message">¿De qué quieres hablar?</string>
 </resources>

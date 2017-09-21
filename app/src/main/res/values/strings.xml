@@ -534,4 +534,5 @@
   <string name="onboarding_users_header">Follow users \n you like</string>
   <string name="onboarding_continue">Continue</string>
   <string name="onboarding_enter">Enter Shootr</string>
+  <string name="login_message">¿De qué quieres hablar?</string>
 </resources>

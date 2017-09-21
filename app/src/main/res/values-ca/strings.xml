@@ -538,4 +538,5 @@
   <string name="onboarding_users_header">Segueix usuaris \n que t\'interessin</string>
   <string name="onboarding_continue">Continuar</string>
   <string name="onboarding_enter">Entrar a Shootr</string>
+  <string name="login_message">¿De qué quieres hablar?</string>
 </resources>
