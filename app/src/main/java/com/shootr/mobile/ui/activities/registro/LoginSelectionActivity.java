@@ -112,7 +112,7 @@ public class LoginSelectionActivity extends BaseActivity {
       animationDrawable.start();
     }
   }
-  
+
   private void setupStatusBarColor() {
     View decorView = getWindow().getDecorView();
     int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;

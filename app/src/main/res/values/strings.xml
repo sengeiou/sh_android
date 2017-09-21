@@ -535,4 +535,5 @@
   <string name="onboarding_continue">Continue</string>
   <string name="onboarding_enter">Enter Shootr</string>
   <string name="login_message">¿De qué quieres hablar?</string>
+  <string name="welcome_shootr">Entrando en Shootr…</string>
 </resources>

@@ -328,6 +328,8 @@
     </activity>
     <activity android:name=".ui.activities.ShareStreamActivity">
     </activity>
+    <activity android:name=".ui.activities.SplashScreenActivity">
+    </activity>
   </application>
 
 </manifest>

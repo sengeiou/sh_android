@@ -124,7 +124,7 @@ public class OnBoardingUserActivity extends BaseActivity implements OnBoardingVi
 
   @Override public void goNextScreen() {
     finish();
-    Intent i = new Intent(this, MainTabbedActivity.class);
+    Intent i = new Intent(this, SplashScreenActivity.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     startActivity(i);
   }
