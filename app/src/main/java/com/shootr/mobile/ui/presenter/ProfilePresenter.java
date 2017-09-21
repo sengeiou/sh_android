@@ -215,7 +215,7 @@ public class ProfilePresenter implements Presenter {
     }
   }
 
-  protected void setupMenuItemsVisibility() {
+  private void setupMenuItemsVisibility() {
     subscribeUIObserverToObservable(getMenuItemsVisibilityObservable());
   }
 
