@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
-import com.shootr.mobile.data.mapper.OnBoardingStreamEntityMapper;
+import com.shootr.mobile.data.mapper.OnBoardingEntityMapper;
 import com.shootr.mobile.data.repository.datasource.favorite.ExternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
@@ -25,20 +25,20 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
   private final InternalFavoriteDatasource localFavoriteDataSource;
   private final FavoriteEntityMapper favoriteEntityMapper;
   private final SyncableFavoriteEntityFactory syncableFavoriteEntityFactory;
-  private final OnBoardingStreamEntityMapper onBoardingStreamEntityMapper;
+  private final OnBoardingEntityMapper onBoardingEntityMapper;
   private final SyncTrigger syncTrigger;
   private final SessionRepository sessionRepository;
 
   @Inject public SyncFavoriteRepository(ExternalFavoriteDatasource remoteFavoriteDataSource,
       InternalFavoriteDatasource localFavoriteDataSource, FavoriteEntityMapper favoriteEntityMapper,
       SyncableFavoriteEntityFactory syncableFavoriteEntityFactory,
-      OnBoardingStreamEntityMapper suggestedStreamEntityMapper, SyncTrigger syncTrigger,
+      OnBoardingEntityMapper suggestedStreamEntityMapper, SyncTrigger syncTrigger,
       SessionRepository sessionRepository) {
     this.remoteFavoriteDataSource = remoteFavoriteDataSource;
     this.localFavoriteDataSource = localFavoriteDataSource;
     this.favoriteEntityMapper = favoriteEntityMapper;
     this.syncableFavoriteEntityFactory = syncableFavoriteEntityFactory;
-    this.onBoardingStreamEntityMapper = suggestedStreamEntityMapper;
+    this.onBoardingEntityMapper = suggestedStreamEntityMapper;
     this.syncTrigger = syncTrigger;
     this.sessionRepository = sessionRepository;
   }
@@ -74,11 +74,15 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
   }
 
   @Override public List<OnBoarding> getOnBoardingStreams(String type, String locale) {
-    return onBoardingStreamEntityMapper.map(remoteFavoriteDataSource.getOnBoardingStreams(type, locale));
+    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale));
   }
 
-  @Override public void addSuggestedFavorites(List<String> idStreams) {
-    remoteFavoriteDataSource.addFavorites(idStreams);
+  @Override public List<OnBoarding> getOnBoardingUsers(String type, String locale) {
+    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale));
+  }
+
+  @Override public void addSuggestedFavorites(List<String> idStreams, String type) {
+    remoteFavoriteDataSource.addFavorites(idStreams, type);
   }
 
   @Override public void removeFavoriteByStream(String idStream) {

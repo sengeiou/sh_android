@@ -9,11 +9,13 @@ public interface OnBoardingView {
 
   void hideLoading();
 
-  void renderOnBoardingList(List<OnBoardingModel> onBoardingStreamModels);
+  void renderOnBoardingList(List<OnBoardingModel> onBoardingModels);
 
   void sendStreamAnalytics(String idStream, String streamTitle, boolean isStrategic);
 
-  void goToUserOnboardingList();
+  void sendUserAnalytics(boolean isStrategic);
+
+  void goNextScreen();
 
   void hideGetStarted();
 

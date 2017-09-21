@@ -14,16 +14,16 @@ public class FavoriteApiEntity {
         return idUser;
     }
 
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
+    public void setIdUser(String idUsers) {
+        this.idUser = idUsers;
     }
 
     public String getIdStream() {
         return idStream;
     }
 
-    public void setIdStream(String idStream) {
-        this.idStream = idStream;
+    public void setIdStream(String idStreams) {
+        this.idStream = idStreams;
     }
 
     public Integer getOrder() {
@@ -41,4 +41,5 @@ public class FavoriteApiEntity {
     public void setStream(StreamEntity stream) {
         this.stream = stream;
     }
+
 }

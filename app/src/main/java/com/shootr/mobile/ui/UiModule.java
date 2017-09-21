@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.NicersActivity;
 import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
+import com.shootr.mobile.ui.activities.OnBoardingUserActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
@@ -111,6 +112,7 @@ import javax.inject.Singleton;
     EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
     OnBoardingStreamActivity.class,
+    OnBoardingUserActivity.class,
     GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class
   },
   complete = false) public class UiModule {

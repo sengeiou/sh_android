@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class OnBoardingStreamEntityMapper {
+public class OnBoardingEntityMapper {
 
   private final StreamEntityMapper streamEntityMapper;
   private final UserEntityMapper userEntityMapper;
 
-  @Inject public OnBoardingStreamEntityMapper(StreamEntityMapper streamEntityMapper,
+  @Inject public OnBoardingEntityMapper(StreamEntityMapper streamEntityMapper,
       UserEntityMapper userEntityMapper) {
     this.streamEntityMapper = streamEntityMapper;
     this.userEntityMapper = userEntityMapper;
@@ -20,7 +20,7 @@ public class OnBoardingStreamEntityMapper {
   public OnBoarding map(OnBoardingEntity value) {
     OnBoarding suggestedStream = new OnBoarding();
     suggestedStream.setStream(streamEntityMapper.transform(value.getStreamEntity()));
-    suggestedStream.setUser(userEntityMapper.transform(value.getUserEntity()));
+    suggestedStream.setUser(userEntityMapper.transform(value.getUser()));
     suggestedStream.setDefaultValue(value.isFavorite());
     return suggestedStream;
   }

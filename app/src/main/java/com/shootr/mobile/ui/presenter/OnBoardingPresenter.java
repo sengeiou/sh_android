@@ -6,12 +6,14 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddSuggestedfavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetOnBoardingStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
+import com.shootr.mobile.domain.interactor.user.GetOnBoardingUserInteractor;
 import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.ui.model.StreamModel;
-import com.shootr.mobile.ui.model.mappers.OnBoardingStreamModelMapper;
+import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.OnBoardingModelMapper;
 import com.shootr.mobile.ui.views.OnBoardingView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.ArrayList;
@@ -20,32 +22,35 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
-public class OnBoardingStreamPresenter implements Presenter {
+public class OnBoardingPresenter implements Presenter {
 
   public static final String STREAM_ONBOARDING = "streamOnBoarding";
-  public static final String USER_ONBOARDING = "streamOnBoarding";
+  public static final String USER_ONBOARDING = "userOnBoarding";
 
   private final StreamsListInteractor streamsListInteractor;
   private final GetOnBoardingStreamInteractor getOnBoardingStreamInteractor;
+  private final GetOnBoardingUserInteractor getOnBoardingUserInteractor;
   private final AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor;
   private final ErrorMessageFactory errorMessageFactory;
-  private final OnBoardingStreamModelMapper onBoardingStreamModelMapper;
+  private final OnBoardingModelMapper onBoardingModelMapper;
 
   private OnBoardingView onBoardingView;
   private boolean streamsLoaded = false;
   private boolean getStartedClicked = false;
   private HashMap<String, StreamModel> favoriteStreams = new HashMap<>();
+  private HashMap<String, UserModel> favoriteUsers = new HashMap<>();
 
-  @Inject public OnBoardingStreamPresenter(StreamsListInteractor streamsListInteractor,
+  @Inject public OnBoardingPresenter(StreamsListInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
+      GetOnBoardingUserInteractor getOnBoardingUserInteractor,
       AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
-      ErrorMessageFactory errorMessageFactory,
-      OnBoardingStreamModelMapper onBoardingStreamModelMapper) {
+      ErrorMessageFactory errorMessageFactory, OnBoardingModelMapper onBoardingModelMapper) {
     this.streamsListInteractor = streamsListInteractor;
     this.getOnBoardingStreamInteractor = getOnBoardingStreamInteractor;
+    this.getOnBoardingUserInteractor = getOnBoardingUserInteractor;
     this.addSuggestedfavoritesInteractor = addSuggestedfavoritesInteractor;
     this.errorMessageFactory = errorMessageFactory;
-    this.onBoardingStreamModelMapper = onBoardingStreamModelMapper;
+    this.onBoardingModelMapper = onBoardingModelMapper;
   }
 
   protected void setView(OnBoardingView welcomePageView) {
@@ -56,9 +61,9 @@ public class OnBoardingStreamPresenter implements Presenter {
     setView(welcomePageView);
     if (onBoardingType.equals(STREAM_ONBOARDING)) {
       loadOnBoardingStreams();
-      loadDefaultStreams();
     } else {
-      //TODO cargar users
+      loadOnBoardingUsers();
+      loadDefaultStreams();
     }
   }
 
@@ -70,12 +75,33 @@ public class OnBoardingStreamPresenter implements Presenter {
             onBoardingView.hideLoading();
             if (!onBoardingStreams.isEmpty()) {
               List<OnBoardingModel> onBoardingStreamModels =
-                  onBoardingStreamModelMapper.transform(onBoardingStreams);
+                  onBoardingModelMapper.transform(onBoardingStreams, FollowableType.STREAM);
               storeDefaultFavorites(onBoardingStreamModels);
-              onBoardingView.renderOnBoardingList(
-                  onBoardingStreamModelMapper.transform(onBoardingStreams));
+              onBoardingView.renderOnBoardingList(onBoardingStreamModels);
             } else {
-              onBoardingView.goToUserOnboardingList();
+              onBoardingView.goNextScreen();
+            }
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            showViewError(error);
+          }
+        });
+  }
+
+  private void loadOnBoardingUsers() {
+    onBoardingView.showLoading();
+    getOnBoardingUserInteractor.loadOnBoardingUsers(FollowableType.USER,
+        new Interactor.Callback<List<OnBoarding>>() {
+          @Override public void onLoaded(List<OnBoarding> onBoardingUsers) {
+            onBoardingView.hideLoading();
+            if (!onBoardingUsers.isEmpty()) {
+              List<OnBoardingModel> onBoardingUsersModels =
+                  onBoardingModelMapper.transform(onBoardingUsers, FollowableType.USER);
+              storeDefaultFavorites(onBoardingUsersModels);
+              onBoardingView.renderOnBoardingList(onBoardingUsersModels);
+            } else {
+              onBoardingView.goNextScreen();
             }
           }
         }, new Interactor.ErrorCallback() {
@@ -98,7 +124,7 @@ public class OnBoardingStreamPresenter implements Presenter {
       @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
         streamsLoaded = true;
         if (getStartedClicked) {
-          onBoardingView.goToUserOnboardingList();
+          onBoardingView.goNextScreen();
         }
       }
     }, new Interactor.ErrorCallback() {
@@ -116,7 +142,20 @@ public class OnBoardingStreamPresenter implements Presenter {
   private void sendFavorites() {
     if (!favoriteStreams.isEmpty()) {
       ArrayList<String> itemsIds = new ArrayList<>(favoriteStreams.keySet());
-      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds,
+      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.STREAM,
+          new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+              sendStreamAnalytics();
+              checkStreamsLoaded();
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              showViewError(error);
+            }
+          });
+    } else if (!favoriteUsers.isEmpty()) {
+      ArrayList<String> itemsIds = new ArrayList<>(favoriteUsers.keySet());
+      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.USER,
           new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               sendStreamAnalytics();
@@ -146,19 +185,28 @@ public class OnBoardingStreamPresenter implements Presenter {
     }
   }
 
+  public void putUserFavorite(OnBoardingModel onBoardingModel) {
+    UserModel userModel = onBoardingModel.getUserModel();
+    if (!favoriteUsers.containsKey(userModel.getIdUser())) {
+      favoriteUsers.put(userModel.getIdUser(), userModel);
+    }
+  }
+
   public void removeFavorite(String idStream) {
     if (favoriteStreams.containsKey(idStream)) {
       favoriteStreams.remove(idStream);
     }
   }
 
+  public void removeUserFavorite(String idStream) {
+    if (favoriteUsers.containsKey(idStream)) {
+      favoriteUsers.remove(idStream);
+    }
+  }
+
   private void checkStreamsLoaded() {
     onBoardingView.hideGetStarted();
-    if (streamsLoaded) {
-      onBoardingView.goToUserOnboardingList();
-    } else {
-      onBoardingView.showLoading();
-    }
+    onBoardingView.goNextScreen();
   }
 
   private void showViewError(ShootrException error) {
