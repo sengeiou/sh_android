@@ -98,6 +98,8 @@ public class GetUserListingStreamsInteractorTest {
       throws Exception {
     when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
         listingStreams());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -111,6 +113,8 @@ public class GetUserListingStreamsInteractorTest {
         listingStreams());
     when(remoteStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
         favoriteStreams());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -120,6 +124,8 @@ public class GetUserListingStreamsInteractorTest {
 
   @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHoldingStreamsAreEmptyList()
       throws Exception {
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
 
@@ -130,6 +136,8 @@ public class GetUserListingStreamsInteractorTest {
       throws Exception {
     when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
         listingStreams());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -138,6 +146,8 @@ public class GetUserListingStreamsInteractorTest {
   }
 
   @Test public void shouldLoadUserListingFromRemote() throws Exception {
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
     verify(remoteStreamSearchRepository).getStreamsListing(anyString(), anyArray());
