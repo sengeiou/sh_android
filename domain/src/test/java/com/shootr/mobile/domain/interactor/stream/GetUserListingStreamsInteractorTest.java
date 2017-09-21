@@ -7,6 +7,9 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.interactor.SpyCallback;
 import com.shootr.mobile.domain.interactor.TestInteractorHandler;
+import com.shootr.mobile.domain.model.Followable;
+import com.shootr.mobile.domain.model.FollowableType;
+import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.model.stream.Listing;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -49,7 +52,6 @@ public class GetUserListingStreamsInteractorTest {
   @Mock StreamSearchRepository remoteStreamSearchRepository;
   @Mock StreamRepository localStreamRepository;
   @Mock ExternalStreamRepository remoteStreamRepository;
-  @Mock ExternalFavoriteRepository remoteFavoriteRepository;
   @Mock InternalFavoriteRepository localFavoriteRepository;
   @Mock FollowRepository remoteFollowRepository;
   @Mock Interactor.ErrorCallback errorCallback;
@@ -69,6 +71,8 @@ public class GetUserListingStreamsInteractorTest {
   @Test public void shouldReturnListingWithHoldingIfUserHaveHoldingStreams() throws Exception {
     when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
         listingStreams());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -133,27 +137,15 @@ public class GetUserListingStreamsInteractorTest {
     assertEquals(listing.includesFavorited(), true);
   }
 
-  @Test public void shouldLoadUserListingFromLocal() throws Exception {
-    interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
-
-    verify(localStreamSearchRepository).getStreamsListing(anyString(), anyArray());
-  }
-
   @Test public void shouldLoadUserListingFromRemote() throws Exception {
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
     verify(remoteStreamSearchRepository).getStreamsListing(anyString(), anyArray());
   }
 
-  @Test public void shouldLoadFavoritesFromLocal() throws Exception {
-    when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
-    interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
-
-    verify(localStreamRepository, times(2)).getStreamsByIds(anyList(), anyArray());
-  }
-
   @Test public void shouldLoadFavoritesFromRemote() throws Exception {
-    when(remoteFavoriteRepository.getFavorites(ID_USER)).thenReturn(favorites());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
@@ -161,6 +153,8 @@ public class GetUserListingStreamsInteractorTest {
   }
 
   @Test public void shouldReturnListingWithoutHoldingIfUserHaveNoHoldingStreams() throws Exception {
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(follow());
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
 
@@ -215,6 +209,18 @@ public class GetUserListingStreamsInteractorTest {
       streams.add(stream);
     }
     return streams;
+  }
+
+  private Follows follow() {
+    Follows follows = new Follows();
+    Stream stream = new Stream();
+    stream.setAuthorId(ID_USER);
+    stream.setId(ID_STREAM);
+    stream.setRemoved(false);
+    List<Followable> data = new ArrayList<>();
+    data.add(stream);
+    follows.setData(data);
+    return follows;
   }
 
   private List<StreamSearchResult> listingStreams() {
