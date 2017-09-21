@@ -37,6 +37,7 @@ import org.mockito.Spy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -159,7 +160,7 @@ public class GetUserListingStreamsInteractorTest {
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
-    verify(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
+    verify(remoteFollowRepository).getFollowing(anyString(), anyArray(), anyLong());
   }
 
   @Test public void shouldReturnListingWithoutHoldingIfUserHaveNoHoldingStreams() throws Exception {
@@ -175,6 +176,8 @@ public class GetUserListingStreamsInteractorTest {
       throws Exception {
     when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
         listingStreams());
+    when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
+        .thenReturn(followEmpty());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
@@ -185,7 +188,7 @@ public class GetUserListingStreamsInteractorTest {
   @Test public void shouldNotifyErrorWhenRemoteStreamRepositoryThrowServerComunicationException()
       throws Exception {
     doThrow(ServerCommunicationException.class).
-        when(remoteStreamRepository).getStreamsByIds(anyList(), anyArray());
+        when(remoteFollowRepository).getFollowing(anyString(), anyArray(), anyLong());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
 
@@ -229,6 +232,13 @@ public class GetUserListingStreamsInteractorTest {
     stream.setRemoved(false);
     List<Followable> data = new ArrayList<>();
     data.add(stream);
+    follows.setData(data);
+    return follows;
+  }
+
+  private Follows followEmpty() {
+    Follows follows = new Follows();
+    List<Followable> data = new ArrayList<>();
     follows.setData(data);
     return follows;
   }
