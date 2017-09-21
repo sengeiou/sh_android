@@ -16,7 +16,6 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
@@ -25,9 +24,7 @@ import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -40,7 +37,6 @@ import static org.mockito.Matchers.anyList;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -195,14 +191,6 @@ public class GetUserListingStreamsInteractorTest {
     verify(errorCallback).onError(any(ServerCommunicationException.class));
   }
 
-  private Map<String, Integer> holderWatchers() {
-    Map<String, Integer> map = new HashMap<>();
-    for (Stream stream : favoriteStreams()) {
-      map.put(stream.getId(), 0);
-    }
-    return map;
-  }
-
   private List<StreamSearchResult> favoriteStreamResults() {
     List<StreamSearchResult> streamSearchResults = new ArrayList<>();
     for (Stream stream : favoriteStreams()) {
@@ -217,7 +205,7 @@ public class GetUserListingStreamsInteractorTest {
     List<Stream> streams = new ArrayList<>();
     for (Followable follow : follow().getData()) {
       Stream stream = new Stream();
-      stream.setId(((Stream)follow).getId());
+      stream.setId(((Stream) follow).getId());
       stream.setAuthorId(ID_USER);
       streams.add(stream);
     }
