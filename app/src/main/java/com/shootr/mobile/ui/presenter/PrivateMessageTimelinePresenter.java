@@ -368,7 +368,7 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   @Override public void resume() {
     bus.register(this);
     startPollingShots();
-    loadTimeline(view, channelId, idTargetUser);
+    //loadTimeline(view, channelId, idTargetUser);
     updateMutedState(privateMessageChannelModel.isMuted());
     if (hasBeenPaused) {
       isFirstLoad = false;
