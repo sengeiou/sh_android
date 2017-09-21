@@ -39,8 +39,10 @@ public class RemoveFromFavoritesInteractor implements Interactor {
     if (existingFavorite != null) {
       localFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
       remoteFavoriteRepository.removeFavoriteByStream(existingFavorite.getIdStream());
-      notifyCompleted();
+    } else {
+      remoteFavoriteRepository.removeFavoriteByStream(idStream);
     }
+    notifyCompleted();
   }
 
   protected void notifyCompleted() {

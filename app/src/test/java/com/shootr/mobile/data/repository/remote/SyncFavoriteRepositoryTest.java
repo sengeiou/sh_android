@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
-import com.shootr.mobile.data.mapper.OnBoardingStreamEntityMapper;
+import com.shootr.mobile.data.mapper.OnBoardingEntityMapper;
 import com.shootr.mobile.data.repository.datasource.favorite.ExternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
@@ -39,7 +39,7 @@ public class SyncFavoriteRepositoryTest {
     @Mock SyncableFavoriteEntityFactory syncableFavoriteEntityFactory;
     @Mock SyncTrigger syncTrigger;
     @Mock SessionRepository sessionRepository;
-    @Mock OnBoardingStreamEntityMapper onBoardingStreamEntityMapper;
+    @Mock OnBoardingEntityMapper onBoardingEntityMapper;
 
     private SyncFavoriteRepository syncFavoriteRepository;
 
@@ -48,7 +48,7 @@ public class SyncFavoriteRepositoryTest {
         syncFavoriteRepository = new SyncFavoriteRepository(remoteFavoriteDataSource,
           localFavoriteDataSource,
           favoriteEntityMapper,
-          syncableFavoriteEntityFactory, onBoardingStreamEntityMapper, syncTrigger,
+          syncableFavoriteEntityFactory, onBoardingEntityMapper, syncTrigger,
           sessionRepository);
     }
 

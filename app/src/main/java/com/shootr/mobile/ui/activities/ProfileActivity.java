@@ -659,7 +659,7 @@ public class ProfileActivity extends BaseActivity
     setupAvatar(userModel);
     followersTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowers()));
     followingTextView.setText(numberFormatUtil.formatNumbers(
-        userModel.getNumFollowings() + userModel.getFavoritedStreamsCount()));
+        userModel.getNumFollowings()));
   }
 
   private void setupAvatar(UserModel userModel) {

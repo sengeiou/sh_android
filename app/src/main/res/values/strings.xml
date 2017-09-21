@@ -530,4 +530,8 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <string name="onboarding_streams_header">Follow streams \n about things you like</string>
+  <string name="onboarding_users_header">Follow users \n you like</string>
+  <string name="onboarding_continue">Continue</string>
+  <string name="onboarding_enter">Enter Shootr</string>
 </resources>

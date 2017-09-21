@@ -1,6 +1,6 @@
 package com.shootr.mobile.ui.views;
 
-import com.shootr.mobile.ui.model.OnBoardingStreamModel;
+import com.shootr.mobile.ui.model.OnBoardingModel;
 import java.util.List;
 
 public interface OnBoardingView {
@@ -9,11 +9,13 @@ public interface OnBoardingView {
 
   void hideLoading();
 
-  void renderOnBoardingList(List<OnBoardingStreamModel> onBoardingStreamModels);
+  void renderOnBoardingList(List<OnBoardingModel> onBoardingModels);
 
-  void sendAnalytics(String idStream, String streamTitle, boolean isStrategic);
+  void sendStreamAnalytics(String idStream, String streamTitle, boolean isStrategic);
 
-  void goToStreamList();
+  void sendUserAnalytics(boolean isStrategic);
+
+  void goNextScreen();
 
   void hideGetStarted();
 

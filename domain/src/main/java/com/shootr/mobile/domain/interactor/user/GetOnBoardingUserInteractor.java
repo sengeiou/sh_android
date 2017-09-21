@@ -1,4 +1,4 @@
-package com.shootr.mobile.domain.interactor.stream;
+package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -11,7 +11,7 @@ import com.shootr.mobile.domain.utils.LocaleProvider;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GetOnBoardingStreamInteractor implements Interactor {
+public class GetOnBoardingUserInteractor implements Interactor {
 
   private final ExternalFavoriteRepository externalFavoriteRepository;
   private final LocaleProvider localeProvider;
@@ -23,7 +23,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
 
   private String type;
 
-  @Inject public GetOnBoardingStreamInteractor(ExternalFavoriteRepository externalFavoriteRepository,
+  @Inject public GetOnBoardingUserInteractor(ExternalFavoriteRepository externalFavoriteRepository,
       LocaleProvider localeProvider, InteractorHandler interactorHandler, PostExecutionThread postExecutionThread) {
     this.externalFavoriteRepository = externalFavoriteRepository;
     this.localeProvider = localeProvider;
@@ -31,7 +31,7 @@ public class GetOnBoardingStreamInteractor implements Interactor {
     this.postExecutionThread = postExecutionThread;
   }
 
-  public void loadOnBoardingStreams(String type, Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
+  public void loadOnBoardingUsers(String type, Callback<List<OnBoarding>> callback, ErrorCallback errorCallback) {
     this.callback = callback;
     this.errorCallback = errorCallback;
     this.type = type;
@@ -39,13 +39,13 @@ public class GetOnBoardingStreamInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    loadOnBoardingStreams();
+    loadOnBoardingUsers();
   }
 
-  private void loadOnBoardingStreams() {
+  private void loadOnBoardingUsers() {
     try {
       String locale = getLocale();
-      notifyResult(externalFavoriteRepository.getOnBoardingStreams(type, locale));
+      notifyResult(externalFavoriteRepository.getOnBoardingUsers(type, locale));
     } catch (ServerCommunicationException error) {
             notifyError(error);
     }
