@@ -8,9 +8,9 @@ public interface AnalyticsTool {
 
   void init(Application application);
 
-  void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context);
+  void sendOpenAppMixPanelAnalytics(String actionId, Context context);
 
-  void sendSignUpEvent(User newUser, String actionId, String loginType, Context context);
+  void sendSignUpEvent(User newUser, String actionId, Context context);
 
   void setUser(User user);
 

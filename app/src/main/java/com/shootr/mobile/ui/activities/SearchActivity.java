@@ -157,7 +157,7 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
         (SearchView.SearchAutoComplete) searchView.findViewById(
             android.support.v7.appcompat.R.id.search_src_text);
     searchAutoComplete.setHintTextColor(getResources().getColor(R.color.hint_black));
-
+    searchView.requestFocus();
     return true;
   }
 

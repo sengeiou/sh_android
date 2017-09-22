@@ -316,6 +316,8 @@
         android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
     <activity android:name=".ui.activities.OnBoardingStreamActivity">
     </activity>
+    <activity android:name=".ui.activities.OnBoardingUserActivity">
+    </activity>
     <activity
         android:name=".ui.activities.SearchActivity"
         android:theme="@style/ShootrTheme.Closable">
@@ -325,6 +327,8 @@
         android:theme="@style/ShootrTheme">
     </activity>
     <activity android:name=".ui.activities.ShareStreamActivity">
+    </activity>
+    <activity android:name=".ui.activities.SplashScreenActivity">
     </activity>
   </application>
 

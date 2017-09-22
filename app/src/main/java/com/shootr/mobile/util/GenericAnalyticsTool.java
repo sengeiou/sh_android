@@ -39,7 +39,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String PUSH_REDIRECTION = "pushRedirection";
   private static final String ID_POLL = "idPoll";
   private static final String ID_SHOT = "idShot";
-  private static final String LOGIN_TYPE = "loginType";
   private static final String FAVORITES = "Favorites";
   private static final String FOLLOWING = "Follows";
   private static final String FOLLOWERS = "Followers";
@@ -106,22 +105,19 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override
-  public void sendOpenAppMixPanelAnalytics(String actionId, String loginType, Context context) {
+  public void sendOpenAppMixPanelAnalytics(String actionId, Context context) {
     try {
       JSONObject props = new JSONObject();
       mixpanel = MixpanelAPI.
           getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
-      props.put(LOGIN_TYPE, loginType);
       mixpanel.track(actionId, props);
     } catch (NullPointerException error) {
       Log.e("Shootr", "Unable to build mixPanel object", error);
-    } catch (JSONException e) {
-      e.printStackTrace();
     }
   }
 
   @Override
-  public void sendSignUpEvent(User newUser, String actionId, String loginType, Context context) {
+  public void sendSignUpEvent(User newUser, String actionId, Context context) {
     try {
       JSONObject props = new JSONObject();
       mixpanel = MixpanelAPI.
@@ -129,25 +125,20 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       mixpanel.alias(newUser.getIdUser(), mixpanel.getDistinctId());
       mixpanel.getPeople().identify(newUser.getIdUser());
       mixpanel.getPeople().set(DISTINCT_ID, newUser.getIdUser());
-      mixpanel.getPeople().set(LOGIN_TYPE, loginType);
-      props.put(LOGIN_TYPE, loginType);
       mixpanel.track(actionId, props);
       mixpanel.flush();
     } catch (NullPointerException error) {
       Log.e("Shootr", "Unable to build mixPanel object", error);
-    } catch (JSONException e) {
-      e.printStackTrace();
     }
-    sendSignupToApsFlyer(actionId, loginType, context);
+    sendSignupToApsFlyer(actionId, context);
   }
 
-  private void sendSignupToApsFlyer(String actionId, String loginType, Context context) {
+  private void sendSignupToApsFlyer(String actionId, Context context) {
     if (appsFlyerLib != null) {
       try {
         if (user != null) {
           Map<String, Object> eventData = new HashMap<>();
           eventData.put(DISTINCT_ID, user.getIdUser());
-          eventData.put(LOGIN_TYPE, loginType);
           appsFlyerLib.trackEvent(context, actionId, eventData);
         }
       } catch (NullPointerException error) {
@@ -335,9 +326,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       }
       if (idShot != null) {
         props.put(ID_SHOT, idShot);
-      }
-      if (loginType != null) {
-        props.put(LOGIN_TYPE, loginType);
       }
       if (newContent != null) {
         props.put(NEW_CONTENT, newContent);

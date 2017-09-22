@@ -4,7 +4,7 @@ import com.shootr.mobile.data.api.entity.FavoriteApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.OnBoardingFavoritesEntity;
-import com.shootr.mobile.data.entity.OnBoardingStreamEntity;
+import com.shootr.mobile.data.entity.OnBoardingEntity;
 import java.io.IOException;
 import java.util.List;
 import retrofit.client.Response;
@@ -25,10 +25,10 @@ public interface FavoriteApiService {
     @DELETE("/favorite/{idFavoriteOrStream}") Response deleteFavorite(@Path("idFavoriteOrStream") String idStream)
       throws ApiException, IOException;
 
-    @GET("/onboarding") List<OnBoardingStreamEntity> getFavoritesOnboarding(
+    @GET("/onboarding") List<OnBoardingEntity> getFavoritesOnboarding(@Query("type") String type,
         @Query("locale") String locale) throws ApiException, IOException;
 
-    @POST("/favorite/bulk") List<FavoriteApiEntity> addOnBoardingFavorites(
+    @POST("/followable/bulk") List<OnBoardingFavoritesEntity> addOnBoardingFavorites(
         @Body OnBoardingFavoritesEntity onBoardingFavoritesEntity) throws ApiException, IOException;
 
 }

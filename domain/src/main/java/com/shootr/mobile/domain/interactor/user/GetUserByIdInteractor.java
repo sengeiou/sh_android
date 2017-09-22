@@ -45,7 +45,9 @@ public class GetUserByIdInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    loadLocalUser();
+    if (userId != null) {
+      loadLocalUser();
+    }
     if (sessionRepository.getCurrentUserId() != null) {
       if (!sessionRepository.getCurrentUserId().equals(userId) || !onlyLocal) {
         loadRemoteUser();

@@ -43,7 +43,7 @@ public class MessagesTimelineAdapter extends RecyclerView.Adapter<MessageViewHol
     this.onUsernameClickListener = onUsernameClickListener;
     this.timeUtils = timeUtils;
     this.onShotUrlClickListener = onShotUrlClickListener;
-    this.messages = new ArrayList<>(0);
+    this.messages = new ArrayList<>();
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     this.onImageClickListener = onImageClickListener;
   }

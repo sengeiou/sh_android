@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.activities.registro;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,7 +14,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.CharacterStyle;
 import android.text.style.ClickableSpan;
 import android.view.View;
-import android.view.Window;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -29,7 +30,6 @@ import com.facebook.login.LoginResult;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
-import com.shootr.mobile.data.prefs.LoginType;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.ShouldShowIntro;
 import com.shootr.mobile.data.prefs.StringPreference;
@@ -43,7 +43,6 @@ import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-import com.shootr.mobile.ui.activities.IntroActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
@@ -65,6 +64,7 @@ public class LoginSelectionActivity extends BaseActivity {
   @BindView(R.id.login_progress) View loading;
   @BindView(R.id.login_buttons) View buttonsContainer;
   @BindView(R.id.login_selection_legal_disclaimer) TextView disclaimer;
+  @BindView(R.id.container) RelativeLayout container;
 
   @BindString(R.string.error_facebook_login) String facebookError;
   @BindString(R.string.error_login_facebook_method) String facebookMethodError;
@@ -83,7 +83,6 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject GetUserByIdInteractor getUserByIdInteractor;
   @Inject GetStreamInteractor getStreamById;
   @Inject @ShouldShowIntro BooleanPreference shouldShowIntro;
-  @Inject @LoginType StringPreference loginTypePreference;
   @Inject LocaleProvider localeProvider;
   @Inject IntentFactory intentFactory;
   @Inject SessionRepository sessionRepository;
@@ -93,7 +92,6 @@ public class LoginSelectionActivity extends BaseActivity {
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
-  private boolean shouldShowLongLogin;
 
   @Override protected int getLayoutResource() {
     return R.layout.activity_login;
@@ -103,21 +101,25 @@ public class LoginSelectionActivity extends BaseActivity {
     ButterKnife.bind(this);
     setupDisclaimerLinks();
     setupStatusBarColor();
-    setupLoginIntro();
+    setupBackground();
   }
 
-  private void setupLoginIntro() {
-    if (loginTypePreference.get() == null) {
-      loginTypePreference.set(loginTypeUtils.shouldShowLongLogin() ? analyticsActionLongLogin
-          : analyticsActionShortLogin);
+  private void setupBackground() {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+      AnimationDrawable animationDrawable = (AnimationDrawable) container.getBackground();
+      animationDrawable.setEnterFadeDuration(2000);
+      animationDrawable.setExitFadeDuration(4000);
+      animationDrawable.start();
     }
-    shouldShowLongLogin = loginTypePreference.get().equals(analyticsActionLongLogin);
   }
 
   private void setupStatusBarColor() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      Window window = getWindow();
-      window.setStatusBarColor(getResources().getColor(R.color.primary_dark));
+    View decorView = getWindow().getDecorView();
+    int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+    decorView.setSystemUiVisibility(uiOptions);
+    android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
+      actionBar.hide();
     }
   }
 
@@ -220,18 +222,11 @@ public class LoginSelectionActivity extends BaseActivity {
   }
 
   private void sendOpenAppFirstTimeAnalytics() {
-    analyticsTool.sendOpenAppMixPanelAnalytics(analyticsActionOpenApp,
-        shouldShowLongLogin ? analyticsActionLongLogin
-            : analyticsActionShortLogin, getBaseContext());
+    analyticsTool.sendOpenAppMixPanelAnalytics(analyticsActionOpenApp, getBaseContext());
   }
 
   private void setupIntro() {
-    if (shouldShowLongLogin) {
-      startActivity(new Intent(this, IntroActivity.class));
-      finish();
-    } else {
-      setupFacebook();
-    }
+    setupFacebook();
   }
 
   private void retrieveOnUpgradeInfo() {
@@ -324,9 +319,7 @@ public class LoginSelectionActivity extends BaseActivity {
   }
 
   private void sendSignUpAnalythics() {
-    analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(),
-        analyticsActionSignup,
-        shouldShowLongLogin ? analyticsActionLongLogin : analyticsActionShortLogin,
+    analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(), analyticsActionSignup,
         getBaseContext());
   }
 
@@ -336,9 +329,6 @@ public class LoginSelectionActivity extends BaseActivity {
 
   @OnClick(R.id.login_btn_email) public void registerWithEmail() {
     Intent intent = new Intent(this, EmailRegistrationActivity.class);
-    intent.putExtra(EmailRegistrationActivity.LOGIN_TYPE,
-        shouldShowLongLogin ? analyticsActionLongLogin
-            : analyticsActionShortLogin);
     startActivity(intent);
   }
 
@@ -364,5 +354,10 @@ public class LoginSelectionActivity extends BaseActivity {
 
   private void showFacebookError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+  }
+
+  @Override protected void onResume() {
+    super.onResume();
+    setupStatusBarColor();
   }
 }

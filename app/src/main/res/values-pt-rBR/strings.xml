@@ -534,4 +534,10 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
+  <string name="login_message">Talk about anything</string>
+  <string name="onboarding_continue">Continuar</string>
+  <string name="onboarding_enter">Continuar</string>
+  <string name="onboarding_streams_header">Siga os streams \n dos assuntos que você gosta</string>
+  <string name="onboarding_users_header">E siga as pessoas \n que lhe interessam</string>
+  <string name="welcome_shootr">Entrando em Shootr…</string>
 </resources>

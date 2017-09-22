@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote;
 import com.shootr.mobile.data.entity.FavoriteEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.mapper.FavoriteEntityMapper;
-import com.shootr.mobile.data.mapper.OnBoardingStreamEntityMapper;
+import com.shootr.mobile.data.mapper.OnBoardingEntityMapper;
 import com.shootr.mobile.data.repository.datasource.favorite.ExternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
@@ -12,7 +12,7 @@ import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.StreamAlreadyInFavoritesException;
 import com.shootr.mobile.domain.model.stream.Favorite;
-import com.shootr.mobile.domain.model.stream.OnBoardingStream;
+import com.shootr.mobile.domain.model.stream.OnBoarding;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
 import java.util.List;
@@ -25,20 +25,20 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
   private final InternalFavoriteDatasource localFavoriteDataSource;
   private final FavoriteEntityMapper favoriteEntityMapper;
   private final SyncableFavoriteEntityFactory syncableFavoriteEntityFactory;
-  private final OnBoardingStreamEntityMapper suggestedStreamEntityMapper;
+  private final OnBoardingEntityMapper onBoardingEntityMapper;
   private final SyncTrigger syncTrigger;
   private final SessionRepository sessionRepository;
 
   @Inject public SyncFavoriteRepository(ExternalFavoriteDatasource remoteFavoriteDataSource,
       InternalFavoriteDatasource localFavoriteDataSource, FavoriteEntityMapper favoriteEntityMapper,
       SyncableFavoriteEntityFactory syncableFavoriteEntityFactory,
-      OnBoardingStreamEntityMapper suggestedStreamEntityMapper, SyncTrigger syncTrigger,
+      OnBoardingEntityMapper suggestedStreamEntityMapper, SyncTrigger syncTrigger,
       SessionRepository sessionRepository) {
     this.remoteFavoriteDataSource = remoteFavoriteDataSource;
     this.localFavoriteDataSource = localFavoriteDataSource;
     this.favoriteEntityMapper = favoriteEntityMapper;
     this.syncableFavoriteEntityFactory = syncableFavoriteEntityFactory;
-    this.suggestedStreamEntityMapper = suggestedStreamEntityMapper;
+    this.onBoardingEntityMapper = suggestedStreamEntityMapper;
     this.syncTrigger = syncTrigger;
     this.sessionRepository = sessionRepository;
   }
@@ -73,12 +73,16 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
     return favoriteEntityMapper.transformEntities(remoteFavorites);
   }
 
-  @Override public List<OnBoardingStream> getOnBoardingStreams(String locale) {
-    return suggestedStreamEntityMapper.map(remoteFavoriteDataSource.getOnBoardingStreams(locale));
+  @Override public List<OnBoarding> getOnBoardingStreams(String type, String locale) {
+    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale));
   }
 
-  @Override public void addSuggestedFavorites(List<String> idStreams) {
-    remoteFavoriteDataSource.addFavorites(idStreams);
+  @Override public List<OnBoarding> getOnBoardingUsers(String type, String locale) {
+    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale));
+  }
+
+  @Override public void addSuggestedFavorites(List<String> idStreams, String type) {
+    remoteFavoriteDataSource.addFavorites(idStreams, type);
   }
 
   @Override public void removeFavoriteByStream(String idStream) {

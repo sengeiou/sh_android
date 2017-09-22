@@ -562,7 +562,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
 
   @Override public void showEmpty() {
     if (emptyView != null) {
-      emptyView.setVisibility(View.VISIBLE);
+      if (adapter.getItemCount() == 0) {
+        emptyView.setVisibility(View.VISIBLE);
+      }
     }
   }
 

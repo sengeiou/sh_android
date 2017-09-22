@@ -178,7 +178,7 @@ public class ListingListPresenterTest {
         setupFavoritesInteractorCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
-        listingListPresenter.openContextualMenu(streamResultModel());
+        listingListPresenter.openContextualMenu(streamResultModelFavorite());
 
         verify(listingView).showCurrentUserContextMenuWithoutAddFavorite(any(StreamResultModel.class));
     }
@@ -206,7 +206,7 @@ public class ListingListPresenterTest {
         setupUserWithoutListingCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
-        listingListPresenter.openContextualMenu(any(StreamResultModel.class));
+        listingListPresenter.openContextualMenu(streamResultModel());
 
         verify(listingView).showContextMenuWithAddFavorite(any(StreamResultModel.class));
     }
@@ -314,6 +314,18 @@ public class ListingListPresenterTest {
         streamModel.setIdStream(STREAM_ID);
         streamModel.setAuthorId(PROFILE_ID_USER);
         streamModel.setRemoved(false);
+        streamModel.setFavorite(false);
+        streamResultModel.setStreamModel(streamModel);
+        return streamResultModel;
+    }
+
+    private StreamResultModel streamResultModelFavorite() {
+        StreamResultModel streamResultModel = new StreamResultModel();
+        StreamModel streamModel = new StreamModel();
+        streamModel.setIdStream(STREAM_ID);
+        streamModel.setAuthorId(PROFILE_ID_USER);
+        streamModel.setRemoved(false);
+        streamModel.setFavorite(true);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
     }
@@ -360,6 +372,7 @@ public class ListingListPresenterTest {
         streamModel.setIdStream(STREAM_ID);
         streamModel.setAuthorId(STREAM_AUTHOR_ID);
         streamModel.setTitle(STREAM_TITLE);
+        streamModel.setFavorite(true);
         streamResultModel.setStreamModel(streamModel);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;

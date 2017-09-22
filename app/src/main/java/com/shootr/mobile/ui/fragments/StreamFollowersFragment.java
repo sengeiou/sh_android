@@ -201,7 +201,7 @@ public class StreamFollowersFragment extends BaseFragment
     builder.setSource(discoverSearchSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setStreamName(stream.getTitle());
-    builder.setIdStream(stream.getIdStream());
+    builder.setIdStreams(stream.getIdStreams());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);*/
   }
@@ -213,7 +213,7 @@ public class StreamFollowersFragment extends BaseFragment
     builder.setLabelId(analyticsLabelFollow);
     builder.setSource(discoverUserSearch);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(user.getIdUser());
+    builder.setIdTargetUser(user.getIdUsers());
     builder.setTargetUsername(user.getUsername());
     analyticsTool.analyticsSendAction(builder);*/
   }

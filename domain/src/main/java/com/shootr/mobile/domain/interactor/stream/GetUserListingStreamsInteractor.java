@@ -5,17 +5,16 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.model.stream.Favorite;
+import com.shootr.mobile.domain.model.Followable;
+import com.shootr.mobile.domain.model.FollowableType;
+import com.shootr.mobile.domain.model.Follows;
 import com.shootr.mobile.domain.model.stream.Listing;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
-import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
-import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,33 +26,28 @@ public class GetUserListingStreamsInteractor implements Interactor {
   private final PostExecutionThread postExecutionThread;
   private final InternalStreamSearchRepository localStreamSearchRepository;
   private final StreamSearchRepository remoteStreamSearchRepository;
-  private final StreamRepository localStreamRepository;
-  private final ExternalStreamRepository remoteStreamRepository;
-  private final ExternalFavoriteRepository remoteFavoriteRepository;
+  private final FollowRepository remoteFollowRepository;
 
   private String idUser;
   private Callback<Listing> callback;
   private ErrorCallback errorCallback;
-  private List<String> favoriteIds;
+  private List<Stream> favoriteStreams;
 
   @Inject public GetUserListingStreamsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
       InternalStreamSearchRepository localStreamSearchRepository,
       @Remote StreamSearchRepository remoteStreamSearchRepository,
-      @Local StreamRepository localStreamRepository,
-      ExternalStreamRepository remoteStreamRepository,
-      ExternalFavoriteRepository remoteFavoriteRepository) {
+      @Remote FollowRepository remoteFollowRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamSearchRepository = localStreamSearchRepository;
     this.remoteStreamSearchRepository = remoteStreamSearchRepository;
-    this.localStreamRepository = localStreamRepository;
-    this.remoteStreamRepository = remoteStreamRepository;
-    this.remoteFavoriteRepository = remoteFavoriteRepository;
+    this.remoteFollowRepository = remoteFollowRepository;
   }
 
   public void loadUserListingStreams(Callback<Listing> callback, ErrorCallback errorCallback,
       String idUser) {
+    favoriteStreams = new ArrayList<>();
     this.callback = callback;
     this.errorCallback = errorCallback;
     this.idUser = idUser;
@@ -71,17 +65,15 @@ public class GetUserListingStreamsInteractor implements Interactor {
   }
 
   private void loadRemoteFavoriteIds() {
-    List<Favorite> favorites = remoteFavoriteRepository.getFavorites(idUser);
-    favoriteIds = new ArrayList<>(favorites.size());
-    for (Favorite favorite : favorites) {
-      favoriteIds.add(favorite.getIdStream());
+    Follows following =
+        remoteFollowRepository.getFollowing(idUser, new String[] { FollowableType.STREAM }, null);
+    for (Followable follow : following.getData()) {
+      favoriteStreams.add((Stream) follow);
     }
   }
 
   private void loadUserListingStreamsFromRemote() throws ServerCommunicationException {
     try {
-      List<Stream> favoriteStreams = new ArrayList<>();
-      favoriteStreams = loadStreams(favoriteStreams);
       List<StreamSearchResult> holdingStreamResults =
           loadUserListingStreamsFromRepository(remoteStreamSearchRepository);
 
@@ -93,21 +85,7 @@ public class GetUserListingStreamsInteractor implements Interactor {
     }
   }
 
-  private List<Stream> loadStreams(List<Stream> favoriteStreams) {
-    if (!favoriteIds.isEmpty()) {
-      favoriteStreams =
-          localStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
-      if (favoriteStreams.isEmpty()) {
-        favoriteStreams =
-            remoteStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
-      }
-    }
-    return favoriteStreams;
-  }
-
   private void loadUserListingStreamsFromLocal() {
-    List<Stream> favoriteStreams =
-        localStreamRepository.getStreamsByIds(favoriteIds, StreamMode.TYPES_STREAM);
     List<StreamSearchResult> holdingStreamResults =
         loadUserListingStreamsFromRepository(localStreamSearchRepository);
     Listing listing = getListing(favoriteStreams, holdingStreamResults);
