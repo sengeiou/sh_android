@@ -535,8 +535,9 @@
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
   <string name="onboarding_streams_header">Segueix streams \n de temes que t\'agradin</string>
-  <string name="onboarding_users_header">Segueix usuaris \n que t\'interessin</string>
+  <string name="onboarding_users_header">I segueix gent \n que t\'interessi</string>
   <string name="onboarding_continue">Continuar</string>
-  <string name="onboarding_enter">Entrar a Shootr</string>
-  <string name="login_message">¿De qué quieres hablar?</string>
+  <string name="onboarding_enter">Continuar</string>
+  <string name="login_message">Talk about anything</string>
+  <string name="welcome_shootr">Entrant a Shootr…</string>
 </resources>
