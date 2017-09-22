@@ -68,7 +68,8 @@
         android:name=".ui.activities.registro.LoginSelectionActivity"
         android:label="@string/app_name"
         android:launchMode="singleTop"
-        android:theme="@style/ShootrTheme.NoActionBar"/>
+        android:theme="@style/ShootrTheme.NoActionBar"
+        android:screenOrientation="portrait"/>
     <activity
         android:name=".ui.activities.registro.EmailRegistrationActivity"
         android:label="@string/title_activity_registration_email"
@@ -78,8 +79,7 @@
         android:label="@string/title_activity_login_email">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
-          android:value="com.shootr.mobile.ui.activities.registro.LoginSelectionActivity"
-          android:screenOrientation="portrait"/>
+          android:value="com.shootr.mobile.ui.activities.registro.LoginSelectionActivity"/>
     </activity>
     <activity
         android:name=".ui.activities.PostNewShotActivity"
