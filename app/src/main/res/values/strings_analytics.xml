@@ -91,7 +91,7 @@
     <string name="analytics_source_find_participants">findParticipants</string>
     <string name="analytics_source_nicers">nicers</string>
     <string name="analytics_source_activity">activity</string>
-    <string name="analytics_source_on_boarding">onBoarding</string>
+    <string name="analytics_source_on_boarding">onboarding</string>
     <string name="analytics_source_stream_detail">streamDetail</string>
     <string name="analytics_source_pin_message">pinMessage</string>
     <string name="analytics_source_contributors">contributors</string>

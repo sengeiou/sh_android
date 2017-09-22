@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import butterknife.BindString;
@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.adapters.OnBoardingAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.OnBoardingModel;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.OnBoardingPresenter;
 import com.shootr.mobile.ui.views.OnBoardingView;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -34,7 +35,7 @@ import static android.view.View.GONE;
 public class OnBoardingUserActivity extends BaseActivity implements OnBoardingView {
 
   @BindView(R.id.users_list) RecyclerView usersList;
-  @BindView(R.id.get_started_button) Button getStartedButton;
+  @BindView(R.id.continue_container) LinearLayout getStartedButton;
   @BindView(R.id.get_started_progress) ProgressBar progressBar;
   @BindView(R.id.activity_on_boarding_user) RelativeLayout container;
   @BindString(R.string.analytics_source_on_boarding) String onBoardingSource;
@@ -92,6 +93,8 @@ public class OnBoardingUserActivity extends BaseActivity implements OnBoardingVi
   @Override public void hideLoading() {
     usersList.setVisibility(View.VISIBLE);
     progressBar.setVisibility(GONE);
+    getStartedButton.setVisibility(View.VISIBLE);
+
   }
 
   @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingModels) {
@@ -103,16 +106,17 @@ public class OnBoardingUserActivity extends BaseActivity implements OnBoardingVi
     /* no-op */
   }
 
-  @Override public void sendUserAnalytics(boolean isStrategic) {
+  @Override public void sendUserAnalytics(UserModel userModel) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(this);
+    builder.setContext(getBaseContext());
     builder.setActionId(analyticsActionFollow);
     builder.setLabelId(analyticsLabelFollow);
     builder.setSource(onBoardingSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIsStrategic(isStrategic);
+    builder.setIsStrategic(userModel.isStrategic());
+    builder.setIdTargetUser(userModel.getIdUser());
+    builder.setTargetUsername(userModel.getUsername());
     analyticsTool.analyticsSendAction(builder);
-    analyticsTool.appsFlyerSendAction(builder);
   }
 
   @Override public void goNextScreen() {
@@ -124,11 +128,12 @@ public class OnBoardingUserActivity extends BaseActivity implements OnBoardingVi
   }
 
   @Override public void hideGetStarted() {
-    getStartedButton.setVisibility(View.INVISIBLE);
+    getStartedButton.setVisibility(View.GONE);
   }
 
   @Override public void showError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+    goNextScreen();
   }
 
   @OnClick(R.id.continue_container) public void onGetStartedClick() {

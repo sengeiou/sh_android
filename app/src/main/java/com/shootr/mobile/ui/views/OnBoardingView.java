@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.OnBoardingModel;
+import com.shootr.mobile.ui.model.UserModel;
 import java.util.List;
 
 public interface OnBoardingView {
@@ -13,7 +14,7 @@ public interface OnBoardingView {
 
   void sendStreamAnalytics(String idStream, String streamTitle, boolean isStrategic);
 
-  void sendUserAnalytics(boolean isStrategic);
+  void sendUserAnalytics(UserModel userModel);
 
   void goNextScreen();
 

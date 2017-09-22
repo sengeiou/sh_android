@@ -158,7 +158,7 @@ public class OnBoardingPresenter implements Presenter {
       addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.USER,
           new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-              sendStreamAnalytics();
+              sendUserAnalytics();
               checkStreamsLoaded();
             }
           }, new Interactor.ErrorCallback() {
@@ -177,6 +177,13 @@ public class OnBoardingPresenter implements Presenter {
           entry.getValue().isStrategic());
     }
   }
+
+  private void sendUserAnalytics() {
+    for (Map.Entry<String, UserModel> entry : favoriteUsers.entrySet()) {
+      onBoardingView.sendUserAnalytics(entry.getValue());
+    }
+  }
+
 
   public void putFavorite(OnBoardingModel onBoardingModel) {
     StreamModel streamModel = onBoardingModel.getStreamModel();

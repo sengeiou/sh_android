@@ -7,7 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import butterknife.BindString;
@@ -20,6 +20,7 @@ import com.shootr.mobile.ui.adapters.OnBoardingAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnBoardingFavoriteClickListener;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.ui.model.OnBoardingModel;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.OnBoardingPresenter;
 import com.shootr.mobile.ui.views.OnBoardingView;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -34,7 +35,7 @@ import static android.view.View.GONE;
 public class OnBoardingStreamActivity extends BaseActivity implements OnBoardingView {
 
   @BindView(R.id.streams_list) RecyclerView streamsList;
-  @BindView(R.id.get_started_button) Button getStartedButton;
+  @BindView(R.id.continue_container) LinearLayout getStartedButton;
   @BindView(R.id.get_started_progress) ProgressBar progressBar;
   @BindView(R.id.activity_on_boarding_stream) RelativeLayout container;
   @BindString(R.string.analytics_source_on_boarding) String onBoardingSource;
@@ -92,6 +93,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   @Override public void hideLoading() {
     streamsList.setVisibility(View.VISIBLE);
     progressBar.setVisibility(GONE);
+    getStartedButton.setVisibility(View.VISIBLE);
   }
 
   @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingModels) {
@@ -113,7 +115,7 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  @Override public void sendUserAnalytics(boolean isStrategic) {
+  @Override public void sendUserAnalytics(UserModel userModel) {
     /* no-op */
   }
 
@@ -125,11 +127,12 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @Override public void hideGetStarted() {
-    getStartedButton.setVisibility(View.INVISIBLE);
+    getStartedButton.setVisibility(View.GONE);
   }
 
   @Override public void showError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+    goNextScreen();
   }
 
   @OnClick(R.id.continue_container) public void onGetStartedClick() {
