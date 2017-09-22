@@ -314,9 +314,12 @@
     <activity
         android:name="com.mixpanel.android.surveys.SurveyActivity"
         android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
-    <activity android:name=".ui.activities.OnBoardingStreamActivity">
+    <activity
+        android:name=".ui.activities.OnBoardingStreamActivity"
+        android:screenOrientation="portrait">
     </activity>
-    <activity android:name=".ui.activities.OnBoardingUserActivity">
+    <activity android:name=".ui.activities.OnBoardingUserActivity"
+        android:screenOrientation="portrait">
     </activity>
     <activity
         android:name=".ui.activities.SearchActivity"
