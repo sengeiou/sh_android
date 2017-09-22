@@ -1,16 +1,11 @@
 package com.shootr.mobile.ui.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.animation.AnimationUtils;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -61,7 +56,6 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
     ButterKnife.bind(this);
-    animateView(getStartedButton);
     LinearLayoutManager layoutManager = new LinearLayoutManager(this);
     streamsList.setLayoutManager(layoutManager);
     LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(this, R.anim.layout_animation_from_bottom);
@@ -101,7 +95,6 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @Override public void renderOnBoardingList(List<OnBoardingModel> onBoardingModels) {
-    container.setVisibility(View.VISIBLE);
     adapter.setOnBoardingModelList(onBoardingModels);
     adapter.notifyDataSetChanged();
   }
@@ -125,9 +118,10 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
   }
 
   @Override public void goNextScreen() {
-    finish();
     Intent i = new Intent(this, OnBoardingUserActivity.class);
     startActivity(i);
+    overridePendingTransition(R.anim.slide_in_up, R.anim.stay);
+    finish();
   }
 
   @Override public void hideGetStarted() {
@@ -140,26 +134,5 @@ public class OnBoardingStreamActivity extends BaseActivity implements OnBoarding
 
   @OnClick(R.id.continue_container) public void onGetStartedClick() {
     presenter.continueClicked();
-  }
-
-  private void animateView(final View viewToShow) {
-    if (viewToShow.getVisibility() == View.INVISIBLE) {
-      viewToShow.setVisibility(View.VISIBLE);
-      viewToShow.setScaleX(0);
-      viewToShow.setScaleY(0);
-      ObjectAnimator scaleX = ObjectAnimator.ofFloat(viewToShow, "scaleX", 0f, 1f);
-      ObjectAnimator scaleY = ObjectAnimator.ofFloat(viewToShow, "scaleY", 0f, 1f);
-      AnimatorSet set = new AnimatorSet();
-      set.playTogether(scaleX, scaleY);
-      set.setDuration(500);
-      set.setInterpolator(new DecelerateInterpolator());
-      set.addListener(new AnimatorListenerAdapter() {
-        @Override public void onAnimationEnd(Animator animation) {
-          viewToShow.setScaleX(1f);
-          viewToShow.setScaleY(1f);
-        }
-      });
-      set.start();
-    }
   }
 }

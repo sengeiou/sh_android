@@ -25,9 +25,9 @@ public class SplashScreenActivity extends AppCompatActivity {
   }
 
   private void goToStreamList() {
-    finish();
     Intent i = new Intent(this, MainTabbedActivity.class);
     i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     startActivity(i);
+    finish();
   }
 }

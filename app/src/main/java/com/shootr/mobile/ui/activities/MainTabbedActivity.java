@@ -318,7 +318,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   }
 
   private void navigateToNewStream() {
-    Intent intent = new Intent(this, NewStreamActivity.class);
+    Intent intent = new Intent(this, OnBoardingStreamActivity.class);
     intent.putExtra(NewStreamActivity.SOURCE, getSource());
     startActivityForResult(intent, REQUEST_NEW_STREAM);
   }

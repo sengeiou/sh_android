@@ -92,17 +92,16 @@ public class UserEntityDBMapper extends GenericDBMapper {
     entity.setFavoritedStreamsCount(
         cursor.getLong(cursor.getColumnIndex(UserTable.FAVORITED_STREAMS_COUNT)));
     entity.setSocialLogin(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.SOCIAL_LOGIN)) == 1) ? true : false);
+        (cursor.getInt(cursor.getColumnIndex(UserTable.SOCIAL_LOGIN)) == 1));
     entity.setAnalyticsUserType(
         cursor.getString(cursor.getColumnIndex(UserTable.ANALYTICS_USER_TYPE)));
     entity.setReceivedReactions(
         cursor.getLong(cursor.getColumnIndex(UserTable.RECEIVED_REACTIONS)));
     entity.setNumMutuals(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_MUTUALS)));
     entity.setFirstSessionActivation(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.FIRST_SESSION_ACTIVATION)) == 1) ? true
-            : false);
+        (cursor.getInt(cursor.getColumnIndex(UserTable.FIRST_SESSION_ACTIVATION)) == 1));
     entity.setStrategic(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.STRATEGIC)) == 1) ? true : false);
+        (cursor.getInt(cursor.getColumnIndex(UserTable.STRATEGIC)) == 1));
     entity.setFollowing(
         (cursor.getInt(cursor.getColumnIndex(UserTable.FOLLOWING)) == 1));
     entity.setMuted(
