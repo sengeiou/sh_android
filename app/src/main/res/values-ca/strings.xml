@@ -22,7 +22,7 @@
   <string name="activity_login_email_forgot">Has oblidat la contrasenya?</string>
   <string name="activity_login_email_id_hint">Nom d\'usuari o email</string>
   <string name="activity_login_email_password_hint">Contrasenya</string>
-  <string name="activity_login_register_email">Registrar-se amb email</string>
+  <string name="activity_login_register_email">Crear compte</string>
   <string name="activity_login_register_facebook">Entrar amb Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Iniciar sessió</string>

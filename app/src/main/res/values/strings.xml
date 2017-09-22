@@ -22,7 +22,7 @@
   <string name="activity_login_email_forgot">Forgot Password?</string>
   <string name="activity_login_email_id_hint">Username or Email</string>
   <string name="activity_login_email_password_hint">Password</string>
-  <string name="activity_login_register_email">Register with Email</string>
+  <string name="activity_login_register_email">Create account</string>
   <string name="activity_login_register_facebook">Log in with Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Sign In</string>
