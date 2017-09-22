@@ -13,7 +13,7 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.42.1] - 2017-09-22
+## [1.42.2] - 2017-09-22
 ### Fixed
 - Request user with null Id to server or local
 - Private Messages Timeline loading
