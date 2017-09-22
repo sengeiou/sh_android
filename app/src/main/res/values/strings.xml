@@ -22,13 +22,13 @@
   <string name="activity_login_email_forgot">Forgot Password?</string>
   <string name="activity_login_email_id_hint">Username or Email</string>
   <string name="activity_login_email_password_hint">Password</string>
-  <string name="activity_login_register_email">Register with Email</string>
-  <string name="activity_login_register_facebook">Continue with Facebook</string>
+  <string name="activity_login_register_email">Create account</string>
+  <string name="activity_login_register_facebook">Log in with Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Sign In</string>
   <string name="activity_new_stream_title">New stream</string>
   <string name="activity_registration_email_hint">Email</string>
-  <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you read the (privacy-policy) and agree to the (terms-of-service).</string>
+  <string name="activity_registration_legal_disclaimer">By signing up you are indicating that you accept the (privacy-policy) and the (terms-of-service).</string>
   <string name="activity_registration_legal_disclaimer_privacy_policy">Privacy Policy</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Terms of Service</string>
   <string name="activity_registration_password_hint">Password</string>
@@ -485,7 +485,7 @@
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">Sign In</string>
-  <string name="title_activity_registration_email">Register with Email</string>
+  <string name="title_activity_registration_email">Create Account</string>
   <string name="title_activity_reset_password">Reset Password</string>
   <string name="title_activity_stream_data_info">Statistics</string>
   <string name="title_activity_stream_media">Media</string>
