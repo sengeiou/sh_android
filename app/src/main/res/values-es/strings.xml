@@ -23,12 +23,12 @@
   <string name="activity_login_email_id_hint">Nombre de usuario o email</string>
   <string name="activity_login_email_password_hint">Contraseña</string>
   <string name="activity_login_register_email">Registrarse con email</string>
-  <string name="activity_login_register_facebook">Continuar con Facebook</string>
+  <string name="activity_login_register_facebook">Entrar con Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Iniciar sesión</string>
   <string name="activity_new_stream_title">Nuevo stream</string>
   <string name="activity_registration_email_hint">Email</string>
-  <string name="activity_registration_legal_disclaimer">Al entrar estás indicando que has leído la (privacy-policy) y aceptas las (terms-of-service).</string>
+  <string name="activity_registration_legal_disclaimer">Al crear tu cuenta aceptas la (privacy-policy) y las (terms-of-service).</string>
   <string name="activity_registration_legal_disclaimer_privacy_policy">Política de privacidad</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condiciones de uso</string>
   <string name="activity_registration_password_hint">Contraseña</string>
@@ -490,7 +490,7 @@
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">Iniciar sesión</string>
-  <string name="title_activity_registration_email">Registrarse con email</string>
+  <string name="title_activity_registration_email">Crear cuenta</string>
   <string name="title_activity_reset_password">Restaurar contraseña</string>
   <string name="title_activity_stream_data_info">Estadísticas</string>
   <string name="title_activity_stream_media">Archivos</string>

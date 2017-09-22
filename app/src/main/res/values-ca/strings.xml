@@ -23,12 +23,12 @@
   <string name="activity_login_email_id_hint">Nom d\'usuari o email</string>
   <string name="activity_login_email_password_hint">Contrasenya</string>
   <string name="activity_login_register_email">Registrar-se amb email</string>
-  <string name="activity_login_register_facebook">Continuar amb Facebook</string>
+  <string name="activity_login_register_facebook">Entrar amb Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Iniciar sessió</string>
   <string name="activity_new_stream_title">Nou stream</string>
   <string name="activity_registration_email_hint">Email</string>
-  <string name="activity_registration_legal_disclaimer">En entrar estàs indicant que has llegit la (privacy-policy) i acceptes les (terms-of-service).</string>
+  <string name="activity_registration_legal_disclaimer">Al crear el teu compte acceptes la (privacy-policy) i les (terms-of-service).</string>
   <string name="activity_registration_legal_disclaimer_privacy_policy">Política de privacitat</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condicions d\'ús</string>
   <string name="activity_registration_password_hint">Contrasenya</string>
@@ -490,7 +490,7 @@
   <string name="title_activity_email_confirmation">Email</string>
   <string name="title_activity_listing">Streams</string>
   <string name="title_activity_login_email">Iniciar sessió</string>
-  <string name="title_activity_registration_email">Registrar-se amb email</string>
+  <string name="title_activity_registration_email">Crear compte</string>
   <string name="title_activity_reset_password">Restaurar contrasenya</string>
   <string name="title_activity_stream_data_info">Estadístiques</string>
   <string name="title_activity_stream_media">Arxius</string>
