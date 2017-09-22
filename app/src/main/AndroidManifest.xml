@@ -78,7 +78,8 @@
         android:label="@string/title_activity_login_email">
       <meta-data
           android:name="android.support.PARENT_ACTIVITY"
-          android:value="com.shootr.mobile.ui.activities.registro.LoginSelectionActivity"/>
+          android:value="com.shootr.mobile.ui.activities.registro.LoginSelectionActivity"
+          android:screenOrientation="portrait"/>
     </activity>
     <activity
         android:name=".ui.activities.PostNewShotActivity"
@@ -314,9 +315,12 @@
     <activity
         android:name="com.mixpanel.android.surveys.SurveyActivity"
         android:theme="@style/com_mixpanel_android_SurveyActivityTheme"/>
-    <activity android:name=".ui.activities.OnBoardingStreamActivity">
+    <activity
+        android:name=".ui.activities.OnBoardingStreamActivity"
+        android:screenOrientation="portrait">
     </activity>
-    <activity android:name=".ui.activities.OnBoardingUserActivity">
+    <activity android:name=".ui.activities.OnBoardingUserActivity"
+        android:screenOrientation="portrait">
     </activity>
     <activity
         android:name=".ui.activities.SearchActivity"
