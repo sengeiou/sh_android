@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.42.0] - 2017-09-22
+### Fixed
+- Request user with null Id to server or local
+- Private Messages Timeline loading
+
+### Added
+- New App Landing Screen
+- New Splash Screen before entering
+- New OnBoarding Users
+- Focus on Searchview and keyboard opened on Search Streams/Users
+
+### Changed
+- OnBoarding Streams
 
 ## [1.41.2] - 2017-09-20
 
