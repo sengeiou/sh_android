@@ -143,6 +143,6 @@
       android:layout_height="@dimen/new_shot_height"
       android:layout_alignParentBottom="true"
       android:layout_gravity="bottom"
-      android:visibility="gone"
+      android:visibility="invisible"
       />
 </RelativeLayout>

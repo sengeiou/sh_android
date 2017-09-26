@@ -278,7 +278,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       }
     });
-    newShotBarContainer.setVisibility(View.GONE);
+    newShotBarContainer.setVisibility(View.INVISIBLE);
     return fragmentView;
   }
 
