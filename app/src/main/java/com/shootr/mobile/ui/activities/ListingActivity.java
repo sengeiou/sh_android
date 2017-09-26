@@ -235,6 +235,14 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
     }).show();
   }
 
+  @Override public void addCurrentUserFavorite(StreamResultModel streamModel) {
+    adapter.addFavorite(streamModel);
+  }
+
+  @Override public void removeCurrentUserFavorite(StreamResultModel streamModel) {
+    adapter.removeFavorite(streamModel);
+  }
+
   @Override
   public void showCurrentUserContextMenuWithoutAddFavorite(final StreamResultModel stream) {
     CustomContextMenu.Builder builder = new CustomContextMenu.Builder(this);

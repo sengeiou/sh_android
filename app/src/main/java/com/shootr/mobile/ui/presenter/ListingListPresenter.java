@@ -117,34 +117,32 @@ public class ListingListPresenter implements Presenter {
         if (listingUserFavoritedStreams != null) {
             listingView.renderFavoritedStreams(listingUserFavoritedStreams);
         }
-        listingView.updateStreams();
     }
 
-    public void addToFavorite(StreamResultModel streamResultModel) {
+    public void addToFavorite(final StreamResultModel streamResultModel) {
         addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
-          new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  if (isCurrentUser) {
-                      loadUserListingStreams();
-                  }
-              }
-          },
-          new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                  showErrorInView(error);
-              }
-          });
+            new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    if (isCurrentUser) {
+                        listingView.addCurrentUserFavorite(streamResultModel);
+                    }
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                    showErrorInView(error);
+                }
+            });
     }
 
-    public void removeFromFavorites(StreamResultModel stream) {
+    public void removeFromFavorites(final StreamResultModel stream) {
         removeFromFavoritesInteractor.removeFromFavorites(stream.getStreamModel().getIdStream(),
-          new Interactor.CompletedCallback() {
-              @Override public void onCompleted() {
-                  if (isCurrentUser) {
-                      loadUserListingStreams();
-                  }
-              }
-          });
+            new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    if (isCurrentUser) {
+                        listingView.removeCurrentUserFavorite(stream);
+                    }
+                }
+            });
     }
 
     public void selectStream(StreamResultModel stream) {
