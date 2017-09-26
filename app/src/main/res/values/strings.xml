@@ -536,4 +536,5 @@
   <string name="onboarding_enter">Next</string>
   <string name="login_message">Talk about anything</string>
   <string name="welcome_shootr">Entering Shootr…</string>
+  <string name="shared_poll_feedback">Poll shared</string>
 </resources>

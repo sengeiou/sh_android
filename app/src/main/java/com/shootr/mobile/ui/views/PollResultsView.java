@@ -18,4 +18,6 @@ public interface PollResultsView extends LoadDataView {
   void goToStreamTimeline(String idStream);
 
   void showClosed();
+
+  void showSharedPoll();
 }
