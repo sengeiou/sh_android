@@ -74,11 +74,13 @@ public class SyncFavoriteRepository implements ExternalFavoriteRepository, Synca
   }
 
   @Override public List<OnBoarding> getOnBoardingStreams(String type, String locale) {
-    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale));
+    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale),
+        sessionRepository.getCurrentUserId());
   }
 
   @Override public List<OnBoarding> getOnBoardingUsers(String type, String locale) {
-    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale));
+    return onBoardingEntityMapper.map(remoteFavoriteDataSource.getOnBoarding(type, locale),
+        sessionRepository.getCurrentUserId());
   }
 
   @Override public void addSuggestedFavorites(List<String> idStreams, String type) {

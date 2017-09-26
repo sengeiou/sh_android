@@ -20,7 +20,7 @@ public class FollowsEntityMapper {
     this.streamEntityMapper = streamEntityMapper;
   }
 
-  public Follows map(FollowsEntity value) {
+  public Follows map(FollowsEntity value, String currentIdUser) {
 
     Follows following = new Follows();
 
@@ -33,7 +33,7 @@ public class FollowsEntityMapper {
       if (followableEntity.getResultType().equals(FollowableType.STREAM)) {
         followables.add(streamEntityMapper.transform((StreamEntity) followableEntity));
       } else if (followableEntity.getResultType().equals(FollowableType.USER)) {
-        followables.add(userEntityMapper.transform((UserEntity) followableEntity));
+        followables.add(userEntityMapper.transform((UserEntity) followableEntity, currentIdUser));
       }
     }
 
