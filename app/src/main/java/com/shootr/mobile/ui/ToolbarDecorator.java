@@ -91,12 +91,15 @@ public class ToolbarDecorator implements ViewContainerDecorator {
   }
 
   public void hideFilterSubtitle() {
-    subtitleText.setVisibility(View.VISIBLE);
+    subtitleText.setVisibility(
+        subtitleText.getText().toString().isEmpty() ? View.GONE : View.VISIBLE);
     subtitleFilteredText.setVisibility(View.GONE);
   }
 
   public void showSubtitle() {
-    subtitleText.setVisibility(View.VISIBLE);
+    if (subtitleFilteredText.getVisibility() != View.VISIBLE) {
+      subtitleText.setVisibility(View.VISIBLE);
+    }
   }
 
   public void setTitleClickListener(View.OnClickListener clickListener) {
