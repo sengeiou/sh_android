@@ -161,6 +161,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
   @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
   @BindView(R.id.timeline_empty) TextView emptyView;
+  @BindView(R.id.important_timeline_empty) TextView importantEmptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
@@ -1231,16 +1232,18 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showEmpty() {
-    emptyView.setVisibility(View.VISIBLE);
     if (isFilterActivated) {
-      emptyView.setText(emptyFilter);
+      importantEmptyView.setVisibility(View.VISIBLE);
+      emptyView.setVisibility(View.GONE);
     } else {
-      emptyView.setText(emptyTimeline);
+      importantEmptyView.setVisibility(View.GONE);
+      emptyView.setVisibility(View.VISIBLE);
     }
   }
 
   @Override public void hideEmpty() {
     emptyView.setVisibility(View.GONE);
+    importantEmptyView.setVisibility(View.GONE);
   }
 
   @Override public void showLoading() {
