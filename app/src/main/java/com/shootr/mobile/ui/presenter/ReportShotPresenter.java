@@ -330,12 +330,8 @@ public class ReportShotPresenter implements Presenter {
     reportShotView.showError(errorMessageFactory.getMessageForError(error));
   }
 
-  public void reportClicked(String language, String sessionToken, ShotModel shotModel) {
-    if (isEnglishLocale(language)) {
-      reportShotView.goToReport(sessionToken, shotModel);
-    } else {
-      reportShotView.showAlertLanguageSupportDialog(sessionToken, shotModel);
-    }
+  public void reportClicked(String sessionToken, ShotModel shotModel) {
+    reportShotView.goToReport(sessionToken, shotModel);
   }
 
   @Override public void resume() {

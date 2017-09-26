@@ -137,22 +137,6 @@ public class ReportShotPresenterTest {
         verify(reportShotView, never()).showAuthorContextMenuWithPin(any(ShotModel.class));
     }
 
-    @Test public void shouldShowSupportLanguageAlertDialogWhenLocaleIsNotEnglish() throws Exception {
-        ShotModel shotModel = shotModel();
-
-        presenter.reportClicked(ES_LOCALE, SESSION_TOKEN, shotModel);
-
-        verify(reportShotView).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
-    }
-
-    @Test public void shouldNotShowSupportLanguageAlertDialogWhenLocaleIsEnlgish() throws Exception {
-        ShotModel shotModel = shotModel();
-
-        presenter.reportClicked(EN_LOCALE, SESSION_TOKEN, shotModel);
-
-        verify(reportShotView, never()).showAlertLanguageSupportDialog(SESSION_TOKEN, shotModel);
-    }
-
     @Test public void shouldShowHolderContextMenuWhenIsNotStreamAuthorAndIsNotShotAuthor() throws Exception {
         when(sessionRepository.getCurrentUserId()).thenReturn(ANOTHER_ID_USER);
         setupGetHighlightShotCallbacks();

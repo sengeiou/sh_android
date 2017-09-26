@@ -204,7 +204,6 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">La app de mensajería donde los chats son abiertos. Se llaman streams.</string>
   <string name="invite_friends_message">Hola! Te recomiendo Shootr: http://shootr.com/</string>
-  <string name="language_support_alert" formatted="false">En estos momentos la atención al usuario es en inglés.</string>
   <string name="left">Tiempo restante: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic en el enlace</item>

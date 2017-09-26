@@ -25,8 +25,6 @@ public interface ReportShotView {
 
     void goToReport(String sessionToken, ShotModel shotModel);
 
-    void showAlertLanguageSupportDialog(String sessionToken, ShotModel shotModel);
-
     void showHolderContextMenu(ShotModel shot);
 
     void showHolderContextMenuWithDismissHighlight(ShotModel shot);

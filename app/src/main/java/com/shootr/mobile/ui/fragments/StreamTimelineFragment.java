@@ -110,7 +110,6 @@ import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -1676,19 +1675,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void handleReport(String sessionToken, ShotModel shotModel) {
-    reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
-  }
-
-  @Override
-  public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-    new AlertDialog.Builder(getContext()).setMessage(getString(R.string.language_support_alert))
-        .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                goToReport(sessionToken, shotModel);
-              }
-            })
-        .show();
+    reportShotPresenter.reportClicked(sessionToken, shotModel);
   }
 
   @Override public void showHolderContextMenu(final ShotModel shotModel) {

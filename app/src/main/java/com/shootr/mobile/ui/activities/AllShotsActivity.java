@@ -42,7 +42,6 @@ import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -383,20 +382,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void handleReport(String sessionToken, ShotModel shotModel) {
-    reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
-  }
-
-  @Override
-  public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-    alertDialogBuilder //
-        .setMessage(getString(R.string.language_support_alert)) //
-        .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                goToReport(sessionToken, shotModel);
-              }
-            }).show();
+    reportShotPresenter.reportClicked(sessionToken, shotModel);
   }
 
   @Override public void showHolderContextMenu(ShotModel shot) {

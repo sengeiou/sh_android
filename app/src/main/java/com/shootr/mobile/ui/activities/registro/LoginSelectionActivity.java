@@ -1,7 +1,5 @@
 package com.shootr.mobile.ui.activities.registro;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -132,7 +130,7 @@ public class LoginSelectionActivity extends BaseActivity {
     String termsText = getString(R.string.activity_registration_legal_disclaimer_terms_of_service);
     final View.OnClickListener termsClickListener = new View.OnClickListener() {
       @Override public void onClick(View v) {
-        showSupportAlertDialog(termsOfServiceClickListener());
+        termsOfServiceClickListener();
       }
     };
     replacePatternWithClickableText(spannableStringBuilder, termsPatternText, termsText,
@@ -142,7 +140,7 @@ public class LoginSelectionActivity extends BaseActivity {
     String privacyText = getString(R.string.activity_registration_legal_disclaimer_privacy_policy);
     final View.OnClickListener privacyClickListener = new View.OnClickListener() {
       @Override public void onClick(View v) {
-        showSupportAlertDialog(privacyPolicyClickListener());
+        privacyPolicyClickListener();
       }
     };
     replacePatternWithClickableText(spannableStringBuilder, privacyPatternText, privacyText,
@@ -152,34 +150,19 @@ public class LoginSelectionActivity extends BaseActivity {
     disclaimer.setMovementMethod(new LinkMovementMethod());
   }
 
-  @NonNull public DialogInterface.OnClickListener privacyPolicyClickListener() {
-    return new DialogInterface.OnClickListener() {
-      @Override public void onClick(DialogInterface dialog, int which) {
-        String privacyUrl =
-            String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
-        Intent privacyIntent =
-            intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, privacyUrl);
-        Intents.maybeStartActivity(LoginSelectionActivity.this, privacyIntent);
-      }
-    };
+  @NonNull public void privacyPolicyClickListener() {
+    String privacyUrl =
+        String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+    Intent privacyIntent =
+        intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, privacyUrl);
+    Intents.maybeStartActivity(LoginSelectionActivity.this, privacyIntent);
   }
 
-  @NonNull public DialogInterface.OnClickListener termsOfServiceClickListener() {
-    return new DialogInterface.OnClickListener() {
-      @Override public void onClick(DialogInterface dialog, int which) {
-        String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
-        Intent termsIntent =
-            intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
-        Intents.maybeStartActivity(LoginSelectionActivity.this, termsIntent);
-      }
-    };
-  }
-
-  private void showSupportAlertDialog(DialogInterface.OnClickListener onClickListener) {
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-    alertDialogBuilder //
-        .setMessage(getString(R.string.language_support_alert)) //
-        .setPositiveButton(getString(R.string.email_confirmation_ok), onClickListener).show();
+  @NonNull public void termsOfServiceClickListener() {
+    String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
+    Intent termsIntent =
+        intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
+    Intents.maybeStartActivity(LoginSelectionActivity.this, termsIntent);
   }
 
   private void replacePatternWithClickableText(SpannableStringBuilder spannableBuilder,

@@ -204,7 +204,6 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">L\'app de missatgeria on els xats són oberts. S\'anomenen streams.</string>
   <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
-  <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
   <string name="left">Temps restant: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic a l\'enllaç</item>
