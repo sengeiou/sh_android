@@ -130,7 +130,7 @@ public class UserEntityMapper {
   }
 
   public User transform(UserEntity user, String idCurrentUser) {
-    return transform(user, idCurrentUser, false, user.isFollowing());
+    return transform(user, idCurrentUser, false, (user == null ? false : user.isFollowing()));
   }
 
   public User transform(UserEntity user) {
