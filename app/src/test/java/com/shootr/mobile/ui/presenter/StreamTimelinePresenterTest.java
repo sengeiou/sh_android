@@ -314,7 +314,7 @@ public class StreamTimelinePresenterTest {
     presenter.setStreamMode(PUBLIC);
     presenter.loadTimeline(PUBLIC);
 
-    verify(streamTimelineView).showEmpty();
+    verify(streamTimelineView).showEmpty(anyBoolean());
   }
 
   @Test public void shouldShowEmptyViewWhenLoadTimelineRespondsEmptyShotListAndIsViewOnly()
@@ -326,7 +326,7 @@ public class StreamTimelinePresenterTest {
     presenter.setStreamMode(VIEW_ONLY);
     presenter.loadTimeline(VIEW_ONLY);
 
-    verify(streamTimelineView).showEmpty();
+    verify(streamTimelineView).showEmpty(anyBoolean());
   }
 
   @Test public void shouldHideEmptyViewWhenLoadTimelineRespondsShots() throws Exception {
@@ -751,7 +751,7 @@ public class StreamTimelinePresenterTest {
   @Test public void shouldShowEmptyWhenShotDeletedAndNoMoreShotsInTimeline() throws Exception {
     presenter.onShotDeleted(0);
 
-    verify(streamTimelineView).showEmpty();
+    verify(streamTimelineView).showEmpty(anyBoolean());
   }
 
   @Test public void shouldHideEmptyWhenShotDeletedAndThereAreShotsInTimeline() throws Exception {

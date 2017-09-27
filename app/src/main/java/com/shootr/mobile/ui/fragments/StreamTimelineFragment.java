@@ -1031,11 +1031,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showAllStreamShots() {
+    isFilterActivated = false;
     showAllShotsMenuItem.setVisible(true);
     toolbarDecorator.putFilterSubtitle();
   }
 
   @Override public void showHoldingShots() {
+    isFilterActivated = true;
     showHoldingShotsMenuItem.setVisible(true);
     toolbarDecorator.hideFilterSubtitle();
   }
@@ -1230,7 +1232,7 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarContainer.setVisibility(View.INVISIBLE);
   }
 
-  @Override public void showEmpty() {
+  @Override public void showEmpty(boolean isFilterActivated) {
     if (isFilterActivated) {
       importantEmptyView.setVisibility(View.VISIBLE);
       emptyView.setVisibility(View.GONE);
@@ -1238,6 +1240,10 @@ public class StreamTimelineFragment extends BaseFragment
       importantEmptyView.setVisibility(View.GONE);
       emptyView.setVisibility(View.VISIBLE);
     }
+  }
+
+  @Override public void showEmpty() {
+    /* no-op */
   }
 
   @Override public void hideEmpty() {
