@@ -25,6 +25,7 @@ public class UnfollowInteractorTest {
   @Mock UserRepository remoteUserRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock SessionRepository sessionRepository;
+  @Mock UserRepository localUserRepository;
 
   @Before
   public void setUp() throws Exception {
