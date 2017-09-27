@@ -34,7 +34,7 @@ public class UnfollowInteractorTest {
     when(sessionRepository.getCurrentUserId()).thenReturn("ID");
     unfollowInteractor =
         new UnfollowInteractor(interactorHandler, postExecutionThread, localFollowRepository,
-            remoteFollowRepository, remoteUserRepository, sessionRepository);
+            remoteFollowRepository, localUserRepository, remoteUserRepository, sessionRepository);
   }
 
   @Test
