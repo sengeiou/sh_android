@@ -158,6 +158,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void showEmpty(boolean isFilterActivated) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

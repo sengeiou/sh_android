@@ -419,7 +419,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void handleStreamTimeLineVisibility() {
     if (isEmpty) {
-      streamTimelineView.showEmpty();
+      streamTimelineView.showEmpty(filterActivated);
       streamTimelineView.hideShots();
     } else {
       streamTimelineView.hideEmpty();
@@ -494,7 +494,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (hasNewShots) {
       loadTimeline(streamMode);
     } else if (isEmpty) {
-      streamTimelineView.showEmpty();
+      streamTimelineView.showEmpty(filterActivated);
     }
     streamTimelineView.hideLoading();
     streamTimelineView.hideCheckingForShots();
@@ -610,7 +610,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   public void onShotDeleted(Integer count) {
     if (count <= 0) {
-      streamTimelineView.showEmpty();
+      streamTimelineView.showEmpty(filterActivated);
     } else {
       streamTimelineView.hideEmpty();
     }

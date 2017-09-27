@@ -50,4 +50,6 @@ public interface StreamTimelineView extends TimelineView  {
     void setupCheckInShowcase();
 
     void setReshoot(String idShot, boolean mark);
+
+    void showEmpty(boolean isFilterActivated);
 }
