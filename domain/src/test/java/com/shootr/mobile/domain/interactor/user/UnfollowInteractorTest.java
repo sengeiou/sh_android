@@ -25,6 +25,7 @@ public class UnfollowInteractorTest {
   @Mock UserRepository remoteUserRepository;
   @Mock Interactor.CompletedCallback callback;
   @Mock SessionRepository sessionRepository;
+  @Mock UserRepository localUserRepository;
 
   @Before
   public void setUp() throws Exception {
@@ -34,7 +35,7 @@ public class UnfollowInteractorTest {
     when(sessionRepository.getCurrentUserId()).thenReturn("ID");
     unfollowInteractor =
         new UnfollowInteractor(interactorHandler, postExecutionThread, localFollowRepository,
-            remoteFollowRepository, remoteUserRepository, sessionRepository);
+            remoteFollowRepository, localUserRepository, remoteUserRepository, sessionRepository);
   }
 
   @Test

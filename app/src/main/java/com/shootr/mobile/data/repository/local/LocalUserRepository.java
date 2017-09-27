@@ -85,6 +85,10 @@ public class LocalUserRepository implements UserRepository {
     return suggestedPeopleCache.getSuggestedPeople();
   }
 
+  @Override public void updateSuggestedPeopleCache(List<SuggestedPeople> suggestedPeopleList) {
+    suggestedPeopleCache.putSuggestedPeopleList(suggestedPeopleList);
+  }
+
   @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
     throw new IllegalArgumentException("getAllParticipants has no local implementation");
   }
@@ -113,11 +117,6 @@ public class LocalUserRepository implements UserRepository {
 
   @Override public List<User> getLocalPeople(String idUser) {
     return transformUserEntitiesForPeople(localUserDataSource.getRelatedUsers(idUser, 0L));
-  }
-
-  @Override public List<User> getLocalPeopleFromIdStream(String idStream) {
-    return transformUserEntitiesForPeople(localUserDataSource.getRelatedUsersByIdStream(idStream,
-        sessionRepository.getCurrentUserId()));
   }
 
   @Override public User getUserForAnalythicsById(String id) {
@@ -153,10 +152,6 @@ public class LocalUserRepository implements UserRepository {
       suggestedPeoples.add(suggestedPeopleEntityMapper.transform(suggestedPeople));
     }
     return suggestedPeoples;
-  }
-
-  @Override public void forceUpdatePeople() {
-    throw new IllegalArgumentException("forceUpdatePeople has no local implementation");
   }
 
   @Override public List<String> getFollowingIds(String userId) {
