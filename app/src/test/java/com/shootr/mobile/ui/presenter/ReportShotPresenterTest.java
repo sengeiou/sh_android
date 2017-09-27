@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteracto
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
@@ -59,9 +59,9 @@ public class ReportShotPresenterTest {
     @Mock GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
     @Mock BlockUserInteractor blockUserInteractor;
     @Mock UnblockUserInteractor unblockUserInteractor;
-    @Mock GetFollowingInteractor getFollowingInteractor;
     @Mock GetLocalStreamInteractor getLocalStreamInteractor;
     @Mock GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
+    @Mock GetUserByIdInteractor getUserByIdInteractor;
 
     private ReportShotPresenter presenter;
 
@@ -74,8 +74,7 @@ public class ReportShotPresenterTest {
           getBlockedIdUsersInteractor,
           blockUserInteractor,
           unblockUserInteractor,
-          getFollowingInteractor,
-          getHighlightedShotInteractor, getLocalStreamInteractor);
+          getHighlightedShotInteractor, getLocalStreamInteractor, getUserByIdInteractor);
         presenter.setView(reportShotView);
     }
 
@@ -213,13 +212,14 @@ public class ReportShotPresenterTest {
     private void setupGetFollowingCallbacksFollowingUser() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[0];
-                callback.onLoaded(userFollowingList());
+                Interactor.Callback<User> callback =
+                    (Interactor.Callback<User>) invocation.getArguments()[2];
+                callback.onLoaded(userFollowingList().get(0));
                 return null;
             }
-        }).when(getFollowingInteractor)
-          .obtainPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getUserByIdInteractor)
+            .loadUserById(anyString(), anyBoolean(), any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private void setupGetHighlightShotCallbacks() {
@@ -248,19 +248,21 @@ public class ReportShotPresenterTest {
     private void setupGetFollowingCallbacksNotFollowingUser() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<User>> callback =
-                  (Interactor.Callback<List<User>>) invocation.getArguments()[0];
-                callback.onLoaded(userList());
+                Interactor.Callback<User> callback =
+                    (Interactor.Callback<User>) invocation.getArguments()[2];
+                callback.onLoaded(userList().get(0));
                 return null;
             }
-        }).when(getFollowingInteractor)
-          .obtainPeople(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        }).when(getUserByIdInteractor)
+            .loadUserById(anyString(), anyBoolean(), any(Interactor.Callback.class),
+                any(Interactor.ErrorCallback.class));
     }
 
     private List<User> userFollowingList() {
         List<User> users = new ArrayList<>();
         User user = new User();
         user.setIdUser(ID_USER);
+        user.setFollowing(true);
         users.add(user);
         return users;
     }
