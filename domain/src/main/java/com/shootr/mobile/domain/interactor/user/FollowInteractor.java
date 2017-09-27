@@ -14,7 +14,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.service.user.CannotFollowBlockedUserException;
-import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
