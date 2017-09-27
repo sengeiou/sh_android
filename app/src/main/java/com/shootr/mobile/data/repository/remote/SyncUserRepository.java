@@ -264,10 +264,6 @@ public class SyncUserRepository
     throw new IllegalArgumentException("No remote implementation");
   }
 
-  @Override public List<User> getLocalPeopleFromIdStream(String idStream) {
-    throw new IllegalArgumentException("No remote implementation");
-  }
-
   @Override public void updateUserProfile(User updatedUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
     UserEntity currentOrNewUserEntity =
@@ -371,12 +367,6 @@ public class SyncUserRepository
     userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
   }
 
-  @Override public void forceUpdatePeople() {
-    syncTrigger.triggerSync();
-    userCache.invalidatePeople();
-    this.getPeople();
-  }
-
   @Override public List<String> getFollowingIds(String userId) {
     throw new IllegalArgumentException("No remote implementation");
   }
@@ -389,9 +379,13 @@ public class SyncUserRepository
     remoteUserDataSource.unMute(idUser);
   }
 
+  @Override public void updateSuggestedPeopleCache(List<SuggestedPeople> suggestedPeopleList) {
+    throw new IllegalArgumentException("this method has no remote implementation");
+  }
+
   @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
     try {
-      //TODO test if call this method is necesary forceUpdatePeopleAndMe();
+      /* no-op */
     } catch (ServerCommunicationException networkError) {
       Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
             /* swallow silently */
