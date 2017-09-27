@@ -39,6 +39,7 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
     return new Truss()
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername()).popSpan()
+        .append(" ")
         .append(formatActivityComment(activity))
         .pushSpan(new ForegroundColorSpan(gray_60))
         .append(" ")
