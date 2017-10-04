@@ -80,7 +80,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void renderSubtitle(StreamModel stream) {
-      setupAuthorAndDescriptionSubtitle(stream);
+    setupAuthorAndDescriptionSubtitle(stream);
   }
 
   private void setupAuthorAndDescriptionSubtitle(StreamModel stream) {
@@ -134,6 +134,4 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
     TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
     pictureWithoutText.setImageDrawable(textDrawable);
   }
-
-
 }

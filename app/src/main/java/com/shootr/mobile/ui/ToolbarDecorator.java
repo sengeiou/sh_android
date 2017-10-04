@@ -121,8 +121,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     }
   }
 
-  public void setVerifiedStream(boolean isVerified)
-  {
+  public void setVerifiedStream(boolean isVerified) {
     if (isVerified) {
       verifiedImage.setVisibility(View.VISIBLE);
     } else {
