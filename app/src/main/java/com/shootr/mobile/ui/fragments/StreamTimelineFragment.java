@@ -816,6 +816,10 @@ public class StreamTimelineFragment extends BaseFragment
     toolbarDecorator.setTitle(streamTitle);
   }
 
+  private void setStreamVerified(boolean isVerified) {
+    toolbarDecorator.setVerifiedStream(isVerified);
+  }
+
   private void setStreamTitleClickListener(final String idStream) {
     toolbarDecorator.setTitleClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
@@ -1048,6 +1052,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void setTitle(String title) {
     setStreamTitle(title);
+  }
+
+  @Override public void setVerified(boolean isVerified) {
+    setStreamVerified(isVerified);
   }
 
   @Override public void setImage(String avatarImage, String username) {

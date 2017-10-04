@@ -22,6 +22,8 @@ public interface TimelineView extends LoadDataView {
 
   void setTitle(String title);
 
+  void setVerified(boolean isVerified);
+
   void sendAnalythicsEnterTimeline();
 
   void setImage(String avatarImage, String username);

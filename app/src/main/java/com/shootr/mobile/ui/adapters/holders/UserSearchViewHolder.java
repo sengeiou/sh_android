@@ -96,6 +96,12 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
 
   private void setTitle(UserModel userModel) {
     title.setText(userModel.getName());
-    title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+    if (userModel.isVerifiedUser()) {
+      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list,
+          0);
+      title.setCompoundDrawablePadding(6);
+    } else {
+      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+    }
   }
 }

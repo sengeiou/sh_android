@@ -28,6 +28,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
   private ViewGroup titleContainer;
   private TextView subtitleText;
   private ImageView muteImage;
+  private ImageView verifiedImage;
   private AvatarView avatar;
 
   public ToolbarDecorator(Context context, ImageLoader imageLoader) {
@@ -45,6 +46,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     avatar = (AvatarView) toolbar.findViewById(R.id.toolbar_user_avatar);
     subtitleFilteredText = (TextView) toolbar.findViewById(R.id.toolbar_filtered_subtitle);
     muteImage = (ImageView) toolbar.findViewById(R.id.user_muted);
+    verifiedImage = (ImageView) toolbar.findViewById(R.id.stream_verified);
     setupTitleContainerTransitions();
     return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
   }
@@ -116,6 +118,15 @@ public class ToolbarDecorator implements ViewContainerDecorator {
       muteImage.setVisibility(View.VISIBLE);
     } else {
       muteImage.setVisibility(View.GONE);
+    }
+  }
+
+  public void setVerifiedStream(boolean isVerified)
+  {
+    if (isVerified) {
+      verifiedImage.setVisibility(View.VISIBLE);
+    } else {
+      verifiedImage.setVisibility(View.GONE);
     }
   }
 

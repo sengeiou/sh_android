@@ -492,6 +492,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     setStreamTitle(title);
   }
 
+  @Override public void setVerified(boolean isVerified) {
+    toolbarDecorator.setVerifiedStream(isVerified);
+  }
+
   @Override public void sendAnalythicsEnterTimeline() {
     /*no-op*/
   }

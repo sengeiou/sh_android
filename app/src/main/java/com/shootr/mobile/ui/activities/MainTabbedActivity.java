@@ -58,6 +58,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @BindView(R.id.bottomBar) BottomBar bottomBar;
   @BindView(R.id.connect_controller) LinearLayout connectController;
   @BindView(R.id.stream_title) TextView streamTitle;
+  @BindView(R.id.stream_verified_connect) ImageView verifiedStream;
   @BindView(R.id.stream_image) CircleImageView streamImage;
   @BindView(R.id.stream_image_without_image) ImageView streamImageWithoutPicture;
   @Inject MainScreenPresenter mainScreenPresenter;
@@ -240,6 +241,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override public void showConnectController(StreamModel streamModel) {
     connectController.setVisibility(View.VISIBLE);
     streamTitle.setText(streamModel.getTitle());
+    verifiedStream.setVisibility(streamModel.isVerifiedUser() ? View.VISIBLE : View.GONE);
     setupStreamPicture(streamModel);
   }
 
