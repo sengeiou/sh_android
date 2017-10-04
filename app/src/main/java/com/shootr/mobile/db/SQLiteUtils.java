@@ -484,8 +484,10 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.POLL_QUESTION
       + " TEXT NULL,"
-      + DatabaseContract.MeActivityTable.POLL_OPTION_TEXT
+      + DatabaseContract.ActivityTable.POLL_OPTION_TEXT
       + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.IS_VERIFIED
+      + " INT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -528,6 +530,8 @@ public class SQLiteUtils {
         + " TEXT NULL,"
         + DatabaseContract.MeActivityTable.POLL_OPTION_TEXT
         + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.IS_VERIFIED
+        + " INT NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
         + DatabaseContract.SyncColumns.MODIFIED
