@@ -54,7 +54,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
     setupStreamPicture(streamModel);
     rankNumber.setVisibility(View.GONE);
   }
-
+  
   private void setClickListener(final StreamModel streamResult) {
     itemView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
