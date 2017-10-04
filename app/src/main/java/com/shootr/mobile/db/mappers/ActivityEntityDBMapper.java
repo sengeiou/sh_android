@@ -27,6 +27,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         activity.setIdPoll(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.ID_POLL)));
         activity.setPollQuestion(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.POLL_QUESTION)));
         activity.setPollOptionText(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.POLL_OPTION_TEXT)));
+        activity.setVerified(c.getInt(c.getColumnIndex(DatabaseContract.ActivityTable.IS_VERIFIED)) == 1);
         setSynchronizedfromCursor(c, activity);
         return activity;
     }
@@ -47,6 +48,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ActivityTable.POLL_QUESTION, activity.getPollQuestion());
         cv.put(DatabaseContract.ActivityTable.ID_POLL, activity.getIdPoll());
         cv.put(DatabaseContract.ActivityTable.POLL_OPTION_TEXT, activity.getPollOptionText());
+        cv.put(DatabaseContract.ActivityTable.IS_VERIFIED, activity.isVerified());
         setSynchronizedtoContentValues(activity, cv);
         return cv;
     }

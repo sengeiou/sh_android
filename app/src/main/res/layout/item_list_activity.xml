@@ -116,14 +116,17 @@
                 tools:visibility="visible"
                 />
         </FrameLayout>
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignLeft="@+id/activity_text"
+    android:layout_alignStart="@+id/activity_text"
+    android:layout_below="@+id/activity_text"
+    >
         <TextView
             android:id="@+id/stream_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/activity_text"
-            android:layout_alignStart="@+id/activity_text"
-            android:layout_below="@+id/activity_text"
             android:padding="8dp"
             android:textColor="@color/links"
             android:clickable="true"
@@ -133,5 +136,16 @@
             tools:visibility="visible"
             tools:text="nombre de stream"
             />
+
+        <ImageView
+            android:id="@+id/stream_verified"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_verified_user"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+</LinearLayout>
     </RelativeLayout>
 </FrameLayout>

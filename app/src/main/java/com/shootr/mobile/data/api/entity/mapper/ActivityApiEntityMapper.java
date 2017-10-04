@@ -44,6 +44,7 @@ public class ActivityApiEntityMapper {
 
         if (activityApiEntity.getStream() != null) {
             activityEntity.setIdStreamAuthor(activityApiEntity.getStream().getIdUser());
+            activityEntity.setVerified(activityApiEntity.getStream().getVerifiedUser() == 1L);
         }
 
         if (activityApiEntity.getPollVote() != null) {
