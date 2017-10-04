@@ -28,7 +28,8 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
   private View view;
 
   public UserSearchViewHolder(View itemView, ImageLoader imageLoader,
-      OnFollowUnfollowListener onFollowUnfollowListener, final OnUserClickListener onUserClickListener) {
+      OnFollowUnfollowListener onFollowUnfollowListener,
+      final OnUserClickListener onUserClickListener) {
     super(itemView);
     view = itemView;
     this.imageLoader = imageLoader;
@@ -95,11 +96,6 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
 
   private void setTitle(UserModel userModel) {
     title.setText(userModel.getName());
-    /*if (userModel.isVerifiedUser()) {
-      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list, 0);
-      title.setCompoundDrawablePadding(6);
-    } else {*/
-      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-    //}
+    title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
   }
 }
