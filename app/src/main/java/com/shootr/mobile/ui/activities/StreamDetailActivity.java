@@ -474,7 +474,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
       collapsingToolbar.setContentScrimColor(getDarkVibrantColor(palette));
       collapsingToolbar.setStatusBarScrimColor(getDarkVibrantColor(palette));
       changeStatusBarColor(palette);
-    } catch (IllegalArgumentException exception) {
+    } catch (IllegalArgumentException | IllegalStateException exception) {
       crashReportTool.logException("IllegalArgumentException. Bitmap is not valid");
     }
   }

@@ -13,6 +13,7 @@ import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.UpdateWatchNumberInteractor;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
@@ -23,7 +24,6 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
-import com.shootr.mobile.ui.presenter.interactorwrapper.StreamHoldingTimelineInteractorsWrapper;
 import com.shootr.mobile.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -44,7 +44,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private static final String SCHEMA = "shootr://";
 
   private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
-  private final StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper;
   private final SelectStreamInteractor selectStreamInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
@@ -75,8 +74,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private boolean isFirstLoad;
   private boolean isTimelineInitialized;
   private Integer newShotsNumber;
-  private String streamTitle;
-  private String streamDescription;
   private String streamTopic;
   private boolean isInitialized = false;
   private Long lastRefreshDate;
@@ -84,11 +81,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private StreamModel streamModel;
   private Integer streamMode;
   private boolean isReadOnly;
-  private boolean isCurrentUserContirbutor;
-  private boolean isViewOnlyStream;
+  private boolean isCurrentUserContributor;
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
-      StreamHoldingTimelineInteractorsWrapper streamHoldingTimelineInteractorsWrapper,
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor, ReshootInteractor reshootInteractor,
@@ -99,7 +94,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
       SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
-    this.streamHoldingTimelineInteractorsWrapper = streamHoldingTimelineInteractorsWrapper;
     this.selectStreamInteractor = selectStreamInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
@@ -156,14 +150,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   protected void setIdAuthor(String idAuthor) {
     this.idAuthor = idAuthor;
-  }
-
-  public void setStreamTitle(String streamTitle) {
-    this.streamTitle = streamTitle;
-  }
-
-  public void setStreamDescription(String streamDescription) {
-    this.streamDescription = streamDescription;
   }
 
   public void setStreamTopic(String streamTopic) {
@@ -243,6 +229,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (isFirstLoad) {
       streamTimelineView.showCheckingForShots();
     }
+    loadTimeline(streamMode);
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
         StreamModel model = streamModelMapper.transform(streamSearchResult.getStream());
@@ -251,7 +238,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         postWatchNumberEvent(true);
         handleFilterVisibility(model.getReadWriteMode());
         setStreamMode(model.getReadWriteMode());
-        loadTimeline(model.getReadWriteMode());
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -262,10 +248,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void setupStreamInfo(StreamModel streamModel) {
     setIdAuthor(streamModel.getAuthorId());
-    setStreamTitle(streamModel.getTitle());
-    setStreamDescription(streamModel.getDescription());
     setStreamTopic(streamModel.getTopic());
-    isCurrentUserContirbutor = streamModel.isCurrentUserContributor();
+    isCurrentUserContributor = streamModel.isCurrentUserContributor();
     streamMode = streamModel.getReadWriteMode();
     handleStreamViewOnlyVisibility();
     streamTimelineView.setTitle(streamModel.getTitle());
@@ -296,6 +280,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
+            loadNewShots();
           }
         });
   }
@@ -326,12 +311,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void loadStreamMode() {
     String idUser = sessionRepository.getCurrentUserId();
-    if (isCurrentUserContirbutor || isCurrentUserStreamAuthor(idUser)) {
+    if (isCurrentUserContributor || isCurrentUserStreamAuthor(idUser)) {
       streamTimelineView.hideStreamViewOnlyIndicator();
-      isViewOnlyStream = false;
     } else {
       streamTimelineView.showStreamViewOnlyIndicator();
-      isViewOnlyStream = true;
     }
   }
 
@@ -341,6 +324,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void showShotsInView(Timeline timeline) {
     List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
+
+    if (hasBeenPaused) {
+      streamTimelineView.setShots(shots);
+      hasBeenPaused = false;
+      return;
+    }
+
     if (isFirstLoad) {
       showFirstLoad(shots);
       setTimelineInitialized(shots);
@@ -351,9 +341,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       isFirstLoad = false;
     } else {
       handleNewShots(timeline, shots, isFirstShotPosition);
-    }
-    if (isFirstLoad) {
-      loadNewShots();
     }
   }
 
@@ -393,8 +380,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       streamTimelineView.addShots(newShots);
     } else {
       addShotsAbove(newShots);
-      newShotsNumber += newShots.size();
-      showTimeLineIndicator();
     }
     streamTimelineView.showShots();
   }
@@ -492,8 +477,14 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void loadNewShotsInView(Timeline timeline) {
     boolean hasNewShots = !timeline.getShots().isEmpty();
-    if (hasNewShots) {
+    if (isFirstLoad) {
       loadTimeline(streamMode);
+      isFirstLoad = false;
+    } else if (hasNewShots) {
+
+      List<ShotModel> newShots = new ArrayList<>(timeline.getShots().size());
+      newShots.addAll(shotModelMapper.transform(timeline.getShots()));
+      addNewShots(isFirstShotPosition, newShots);
     } else if (isEmpty) {
       streamTimelineView.showEmpty(filterActivated);
     }
@@ -561,22 +552,15 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     });
   }
 
-  private void refreshForUpdatingShotsInfo() {
-    timelineInteractorWrapper.loadTimeline(streamId, filterActivated, hasBeenPaused, streamMode,
-        new Interactor.Callback<Timeline>() {
-          @Override public void onLoaded(Timeline timeline) {
-            updateShotsInfo(timeline);
-          }
-        });
-  }
-
   private void updateShotsInfo(Timeline timeline) {
     List<ShotModel> shots = shotModelMapper.transform(timeline.getShots());
     streamTimelineView.updateShotsInfo(shots);
   }
 
   @Subscribe @Override public void onShotSent(ShotSent.Event event) {
-    refresh();
+    List<ShotModel> shots = new ArrayList<>(1);
+    shots.add(shotModelMapper.transform((Shot) event.getShot()));
+    addNewShots(isFirstShotPosition, shots);
   }
 
   public void reshoot(final ShotModel shotModel) {
@@ -618,6 +602,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   public void setIsFirstShotPosition(Boolean firstPositionVisible) {
+    if (firstPositionVisible) {
+      newShotsNumber = 0;
+    }
     this.isFirstShotPosition = firstPositionVisible;
   }
 
@@ -675,17 +662,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     return trimmedText;
   }
 
-  private String filterTitle(String title) {
-    return title.trim();
-  }
-
-  private String filterDescription(String streamDescription) {
-    if (streamDescription != null) {
-      return streamDescription.trim();
-    }
-    return null;
-  }
-
   public void textChanged(String currentText) {
     updateCharCounter(filterText(currentText));
   }
@@ -717,7 +693,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       isFirstLoad = false;
       isTimelineInitialized = false;
       selectStream();
-      loadNewShots();
     }
   }
 
@@ -778,5 +753,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       return false;
     }
     return streamModel.isStrategic();
+  }
+
+  public void onShotInserted(int number) {
+    newShotsNumber += number;
+    showTimeLineIndicator();
   }
 }

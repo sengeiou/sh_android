@@ -1,7 +1,10 @@
 package com.shootr.mobile;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.support.multidex.MultiDexApplication;
+import android.view.Display;
+import android.view.WindowManager;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import com.crashlytics.android.answers.Answers;
 import com.shootr.mobile.ui.activities.ErrorActivity;
@@ -16,6 +19,7 @@ import timber.log.Timber;
 
 public class ShootrApplication extends MultiDexApplication {
 
+    public static final Point SCREEN_SIZE = new Point();
     private ObjectGraph objectGraph;
     @Inject DatabaseVersionUtils databaseVersionUtils;
     @Inject CrashReportTool crashReportTool;
@@ -31,6 +35,11 @@ public class ShootrApplication extends MultiDexApplication {
         CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
         crashReportTool.init(this);
         Fabric.with(this, new Answers());
+        WindowManager manager = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
+        if (manager != null) {
+            Display display = manager.getDefaultDisplay();
+            display.getSize(SCREEN_SIZE);
+        }
     }
 
     public void plantLoggerTrees() {

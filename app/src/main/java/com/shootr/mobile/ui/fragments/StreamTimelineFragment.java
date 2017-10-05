@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -115,7 +116,7 @@ import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
-    ReportShotView, StreamPollView, HighlightedShotsView {
+    ReportShotView, StreamPollView, HighlightedShotsView, ShotsTimelineAdapter.ShotsInsertedListener {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -233,7 +234,6 @@ public class StreamTimelineFragment extends BaseFragment
   private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   private Unbinder unbinder;
-  private boolean scrollMoved;
   private String idStream;
   private String streamTitle;
   private String streamAuthorIdUser;
@@ -250,22 +250,14 @@ public class StreamTimelineFragment extends BaseFragment
   //region Lifecycle methods
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
     unbinder = ButterKnife.bind(this, fragmentView);
     preCachingLayoutManager = new PreCachingLayoutManager(getContext());
+
+    preCachingLayoutManager.setInitialPrefetchItemCount(10);
     shotsTimeline.setLayoutManager(preCachingLayoutManager);
     shotsTimeline.setHasFixedSize(false);
-    shotsTimeline.setOnTouchListener(new View.OnTouchListener() {
-      @Override public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-          if (!scrollMoved) {
-            sendTimelineScrollAnalytics();
-            scrollMoved = true;
-          }
-        }
-        return false;
-      }
-    });
     shotsTimeline.setItemAnimator(new DefaultItemAnimator() {
       @Override
       public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
@@ -684,8 +676,8 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.onCtaPressed(shotModel);
         sendCheckinAnalythics();
       }
-    }, numberFormatUtil,
-        highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
+    }, numberFormatUtil, this, getContext(),
+     highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
   }
 
@@ -1019,15 +1011,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showCheckingForShots() {
-    checkingForShotsView.setVisibility(View.VISIBLE);
+    if (adapter.getItemCount() == 0) {
+      checkingForShotsView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideCheckingForShots() {
     checkingForShotsView.setVisibility(View.GONE);
-  }
-
-  @Override public void showShotShared() {
-    feedbackMessage.show(getView(), shotShared);
   }
 
   @Override public void hideHoldingShots() {
@@ -1035,13 +1025,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showAllStreamShots() {
-    isFilterActivated = false;
+    isFilterActivated = true;
     showAllShotsMenuItem.setVisible(true);
     toolbarDecorator.putFilterSubtitle();
   }
 
   @Override public void showHoldingShots() {
-    isFilterActivated = true;
+    isFilterActivated = false;
     showHoldingShotsMenuItem.setVisible(true);
     toolbarDecorator.hideFilterSubtitle();
   }
@@ -1181,9 +1171,11 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addShots(List<ShotModel> shotModels) {
-    adapter.addShots(shotModels);
+    adapter.notifyItemRangeChanged(preCachingLayoutManager.findFirstVisibleItemPosition(),
+        preCachingLayoutManager.findLastVisibleItemPosition());
     streamTimelinePresenter.setIsFirstShotPosition(true);
     streamTimelinePresenter.setNewShotsNumber(0);
+    adapter.addShots(shotModels);
     shotsTimeline.smoothScrollToPosition(0);
   }
 
@@ -1226,8 +1218,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
     adapter.setShots(shots);
-    adapter.notifyDataSetChanged();
     highlightedShotPresenter.refreshHighlight();
+    adapter.notifyDataSetChanged();
   }
 
   @Override public void hideStreamViewOnlyIndicator() {
@@ -1241,12 +1233,14 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showEmpty(boolean isFilterActivated) {
-    if (isFilterActivated) {
-      importantEmptyView.setVisibility(View.VISIBLE);
-      emptyView.setVisibility(View.GONE);
-    } else {
-      importantEmptyView.setVisibility(View.GONE);
-      emptyView.setVisibility(View.VISIBLE);
+    if (adapter.getItemCount() == 0) {
+      if (isFilterActivated) {
+        importantEmptyView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+      } else {
+        importantEmptyView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+      }
     }
   }
 
@@ -1998,6 +1992,11 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void onStart() {
     super.onStart();
     analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
+  }
+
+  @Override
+  public void onShotsInserted(int number) {
+    streamTimelinePresenter.onShotInserted(number);
   }
   //endregion
 }

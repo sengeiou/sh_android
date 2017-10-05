@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.bus.MessageFailed;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageTimeline;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
@@ -20,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Receiver,
-    MessageFailed.Receiver {
+public class PrivateMessageTimelinePresenter
+    implements Presenter, ShotSent.Receiver, MessageFailed.Receiver {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
 
@@ -91,7 +92,8 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
         new Interactor.Callback<PrivateMessageTimeline>() {
           @Override public void onLoaded(PrivateMessageTimeline privateMessageTimeline) {
             if (privateMessageTimeline != null) {
-              channelId = privateMessageTimeline.getPrivateMessageChannel().getIdPrivateMessageChanel();
+              channelId =
+                  privateMessageTimeline.getPrivateMessageChannel().getIdPrivateMessageChanel();
               privateMessageChannelModel = privateMessageChannelModelMapper.transform(
                   privateMessageTimeline.getPrivateMessageChannel());
               privateMessageModels =
@@ -348,9 +350,9 @@ public class PrivateMessageTimelinePresenter implements Presenter, ShotSent.Rece
   }
 
   @Subscribe @Override public void onShotSent(ShotSent.Event event) {
-    stopPollingShots();
-    refresh();
-    startPollingShots();
+    List<PrivateMessageModel> shots = new ArrayList<>(1);
+    shots.add(privateMessageModelMapper.transform((PrivateMessage) event.getShot(), ""));
+    addNewMessages(isFirstShotPosition, shots);
   }
 
   public void setIsFirstShotPosition(Boolean firstPositionVisible) {

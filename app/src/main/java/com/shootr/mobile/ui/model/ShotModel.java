@@ -252,10 +252,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
             : shotModel.streamTitle != null) {
             return false;
         }
-        if (niceCount != null ? !niceCount.equals(shotModel.niceCount)
-            : shotModel.niceCount != null) {
-            return false;
-        }
+
         if (hide != null ? !hide.equals(shotModel.hide) : shotModel.hide != null) return false;
         return replyCount != null ? replyCount.equals(shotModel.replyCount)
             : shotModel.replyCount == null;
@@ -265,7 +262,6 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
         int result = idShot != null ? idShot.hashCode() : 0;
         result = 31 * result + (nicers != null ? nicers.hashCode() : 0);
         result = 31 * result + (streamTitle != null ? streamTitle.hashCode() : 0);
-        result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
         result = 31 * result + (hide != null ? hide.hashCode() : 0);
         result = 31 * result + (replyCount != null ? replyCount.hashCode() : 0);
         return result;

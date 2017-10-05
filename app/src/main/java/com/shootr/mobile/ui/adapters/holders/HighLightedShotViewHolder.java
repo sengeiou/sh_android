@@ -2,9 +2,9 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
-import butterknife.BindView;
+
 import com.daimajia.swipe.SwipeLayout;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -26,6 +26,8 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
+import butterknife.BindView;
+
 public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
   protected final OnHideHighlightShot onHideHighlightClickListener;
@@ -34,7 +36,8 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
-  @BindView(R.id.open_menu) LinearLayout openHighlightedMenu;
+  @BindView(R.id.open_menu)
+  ImageView openHighlightedMenu;
   @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
 
   public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,

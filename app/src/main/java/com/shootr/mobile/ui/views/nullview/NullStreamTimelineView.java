@@ -38,10 +38,6 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showShotShared() {
-        /* no-op */
-    }
-
     @Override public void hideHoldingShots() {
         /* no-op */
     }
