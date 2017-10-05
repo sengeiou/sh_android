@@ -36,6 +36,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.activity_follow_button) FollowButton followButton;
   @BindView(R.id.favorite_stream_indicator) ShineButton favoriteButton;
   @BindView(R.id.stream_name) TextView streamName;
+  @BindView(R.id.stream_verified) ImageView verified;
 
   public GenericActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener) {
@@ -52,6 +53,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     renderImage(activity);
     renderFavorite(activity);
     renderStreamName(activity);
+    renderVerified(activity);
   }
 
   protected void renderText(ActivityModel activity) {
@@ -60,10 +62,18 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
+  protected void renderVerified(ActivityModel activity) {
+    if (activity.isVerified()) {
+      verified.setVisibility(View.VISIBLE);
+    } else {
+      verified.setVisibility(View.GONE);
+    }
+  }
+
   protected CharSequence getFormattedUserName(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
+    return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
         .append(" ")
         .append(activity.getComment().toLowerCase())
         .pushSpan(new ForegroundColorSpan(gray_60))
@@ -71,7 +81,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
         .popSpan()
         .build();
-
   }
 
   protected void renderAvatar(final ActivityModel activity) {

@@ -269,6 +269,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     streamMode = streamModel.getReadWriteMode();
     handleStreamViewOnlyVisibility();
     streamTimelineView.setTitle(streamModel.getTitle());
+    streamTimelineView.setVerified(streamModel.isVerifiedUser());
     streamTimelineView.sendAnalythicsEnterTimeline();
     if (streamTopic != null && !streamTopic.isEmpty()) {
       streamTimelineView.showPinnedMessage(streamTopic);

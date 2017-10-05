@@ -21,6 +21,7 @@ public class ActivityEntity extends Synchronized {
     private String pollQuestion;
     private String pollOptionText;
     private boolean strategic;
+    private boolean isVerified;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -150,5 +151,13 @@ public class ActivityEntity extends Synchronized {
 
     public void setStrategic(boolean strategic) {
         this.strategic = strategic;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 }

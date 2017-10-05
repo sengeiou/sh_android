@@ -52,6 +52,11 @@
         android:gravity="center_vertical"
         android:orientation="vertical"
         >
+      <LinearLayout
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          >
       <TextView
           android:id="@+id/stream_title"
           android:layout_width="wrap_content"
@@ -61,6 +66,17 @@
           tools:text="MON RAC 1"
           android:textColor="@color/black"
           />
+        <ImageView
+            android:id="@+id/stream_verified_connect"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="center"
+            android:paddingLeft="2dp"
+            android:src="@drawable/ic_action_verified_user"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
+      </LinearLayout>
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
@@ -69,7 +85,6 @@
           android:textColor="#90000000"
           />
     </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/close_button"

@@ -62,6 +62,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void setVerified(boolean isVerified) {
+        /* no-op */
+    }
+
     @Override public void sendAnalythicsEnterTimeline() {
         /* no-op */
     }

@@ -22,6 +22,7 @@ public class ActivityModel {
     private boolean isFavorite;
     private boolean strategic;
     private String pollOptionText;
+    private boolean isVerified;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -165,5 +166,13 @@ public class ActivityModel {
 
     public void setPollOptionText(String pollOptionText) {
         this.pollOptionText = pollOptionText;
+    }
+
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+        isVerified = verified;
     }
 }

@@ -27,7 +27,6 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.stream_title) TextView title;
   @BindView(R.id.stream_muted) ImageView mute;
   @BindView(R.id.user_follow_button) FollowButton followButton;
-  @BindView(R.id.stream_verified) ImageView streamVerified;
   @BindView(R.id.stream_rank) TextView rankNumber;
   @BindView(R.id.stream_remove) ImageView removeButton;
   @BindView(R.id.stream_subtitle) TextView subtitle;
@@ -48,11 +47,22 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   public void render(StreamModel streamModel) {
     this.setClickListener(streamModel);
     this.setupFavoriteClickListener(streamModel);
-    title.setText(streamModel.getTitle());
+    setTitle(streamModel);
     renderSubtitle(streamModel);
     handleShowFavorite(streamModel);
     setupStreamPicture(streamModel);
     rankNumber.setVisibility(View.GONE);
+  }
+
+  private void setTitle(StreamModel streamModel) {
+    title.setText(streamModel.getTitle());
+    if (streamModel.isVerifiedUser()) {
+      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_action_verified_user_list,
+          0);
+      title.setCompoundDrawablePadding(6);
+    } else {
+      title.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+    }
   }
 
   private void setClickListener(final StreamModel streamResult) {
@@ -70,27 +80,18 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void renderSubtitle(StreamModel stream) {
-      setupAuthorAndDescriptionSubtitle(stream);
-      setVerifiedVisibility(stream);
+    setupAuthorAndDescriptionSubtitle(stream);
   }
 
   private void setupAuthorAndDescriptionSubtitle(StreamModel stream) {
     if (subtitle != null && subtitleDescription != null) {
-      subtitle.setText(stream.getAuthorUsername());
+      subtitle.setText("@" + stream.getAuthorUsername());
       if (stream.getDescription() != null) {
         subtitleDescription.setVisibility(View.VISIBLE);
         subtitleDescription.setText(stream.getDescription());
       } else {
         subtitleDescription.setVisibility(View.GONE);
       }
-    }
-  }
-
-  private void setVerifiedVisibility(StreamModel streamModel) {
-    if (streamModel.isVerifiedUser()) {
-      streamVerified.setVisibility(View.VISIBLE);
-    } else {
-      streamVerified.setVisibility(View.GONE);
     }
   }
 
@@ -133,6 +134,4 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
     TextDrawable textDrawable = initialsLoader.getTextDrawable(initials, backgroundColor);
     pictureWithoutText.setImageDrawable(textDrawable);
   }
-
-
 }

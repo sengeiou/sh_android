@@ -34,6 +34,7 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
             activityModel.setIdStream(streamInfo.getIdStream());
             activityModel.setStreamTitle(streamInfo.getStreamTitle());
             activityModel.setStrategic(streamInfo.isStrategic());
+            activityModel.setVerified(streamInfo.isVerified());
         }
 
         activityModel.setIdTargetUser(activity.getIdTargetUser());
