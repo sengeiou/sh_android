@@ -3,6 +3,8 @@ package com.shootr.mobile.ui.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.mobile.R;
@@ -15,6 +17,7 @@ import javax.inject.Inject;
 public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Inject BackStackHandler backStackHandler;
+    private Fragment currentFragment;
 
     public static Intent newIntent(Context context, String streamId, String streamTitle, String authorId) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
@@ -59,6 +62,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
         if (!fragmentAlreadyAddedBySystem) {
             Bundle fragmentArguments = getIntent().getExtras();
             StreamTimelineFragment streamTimelineFragment = StreamTimelineFragment.newInstance(fragmentArguments);
+            currentFragment = streamTimelineFragment;
 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.add(R.id.container, streamTimelineFragment, StreamTimelineFragment.TAG);
@@ -81,5 +85,16 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     @Override public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+    }
+
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+        @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0) {
+                if (currentFragment instanceof StreamTimelineFragment) {
+                    ((StreamTimelineFragment) currentFragment).pickImage();
+                }
+            }
+        }
     }
 }

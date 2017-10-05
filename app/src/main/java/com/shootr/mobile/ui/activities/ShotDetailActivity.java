@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -681,4 +682,14 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     super.onStart();
     sendScreenToAnalythics();
   }
+
+  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+    if (requestCode == 1) {
+      if (grantResults.length > 0) {
+        pickImage();
+      }
+    }
+  }
+
 }
