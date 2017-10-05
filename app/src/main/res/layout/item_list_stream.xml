@@ -79,7 +79,15 @@
           android:textSize="17sp"
           tools:text="Titulo Dos líneas"
           />
-
+      <ImageView
+          android:id="@+id/stream_verified"
+          android:layout_width="12dp"
+          android:layout_height="12dp"
+          android:layout_gravity="center"
+          android:src="@drawable/ic_action_verified_user"
+          android:visibility="gone"
+          tools:visibility="visible"
+          />
       <ImageView
           android:id="@+id/stream_muted"
           android:layout_width="wrap_content"
