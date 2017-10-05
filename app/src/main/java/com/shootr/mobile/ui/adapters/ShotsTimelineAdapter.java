@@ -341,7 +341,7 @@ public class ShotsTimelineAdapter
         iterator.remove();
       }
     }
-    if(newShotList.size() > 0) {
+    if (newShotList.size() > 0) {
       shots.addAll(position, newShotList);
       notifyItemRangeInserted(position, newShotList.size());
     }
