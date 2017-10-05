@@ -50,8 +50,8 @@
               tools:visibility="visible" />
                 <ImageView
                     android:id="@+id/stream_verified"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:layout_gravity="center"
                     android:paddingLeft="2dp"
                     android:src="@drawable/ic_action_verified_user_white"

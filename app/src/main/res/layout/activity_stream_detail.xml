@@ -98,8 +98,8 @@
                       tools:text="Title" />
                     <ImageView
                         android:id="@+id/stream_verified"
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_action_verified_user_white"
                         android:visibility="gone"
