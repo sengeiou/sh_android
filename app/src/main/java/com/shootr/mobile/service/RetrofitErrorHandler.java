@@ -1,6 +1,8 @@
 package com.shootr.mobile.service;
 
 import android.support.annotation.NonNull;
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.exception.ErrorResource;
@@ -50,6 +52,14 @@ import timber.log.Timber;
   }
 
   @NonNull private Exception defaultExceptionForUnknownCause(RetrofitError retrofitError) {
+
+    CustomEvent customEvent = new CustomEvent("NetworkError");
+
+    customEvent.putCustomAttribute("ErrorCode", String.valueOf(retrofitError.getResponse().getStatus()));
+    customEvent.putCustomAttribute("ErrorInfo", retrofitError.getMessage());
+    customEvent.putCustomAttribute("url", retrofitError.getUrl());
+
+    Answers.getInstance().logCustom(customEvent);
     return new ServerCommunicationException(retrofitError);
   }
 }
