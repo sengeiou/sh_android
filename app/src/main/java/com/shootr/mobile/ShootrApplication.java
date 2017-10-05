@@ -3,12 +3,14 @@ package com.shootr.mobile;
 import android.content.Context;
 import android.support.multidex.MultiDexApplication;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
+import com.crashlytics.android.answers.Answers;
 import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DatabaseVersionUtils;
 import com.shootr.mobile.util.LogTreeFactory;
 import dagger.ObjectGraph;
+import io.fabric.sdk.android.Fabric;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -28,6 +30,7 @@ public class ShootrApplication extends MultiDexApplication {
         CustomActivityOnCrash.install(this);
         CustomActivityOnCrash.setErrorActivityClass(ErrorActivity.class);
         crashReportTool.init(this);
+        Fabric.with(this, new Answers());
     }
 
     public void plantLoggerTrees() {
