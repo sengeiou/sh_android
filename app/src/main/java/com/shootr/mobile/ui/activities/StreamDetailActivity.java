@@ -85,6 +85,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @BindView(R.id.subtitle) TextView streamSubtitle;
   @BindView(R.id.blurLayout) FrameLayout blurLayout;
   @BindView(R.id.appbar) AppBarLayout appBarLayout;
+  @BindView(R.id.stream_verified) ImageView verifiedStream;
 
   @BindView(R.id.list) RecyclerView recyclerView;
   @BindView(R.id.loading_progress) View progressView;
@@ -192,7 +193,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         new View.OnClickListener() {
           @Override public void onClick(View view) {
             startActivity(
-                UserFollowsContainerActivity.getIntentStreamsFollowersIntent(getBaseContext(), idStream));
+                UserFollowsContainerActivity.getIntentStreamsFollowersIntent(getBaseContext(),
+                    idStream));
           }
         }, new CompoundButton.OnCheckedChangeListener() {
       @Override public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
@@ -371,6 +373,14 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Override public void setStreamTitle(String title) {
     streamTitle.setText(title);
     setTitleResultForPreviousActivity(title);
+  }
+
+  @Override public void setStreamVerified(boolean isVerified) {
+    if (isVerified) {
+      verifiedStream.setVisibility(View.VISIBLE);
+    } else {
+      verifiedStream.setVisibility(View.GONE);
+    }
   }
 
   @Override public void setStreamAuthor(String author) {

@@ -9,6 +9,8 @@ public interface StreamDetailView extends DataTransferView {
 
     void setStreamTitle(String title);
 
+    void setStreamVerified(boolean isVerified);
+
     void setStreamAuthor(String author);
 
     void setStream(StreamModel streamModel);
