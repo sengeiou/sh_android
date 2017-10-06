@@ -13,6 +13,28 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.43.0] - 2017-10-06
+### Fixed
+- Cannot follow myself on following and followers
+- Suggested People musn't suggest people you follow
+- Kill message about english it's the only language for terms and conditions
+- You cannot vote in a poll you have voted previously from push notification
+- Time to load stream Timeline
+- Feedback sharing poll
+- Messsage checking for shots while the are no shots (appears both)
+- Double subtitle on #users and filter (appears both)
+- Onboarding doesn't follow default followin
+- Share poll activity --> Username missed blank space
+- Cannot block user who follow
+- Refreshing shot on sent
+- Smooth scroll
+- Refreshing private message on sent
+- Incorrect Activity badge on logout / login
+
+### Added
+- Streams verified
+- Change blue logo
+
 ## [1.42.2] - 2017-09-22
 ### Fixed
 - Request user with null Id to server or local
