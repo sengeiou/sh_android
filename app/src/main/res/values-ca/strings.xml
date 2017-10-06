@@ -407,7 +407,7 @@
     <item quantity="other">%d segons</item>
     <item quantity="zero">%d segon</item>
   </plurals>
-  <string name="shared_poll">Ha compartit l\'enquesta %s</string>
+  <string name="shared_poll">ha compartit l\'enquesta %s</string>
   <string name="shared_shot_activity">" reshot de %s"</string>
   <string name="shared_shot_activity_with_comment">" reshot: "</string>
   <string name="shared_stream_notification">Stream compartit</string>
@@ -539,5 +539,5 @@
   <string name="onboarding_enter">Continuar</string>
   <string name="login_message">Talk about anything</string>
   <string name="welcome_shootr">Entrant a Shootr…</string>
-  <string name="shared_poll_feedback">Poll shared</string>
+  <string name="shared_poll_feedback">Enquesta compartida</string>
 </resources>
