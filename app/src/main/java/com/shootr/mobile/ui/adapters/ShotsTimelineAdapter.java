@@ -71,8 +71,7 @@ public class ShotsTimelineAdapter
   private final Context context;
 
   private List<ShotModel> shots;
-  private Deque<List<ShotModel>> pendingUpdates =
-      new ArrayDeque<>();
+  private Deque<List<ShotModel>> pendingUpdates = new ArrayDeque<>();
   private HighlightedShotModel highlightedShotModel;
   private Boolean isAdmin;
   private int avatarSize;
@@ -113,7 +112,8 @@ public class ShotsTimelineAdapter
     this.isAdmin = isAdmin;
 
     Resources r = context.getResources();
-    avatarSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, r.getDisplayMetrics());
+    avatarSize =
+        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, r.getDisplayMetrics());
   }
 
   @Override public int getItemViewType(int position) {
