@@ -5,8 +5,8 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="?actionBarSize">
-
+  android:layout_height="?actionBarSize"
+    android:elevation="4dp">
     <LinearLayout android:id="@+id/toolbar_title_container"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -22,7 +22,7 @@
           android:layout_height="@dimen/userlist_avatar_size"
           android:src="@drawable/ic_contact_picture_default"
           android:visibility="gone"
-          app:border_color="@color/white"
+          app:border_color="@color/material_black"
           app:border_width="2dp"
           android:layout_marginRight="@dimen/toolbar_title_padding"
           tools:visibility="visible" />
@@ -46,6 +46,7 @@
               android:gravity="center_vertical|start"
               android:singleLine="true"
               android:visibility="gone"
+                android:textColor="@color/material_black"
               tools:text="Title"
               tools:visibility="visible" />
                 <ImageView
@@ -76,7 +77,7 @@
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
               android:singleLine="true"
-              android:textColor="#FFDAEDFB"
+              android:textColor="#FF000000"
               android:textSize="14sp"
               android:visibility="gone"
               tools:text="following 3"
