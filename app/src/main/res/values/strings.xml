@@ -402,7 +402,7 @@
     <item quantity="one">%d second</item>
     <item quantity="other">%d seconds</item>
   </plurals>
-  <string name="shared_poll">Shared poll %s</string>
+  <string name="shared_poll">shared poll %s</string>
   <string name="shared_shot_activity">" reshot  from %s"</string>
   <string name="shared_shot_activity_with_comment">" reshot: "</string>
   <string name="shared_stream_notification">Stream shared</string>
