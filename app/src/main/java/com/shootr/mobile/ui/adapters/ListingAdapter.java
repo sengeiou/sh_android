@@ -141,4 +141,30 @@ public class ListingAdapter
   public void setShowTitles(boolean showTitles) {
     this.showTitles = showTitles;
   }
+
+  public void addFavorite(StreamResultModel streamModel) {
+    streamModel.getStreamModel().setFavorite(true);
+    if (!favoritedStreams.contains(streamModel)) {
+      favoritedStreams.add(streamModel);
+    }
+
+    if (createdStreams.contains(streamModel)) {
+      createdStreams.get(createdStreams.indexOf(streamModel)).setFavorited(true);
+    }
+
+    notifyDataSetChanged();
+  }
+
+  public void removeFavorite(StreamResultModel streamModel) {
+    streamModel.getStreamModel().setFavorite(false);
+    if (favoritedStreams.contains(streamModel)) {
+      favoritedStreams.remove(streamModel);
+    }
+
+    if (createdStreams.contains(streamModel)) {
+      createdStreams.get(createdStreams.indexOf(streamModel)).setFavorited(false);
+    }
+
+    notifyDataSetChanged();
+  }
 }

@@ -38,10 +38,6 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showShotShared() {
-        /* no-op */
-    }
-
     @Override public void hideHoldingShots() {
         /* no-op */
     }
@@ -59,6 +55,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void setTitle(String title) {
+        /* no-op */
+    }
+
+    @Override public void setVerified(boolean isVerified) {
         /* no-op */
     }
 
@@ -155,6 +155,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void setReshoot(String idShot, boolean mark) {
+        /* no-op */
+    }
+
+    @Override public void showEmpty(boolean isFilterActivated) {
         /* no-op */
     }
 

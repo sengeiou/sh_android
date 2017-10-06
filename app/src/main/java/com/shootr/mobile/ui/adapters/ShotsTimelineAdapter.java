@@ -1,7 +1,10 @@
 package com.shootr.mobile.ui.adapters;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +34,10 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.Iterator;
 import java.util.List;
 
 public class ShotsTimelineAdapter
@@ -61,10 +67,14 @@ public class ShotsTimelineAdapter
   private final OnReshootClickListener onReshootClickListener;
   private final OnCtaClickListener onCtaClickListener;
   private final NumberFormatUtil numberFormatUtil;
+  private final ShotsInsertedListener shotsInsertedListener;
+  private final Context context;
 
   private List<ShotModel> shots;
+  private Deque<List<ShotModel>> pendingUpdates = new ArrayDeque<>();
   private HighlightedShotModel highlightedShotModel;
   private Boolean isAdmin;
+  private int avatarSize;
 
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
@@ -75,7 +85,8 @@ public class ShotsTimelineAdapter
       OnUrlClickListener onUrlClickListener, OnUrlClickListener onShotUrlClickListener,
       OnHideHighlightShot onHideHighlightClickListener,
       OnReshootClickListener onReshootClickListener, OnCtaClickListener onCtaClickListener,
-      NumberFormatUtil numberFormatUtil, Boolean isAdmin) {
+      NumberFormatUtil numberFormatUtil, ShotsInsertedListener shotsInsertedListener,
+      Context context, Boolean isAdmin) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
     this.videoClickListener = videoClickListener;
@@ -89,6 +100,8 @@ public class ShotsTimelineAdapter
     this.onReshootClickListener = onReshootClickListener;
     this.onCtaClickListener = onCtaClickListener;
     this.numberFormatUtil = numberFormatUtil;
+    this.shotsInsertedListener = shotsInsertedListener;
+    this.context = context;
     this.shots = new ArrayList<>(0);
     this.shotTextSpannableBuilder = new ShotTextSpannableBuilder();
     this.shotClickListener = shotClickListener;
@@ -97,6 +110,10 @@ public class ShotsTimelineAdapter
     this.onTouchListener = onTouchListener;
     this.onImageClickListener = onImageClickListener;
     this.isAdmin = isAdmin;
+
+    Resources r = context.getResources();
+    avatarSize =
+        (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 36, r.getDisplayMetrics());
   }
 
   @Override public int getItemViewType(int position) {
@@ -201,13 +218,13 @@ public class ShotsTimelineAdapter
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
       ((HighlightedPromotedShotViewHolder) holder).render(highlightedShotModel, shots.get(position),
           shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
-          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener, isAdmin,
-          onCtaClickListener);
+          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
+          isAdmin, onCtaClickListener);
     } else {
       ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel,
           shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
-          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
-          isAdmin);
+          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
+          onReshootClickListener, isAdmin);
     }
   }
 
@@ -269,9 +286,10 @@ public class ShotsTimelineAdapter
     if (hasHeader()) {
       shots.remove(0);
     }
+    int oldSize = shots.size();
     this.shots.addAll(newShots);
     insertExistingHeader(shots);
-    notifyDataSetChanged();
+    notifyItemRangeInserted(oldSize, newShots.size());
   }
 
   public void removeShot(ShotModel shotModel) {
@@ -292,9 +310,16 @@ public class ShotsTimelineAdapter
 
   public void addShotsAbove(List<ShotModel> shotModels) {
     List<ShotModel> newShotList = new ArrayList<>(shotModels);
+    Iterator<ShotModel> iterator = newShotList.iterator();
+    while (iterator.hasNext()) {
+      if (shots.contains(iterator.next())) {
+        iterator.remove();
+      }
+    }
     if (hasHeader()) {
       shots.remove(0);
     }
+    shotsInsertedListener.onShotsInserted(newShotList.size());
     newShotList.addAll(this.shots);
     this.shots = newShotList;
     insertExistingHeader(shots);
@@ -303,27 +328,23 @@ public class ShotsTimelineAdapter
   public void addShots(List<ShotModel> shotModels) {
     List<ShotModel> newShotList = new ArrayList<>(shotModels);
     if (hasHeader()) {
-      insertNewShots(newShotList, ITEM_POSITION_WITH_HEADER, newShotList.size());
+      insertNewShots(newShotList, ITEM_POSITION_WITH_HEADER);
     } else {
-      insertNewShots(newShotList, ITEM_POSITION_WITHOUT_HEADER, newShotList.size());
+      insertNewShots(newShotList, ITEM_POSITION_WITHOUT_HEADER);
     }
   }
 
-  private void insertNewShots(List<ShotModel> newShotList, int position, int size) {
-    shots.addAll(position, newShotList);
-    notifyDataSetChanged();
-  }
-
-  public void onPinnedShot(ShotModel shotModel) {
-    List<ShotModel> shotModels = new ArrayList<>();
-    for (ShotModel shot : shots) {
-      if (shotModel.getIdShot().equals(shot.getIdShot())) {
-        shotModels.add(shotModel);
-      } else {
-        shotModels.add(shot);
+  private void insertNewShots(List<ShotModel> newShotList, int position) {
+    Iterator<ShotModel> iterator = newShotList.iterator();
+    while (iterator.hasNext()) {
+      if (shots.contains(iterator.next())) {
+        iterator.remove();
       }
     }
-    this.shots = shotModels;
+    if (newShotList.size() > 0) {
+      shots.addAll(position, newShotList);
+      notifyItemRangeInserted(position, newShotList.size());
+    }
   }
 
   public ShotModel getItem(int position) {
@@ -367,7 +388,6 @@ public class ShotsTimelineAdapter
       }
       index++;
     }
-
   }
 
   public void unmarkNice(String idShot) {
@@ -392,5 +412,9 @@ public class ShotsTimelineAdapter
       }
       index++;
     }
+  }
+
+  public interface ShotsInsertedListener {
+    void onShotsInserted(int number);
   }
 }

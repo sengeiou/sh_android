@@ -36,12 +36,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 42
-def versionRevision = 2
+def versionMinor = 43
+def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 57
+def databaseVersion = 58
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -248,6 +248,10 @@ dependencies {
   compile 'com.github.clans:fab:1.6.4'
   compile 'com.daasuu:BubbleLayout:1.1.1'
   compile 'com.google.android.gms:play-services-safetynet:10.2.4'
+  compile ("com.github.bumptech.glide:recyclerview-integration:4.1.1") {
+    // Excludes the support library because it's already included by Glide.
+    transitive = false
+  }
 }
 
 /**

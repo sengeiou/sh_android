@@ -111,10 +111,12 @@ public class OnBoardingPresenter implements Presenter {
         });
   }
 
-  private void storeDefaultFavorites(List<OnBoardingModel> onBoardingStreamModels) {
-    for (OnBoardingModel onBoardingStreamModel : onBoardingStreamModels) {
-      if (onBoardingStreamModel.getStreamModel() != null && onBoardingStreamModel.isFavorite()) {
-        putFavorite(onBoardingStreamModel);
+  private void storeDefaultFavorites(List<OnBoardingModel> onBoardingModels) {
+    for (OnBoardingModel onBoardingModel : onBoardingModels) {
+      if (onBoardingModel.getStreamModel() != null && onBoardingModel.isFavorite()) {
+        putFavorite(onBoardingModel);
+      } else if (onBoardingModel.getUserModel() != null && onBoardingModel.isFavorite()) {
+        putUserFavorite(onBoardingModel);
       }
     }
   }

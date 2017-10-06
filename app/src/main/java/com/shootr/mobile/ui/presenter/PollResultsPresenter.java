@@ -152,7 +152,7 @@ public class PollResultsPresenter implements Presenter {
   public void shareViaShootr() {
     sharePollInteractor.sharePoll(idPoll, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        /* no-op */
+        pollResultsView.showSharedPoll();
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {

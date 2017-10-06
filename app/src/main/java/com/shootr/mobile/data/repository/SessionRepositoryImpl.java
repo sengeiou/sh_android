@@ -1,11 +1,13 @@
 package com.shootr.mobile.data.repository;
 
+import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CacheTimeKeepAlive;
 import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.DeviceId;
 import com.shootr.mobile.data.prefs.DevicePref;
 import com.shootr.mobile.data.prefs.DevicePreferences;
+import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
@@ -30,6 +32,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final BooleanPreference publicVoteAlertPreference;
   private final StringPreference deviceIdPreference;
   private final DevicePreferences devicePreference;
+  private final IntPreference badgeCount;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
   private User currentUser;
@@ -42,7 +45,7 @@ public class SessionRepositoryImpl implements SessionRepository {
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
       @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
-      CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
+      @ActivityBadgeCount IntPreference badgeCount, CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;
@@ -51,6 +54,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.publicVoteAlertPreference = publicVoteAlertPreference;
     this.deviceIdPreference = deviceIdPreference;
     this.devicePreference = devicePreference;
+    this.badgeCount = badgeCount;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
@@ -99,6 +103,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     deviceIdPreference.delete();
     devicePreference.delete();
     cacheTimeKeepAlive.delete();
+    badgeCount.delete();
     analyticsTool.reset();
     currentUser = null;
   }

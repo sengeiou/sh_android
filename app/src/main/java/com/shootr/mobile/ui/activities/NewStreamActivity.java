@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.FileProvider;
@@ -460,4 +461,12 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         startActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
     }
 
+    @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+        @NonNull int[] grantResults) {
+        if (requestCode == 1) {
+            if (grantResults.length > 0) {
+                onPhotoClick();
+            }
+        }
+    }
 }

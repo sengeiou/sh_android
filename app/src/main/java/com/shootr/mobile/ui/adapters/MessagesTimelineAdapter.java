@@ -16,6 +16,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MessagesTimelineAdapter extends RecyclerView.Adapter<MessageViewHolder> {
@@ -89,8 +90,16 @@ public class MessagesTimelineAdapter extends RecyclerView.Adapter<MessageViewHol
   }
 
   private void insertNewMessages(List<PrivateMessageModel> newMessages, int position, int size) {
-    messages.addAll(position, newMessages);
-    notifyItemRangeInserted(position, size);
+    Iterator<PrivateMessageModel> iterator = newMessages.iterator();
+    while (iterator.hasNext()) {
+      if (messages.contains(iterator.next())) {
+        iterator.remove();
+      }
+    }
+    if (newMessages.size() > 0) {
+      messages.addAll(position, newMessages);
+      notifyItemRangeInserted(position, size);
+    }
   }
 
   public PrivateMessageModel getItem(int position) {

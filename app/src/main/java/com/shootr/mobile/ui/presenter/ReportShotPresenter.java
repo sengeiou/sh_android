@@ -7,7 +7,7 @@ import com.shootr.mobile.domain.interactor.shot.GetLocalHighlightedShotInteracto
 import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.BlockUserInteractor;
 import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
+import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -31,9 +31,9 @@ public class ReportShotPresenter implements Presenter {
   private final GetBlockedIdUsersInteractor getBlockedIdUsersInteractor;
   private final BlockUserInteractor blockUserInteractor;
   private final UnblockUserInteractor unblockUserInteractor;
-  private final GetFollowingInteractor getFollowingInteractor;
   private final GetLocalHighlightedShotInteractor getHighlightedShotInteractor;
   private final GetLocalStreamInteractor getLocalStreamInteractor;
+  private final GetUserByIdInteractor getUserByIdInteractor;
 
   private ReportShotView reportShotView;
   private String idUserToBlock;
@@ -45,9 +45,9 @@ public class ReportShotPresenter implements Presenter {
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository,
       UserModelMapper userModelMapper, GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
       BlockUserInteractor blockUserInteractor, UnblockUserInteractor unblockUserInteractor,
-      GetFollowingInteractor getFollowingInteractor,
       GetLocalHighlightedShotInteractor getHighlightedShotInteractor,
-      GetLocalStreamInteractor getLocalStreamInteractor) {
+      GetLocalStreamInteractor getLocalStreamInteractor,
+      GetUserByIdInteractor getUserByIdInteractor) {
     this.deleteShotInteractor = deleteShotInteractor;
     this.errorMessageFactory = errorMessageFactory;
     this.sessionRepository = sessionRepository;
@@ -55,9 +55,9 @@ public class ReportShotPresenter implements Presenter {
     this.getBlockedIdUsersInteractor = getBlockedIdUsersInteractor;
     this.blockUserInteractor = blockUserInteractor;
     this.unblockUserInteractor = unblockUserInteractor;
-    this.getFollowingInteractor = getFollowingInteractor;
     this.getHighlightedShotInteractor = getHighlightedShotInteractor;
     this.getLocalStreamInteractor = getLocalStreamInteractor;
+    this.getUserByIdInteractor = getUserByIdInteractor;
   }
 
   protected void setView(ReportShotView reportShotView) {
@@ -260,9 +260,9 @@ public class ReportShotPresenter implements Presenter {
   }
 
   public void checkIfUserCanBeBlocked() {
-    getFollowingInteractor.obtainPeople(new Interactor.Callback<List<User>>() {
-      @Override public void onLoaded(List<User> users) {
-        handleUserBlocking(users, idUserToBlock);
+    getUserByIdInteractor.loadUserById(idUserToBlock, true, new Interactor.Callback<User>() {
+      @Override public void onLoaded(User user) {
+        handleUserBlocking(user);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -311,15 +311,8 @@ public class ReportShotPresenter implements Presenter {
     blockUser(idUserToBlock);
   }
 
-  private void handleUserBlocking(List<User> users, String idUserToBlock) {
-    Boolean following = false;
-    for (User user : users) {
-      if (user.getIdUser().equals(idUserToBlock)) {
-        following = true;
-        break;
-      }
-    }
-    if (!following) {
+  private void handleUserBlocking(User users) {
+    if (!users.isFollowing()) {
       reportShotView.showBlockUserConfirmation();
     } else {
       reportShotView.showBlockFollowingUserAlert();
@@ -330,12 +323,8 @@ public class ReportShotPresenter implements Presenter {
     reportShotView.showError(errorMessageFactory.getMessageForError(error));
   }
 
-  public void reportClicked(String language, String sessionToken, ShotModel shotModel) {
-    if (isEnglishLocale(language)) {
-      reportShotView.goToReport(sessionToken, shotModel);
-    } else {
-      reportShotView.showAlertLanguageSupportDialog(sessionToken, shotModel);
-    }
+  public void reportClicked(String sessionToken, ShotModel shotModel) {
+    reportShotView.goToReport(sessionToken, shotModel);
   }
 
   @Override public void resume() {

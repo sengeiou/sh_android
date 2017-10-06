@@ -202,7 +202,6 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">The messaging app where chats are open. They\'re called streams.</string>
   <string name="invite_friends_message">Hey, let\'s use Shootr: http://shootr.com/</string>
-  <string name="language_support_alert" formatted="false">We currently support English only.</string>
   <string name="left">%s left</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s link click</item>
@@ -403,7 +402,7 @@
     <item quantity="one">%d second</item>
     <item quantity="other">%d seconds</item>
   </plurals>
-  <string name="shared_poll">Shared poll %s</string>
+  <string name="shared_poll">shared poll %s</string>
   <string name="shared_shot_activity">" reshot  from %s"</string>
   <string name="shared_shot_activity_with_comment">" reshot: "</string>
   <string name="shared_stream_notification">Stream shared</string>
@@ -536,4 +535,5 @@
   <string name="onboarding_enter">Next</string>
   <string name="login_message">Talk about anything</string>
   <string name="welcome_shootr">Entering Shootr…</string>
+  <string name="shared_poll_feedback">Poll shared</string>
 </resources>

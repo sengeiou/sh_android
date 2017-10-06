@@ -82,7 +82,6 @@ import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
@@ -1001,20 +1000,7 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void handleReport(String sessionToken, ShotModel shotModel) {
-    reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
-  }
-
-  @Override
-  public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-    alertDialogBuilder //
-        .setMessage(getString(R.string.language_support_alert)) //
-        .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                goToReport(sessionToken, shotModel);
-              }
-            }).show();
+    reportShotPresenter.reportClicked(sessionToken, shotModel);
   }
 
   @Override public void showHolderContextMenu(ShotModel shot) {
@@ -1233,6 +1219,15 @@ public class ProfileActivity extends BaseActivity
   private void closeFabMenu() {
     if (floatingMenu != null) {
       floatingMenu.close(true);
+    }
+  }
+
+  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+    if (requestCode == 1) {
+      if (grantResults.length > 0) {
+        onAvatarClick();
+      }
     }
   }
 }

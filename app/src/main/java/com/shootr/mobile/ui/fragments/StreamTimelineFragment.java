@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -110,13 +111,12 @@ import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
 import java.util.List;
-import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
-    ReportShotView, StreamPollView, HighlightedShotsView {
+    ReportShotView, StreamPollView, HighlightedShotsView, ShotsTimelineAdapter.ShotsInsertedListener {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -161,6 +161,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
   @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
   @BindView(R.id.timeline_empty) TextView emptyView;
+  @BindView(R.id.important_timeline_empty) TextView importantEmptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
@@ -233,7 +234,6 @@ public class StreamTimelineFragment extends BaseFragment
   private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   private Unbinder unbinder;
-  private boolean scrollMoved;
   private String idStream;
   private String streamTitle;
   private String streamAuthorIdUser;
@@ -250,22 +250,14 @@ public class StreamTimelineFragment extends BaseFragment
   //region Lifecycle methods
   @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+    AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     View fragmentView = inflater.inflate(R.layout.timeline_stream, container, false);
     unbinder = ButterKnife.bind(this, fragmentView);
     preCachingLayoutManager = new PreCachingLayoutManager(getContext());
+
+    preCachingLayoutManager.setInitialPrefetchItemCount(10);
     shotsTimeline.setLayoutManager(preCachingLayoutManager);
     shotsTimeline.setHasFixedSize(false);
-    shotsTimeline.setOnTouchListener(new View.OnTouchListener() {
-      @Override public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-          if (!scrollMoved) {
-            sendTimelineScrollAnalytics();
-            scrollMoved = true;
-          }
-        }
-        return false;
-      }
-    });
     shotsTimeline.setItemAnimator(new DefaultItemAnimator() {
       @Override
       public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder) {
@@ -278,7 +270,7 @@ public class StreamTimelineFragment extends BaseFragment
         return true;
       }
     });
-    newShotBarContainer.setVisibility(View.GONE);
+    newShotBarContainer.setVisibility(View.INVISIBLE);
     return fragmentView;
   }
 
@@ -684,8 +676,8 @@ public class StreamTimelineFragment extends BaseFragment
         streamTimelinePresenter.onCtaPressed(shotModel);
         sendCheckinAnalythics();
       }
-    }, numberFormatUtil,
-        highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
+    }, numberFormatUtil, this, getContext(),
+     highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
   }
 
@@ -814,6 +806,10 @@ public class StreamTimelineFragment extends BaseFragment
   private void setStreamTitle(String streamTitle) {
     this.streamTitle = streamTitle;
     toolbarDecorator.setTitle(streamTitle);
+  }
+
+  private void setStreamVerified(boolean isVerified) {
+    toolbarDecorator.setVerifiedStream(isVerified);
   }
 
   private void setStreamTitleClickListener(final String idStream) {
@@ -1015,15 +1011,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showCheckingForShots() {
-    checkingForShotsView.setVisibility(View.VISIBLE);
+    if (adapter.getItemCount() == 0) {
+      checkingForShotsView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideCheckingForShots() {
     checkingForShotsView.setVisibility(View.GONE);
-  }
-
-  @Override public void showShotShared() {
-    feedbackMessage.show(getView(), shotShared);
   }
 
   @Override public void hideHoldingShots() {
@@ -1031,11 +1025,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showAllStreamShots() {
+    isFilterActivated = true;
     showAllShotsMenuItem.setVisible(true);
     toolbarDecorator.putFilterSubtitle();
   }
 
   @Override public void showHoldingShots() {
+    isFilterActivated = false;
     showHoldingShotsMenuItem.setVisible(true);
     toolbarDecorator.hideFilterSubtitle();
   }
@@ -1046,6 +1042,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void setTitle(String title) {
     setStreamTitle(title);
+  }
+
+  @Override public void setVerified(boolean isVerified) {
+    setStreamVerified(isVerified);
   }
 
   @Override public void setImage(String avatarImage, String username) {
@@ -1171,9 +1171,11 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addShots(List<ShotModel> shotModels) {
-    adapter.addShots(shotModels);
+    adapter.notifyItemRangeChanged(preCachingLayoutManager.findFirstVisibleItemPosition(),
+        preCachingLayoutManager.findLastVisibleItemPosition());
     streamTimelinePresenter.setIsFirstShotPosition(true);
     streamTimelinePresenter.setNewShotsNumber(0);
+    adapter.addShots(shotModels);
     shotsTimeline.smoothScrollToPosition(0);
   }
 
@@ -1216,8 +1218,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void updateShotsInfo(List<ShotModel> shots) {
     adapter.setShots(shots);
-    adapter.notifyDataSetChanged();
     highlightedShotPresenter.refreshHighlight();
+    adapter.notifyDataSetChanged();
   }
 
   @Override public void hideStreamViewOnlyIndicator() {
@@ -1230,17 +1232,25 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarContainer.setVisibility(View.INVISIBLE);
   }
 
-  @Override public void showEmpty() {
-    emptyView.setVisibility(View.VISIBLE);
-    if (isFilterActivated) {
-      emptyView.setText(emptyFilter);
-    } else {
-      emptyView.setText(emptyTimeline);
+  @Override public void showEmpty(boolean isFilterActivated) {
+    if (adapter.getItemCount() == 0) {
+      if (isFilterActivated) {
+        importantEmptyView.setVisibility(View.VISIBLE);
+        emptyView.setVisibility(View.GONE);
+      } else {
+        importantEmptyView.setVisibility(View.GONE);
+        emptyView.setVisibility(View.VISIBLE);
+      }
     }
+  }
+
+  @Override public void showEmpty() {
+    /* no-op */
   }
 
   @Override public void hideEmpty() {
     emptyView.setVisibility(View.GONE);
+    importantEmptyView.setVisibility(View.GONE);
   }
 
   @Override public void showLoading() {
@@ -1673,19 +1683,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void handleReport(String sessionToken, ShotModel shotModel) {
-    reportShotPresenter.reportClicked(Locale.getDefault().getLanguage(), sessionToken, shotModel);
-  }
-
-  @Override
-  public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-    new AlertDialog.Builder(getContext()).setMessage(getString(R.string.language_support_alert))
-        .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                goToReport(sessionToken, shotModel);
-              }
-            })
-        .show();
+    reportShotPresenter.reportClicked(sessionToken, shotModel);
   }
 
   @Override public void showHolderContextMenu(final ShotModel shotModel) {
@@ -1994,6 +1992,11 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void onStart() {
     super.onStart();
     analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
+  }
+
+  @Override
+  public void onShotsInserted(int number) {
+    streamTimelinePresenter.onShotInserted(number);
   }
   //endregion
 }

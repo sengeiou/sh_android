@@ -48,6 +48,11 @@ public class GetUserByIdInteractor implements Interactor {
     if (userId != null) {
       loadLocalUser();
     }
+
+    if (onlyLocal) {
+      return;
+    }
+
     if (sessionRepository.getCurrentUserId() != null) {
       if (!sessionRepository.getCurrentUserId().equals(userId) || !onlyLocal) {
         loadRemoteUser();

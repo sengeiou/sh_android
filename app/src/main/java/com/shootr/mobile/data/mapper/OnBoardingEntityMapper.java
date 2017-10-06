@@ -17,18 +17,18 @@ public class OnBoardingEntityMapper {
     this.userEntityMapper = userEntityMapper;
   }
 
-  public OnBoarding map(OnBoardingEntity value) {
+  public OnBoarding map(OnBoardingEntity value, String currentUserId) {
     OnBoarding suggestedStream = new OnBoarding();
     suggestedStream.setStream(streamEntityMapper.transform(value.getStreamEntity()));
-    suggestedStream.setUser(userEntityMapper.transform(value.getUser()));
+    suggestedStream.setUser(userEntityMapper.transform(value.getUser(), currentUserId));
     suggestedStream.setDefaultValue(value.isFavorite());
     return suggestedStream;
   }
 
-  public List<OnBoarding> map(List<OnBoardingEntity> values) {
+  public List<OnBoarding> map(List<OnBoardingEntity> values, String currentIdUser) {
     List<OnBoarding> returnValues = new ArrayList<>(values.size());
     for (OnBoardingEntity value : values) {
-      returnValues.add(map(value));
+      returnValues.add(map(value, currentIdUser));
     }
     return returnValues;
   }

@@ -39,4 +39,8 @@ public interface ListingView extends LoadDataView {
     void showContextMenuWithoutAddFavorite(StreamResultModel stream);
 
     void showCurrentUserContextMenuWithAddFavorite(StreamResultModel stream);
+
+    void addCurrentUserFavorite(StreamResultModel streamModel);
+
+    void removeCurrentUserFavorite(StreamResultModel streamModel);
 }

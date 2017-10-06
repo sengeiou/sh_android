@@ -286,6 +286,7 @@ public class Activity {
     private String streamTitle;
     private String idUser;
     private boolean strategic;
+    private boolean isVerified;
 
     public String getStreamTitle() {
       return streamTitle;
@@ -309,6 +310,14 @@ public class Activity {
 
     public void setStrategic(boolean strategic) {
       this.strategic = strategic;
+    }
+
+    public boolean isVerified() {
+      return isVerified;
+    }
+
+    public void setVerified(boolean verified) {
+      isVerified = verified;
     }
 
     @Override public boolean equals(Object o) {

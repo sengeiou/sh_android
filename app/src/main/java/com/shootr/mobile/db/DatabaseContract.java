@@ -322,11 +322,12 @@ public class DatabaseContract {
     public static final String ID_POLL = "idPoll";
     public static final String POLL_QUESTION = "pollQuestion";
     public static final String POLL_OPTION_TEXT = "pollOptiontext";
+    public static final String IS_VERIFIED = "isVerified";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH,
-        MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE,
+        IS_VERIFIED, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -352,11 +353,12 @@ public class DatabaseContract {
     public static final String ID_POLL = "idPoll";
     public static final String POLL_QUESTION = "pollQuestion";
     public static final String POLL_OPTION_TEXT = "pollOptiontext";
+    public static final String IS_VERIFIED = "isVerified";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
-        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE, BIRTH,
-        MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE,
+        IS_VERIFIED, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 

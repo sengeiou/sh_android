@@ -30,6 +30,7 @@ public class ActivityEntityMapper {
             eventInfo.setIdStream(activityEntity.getIdStream());
             eventInfo.setStreamTitle(activityEntity.getStreamTitle());
             eventInfo.setStrategic(activityEntity.isStrategic());
+            eventInfo.setVerified(activityEntity.isVerified());
             activity.setStreamInfo(eventInfo);
         }
 
@@ -82,6 +83,7 @@ public class ActivityEntityMapper {
         if (eventInfo != null) {
             activityEntity.setIdStream(eventInfo.getIdStream());
             activityEntity.setStreamTitle(eventInfo.getStreamTitle());
+            activityEntity.setVerified(eventInfo.isVerified());
         }
         Activity.ActivityUserInfo userInfo = activity.getUserInfo();
         if (userInfo != null) {

@@ -52,6 +52,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
   @BindString(R.string.timeline_poll_results) String pollResultsResource;
+  @BindString(R.string.shared_poll_feedback) String sharedPoll;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PercentageUtils percentageUtils;
@@ -206,6 +207,10 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override public void showClosed() {
     getToolbarDecorator().setTitle(pollResultsResource);
+  }
+
+  @Override public void showSharedPoll() {
+    feedbackMessage.show(getView(), sharedPoll);
   }
 
   @Override protected void onResume() {

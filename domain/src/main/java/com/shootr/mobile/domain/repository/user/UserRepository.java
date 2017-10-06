@@ -40,18 +40,17 @@ public interface UserRepository {
 
     List<User> getLocalPeople(String idUser);
 
-    List<User> getLocalPeopleFromIdStream(String idStream);
-
     void updateUserProfile(User updatedUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
     List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
 
-    void forceUpdatePeople();
 
     List<String> getFollowingIds(String userId);
 
     void mute(String idUser);
 
     void unMute(String idUser);
+
+    void updateSuggestedPeopleCache(List<SuggestedPeople> suggestedPeopleList);
 }

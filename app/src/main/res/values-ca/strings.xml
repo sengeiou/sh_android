@@ -204,7 +204,6 @@
   <string name="intro_streams">Streams</string>
   <string name="intro_streams_text">L\'app de missatgeria on els xats són oberts. S\'anomenen streams.</string>
   <string name="invite_friends_message">Hola! Et recomano Shootr: http://shootr.com/</string>
-  <string name="language_support_alert" formatted="false">En aquests moments l\'atenció a l\'usuari és en anglès.</string>
   <string name="left">Temps restant: %s</string>
   <plurals name="link_click_count_pattern">
     <item quantity="one">%s clic a l\'enllaç</item>
@@ -408,7 +407,7 @@
     <item quantity="other">%d segons</item>
     <item quantity="zero">%d segon</item>
   </plurals>
-  <string name="shared_poll">Ha compartit l\'enquesta %s</string>
+  <string name="shared_poll">ha compartit l\'enquesta %s</string>
   <string name="shared_shot_activity">" reshot de %s"</string>
   <string name="shared_shot_activity_with_comment">" reshot: "</string>
   <string name="shared_stream_notification">Stream compartit</string>
@@ -540,4 +539,5 @@
   <string name="onboarding_enter">Continuar</string>
   <string name="login_message">Talk about anything</string>
   <string name="welcome_shootr">Entrant a Shootr…</string>
+  <string name="shared_poll_feedback">Enquesta compartida</string>
 </resources>

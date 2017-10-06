@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
->
-
-  <RelativeLayout
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_weight=".9"
-      android:descendantFocusability="blocksDescendants"
-      android:paddingBottom="12dp"
-      android:paddingLeft="16dp"
-      android:paddingTop="12dp"
-  >
+    android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="12dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="12dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <com.shootr.mobile.ui.widgets.AvatarView
         android:id="@+id/shot_avatar"
@@ -98,15 +93,11 @@
 
       </RelativeLayout>
 
-      <com.shootr.mobile.ui.widgets.BaseMessageTextView
+      <com.shootr.mobile.ui.widgets.CustomBaseMessageTextView
           android:id="@+id/shot_text"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
 
-
-          android:textColor="@color/material_black"
-          android:textColorLink="@color/links"
-          android:textSize="14sp"
           tools:text="Who's the referee? vfdvsdfvgdngjbn mgjknjn gmkfg"
           tools:visibility="visible"
 
@@ -228,49 +219,31 @@
           android:textSize="12sp"
           tools:text="2"
       />
-      <com.sackcentury.shinebuttonlib.ShineButton
+      <com.shootr.mobile.ui.widgets.NiceButtonView
+          style="@style/HearthButton"
           android:id="@+id/shot_nice_button"
           android:layout_width="20dp"
           android:layout_height="20dp"
-          android:scaleType="centerCrop"
           android:visibility="visible"
-          app:allow_random_color="false"
-          app:big_shine_color="@color/primary_dark"
-          app:btn_color="@color/gray_92"
-          app:btn_fill_color="@color/primary"
-          app:click_animation_duration="200"
-          app:enable_flashing="false"
-          app:shine_animation_duration="1500"
-          app:shine_count="8"
-          app:shine_turn_angle="10"
-          app:siShape="@drawable/ic_action_favorite_gray"
-          app:small_shine_color="@color/accent"
-          app:small_shine_offset_angle="20"
-      />
+          />
+
     </LinearLayout>
     <FrameLayout
         android:id="@+id/open_menu_container"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_marginTop="16dp"
-        android:layout_alignBaseline="@+id/linearLayout2"
+        android:layout_above="@+id/include"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="14dp"
         >
-      <LinearLayout
-          android:id="@+id/open_menu"
-          android:layout_width="24dp"
-          android:layout_height="24dp"
-          android:layout_gravity="center|end"
-          android:visibility="gone"
-          tools:visibility="visible"
-          >
       <ImageView
+          android:id="@+id/open_menu"
           android:layout_width="16dp"
           android:layout_height="16dp"
-          android:layout_gravity="center|end"
           android:layout_marginLeft="6dp"
           android:src="@drawable/ic_more_vert"
+          android:layout_gravity="center|end"
           />
-      </LinearLayout>
     </FrameLayout>
   </RelativeLayout>
-</LinearLayout>

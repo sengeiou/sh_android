@@ -7,11 +7,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import butterknife.BindString;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.daimajia.swipe.SwipeLayout;
-import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
@@ -26,42 +23,47 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
-import com.shootr.mobile.ui.widgets.BaseMessageTextView;
+import com.shootr.mobile.ui.widgets.CustomBaseMessageTextView;
+import com.shootr.mobile.ui.widgets.NiceButtonView;
 import com.shootr.mobile.ui.widgets.ProportionalImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
 
-  private final OnAvatarClickListener avatarClickListener;
-  private final OnVideoClickListener videoClickListener;
-  private final OnNiceShotListener onNiceShotListener;
-  private final OnUsernameClickListener onUsernameClickListener;
-  private final OnOpenShotMenuListener onOpenShotMenuListener;
-  private final AndroidTimeUtils timeUtils;
-  private final ImageLoader imageLoader;
-  private final ShotTextSpannableBuilder shotTextSpannableBuilder;
-  private final NumberFormatUtil numberFormatUtil;
+  private  OnAvatarClickListener avatarClickListener;
+  private  OnVideoClickListener videoClickListener;
+  private  OnNiceShotListener onNiceShotListener;
+  private  OnUsernameClickListener onUsernameClickListener;
+  private  OnOpenShotMenuListener onOpenShotMenuListener;
+  private  AndroidTimeUtils timeUtils;
+  private  ImageLoader imageLoader;
+  private  ShotTextSpannableBuilder shotTextSpannableBuilder;
+  private  NumberFormatUtil numberFormatUtil;
 
   @BindView(R.id.shot_avatar) AvatarView avatar;
   @BindView(R.id.shot_user_name) TextView name;
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
   @Nullable @BindView(R.id.shot_timestamp) TextView timestamp;
-  @BindView(R.id.shot_text) BaseMessageTextView text;
+  @BindView(R.id.shot_text) CustomBaseMessageTextView text;
   @BindView(R.id.shot_image_landscape) ProportionalImageView proportionalImageView;
   @BindView(R.id.default_image) ImageView defaultImage;
   @BindView(R.id.shot_video_frame) View videoFrame;
   @BindView(R.id.shot_video_title) TextView videoTitle;
   @BindView(R.id.shot_video_duration) TextView videoDuration;
-  @BindView(R.id.shot_nice_button) ShineButton niceButton;
+  @BindView(R.id.shot_nice_button) NiceButtonView niceButton;
   @BindView(R.id.shot_nice_count) TextView niceCount;
   @BindView(R.id.shot_reply_count) TextView replyCount;
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.shot_media_content) FrameLayout shotMediaContent;
-  @BindView(R.id.open_menu) LinearLayout openImageMenu;
+  @BindView(R.id.open_menu) ImageView openImageMenu;
   @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @BindView(R.id.actions) LinearLayout actionsContainer;
@@ -257,8 +259,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
       OnUrlClickListener onUrlClickListener, ShotModel shotModel) {
     vh.text.setBaseMessageModel(shotModel);
     vh.text.setOnUrlClickListener(onUrlClickListener);
-    vh.text.setText(comment);
-    vh.text.addLinks();
+    vh.text.addLinksWithText(comment);
   }
 
   private void bindUsername(ShotModel shot) {
@@ -291,7 +292,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
         .getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
   }
 
-  private void bindElapsedTime(ShotModel shot) {
+  public void bindElapsedTime(ShotModel shot) {
     long shotTimestamp = shot.getBirth().getTime();
     if (timestamp != null) {
       this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), shotTimestamp));

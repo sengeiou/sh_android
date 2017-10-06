@@ -29,7 +29,7 @@ public class SuggestedPeopleEntityMapper {
         user.setBio(suggestedPeopleEntity.getBio());
         user.setPoints(suggestedPeopleEntity.getPoints());
         user.setVerifiedUser(suggestedPeopleEntity.getVerifiedUser() == 1);
-
+        user.setFollowing(suggestedPeopleEntity.isFollowing());
         user.setIdWatchingStream(suggestedPeopleEntity.getIdWatchingStream());
         user.setWatchingStreamTitle(suggestedPeopleEntity.getWatchingStreamTitle());
 

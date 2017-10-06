@@ -15,8 +15,6 @@ public interface StreamTimelineView extends TimelineView  {
 
     void addOldShots(List<ShotModel> oldShots);
 
-    void showShotShared();
-
     void hideHoldingShots();
 
     void showAllStreamShots();
@@ -50,4 +48,6 @@ public interface StreamTimelineView extends TimelineView  {
     void setupCheckInShowcase();
 
     void setReshoot(String idShot, boolean mark);
+
+    void showEmpty(boolean isFilterActivated);
 }
