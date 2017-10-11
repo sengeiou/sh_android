@@ -280,7 +280,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
-            if (isFirstLoad) loadNewShots();
+            if (isFirstLoad) {
+              loadNewShots();
+            }
           }
         });
   }
