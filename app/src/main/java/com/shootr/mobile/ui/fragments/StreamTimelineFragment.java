@@ -1244,6 +1244,18 @@ public class StreamTimelineFragment extends BaseFragment
     }
   }
 
+  @Override public void showHighlightedShot() {
+    if (adapter != null) {
+      adapter.showHighlightedShotForFilter();
+    }
+  }
+
+  @Override public void hideHighlightedShot() {
+    if (adapter != null) {
+      adapter.removeHighlightShot();
+    }
+  }
+
   @Override public void showEmpty() {
     /* no-op */
   }

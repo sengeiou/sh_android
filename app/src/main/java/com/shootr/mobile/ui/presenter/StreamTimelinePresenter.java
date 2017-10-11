@@ -581,6 +581,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     showingHolderShots(true);
     streamTimelineView.hideHoldingShots();
     streamTimelineView.showAllStreamShots();
+    streamTimelineView.hideHighlightedShot();
     sessionRepository.setTimelineFilterActivated(true);
     isFirstLoad = true;
     loadTimeline(0);
@@ -590,6 +591,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     showingHolderShots(false);
     streamTimelineView.hideAllStreamShots();
     streamTimelineView.showHoldingShots();
+    streamTimelineView.showHighlightedShot();
     sessionRepository.setTimelineFilterActivated(false);
     isFirstLoad = true;
     loadTimeline(0);
