@@ -709,6 +709,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   public void onHidePoll() {
     if (streamModel != null && streamModel.getTopic() != null) {
       streamTimelineView.showPinnedMessage(streamModel.getTopic());
+    } else {
+      streamTimelineView.hidePinnedMessage();
     }
   }
 
