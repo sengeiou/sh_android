@@ -503,6 +503,9 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   private void initializePresenter(ShotModel shotModel) {
     detailPresenter.initialize(this, shotModel);
     newShotBarPresenter.initialize(this, shotModel.getStreamId(), false);
+    if (shotModel != null) {
+      renderShot(shotModel);
+    }
   }
 
   private void initializePresenter(String idShot) {
