@@ -63,11 +63,6 @@ public class ShootrTimelineService {
 
     activityTimelineParameters.excludeHiddenTypes();
 
-    if (localActivityRepository.getActivityTimeline(activityTimelineParameters, language)
-        .isEmpty()) {
-      activityTimelineParameters.excludeHiddenTypes();
-    }
-
     return remoteActivityRepository.getActivityTimeline(activityTimelineParameters, language);
   }
 
