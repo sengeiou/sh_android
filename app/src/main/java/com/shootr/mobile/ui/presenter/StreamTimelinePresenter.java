@@ -280,7 +280,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
-            loadNewShots();
+            if (isFirstLoad) loadNewShots();
           }
         });
   }
@@ -477,8 +477,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void loadNewShotsInView(Timeline timeline) {
     boolean hasNewShots = !timeline.getShots().isEmpty();
-    if (isFirstLoad) {
+    if (timeline.isFirstCall()) {
       loadTimeline(streamMode);
+    }
+    if (isFirstLoad) {
       isFirstLoad = false;
     } else if (hasNewShots) {
 

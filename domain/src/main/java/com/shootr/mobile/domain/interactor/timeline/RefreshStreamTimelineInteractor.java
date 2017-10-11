@@ -58,6 +58,7 @@ public class RefreshStreamTimelineInteractor implements Interactor {
           calls != 0 && !(goneBackground && timestamp - lastRefreshDate >= REAL_TIME_INTERVAL);
       Timeline timeline =
           shootrTimelineService.refreshTimelinesForStream(idStream, filterActivated, isRealTime);
+      timeline.setFirstCall(!isRealTime);
       notifyLoaded(timeline);
       incrementCalls();
     } catch (ShootrException error) {

@@ -74,6 +74,7 @@ public class GetStreamTimelineInteractor implements Interactor {
   //region Result
   private void notifyTimelineFromShots(List<Shot> shots) {
     Timeline timeline = buildTimeline(shots);
+    timeline.setFirstCall(false);
     notifyLoaded(timeline);
   }
 

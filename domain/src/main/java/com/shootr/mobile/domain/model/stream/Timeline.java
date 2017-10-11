@@ -6,6 +6,7 @@ import java.util.List;
 public class Timeline {
 
     private List<Shot> shots;
+    private boolean isFirstCall;
 
     public List<Shot> getShots() {
         return shots;
@@ -32,5 +33,13 @@ public class Timeline {
         return "Timeline{" +
           "shots=" + shots +
           '}';
+    }
+
+    public boolean isFirstCall() {
+        return isFirstCall;
+    }
+
+    public void setFirstCall(boolean firstCall) {
+        isFirstCall = firstCall;
     }
 }
