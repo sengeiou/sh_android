@@ -18,6 +18,7 @@ public class PollModel {
   private String votePrivacy;
   private Long expirationDate;
   private boolean verifiedPoll;
+  private String idPollOptionVoted;
 
   public String getIdPoll() {
     return idPoll;
@@ -138,5 +139,13 @@ public class PollModel {
 
   public void setVerifiedPoll(boolean verifiedPoll) {
     this.verifiedPoll = verifiedPoll;
+  }
+
+  public String getIdPollOptionVoted() {
+    return idPollOptionVoted;
+  }
+
+  public void setIdPollOptionVoted(String idPollOptionVoted) {
+    this.idPollOptionVoted = idPollOptionVoted;
   }
 }

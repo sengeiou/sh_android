@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.holders.PollResultViewHolder;
+import com.shootr.mobile.ui.adapters.holders.SharePollVotedViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollStreamTitleClickListener;
 import com.shootr.mobile.ui.model.PollModel;
@@ -25,24 +26,29 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
   private static final int TYPE_POLL = 0;
   private static final int TYPE_POLL_OPTION = 1;
+  private static final int TYPE_SHARE_POLL = 2;
 
   private List<Object> items;
   private final OnPollOptionClickListener onPollOptionClickListener;
   private final OnPollStreamTitleClickListener onPollStreamTitleClickListener;
+  private final View.OnClickListener onClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
   private final PercentageUtils percentageUtils;
   private final Context context;
 
   private Long totalVotes = 0L;
+  private boolean showShared;
   private int screenHeight;
   private int lastAnimatedPosition = -1;
 
   public PollResultsAdapter(OnPollOptionClickListener onPollOptionClickListener,
-      OnPollStreamTitleClickListener onPollStreamTitleClickListener, Context context,
-      ImageLoader imageLoader, InitialsLoader initialsLoader, PercentageUtils percentageUtils) {
+      OnPollStreamTitleClickListener onPollStreamTitleClickListener,
+      View.OnClickListener onClickListener, Context context, ImageLoader imageLoader,
+      InitialsLoader initialsLoader, PercentageUtils percentageUtils) {
     this.onPollOptionClickListener = onPollOptionClickListener;
     this.onPollStreamTitleClickListener = onPollStreamTitleClickListener;
+    this.onClickListener = onClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
     this.percentageUtils = percentageUtils;
@@ -52,25 +58,32 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   @Override public int getItemViewType(int position) {
     if (items.get(position) instanceof PollModel) {
       return TYPE_POLL;
-    } else {
+    } else if (items.get(position) instanceof Boolean) {
+      return TYPE_SHARE_POLL;
+    } else if (items.get(position) instanceof PollOptionModel) {
       return TYPE_POLL_OPTION;
     }
+    return -1;
   }
 
   @Override public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-    RecyclerView.ViewHolder viewHolder;
+    RecyclerView.ViewHolder viewHolder = null;
     View view;
 
     if (viewType == TYPE_POLL) {
       view = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.poll_question_view_holder, parent, false);
-      viewHolder = new PollQuestionViewHolder(view, onPollStreamTitleClickListener);
-    } else {
+      viewHolder = new PollQuestionViewHolder(view);
+    } else if (viewType == TYPE_POLL_OPTION) {
       view = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.item_poll_result, parent, false);
       viewHolder =
           new PollResultViewHolder(view, onPollOptionClickListener, imageLoader, initialsLoader,
-              percentageUtils, totalVotes);
+              percentageUtils, totalVotes, showShared);
+    } else if (viewType == TYPE_SHARE_POLL) {
+      view = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_share_poll, parent, false);
+      viewHolder = new SharePollVotedViewHolder(view, onClickListener);
     }
 
     return viewHolder;
@@ -80,8 +93,10 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     runEnterAnimation(holder.itemView, position);
     if (holder.getItemViewType() == TYPE_POLL) {
       ((PollQuestionViewHolder) holder).render((PollModel) items.get(position));
-    } else {
+    } else if (holder.getItemViewType() == TYPE_POLL_OPTION) {
       ((PollResultViewHolder) holder).render((PollOptionModel) items.get(position), position);
+    } else if (holder.getItemViewType() == TYPE_SHARE_POLL) {
+      ((SharePollVotedViewHolder) holder).render((PollModel) items.get(position - 1));
     }
   }
 
@@ -89,9 +104,13 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     return items != null ? items.size() : 0;
   }
 
-  public void setPollModel(PollModel model) {
+  public void setPollModel(PollModel model, boolean showShare) {
+    this.showShared = showShare;
     items = new ArrayList<>();
     items.add(model);
+    if (showShare) {
+      items.add(true);
+    }
     for (PollOptionModel pollOptionModel : model.getPollOptionModels()) {
       items.add(pollOptionModel);
     }

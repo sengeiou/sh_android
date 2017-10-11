@@ -26,6 +26,8 @@ public class PollEntityDBMapper extends GenericDBMapper {
     pollEntity.setExpirationDate(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.EXPIRATION_DATE)));
     pollEntity.setVerifiedPoll(
         c.getLong(c.getColumnIndex(DatabaseContract.PollTable.VERIFIED_POLL)) == 1L);
+    pollEntity.setIdPollOptionVoted(
+        c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_POLL_OPTION_VOTED)));
     return pollEntity;
   }
 
@@ -44,6 +46,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PollTable.EXPIRATION_DATE, pollEntity.getExpirationDate());
     cv.put(DatabaseContract.PollTable.VERIFIED_POLL,
         pollEntity.getVerifiedPoll() != null && pollEntity.getVerifiedPoll() ? 1L : 0L);
+    cv.put(DatabaseContract.PollTable.ID_POLL_OPTION_VOTED, pollEntity.getIdPollOptionVoted());
     return cv;
   }
 }

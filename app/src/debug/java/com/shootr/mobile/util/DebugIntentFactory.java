@@ -5,6 +5,7 @@ import android.content.Intent;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.ui.ExternalIntentActivity;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 
@@ -53,7 +54,13 @@ public final class DebugIntentFactory implements IntentFactory {
         return createCaptureIntent(baseIntent);
     }
 
-    private Intent createCaptureIntent(Intent baseIntent) {
+  @Override public Intent sharePollVotedIntent(Activity activity, PollModel pollModel,
+      PollOptionModel pollOptionModel, String locale) {
+    Intent baseIntent = realIntentFactory.sharePollVotedIntent(activity, pollModel, pollOptionModel, locale);
+    return createCaptureIntent(baseIntent);
+  }
+
+  private Intent createCaptureIntent(Intent baseIntent) {
         if (!captureIntents.get()) {
             return baseIntent;
         } else {

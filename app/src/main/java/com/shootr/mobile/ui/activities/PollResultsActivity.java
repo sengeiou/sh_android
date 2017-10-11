@@ -104,6 +104,10 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
       @Override public void onClickPressed() {
         presenter.onStreamTitleClick();
       }
+    }, new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        presenter.shareVoted();
+      }
     }, this, imageLoader, initialsLoader, percentageUtils);
     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
     results.setLayoutManager(linearLayoutManager);
@@ -162,10 +166,10 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public void renderPollResults(PollModel pollModel) {
+  @Override public void renderPollResults(PollModel pollModel, boolean showShare) {
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
     pollModel.setStreamTitle(title == null ? NO_TITLE : title);
-    adapter.setPollModel(pollModel);
+    adapter.setPollModel(pollModel, showShare);
     adapter.notifyDataSetChanged();
     sendMixPanel();
   }
@@ -180,6 +184,11 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override public void share(PollModel pollModel) {
     Intent shareIntent = shareManager.sharePollIntent(this, pollModel);
+    Intents.maybeStartActivity(this, shareIntent);
+  }
+
+  @Override public void shareVoted(PollModel pollModel, PollOptionModel pollOptionModel) {
+    Intent shareIntent = shareManager.sharePollVotedIntent(this, pollModel, pollOptionModel);
     Intents.maybeStartActivity(this, shareIntent);
   }
 
