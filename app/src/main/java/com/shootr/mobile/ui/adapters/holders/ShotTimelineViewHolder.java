@@ -69,6 +69,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.actions) LinearLayout actionsContainer;
   @BindView(R.id.reshoot_action) LinearLayout reshootAction;
   @BindView(R.id.reshoot_action_text) TextView reshootActionText;
+  @BindView(R.id.action_container) LinearLayout niceContainer;
   @Nullable @BindView(R.id.reshoot_container) FrameLayout reshootContainer;
   @Nullable @BindView(R.id.reshoot) TextView reshootText;
 
@@ -401,7 +402,7 @@ public class ShotTimelineViewHolder extends RecyclerView.ViewHolder {
     }
 
     niceButton.setChecked(shot.isNiced());
-    niceButton.setOnClickListener(new View.OnClickListener() {
+    niceContainer.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         if (shot.isNiced()) {
           onNiceShotListener.unmarkNice(shot.getIdShot());
