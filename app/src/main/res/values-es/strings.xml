@@ -540,4 +540,7 @@
   <string name="login_message">Talk about anything</string>
   <string name="welcome_shootr">Entrando en Shootr…</string>
   <string name="shared_poll_feedback">Encuesta compartida</string>
+  <string name="share_poll_voted_subject">He votado \"%1$s\" en %2$s</string>
+  <string name="share_poll_voted_comment">Has votado \"%s\"</string>
+  <string name="share_voted_poll">Compartir</string>
 </resources>
