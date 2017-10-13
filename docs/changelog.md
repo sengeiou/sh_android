@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.44.0] - 2017-10-13
+### Fixed
+- Expand nice area
+- Bugs fixed
+
+### Added
+- Share Vote
+
+### Changed
+- Hide Highlighted Shot with filter active
+- Reduction load times (Shot Detail, Activity y Timeline)
+- Reduction server request de llamadas a server
+
 ## [1.43.0] - 2017-10-06
 ### Fixed
 - Cannot follow myself on following and followers
