@@ -116,7 +116,7 @@
 
   <style name="ActionBarThemeOverlay" parent="">
     <item name="android:textColorPrimary">#fff</item>
-    <item name="colorControlNormal">#fff</item>
+    <item name="colorControlNormal">@color/icons</item>
     <item name="colorControlHighlight">#3fff</item>
   </style>
 

@@ -262,10 +262,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       streamImageWithoutPicture.setVisibility(View.GONE);
       streamImage.setVisibility(View.VISIBLE);
     }
-
-    ViewCompat.setElevation(streamImage, 10);
-    ViewCompat.setElevation(streamImageWithoutPicture, 10);
-
   }
 
   @Override public void hideConnectController() {

@@ -34,7 +34,7 @@ public class CustomActionItemBadge extends ActionItemBadge {
       String badgeCount) {
     BadgeStyle followingBadgeStyle = new BadgeStyle(BadgeStyle.Style.DEFAULT,
         R.layout.filter_badge,
-        Color.parseColor("#FF57B3E3"), Color.parseColor("#FF57B3E3"), Color.WHITE);
+        Color.parseColor("#FF6000"), Color.parseColor("#FF6000"), Color.WHITE);
     update(act, menu, icon, followingBadgeStyle, badgeCount);
   }
 

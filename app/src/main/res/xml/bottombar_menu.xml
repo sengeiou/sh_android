@@ -5,16 +5,16 @@
      id="@+id/bottombar_streams"
      icon="@drawable/ic_streams_selected"
      title="@string/drawer_streams_title"
-     activeColor="#464749"
-      inActiveColor="#464749"
+     activeColor="@color/material_black"
+      inActiveColor="@color/inactive_tabs"
      barColorWhenSelected="@color/primary"/>
 
   <tab
       id="@+id/bottombar_activity"
       icon="@drawable/drawable_activity"
       title="@string/drawer_activity_title"
-      activeColor="#464749"
-      inActiveColor="#464749"
+      activeColor="@color/material_black"
+      inActiveColor="@color/inactive_tabs"
       barColorWhenSelected="@color/primary"
       badgeBackgroundColor="#00000000"/>
 
@@ -22,7 +22,7 @@
       id="@+id/bottombar_messages"
       icon="@drawable/drawable_messages"
       title="@string/messages"
-      activeColor="#464749"
+      activeColor="@color/material_black"
       inActiveColor="#464749"
       barColorWhenSelected="@color/primary"
       />

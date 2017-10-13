@@ -157,6 +157,6 @@ public class ToolbarDecorator implements ViewContainerDecorator {
   }
 
   public void showElevation() {
-    ViewCompat.setElevation(toolbar, 4);
+    ViewCompat.setElevation(toolbar, 10);
   }
 }
