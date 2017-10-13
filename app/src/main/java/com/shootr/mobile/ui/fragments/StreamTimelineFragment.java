@@ -1290,6 +1290,10 @@ public class StreamTimelineFragment extends BaseFragment
     }
   }
 
+  @Override public void setIsContributor(boolean isCurrentUserContributor) {
+    reportShotPresenter.setCurrentUserContributor(isCurrentUserContributor);
+  }
+
   @Override public void showEmpty() {
     /* no-op */
   }

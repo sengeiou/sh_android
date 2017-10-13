@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
-import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -74,15 +73,6 @@ public class ReportShotPresenter implements Presenter {
   public void initializeWithIdStream(ReportShotView reportShotView, String streamId) {
     setView(reportShotView);
     this.idStream = streamId;
-    getContributorsIds();
-  }
-
-  private void getContributorsIds() {
-    getLocalStreamInteractor.loadStream(idStream, new GetLocalStreamInteractor.Callback() {
-      @Override public void onLoaded(Stream stream) {
-        isCurrentUserContributor = stream.isCurrentUserContributor();
-      }
-    });
   }
 
   public void report(ShotModel shotModel) {
@@ -94,6 +84,8 @@ public class ReportShotPresenter implements Presenter {
     }
   }
 
+  public void setCurrentUserContributor(boolean currentUserContributor) {
+    isCurrentUserContributor = currentUserContributor;
   }
 
   public void onShotLongPressed(final ShotModel shotModel) {
