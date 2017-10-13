@@ -129,9 +129,6 @@ public class StreamTimelineFragment extends BaseFragment
 
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
-  private static final String POLL_STATUS_SHOWING = "showing";
-  private static final String POLL_STATUS_INVISIBLE = "invisible";
-  private static final String POLL_STATUS_GONE = "gone";
   private static final int FOLLOWINGS = 0;
   private static final int PARTICIPANTS = 1;
 
@@ -238,7 +235,6 @@ public class StreamTimelineFragment extends BaseFragment
   private EditText newTopicText;
   private TextView topicCharCounter;
   private PreCachingLayoutManager preCachingLayoutManager;
-  private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   private Unbinder unbinder;
   private String idStream;
@@ -249,7 +245,6 @@ public class StreamTimelineFragment extends BaseFragment
   private ViewPropertyAnimator timelineIndicatorAnimator;
   private boolean animatorIsRunning;
   private boolean isShowingPollIndicator;
-  private boolean isShowingMessageIndicator;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -1091,7 +1086,6 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void showPinnedMessage(String topic) {
     try {
       if (!isShowingPollIndicator) {
-        isShowingMessageIndicator = true;
         isShowingPollIndicator = false;
         cancelIndicatorAnimator();
         timelineNewShotsIndicator.setVisibility(View.VISIBLE);
@@ -1127,7 +1121,6 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void hidePinnedMessage() {
     if (!isShowingPollIndicator) {
       hideTimelineIndicatorContainer();
-      isShowingMessageIndicator = false;
     }
   }
 
@@ -1295,6 +1288,10 @@ public class StreamTimelineFragment extends BaseFragment
     if (adapter != null) {
       adapter.removeHighlightShot();
     }
+  }
+
+  @Override public void setIsContributor(boolean isCurrentUserContributor) {
+    reportShotPresenter.setCurrentUserContributor(isCurrentUserContributor);
   }
 
   @Override public void showEmpty() {
@@ -1953,7 +1950,6 @@ public class StreamTimelineFragment extends BaseFragment
     cancelIndicatorAnimator();
     if (timelinePollIndicator != null && timelineNewShotsIndicator != null) {
       timelineNewShotsIndicator.setVisibility(View.GONE);
-      pollIndicatorStatus = POLL_STATUS_SHOWING;
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
@@ -1965,13 +1961,11 @@ public class StreamTimelineFragment extends BaseFragment
         }
       });
     }
-    isShowingMessageIndicator = false;
     isShowingPollIndicator = true;
   }
 
   @Override public void hidePollIndicator() {
     cancelIndicatorAnimator();
-    pollIndicatorStatus = POLL_STATUS_GONE;
     isShowingPollIndicator = false;
     streamTimelinePresenter.onHidePoll();
   }

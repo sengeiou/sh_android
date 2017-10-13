@@ -10,7 +10,6 @@ import com.shootr.mobile.domain.interactor.user.GetBlockedIdUsersInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
 import com.shootr.mobile.domain.interactor.user.UnblockUserInteractor;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
-import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -23,7 +22,6 @@ import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
 
-  private static final String EN_LOCALE = "en";
   private final DeleteShotInteractor deleteShotInteractor;
   private final ErrorMessageFactory errorMessageFactory;
   private final SessionRepository sessionRepository;
@@ -75,15 +73,6 @@ public class ReportShotPresenter implements Presenter {
   public void initializeWithIdStream(ReportShotView reportShotView, String streamId) {
     setView(reportShotView);
     this.idStream = streamId;
-    getContributorsIds();
-  }
-
-  private void getContributorsIds() {
-    getLocalStreamInteractor.loadStream(idStream, new GetLocalStreamInteractor.Callback() {
-      @Override public void onLoaded(Stream stream) {
-        isCurrentUserContributor = stream.isCurrentUserContributor();
-      }
-    });
   }
 
   public void report(ShotModel shotModel) {
@@ -95,8 +84,8 @@ public class ReportShotPresenter implements Presenter {
     }
   }
 
-  public boolean isEnglishLocale(String locale) {
-    return locale.equals(EN_LOCALE);
+  public void setCurrentUserContributor(boolean currentUserContributor) {
+    isCurrentUserContributor = currentUserContributor;
   }
 
   public void onShotLongPressed(final ShotModel shotModel) {
@@ -113,7 +102,7 @@ public class ReportShotPresenter implements Presenter {
         new Interactor.Callback<HighlightedShot>() {
           @Override public void onLoaded(HighlightedShot highlightedShot) {
             currentHighlightedShot = highlightedShot;
-            if (currentUserIsStreamHolder(streamAuthorIdUser) || currentUserIsStreamContributor()) {
+            if (currentUserIsStreamHolder(streamAuthorIdUser) || isCurrentUserContributor) {
               handlePinContextMenu(shot, streamAuthorIdUser, highlightedShot);
             } else {
               if (currentHighlightedShot != null
@@ -135,7 +124,7 @@ public class ReportShotPresenter implements Presenter {
       showAuthorContextMenuWithHighlight(shot, highlightedShot);
     } else if (currentUserIsShotAuthor(shot)) {
       showAuthorContextMenu(shot);
-    } else if (currentUserIsStreamContributor()) {
+    } else if (isCurrentUserContributor) {
       showContributorContextMenu(shot);
     } else {
       if (shotIsHighlighted(shot)) {
@@ -200,10 +189,6 @@ public class ReportShotPresenter implements Presenter {
 
   public boolean isShotVisible(ShotModel shot) {
     return shot.getHide() != null && shot.getHide() != 0L;
-  }
-
-  private boolean currentUserIsStreamContributor() {
-    return isCurrentUserContributor;
   }
 
   public boolean currentUserIsShotAuthor(ShotModel shotModel) {

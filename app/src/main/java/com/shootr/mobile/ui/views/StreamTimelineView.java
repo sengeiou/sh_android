@@ -54,4 +54,6 @@ public interface StreamTimelineView extends TimelineView  {
     void showHighlightedShot();
 
     void hideHighlightedShot();
+
+    void setIsContributor(boolean isCurrentUserContributor);
 }

@@ -233,6 +233,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
         StreamModel model = streamModelMapper.transform(streamSearchResult.getStream());
+        streamTimelineView.setIsContributor(model.isCurrentUserContributor());
         streamModel = model;
         setupStreamInfo(model);
         postWatchNumberEvent(true);

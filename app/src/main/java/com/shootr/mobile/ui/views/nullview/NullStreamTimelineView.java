@@ -170,6 +170,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
+    @Override public void setIsContributor(boolean isCurrentUserContributor) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }
