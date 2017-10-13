@@ -540,4 +540,7 @@
   <string name="onboarding_users_header">E siga as pessoas \n que lhe interessam</string>
   <string name="welcome_shootr">Entrando em Shootr…</string>
   <string name="shared_poll_feedback">Enquete compartilhada</string>
+  <string name="share_poll_voted_subject">Eu votei \"%1$s\" em %2$s</string>
+  <string name="share_poll_voted_comment">Você votou \"%s\"</string>
+  <string name="share_voted_poll">Compartilhar</string>
 </resources>
