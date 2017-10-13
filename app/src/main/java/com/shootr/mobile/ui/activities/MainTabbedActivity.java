@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -115,12 +116,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
           case R.id.bottombar_streams:
             StreamsListFragment streamsListFragment = StreamsListFragment.newInstance();
             currentFragment = streamsListFragment;
+            toolbarDecorator.showElevation();
             switchTab(streamsListFragment);
             break;
           case R.id.bottombar_messages:
             Fragment favoritesFragment = ChannelsContainerFragment.newInstance();
             currentFragment = favoritesFragment;
             switchTab(favoritesFragment);
+            toolbarDecorator.hideElevation();
             channelTab.removeBadge();
             break;
           case R.id.bottombar_activity:
@@ -128,6 +131,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 ActivityTimelineContainerFragment.newInstance();
             currentFragment = activityTimelineFragment;
             switchTab(activityTimelineFragment);
+            toolbarDecorator.hideElevation();
             activitiesTab.removeBadge();
             break;
           default:
@@ -258,6 +262,10 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
       streamImageWithoutPicture.setVisibility(View.GONE);
       streamImage.setVisibility(View.VISIBLE);
     }
+
+    ViewCompat.setElevation(streamImage, 10);
+    ViewCompat.setElevation(streamImageWithoutPicture, 10);
+
   }
 
   @Override public void hideConnectController() {
