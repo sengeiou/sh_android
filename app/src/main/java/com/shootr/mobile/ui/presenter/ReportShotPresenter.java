@@ -23,7 +23,6 @@ import javax.inject.Inject;
 
 public class ReportShotPresenter implements Presenter {
 
-  private static final String EN_LOCALE = "en";
   private final DeleteShotInteractor deleteShotInteractor;
   private final ErrorMessageFactory errorMessageFactory;
   private final SessionRepository sessionRepository;
@@ -95,8 +94,6 @@ public class ReportShotPresenter implements Presenter {
     }
   }
 
-  public boolean isEnglishLocale(String locale) {
-    return locale.equals(EN_LOCALE);
   }
 
   public void onShotLongPressed(final ShotModel shotModel) {
@@ -113,7 +110,7 @@ public class ReportShotPresenter implements Presenter {
         new Interactor.Callback<HighlightedShot>() {
           @Override public void onLoaded(HighlightedShot highlightedShot) {
             currentHighlightedShot = highlightedShot;
-            if (currentUserIsStreamHolder(streamAuthorIdUser) || currentUserIsStreamContributor()) {
+            if (currentUserIsStreamHolder(streamAuthorIdUser) || isCurrentUserContributor) {
               handlePinContextMenu(shot, streamAuthorIdUser, highlightedShot);
             } else {
               if (currentHighlightedShot != null
@@ -135,7 +132,7 @@ public class ReportShotPresenter implements Presenter {
       showAuthorContextMenuWithHighlight(shot, highlightedShot);
     } else if (currentUserIsShotAuthor(shot)) {
       showAuthorContextMenu(shot);
-    } else if (currentUserIsStreamContributor()) {
+    } else if (isCurrentUserContributor) {
       showContributorContextMenu(shot);
     } else {
       if (shotIsHighlighted(shot)) {
@@ -200,10 +197,6 @@ public class ReportShotPresenter implements Presenter {
 
   public boolean isShotVisible(ShotModel shot) {
     return shot.getHide() != null && shot.getHide() != 0L;
-  }
-
-  private boolean currentUserIsStreamContributor() {
-    return isCurrentUserContributor;
   }
 
   public boolean currentUserIsShotAuthor(ShotModel shotModel) {
