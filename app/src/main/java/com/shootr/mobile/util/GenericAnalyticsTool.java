@@ -244,8 +244,12 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override public void reset() {
-    mixpanel.clearSuperProperties();
-    mixpanel.reset();
+    try {
+      mixpanel.clearSuperProperties();
+      mixpanel.reset();
+    } catch (Exception error) {
+      /* no-op */
+    }
   }
 
   @Override public long getDiscoverTweak() {

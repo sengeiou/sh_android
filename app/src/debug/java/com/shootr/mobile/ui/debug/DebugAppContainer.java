@@ -46,11 +46,15 @@ import com.shootr.mobile.data.UnauthorizedErrorInterceptor;
 import com.shootr.mobile.data.VersionOutdatedErrorInterceptor;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
+import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.NotificationsEnabled;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.db.ShootrDbOpenHelper;
+import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.user.LogoutInteractor;
 import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.debug.debugactions.FakeEmailInUseDebugAction;
@@ -108,20 +112,23 @@ import static butterknife.ButterKnife.findById;
     private StringPreference customEndpoint;
     private final MockRestAdapter mockRestAdapter;
     private final Application app;
+    private final LogoutInteractor logoutInteractor;
+    private final StringPreference currentUserPreference;
 
     Activity activity;
     Context drawerContext;
     ContextualDebugActions contextualDebugActions;
 
     @Inject public DebugAppContainer(JsonAdapter jsonAdapter, OkHttpClient client,
-      @ApiEndpoint StringPreference networkEndpoint, @NetworkEnabled BooleanPreference networkEnabled,
-      @DebugMode BooleanPreference debugMode, @NetworkProxy StringPreference networkProxy,
-      @AnimationSpeed IntPreference animationSpeed, @ScalpelEnabled BooleanPreference scalpelEnabled,
-      @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
-      @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences,
-      @CaptureIntents BooleanPreference captureIntentsEnabled, @CustomEndpoint StringPreference customEndpoint,
-      @NotificationsEnabled BooleanPreference notificationsEnabled, @PollerEnabled BooleanPreference pollerEnabled,
-      MockRestAdapter mockRestAdapter, Application app) {
+        @ApiEndpoint StringPreference networkEndpoint, @NetworkEnabled BooleanPreference networkEnabled,
+        @DebugMode BooleanPreference debugMode, @NetworkProxy StringPreference networkProxy,
+        @AnimationSpeed IntPreference animationSpeed, @ScalpelEnabled BooleanPreference scalpelEnabled,
+        @ScalpelWireframeEnabled BooleanPreference scalpelWireframeEnabled,
+        @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences,
+        @CaptureIntents BooleanPreference captureIntentsEnabled, @CustomEndpoint StringPreference customEndpoint,
+        @NotificationsEnabled BooleanPreference notificationsEnabled,
+        @PollerEnabled BooleanPreference pollerEnabled, MockRestAdapter mockRestAdapter,
+        Application app, LogoutInteractor logoutInteractor, @CurrentUserId StringPreference currentUserPreference) {
         this.jsonAdapter = jsonAdapter;
         this.client = client;
         this.debugMode = debugMode;
@@ -138,6 +145,8 @@ import static butterknife.ButterKnife.findById;
         this.mockRestAdapter = mockRestAdapter;
         this.app = app;
         this.checkInShowcasePreferences = checkInShowcasePreferences;
+        this.logoutInteractor = logoutInteractor;
+        this.currentUserPreference = currentUserPreference;
     }
 
     @BindView(R.id.debug_drawer_layout) DrawerLayout drawerLayout;
@@ -266,7 +275,7 @@ import static butterknife.ButterKnife.findById;
             @Override public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Timber.d("Setting Debug Mode to " + isChecked);
                 debugMode.set(isChecked);
-                relaunch();
+                logout();
             }
         });
         //endregion
@@ -694,7 +703,7 @@ import static butterknife.ButterKnife.findById;
         //    Timber.d("Setting network endpoint to %s", endpoint);
         networkEndpoint.set(endpoint);
 
-        relaunch();
+        logout();
     }
 
     private boolean setProxy(String theHost) {
@@ -718,5 +727,22 @@ import static butterknife.ButterKnife.findById;
 
     public Context getContext() {
         return drawerContext;
+    }
+
+    private void logout() {
+        if (currentUserPreference.get() != null) {
+            Toast.makeText(getContext(), "Saliendo de la App...", Toast.LENGTH_LONG).show();
+            logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
+                @Override public void onCompleted() {
+                    relaunch();
+                }
+            }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                /* no-op */
+                }
+            });
+        } else {
+            relaunch();
+        }
     }
 }

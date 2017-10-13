@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.animation.Animator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.animation.FastOutSlowInInterpolator;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -23,6 +25,8 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.Interpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -125,11 +129,11 @@ public class StreamTimelineFragment extends BaseFragment
 
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
-  private static final String POLL_STATUS_SHOWING = "showing";
-  private static final String POLL_STATUS_INVISIBLE = "invisible";
-  private static final String POLL_STATUS_GONE = "gone";
   private static final int FOLLOWINGS = 0;
   private static final int PARTICIPANTS = 1;
+
+  private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
+  private static final int ANIMATION_DURATION = 200;
 
   //region Fields
   @Inject StreamTimelinePresenter streamTimelinePresenter;
@@ -231,7 +235,6 @@ public class StreamTimelineFragment extends BaseFragment
   private EditText newTopicText;
   private TextView topicCharCounter;
   private PreCachingLayoutManager preCachingLayoutManager;
-  private String pollIndicatorStatus;
   private AlertDialog shotImageDialog;
   private Unbinder unbinder;
   private String idStream;
@@ -239,6 +242,9 @@ public class StreamTimelineFragment extends BaseFragment
   private String streamAuthorIdUser;
   private Menu menu;
   private boolean isFilterActivated;
+  private ViewPropertyAnimator timelineIndicatorAnimator;
+  private boolean animatorIsRunning;
+  private boolean isShowingPollIndicator;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -1078,17 +1084,24 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void showPinnedMessage(String topic) {
-    if (timelineNewShotsIndicator != null) {
-      timelineNewShotsIndicator.setVisibility(View.VISIBLE);
-      timelineIndicatorContainer.setVisibility(View.VISIBLE);
-      streamMessage.setVisibility(View.VISIBLE);
-      streamMessage.setText(topic);
-      streamMessage.addLinks(new OnUrlClickListener() {
-        @Override public void onClick() {
-          sendPinMessageOpenlinkAnalythics();
-        }
-      });
-      streamMessage.setLinkTextColor(Color.WHITE);
+    try {
+      if (!isShowingPollIndicator) {
+        isShowingPollIndicator = false;
+        cancelIndicatorAnimator();
+        timelineNewShotsIndicator.setVisibility(View.VISIBLE);
+        timelineIndicatorContainer.setVisibility(View.VISIBLE);
+        timelinePollIndicator.setVisibility(View.GONE);
+        streamMessage.setVisibility(View.VISIBLE);
+        streamMessage.setText(topic);
+        streamMessage.addLinks(new OnUrlClickListener() {
+          @Override public void onClick() {
+            sendPinMessageOpenlinkAnalythics();
+          }
+        });
+        streamMessage.setLinkTextColor(Color.WHITE);
+      }
+    } catch (NullPointerException ex) {
+      /* no-op */
     }
   }
 
@@ -1106,25 +1119,46 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hidePinnedMessage() {
-    try {
-      if (streamMessage != null) {
-        streamMessage.setVisibility(View.GONE);
-        if (timelineNewShotsIndicator != null) {
-          timelineNewShotsIndicator.setVisibility(View.GONE);
-        }
-        if (timelineIndicatorContainer != null) {
-          timelineIndicatorContainer.setVisibility(View.GONE);
-        }
+    if (!isShowingPollIndicator) {
+      hideTimelineIndicatorContainer();
+    }
+  }
+
+  private void hideTimelineIndicatorContainer() {
+    timelineIndicatorAnimator = timelineIndicatorContainer.animate()
+        .translationY(-timelineIndicatorContainer.getHeight())
+        .setInterpolator(INTERPOLATOR)
+        .setDuration(ANIMATION_DURATION);
+
+    timelineIndicatorAnimator.setListener(new Animator.AnimatorListener() {
+      @Override public void onAnimationStart(Animator animation) {
+        animatorIsRunning = true;
       }
-      if (pollIndicatorStatus != null && pollIndicatorStatus.equals(POLL_STATUS_SHOWING)) {
-        if (timelineNewShotsIndicator != null) {
-          timelineNewShotsIndicator.setVisibility(View.GONE);
-        }
-        timelinePollIndicator.setVisibility(View.VISIBLE);
+
+      @Override public void onAnimationEnd(Animator animation) {
+        timelineIndicatorContainer.setVisibility(View.GONE);
+        timelineIndicatorContainer.setTranslationY(0);
+        animatorIsRunning = false;
+      }
+
+      @Override public void onAnimationCancel(Animator animation) {
         timelineIndicatorContainer.setVisibility(View.VISIBLE);
+        timelineIndicatorContainer.setTranslationY(0);
+        animatorIsRunning = false;
       }
-    } catch (NullPointerException error) {
-      /* no-op */
+
+      @Override public void onAnimationRepeat(Animator animation) {
+        /* no-op */
+      }
+    });
+    timelineIndicatorAnimator.start();
+  }
+
+  private void cancelIndicatorAnimator() {
+    if (timelineIndicatorAnimator != null) {
+      if (animatorIsRunning) {
+        timelineIndicatorAnimator.cancel();
+      }
     }
   }
 
@@ -1242,6 +1276,22 @@ public class StreamTimelineFragment extends BaseFragment
         emptyView.setVisibility(View.VISIBLE);
       }
     }
+  }
+
+  @Override public void showHighlightedShot() {
+    if (adapter != null) {
+      adapter.showHighlightedShotForFilter();
+    }
+  }
+
+  @Override public void hideHighlightedShot() {
+    if (adapter != null) {
+      adapter.removeHighlightShot();
+    }
+  }
+
+  @Override public void setIsContributor(boolean isCurrentUserContributor) {
+    reportShotPresenter.setCurrentUserContributor(isCurrentUserContributor);
   }
 
   @Override public void showEmpty() {
@@ -1897,9 +1947,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void setupPollIndicator(PollModel pollModel) {
+    cancelIndicatorAnimator();
     if (timelinePollIndicator != null && timelineNewShotsIndicator != null) {
       timelineNewShotsIndicator.setVisibility(View.GONE);
-      pollIndicatorStatus = POLL_STATUS_SHOWING;
       timelineIndicatorContainer.setVisibility(View.VISIBLE);
       timelinePollIndicator.setVisibility(View.VISIBLE);
       pollQuestion.setText(pollModel.getQuestion());
@@ -1911,14 +1961,12 @@ public class StreamTimelineFragment extends BaseFragment
         }
       });
     }
+    isShowingPollIndicator = true;
   }
 
   @Override public void hidePollIndicator() {
-    pollIndicatorStatus = POLL_STATUS_GONE;
-    if (timelinePollIndicator != null) {
-      timelinePollIndicator.setVisibility(View.GONE);
-      timelineIndicatorContainer.setVisibility(View.GONE);
-    }
+    cancelIndicatorAnimator();
+    isShowingPollIndicator = false;
     streamTimelinePresenter.onHidePoll();
   }
 

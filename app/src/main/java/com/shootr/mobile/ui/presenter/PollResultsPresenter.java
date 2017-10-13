@@ -34,6 +34,7 @@ public class PollResultsPresenter implements Presenter {
   private String idPoll;
   private long pollVotes = ZERO_VOTES;
   private PollModel pollModel;
+  private PollOptionModel pollOptionVoted;
   private String idStream;
 
   @Inject public PollResultsPresenter(GetPollByIdPollInteractor getPollByIdPollInteractor,
@@ -82,10 +83,22 @@ public class PollResultsPresenter implements Presenter {
     this.pollModel = pollModel;
     if (pollModel != null) {
       idPoll = pollModel.getIdPoll();
-      pollResultsView.renderPollResults(pollModel);
+      pollResultsView.renderPollResults(pollModel, shouldShowShareVoted(pollModel));
       showPollVotesTimeToExpire(pollModel.getExpirationDate());
       setupPoller();
     }
+  }
+
+  private boolean shouldShowShareVoted(PollModel pollModel) {
+    if (pollModel.getIdPollOptionVoted() != null) {
+      for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
+        if (pollOptionModel.getIdPollOption().equals(pollModel.getIdPollOptionVoted())) {
+          pollOptionVoted = pollOptionModel;
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   private void orderPollOptions(Poll poll) {
@@ -163,6 +176,12 @@ public class PollResultsPresenter implements Presenter {
 
   public void share() {
     pollResultsView.share(pollModel);
+  }
+
+  public void shareVoted() {
+    if (pollOptionVoted != null) {
+      pollResultsView.shareVoted(pollModel, pollOptionVoted);
+    }
   }
 
   public void onStreamTitleClick() {

@@ -24,23 +24,10 @@ public class MeActivityManager extends AbstractManager {
 
   public List<ActivityEntity> getActivityTimelineFromParameters(
       ActivityTimelineParameters parameters) {
-    List<String> includedTypes = parameters.getIncludedTypes();
-
-    String typeSelection = DatabaseContract.MeActivityTable.TYPE + " IN (" + createListPlaceholders(
-        includedTypes.size()) + ")";
-
-    int whereArgumentsSize = includedTypes.size();
-    String[] whereArguments = new String[whereArgumentsSize];
-
-    for (int i = 0; i < includedTypes.size(); i++) {
-      whereArguments[i] = includedTypes.get(i);
-    }
-
-    String whereClause = typeSelection;
 
     Cursor queryResult =
         getReadableDatabase().query(ACTIVITY_TABLE, DatabaseContract.MeActivityTable.PROJECTION,
-            whereClause, whereArguments, null, null,
+            null, null, null, null,
             DatabaseContract.MeActivityTable.BIRTH + " DESC", parameters.getLimit().toString());
 
     List<ActivityEntity> resultActivities = new ArrayList<>(queryResult.getCount());

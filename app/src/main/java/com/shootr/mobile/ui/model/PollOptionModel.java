@@ -9,6 +9,7 @@ public class PollOptionModel implements Serializable {
   private String imageUrl;
   private String text;
   private Long votes;
+  private boolean isVoted;
 
   public String getIdPoll() {
     return idPoll;
@@ -48,5 +49,13 @@ public class PollOptionModel implements Serializable {
 
   public void setVotes(Long votes) {
     this.votes = votes;
+  }
+
+  public boolean isVoted() {
+    return isVoted;
+  }
+
+  public void setVoted(boolean voted) {
+    isVoted = voted;
   }
 }

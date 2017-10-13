@@ -57,7 +57,7 @@ public class PollResultsPresenterTest {
 
     presenter.initialize(pollResultsView, POLL_ID, STREAM_ID, HAS_VOTED);
 
-    verify(pollResultsView).renderPollResults(any(PollModel.class));
+    verify(pollResultsView).renderPollResults(any(PollModel.class), anyBoolean());
   }
 
   @Test public void shouldShowPollVotesWhenInitialize() throws Exception {
@@ -82,7 +82,7 @@ public class PollResultsPresenterTest {
 
     presenter.resume();
 
-    verify(pollResultsView).renderPollResults(any(PollModel.class));
+    verify(pollResultsView).renderPollResults(any(PollModel.class), anyBoolean());
   }
 
   @Test

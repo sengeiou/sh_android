@@ -50,4 +50,10 @@ public interface StreamTimelineView extends TimelineView  {
     void setReshoot(String idShot, boolean mark);
 
     void showEmpty(boolean isFilterActivated);
+
+    void showHighlightedShot();
+
+    void hideHighlightedShot();
+
+    void setIsContributor(boolean isCurrentUserContributor);
 }

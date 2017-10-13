@@ -411,10 +411,11 @@ public class DatabaseContract {
     public static final String VOTE_PRIVACY = "votePrivacy";
     public static final String EXPIRATION_DATE = "expirationDate";
     public static final String VERIFIED_POLL = "verifiedPoll";
+    public static final String ID_POLL_OPTION_VOTED = "idPollOptionVoted";
 
     public static final String[] PROJECTION = {
         ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, VOTE_PRIVACY,
-        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL
+        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL, ID_POLL_OPTION_VOTED
     };
   }
 

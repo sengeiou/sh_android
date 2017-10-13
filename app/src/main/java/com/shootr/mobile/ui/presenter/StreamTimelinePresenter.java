@@ -233,6 +233,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     selectStreamInteractor.selectStream(streamId, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
         StreamModel model = streamModelMapper.transform(streamSearchResult.getStream());
+        streamTimelineView.setIsContributor(model.isCurrentUserContributor());
         streamModel = model;
         setupStreamInfo(model);
         postWatchNumberEvent(true);
@@ -280,7 +281,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
-            loadNewShots();
+            if (isFirstLoad) loadNewShots();
           }
         });
   }
@@ -477,8 +478,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   private void loadNewShotsInView(Timeline timeline) {
     boolean hasNewShots = !timeline.getShots().isEmpty();
-    if (isFirstLoad) {
+    if (timeline.isFirstCall()) {
       loadTimeline(streamMode);
+    }
+    if (isFirstLoad) {
       isFirstLoad = false;
     } else if (hasNewShots) {
 
@@ -579,6 +582,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     showingHolderShots(true);
     streamTimelineView.hideHoldingShots();
     streamTimelineView.showAllStreamShots();
+    streamTimelineView.hideHighlightedShot();
     sessionRepository.setTimelineFilterActivated(true);
     isFirstLoad = true;
     loadTimeline(0);
@@ -588,6 +592,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     showingHolderShots(false);
     streamTimelineView.hideAllStreamShots();
     streamTimelineView.showHoldingShots();
+    streamTimelineView.showHighlightedShot();
     sessionRepository.setTimelineFilterActivated(false);
     isFirstLoad = true;
     loadTimeline(0);
@@ -705,6 +710,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   public void onHidePoll() {
     if (streamModel != null && streamModel.getTopic() != null) {
       streamTimelineView.showPinnedMessage(streamModel.getTopic());
+    } else {
+      streamTimelineView.hidePinnedMessage();
     }
   }
 

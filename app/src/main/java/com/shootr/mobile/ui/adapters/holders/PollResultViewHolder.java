@@ -33,9 +33,11 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
   private final Long totalVotes;
   private final Context context;
   private final OnPollOptionClickListener onPollOptionClickListener;
+  private final boolean showShared;
 
   public PollResultViewHolder(View itemView, OnPollOptionClickListener onPollOptionClickListener,
-      ImageLoader imageLoader, InitialsLoader initialsLoader, PercentageUtils percentageUtils, Long totalVotes) {
+      ImageLoader imageLoader, InitialsLoader initialsLoader, PercentageUtils percentageUtils,
+      Long totalVotes, boolean showShared) {
     super(itemView);
     ButterKnife.bind(this, itemView);
     this.context = itemView.getContext();
@@ -44,9 +46,13 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
     this.percentageUtils = percentageUtils;
     this.totalVotes = totalVotes;
     this.onPollOptionClickListener = onPollOptionClickListener;
+    this.showShared = showShared;
   }
 
   public void render(PollOptionModel model, Integer position) {
+    if (showShared) {
+      position = position - 1;
+    }
     setupImage(model);
     question.setText(
         context.getResources().getString(R.string.order_poll_option, position, model.getText()));

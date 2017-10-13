@@ -61,6 +61,9 @@ public class RemotePollRepository implements ExternalPollRepository {
     } else {
       pollEntity.setVoteStatus(pollEntity.getUserHasVoted() ? PollStatus.VOTED : PollStatus.VOTE);
     }
+    if (pollById != null) {
+      pollEntity.setIdPollOptionVoted(pollById.getIdPollOptionVoted());
+    }
   }
 
   @Override public Poll vote(String idPoll, String idPollOption, boolean isPrivateVote)
@@ -68,6 +71,7 @@ public class RemotePollRepository implements ExternalPollRepository {
       UserCannotVoteDueToDeviceRequestException {
     PollEntity pollEntity = remotePollDataSource.vote(idPoll, idPollOption, isPrivateVote);
     pollEntity.setVoteStatus(PollStatus.VOTED);
+    pollEntity.setIdPollOptionVoted(idPollOption);
     localPollDataSource.putPoll(pollEntity);
     return pollEntityMapper.transform(pollEntity);
   }

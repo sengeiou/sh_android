@@ -278,6 +278,12 @@ public class ShotsTimelineAdapter
     }
   }
 
+  public void showHighlightedShotForFilter() {
+    if (highlightedShotModel != null) {
+      setHighlightedShot(highlightedShotModel);
+    }
+  }
+
   @Override public int getItemCount() {
     return shots.size();
   }

@@ -7,6 +7,7 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.ShareCompat;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 
@@ -24,6 +25,9 @@ public interface IntentFactory {
   Intent reportEmailIntent(Activity launchActivity, String currentUserId, String reportedUserId);
 
   Intent sharePollIntent(Activity activity, PollModel pollModel, String locale);
+
+  Intent sharePollVotedIntent(Activity activity, PollModel pollModel,
+      PollOptionModel pollOptionModel, String locale);
 
   IntentFactory REAL = new IntentFactory() {
     @Override public Intent openUrlIntent(String url) {
@@ -105,6 +109,25 @@ public interface IntentFactory {
 
       String subject =
           String.format(subjectPattern, pollModel.getQuestion());
+
+      return ShareCompat.IntentBuilder.from(activity)
+          .setType("text/plain")
+          .setSubject(subject)
+          .setText(sharedText)
+          .setChooserTitle(R.string.share_via)
+          .createChooserIntent();
+    }
+
+    @Override public Intent sharePollVotedIntent(Activity activity, PollModel pollModel,
+        PollOptionModel pollOptionModel, String locale) {
+      String messagePattern = activity.getString(R.string.share_poll_message);
+      String subjectPattern = activity.getString(R.string.share_poll_voted_subject);
+
+      String sharedText =
+          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
+
+      String subject =
+          String.format(subjectPattern, pollOptionModel.getText(), pollModel.getQuestion());
 
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
