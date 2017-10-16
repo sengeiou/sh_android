@@ -142,9 +142,9 @@ public class ShotDetailMainViewHolder extends RecyclerView.ViewHolder {
 
   private void setupShareListener(ShotModel shotModel) {
     if (shotModel.isReshooted()) {
-      reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_repeat));
+      reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_repeat_orange));
       reshootText.setText(undoReshootResource);
-      reshootText.setTextColor(reshootText.getResources().getColor(R.color.primary));
+      reshootText.setTextColor(reshootText.getResources().getColor(R.color.acctions));
     } else {
       reshootIcon.setImageDrawable(reshootIcon.getResources().getDrawable(R.drawable.ic_av_repeat));
       reshootText.setText(reshootResource);
