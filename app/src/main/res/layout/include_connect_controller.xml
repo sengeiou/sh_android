@@ -3,31 +3,16 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:layout_margin="8dp"
-    android:background="@drawable/circular_shape"
-    android:elevation="4dp"
     >
-
-  <ImageView
-      android:id="@+id/stream_image_without_image"
-      android:layout_width="54dp"
-      android:layout_height="54dp"
-      android:focusable="false"
-      android:focusableInTouchMode="false"
-      android:src="@drawable/ic_contact_picture_default"
-      android:visibility="gone"
-      android:elevation="4dp"
-      />
 
   <View android:id="@+id/activity_tab_layout_shadow"
       android:layout_width="match_parent"
       android:layout_height="6dp"
-      android:background="@drawable/shadow_down_top"
-      android:visibility="gone"/>
+      android:background="@drawable/shadow_down_top" />
   <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
       android:layout_height="56dp"
@@ -36,10 +21,28 @@
       android:paddingRight="8dp"
       android:paddingBottom="8dp"
       android:paddingLeft="16dp"
-      android:visibility="gone"
       android:background="@color/connect_controller"
       >
-
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/stream_image"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:layout_gravity="center"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        />
+    <ImageView
+        android:id="@+id/stream_image_without_image"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/ic_contact_picture_default"
+        android:visibility="gone"
+        />
     <LinearLayout
         android:id="@+id/stream_info_container"
         android:layout_width="0dp"
@@ -99,20 +102,9 @@
 
 
   </LinearLayout>
-
-  <de.hdodenhof.circleimageview.CircleImageView
-      android:id="@+id/stream_image"
-      android:layout_width="54dp"
-      android:layout_height="54dp"
-      android:layout_gravity="center"
-      android:focusable="false"
-      android:focusableInTouchMode="false"
-      android:src="@drawable/ic_contact_picture_default"
-      />
   <View
       android:layout_width="match_parent"
       android:layout_height="0.3dp"
       android:background="@color/material_black"
-      android:visibility="gone"
       />
 </LinearLayout>

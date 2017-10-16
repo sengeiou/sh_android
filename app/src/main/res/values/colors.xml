@@ -69,7 +69,7 @@
     <color name="poll_vote">#0277BD</color>
     <color name="poll_view">#039BE5</color>
     <color name="poll_results">#039BE5</color>
-    <color name="connect_controller">#ECEFF1</color>
+    <color name="connect_controller">#fafafa</color>
     <color name="onboarding_background">#dfdfdf</color>
     <color name="onboarding_card_background">#ededed</color>
     <color name="reshoot">#388E3C</color>
