@@ -2,7 +2,6 @@ package com.shootr.mobile.notifications.activity;
 
 import android.app.Application;
 import android.content.Context;
-import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;

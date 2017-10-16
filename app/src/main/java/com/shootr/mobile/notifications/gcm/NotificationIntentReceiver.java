@@ -20,7 +20,6 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.PrivateMessageTimelineFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
-import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AnalyticsTool;
 import javax.inject.Inject;
 

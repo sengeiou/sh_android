@@ -20,7 +20,8 @@ public class MultipleShotNotification extends AbstractShotNotification {
 
     private List<ShotNotification> shots;
 
-    public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory, List<ShotNotification> shots) {
+    public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory,
+        List<ShotNotification> shots) {
         super(context, builderFactory);
         this.shots = shots;
     }
