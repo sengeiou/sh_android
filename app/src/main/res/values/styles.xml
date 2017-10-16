@@ -142,7 +142,7 @@
   </style>
 
   <style name="MySearchViewStyle.Closable">
-    <item name="queryBackground">@color/white</item>
+    <item name="queryBackground">@color/icons</item>
     <item name="android:textColorHint">@color/material_black</item>
   </style>
 

@@ -5,11 +5,11 @@
     <color name="primary_dark">#bdbdbd</color>
     <color name="primary_disabled">#e0e0e0</color>
     <color name="accent">#ff6000</color>
-    <color name="links">#478ceb</color>
+    <color name="links">#2196f3</color>
     <color name="transparent">#00000000</color>
     <color name="separator">#ffe0e0e0</color>
     <color name="disabled">#aaaaaa</color>
-    <color name="icons">#9e9e9e</color>
+    <color name="icons">#757575</color>
     <color name="inactive_tabs">#616161</color>
     <color name="favorite">#f44336</color>
     <color name="no_favorite">#e0e0e0</color>

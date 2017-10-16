@@ -9,7 +9,7 @@
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="#f5f5f5"
+      android:background="@color/primary"
       android:orientation="horizontal"
       android:paddingTop="16dp"
       android:paddingBottom="16dp"
@@ -45,7 +45,7 @@
         android:text="@string/share_voted_poll"
         android:textSize="15sp"
         android:textAllCaps="true"
-        android:textColor="@color/links"
+        android:textColor="@color/accent"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
