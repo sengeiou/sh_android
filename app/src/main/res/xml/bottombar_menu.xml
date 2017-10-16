@@ -16,7 +16,7 @@
       activeColor="@color/material_black"
       inActiveColor="@color/inactive_tabs"
       barColorWhenSelected="@color/primary"
-      badgeBackgroundColor="#00000000"/>
+      badgeBackgroundColor="@color/accent"/>
 
   <tab
       id="@+id/bottombar_messages"
@@ -25,5 +25,6 @@
       activeColor="@color/material_black"
       inActiveColor="#464749"
       barColorWhenSelected="@color/primary"
+      badgeBackgroundColor="@color/accent"
       />
 </tabs>

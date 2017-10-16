@@ -406,7 +406,7 @@
   </style>
 
   <style name="TimelineIndicator">
-    <item name="android:background">#039BE5</item>
+    <item name="android:background">@color/poll_results</item>
   </style>
 
   <style name="NewShotBar">

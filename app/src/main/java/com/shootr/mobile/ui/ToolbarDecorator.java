@@ -84,7 +84,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         subtitleText.setVisibility(View.VISIBLE);
       }
       subtitleText.setText(subtitle);
-      subtitleText.setTextColor(Color.parseColor("#FFDAEDFB"));
+      subtitleText.setTextColor(Color.parseColor("#9e9e9e"));
     }
   }
 
