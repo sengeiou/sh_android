@@ -136,6 +136,7 @@ public class GCMIntentService extends IntentService {
     shot.setUsername(pushNotification.getNotificationValues().getTitle());
     shot.setTitle(pushNotification.getNotificationValues().getTitle());
     shot.setContentText(pushNotification.getNotificationValues().getContentText());
+    shot.setImage(pushNotification.getParameters().getImage());
     return shot;
   }
 
@@ -220,7 +221,7 @@ public class GCMIntentService extends IntentService {
     String idShot = push.getParameters().getIdShot();
     boolean shouldUpdate = !areShotPushTypesKnown(push);
     activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(),
-        checkNotNull(idShot), shouldUpdate);
+        buildShotFromParameters(push), checkNotNull(idShot), shouldUpdate);
   }
 
   private void receivedUnknown(PushNotification pushNotification) {
