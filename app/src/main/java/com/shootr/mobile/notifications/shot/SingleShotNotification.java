@@ -3,9 +3,7 @@ package com.shootr.mobile.notifications.shot;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
-import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
-import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
 import java.io.IOException;
 import timber.log.Timber;
@@ -13,12 +11,12 @@ import timber.log.Timber;
 public class SingleShotNotification extends AbstractSingleShotNotification {
 
     private final Boolean areShotTypesKnown;
-    private ShotModel shot;
+    private ShotNotification shot;
     private ImageLoader imageLoader;
     private Bitmap largeIcon;
 
     public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory,
-        ImageLoader imageLoader, ShotModel shot, Boolean areShotTypesKnown) {
+        ImageLoader imageLoader, ShotNotification shot, Boolean areShotTypesKnown) {
         super(context, builderFactory, shot);
         this.shot = shot;
         this.imageLoader = imageLoader;
@@ -30,7 +28,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
         super.setNotificationValues(builder, this.areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
-        if (shot.getImage().getImageUrl() == null) {
+        if (shot.getImage() == null) {
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
         } else {
             builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getImageBitmap()));
@@ -39,7 +37,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
 
     private Bitmap getImageBitmap() {
         try {
-            return imageLoader.load(shot.getImage().getImageUrl());
+            return imageLoader.load(shot.getImage());
         } catch (IOException e) {
             Timber.e(e, "Error obteniendo imagen del shot con id %d y url %s", shot.getIdShot(), shot.getImage());
             return null;
@@ -47,15 +45,11 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
     }
 
     private String getContent() {
-        return getShotText(shot);
+        return shot.getContentText();
     }
 
     public String getTitle() {
-        if (shot.isReply()) {
-            return getResources().getString(R.string.reply_name_pattern, shot.getUsername(), shot.getReplyUsername());
-        } else {
-            return shot.getUsername();
-        }
+        return shot.getTitle();
     }
 
     @Override protected CharSequence getTickerText() {
@@ -63,7 +57,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
     }
 
     @Override public Bitmap getLargeIcon() {
-        return getUserPhoto(shot.getAvatar());
+        return getUserPhoto(shot.getAvatarImage());
     }
 
     protected Bitmap getUserPhoto(String url) {

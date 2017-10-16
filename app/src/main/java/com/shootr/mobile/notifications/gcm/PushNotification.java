@@ -132,6 +132,7 @@ public class PushNotification {
         private String idPoll;
         private String idTargetUser;
         private String comment;
+        private String image;
 
         public int getPushType() {
             return pushType;
@@ -263,6 +264,14 @@ public class PushNotification {
 
         public void setComment(String comment) {
             this.comment = comment;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 }

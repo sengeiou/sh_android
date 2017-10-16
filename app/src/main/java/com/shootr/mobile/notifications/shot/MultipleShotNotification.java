@@ -18,9 +18,9 @@ import java.util.TreeSet;
 
 public class MultipleShotNotification extends AbstractShotNotification {
 
-    private List<ShotModel> shots;
+    private List<ShotNotification> shots;
 
-    public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory, List<ShotModel> shots) {
+    public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory, List<ShotNotification> shots) {
         super(context, builderFactory);
         this.shots = shots;
     }
@@ -54,9 +54,9 @@ public class MultipleShotNotification extends AbstractShotNotification {
 
     protected NotificationCompat.InboxStyle getInboxStyleFromShots() {
         NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
-        for (ShotModel shot : shots) {
-            String userName = getShotTitle(shot);
-            String shotText = getShotText(shot);
+        for (ShotNotification shot : shots) {
+            String userName = shot.getUsername();
+            String shotText = shot.getContentText();
             Spannable styledLine = getSpannableLineFromNameAndComment(userName, shotText);
             inbox.addLine(styledLine);
         }
@@ -80,7 +80,7 @@ public class MultipleShotNotification extends AbstractShotNotification {
 
     private List<String> getUserNamesFromShots() {
         Set<String> names = new TreeSet<>();
-        for (ShotModel shot : shots) {
+        for (ShotNotification shot : shots) {
             String userName = shot.getUsername();
             names.add(userName);
         }

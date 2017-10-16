@@ -153,8 +153,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
   public void openShotDetail(Context context, Intent intent) {
     decrementBadgeCount();
-    ShotModel shotModel = (ShotModel) intent.getExtras().get(ShotDetailActivity.EXTRA_SHOT);
-    startActivityFromIntent(context, ShotDetailActivity.getIntentForActivity(context, shotModel)
+    String idShot = (String) intent.getExtras().get(ShotDetailActivity.EXTRA_ID_SHOT);
+    startActivityFromIntent(context, ShotDetailActivity.getIntentForActivity(context, idShot)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 
