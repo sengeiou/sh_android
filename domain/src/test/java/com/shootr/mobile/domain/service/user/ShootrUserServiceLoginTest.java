@@ -78,19 +78,6 @@ public class ShootrUserServiceLoginTest {
     verify(remoteStreamRepository, never()).getStreamById(anyString(), anyArray());
   }
 
-  @Test public void shouldDownloadPeopleIfUserHasStreamsWhenLoginCorrect() throws Exception {
-    when(loginGateway.performLogin(anyString(), anyString())).thenReturn(loginResultWithStream());
-    shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-    verify(remoteUserRepository).getPeople();
-  }
-
-  @Test public void shouldDownlaodPeopleIfUserHasNotStreamsWhenLoginCorrect() throws Exception {
-    when(loginGateway.performLogin(anyString(), anyString())).thenReturn(
-        loginResultWithoutStream());
-    shootrUserService.performLogin(USERNAME_OR_EMAIL_STUB, PASSWORD_STUB);
-    verify(remoteUserRepository).getPeople();
-  }
-
   private LoginResult loginResultWithoutStream() {
     User user = currentUserWithoutStreams();
     return new LoginResult(user, SESSION_TOKEN_STUB);
