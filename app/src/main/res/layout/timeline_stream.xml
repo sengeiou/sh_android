@@ -115,8 +115,8 @@
       app:bl_arrowPosition="129dp"
       app:bl_arrowWidth="10dp"
       app:bl_cornersRadius="6dp"
-      app:bl_bubbleColor="@color/primary_dark"
-      android:visibility="visible">
+      app:bl_bubbleColor="@color/showcase"
+      android:visibility="gone">
 
     <TextView
         android:layout_width="wrap_content"

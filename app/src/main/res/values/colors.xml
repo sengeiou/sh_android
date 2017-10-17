@@ -82,5 +82,6 @@
     <color name="actions">#fb830e</color>
     <color name="follow_button">#2196f3</color>
     <color name="follow_button_pressed">#1e88e5</color>
+    <color name="showcase">#212121</color>
 
 </resources>
