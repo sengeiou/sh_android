@@ -11,7 +11,7 @@
 
   <tab
       id="@+id/bottombar_activity"
-      icon="@drawable/drawable_activity"
+      icon="@drawable/ic_activity_selected"
       title="@string/drawer_activity_title"
       activeColor="@color/material_black"
       inActiveColor="@color/inactive_tabs"
@@ -20,7 +20,7 @@
 
   <tab
       id="@+id/bottombar_messages"
-      icon="@drawable/drawable_messages"
+      icon="@drawable/ic_messages_selected"
       title="@string/messages"
       activeColor="@color/material_black"
       inActiveColor="#464749"

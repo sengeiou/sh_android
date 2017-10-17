@@ -27,6 +27,7 @@
     <item name="toolbar">@style/ToolBar.Closable</item>
     <item name="colorPrimaryDark">#b3b3b3</item>
     <item name="searchViewStyle">@style/MySearchViewStyle.Closable</item>
+    <item name="android:actionBarWidgetTheme">@style/MySearchViewStyle.Closable</item>
   </style>
 
   <style name="ShootrTheme.WelcomePage">
@@ -61,7 +62,6 @@
 
   <style name="ToolBar.Closable">
     <item name="android:background">@color/white</item>
-    <item name="navigationIcon">@drawable/ic_action_navigation_close</item>
     <item name="theme">@style/ActionBarThemeOverlay.Closable</item>
     <item name="titleTextAppearance">@style/ActionBar.TitleText.Closable</item>
   </style>
@@ -132,7 +132,7 @@
 
   <style name="MySearchViewStyle" parent="Widget.AppCompat.Light.SearchView">
     <item name="queryBackground">@color/primary</item>
-    <item name="android:textColorHint">@color/white</item>
+    <item name="android:textColorHint">@color/accent</item>
 
     <!--<item name="searchIcon"></item>-->
     <!--<item name="goIcon"></item>-->
@@ -142,8 +142,8 @@
   </style>
 
   <style name="MySearchViewStyle.Closable">
-    <item name="queryBackground">@color/icons</item>
-    <item name="android:textColorHint">@color/material_black</item>
+    <item name="queryBackground">@color/white</item>
+    <item name="android:textColorHint">@color/accent</item>
   </style>
 
   <style name="ShootrTheme.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -237,6 +237,9 @@
 
   <style name="FollowButtonText.Follow">
     <item name="android:text">@string/profile_following</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/follow_button</item>
+    <item name="android:textStyle">normal</item>
   </style>
 
   <style name="FollowButton.Checked">
@@ -245,15 +248,19 @@
 
   <style name="FollowButtonText.Checked">
     <item name="android:textColor">@color/white</item>
-    <item name="android:textStyle">bold</item>
+    <item name="android:textStyle">normal</item>
     <item name="android:drawablePadding">4dp</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:text">@string/profile_follow</item>
+    <item name="android:textAllCaps">true</item>
   </style>
 
   <!--Follows button-->
   <style name="FollowingButton">
     <item name="android:background">@drawable/btn_follow</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/follow_button</item>
+    <item name="android:textStyle">normal</item>
   </style>
 
   <!-- EditProfile Button -->
