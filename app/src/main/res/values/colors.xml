@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="primary">#ffffff</color>
+    <color name="primary">#fafafa</color>
     <color name="primary_dark">#bdbdbd</color>
     <color name="primary_disabled">#e0e0e0</color>
-    <color name="accent">#ff6000</color>
-    <color name="fab_pressed">#ff5722</color>
+    <color name="accent">#2196f3</color>
+    <color name="fab_pressed">#1e88e5</color>
     <color name="links">#2196f3</color>
     <color name="transparent">#00000000</color>
     <color name="separator">#ffe0e0e0</color>
@@ -70,7 +70,7 @@
     <color name="poll_vote">#eeeeee</color>
     <color name="poll_view">#eeeeee</color>
     <color name="poll_results">#eeeeee</color>
-    <color name="connect_controller">#eeeeee</color>
+    <color name="connect_controller">#fafafa</color>
     <color name="onboarding_background">#dfdfdf</color>
     <color name="onboarding_card_background">#ededed</color>
     <color name="reshoot">#388E3C</color>
@@ -79,7 +79,7 @@
     <color name="setup_notification_background">#fafafa</color>
     <color name="naranjita">#ce6b1e</color>
     <color name="toolbar_subtitle">#9e9e9e</color>
-    <color name="actions">#fb830e</color>
+    <color name="actions">#2196f3</color>
     <color name="follow_button">#2196f3</color>
     <color name="follow_button_pressed">#1e88e5</color>
     <color name="showcase">#212121</color>

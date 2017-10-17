@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.AppCompatSpinner;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -85,6 +86,10 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
     private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
     private StreamReadWriteModeAdapter spinnerAadapter;
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     public static Intent newIntent(Context context, String idStream) {
         Intent launchIntent = new Intent(context, NewStreamActivity.class);
@@ -166,7 +171,6 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.primary)));
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_action_navigation_close_white);
 
         if (idStreamToEdit != null) {
             getToolbarDecorator().setTitle(editStreamTitleActionBar);

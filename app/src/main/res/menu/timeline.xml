@@ -14,7 +14,7 @@
 
     <item
       android:id="@+id/menu_showing_all_shots"
-      android:icon="@drawable/ic_filter"
+      android:icon="@drawable/filter_activated"
       android:title="@string/menu_all_shots"
       android:visible="false"
       app:showAsAction="always" />
