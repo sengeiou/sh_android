@@ -270,6 +270,9 @@
 
   <style name="FollowButtonText.Edit">
     <item name="android:text">@string/profile_edit_profile</item>
+    <item name="android:textColor">@color/follow_button</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:textAllCaps">true</item>
   </style>
 
   <!-- Add Contributor -->

@@ -23,7 +23,7 @@
       icon="@drawable/ic_messages_selected"
       title="@string/messages"
       activeColor="@color/material_black"
-      inActiveColor="#464749"
+      inActiveColor="@color/inactive_tabs"
       barColorWhenSelected="@color/primary"
       badgeBackgroundColor="@color/accent"
       />
