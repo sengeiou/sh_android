@@ -4,7 +4,6 @@ public class PollOptionEntity {
 
   private String idPoll;
   private String idPollOption;
-  private String imageUrl;
   private ImageMediaEntity optionImage;
   private String text;
   private Long votes;
@@ -24,14 +23,6 @@ public class PollOptionEntity {
 
   public void setIdPollOption(String idPollOption) {
     this.idPollOption = idPollOption;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
   }
 
   public Long getVotes() {

@@ -23,7 +23,6 @@ public class PollOptionModelMapper {
     pollOptionModel.setIdPoll(pollOption.getIdPoll());
     pollOptionModel.setIdPollOption(pollOption.getIdPollOption());
     pollOptionModel.setText(pollOption.getTitle());
-    pollOptionModel.setImageUrl(pollOption.getImageUrl());
     pollOptionModel.setVotes(pollOption.getVotes());
     pollOptionModel.setOptionImage(imageMediaModelMapper.transform(pollOption.getOptionImage()));
 

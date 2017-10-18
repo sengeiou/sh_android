@@ -8,7 +8,6 @@ public class PollOption {
   private String idPoll;
   private String idPollOption;
   private ImageMedia optionImage;
-  private String imageUrl;
   private String title;
   private Long votes;
   private Integer order;
@@ -27,14 +26,6 @@ public class PollOption {
 
   public void setIdPollOption(String idPollOption) {
     this.idPollOption = idPollOption;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
   }
 
   public String getTitle() {

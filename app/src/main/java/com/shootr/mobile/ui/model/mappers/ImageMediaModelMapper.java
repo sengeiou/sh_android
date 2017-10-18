@@ -12,30 +12,36 @@ public class ImageMediaModelMapper {
   }
 
   public ImageMediaModel transform(ImageMedia imageMedia) {
-    ImageMediaModel imageMediaModel = new ImageMediaModel();
-    ImageSizeModel imageSize = new ImageSizeModel();
+    if (imageMedia != null) {
 
-    SizesModel lowSize = new SizesModel();
-    lowSize.setHeight(imageMedia.getSizes().getLow().getHeight());
-    lowSize.setWidth(imageMedia.getSizes().getLow().getWidth());
-    lowSize.setUrl(imageMedia.getSizes().getLow().getUrl());
-    imageSize.setLow(lowSize);
+      ImageMediaModel imageMediaModel = new ImageMediaModel();
+      ImageSizeModel imageSize = new ImageSizeModel();
 
-    SizesModel mediumSize = new SizesModel();
-    mediumSize.setHeight(imageMedia.getSizes().getMedium().getHeight());
-    mediumSize.setWidth(imageMedia.getSizes().getMedium().getWidth());
-    mediumSize.setUrl(imageMedia.getSizes().getMedium().getUrl());
-    imageSize.setMedium(mediumSize);
+      SizesModel lowSize = new SizesModel();
+      lowSize.setHeight(imageMedia.getSizes().getLow().getHeight());
+      lowSize.setWidth(imageMedia.getSizes().getLow().getWidth());
+      lowSize.setUrl(imageMedia.getSizes().getLow().getUrl());
+      imageSize.setLow(lowSize);
 
-    SizesModel highSize = new SizesModel();
-    highSize.setHeight(imageMedia.getSizes().getHigh().getHeight());
-    highSize.setWidth(imageMedia.getSizes().getHigh().getWidth());
-    highSize.setUrl(imageMedia.getSizes().getHigh().getUrl());
-    imageSize.setHigh(highSize);
+      SizesModel mediumSize = new SizesModel();
+      mediumSize.setHeight(imageMedia.getSizes().getMedium().getHeight());
+      mediumSize.setWidth(imageMedia.getSizes().getMedium().getWidth());
+      mediumSize.setUrl(imageMedia.getSizes().getMedium().getUrl());
+      imageSize.setMedium(mediumSize);
 
-    imageMediaModel.setType(imageMedia.getType());
-    imageMediaModel.setSizes(imageSize);
+      SizesModel highSize = new SizesModel();
+      highSize.setHeight(imageMedia.getSizes().getHigh().getHeight());
+      highSize.setWidth(imageMedia.getSizes().getHigh().getWidth());
+      highSize.setUrl(imageMedia.getSizes().getHigh().getUrl());
+      imageSize.setHigh(highSize);
 
-    return imageMediaModel;
+      imageMediaModel.setType(imageMedia.getType());
+
+      imageMediaModel.setSizes(imageSize);
+
+      return imageMediaModel;
+    }
+
+    return null;
   }
 }

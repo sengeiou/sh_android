@@ -6,7 +6,6 @@ public class PollOptionModel implements Serializable {
 
   private String idPoll;
   private String idPollOption;
-  private String imageUrl;
   private ImageMediaModel optionImage;
   private String text;
   private Long votes;
@@ -26,14 +25,6 @@ public class PollOptionModel implements Serializable {
 
   public void setIdPollOption(String idPollOption) {
     this.idPollOption = idPollOption;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
-
-  public void setImageUrl(String imageUrl) {
-    this.imageUrl = imageUrl;
   }
 
   public String getText() {

@@ -16,7 +16,6 @@ public class PollOptionEntityMapper {
 
   public PollOption transform(PollOptionEntity pollOptionEntity) {
     PollOption pollOption = new PollOption();
-    pollOption.setImageUrl(pollOptionEntity.getImageUrl());
     pollOption.setTitle(pollOptionEntity.getText());
     pollOption.setVotes(pollOptionEntity.getVotes());
     pollOption.setIdPoll(pollOptionEntity.getIdPoll());
@@ -36,7 +35,6 @@ public class PollOptionEntityMapper {
 
   private PollOptionEntity transform(PollOption pollOption) {
     PollOptionEntity pollOptionEntity = new PollOptionEntity();
-    pollOptionEntity.setImageUrl(pollOption.getImageUrl());
     pollOptionEntity.setOrder(pollOption.getOrder());
     pollOptionEntity.setIdPoll(pollOption.getIdPoll());
     pollOptionEntity.setText(pollOption.getTitle());
