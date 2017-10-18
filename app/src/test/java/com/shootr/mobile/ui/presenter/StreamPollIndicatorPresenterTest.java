@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.interactor.poll.GetPollByIdStreamInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.mappers.ImageMediaModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
 import com.shootr.mobile.ui.views.StreamPollView;
@@ -46,7 +47,7 @@ public class StreamPollIndicatorPresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper(
-        imageMediaModelMapper));
+        new ImageMediaModelMapper()));
     presenter = new StreamPollIndicatorPresenter(getPollByIdStreamInteractor, pollModelMapper,
         errorMessageFactory);
   }
