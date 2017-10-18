@@ -47,7 +47,8 @@ public class PollResultsPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
+    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper(
+        imageMediaModelMapper));
     presenter = new PollResultsPresenter(getPollByIdPollInteractor, pollModelMapper,
         ignorePollInteractor, sharePollInteractor, errorMessageFactory, poller);
   }

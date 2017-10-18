@@ -1,11 +1,13 @@
 package com.shootr.mobile.domain.model.poll;
 
+import com.shootr.mobile.domain.model.ImageMedia;
 import java.util.Comparator;
 
 public class PollOption {
 
   private String idPoll;
   private String idPollOption;
+  private ImageMedia optionImage;
   private String imageUrl;
   private String title;
   private Long votes;
@@ -76,4 +78,12 @@ public class PollOption {
     }
 
   };
+
+  public ImageMedia getOptionImage() {
+    return optionImage;
+  }
+
+  public void setOptionImage(ImageMedia optionImage) {
+    this.optionImage = optionImage;
+  }
 }

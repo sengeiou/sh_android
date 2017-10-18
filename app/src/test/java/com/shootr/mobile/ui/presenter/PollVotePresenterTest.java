@@ -71,7 +71,8 @@ public class PollVotePresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     when(sessionRepository.getCurrentUserId()).thenReturn(HOLDER_USER_ID);
-    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
+    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper(
+        imageMediaModelMapper));
     presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
         ignorePollInteractor, votePollOptionInteractor,
         showPollResultsInteractor, getStreamInteractor, sessionRepository, pollModelMapper, errorMessageFactory,

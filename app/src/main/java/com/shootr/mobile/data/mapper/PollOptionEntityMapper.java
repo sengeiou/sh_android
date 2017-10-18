@@ -8,7 +8,10 @@ import javax.inject.Inject;
 
 public class PollOptionEntityMapper {
 
-  @Inject public PollOptionEntityMapper() {
+  private final ImageMediaEntityMapper imageMediaEntityMapper;
+
+  @Inject public PollOptionEntityMapper(ImageMediaEntityMapper imageMediaEntityMapper) {
+    this.imageMediaEntityMapper = imageMediaEntityMapper;
   }
 
   public PollOption transform(PollOptionEntity pollOptionEntity) {
@@ -19,6 +22,7 @@ public class PollOptionEntityMapper {
     pollOption.setIdPoll(pollOptionEntity.getIdPoll());
     pollOption.setIdPollOption(pollOptionEntity.getIdPollOption());
     pollOption.setOrder(pollOptionEntity.getOrder());
+    pollOption.setOptionImage(imageMediaEntityMapper.transform(pollOptionEntity.getOptionImage()));
     return pollOption;
   }
 
@@ -38,6 +42,7 @@ public class PollOptionEntityMapper {
     pollOptionEntity.setText(pollOption.getTitle());
     pollOptionEntity.setVotes(pollOption.getVotes());
     pollOptionEntity.setIdPollOption(pollOption.getIdPollOption());
+    pollOptionEntity.setOptionImage(imageMediaEntityMapper.transform(pollOption.getOptionImage()));
     return pollOptionEntity;
   }
 

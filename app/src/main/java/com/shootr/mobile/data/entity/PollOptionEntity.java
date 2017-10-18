@@ -5,6 +5,7 @@ public class PollOptionEntity {
   private String idPoll;
   private String idPollOption;
   private String imageUrl;
+  private ImageMediaEntity optionImage;
   private String text;
   private Long votes;
   private Integer order;
@@ -55,5 +56,13 @@ public class PollOptionEntity {
 
   public void setOrder(Integer order) {
     this.order = order;
+  }
+
+  public ImageMediaEntity getOptionImage() {
+    return optionImage;
+  }
+
+  public void setOptionImage(ImageMediaEntity optionImage) {
+    this.optionImage = optionImage;
   }
 }

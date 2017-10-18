@@ -45,7 +45,8 @@ public class StreamPollIndicatorPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
+    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper(
+        imageMediaModelMapper));
     presenter = new StreamPollIndicatorPresenter(getPollByIdStreamInteractor, pollModelMapper,
         errorMessageFactory);
   }
