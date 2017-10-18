@@ -45,6 +45,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
       if (currentUserId != null) {
         title.setText(getFormattedUserName(activity));
         title.setVisibility(View.VISIBLE);
+        text.setVisibility(View.GONE);
       }
     } catch (Exception e) {
       /* no-op */

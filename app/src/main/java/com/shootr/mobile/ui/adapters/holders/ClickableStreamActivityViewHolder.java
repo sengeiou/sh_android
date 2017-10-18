@@ -30,8 +30,9 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
   }
 
   @Override protected void renderText(ActivityModel activity) {
-    text.setText(getFormattedUserName(activity));
-    text.setMovementMethod(new LinkMovementMethod());
+    title.setText(getFormattedUserName(activity));
+    title.setMovementMethod(new LinkMovementMethod());
+    text.setVisibility(View.GONE);
   }
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
@@ -39,6 +40,10 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername()).popSpan()
         .append(getCommentPattern())
+        .append(" ")
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getStreamTitle())
+        .popSpan()
         .build();
   }
 

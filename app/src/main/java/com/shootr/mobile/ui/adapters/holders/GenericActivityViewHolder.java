@@ -62,7 +62,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   }
 
   protected void rendetTargetAvatar(ActivityModel activity) {
-    if (activity.getIdTargetUser() != null) {
+    if (activity.getIdTargetUser() != null || activity.getStreamTitle() != null) {
       imageLoader.loadProfilePhoto(activity.getUserPhoto(), targetAvatar, activity.getUsername());
       targetAvatar.setVisibility(View.VISIBLE);
       targetAvatar.setOnClickListener(new View.OnClickListener() {

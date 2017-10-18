@@ -18,7 +18,6 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_marginLeft="8dp"
-      android:gravity="center_vertical"
       android:orientation="vertical"
       >
 
@@ -42,7 +41,7 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:textColor="@color/material_black"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:text="Este es mi primer shoot en más de 20 horas! Además, tiene que ser largo o mostrar una imagen."
         tools:visibility="visible"
         />
