@@ -34,6 +34,16 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
   @Override public void render(ActivityModel activity) {
     super.render(activity);
     enableShotClick(activity);
+    title.setText(getTitle(activity));
+  }
+
+  protected CharSequence getTitle(ActivityModel activity) {
+    return new Truss()
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername()).popSpan()
+        .append(getActivitySimpleComment(activity)).append(" ")
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername()).popSpan().build();
   }
 
   private void enableShotClick(final ActivityModel activity) {
@@ -44,18 +54,12 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     });
   }
 
-  @Override protected void renderText(ActivityModel activity) {
-    CharSequence activityText = getActivityText(activity);
-    text.setText(activityText);
+  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+    targetAvatar.setVisibility(View.GONE);
   }
 
-  private CharSequence getActivityText(ActivityModel activity) {
-    boolean hasCommentInShot = activity.getShot().getComment() != null;
-    if (hasCommentInShot) {
-      return buildActivityCommentWithShot(activity);
-    } else {
-      return buildActivitySimpleComment(activity);
-    }
+  @Override protected void renderText(ActivityModel activity) {
+    text.setText(activity.getShot().getComment());
   }
 
   @Override protected void renderImage(ActivityModel activity) {
@@ -66,35 +70,6 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     } else {
       image.setVisibility(View.GONE);
     }
-  }
-
-  private CharSequence buildActivityCommentWithShot(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
-        .append(getActivityCommentPrefix(activity))
-        .pushSpan(new ForegroundColorSpan(shotCommentColor))
-        .append(activity.getShot().getComment())
-        .popSpan()
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
-        .build();
-  }
-
-  private CharSequence buildActivitySimpleComment(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
-        .pushSpan(new ForegroundColorSpan(shotCommentColor))
-        .append(getActivitySimpleComment(activity))
-        .popSpan()
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
-        .build();
   }
 
   protected abstract String getActivitySimpleComment(ActivityModel activity);

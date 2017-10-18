@@ -52,8 +52,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     renderTitle(activity);
     renderText(activity);
     renderAvatar(activity);
-    renderImage(activity);
     rendetTargetAvatar(activity);
+    renderImage(activity);
     renderVerified(activity);
   }
 
