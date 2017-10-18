@@ -5,7 +5,7 @@
   <string name="activity_edit_profile_bio_hint">Bio</string>
   <string name="activity_edit_profile_email_hint">Email</string>
   <string name="activity_edit_profile_name_hint">Nome</string>
-  <string name="activity_edit_profile_username_hint">Nome de usuário</string>
+  <string name="activity_edit_profile_username_hint">"@Usuário (nome único)"</string>
   <string name="activity_edit_profile_website_hint">Página web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
   <string name="activity_find_contributors_hint">Buscar</string>
@@ -32,7 +32,7 @@
   <string name="activity_registration_legal_disclaimer_privacy_policy">Política de privacidade</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condições de uso</string>
   <string name="activity_registration_password_hint">Senha</string>
-  <string name="activity_registration_username_hint">Nome de usuário</string>
+  <string name="activity_registration_username_hint">"@Usuário (nome único)"</string>
   <string name="activity_started_following_you">te segue</string>
   <string name="activity_timeline_empty_title">Nenhuma atividade</string>
   <string name="added_contributor">Adicionado</string>
