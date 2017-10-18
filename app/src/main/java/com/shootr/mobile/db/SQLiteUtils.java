@@ -597,7 +597,7 @@ public class SQLiteUtils {
         + " TEXT NOT NULL PRIMARY KEY,"
         + DatabaseContract.PollOptionTable.ID_POLL
         + " TEXT NOT NULL,"
-        + DatabaseContract.PollOptionTable.IMAGE_URL
+        + DatabaseContract.PollOptionTable.OPTION_IMAGE
         + " TEXT NULL,"
         + DatabaseContract.PollOptionTable.TEXT
         + " TEXT NOT NULL,"
