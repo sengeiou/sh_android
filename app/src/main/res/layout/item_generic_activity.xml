@@ -17,8 +17,9 @@
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:orientation="vertical"
       android:layout_marginLeft="8dp"
+      android:gravity="center_vertical"
+      android:orientation="vertical"
       >
 
     <TextView
@@ -26,9 +27,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"
         android:paddingBottom="4dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
         android:textColor="@color/material_black"
         tools:text="Anna started following pepe16"
         />
@@ -38,43 +39,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:paddingRight="8dp"
         android:paddingLeft="8dp"
-        android:visibility="gone"
-        tools:visibility="visible"
+        android:paddingRight="8dp"
         android:textColor="@color/material_black"
+        android:visibility="gone"
         tools:text="Este es mi primer shoot en más de 20 horas! Además, tiene que ser largo o mostrar una imagen."
+        tools:visibility="visible"
         />
 
     <com.shootr.mobile.ui.widgets.AvatarView
         android:id="@+id/activity_target_avatar"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginTop="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:visibility="gone"
-        tools:visibility="visible"
         tools:background="@color/refresh_1"
+        tools:visibility="visible"
         />
 
     <ImageView
         android:id="@+id/shot_image"
-        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="165dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
         android:visibility="gone"
-        tools:visibility="visible"
         tools:background="@color/accent"
+        tools:visibility="visible"
         />
 
     <include
-      layout="@layout/embed_activity_shot"
+        layout="@layout/embed_activity_shot"
         android:visibility="gone"
         tools:visibility="visible"
-      />
+        />
 
   </LinearLayout>
 

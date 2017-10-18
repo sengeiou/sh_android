@@ -39,10 +39,6 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername()).popSpan()
         .append(getCommentPattern())
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
         .build();
   }
 

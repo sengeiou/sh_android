@@ -43,8 +43,8 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
   @Override protected void renderText(ActivityModel activity) {
     try {
       if (currentUserId != null) {
-        text.setText(getFormattedUserName(activity));
-        renderFollowButton(activity, currentUserId);
+        title.setText(getFormattedUserName(activity));
+        title.setVisibility(View.VISIBLE);
       }
     } catch (Exception e) {
       /* no-op */
@@ -56,37 +56,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
         .pushSpan(new StyleSpan(Typeface.BOLD)) //
         .append(activity.getUsername()).popSpan()//
         .append(" ").append(formatActivityComment(activity, currentUserId)) //
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
         .build();
-  }
-
-  protected void renderFollowButton(final ActivityModel activity, String currentUserId) {
-    image.setVisibility(View.GONE);
-    if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
-      followButton.setFollowing(activity.amIFollowing());
-      followButton.setVisibility(View.VISIBLE);
-      setupFollowListener(activity);
-    } else {
-      followButton.setVisibility(View.GONE);
-    }
-  }
-
-  private void setupFollowListener(final ActivityModel activity) {
-    followButton.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        if (followButton.isFollowing()) {
-          onFollowUnfollowListener.onUnfollow(activity.getIdUser(), activity.getUsername());
-          followButton.setFollowing(false);
-        } else {
-          onFollowUnfollowListener.onFollow(activity.getIdUser(), activity.getUsername(),
-              activity.isStrategic());
-          followButton.setFollowing(true);
-        }
-      }
-    });
   }
 
   protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {

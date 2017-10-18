@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
@@ -31,12 +32,12 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   @BindColor(R.color.gray_60) int gray_60;
 
   @BindView(R.id.activity_avatar) AvatarView avatar;
+  @BindView(R.id.activity_target_avatar) AvatarView targetAvatar;
   @BindView(R.id.activity_text) ClickableTextView text;
+  @BindView(R.id.activity_title) TextView title;
   @BindView(R.id.shot_image) ImageView image;
-  @BindView(R.id.activity_follow_button) FollowButton followButton;
-  @BindView(R.id.favorite_stream_indicator) ShineButton favoriteButton;
-  @BindView(R.id.stream_name) TextView streamName;
-  @BindView(R.id.stream_verified) ImageView verified;
+  //@BindView(R.id.stream_name) TextView streamName;
+  //@BindView(R.id.stream_verified) ImageView verified;
 
   public GenericActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener) {
@@ -48,12 +49,30 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   }
 
   public void render(final ActivityModel activity) {
+    renderTitle(activity);
     renderText(activity);
     renderAvatar(activity);
     renderImage(activity);
-    renderFavorite(activity);
-    renderStreamName(activity);
+    rendetTargetAvatar(activity);
     renderVerified(activity);
+  }
+
+  protected void renderTitle(final ActivityModel activity) {
+
+  }
+
+  protected void rendetTargetAvatar(ActivityModel activity) {
+    if (activity.getIdTargetUser() != null) {
+      imageLoader.loadProfilePhoto(activity.getUserPhoto(), targetAvatar, activity.getUsername());
+      targetAvatar.setVisibility(View.VISIBLE);
+      targetAvatar.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+
+        }
+      });
+    } else {
+      targetAvatar.setVisibility(View.GONE);
+    }
   }
 
   protected void renderText(ActivityModel activity) {
@@ -64,9 +83,9 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
   protected void renderVerified(ActivityModel activity) {
     if (activity.isVerified()) {
-      verified.setVisibility(View.VISIBLE);
+      //verified.setVisibility(View.VISIBLE);
     } else {
-      verified.setVisibility(View.GONE);
+      //verified.setVisibility(View.GONE);
     }
   }
 
@@ -100,24 +119,4 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     return itemView.getContext();
   }
 
-  protected void renderFavorite(ActivityModel activityModel) {
-    favoriteButton.setVisibility(View.GONE);
-  }
-
-  protected void renderStreamName(final ActivityModel activityModel) {
-    if (activityModel.getStreamTitle() != null && !activityModel.getStreamTitle().isEmpty()) {
-      streamName.setVisibility(View.VISIBLE);
-      streamName.setText(activityModel.getStreamTitle());
-
-      streamName.setOnClickListener(new View.OnClickListener() {
-        @Override public void onClick(View view) {
-          if (activityModel.getIdStream() != null) {
-            view.getContext()
-                .startActivity(StreamTimelineActivity.newIntent(view.getContext(),
-                    activityModel.getIdStream()));
-          }
-        }
-      });
-    }
-  }
 }

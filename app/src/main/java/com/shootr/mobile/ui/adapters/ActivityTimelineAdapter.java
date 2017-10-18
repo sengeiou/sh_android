@@ -193,7 +193,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private View createActivityView(ViewGroup parent) {
     return LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_list_activity, parent, false);
+        .inflate(R.layout.item_generic_activity, parent, false);
   }
 
   private GenericActivityViewHolder onCreateActivityViewHolder(ViewGroup parent) {
