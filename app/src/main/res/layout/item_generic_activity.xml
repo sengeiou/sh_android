@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    >
+
+  <com.shootr.mobile.ui.widgets.AvatarView
+      android:id="@+id/activity_avatar"
+      android:layout_width="40dp"
+      android:layout_height="40dp"
+      tools:background="@color/favorite_tab"
+      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:layout_marginLeft="8dp"
+      >
+
+    <TextView
+        android:id="@+id/activity_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingBottom="4dp"
+        android:textColor="@color/material_black"
+        tools:text="Anna started following pepe16"
+        />
+
+    <com.shootr.mobile.ui.widgets.ClickableTextView
+        android:id="@+id/activity_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@color/material_black"
+        tools:text="Este es mi primer shoot en más de 20 horas! Además, tiene que ser largo o mostrar una imagen."
+        />
+
+    <com.shootr.mobile.ui.widgets.AvatarView
+        android:id="@+id/activity_target_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:background="@color/refresh_1"
+        />
+
+    <ImageView
+        android:id="@+id/shot_image"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        tools:background="@color/accent"
+        />
+
+    <include
+      layout="@layout/embed_activity_shot"
+        android:visibility="gone"
+        tools:visibility="visible"
+      />
+
+  </LinearLayout>
+
+</LinearLayout>
