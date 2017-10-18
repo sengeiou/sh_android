@@ -15,7 +15,7 @@ import com.shootr.mobile.util.Truss;
 
 public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
-  private final ImageLoader imageLoader;
+  protected final ImageLoader imageLoader;
   private final OnShotClick onShotClickListener;
   private final AndroidTimeUtils androidTimeUtils;
 

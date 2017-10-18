@@ -73,8 +73,6 @@
 
     <include
         layout="@layout/embed_activity_shot"
-        android:visibility="gone"
-        tools:visibility="visible"
         />
 
   </LinearLayout>
