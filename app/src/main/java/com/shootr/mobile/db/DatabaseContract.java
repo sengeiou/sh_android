@@ -323,11 +323,17 @@ public class DatabaseContract {
     public static final String POLL_QUESTION = "pollQuestion";
     public static final String POLL_OPTION_TEXT = "pollOptiontext";
     public static final String IS_VERIFIED = "isVerified";
+    public static final String NAME = "name";
+    public static final String TARGET_NAME = "targetName";
+    public static final String STREAM_PHOTO = "streamPhoto";
+    public static final String TARGET_USER_PHOTO = "targetUserPhoto";
+    public static final String TARGET_USERNAME = "targetUsername";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
         ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE,
-        IS_VERIFIED, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        IS_VERIFIED, NAME, TARGET_NAME, STREAM_PHOTO, TARGET_USER_PHOTO, TARGET_USERNAME,
+        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -354,11 +360,17 @@ public class DatabaseContract {
     public static final String POLL_QUESTION = "pollQuestion";
     public static final String POLL_OPTION_TEXT = "pollOptiontext";
     public static final String IS_VERIFIED = "isVerified";
+    public static final String NAME = "name";
+    public static final String TARGET_NAME = "targetName";
+    public static final String STREAM_PHOTO = "streamPhoto";
+    public static final String TARGET_USER_PHOTO = "targetUserPhoto";
+    public static final String TARGET_USERNAME = "targetUsername";
 
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
         ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE,
-        IS_VERIFIED, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        IS_VERIFIED, NAME, TARGET_NAME, STREAM_PHOTO, TARGET_USER_PHOTO, TARGET_USERNAME,
+        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
