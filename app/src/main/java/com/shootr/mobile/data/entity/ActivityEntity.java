@@ -9,11 +9,15 @@ public class ActivityEntity extends Synchronized {
     private String idUser;
     private String idTargetUser;
     private String username;
+    private String name;
+    private String targetName;
     private String idStream;
     private String streamTitle;
+    private String streamPhoto;
     private String comment;
     private String type;
     private String userPhoto;
+    private String targetUserPhoto;
     private String idShot;
     private Shot shotForMapping;
     private String idStreamAuthor;
@@ -22,6 +26,7 @@ public class ActivityEntity extends Synchronized {
     private String pollOptionText;
     private boolean strategic;
     private boolean isVerified;
+    private String targetUsername;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -159,5 +164,45 @@ public class ActivityEntity extends Synchronized {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
+
+    public String getStreamPhoto() {
+        return streamPhoto;
+    }
+
+    public void setStreamPhoto(String streamPhoto) {
+        this.streamPhoto = streamPhoto;
+    }
+
+    public String getTargetUserPhoto() {
+        return targetUserPhoto;
+    }
+
+    public void setTargetUserPhoto(String targetUserPhoto) {
+        this.targetUserPhoto = targetUserPhoto;
+    }
+
+    public String getTargetUsername() {
+        return targetUsername;
+    }
+
+    public void setTargetUsername(String targetUsername) {
+        this.targetUsername = targetUsername;
     }
 }

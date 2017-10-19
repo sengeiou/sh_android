@@ -28,6 +28,7 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
         activityModel.setIdUser(userInfo.getIdUser());
         activityModel.setUserPhoto(userInfo.getAvatar());
         activityModel.setStrategic(userInfo.isStrategic());
+        activityModel.setName(activity.getName());
 
         Activity.ActivityStreamInfo streamInfo = activity.getStreamInfo();
         if (streamInfo != null) {
@@ -35,9 +36,13 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
             activityModel.setStreamTitle(streamInfo.getStreamTitle());
             activityModel.setStrategic(streamInfo.isStrategic());
             activityModel.setVerified(streamInfo.isVerified());
+            activityModel.setStreamPhoto(activity.getStreamPhoto());
         }
 
         activityModel.setIdTargetUser(activity.getIdTargetUser());
+        activityModel.setTargetUserPhoto(activity.getTargetUserPhoto());
+        activityModel.setTargetName(activity.getTargetName());
+        activityModel.setTargetUsername(activity.getTargetUsername());
 
         activityModel.setShot(shotModelMapper.transform(activity.getShot()));
 
