@@ -32,7 +32,28 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
   }
 
   @Override protected void renderText(ActivityModel activity) {
-    text.setText(getFormattedUserName(activity));
+    try {
+      title.setText(getFormattedUserName(activity));
+      title.setVisibility(View.VISIBLE);
+      renderEmbedPollQuestion(activity);
+    } catch (Exception e) {
+      /* no-op */
+    }
+  }
+
+  private void renderEmbedPollQuestion(ActivityModel activity) {
+    text.setVisibility(View.GONE);
+    embedCard.setVisibility(View.VISIBLE);
+    embedShotComment.setVisibility(View.GONE);
+    embedShotImage.setVisibility(View.GONE);
+    embedUsername.setText(getFormattedPoll(activity));
+  }
+
+  private CharSequence getFormattedPoll(ActivityModel activity) {
+    return new Truss()
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getPollQuestion()).popSpan()
+        .build();
   }
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
@@ -40,12 +61,25 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername()).popSpan()
         .append(" ")
-        .append(formatActivityComment(activity))
-        .pushSpan(new ForegroundColorSpan(gray_60))
+        .append("shared a poll in")
         .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getStreamTitle()).popSpan()
         .build();
+  }
+
+  @Override protected void renderAvatar(ActivityModel activity) {
+    //TODO poner foto de stream
+    imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar, activity.getStreamTitle());
+    avatar.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        //TODO onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
+      }
+    });
+  }
+
+  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+    /* no-op */
   }
 
   protected CharSequence formatActivityComment(final ActivityModel activity) {
