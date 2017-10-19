@@ -351,8 +351,7 @@ public class ShotsTimelineAdapter
       shots.addAll(position, newShotList);
       try {
         notifyItemRangeInserted(position, newShotList.size());
-      }
-      catch (Exception e){
+      } catch (Exception e) {
         notifyDataSetChanged();
       }
     }
