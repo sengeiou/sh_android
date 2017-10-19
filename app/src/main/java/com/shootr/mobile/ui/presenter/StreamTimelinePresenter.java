@@ -262,7 +262,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       streamTimelineView.hidePinnedMessage();
     }
     if (streamModel.getReadWriteMode() == 0) {
-      streamTimelineView.setupCheckInShowcase();
+      streamTimelineView.setupFilterShowcase();
     }
   }
 

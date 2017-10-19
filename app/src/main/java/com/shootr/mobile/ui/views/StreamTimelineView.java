@@ -45,7 +45,7 @@ public interface StreamTimelineView extends TimelineView  {
 
     void renderUnnice(String idShot);
 
-    void setupCheckInShowcase();
+    void setupFilterShowcase();
 
     void setReshoot(String idShot, boolean mark);
 

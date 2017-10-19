@@ -63,6 +63,7 @@
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
   <string name="check_in_show_case">Haz check-in para decir que estás aquí</string>
+  <string name="filter_show_case">Pulsa aquí para ver los shots importantes</string>
   <!-- Errors -->
   <string name="communication_error">Hay un problema de conexión a Internet. Comprueba tu conexión y prueba otra vez.</string>
   <string name="connection_lost">Se ha perdido la conexión</string>
