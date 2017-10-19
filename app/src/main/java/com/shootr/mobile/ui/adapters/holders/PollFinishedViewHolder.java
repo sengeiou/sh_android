@@ -57,10 +57,10 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
     return new Truss()
+        .append("Poll has finished in")
+        .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getStreamTitle()).popSpan()
-        .append(": ")
-        .append("poll has finished")
         .build();
   }
 

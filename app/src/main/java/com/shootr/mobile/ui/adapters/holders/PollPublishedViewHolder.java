@@ -58,10 +58,9 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
     return new Truss()
+        .append("New poll in").append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getStreamTitle()).popSpan()
-        .append(": ")
-        .append("has a new poll")
         .build();
   }
 
