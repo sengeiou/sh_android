@@ -29,6 +29,7 @@
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
+        android:textColorLink="@color/material_black"
         android:textColor="@color/material_black"
         tools:text="Anna started following pepe16"
         />

@@ -228,33 +228,33 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {
     return new StartedShootingViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private ImportantStartedShootingViewHolder onCreateImportantStartedShootingViewHolder(
       ViewGroup parent) {
     return new ImportantStartedShootingViewHolder(createActivityView(parent), imageLoader,
-        timeUtils, avatarClickListener, onShotClick);
+        timeUtils, avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent) {
     return new NiceShotViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent) {
     return new ShareShotViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent) {
     return new MentionViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private ReplyViewHolder onCreateReplyViewHolder(ViewGroup parent) {
     return new ReplyViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private FollowActivityViewHolder onCreateFollowViewHolder(ViewGroup parent) {
