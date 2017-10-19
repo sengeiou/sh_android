@@ -47,12 +47,18 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
     }
   }
 
-  private void renderEmbedPollQuestion(ActivityModel activity) {
+  private void renderEmbedPollQuestion(final ActivityModel activity) {
     text.setVisibility(View.GONE);
     embedCard.setVisibility(View.VISIBLE);
     embedShotComment.setVisibility(View.GONE);
     embedShotImage.setVisibility(View.GONE);
     embedUsername.setText(getFormattedPoll(activity));
+    embedCard.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        onPollQuestionClickListener.onPollQuestionClick(activity.getIdPoll(),
+            activity.getStreamTitle());
+      }
+    });
   }
 
   private CharSequence getFormattedPoll(ActivityModel activity) {
@@ -80,14 +86,16 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
         .build();
   }
 
-  @Override protected void renderAvatar(ActivityModel activity) {
-    //TODO poner foto de stream
-    imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar, activity.getStreamTitle());
-    avatar.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        //TODO onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
-      }
-    });
+  @Override protected void renderAvatar(final ActivityModel activity) {
+    if (activity.getStreamTitle() != null) {
+      imageLoader.loadProfilePhoto(activity.getStreamPhoto(), avatar, activity.getStreamTitle());
+      avatar.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          onStreamTitleClickListener.onStreamTitleClick(activity.getIdStream(),
+              activity.getStreamTitle(), activity.getIdStreamAuthor());
+        }
+      });
+    }
   }
 
   @Override protected void rendetTargetAvatar(ActivityModel activity) {

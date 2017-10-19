@@ -47,12 +47,18 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
     }
   }
 
-  private void renderEmbedPollQuestion(ActivityModel activity) {
+  private void renderEmbedPollQuestion(final ActivityModel activity) {
     text.setVisibility(View.GONE);
     embedCard.setVisibility(View.VISIBLE);
     embedShotImage.setVisibility(View.GONE);
     embedUsername.setText(getFormattedPoll(activity));
     embedShotComment.setText("Respuesta: " + activity.getPollOptionText());
+    embedCard.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        onPollQuestionClickListener.onPollQuestionClick(activity.getIdPoll(),
+            activity.getStreamTitle());
+      }
+    });
   }
 
   private CharSequence getFormattedPoll(ActivityModel activity) {
@@ -81,16 +87,6 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
         .pushSpan(streamTitleSpan)
         .append(activity.getStreamTitle()).popSpan()
         .build();
-  }
-
-  @Override protected void renderAvatar(ActivityModel activity) {
-    //TODO poner foto de stream
-    imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar, activity.getStreamTitle());
-    avatar.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        //TODO onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
-      }
-    });
   }
 
   @Override protected void rendetTargetAvatar(ActivityModel activity) {
