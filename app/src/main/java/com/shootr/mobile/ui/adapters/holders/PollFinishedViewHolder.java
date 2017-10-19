@@ -82,6 +82,7 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
         .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
         .popSpan()
         .build();
   }
@@ -102,11 +103,4 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
     /* no-op */
   }
 
-  protected CharSequence formatActivityComment(final ActivityModel activity) {
-    activity.setComment(
-        itemView.getResources().getString(R.string.finished_poll, activity.getPollQuestion()));
-    return pollQuestionSpannableBuilder.formatPollQuestionSpans(activity.getIdPoll(),
-        activity.getStreamTitle(), activity.getPollQuestion(), activity.getComment(),
-        onPollQuestionClickListener);
-  }
 }

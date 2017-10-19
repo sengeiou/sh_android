@@ -21,6 +21,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
   private final AndroidTimeUtils androidTimeUtils;
   @BindColor(R.color.gray_60) int gray_60;
 
+
   public ClickableStreamActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
       OnStreamTitleClickListener onStreamTitleClickListener) {
@@ -69,6 +70,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
         .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
         .popSpan()
         .build();
   }

@@ -81,7 +81,9 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
         .append("New poll in").append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
-        .append(activity.getStreamTitle()).popSpan()
+        .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
+        .popSpan()
         .build();
   }
 
@@ -101,11 +103,4 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
     /* no-op */
   }
 
-  protected CharSequence formatActivityComment(final ActivityModel activity) {
-    activity.setComment(
-        itemView.getResources().getString(R.string.publish_poll, activity.getPollQuestion()));
-    return pollQuestionSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(),
-        activity.getStreamTitle(), activity.getPollQuestion(), activity.getComment(),
-        onPollQuestionClickListener);
-  }
 }

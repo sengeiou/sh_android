@@ -44,6 +44,7 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
             .pushSpan(streamTitleSpan)
             .pushSpan(new StyleSpan(Typeface.BOLD))
             .append(activity.getStreamTitle())
+            .append(verifiedStream(activity.isVerified()))
             .popSpan()
             .build();
     }
@@ -89,8 +90,4 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
         return sharedShotPrefixPattern;
     }
 
-    @Override
-    protected String getActivityCommentPrefix(ActivityModel activity) {
-        return sharedShotPrefixPattern;
-    }
 }

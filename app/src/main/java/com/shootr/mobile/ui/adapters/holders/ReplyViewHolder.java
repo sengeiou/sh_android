@@ -43,6 +43,7 @@ public class ReplyViewHolder extends ShotActivityViewHolder {
             .pushSpan(new StyleSpan(Typeface.BOLD))
             .pushSpan(streamTitleSpan)
             .append(activity.getStreamTitle())
+            .append(verifiedStream(activity.isVerified()))
             .popSpan()
             .build();
     }
@@ -51,7 +52,4 @@ public class ReplyViewHolder extends ShotActivityViewHolder {
         return repliedWithoutCommentPrefixText;
     }
 
-    @Override protected String getActivityCommentPrefix(ActivityModel activity) {
-        return repliedWithCommentPrefixText;
-    }
 }

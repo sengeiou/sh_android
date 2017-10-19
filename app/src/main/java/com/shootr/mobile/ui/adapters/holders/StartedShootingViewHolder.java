@@ -26,9 +26,4 @@ public class StartedShootingViewHolder extends ShotActivityViewHolder {
         return startedShootingPattern;
     }
 
-    @Override
-    protected String getActivityCommentPrefix(ActivityModel activity) {
-        return startedShootingPatternWithComment;
-    }
-
 }

@@ -85,7 +85,9 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
         .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
-        .append(activity.getStreamTitle()).popSpan()
+        .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
+        .popSpan()
         .build();
   }
 
@@ -93,15 +95,4 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
     /* no-op */
   }
 
-  protected CharSequence formatActivityComment(final ActivityModel activity) {
-    if (activity.getPollOptionText() != null && !activity.getPollOptionText().isEmpty()) {
-      activity.setComment(itemView.getResources()
-          .getString(R.string.voted_public_poll, activity.getPollOptionText()));
-    } else {
-      activity.setComment(itemView.getResources().getString(R.string.voted_poll));
-    }
-    return pollVotedSpannableBuilder.formatWithPollQuestionSpans(activity.getIdPoll(),
-        activity.getStreamTitle(), activity.getPollQuestion(), activity.getComment(),
-        onPollQuestionClickListener);
-  }
 }

@@ -44,18 +44,25 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
   }
 
   protected CharSequence getTitle(ActivityModel activity) {
-    StreamTitleSpan streamTitleSpan = new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(), activity.getIdStreamAuthor()) {
-      @Override public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
-        onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
-      }
-    };
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
-        .append(getActivitySimpleComment(activity)).append(" ")
+    StreamTitleSpan streamTitleSpan =
+        new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
+            activity.getIdStreamAuthor()) {
+          @Override
+          public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
+            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
+          }
+        };
+    return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
+        .append(getActivitySimpleComment(activity))
+        .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
-        .append(activity.getStreamTitle()).popSpan().build();
+        .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
+        .popSpan()
+        .build();
   }
 
   private void enableShotClick(final ActivityModel activity) {
@@ -92,5 +99,4 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
   protected abstract String getActivitySimpleComment(ActivityModel activity);
 
-  protected abstract String getActivityCommentPrefix(ActivityModel activity);
 }

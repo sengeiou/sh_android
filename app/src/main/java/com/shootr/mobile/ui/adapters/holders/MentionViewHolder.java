@@ -16,43 +16,41 @@ import com.shootr.mobile.util.Truss;
 
 public class MentionViewHolder extends ShotActivityViewHolder {
 
-    @BindString(R.string.mentioned_shot_activity_with_comment) String mentionedPrefixText;
+  @BindString(R.string.mentioned_shot_activity_with_comment) String mentionedPrefixText;
 
-    public MentionViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
-        OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener,
-        OnStreamTitleClickListener onStreamTitleClickListener) {
-        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClickListener,
-            onStreamTitleClickListener);
-    }
+  public MentionViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
+      OnAvatarClickListener onAvatarClickListener, OnShotClick onShotClickListener,
+      OnStreamTitleClickListener onStreamTitleClickListener) {
+    super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClickListener,
+        onStreamTitleClickListener);
+  }
 
-    @Override protected CharSequence getTitle(ActivityModel activity) {
+  @Override protected CharSequence getTitle(ActivityModel activity) {
 
-        StreamTitleSpan streamTitleSpan =
-            new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
-                activity.getIdStreamAuthor()) {
-                @Override
-                public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
-                    onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
-                }
-            };
+    StreamTitleSpan streamTitleSpan =
+        new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
+            activity.getIdStreamAuthor()) {
+          @Override
+          public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
+            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
+          }
+        };
 
-        return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
-            .append(activity.getUsername())
-            .popSpan()
-            .append(getActivitySimpleComment(activity))
-            .append(" ")
-            .pushSpan(new StyleSpan(Typeface.BOLD))
-            .pushSpan(streamTitleSpan)
-            .append(activity.getStreamTitle())
-            .popSpan()
-            .build();
-    }
+    return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
+        .append(getActivitySimpleComment(activity))
+        .append(" ")
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .pushSpan(streamTitleSpan)
+        .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
+        .popSpan()
+        .build();
+  }
 
-    @Override protected String getActivitySimpleComment(ActivityModel activity) {
-        return mentionedPrefixText;
-    }
+  @Override protected String getActivitySimpleComment(ActivityModel activity) {
+    return mentionedPrefixText;
+  }
 
-    @Override protected String getActivityCommentPrefix(ActivityModel activity) {
-        return mentionedPrefixText;
-    }
 }

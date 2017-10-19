@@ -85,7 +85,9 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
         .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
-        .append(activity.getStreamTitle()).popSpan()
+        .append(activity.getStreamTitle())
+        .append(verifiedStream(activity.isVerified()))
+        .popSpan()
         .build();
   }
 
@@ -93,11 +95,4 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
     /* no-op */
   }
 
-  protected CharSequence formatActivityComment(final ActivityModel activity) {
-    activity.setComment(
-        itemView.getResources().getString(R.string.shared_poll, activity.getPollQuestion()));
-    return pollQuestionSpannableBuilder.formatPollQuestionSpans(activity.getIdPoll(),
-        activity.getStreamTitle(), activity.getPollQuestion(), activity.getComment(),
-        onPollQuestionClickListener);
-  }
 }
