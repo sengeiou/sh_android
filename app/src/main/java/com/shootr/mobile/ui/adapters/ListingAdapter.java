@@ -103,7 +103,7 @@ public class ListingAdapter
     ((ListingStreamResultViewHolder) holder).setFavorite(isFavorite(section, position));
     StreamResultModel stream = getItem(section, position);
     if (isCurrentUser) {
-      holder.render(stream, favoritedStreams, true, position, false);
+      holder.render(stream, favoritedStreams, true, position, false, section == 0);
     } else {
       holder.render(stream, true, position, false);
     }
