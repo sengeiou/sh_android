@@ -177,7 +177,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     actionBar = getSupportActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
     actionBar.setDisplayShowHomeEnabled(false);
-    actionBar.setHomeAsUpIndicator(R.drawable.ic_navigation_close_white_24);
+    actionBar.setHomeAsUpIndicator(R.drawable.ic_close);
   }
 
   @Override public void renderPoll(PollModel pollModel) {

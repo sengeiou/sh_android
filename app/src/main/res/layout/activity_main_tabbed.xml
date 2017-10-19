@@ -16,11 +16,18 @@
         android:id="@+id/connect_controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_gravity="bottom"
         app:layout_behavior="com.shootr.mobile.ui.widgets.ConnectControllerBehavior"
 
         />
+  <LinearLayout
+      android:background="#cfd8dc"
+      android:layout_width = "match_parent"
+      android:layout_height="1dp"
+      android:layout_gravity="bottom"
+      app:layout_behavior="com.shootr.mobile.ui.widgets.ConnectControllerBehavior"/>
+
   <com.roughike.bottombar.BottomBar
       android:id="@+id/bottomBar"
       android:layout_width="match_parent"

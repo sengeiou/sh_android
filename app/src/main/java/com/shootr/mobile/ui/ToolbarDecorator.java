@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.StringRes;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -83,7 +84,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         subtitleText.setVisibility(View.VISIBLE);
       }
       subtitleText.setText(subtitle);
-      subtitleText.setTextColor(Color.parseColor("#FFDAEDFB"));
+      subtitleText.setTextColor(Color.parseColor("#9e9e9e"));
     }
   }
 
@@ -149,5 +150,13 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     LayoutTransition layoutTransition = titleContainer.getLayoutTransition();
     layoutTransition.setStartDelay(LayoutTransition.CHANGE_DISAPPEARING, 0);
     layoutTransition.setStartDelay(LayoutTransition.APPEARING, 0);
+  }
+
+  public void hideElevation() {
+    ViewCompat.setElevation(toolbar, 0);
+  }
+
+  public void showElevation() {
+    ViewCompat.setElevation(toolbar, 10);
   }
 }

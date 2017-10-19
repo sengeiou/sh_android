@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/primary"
+    android:background="#f5f5f5"
     android:padding="16dp"
     >
 
@@ -13,7 +13,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:fontFamily="sans-serif"
-      android:textColor="@color/white"
+      android:textColor="@color/material_black"
       android:textSize="17sp"
       android:textStyle="normal"
       tools:text="Por qué crees que hay menos participantes en el stream oficial de Arucitys?"

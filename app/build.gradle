@@ -97,6 +97,9 @@ android {
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
+    aaptOptions {
+      additionalParameters "--no-version-vectors"
+    }
   }
 
   compileOptions {
