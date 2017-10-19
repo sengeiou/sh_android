@@ -269,25 +269,25 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
   private PollPublishedViewHolder onCreatePollPublishedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollPublishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollQuestionSpannableBuilder, onPollQuestionClickListener);
+        pollQuestionSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private PollVotedViewHolder onCreatePollVotedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollVotedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollVotedSpannableBuilder, onPollQuestionClickListener);
+        pollVotedSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private PollSharedViewHolder onCreatePollSharedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollSharedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollQuestionSpannableBuilder, onPollQuestionClickListener);
+        pollQuestionSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private RecyclerView.ViewHolder onCreatePollFinishedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollFinishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollQuestionSpannableBuilder, onPollQuestionClickListener);
+        pollQuestionSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {

@@ -1,14 +1,16 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.graphics.Typeface;
-import android.text.style.ForegroundColorSpan;
+import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
+import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
+import com.shootr.mobile.ui.widgets.StreamTitleSpan;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.PollQuestionSpannableBuilder;
@@ -18,23 +20,27 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
 
   private final PollQuestionSpannableBuilder pollQuestionSpannableBuilder;
   private final OnPollQuestionClickListener onPollQuestionClickListener;
+  private final OnStreamTitleClickListener onStreamTitleClickListener;
   private final AndroidTimeUtils androidTimeUtils;
   @BindColor(R.color.gray_60) int gray_60;
 
   public PollPublishedViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
       PollQuestionSpannableBuilder pollQuestionSpannableBuilder,
-      OnPollQuestionClickListener onPollQuestionClickListener) {
+      OnPollQuestionClickListener onPollQuestionClickListener,
+      OnStreamTitleClickListener onStreamTitleClickListener) {
     super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
     this.pollQuestionSpannableBuilder = pollQuestionSpannableBuilder;
     this.onPollQuestionClickListener = onPollQuestionClickListener;
     this.androidTimeUtils = androidTimeUtils;
+    this.onStreamTitleClickListener = onStreamTitleClickListener;
   }
 
   @Override protected void renderText(ActivityModel activity) {
     try {
       title.setText(getFormattedUserName(activity));
       title.setVisibility(View.VISIBLE);
+      title.setMovementMethod(new LinkMovementMethod());
       renderEmbedPollQuestion(activity);
     } catch (Exception e) {
       /* no-op */
@@ -57,9 +63,18 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
   }
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
+    StreamTitleSpan streamTitleSpan =
+        new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
+            activity.getIdStreamAuthor()) {
+          @Override
+          public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
+            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
+          }
+        };
     return new Truss()
         .append("New poll in").append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
+        .pushSpan(streamTitleSpan)
         .append(activity.getStreamTitle()).popSpan()
         .build();
   }
