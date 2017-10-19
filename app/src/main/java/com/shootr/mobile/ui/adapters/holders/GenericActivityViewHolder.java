@@ -67,6 +67,11 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
       title.setText(getFormattedUserName(activity));
       if (activity.getType().equals(ActivityType.PROFILE_UPDATED)) {
         infoContainer.setVisibility(View.GONE);
+        itemView.setOnClickListener(new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
+          }
+        });
       }
     }
   }

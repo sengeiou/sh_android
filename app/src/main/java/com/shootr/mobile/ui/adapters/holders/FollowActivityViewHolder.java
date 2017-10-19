@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
+import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
@@ -44,6 +46,8 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
       if (currentUserId != null) {
         title.setText(getFormattedUserName(activity));
         title.setVisibility(View.VISIBLE);
+        title.setLinkTextColor(Color.parseColor("#478ceb"));
+        title.setMovementMethod(new LinkMovementMethod());
         text.setVisibility(View.GONE);
       }
     } catch (Exception e) {

@@ -22,7 +22,10 @@
         android:fontFamily="sans-serif"
         android:textStyle="bold"
         android:textColor="@color/material_black"
-        android:padding="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp"
         tools:text="Carla"
         />
 
@@ -32,7 +35,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textColor="@color/material_black"
-        android:padding="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="4dp"
         tools:text="Yo mando aquí!!! Asi que hareis lo que yo diga!"
         />
 
@@ -41,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="165dp"
         android:scaleType="centerCrop"
+        android:layout_marginTop="4dp"
         tools:background="@color/com_facebook_likeboxcountview_border_color"
         />
 
