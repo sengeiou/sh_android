@@ -40,9 +40,10 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
 
   @Override
   public void render(StreamResultModel streamResultModel, List<StreamResultModel> favoritedStreams,
-      boolean hasToShowIsFavorite, Integer position, boolean hasToShowRankNumber) {
+      boolean hasToShowIsFavorite, Integer position, boolean hasToShowRankNumber,
+      boolean hasToShowFollowers) {
     super.render(streamResultModel, favoritedStreams, hasToShowIsFavorite, position,
-        hasToShowRankNumber);
+        hasToShowRankNumber, hasToShowFollowers);
     setupFavoriteIndicator(streamResultModel);
   }
 
