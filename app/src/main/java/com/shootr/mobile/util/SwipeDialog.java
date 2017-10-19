@@ -72,8 +72,9 @@ public class SwipeDialog extends SwipeAwayDialogFragment {
 
   private void setupPicturePollOption(PollOptionModel pollOptionModel, View dialogView) {
     ImageView pollOptionImage = (ImageView) dialogView.findViewById(R.id.poll_option_image);
-    if (imageLoader != null) {
-      imageLoader.load(pollOptionModel.getImageUrl(), pollOptionImage);
+    if (imageLoader != null && pollOptionModel.getOptionImage() != null) {
+      imageLoader.load(pollOptionModel.getOptionImage().getSizes().getHigh().getUrl(),
+          pollOptionImage);
     }
   }
 }

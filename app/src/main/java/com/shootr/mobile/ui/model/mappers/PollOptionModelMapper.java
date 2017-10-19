@@ -8,7 +8,10 @@ import javax.inject.Inject;
 
 public class PollOptionModelMapper {
 
-  @Inject public PollOptionModelMapper() {
+  private final ImageMediaModelMapper imageMediaModelMapper;
+
+  @Inject public PollOptionModelMapper(ImageMediaModelMapper imageMediaModelMapper) {
+    this.imageMediaModelMapper = imageMediaModelMapper;
   }
 
   public PollOptionModel transform(PollOption pollOption) {
@@ -20,8 +23,8 @@ public class PollOptionModelMapper {
     pollOptionModel.setIdPoll(pollOption.getIdPoll());
     pollOptionModel.setIdPollOption(pollOption.getIdPollOption());
     pollOptionModel.setText(pollOption.getTitle());
-    pollOptionModel.setImageUrl(pollOption.getImageUrl());
     pollOptionModel.setVotes(pollOption.getVotes());
+    pollOptionModel.setOptionImage(imageMediaModelMapper.transform(pollOption.getOptionImage()));
 
     return pollOptionModel;
   }

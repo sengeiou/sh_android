@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.mappers.ImageMediaModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
 import com.shootr.mobile.ui.views.PollVoteView;
@@ -71,7 +72,8 @@ public class PollVotePresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     when(sessionRepository.getCurrentUserId()).thenReturn(HOLDER_USER_ID);
-    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
+    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper(
+        new ImageMediaModelMapper()));
     presenter = new PollVotePresenter(getPollByIdStreamInteractor, getPollByIdPollInteractor,
         ignorePollInteractor, votePollOptionInteractor,
         showPollResultsInteractor, getStreamInteractor, sessionRepository, pollModelMapper, errorMessageFactory,

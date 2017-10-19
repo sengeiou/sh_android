@@ -429,13 +429,13 @@ public class DatabaseContract {
 
     public static final String ID_POLL = "idPoll";
     public static final String ID_POLL_OPTION = "idPollOption";
-    public static final String IMAGE_URL = "imageUrl";
+    public static final String OPTION_IMAGE = "optionImage";
     public static final String TEXT = "text";
     public static final String VOTES = "votes";
     public static final String ORDER = "'order'";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_POLL_OPTION, IMAGE_URL, TEXT, VOTES, ORDER
+        ID_POLL, ID_POLL_OPTION, OPTION_IMAGE, TEXT, VOTES, ORDER
     };
   }
 
