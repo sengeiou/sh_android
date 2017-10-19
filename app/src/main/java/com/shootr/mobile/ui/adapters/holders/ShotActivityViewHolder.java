@@ -76,6 +76,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
       text.setBaseMessageModel(shotModel);
       text.setText(shotModel.getComment());
       text.addLinks();
+      text.setVisibility(View.VISIBLE);
     }
   }
 

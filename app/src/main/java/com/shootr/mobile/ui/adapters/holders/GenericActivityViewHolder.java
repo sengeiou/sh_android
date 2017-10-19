@@ -8,11 +8,14 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.activity.Activity;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
@@ -37,6 +40,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.embed_user) TextView embedUsername;
   @BindView(R.id.embed_shot_image) ImageView embedShotImage;
   @BindView(R.id.embed_card) CardView embedCard;
+  @BindView(R.id.info_container) LinearLayout infoContainer;
   //@BindView(R.id.stream_name) TextView streamName;
   //@BindView(R.id.stream_verified) ImageView verified;
 
@@ -59,7 +63,12 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   }
 
   protected void renderTitle(final ActivityModel activity) {
-
+    if (activity.getComment() != null) {
+      title.setText(getFormattedUserName(activity));
+      if (activity.getType().equals(ActivityType.PROFILE_UPDATED)) {
+        infoContainer.setVisibility(View.GONE);
+      }
+    }
   }
 
   protected void rendetTargetAvatar(ActivityModel activity) {
@@ -77,9 +86,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   }
 
   protected void renderText(ActivityModel activity) {
-    if (activity.getComment() != null) {
-      text.setText(getFormattedUserName(activity));
-    }
+    /* no-op */
   }
 
   protected void renderVerified(ActivityModel activity) {
@@ -96,10 +103,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         .popSpan()
         .append(" ")
         .append(activity.getComment().toLowerCase())
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
         .build();
   }
 
