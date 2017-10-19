@@ -58,10 +58,11 @@ public class NiceShotViewHolder extends ShotActivityViewHolder {
         }
     }
 
-    private void renderEmbedComment(ShotModel shot) {
-        if (!shot.getComment().isEmpty()) {
-            embedShotComment.setText(shot.getComment());
-            embedShotComment.setVisibility(View.VISIBLE);
+    private void renderEmbedComment(ShotModel shotModel) {
+        if (shotModel.getComment() != null) {
+            embedShotComment.setBaseMessageModel(shotModel);
+            embedShotComment.setText(shotModel.getComment());
+            embedShotComment.addLinks();
         } else {
             embedShotComment.setVisibility(View.GONE);
         }

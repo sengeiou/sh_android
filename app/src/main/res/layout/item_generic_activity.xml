@@ -33,7 +33,7 @@
         tools:text="Anna started following pepe16"
         />
 
-    <com.shootr.mobile.ui.widgets.ClickableTextView
+    <com.shootr.mobile.ui.widgets.BaseMessageTextView
         android:id="@+id/activity_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

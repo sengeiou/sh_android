@@ -9,6 +9,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.model.ActivityModel;
+import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
@@ -59,7 +60,12 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
   }
 
   @Override protected void renderText(ActivityModel activity) {
-    text.setText(activity.getShot().getComment());
+    ShotModel shotModel = activity.getShot();
+    if (shotModel.getComment() != null) {
+      text.setBaseMessageModel(shotModel);
+      text.setText(shotModel.getComment());
+      text.addLinks();
+    }
   }
 
   @Override protected void renderImage(ActivityModel activity) {

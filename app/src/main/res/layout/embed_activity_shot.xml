@@ -26,7 +26,7 @@
         tools:text="Carla"
         />
 
-    <TextView
+    <com.shootr.mobile.ui.widgets.BaseMessageTextView
         android:id="@+id/embed_shot_comment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

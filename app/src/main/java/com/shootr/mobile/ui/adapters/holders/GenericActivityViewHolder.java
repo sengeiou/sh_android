@@ -16,7 +16,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
-import com.shootr.mobile.ui.widgets.ClickableTextView;
+import com.shootr.mobile.ui.widgets.BaseMessageTextView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
@@ -30,10 +30,10 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.activity_avatar) AvatarView avatar;
   @BindView(R.id.activity_target_avatar) AvatarView targetAvatar;
-  @BindView(R.id.activity_text) ClickableTextView text;
+  @BindView(R.id.activity_text) BaseMessageTextView text;
   @BindView(R.id.activity_title) TextView title;
   @BindView(R.id.shot_image) ImageView image;
-  @BindView(R.id.embed_shot_comment) TextView embedShotComment;
+  @BindView(R.id.embed_shot_comment) BaseMessageTextView embedShotComment;
   @BindView(R.id.embed_user) TextView embedUsername;
   @BindView(R.id.embed_shot_image) ImageView embedShotImage;
   @BindView(R.id.embed_card) CardView embedCard;
