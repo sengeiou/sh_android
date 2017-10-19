@@ -2,19 +2,22 @@ package com.shootr.mobile.ui.adapters.holders;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.ForegroundColorSpan;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
@@ -41,8 +44,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.embed_shot_image) ImageView embedShotImage;
   @BindView(R.id.embed_card) CardView embedCard;
   @BindView(R.id.info_container) LinearLayout infoContainer;
-  //@BindView(R.id.stream_name) TextView streamName;
-  //@BindView(R.id.stream_verified) ImageView verified;
+  @BindDrawable(R.drawable.ic_action_verified_user) Drawable d;
 
   public GenericActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener) {
@@ -59,7 +61,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     renderAvatar(activity);
     rendetTargetAvatar(activity);
     renderImage(activity);
-    renderVerified(activity);
   }
 
   protected void renderTitle(final ActivityModel activity) {
@@ -78,7 +79,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
   protected void rendetTargetAvatar(final ActivityModel activity) {
     if (activity.getTargetName() != null) {
-      imageLoader.loadProfilePhoto(activity.getTargetUserPhoto(), targetAvatar, activity.getTargetName());
+      imageLoader.loadProfilePhoto(activity.getTargetUserPhoto(), targetAvatar,
+          activity.getTargetName());
       targetAvatar.setVisibility(View.VISIBLE);
       targetAvatar.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
@@ -94,14 +96,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     /* no-op */
   }
 
-  protected void renderVerified(ActivityModel activity) {
-    if (activity.isVerified()) {
-      //verified.setVisibility(View.VISIBLE);
-    } else {
-      //verified.setVisibility(View.GONE);
-    }
-  }
-
   protected CharSequence getFormattedUserName(ActivityModel activity) {
     return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername())
@@ -109,6 +103,18 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         .append(" ")
         .append(activity.getComment().toLowerCase())
         .build();
+  }
+
+  protected SpannableString verifiedStream(boolean isVerified) {
+    if (isVerified) {
+      SpannableString ss = new SpannableString("  ");
+      d.setBounds(0, 0, 40, 40);
+      ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
+      ss.setSpan(span, 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+      return ss;
+    } else {
+      return new SpannableString("");
+    }
   }
 
   protected void renderAvatar(final ActivityModel activity) {
@@ -127,5 +133,4 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   protected Context getContext() {
     return itemView.getContext();
   }
-
 }
