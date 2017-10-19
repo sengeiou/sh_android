@@ -71,13 +71,13 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  protected void rendetTargetAvatar(ActivityModel activity) {
-    if (activity.getIdTargetUser() != null || activity.getStreamTitle() != null) {
-      imageLoader.loadProfilePhoto(activity.getUserPhoto(), targetAvatar, activity.getUsername());
+  protected void rendetTargetAvatar(final ActivityModel activity) {
+    if (activity.getTargetName() != null) {
+      imageLoader.loadProfilePhoto(activity.getTargetUserPhoto(), targetAvatar, activity.getTargetName());
       targetAvatar.setVisibility(View.VISIBLE);
       targetAvatar.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-
+          onAvatarClickListener.onAvatarClick(activity.getIdTargetUser(), targetAvatar);
         }
       });
     } else {

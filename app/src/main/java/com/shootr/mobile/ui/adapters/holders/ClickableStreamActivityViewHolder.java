@@ -35,6 +35,22 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
     text.setVisibility(View.GONE);
   }
 
+  @Override protected void rendetTargetAvatar(final ActivityModel activity) {
+    if (activity.getStreamTitle() != null) {
+      imageLoader.loadProfilePhoto(activity.getStreamPhoto(), targetAvatar,
+          activity.getStreamTitle());
+      targetAvatar.setVisibility(View.VISIBLE);
+      targetAvatar.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View v) {
+          onStreamTitleClickListener.onStreamTitleClick(activity.getIdStream(),
+              activity.getStreamTitle(), activity.getIdStreamAuthor());
+        }
+      });
+    } else {
+      targetAvatar.setVisibility(View.GONE);
+    }
+  }
+
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
     StreamTitleSpan streamTitleSpan =
         new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
