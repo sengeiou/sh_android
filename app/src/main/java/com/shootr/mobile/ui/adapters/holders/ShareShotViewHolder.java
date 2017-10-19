@@ -63,6 +63,7 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
             embedShotComment.setBaseMessageModel(shotModel);
             embedShotComment.setText(shotModel.getComment());
             embedShotComment.addLinks();
+            embedShotComment.setVisibility(View.VISIBLE);
         } else {
             embedShotComment.setVisibility(View.GONE);
         }

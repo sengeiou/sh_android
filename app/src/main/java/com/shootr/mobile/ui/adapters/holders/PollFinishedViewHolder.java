@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.graphics.Typeface;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
@@ -32,19 +31,51 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
   }
 
   @Override protected void renderText(ActivityModel activity) {
-    text.setText(getFormattedUserName(activity));
+    try {
+      title.setText(getFormattedUserName(activity));
+      title.setVisibility(View.VISIBLE);
+      renderEmbedPollQuestion(activity);
+    } catch (Exception e) {
+      /* no-op */
+    }
+  }
+
+  private void renderEmbedPollQuestion(ActivityModel activity) {
+    text.setVisibility(View.GONE);
+    embedCard.setVisibility(View.VISIBLE);
+    embedShotComment.setVisibility(View.GONE);
+    embedShotImage.setVisibility(View.GONE);
+    embedUsername.setText(getFormattedPoll(activity));
+  }
+
+  private CharSequence getFormattedPoll(ActivityModel activity) {
+    return new Truss()
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getPollQuestion()).popSpan()
+        .build();
   }
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
     return new Truss()
         .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
-        .append(formatActivityComment(activity))
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
+        .append(activity.getStreamTitle()).popSpan()
+        .append(": ")
+        .append("poll has finished")
         .build();
+  }
+
+  @Override protected void renderAvatar(ActivityModel activity) {
+    //TODO poner foto de stream
+    imageLoader.loadProfilePhoto(activity.getUserPhoto(), avatar, activity.getStreamTitle());
+    avatar.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        //TODO onAvatarClickListener.onAvatarClick(activity.getIdUser(), avatar);
+      }
+    });
+  }
+
+  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+    /* no-op */
   }
 
   protected CharSequence formatActivityComment(final ActivityModel activity) {
