@@ -98,7 +98,11 @@ public class MessagesTimelineAdapter extends RecyclerView.Adapter<MessageViewHol
     }
     if (newMessages.size() > 0) {
       messages.addAll(position, newMessages);
-      notifyItemRangeInserted(position, size);
+      try {
+        notifyItemRangeInserted(position, size);
+      } catch (Exception e) {
+        notifyDataSetChanged();
+      }
     }
   }
 
