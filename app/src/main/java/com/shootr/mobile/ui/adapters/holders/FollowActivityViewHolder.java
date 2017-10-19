@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.graphics.Typeface;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
@@ -63,6 +62,7 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
   protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {
     if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
       activity.setComment(itemView.getContext().getString(R.string.activity_started_following_you));
+      infoContainer.setVisibility(View.GONE);
     } else {
       activity.setComment(
           activity.getComment().substring(0, 1).toLowerCase() + activity.getComment().substring(1));
