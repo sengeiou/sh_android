@@ -104,6 +104,40 @@ public class PushNotification {
         public void setOptionalLongText(String optionalLongText) {
             this.optionalLongText = optionalLongText;
         }
+
+        @Override public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            NotificationValues that = (NotificationValues) o;
+
+            if (getTitle() != null ? !getTitle().equals(that.getTitle())
+                : that.getTitle() != null) {
+                return false;
+            }
+            if (getContentText() != null ? !getContentText().equals(that.getContentText())
+                : that.getContentText() != null) {
+                return false;
+            }
+            if (getIcon() != null ? !getIcon().equals(that.getIcon()) : that.getIcon() != null)
+                return false;
+            if (getTickerText() != null ? !getTickerText().equals(that.getTickerText())
+                : that.getTickerText() != null) {
+                return false;
+            }
+            return getOptionalLongText() != null ? getOptionalLongText().equals(
+                that.getOptionalLongText()) : that.getOptionalLongText() == null;
+        }
+
+        @Override public int hashCode() {
+            int result = getTitle() != null ? getTitle().hashCode() : 0;
+            result = 31 * result + (getContentText() != null ? getContentText().hashCode() : 0);
+            result = 31 * result + (getIcon() != null ? getIcon().hashCode() : 0);
+            result = 31 * result + (getTickerText() != null ? getTickerText().hashCode() : 0);
+            result = 31 * result + (getOptionalLongText() != null ? getOptionalLongText().hashCode()
+                : 0);
+            return result;
+        }
     }
 
     /**
@@ -132,6 +166,7 @@ public class PushNotification {
         private String idPoll;
         private String idTargetUser;
         private String comment;
+        private String image;
 
         public int getPushType() {
             return pushType;
@@ -263,6 +298,14 @@ public class PushNotification {
 
         public void setComment(String comment) {
             this.comment = comment;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
         }
     }
 }

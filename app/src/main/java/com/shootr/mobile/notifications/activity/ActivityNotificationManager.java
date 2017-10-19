@@ -2,11 +2,11 @@ package com.shootr.mobile.notifications.activity;
 
 import android.app.Application;
 import android.content.Context;
-import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.PushNotification;
+import com.shootr.mobile.notifications.shot.ShotNotification;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
@@ -24,33 +24,33 @@ import javax.inject.Singleton;
   private final NotificationBuilderFactory notificationBuilderFactory;
   private final ImageLoader imageLoader;
   private final List<SingleActivityNotification> activeNotifications = new ArrayList<>();
-  private final ExternalShotRepository remoteShotRepository;
   private final ShotModelMapper shotModelMapper;
 
   @Inject public ActivityNotificationManager(Application context,
       AndroidNotificationManager androidNotificationManager,
       NotificationBuilderFactory notificationBuilderFactory, ImageLoader imageLoader,
-      ExternalShotRepository remoteShotRepository, ShotModelMapper shotModelMapper) {
+      ShotModelMapper shotModelMapper) {
     this.context = context;
     this.androidNotificationManager = androidNotificationManager;
     this.notificationBuilderFactory = notificationBuilderFactory;
     this.imageLoader = imageLoader;
-    this.remoteShotRepository = remoteShotRepository;
     this.shotModelMapper = shotModelMapper;
   }
 
   private void showNotification(SingleActivityNotification singleActivityNotification) {
-    activeNotifications.add(singleActivityNotification);
-    CommonNotification finalNotification;
-    if (activeNotifications.size() > 1) {
-      finalNotification =
-          new MultipleActivityNotification(context, imageLoader, notificationBuilderFactory,
-              activeNotifications);
-    } else {
-      finalNotification = singleActivityNotification;
+    if (!activeNotifications.contains(singleActivityNotification)) {
+      activeNotifications.add(singleActivityNotification);
+      CommonNotification finalNotification;
+      if (activeNotifications.size() > 1) {
+        finalNotification =
+            new MultipleActivityNotification(context, imageLoader, notificationBuilderFactory,
+                activeNotifications);
+      } else {
+        finalNotification = singleActivityNotification;
+      }
+      androidNotificationManager.notify(finalNotification, NOTIFICATION_TAG,
+          ACTIVITY_NOTIFICATION_ID);
     }
-    androidNotificationManager.notify(finalNotification, NOTIFICATION_TAG,
-        ACTIVITY_NOTIFICATION_ID);
   }
 
   public void sendGenericActivityNotification(PushNotification.NotificationValues values) {
@@ -83,12 +83,12 @@ import javax.inject.Singleton;
     showNotification(notification);
   }
 
-  public void sendOpenShotDetailNotification(
-      final PushNotification.NotificationValues notificationValues, String idShot,
+  public void sendOpenShotDetailNotification(final PushNotification.NotificationValues values,
+      final ShotNotification shotNotification, String idShot,
       Boolean updateNeeded) {
     ShotActivityNotification notification =
-        new ShotActivityNotification(context, notificationBuilderFactory, imageLoader,
-            notificationValues, idShot, remoteShotRepository, shotModelMapper, updateNeeded);
+        new ShotActivityNotification(context, notificationBuilderFactory, imageLoader, values,
+            idShot, updateNeeded, shotNotification);
     showNotification(notification);
   }
 
