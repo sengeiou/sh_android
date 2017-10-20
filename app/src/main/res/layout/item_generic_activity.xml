@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="16dp"
+    android:paddingRight="16dp"
+    android:paddingLeft="16dp"
+    android:paddingBottom="8dp"
+    >
+  <LinearLayout
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      >
+
+  <com.shootr.mobile.ui.widgets.AvatarView
+      android:id="@+id/activity_avatar"
+      android:layout_width="44dp"
+      android:layout_height="44dp"
+      tools:background="@color/favorite_tab"
+      />
+  </LinearLayout>
+
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:visibility="visible"
+      android:gravity="center"
+      >
+
+    <TextView
+        android:id="@+id/activity_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_gravity="center_vertical"
+        android:textColorLink="@color/material_black"
+        android:textColor="@color/material_black"
+        tools:text="Anna started following pepe16"
+        />
+
+    <LinearLayout
+        android:id="@+id/info_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="visible"
+        >
+    <com.shootr.mobile.ui.widgets.BaseMessageTextView
+        android:id="@+id/activity_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:textColor="@color/material_black"
+        android:visibility="visible"
+        tools:text="Este es mi primer shoot en más de 20 horas! Además, tiene que ser largo o mostrar una imagen."
+        tools:visibility="visible"
+        />
+
+    <com.shootr.mobile.ui.widgets.AvatarView
+        android:id="@+id/activity_target_avatar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        tools:background="@color/refresh_1"
+        tools:visibility="visible"
+        />
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/shot_image"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:riv_corner_radius="8dp"
+        tools:background="@color/accent"
+        tools:visibility="visible"
+        />
+
+    <include
+        layout="@layout/embed_activity_shot"
+        />
+    </LinearLayout>
+
+  </LinearLayout>
+
+</LinearLayout>

@@ -56,4 +56,23 @@ public class SingleActivityNotification extends AbstractActivityNotification {
     public PushNotification.NotificationValues getNotificationValues() {
         return values;
     }
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SingleActivityNotification that = (SingleActivityNotification) o;
+
+        if (imageLoader != null ? !imageLoader.equals(that.imageLoader)
+            : that.imageLoader != null) {
+            return false;
+        }
+        return values != null ? values.equals(that.values) : that.values == null;
+    }
+
+    @Override public int hashCode() {
+        int result = imageLoader != null ? imageLoader.hashCode() : 0;
+        result = 31 * result + (values != null ? values.hashCode() : 0);
+        return result;
+    }
 }

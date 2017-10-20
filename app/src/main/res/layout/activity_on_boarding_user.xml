@@ -48,7 +48,7 @@
         android:textAllCaps="true"
         android:padding="16dp"
         android:fontFamily="sans-serif-medium"
-        android:textColor="@color/primary"
+        android:textColor="@color/primary_selector"
         />
   </LinearLayout>
 </RelativeLayout>

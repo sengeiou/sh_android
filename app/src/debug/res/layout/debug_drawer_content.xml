@@ -166,21 +166,24 @@
         android:layout_height="wrap_content"
         android:layout_columnSpan="2"
         android:layout_gravity="start|fill_horizontal"
-        android:text="Reset Showcase" />
+        android:text="Reset Showcase"
+        android:textColor="@color/black"/>
 
     <Button android:id="@+id/debug_fake_version"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_columnSpan="2"
       android:layout_gravity="start|fill_horizontal"
-      android:text="Version outdated" />
+      android:text="Version outdated"
+      android:textColor="@color/black" />
 
     <Button android:id="@+id/debug_fake_server_down"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_columnSpan="2"
       android:layout_gravity="start|fill_horizontal"
-      android:text="Server down" />
+      android:text="Server down"
+      android:textColor="@color/black"/>
 
     <Button android:id="@+id/debug_fake_unauthorized"
       android:layout_width="0dp"

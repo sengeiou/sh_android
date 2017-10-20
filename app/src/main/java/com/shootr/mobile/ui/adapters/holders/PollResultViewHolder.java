@@ -71,10 +71,10 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupImage(final PollOptionModel model) {
-    if (model.getImageUrl() != null) {
+    if (model.getOptionImage() != null) {
       pictureWithText.setVisibility(View.GONE);
       picture.setVisibility(View.VISIBLE);
-      imageLoader.loadStreamPicture(model.getImageUrl(), picture);
+      imageLoader.loadStreamPicture(model.getOptionImage().getSizes().getLow().getUrl(), picture);
       picture.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
           onPollOptionClickListener.onClickPressed(model);

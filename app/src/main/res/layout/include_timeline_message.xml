@@ -16,7 +16,7 @@
       android:gravity="center_vertical"
       android:paddingLeft="24dp"
       android:singleLine="true"
-      android:textColor="@color/white"
+      android:textColor="@color/material_black"
       android:textSize="15sp"
       android:visibility="gone"
       tools:text="Hola que haces?"

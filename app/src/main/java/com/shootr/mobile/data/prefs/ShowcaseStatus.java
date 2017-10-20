@@ -4,6 +4,7 @@ public class ShowcaseStatus {
 
   private boolean shouldShowShowcase;
   private int timesViewed;
+  public final int NUM_TIMES_VISIBLE = 1;
 
   ShowcaseStatus(boolean shouldShowShowcase) {
     this.shouldShowShowcase = shouldShowShowcase;
@@ -24,7 +25,7 @@ public class ShowcaseStatus {
 
   public void setTimesViewed(int timesViewed) {
     this.timesViewed = timesViewed;
-    if (this.timesViewed >= 3) {
+    if (this.timesViewed >= NUM_TIMES_VISIBLE) {
       this.shouldShowShowcase = false;
     }
   }

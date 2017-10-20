@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/embed_card"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:visibility="gone"
+    android:background="@drawable/embed_activity_shot"
+    tools:visibility="visible"
+    >
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      >
+    <TextView
+        android:id="@+id/embed_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textColor="@color/material_black"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        tools:text="Carla"
+        />
+
+    <com.shootr.mobile.ui.widgets.BaseMessageTextView
+        android:id="@+id/embed_shot_comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/material_black"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingBottom="8dp"
+        tools:text="Yo mando aquí!!! Asi que hareis lo que yo diga!"
+        />
+
+    <ImageView
+        android:id="@+id/embed_shot_image"
+        android:layout_width="match_parent"
+        android:layout_height="165dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="4dp"
+        android:visibility="visible"
+        tools:background="@color/com_facebook_likeboxcountview_border_color"
+        />
+
+  </LinearLayout>
+
+</LinearLayout>

@@ -20,6 +20,11 @@ public class Activity {
   private String idPoll;
   private String pollQuestion;
   private String pollOptionText;
+  private String name;
+  private String targetName;
+  private String streamPhoto;
+  private String targetUserPhoto;
+  private String targetUsername;
 
   private ActivityUserInfo userInfo;
 
@@ -55,6 +60,46 @@ public class Activity {
 
   public void setStreamInfo(ActivityStreamInfo streamInfo) {
     this.streamInfo = streamInfo;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getTargetName() {
+    return targetName;
+  }
+
+  public void setTargetName(String targetName) {
+    this.targetName = targetName;
+  }
+
+  public String getStreamPhoto() {
+    return streamPhoto;
+  }
+
+  public void setStreamPhoto(String streamPhoto) {
+    this.streamPhoto = streamPhoto;
+  }
+
+  public String getTargetUserPhoto() {
+    return targetUserPhoto;
+  }
+
+  public void setTargetUserPhoto(String targetUserPhoto) {
+    this.targetUserPhoto = targetUserPhoto;
+  }
+
+  public String getTargetUsername() {
+    return targetUsername;
+  }
+
+  public void setTargetUsername(String targetUsername) {
+    this.targetUsername = targetUsername;
   }
 
   public String getIdActivity() {

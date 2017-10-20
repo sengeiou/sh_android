@@ -36,12 +36,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 44
+def versionMinor = 45
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 59
+def databaseVersion = 60
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -97,6 +97,9 @@ android {
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     vectorDrawables.useSupportLibrary = true
+    aaptOptions {
+      additionalParameters "--no-version-vectors"
+    }
   }
 
   compileOptions {

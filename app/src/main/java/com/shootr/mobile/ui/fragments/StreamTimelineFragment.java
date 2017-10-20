@@ -175,7 +175,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindView(R.id.poll_action) TextView pollAction;
   @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
-  @BindView(R.id.check_in_showcase) BubbleLayout checkInShowcase;
+  @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -280,23 +280,23 @@ public class StreamTimelineFragment extends BaseFragment
     return fragmentView;
   }
 
-  @Override public void setupCheckInShowcase() {
-    ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
-    if (checkInShowcaseStatus.shouldShowShowcase()) {
-      if (checkInShowcase != null) {
-        checkInShowcase.setVisibility(View.VISIBLE);
-        checkInShowcase.setOnClickListener(new View.OnClickListener() {
+  @Override public void setupFilterShowcase() {
+    ShowcaseStatus filterShowcaseStatus = checkInShowcasePreferences.get();
+    if (filterShowcaseStatus.shouldShowShowcase()) {
+      if (filterShowcase != null) {
+        filterShowcase.setVisibility(View.VISIBLE);
+        filterShowcase.setOnClickListener(new View.OnClickListener() {
           @Override public void onClick(View view) {
-            checkInShowcase.setVisibility(View.GONE);
+            filterShowcase.setVisibility(View.GONE);
             setShowcasePreference();
           }
         });
-        checkInShowcaseStatus.setTimesViewed(checkInShowcaseStatus.getTimesViewed() + 1);
-        checkInShowcasePreferences.set(checkInShowcaseStatus);
+        filterShowcaseStatus.setTimesViewed(filterShowcaseStatus.getTimesViewed() + 1);
+        checkInShowcasePreferences.set(filterShowcaseStatus);
       }
     } else {
-      if (checkInShowcase != null) {
-        checkInShowcase.setVisibility(View.GONE);
+      if (filterShowcase != null) {
+        filterShowcase.setVisibility(View.GONE);
       }
     }
   }
@@ -377,6 +377,8 @@ public class StreamTimelineFragment extends BaseFragment
       case R.id.menu_showing_holding_shots:
         streamTimelinePresenter.onHoldingShotsClick();
         sendFilterOnAnalytics();
+        filterShowcase.setVisibility(View.GONE);
+        setShowcasePreference();
         isFilterActivated = true;
         return true;
       case R.id.menu_showing_all_shots:
@@ -428,18 +430,6 @@ public class StreamTimelineFragment extends BaseFragment
         : sessionRepository.getCurrentUser().getWatchingStreamTitle());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
-  }
-
-  private void sendTimelineScrollAnalytics() {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
-    builder.setActionId(analyticsTimelineScrollAction);
-    builder.setLabelId(analyticsLabelTimelineScrollAction);
-    builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdStream(idStream);
-    builder.setStreamName((streamTitle != null) ? streamTitle
-        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
-    analyticsTool.analyticsSendAction(builder);
   }
 
   private void sendFilterOnAnalytics() {
@@ -1356,14 +1346,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void pickImage() {
-    setShowcasePreference();
     newShotBarContainer.pickImage();
   }
 
   private void setShowcasePreference() {
     if (checkInShowcasePreferences.get().shouldShowShowcase()) {
       ShowcaseStatus checkInShowcaseStatus = checkInShowcasePreferences.get();
-      checkInShowcase.setVisibility(View.GONE);
+      filterShowcase.setVisibility(View.GONE);
       checkInShowcaseStatus.setShouldShowShowcase(false);
       checkInShowcasePreferences.set(checkInShowcaseStatus);
     }

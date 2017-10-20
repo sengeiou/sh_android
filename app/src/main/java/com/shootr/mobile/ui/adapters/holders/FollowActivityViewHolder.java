@@ -1,7 +1,8 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.text.style.ForegroundColorSpan;
+import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
@@ -43,8 +44,11 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
   @Override protected void renderText(ActivityModel activity) {
     try {
       if (currentUserId != null) {
-        text.setText(getFormattedUserName(activity));
-        renderFollowButton(activity, currentUserId);
+        title.setText(getFormattedUserName(activity));
+        title.setVisibility(View.VISIBLE);
+        title.setLinkTextColor(Color.parseColor("#478ceb"));
+        title.setMovementMethod(new LinkMovementMethod());
+        text.setVisibility(View.GONE);
       }
     } catch (Exception e) {
       /* no-op */
@@ -56,42 +60,13 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
         .pushSpan(new StyleSpan(Typeface.BOLD)) //
         .append(activity.getUsername()).popSpan()//
         .append(" ").append(formatActivityComment(activity, currentUserId)) //
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
         .build();
-  }
-
-  protected void renderFollowButton(final ActivityModel activity, String currentUserId) {
-    image.setVisibility(View.GONE);
-    if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
-      followButton.setFollowing(activity.amIFollowing());
-      followButton.setVisibility(View.VISIBLE);
-      setupFollowListener(activity);
-    } else {
-      followButton.setVisibility(View.GONE);
-    }
-  }
-
-  private void setupFollowListener(final ActivityModel activity) {
-    followButton.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        if (followButton.isFollowing()) {
-          onFollowUnfollowListener.onUnfollow(activity.getIdUser(), activity.getUsername());
-          followButton.setFollowing(false);
-        } else {
-          onFollowUnfollowListener.onFollow(activity.getIdUser(), activity.getUsername(),
-              activity.isStrategic());
-          followButton.setFollowing(true);
-        }
-      }
-    });
   }
 
   protected CharSequence formatActivityComment(final ActivityModel activity, String currentUserId) {
     if (activity.getIdTargetUser() != null && activity.getIdTargetUser().equals(currentUserId)) {
       activity.setComment(itemView.getContext().getString(R.string.activity_started_following_you));
+      infoContainer.setVisibility(View.GONE);
     } else {
       activity.setComment(
           activity.getComment().substring(0, 1).toLowerCase() + activity.getComment().substring(1));

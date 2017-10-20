@@ -150,7 +150,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void setupCheckInShowcase() {
+    @Override public void setupFilterShowcase() {
         /* no-op */
     }
 

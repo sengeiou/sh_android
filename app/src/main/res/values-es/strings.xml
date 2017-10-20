@@ -5,7 +5,7 @@
   <string name="activity_edit_profile_bio_hint">Bio</string>
   <string name="activity_edit_profile_email_hint">Email</string>
   <string name="activity_edit_profile_name_hint">Nombre</string>
-  <string name="activity_edit_profile_username_hint">Nombre de usuario</string>
+  <string name="activity_edit_profile_username_hint">"@Usuario (nombre único)"</string>
   <string name="activity_edit_profile_website_hint">Página web</string>
   <string name="activity_edit_stream_title">Editar stream</string>
   <string name="activity_find_contributors_hint">Buscar</string>
@@ -32,7 +32,7 @@
   <string name="activity_registration_legal_disclaimer_privacy_policy">Política de privacidad</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condiciones de uso</string>
   <string name="activity_registration_password_hint">Contraseña</string>
-  <string name="activity_registration_username_hint">Nombre de usuario</string>
+  <string name="activity_registration_username_hint">Usuario (nombre único)</string>
   <string name="activity_started_following_you">te sigue</string>
   <string name="activity_timeline_empty_title">No hay actividad</string>
   <string name="added_contributor">Añadido</string>
@@ -63,6 +63,7 @@
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
   <string name="check_in_show_case">Haz check-in para decir que estás aquí</string>
+  <string name="filter_show_case">Pulsa aquí para ver los shots importantes</string>
   <!-- Errors -->
   <string name="communication_error">Hay un problema de conexión a Internet. Comprueba tu conexión y prueba otra vez.</string>
   <string name="connection_lost">Se ha perdido la conexión</string>
@@ -218,7 +219,7 @@
   <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Cargando…</string>
   <string name="main_activity_title">Actividad</string>
-  <string name="mentioned_shot_activity_with_comment">" te ha mencionado: "</string>
+  <string name="mentioned_shot_activity_with_comment">" te ha mencionado en"</string>
   <string name="menu_all_shots">Mostrar todos los shots</string>
   <string name="menu_check_in">Check-in</string>
   <string name="menu_copy_text">Copiar texto</string>
@@ -265,7 +266,7 @@
   <string name="next">Siguiente</string>
   <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">" ha hecho nice a %s"</string>
-  <string name="niced_shot_activity_with_comment">" ha hecho nice: "</string>
+  <string name="niced_shot_activity_with_comment">" ha hecho nice a un shot en"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -370,7 +371,7 @@
   <string name="remove_stream_confirmation">¿Borrar stream?</string>
   <string name="remove_stream_label">Borrar stream</string>
   <string name="remove_stream_listing_context_menu">Borrar</string>
-  <string name="replied_activity" formatted="false">" ha respondido"</string>
+  <string name="replied_activity" formatted="false">" te ha respondido en"</string>
   <string name="replied_activity_with_comment" formatted="false">" ha respondido: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d respuesta</item>
@@ -409,14 +410,14 @@
   </plurals>
   <string name="shared_poll">ha compartido la encuesta %s</string>
   <string name="shared_shot_activity">" reshot de %s"</string>
-  <string name="shared_shot_activity_with_comment">" reshot: "</string>
+  <string name="shared_shot_activity_with_comment">" ha hecho un reshot en"</string>
   <string name="shared_stream_notification">Stream compartido</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Encuesta %s</string>
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%s</string>
   <string name="share_shot_subject">Shot de %1$s en %2$s · Shootr</string>
-  <string name="share_stream_activity_text_pattern">" ha compartido este stream"</string>
+  <string name="share_stream_activity_text_pattern">" ha compartido"</string>
   <string name="share_stream_button">Compartir ahora</string>
   <string name="share_stream_description">Seguro que conoces mucha gente a quien le gustará tu stream. Compártelo ahora en tus redes sociales o web, trae a gente y empieza a disfrutar.</string>
   <string name="share_stream_message">Echa un vistazo a %1$s en Shootr: https://web.shootr.com/st/%2$s</string>
@@ -435,7 +436,7 @@
   <string name="shot_timeline_empty_title">No hay shots</string>
   <string name="showing_shots_by_holder">Shots del administrador.</string>
   <string name="sign_out_message">Cerrando sesión…</string>
-  <string name="started_shooting_activity_text_pattern">" ha escrito"</string>
+  <string name="started_shooting_activity_text_pattern">" ha escrito un shot en"</string>
   <string name="started_shooting_activity_text_pattern_with_comment">" ha escrito: "</string>
   <string name="started_shooting_push_settings">Aviso de nuevo shot</string>
   <string name="stream_checked">Hecho</string>
@@ -456,7 +457,7 @@
     <item quantity="zero">%s participantes</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">" sigue este stream"</string>
+  <string name="stream_favorited_activity_text_pattern">" sigue"</string>
   <string name="stream_followers">Seguidores</string>
   <string name="stream_list_empty">No hay resultados</string>
   <string name="stream_media_empty_title">No hay fotos ni vídeos</string>
@@ -543,4 +544,9 @@
   <string name="share_poll_voted_subject">He votado \"%1$s\" en %2$s</string>
   <string name="share_poll_voted_comment">Has votado \"%s\"</string>
   <string name="share_voted_poll">Compartir</string>
+  <string name="admin">"Admin. "</string>
+  <string name="voted_in_a_poll">ha votado en una encuesta en</string>
+  <string name="poll_finished">Encuesta finalizada en</string>
+  <string name="poll_published">Nueva encuesta en</string>
+  <string name="poll_shared">ha compartido una encuesta en</string>
 </resources>

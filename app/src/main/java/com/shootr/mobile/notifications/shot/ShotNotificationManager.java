@@ -5,14 +5,12 @@ import android.content.Context;
 import com.shootr.mobile.notifications.AndroidNotificationManager;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
-import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.util.ImageLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 @Singleton
 public class ShotNotificationManager {
@@ -21,7 +19,7 @@ public class ShotNotificationManager {
     private static final String NOTIFICATION_TAG = "shot";
 
     private final Context context;
-    private final List<ShotModel> shotsCurrentlyNotified = new ArrayList<>();
+    private final HashMap<String, ShotNotification> shotsCurrentlyNotified = new HashMap<>();
     private final AndroidNotificationManager androidNotificationManager;
     private final NotificationBuilderFactory notificationBuilderFactory;
     private final ImageLoader imageLoader;
@@ -34,13 +32,12 @@ public class ShotNotificationManager {
         this.imageLoader = imageLoader;
     }
 
-    public void sendNewShotNotification(ShotModel shot, Boolean areShotTypesKnown) {
-        checkNotNull(shot);
-        shotsCurrentlyNotified.add(shot);
+    public void sendNewShotNotification(ShotNotification shot, Boolean areShotTypesKnown) {
+        shotsCurrentlyNotified.put(shot.getIdShot(), shot);
 
         CommonNotification notification;
         if (shotsCurrentlyNotified.size() > 1) {
-            notification = buildMultipleShotNotification(shotsCurrentlyNotified);
+            notification = buildMultipleShotNotification(new ArrayList<>(shotsCurrentlyNotified.values()));
         } else {
             notification = buildSingleShotNotification(shot, areShotTypesKnown);
         }
@@ -48,12 +45,12 @@ public class ShotNotificationManager {
     }
 
 
-    protected SingleShotNotification buildSingleShotNotification(ShotModel shot,
+    protected SingleShotNotification buildSingleShotNotification(ShotNotification shot,
         Boolean areShotTypesKnown) {
         return new SingleShotNotification(context, notificationBuilderFactory, imageLoader, shot, areShotTypesKnown);
     }
 
-    protected MultipleShotNotification buildMultipleShotNotification(List<ShotModel> shots) {
+    protected MultipleShotNotification buildMultipleShotNotification(List<ShotNotification> shots) {
         return new MultipleShotNotification(context, notificationBuilderFactory, shots);
     }
 

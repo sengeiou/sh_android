@@ -25,10 +25,15 @@ public class ActivityApiEntityMapper {
         activityEntity.setIdUser(userApiEntity.getIdUser());
         activityEntity.setUserPhoto(userApiEntity.getPhoto());
         activityEntity.setStrategic(userApiEntity.isStrategic());
+        activityEntity.setName(userApiEntity.getName());
+
 
         EmbedUserApiEntity targetUser = activityApiEntity.getTargetUser();
         if (targetUser != null) {
             activityEntity.setIdTargetUser(targetUser.getIdUser());
+            activityEntity.setTargetName(targetUser.getName());
+            activityEntity.setTargetUsername(targetUser.getUserName());
+            activityEntity.setTargetUserPhoto(targetUser.getPhoto());
         }
 
         activityEntity.setIdStream(activityApiEntity.getIdStream());
@@ -45,6 +50,7 @@ public class ActivityApiEntityMapper {
         if (activityApiEntity.getStream() != null) {
             activityEntity.setIdStreamAuthor(activityApiEntity.getStream().getIdUser());
             activityEntity.setVerified(activityApiEntity.getStream().getVerifiedUser() == 1L);
+            activityEntity.setStreamPhoto(activityApiEntity.getStream().getPhoto());
         }
 
         if (activityApiEntity.getPollVote() != null) {

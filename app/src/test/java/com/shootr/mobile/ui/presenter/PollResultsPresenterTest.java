@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.poll.SharePollInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
+import com.shootr.mobile.ui.model.mappers.ImageMediaModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
 import com.shootr.mobile.ui.model.mappers.PollOptionModelMapper;
 import com.shootr.mobile.ui.views.PollResultsView;
@@ -47,7 +48,8 @@ public class PollResultsPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper());
+    PollModelMapper pollModelMapper = new PollModelMapper(new PollOptionModelMapper(
+        new ImageMediaModelMapper()));
     presenter = new PollResultsPresenter(getPollByIdPollInteractor, pollModelMapper,
         ignorePollInteractor, sharePollInteractor, errorMessageFactory, poller);
   }

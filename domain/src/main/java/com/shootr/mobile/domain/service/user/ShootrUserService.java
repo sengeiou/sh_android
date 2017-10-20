@@ -90,7 +90,6 @@ public class ShootrUserService {
       remoteStreamRepository.getStreamById(visibleEventId, StreamMode.TYPES_STREAM);
     }
     storeFavoritesStreams(loginResult);
-    remoteUserRepository.getPeople();
   }
 
   private void storeFavoritesStreams(LoginResult loginResult) {

@@ -52,6 +52,8 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
   private SearchFragment[] fragments = new SearchFragment[3];
   private SearchFragment currentFragment;
 
+  private ToolbarDecorator toolbarDecorator;
+
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
   }
@@ -144,7 +146,10 @@ public class SearchActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-    /* no-op */
+    this.toolbarDecorator = toolbarDecorator;
+    this.toolbarDecorator.hideElevation();
+    this.toolbarDecorator.getActionBar().setDisplayShowHomeEnabled(true);
+    this.toolbarDecorator.getActionBar().setDisplayHomeAsUpEnabled(true);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

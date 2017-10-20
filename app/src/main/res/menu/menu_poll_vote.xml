@@ -17,7 +17,7 @@
   <item
       android:id="@+id/menu_public_poll"
       android:title="@string/public_vote"
-      android:icon="@drawable/ic_lock_open"
+      android:icon="@drawable/ic_public_vote"
       tools:visible="false"
       app:showAsAction="always"/>
 
@@ -25,6 +25,6 @@
       android:id="@+id/menu_private_poll"
       android:title="@string/private_vote"
       tools:visible="false"
-      android:icon="@drawable/ic_lock_outline"
+      android:icon="@drawable/ic_private_vote"
       app:showAsAction="always"/>
 </menu>

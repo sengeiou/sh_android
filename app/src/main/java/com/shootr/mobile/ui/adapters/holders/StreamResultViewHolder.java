@@ -102,13 +102,15 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   }
 
   public void render(StreamResultModel streamResultModel, List<StreamResultModel> favoritedStreams,
-      boolean hasToShowIsFavorite, Integer position, boolean hasToShowRankNumber) {
+      boolean hasToShowIsFavorite, Integer position, boolean hasToShowRankNumber,
+      boolean hasToShowFollowers) {
     this.setClickListener(streamResultModel);
     this.setupFavoriteClickListener(streamResultModel);
     title.setText(streamResultModel.getStreamModel().getTitle());
     setMutedVisibility(streamResultModel);
     renderSubtitle(streamResultModel.getStreamModel());
-    if (showsFavoritesText && !favoritedStreams.contains(streamResultModel)) {
+    if ((showsFavoritesText && !favoritedStreams.contains(streamResultModel))
+        || hasToShowFollowers) {
       renderHolderSubtitle(streamResultModel);
     }
     handleShowRankNumber(position, hasToShowRankNumber);

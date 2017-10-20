@@ -15,16 +15,16 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
 
     private static final int REQUEST_DELETE = 1;
     private static final int REQUEST_OPEN = 2;
-    private final ShotModel shotModel;
+    private final ShotNotification shotNotification;
     protected String imageOnlyText;
     protected String imageAndTextPattern;
 
     protected AbstractSingleShotNotification(Context context, NotificationBuilderFactory builderFactory,
-      ShotModel shotModel) {
+      ShotNotification shotModel) {
         super(context, builderFactory);
         imageOnlyText = context.getResources().getString(R.string.notification_image);
         imageAndTextPattern = context.getResources().getString(R.string.notification_image_and_text);
-        this.shotModel = shotModel;
+        this.shotNotification = shotModel;
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder,
@@ -39,7 +39,7 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
-        intent.putExtra(ShotDetailActivity.EXTRA_SHOT, shotModel);
+        intent.putExtra(ShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 

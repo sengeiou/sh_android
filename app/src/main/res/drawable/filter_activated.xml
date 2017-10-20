@@ -6,7 +6,7 @@
       <size
           android:height="24dp"
           android:width="24dp"/>
-      <solid android:color="@color/white" />
+      <solid android:color="@color/links" />
     </shape>
   </item>
   <item android:drawable="@drawable/ic_filter_list_black_18dp" android:width="17dp" android:height="17dp"

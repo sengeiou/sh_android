@@ -115,12 +115,14 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
           case R.id.bottombar_streams:
             StreamsListFragment streamsListFragment = StreamsListFragment.newInstance();
             currentFragment = streamsListFragment;
+            toolbarDecorator.showElevation();
             switchTab(streamsListFragment);
             break;
           case R.id.bottombar_messages:
             Fragment favoritesFragment = ChannelsContainerFragment.newInstance();
             currentFragment = favoritesFragment;
             switchTab(favoritesFragment);
+            toolbarDecorator.hideElevation();
             channelTab.removeBadge();
             break;
           case R.id.bottombar_activity:
@@ -128,6 +130,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
                 ActivityTimelineContainerFragment.newInstance();
             currentFragment = activityTimelineFragment;
             switchTab(activityTimelineFragment);
+            toolbarDecorator.hideElevation();
             activitiesTab.removeBadge();
             break;
           default:

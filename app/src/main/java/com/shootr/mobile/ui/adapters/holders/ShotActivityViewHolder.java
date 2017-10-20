@@ -1,22 +1,26 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.graphics.Typeface;
-import android.text.style.ForegroundColorSpan;
+import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
+import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
+import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.widgets.StreamTitleSpan;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
 
 public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
-  private final ImageLoader imageLoader;
+  protected final ImageLoader imageLoader;
   private final OnShotClick onShotClickListener;
+  protected final OnStreamTitleClickListener onStreamTitleClickListener;
   private final AndroidTimeUtils androidTimeUtils;
 
   @BindColor(R.color.material_black) int shotCommentColor;
@@ -24,16 +28,40 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
 
   public ShotActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
-      OnShotClick onShotClickListener) {
+      OnShotClick onShotClickListener, OnStreamTitleClickListener onStreamTitleClickListener) {
     super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
     this.imageLoader = imageLoader;
     this.onShotClickListener = onShotClickListener;
     this.androidTimeUtils = androidTimeUtils;
+    this.onStreamTitleClickListener = onStreamTitleClickListener;
   }
 
   @Override public void render(ActivityModel activity) {
     super.render(activity);
     enableShotClick(activity);
+    title.setText(getTitle(activity));
+    title.setMovementMethod(new LinkMovementMethod());
+  }
+
+  protected CharSequence getTitle(ActivityModel activity) {
+    StreamTitleSpan streamTitleSpan =
+        new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
+            activity.getIdStreamAuthor()) {
+          @Override
+          public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
+            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
+          }
+        };
+    return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
+        .append(getActivitySimpleComment(activity))
+        .append(" ")
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .pushSpan(streamTitleSpan)
+        .append(verifiedStream(activity.getStreamTitle(), activity.isVerified()))
+        .popSpan()
+        .build();
   }
 
   private void enableShotClick(final ActivityModel activity) {
@@ -44,17 +72,17 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     });
   }
 
-  @Override protected void renderText(ActivityModel activity) {
-    CharSequence activityText = getActivityText(activity);
-    text.setText(activityText);
+  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+    targetAvatar.setVisibility(View.GONE);
   }
 
-  private CharSequence getActivityText(ActivityModel activity) {
-    boolean hasCommentInShot = activity.getShot().getComment() != null;
-    if (hasCommentInShot) {
-      return buildActivityCommentWithShot(activity);
-    } else {
-      return buildActivitySimpleComment(activity);
+  @Override protected void renderText(ActivityModel activity) {
+    ShotModel shotModel = activity.getShot();
+    if (shotModel.getComment() != null) {
+      text.setBaseMessageModel(shotModel);
+      text.setText(shotModel.getComment());
+      text.addLinks();
+      text.setVisibility(View.VISIBLE);
     }
   }
 
@@ -68,36 +96,6 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     }
   }
 
-  private CharSequence buildActivityCommentWithShot(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
-        .append(getActivityCommentPrefix(activity))
-        .pushSpan(new ForegroundColorSpan(shotCommentColor))
-        .append(activity.getShot().getComment())
-        .popSpan()
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
-        .build();
-  }
-
-  private CharSequence buildActivitySimpleComment(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
-        .pushSpan(new ForegroundColorSpan(shotCommentColor))
-        .append(getActivitySimpleComment(activity))
-        .popSpan()
-        .pushSpan(new ForegroundColorSpan(gray_60))
-        .append(" ")
-        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
-        .popSpan()
-        .build();
-  }
-
   protected abstract String getActivitySimpleComment(ActivityModel activity);
 
-  protected abstract String getActivityCommentPrefix(ActivityModel activity);
 }

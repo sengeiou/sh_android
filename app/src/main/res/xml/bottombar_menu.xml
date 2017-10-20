@@ -3,21 +3,28 @@
 
   <tab
      id="@+id/bottombar_streams"
-     icon="@drawable/ic_bottombar_streams"
+     icon="@drawable/ic_streams_selected"
      title="@string/drawer_streams_title"
+     activeColor="@color/material_black"
+      inActiveColor="@color/inactive_tabs"
      barColorWhenSelected="@color/primary"/>
 
   <tab
       id="@+id/bottombar_activity"
-      icon="@drawable/ic_bottombar_activity"
+      icon="@drawable/ic_activity_selected"
       title="@string/drawer_activity_title"
+      activeColor="@color/material_black"
+      inActiveColor="@color/inactive_tabs"
       barColorWhenSelected="@color/primary"
-      badgeBackgroundColor="#00000000"/>
+      badgeBackgroundColor="@color/favorite"/>
 
   <tab
       id="@+id/bottombar_messages"
-      icon="@drawable/ic_stat_mail"
+      icon="@drawable/ic_messages_selected"
       title="@string/messages"
+      activeColor="@color/material_black"
+      inActiveColor="@color/inactive_tabs"
       barColorWhenSelected="@color/primary"
+      badgeBackgroundColor="@color/favorite"
       />
 </tabs>

@@ -6,20 +6,19 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.model.activity.ActivityType;
-import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
-import com.shootr.mobile.domain.repository.shot.ExternalShotRepository;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.message.MessageNotificationManager;
+import com.shootr.mobile.notifications.shot.ShotNotification;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
-import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.util.JsonAdapter;
 import java.io.IOException;
@@ -42,7 +41,6 @@ public class GCMIntentService extends IntentService {
 
   @Inject ActivityNotificationManager activityNotificationManager;
   @Inject MessageNotificationManager messageNotificationManager;
-  @Inject ExternalShotRepository remoteShotRepository;
   @Inject ShotModelMapper shotModelMapper;
   @Inject JsonAdapter jsonAdapter;
   @Inject @ActivityBadgeCount IntPreference badgeCount;
@@ -126,24 +124,24 @@ public class GCMIntentService extends IntentService {
   }
 
   private void receivedShot(PushNotification pushNotification) throws JSONException, IOException {
-    String idShot = pushNotification.getParameters().getIdShot();
     boolean areShotTypesKnown = areShotPushTypesKnown(pushNotification);
-    if (areShotTypesKnown) {
-      Shot shot =
-          remoteShotRepository.getShot(idShot, StreamMode.TYPES_STREAM, ShotType.TYPES_SHOWN);
-      setupShotNotification(shot, areShotTypesKnown);
-    } else {
-      String streamType = pushNotification.getParameters().getStreamReadWriteMode();
-      String shotType = pushNotification.getParameters().getShotType();
-      Shot shot =
-          remoteShotRepository.getShot(idShot, new String[] { streamType }, new String[] { shotType });
-      setupShotNotification(shot, areShotTypesKnown);
-    }
+    ShotNotification shot = buildShotFromParameters(pushNotification);
+    setupShotNotification(shot, areShotTypesKnown);
   }
 
-  private void setupShotNotification(Shot shot, boolean areShotTypesKnown) {
-    ShotModel shotModel = shotModelMapper.transform(shot);
-    shotNotificationManager.sendNewShotNotification(shotModel, areShotTypesKnown);
+  @NonNull private ShotNotification buildShotFromParameters(PushNotification pushNotification) {
+    ShotNotification shot = new ShotNotification();
+    shot.setIdShot(pushNotification.getParameters().getIdShot());
+    shot.setAvatarImage(pushNotification.getNotificationValues().getIcon());
+    shot.setUsername(pushNotification.getNotificationValues().getTitle());
+    shot.setTitle(pushNotification.getNotificationValues().getTitle());
+    shot.setContentText(pushNotification.getNotificationValues().getContentText());
+    shot.setImage(pushNotification.getParameters().getImage());
+    return shot;
+  }
+
+  private void setupShotNotification(ShotNotification shot, boolean areShotTypesKnown) {
+    shotNotificationManager.sendNewShotNotification(shot, areShotTypesKnown);
   }
 
   private boolean areShotPushTypesKnown(PushNotification pushNotification) {
@@ -223,7 +221,7 @@ public class GCMIntentService extends IntentService {
     String idShot = push.getParameters().getIdShot();
     boolean shouldUpdate = !areShotPushTypesKnown(push);
     activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(),
-        checkNotNull(idShot), shouldUpdate);
+        buildShotFromParameters(push), checkNotNull(idShot), shouldUpdate);
   }
 
   private void receivedUnknown(PushNotification pushNotification) {

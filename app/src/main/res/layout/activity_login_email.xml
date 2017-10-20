@@ -80,7 +80,7 @@
           android:background="?selectableItemBackground"
           android:gravity="center_vertical"
           android:text="@string/activity_login_email_forgot"
-          android:textColor="@color/primary" />
+          android:textColor="@color/primary_selector" />
 
         <!--<ProgressBar
             android:id="@+id/email_login_progress"
