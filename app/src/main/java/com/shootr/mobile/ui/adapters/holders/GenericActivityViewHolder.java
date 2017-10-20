@@ -3,7 +3,6 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -42,7 +41,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.embed_shot_comment) BaseMessageTextView embedShotComment;
   @BindView(R.id.embed_user) TextView embedUsername;
   @BindView(R.id.embed_shot_image) ImageView embedShotImage;
-  @BindView(R.id.embed_card) CardView embedCard;
+  @BindView(R.id.embed_card) LinearLayout embedCard;
   @BindView(R.id.info_container) LinearLayout infoContainer;
   @BindDrawable(R.drawable.ic_action_verified_user_list) Drawable d;
 
@@ -132,5 +131,10 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
   protected Context getContext() {
     return itemView.getContext();
+  }
+
+  protected int getDps(int sizeInDp) {
+    float scale = itemView.getContext().getResources().getDisplayMetrics().density;
+    return (int) (sizeInDp*scale + 0.5f);
   }
 }

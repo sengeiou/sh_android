@@ -59,6 +59,7 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
             activity.getStreamTitle());
       }
     });
+    embedUsername.setPadding(getDps(8), getDps(8), getDps(8), getDps(8));
   }
 
   private CharSequence getFormattedPoll(ActivityModel activity) {

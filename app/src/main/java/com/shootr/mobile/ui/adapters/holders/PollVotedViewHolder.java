@@ -52,13 +52,20 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
     embedCard.setVisibility(View.VISIBLE);
     embedShotImage.setVisibility(View.GONE);
     embedUsername.setText(getFormattedPoll(activity));
-    embedShotComment.setText("Respuesta: " + activity.getPollOptionText());
     embedCard.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
         onPollQuestionClickListener.onPollQuestionClick(activity.getIdPoll(),
             activity.getStreamTitle());
       }
     });
+
+    if (activity.getPollOptionText() != null) {
+      embedShotComment.setText("Respuesta: " + activity.getPollOptionText());
+      embedShotComment.setVisibility(View.VISIBLE);
+    } else {
+      embedUsername.setPadding(getDps(8), getDps(8), getDps(8), getDps(8));
+      embedShotComment.setVisibility(View.GONE);
+    }
   }
 
   private CharSequence getFormattedPoll(ActivityModel activity) {

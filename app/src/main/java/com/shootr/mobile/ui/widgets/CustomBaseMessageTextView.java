@@ -145,7 +145,8 @@ public class CustomBaseMessageTextView extends View  {
   }
 
   private float dp(float dp) {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    float scale = getResources().getDisplayMetrics().density;
+    return (int) (dp*scale + 0.5f);
   }
 
   public void setOnUrlClickListener(OnUrlClickListener onUrlClickListener) {

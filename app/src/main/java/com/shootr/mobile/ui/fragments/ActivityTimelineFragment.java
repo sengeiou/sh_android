@@ -129,7 +129,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   private void setupListAdapter() {
     layoutManager = new LinearLayoutManager(getActivity());
     activityList.setLayoutManager(layoutManager);
-    activityList.addItemDecoration(new DividerItemDecoration(getContext(), 65,
+    activityList.addItemDecoration(new DividerItemDecoration(getContext(), 68,
         getResources().getDrawable(R.drawable.line_divider), false, false));
 
     adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //

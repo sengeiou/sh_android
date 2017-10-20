@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/embed_card"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    android:elevation="4dp"
     android:visibility="gone"
+    android:background="@drawable/embed_activity_shot"
     tools:visibility="visible"
     >
   <LinearLayout
@@ -25,7 +25,6 @@
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
         android:paddingTop="8dp"
-        android:paddingBottom="4dp"
         tools:text="Carla"
         />
 
@@ -37,7 +36,7 @@
         android:textColor="@color/material_black"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
-        android:paddingBottom="4dp"
+        android:paddingBottom="8dp"
         tools:text="Yo mando aquí!!! Asi que hareis lo que yo diga!"
         />
 
@@ -47,9 +46,10 @@
         android:layout_height="165dp"
         android:scaleType="centerCrop"
         android:layout_marginTop="4dp"
+        android:visibility="visible"
         tools:background="@color/com_facebook_likeboxcountview_border_color"
         />
 
   </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</LinearLayout>
