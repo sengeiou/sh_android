@@ -432,18 +432,6 @@ public class StreamTimelineFragment extends BaseFragment
     analyticsTool.appsFlyerSendAction(builder);
   }
 
-  private void sendTimelineScrollAnalytics() {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
-    builder.setActionId(analyticsTimelineScrollAction);
-    builder.setLabelId(analyticsLabelTimelineScrollAction);
-    builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdStream(idStream);
-    builder.setStreamName((streamTitle != null) ? streamTitle
-        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
-    analyticsTool.analyticsSendAction(builder);
-  }
-
   private void sendFilterOnAnalytics() {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
