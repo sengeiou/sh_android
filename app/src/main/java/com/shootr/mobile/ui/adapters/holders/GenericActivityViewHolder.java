@@ -104,15 +104,15 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         .build();
   }
 
-  protected SpannableString verifiedStream(boolean isVerified) {
+  protected SpannableString verifiedStream(String streamTitle, boolean isVerified) {
     if (isVerified) {
-      SpannableString ss = new SpannableString("  ");
+      SpannableString ss = new SpannableString(streamTitle + "  ");
       d.setBounds(0, 2, d.getIntrinsicWidth(), d.getIntrinsicHeight());
       ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-      ss.setSpan(span, 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+      ss.setSpan(span, streamTitle.length() + 1, streamTitle.length() + 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
       return ss;
     } else {
-      return new SpannableString("");
+      return new SpannableString(streamTitle);
     }
   }
 

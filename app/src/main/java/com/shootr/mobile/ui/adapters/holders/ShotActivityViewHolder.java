@@ -59,8 +59,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
         .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
-        .append(activity.getStreamTitle())
-        .append(verifiedStream(activity.isVerified()))
+        .append(verifiedStream(activity.getStreamTitle(), activity.isVerified()))
         .popSpan()
         .build();
   }
