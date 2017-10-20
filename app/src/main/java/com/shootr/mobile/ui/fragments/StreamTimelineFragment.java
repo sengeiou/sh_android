@@ -120,7 +120,8 @@ import timber.log.Timber;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
-    ReportShotView, StreamPollView, HighlightedShotsView, ShotsTimelineAdapter.ShotsInsertedListener {
+    ReportShotView, StreamPollView, HighlightedShotsView,
+    ShotsTimelineAdapter.ShotsInsertedListener {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -673,7 +674,7 @@ public class StreamTimelineFragment extends BaseFragment
         sendCheckinAnalythics();
       }
     }, numberFormatUtil, this, getContext(),
-     highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
+        highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
     shotsTimeline.setAdapter(adapter);
   }
 
@@ -977,6 +978,9 @@ public class StreamTimelineFragment extends BaseFragment
 
   //region View methods
   @Override public void setShots(List<ShotModel> shots) {
+    if (shots.size() > 0) {
+      hideEmpty();
+    }
     adapter.setShots(shots);
     adapter.notifyDataSetChanged();
   }
@@ -1195,6 +1199,9 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void addShots(List<ShotModel> shotModels) {
+    if (shotModels.size() > 0) {
+      hideEmpty();
+    }
     adapter.notifyItemRangeChanged(preCachingLayoutManager.findFirstVisibleItemPosition(),
         preCachingLayoutManager.findLastVisibleItemPosition());
     streamTimelinePresenter.setIsFirstShotPosition(true);
@@ -2031,8 +2038,7 @@ public class StreamTimelineFragment extends BaseFragment
     analyticsTool.analyticsStart(getContext(), analyticsScreenStreamTimeline);
   }
 
-  @Override
-  public void onShotsInserted(int number) {
+  @Override public void onShotsInserted(int number) {
     streamTimelinePresenter.onShotInserted(number);
   }
   //endregion
