@@ -13,6 +13,23 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.45.0] - 2017-10-20
+### Added
+- New showcase for filter timeline
+- Media on polls (enhancement on images)
+
+### Fixed
+- Time loading filtered timeline
+- Tag #votes and time remaing equal on poll results and poll vote
+- Subtitle on owned streams and favorite
+- Double request on loadTimeline
+
+### Changed
+- Activity redesigned
+- Removed Check-in showcase
+- Shootr goes white
+
+
 ## [1.44.0] - 2017-10-13
 ### Fixed
 - Expand nice area
