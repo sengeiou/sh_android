@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.45.1] - 2017-10-20
+### Fixed
+- Empty label is not showing if exist any shot
+
 ## [1.45.0] - 2017-10-20
 ### Added
 - New showcase for filter timeline
