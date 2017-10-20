@@ -43,8 +43,7 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
             .append(" ")
             .pushSpan(streamTitleSpan)
             .pushSpan(new StyleSpan(Typeface.BOLD))
-            .append(activity.getStreamTitle())
-            .append(verifiedStream(activity.isVerified()))
+            .append(verifiedStream(activity.getStreamTitle(), activity.isVerified()))
             .popSpan()
             .build();
     }
