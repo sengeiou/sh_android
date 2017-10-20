@@ -16,10 +16,12 @@ import com.shootr.mobile.util.Truss;
 
 public class ImportantStartedShootingViewHolder extends ShotActivityViewHolder {
 
-  @BindString(R.string.important_started_shooting_activity_notext_pattern) String
+  @BindString(R.string.started_shooting_activity_text_pattern) String
       startedShootingPattern;
   @BindString(R.string.important_started_shooting_activity_text_pattern) String
       startedShootingPatternWithComment;
+  @BindString(R.string.admin) String
+      adminResource;
 
   public ImportantStartedShootingViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
@@ -39,7 +41,7 @@ public class ImportantStartedShootingViewHolder extends ShotActivityViewHolder {
           }
         };
     return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
-        .append("Admin. ")
+        .append(adminResource)
         .popSpan()
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername())

@@ -5,6 +5,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
+import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
@@ -23,6 +24,7 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
   private final OnStreamTitleClickListener onStreamTitleClickListener;
   private final AndroidTimeUtils androidTimeUtils;
   @BindColor(R.color.gray_60) int gray_60;
+  @BindString(R.string.poll_published) String pollPublished;
 
   public PollPublishedViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
@@ -79,7 +81,7 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
           }
         };
     return new Truss()
-        .append("New poll in").append(" ")
+        .append(pollPublished).append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
         .append(activity.getStreamTitle())

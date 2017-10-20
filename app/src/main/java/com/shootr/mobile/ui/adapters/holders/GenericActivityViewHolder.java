@@ -135,6 +135,6 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
   protected int getDps(int sizeInDp) {
     float scale = itemView.getContext().getResources().getDisplayMetrics().density;
-    return (int) (sizeInDp*scale + 0.5f);
+    return (int) (sizeInDp * scale + 0.5f);
   }
 }

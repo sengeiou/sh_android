@@ -5,6 +5,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
+import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
@@ -23,6 +24,7 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
   private final OnStreamTitleClickListener onStreamTitleClickListener;
   private final AndroidTimeUtils androidTimeUtils;
   @BindColor(R.color.gray_60) int gray_60;
+  @BindString(R.string.voted_in_a_poll) String votedResource;
 
   public PollVotedViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
       OnAvatarClickListener onAvatarClickListener,
@@ -60,7 +62,7 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
     });
 
     if (activity.getPollOptionText() != null) {
-      embedShotComment.setText("Respuesta: " + activity.getPollOptionText());
+      embedShotComment.setText(activity.getPollOptionText());
       embedShotComment.setVisibility(View.VISIBLE);
     } else {
       embedUsername.setPadding(getDps(8), getDps(8), getDps(8), getDps(8));
@@ -88,7 +90,7 @@ public class PollVotedViewHolder extends GenericActivityViewHolder {
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .append(activity.getUsername()).popSpan()
         .append(" ")
-        .append("voted in a poll in")
+        .append(votedResource)
         .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)

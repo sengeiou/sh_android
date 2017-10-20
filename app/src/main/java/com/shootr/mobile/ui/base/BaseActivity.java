@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
@@ -35,6 +36,10 @@ public abstract class BaseActivity extends ActionBarActivity {
     private Unauthorized.Receiver unauthorizedReceiver;
     private ObjectGraph activityGraph;
     private View activityView;
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

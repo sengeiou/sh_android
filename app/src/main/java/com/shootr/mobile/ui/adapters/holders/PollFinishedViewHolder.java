@@ -5,6 +5,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
+import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
@@ -23,6 +24,7 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
   private final OnStreamTitleClickListener onStreamTitleClickListener;
   private final AndroidTimeUtils androidTimeUtils;
   @BindColor(R.color.gray_60) int gray_60;
+  @BindString(R.string.poll_finished) String pollFinished;
 
   public PollFinishedViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
@@ -78,7 +80,7 @@ public class PollFinishedViewHolder extends GenericActivityViewHolder {
             onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
           }
         };
-    return new Truss().append("Poll has finished in")
+    return new Truss().append(pollFinished)
         .append(" ")
         .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
