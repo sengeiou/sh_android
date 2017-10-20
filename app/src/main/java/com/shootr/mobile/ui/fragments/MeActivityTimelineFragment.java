@@ -36,6 +36,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.GenericActivityTimelinePresenter;
 import com.shootr.mobile.ui.views.MeActivityTimelineView;
 import com.shootr.mobile.ui.views.nullview.NullMeActivityTimelineView;
+import com.shootr.mobile.ui.widgets.DividerItemDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -141,6 +142,8 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
   private void setupListAdapter() {
     layoutManager = new LinearLayoutManager(getActivity());
     activityList.setLayoutManager(layoutManager);
+    activityList.addItemDecoration(new DividerItemDecoration(getContext(), 68,
+        getResources().getDrawable(R.drawable.line_divider), false, false));
 
     adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
         new OnAvatarClickListener() {

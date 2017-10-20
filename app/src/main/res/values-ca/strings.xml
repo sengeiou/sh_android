@@ -219,7 +219,7 @@
   <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Carregant…</string>
   <string name="main_activity_title">Activitat</string>
-  <string name="mentioned_shot_activity_with_comment">" t\'ha mencionat: "</string>
+  <string name="mentioned_shot_activity_with_comment">" t\'ha mencionat a"</string>
   <string name="menu_all_shots">Mostrar tots els shots</string>
   <string name="menu_check_in">Check-in</string>
   <string name="menu_copy_text">Copiar text</string>
@@ -266,7 +266,7 @@
   <string name="next">Següent</string>
   <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">" ha fet nice a %s"</string>
-  <string name="niced_shot_activity_with_comment">" ha fet nice: "</string>
+  <string name="niced_shot_activity_with_comment">" ha fet nice a un shot a"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -371,7 +371,7 @@
   <string name="remove_stream_confirmation">Esborrar l\'stream?</string>
   <string name="remove_stream_label">Esborrar stream</string>
   <string name="remove_stream_listing_context_menu">Esborrar</string>
-  <string name="replied_activity" formatted="false">" ha respost"</string>
+  <string name="replied_activity" formatted="false">" t\'ha respòs a"</string>
   <string name="replied_activity_with_comment" formatted="false">" ha respost: "</string>
   <plurals name="replies_header_count_pattern">
     <item quantity="one">%d resposta</item>
@@ -410,14 +410,14 @@
   </plurals>
   <string name="shared_poll">ha compartit l\'enquesta %s</string>
   <string name="shared_shot_activity">" reshot de %s"</string>
-  <string name="shared_shot_activity_with_comment">" reshot: "</string>
+  <string name="shared_shot_activity_with_comment">" ha fet un reshot a"</string>
   <string name="shared_stream_notification">Stream compartit</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Enquesta %s</string>
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%s</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
-  <string name="share_stream_activity_text_pattern">" ha compartit aquest stream"</string>
+  <string name="share_stream_activity_text_pattern">" ha compartit"</string>
   <string name="share_stream_button">Compartir ara</string>
   <string name="share_stream_description">Segurament coneixes a molta gent a qui li agradarà el teu stream. Comparteix-lo ara a les teves xarxes socials o web, porta gent i comença a gaudir.</string>
   <string name="share_stream_message">Fes una ullada a %1$s a Shootr: https://web.shootr.com/st/%2$s</string>
@@ -436,7 +436,7 @@
   <string name="shot_timeline_empty_title">No hi ha shots</string>
   <string name="showing_shots_by_holder">Shots de l\'administrador.</string>
   <string name="sign_out_message">Tancant sessió…</string>
-  <string name="started_shooting_activity_text_pattern">" ha escrit"</string>
+  <string name="started_shooting_activity_text_pattern">" ha escrit un shot a"</string>
   <string name="started_shooting_activity_text_pattern_with_comment">" ha escrit: "</string>
   <string name="started_shooting_push_settings">Avís de nou shot</string>
   <string name="stream_checked">Fet</string>
@@ -457,7 +457,7 @@
     <item quantity="zero">%s participants</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">" segueix aquest stream"</string>
+  <string name="stream_favorited_activity_text_pattern">" segueix"</string>
   <string name="stream_followers">Seguidors</string>
   <string name="stream_list_empty">No hi ha resultats</string>
   <string name="stream_media_empty_title">No hi ha fotos ni vídeos</string>
@@ -544,4 +544,9 @@
   <string name="share_poll_voted_subject">He votat \"%1$s\" a %2$s</string>
   <string name="share_poll_voted_comment">Has votat \"%s\"</string>
   <string name="share_voted_poll">Compartir</string>
+  <string name="admin">"Admin. "</string>
+  <string name="voted_in_a_poll">ha votat a una enquesta a</string>
+  <string name="poll_finished">Enquesta finalitzada a</string>
+  <string name="poll_published">Nova enquesta a</string>
+  <string name="poll_shared">ha compartit una enquesta a</string>
 </resources>

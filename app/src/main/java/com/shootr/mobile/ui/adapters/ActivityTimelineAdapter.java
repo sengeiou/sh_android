@@ -193,7 +193,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private View createActivityView(ViewGroup parent) {
     return LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.item_list_activity, parent, false);
+        .inflate(R.layout.item_generic_activity, parent, false);
   }
 
   private GenericActivityViewHolder onCreateActivityViewHolder(ViewGroup parent) {
@@ -228,33 +228,33 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {
     return new StartedShootingViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private ImportantStartedShootingViewHolder onCreateImportantStartedShootingViewHolder(
       ViewGroup parent) {
     return new ImportantStartedShootingViewHolder(createActivityView(parent), imageLoader,
-        timeUtils, avatarClickListener, onShotClick);
+        timeUtils, avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private NiceShotViewHolder onCreateNiceShotViewHolder(ViewGroup parent) {
     return new NiceShotViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private ShareShotViewHolder onCreateShareShotViewHolder(ViewGroup parent) {
     return new ShareShotViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private MentionViewHolder onCreateMentionViewHolder(ViewGroup parent) {
     return new MentionViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private ReplyViewHolder onCreateReplyViewHolder(ViewGroup parent) {
     return new ReplyViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, onShotClick);
+        avatarClickListener, onShotClick, streamTitleClickListener);
   }
 
   private FollowActivityViewHolder onCreateFollowViewHolder(ViewGroup parent) {
@@ -269,25 +269,25 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
   private PollPublishedViewHolder onCreatePollPublishedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollPublishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollQuestionSpannableBuilder, onPollQuestionClickListener);
+        pollQuestionSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private PollVotedViewHolder onCreatePollVotedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollVotedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollVotedSpannableBuilder, onPollQuestionClickListener);
+        pollVotedSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private PollSharedViewHolder onCreatePollSharedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollSharedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollQuestionSpannableBuilder, onPollQuestionClickListener);
+        pollQuestionSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private RecyclerView.ViewHolder onCreatePollFinishedViewHolder(ViewGroup parent) {
     View view = createActivityView(parent);
     return new PollFinishedViewHolder(view, imageLoader, timeUtils, avatarClickListener,
-        pollQuestionSpannableBuilder, onPollQuestionClickListener);
+        pollQuestionSpannableBuilder, onPollQuestionClickListener, streamTitleClickListener);
   }
 
   private RecyclerView.ViewHolder onCreateFooterViewHolder(ViewGroup parent) {

@@ -32,6 +32,7 @@ public class ActivityEntityMapper {
             eventInfo.setStrategic(activityEntity.isStrategic());
             eventInfo.setVerified(activityEntity.isVerified());
             activity.setStreamInfo(eventInfo);
+            activity.setStreamPhoto(activityEntity.getStreamPhoto());
         }
 
         Activity.ActivityUserInfo userInfo = new Activity.ActivityUserInfo();
@@ -40,8 +41,12 @@ public class ActivityEntityMapper {
         userInfo.setAvatar(activityEntity.getUserPhoto());
         userInfo.setStrategic(activityEntity.isStrategic());
         activity.setUserInfo(userInfo);
+        activity.setName(activityEntity.getName());
 
         activity.setIdTargetUser(activityEntity.getIdTargetUser());
+        activity.setTargetUserPhoto(activityEntity.getTargetUserPhoto());
+        activity.setTargetName(activityEntity.getTargetName());
+        activity.setTargetUsername(activityEntity.getTargetUsername());
 
         if (activityEntity.getIdShot() != null) {
             Shot shot = activityEntity.getShotForMapping();
@@ -84,15 +89,20 @@ public class ActivityEntityMapper {
             activityEntity.setIdStream(eventInfo.getIdStream());
             activityEntity.setStreamTitle(eventInfo.getStreamTitle());
             activityEntity.setVerified(eventInfo.isVerified());
+            activityEntity.setStreamPhoto(activity.getStreamPhoto());
         }
         Activity.ActivityUserInfo userInfo = activity.getUserInfo();
         if (userInfo != null) {
             activityEntity.setUsername(userInfo.getUsername());
             activityEntity.setIdUser(userInfo.getIdUser());
             activityEntity.setUserPhoto(userInfo.getAvatar());
+            activityEntity.setName(activity.getName());
         }
 
         activityEntity.setIdTargetUser(activity.getIdTargetUser());
+        activityEntity.setTargetUserPhoto(activity.getTargetUserPhoto());
+        activityEntity.setTargetName(activity.getTargetName());
+        activityEntity.setTargetUsername(activity.getTargetUsername());
 
         activityEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
         activityEntity.setIdPoll(activity.getIdPoll());

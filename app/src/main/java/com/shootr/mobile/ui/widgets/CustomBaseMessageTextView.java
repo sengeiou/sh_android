@@ -21,7 +21,6 @@ import android.util.LruCache;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -30,7 +29,6 @@ import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.StreamIndexModel;
 import com.shootr.mobile.ui.model.UrlModel;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -145,7 +143,8 @@ public class CustomBaseMessageTextView extends View  {
   }
 
   private float dp(float dp) {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    float scale = getResources().getDisplayMetrics().density;
+    return (int) (dp * scale + 0.5f);
   }
 
   public void setOnUrlClickListener(OnUrlClickListener onUrlClickListener) {

@@ -23,6 +23,11 @@ public class ActivityModel {
     private boolean strategic;
     private String pollOptionText;
     private boolean isVerified;
+    private String name;
+    private String targetName;
+    private String streamPhoto;
+    private String targetUserPhoto;
+    private String targetUsername;
 
     public String getUserPhoto() {
         return userPhoto;
@@ -174,5 +179,45 @@ public class ActivityModel {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
+
+    public String getStreamPhoto() {
+        return streamPhoto;
+    }
+
+    public void setStreamPhoto(String streamPhoto) {
+        this.streamPhoto = streamPhoto;
+    }
+
+    public String getTargetUserPhoto() {
+        return targetUserPhoto;
+    }
+
+    public void setTargetUserPhoto(String targetUserPhoto) {
+        this.targetUserPhoto = targetUserPhoto;
+    }
+
+    public String getTargetUsername() {
+        return targetUsername;
+    }
+
+    public void setTargetUsername(String targetUsername) {
+        this.targetUsername = targetUsername;
     }
 }

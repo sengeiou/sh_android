@@ -37,6 +37,11 @@ public class MeActivityEntityDBMapper extends GenericDBMapper {
         c.getString(c.getColumnIndex(DatabaseContract.MeActivityTable.POLL_OPTION_TEXT)));
     activity.setVerified(
         c.getInt(c.getColumnIndex(DatabaseContract.MeActivityTable.IS_VERIFIED)) == 1);
+    activity.setName(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.NAME)));
+    activity.setTargetName(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TARGET_NAME)));
+    activity.setStreamPhoto(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_PHOTO)));
+    activity.setTargetUserPhoto(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TARGET_USER_PHOTO)));
+    activity.setTargetUsername(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TARGET_USERNAME)));
     return activity;
   }
 
@@ -57,6 +62,11 @@ public class MeActivityEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.MeActivityTable.ID_POLL, activity.getIdPoll());
     cv.put(DatabaseContract.MeActivityTable.POLL_OPTION_TEXT, activity.getPollOptionText());
     cv.put(DatabaseContract.MeActivityTable.IS_VERIFIED, activity.isVerified());
+    cv.put(DatabaseContract.ActivityTable.NAME, activity.getName());
+    cv.put(DatabaseContract.ActivityTable.TARGET_NAME, activity.getTargetName());
+    cv.put(DatabaseContract.ActivityTable.STREAM_PHOTO, activity.getStreamPhoto());
+    cv.put(DatabaseContract.ActivityTable.TARGET_USER_PHOTO, activity.getTargetUserPhoto());
+    cv.put(DatabaseContract.ActivityTable.TARGET_USERNAME, activity.getTargetUsername());
     setSynchronizedtoContentValues(activity, cv);
     return cv;
   }

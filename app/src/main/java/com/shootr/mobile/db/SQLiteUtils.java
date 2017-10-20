@@ -488,6 +488,16 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.IS_VERIFIED
       + " INT NULL,"
+      + DatabaseContract.ActivityTable.NAME
+      + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.TARGET_NAME
+      + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.STREAM_PHOTO
+      + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.TARGET_USER_PHOTO
+      + " TEXT NULL,"
+      + DatabaseContract.ActivityTable.TARGET_USERNAME
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -532,6 +542,16 @@ public class SQLiteUtils {
         + " TEXT NULL,"
         + DatabaseContract.MeActivityTable.IS_VERIFIED
         + " INT NULL,"
+        + DatabaseContract.MeActivityTable.NAME
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.TARGET_NAME
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.STREAM_PHOTO
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.TARGET_USER_PHOTO
+        + " TEXT NULL,"
+        + DatabaseContract.MeActivityTable.TARGET_USERNAME
+        + " TEXT NULL,"
         + DatabaseContract.SyncColumns.BIRTH
         + " DATETIME NOT NULL,"
         + DatabaseContract.SyncColumns.MODIFIED
