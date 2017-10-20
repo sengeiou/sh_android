@@ -44,7 +44,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   @BindView(R.id.embed_shot_image) ImageView embedShotImage;
   @BindView(R.id.embed_card) CardView embedCard;
   @BindView(R.id.info_container) LinearLayout infoContainer;
-  @BindDrawable(R.drawable.ic_action_verified_user) Drawable d;
+  @BindDrawable(R.drawable.ic_action_verified_user_list) Drawable d;
 
   public GenericActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener) {
@@ -108,7 +108,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
   protected SpannableString verifiedStream(boolean isVerified) {
     if (isVerified) {
       SpannableString ss = new SpannableString("  ");
-      d.setBounds(0, 0, 40, 40);
+      d.setBounds(0, 2, d.getIntrinsicWidth(), d.getIntrinsicHeight());
       ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
       ss.setSpan(span, 1, 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
       return ss;
