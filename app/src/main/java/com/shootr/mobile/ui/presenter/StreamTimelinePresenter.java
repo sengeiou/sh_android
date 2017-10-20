@@ -281,7 +281,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
             manageCallImportantShots();
             showShotsInView(timeline);
             handleStreamViewOnlyVisibility();
-            if (isFirstLoad) {
+            if (isFirstLoad && !filterActivated) {
               loadNewShots();
             }
           }
@@ -333,7 +333,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       hasBeenPaused = false;
       return;
     }
-
     if (isFirstLoad) {
       showFirstLoad(shots);
       setTimelineInitialized(shots);
@@ -486,7 +485,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (isFirstLoad) {
       isFirstLoad = false;
     } else if (hasNewShots) {
-
       List<ShotModel> newShots = new ArrayList<>(timeline.getShots().size());
       newShots.addAll(shotModelMapper.transform(timeline.getShots()));
       addNewShots(isFirstShotPosition, newShots);
@@ -495,6 +493,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     }
     streamTimelineView.hideLoading();
     streamTimelineView.hideCheckingForShots();
+    streamTimelineView.showEmpty(filterActivated);
     isRefreshing = false;
   }
 
@@ -582,6 +581,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
 
   public void onHoldingShotsClick() {
     showingHolderShots(true);
+    streamTimelineView.showCheckingForShots();
     streamTimelineView.hideHoldingShots();
     streamTimelineView.showAllStreamShots();
     streamTimelineView.hideHighlightedShot();
