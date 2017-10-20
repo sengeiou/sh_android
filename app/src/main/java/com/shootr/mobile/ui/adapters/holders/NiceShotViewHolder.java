@@ -80,8 +80,10 @@ public class NiceShotViewHolder extends ShotActivityViewHolder {
       embedShotComment.setText(shotModel.getComment());
       embedShotComment.addLinks();
       embedShotComment.setVisibility(View.VISIBLE);
+      embedUsername.setPadding(getDps(8), getDps(8), getDps(8), getDps(0));
     } else {
       embedShotComment.setVisibility(View.GONE);
+      embedUsername.setPadding(getDps(8), getDps(8), getDps(8), getDps(4));
     }
   }
 
