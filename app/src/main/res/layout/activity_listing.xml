@@ -31,7 +31,8 @@
       android:layout_gravity="center"
       android:visibility="gone"
       tools:visibility="visible" />
-    <com.shootr.mobile.ui.widgets.PrimaryFloatingActionButton
+
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/listing_add_stream"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
