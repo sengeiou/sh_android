@@ -43,7 +43,7 @@ public class MultipleMessageNotification extends AbstractMessageNotification {
     builder.setContentTitle(getTitle());
     builder.setContentText(getCollapsedContent());
     builder.setStyle(getInboxStyleFromActivities());
-    builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+    builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     if (!hasMoreThanOneIcon()) {
       builder.setContentIntent(getSingleMessageNotificationPendingIntent(individualNotifications.get(0).getIdUser()));
     }

@@ -28,7 +28,7 @@ public class ShotQueueSendingNotification extends CommonNotification {
         builder.setPriority(NotificationCompat.PRIORITY_LOW);
         builder.setProgress(100, 0, true);
         builder.setSound(null);
-      builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+      builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     }
 
     @Override public Bitmap getLargeIcon() {

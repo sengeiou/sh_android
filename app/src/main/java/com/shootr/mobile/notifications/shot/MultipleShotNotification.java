@@ -33,7 +33,7 @@ public class MultipleShotNotification extends AbstractShotNotification {
         builder.setContentTitle(getTitle());
         builder.setContentText(getCollapsedContent());
         builder.setStyle(getInboxStyleFromShots());
-        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     }
 
     private String getCollapsedContent() {

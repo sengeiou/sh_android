@@ -30,7 +30,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
         super.setNotificationValues(builder, this.areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
-        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
         if (shot.getImage() == null) {
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
         } else {
