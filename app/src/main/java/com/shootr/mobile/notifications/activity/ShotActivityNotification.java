@@ -33,7 +33,7 @@ public class ShotActivityNotification extends SingleActivityNotification {
         Boolean areShotTypesKnown) {
         super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentIntent(getShotNotificationPendingIntent());
-        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     }
 
     private PendingIntent getShotNotificationPendingIntent() {

@@ -28,7 +28,7 @@ public abstract class AbstractShotNotification extends CommonNotification {
     public void setNotificationValues(NotificationCompat.Builder builder, Boolean areShotTypesKnown) {
         builder.setContentIntent(getOpenShotNotificationPendingIntent());
         builder.setDeleteIntent(getDiscardShotNotificationPendingIntent());
-        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     }
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {

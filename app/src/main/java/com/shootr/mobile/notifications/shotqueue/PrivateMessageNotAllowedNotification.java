@@ -27,7 +27,7 @@ public class PrivateMessageNotAllowedNotification extends CommonNotification {
     builder.setSound(null);
     PendingIntent draftsPendingIntent = getOpenIntent();
     builder.setContentIntent(draftsPendingIntent);
-    builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+    builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
   }
 
   protected PendingIntent getOpenIntent() {

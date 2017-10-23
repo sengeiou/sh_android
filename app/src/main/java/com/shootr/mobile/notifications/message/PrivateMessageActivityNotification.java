@@ -35,7 +35,7 @@ public class PrivateMessageActivityNotification extends AbstractMessageNotificat
     super.setNotificationValues(builder, areShotTypesKnown);
     builder.setContentTitle(getTitle());
     builder.setContentText(comment);
-    builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+    builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     builder.setStyle(new NotificationCompat.BigTextStyle() //
           .bigText(comment));
 
