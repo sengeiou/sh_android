@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.adapters.holders;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
@@ -57,9 +58,15 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
     return new Truss() //
-        .pushSpan(new StyleSpan(Typeface.BOLD)) //
-        .append(activity.getUsername()).popSpan()//
-        .append(" ").append(formatActivityComment(activity, currentUserId)) //
+        .pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
+        .append(" ")
+        .append(formatActivityComment(activity, currentUserId))
+        .pushSpan(new ForegroundColorSpan(gray_60))
+        .append(" ")
+        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
+        .popSpan()
         .build();
   }
 

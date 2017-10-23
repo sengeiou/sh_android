@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.graphics.Typeface;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -39,14 +38,12 @@ public class WakeUpShotActivityViewHolder extends GenericActivityViewHolder {
   }
 
   @Override protected void renderText(ActivityModel activity) {
-    text.setText(getFormattedUserName(activity));
-    text.setMovementMethod(new LinkMovementMethod());
   }
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
+    return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
         .append(" ")
         .append(activity.getShot().getComment())
         .pushSpan(new ForegroundColorSpan(gray_60))

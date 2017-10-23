@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
@@ -101,6 +102,10 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
         .popSpan()
         .append(" ")
         .append(activity.getComment().toLowerCase())
+        .pushSpan(new ForegroundColorSpan(gray_60))
+        .append(" ")
+        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
+        .popSpan()
         .build();
   }
 

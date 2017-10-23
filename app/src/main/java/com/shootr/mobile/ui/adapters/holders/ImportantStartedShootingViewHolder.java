@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.adapters.holders;
 
 import android.graphics.Typeface;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindString;
@@ -9,7 +10,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
-import com.shootr.mobile.ui.widgets.StreamTitleSpan;
+import com.shootr.mobile.ui.widgets.StreamTitleBoldSpan;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
@@ -22,18 +23,20 @@ public class ImportantStartedShootingViewHolder extends ShotActivityViewHolder {
       startedShootingPatternWithComment;
   @BindString(R.string.admin) String
       adminResource;
+  private final AndroidTimeUtils androidTimeUtils;
 
   public ImportantStartedShootingViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
       OnShotClick onShotClick, OnStreamTitleClickListener onStreamTitleClickListener) {
     super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onShotClick,
         onStreamTitleClickListener);
+    this.androidTimeUtils = androidTimeUtils;
   }
 
   @Override protected CharSequence getTitle(ActivityModel activity) {
 
-    StreamTitleSpan streamTitleSpan =
-        new StreamTitleSpan(activity.getIdStream(), activity.getStreamTitle(),
+    StreamTitleBoldSpan streamTitleSpan =
+        new StreamTitleBoldSpan(activity.getIdStream(), activity.getStreamTitle(),
             activity.getIdStreamAuthor()) {
           @Override
           public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
@@ -48,9 +51,12 @@ public class ImportantStartedShootingViewHolder extends ShotActivityViewHolder {
         .popSpan()
         .append(getActivitySimpleComment(activity))
         .append(" ")
-        .pushSpan(new StyleSpan(Typeface.BOLD))
         .pushSpan(streamTitleSpan)
         .append(verifiedStream(activity.getStreamTitle(), activity.isVerified()))
+        .popSpan()
+        .pushSpan(new ForegroundColorSpan(gray_60))
+        .append(" ")
+        .append(androidTimeUtils.getElapsedTime(getContext(), activity.getPublishDate().getTime()))
         .popSpan()
         .build();
   }
