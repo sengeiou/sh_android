@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.adapters.holders;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -28,25 +29,25 @@ public class WakeUpShotActivityViewHolder extends GenericActivityViewHolder {
     this.androidTimeUtils = androidTimeUtils;
   }
 
-  @Override public void render(final ActivityModel activity) {
-    super.render(activity);
+  @Override protected void renderText(final ActivityModel activity) {
+    title.setText(getFormattedUserName(activity));
+    title.setVisibility(View.VISIBLE);
+    title.setLinkTextColor(Color.parseColor("#478ceb"));
+    title.setMovementMethod(new LinkMovementMethod());
+    infoContainer.setVisibility(View.GONE);
     itemView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         streamTitleClickListener.onStreamTitleClick(activity.getIdStream(),
             activity.getStreamTitle(), activity.getIdStreamAuthor());
       }
     });
-  }
 
-  @Override protected void renderText(ActivityModel activity) {
-    text.setText(getFormattedUserName(activity));
-    text.setMovementMethod(new LinkMovementMethod());
   }
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
-    return new Truss()
-        .pushSpan(new StyleSpan(Typeface.BOLD))
-        .append(activity.getUsername()).popSpan()
+    return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))
+        .append(activity.getUsername())
+        .popSpan()
         .append(" ")
         .append(activity.getShot().getComment())
         .pushSpan(new ForegroundColorSpan(gray_60))

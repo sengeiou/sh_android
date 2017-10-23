@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.mobile.notifications.gcm.PushNotification;
@@ -33,6 +35,7 @@ public class PrivateMessageActivityNotification extends AbstractMessageNotificat
     super.setNotificationValues(builder, areShotTypesKnown);
     builder.setContentTitle(getTitle());
     builder.setContentText(comment);
+    builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     builder.setStyle(new NotificationCompat.BigTextStyle() //
           .bigText(comment));
 

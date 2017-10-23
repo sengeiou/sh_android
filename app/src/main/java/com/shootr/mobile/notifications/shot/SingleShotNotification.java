@@ -3,6 +3,8 @@ package com.shootr.mobile.notifications.shot;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.util.ImageLoader;
 import java.io.IOException;
@@ -28,6 +30,7 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
         super.setNotificationValues(builder, this.areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContent());
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
         if (shot.getImage() == null) {
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
         } else {

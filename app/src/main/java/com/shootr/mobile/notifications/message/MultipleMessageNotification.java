@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -42,6 +43,7 @@ public class MultipleMessageNotification extends AbstractMessageNotification {
     builder.setContentTitle(getTitle());
     builder.setContentText(getCollapsedContent());
     builder.setStyle(getInboxStyleFromActivities());
+    builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     if (!hasMoreThanOneIcon()) {
       builder.setContentIntent(getSingleMessageNotificationPendingIntent(individualNotifications.get(0).getIdUser()));
     }

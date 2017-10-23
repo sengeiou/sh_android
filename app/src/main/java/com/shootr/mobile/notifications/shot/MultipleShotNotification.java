@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextUtils;
@@ -32,6 +33,7 @@ public class MultipleShotNotification extends AbstractShotNotification {
         builder.setContentTitle(getTitle());
         builder.setContentText(getCollapsedContent());
         builder.setStyle(getInboxStyleFromShots());
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     }
 
     private String getCollapsedContent() {

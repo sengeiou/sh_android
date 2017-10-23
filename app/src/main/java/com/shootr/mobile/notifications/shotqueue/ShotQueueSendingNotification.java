@@ -3,6 +3,7 @@ package com.shootr.mobile.notifications.shotqueue;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.notifications.CommonNotification;
@@ -27,6 +28,7 @@ public class ShotQueueSendingNotification extends CommonNotification {
         builder.setPriority(NotificationCompat.PRIORITY_LOW);
         builder.setProgress(100, 0, true);
         builder.setSound(null);
+      builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     }
 
     @Override public Bitmap getLargeIcon() {

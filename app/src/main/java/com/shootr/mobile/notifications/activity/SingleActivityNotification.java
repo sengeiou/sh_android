@@ -3,6 +3,8 @@ package com.shootr.mobile.notifications.activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.PushNotification;
 import com.shootr.mobile.util.ImageLoader;
@@ -26,6 +28,7 @@ public class SingleActivityNotification extends AbstractActivityNotification {
         super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContentText());
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
         if (values.getOptionalLongText() != null) {
             builder.setStyle(new NotificationCompat.BigTextStyle() //
               .bigText(values.getOptionalLongText()) //

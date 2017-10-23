@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.mobile.notifications.gcm.PushNotification;
@@ -26,6 +28,7 @@ public class FollowActivityNotification extends SingleActivityNotification {
         Boolean areShotTypesKnown) {
         super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentIntent(getOpenProfileNotificationPendingIntent());
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     }
 
     protected PendingIntent getOpenProfileNotificationPendingIntent() {

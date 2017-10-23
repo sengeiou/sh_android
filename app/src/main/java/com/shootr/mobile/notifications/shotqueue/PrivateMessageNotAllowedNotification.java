@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
@@ -26,6 +27,7 @@ public class PrivateMessageNotAllowedNotification extends CommonNotification {
     builder.setSound(null);
     PendingIntent draftsPendingIntent = getOpenIntent();
     builder.setContentIntent(draftsPendingIntent);
+    builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
   }
 
   protected PendingIntent getOpenIntent() {

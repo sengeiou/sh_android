@@ -1130,9 +1130,11 @@ public class StreamTimelineFragment extends BaseFragment
       }
 
       @Override public void onAnimationEnd(Animator animation) {
-        timelineIndicatorContainer.setVisibility(View.GONE);
-        timelineIndicatorContainer.setTranslationY(0);
-        animatorIsRunning = false;
+        if (timelineIndicatorContainer != null) {
+          timelineIndicatorContainer.setVisibility(View.GONE);
+          timelineIndicatorContainer.setTranslationY(0);
+          animatorIsRunning = false;
+        }
       }
 
       @Override public void onAnimationCancel(Animator animation) {

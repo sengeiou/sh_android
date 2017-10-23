@@ -130,8 +130,7 @@
     <activity
         android:name=".ui.activities.DraftsActivity"
         android:label="@string/activity_drafts_title"
-        android:launchMode="singleTop"
-        android:theme="@style/ShootrTheme.DarkToolbar"/>
+        android:launchMode="singleTop"/>
     <activity android:name=".ui.activities.UpdateWarningActivity"/>
     <activity android:name=".ui.activities.WhaleActivity"/>
 
