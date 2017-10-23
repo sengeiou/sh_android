@@ -15,6 +15,10 @@ Etiquetas para el changelog:
 
 ## [1.45.2] - 2017-10-23
 ### Fixed
+- Crash on streams from profile on some devices
+
+## [1.45.2] - 2017-10-23
+### Fixed
 - Add time to activities
 - Change wakeup activity style
 - Fix terminating timeline animation

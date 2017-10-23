@@ -28,7 +28,7 @@ public class SingleActivityNotification extends AbstractActivityNotification {
         super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getContentText());
-        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
         if (values.getOptionalLongText() != null) {
             builder.setStyle(new NotificationCompat.BigTextStyle() //
               .bigText(values.getOptionalLongText()) //

@@ -83,5 +83,6 @@
     <color name="follow_button">#2196f3</color>
     <color name="follow_button_pressed">#1e88e5</color>
     <color name="showcase">#212121</color>
+    <color name="shootr_orange">#fb830e</color>
 
 </resources>
