@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -652,13 +653,14 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void setUserInfo(UserModel userModel) {
     collapsingToolbarLayout.setTitle("@" + userModel.getUsername());
+    collapsingToolbarLayout.setExpandedTitleTextColor(
+        android.content.res.ColorStateList.valueOf(Color.WHITE));
     nameTextView.setText(userModel.getName());
     renderWebsite(userModel);
     renderBio(userModel);
     setupAvatar(userModel);
     followersTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowers()));
-    followingTextView.setText(numberFormatUtil.formatNumbers(
-        userModel.getNumFollowings()));
+    followingTextView.setText(numberFormatUtil.formatNumbers(userModel.getNumFollowings()));
   }
 
   private void setupAvatar(UserModel userModel) {
