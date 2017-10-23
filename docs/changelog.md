@@ -13,6 +13,16 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.45.2] - 2017-10-23
+### Fixed
+- Add time to activities
+- Change wakeup activity style
+- Fix terminating timeline animation
+- floating Button Native
+- Fix username to white
+- Draft Toolbar to white
+- Fix color push notifications
+
 ## [1.45.1] - 2017-10-20
 ### Fixed
 - Empty label is not showing if exist any shot
