@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    >
 
     <android.support.v7.widget.RecyclerView android:id="@+id/listing_list"
       android:layout_width="match_parent"
@@ -41,6 +43,10 @@
         android:src="@drawable/ic_action_add_white_24"
         android:backgroundTint="@color/accent"
         android:visibility="gone"
-        tools:visibility="visible"/>
+        tools:visibility="visible"
+        app:srcCompat="@drawable/ic_action_add_white_24"
+        app:backgroundTint="@color/accent"
+        app:borderWidth="0dp"
+        app:layout_anchorGravity="bottom|right|end" />
 
 </FrameLayout>
