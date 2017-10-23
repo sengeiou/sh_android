@@ -4,6 +4,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
@@ -21,6 +23,7 @@ public abstract class AbstractActivityNotification extends CommonNotification {
         Boolean areShotTypesKnown) {
         builder.setContentIntent(getOpenActivityNotificationPendingIntent());
         builder.setDeleteIntent(getDiscardActivityNotificationPendingIntent());
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     }
 
     protected PendingIntent getOpenActivityNotificationPendingIntent() {

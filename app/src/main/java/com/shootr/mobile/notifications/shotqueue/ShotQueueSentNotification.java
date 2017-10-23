@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.notifications.CommonNotification;
@@ -30,6 +31,7 @@ public class ShotQueueSentNotification extends CommonNotification {
         builder.setAutoCancel(true);
         /* Empty content intent for auto-cancel to work */
         builder.setContentIntent(PendingIntent.getActivity(getContext(), 0, new Intent(), 0));
+        builder.setColor(ContextCompat.getColor(getContext(), R.color.primary_selector));
     }
 
     @Override public Bitmap getLargeIcon() {
