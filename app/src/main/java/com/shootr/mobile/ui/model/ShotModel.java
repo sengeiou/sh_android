@@ -240,30 +240,32 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
     @Override public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof ShotModel)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         ShotModel shotModel = (ShotModel) o;
 
-        if (idShot != null ? !idShot.equals(shotModel.idShot) : shotModel.idShot != null)
-            return false;
-        if (nicers != null ? !nicers.equals(shotModel.nicers) : shotModel.nicers != null)
-            return false;
-        if (streamTitle != null ? !streamTitle.equals(shotModel.streamTitle)
-            : shotModel.streamTitle != null) {
+        if (isNiced() != shotModel.isNiced()) return false;
+        if (isReshooted() != shotModel.isReshooted()) return false;
+        if (!getIdShot().equals(shotModel.getIdShot())) return false;
+        if (getNicers() != null ? !getNicers().equals(shotModel.getNicers())
+            : shotModel.getNicers() != null) {
             return false;
         }
-
-        if (hide != null ? !hide.equals(shotModel.hide) : shotModel.hide != null) return false;
-        return replyCount != null ? replyCount.equals(shotModel.replyCount)
-            : shotModel.replyCount == null;
+        if (getNiceCount() != null ? !getNiceCount().equals(shotModel.getNiceCount())
+            : shotModel.getNiceCount() != null) {
+            return false;
+        }
+        return getReplyCount() != null ? getReplyCount().equals(shotModel.getReplyCount())
+            : shotModel.getReplyCount() == null;
     }
 
     @Override public int hashCode() {
-        int result = idShot != null ? idShot.hashCode() : 0;
-        result = 31 * result + (nicers != null ? nicers.hashCode() : 0);
-        result = 31 * result + (streamTitle != null ? streamTitle.hashCode() : 0);
-        result = 31 * result + (hide != null ? hide.hashCode() : 0);
-        result = 31 * result + (replyCount != null ? replyCount.hashCode() : 0);
+        int result = getIdShot().hashCode();
+        result = 31 * result + (getNicers() != null ? getNicers().hashCode() : 0);
+        result = 31 * result + (getNiceCount() != null ? getNiceCount().hashCode() : 0);
+        result = 31 * result + (getReplyCount() != null ? getReplyCount().hashCode() : 0);
+        result = 31 * result + (isNiced() ? 1 : 0);
+        result = 31 * result + (isReshooted() ? 1 : 0);
         return result;
     }
 }
