@@ -16,7 +16,7 @@ import timber.log.Timber;
 public class BitmapImageResizer implements ImageResizer {
 
   private static final int MAX_SIZE = 2400;
-  private static final long MAX_WEIGHT_KB = 300;
+  private static final long MAX_WEIGHT_KB = 1024;
 
   public static final String OUTPUT_IMAGE_NAME = "profileUploadResized.jpg";
   public static final int INITIAL_COMPRESSION_QUALITY = 90;
@@ -43,8 +43,8 @@ public class BitmapImageResizer implements ImageResizer {
       orientedImage.recycle();
     }
 
-    Timber.d("Scaling image to %d px...", MAX_SIZE);
-    Bitmap bitmapResized = getScaledBitmapWithMaxDimension(squareImage, MAX_SIZE);
+    Timber.d("Scaling image to %d px...", 1080);
+    Bitmap bitmapResized = getScaledBitmapWithMaxDimension(squareImage, 1080);
     if (bitmapResized != squareImage) {
       squareImage.recycle();
     }
@@ -148,18 +148,27 @@ public class BitmapImageResizer implements ImageResizer {
   private File storeCompressedImageInFile(Bitmap bitmapResized) throws IOException {
     File imageFile = new File(getOutputDirectory(), getOutputImageName());
 
-    Timber.i("Performing JPEG compression with quality of %d", INITIAL_COMPRESSION_QUALITY);
-    FileOutputStream compressedImageStream = new FileOutputStream(imageFile);
-    bitmapResized.compress(Bitmap.CompressFormat.JPEG, INITIAL_COMPRESSION_QUALITY,
-        compressedImageStream);
-    // Check size
-    compressedImageStream.flush();
+    int compressionQuality = INITIAL_COMPRESSION_QUALITY;
+    boolean needsCompression = true;
 
-    long imageSizeInKb = imageFile.length() / 1000;
-    Timber.i("Image size: %s KB", imageSizeInKb);
-    compressedImageStream.close();
+    while (needsCompression) {
+      Timber.i("Performing JPEG compression with quality of %d", compressionQuality);
+      FileOutputStream compressedImageStream = new FileOutputStream(imageFile);
+      bitmapResized.compress(Bitmap.CompressFormat.JPEG, compressionQuality, compressedImageStream);
+      // Check size
+      compressedImageStream.flush();
 
+      long imageSizeInKb = imageFile.length() / 1000;
+      Timber.i("Image size: %s KB", imageSizeInKb);
+      needsCompression = needsCompression(compressionQuality, imageSizeInKb);
+      compressionQuality -= COMPRESSION_QUALITY_DECREMENT;
+      compressedImageStream.close();
+    }
     return imageFile;
+  }
+
+  private boolean needsCompression(int compressionQuality, long imageSizeInKb) {
+    return imageSizeInKb > MAX_WEIGHT_KB && compressionQuality > 0;
   }
 
   private String getOutputImageName() {
