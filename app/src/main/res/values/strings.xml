@@ -289,7 +289,7 @@
   <string name="no_filter_shots">No shots by you or verified accounts.</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="official_poll_button_text">Go to Notifications</string>
-  <string name="official_poll_description">For security reasons, in order to vote you must unblock Shootr push notifications in your device. You can adjust your push notifications on your profile.</string>
+  <string name="official_poll_description">Para garantizar un solo voto por cuenta y dispositivo, antes de votar debes activar las notificaciones de Shootr. Puedes configurarlas en tu perfil.</string>
   <string name="official_poll_title">Official poll</string>
   <string name="off_push_settings">Off</string>
   <string name="ok">OK</string>
