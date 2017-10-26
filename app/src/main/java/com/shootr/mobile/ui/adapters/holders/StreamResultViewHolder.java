@@ -111,7 +111,11 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     renderSubtitle(streamResultModel.getStreamModel());
     if ((showsFavoritesText && !favoritedStreams.contains(streamResultModel))
         || hasToShowFollowers) {
-      renderHolderSubtitle(streamResultModel);
+      if (hasToShowFollowers) {
+        renderHolderOwnSubtitle(streamResultModel);
+      } else {
+        renderHolderSubtitle(streamResultModel);
+      }
     }
     handleShowRankNumber(position, hasToShowRankNumber);
     handleShowFavorite(streamResultModel, hasToShowIsFavorite);
@@ -225,6 +229,18 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
           .getResources()
           .getQuantityString(R.plurals.listing_favorites, stream.getTotalFavorites(),
               stream.getTotalFavorites());
+      subtitleDescription.setText(favorites);
+    }
+  }
+
+  private void renderHolderOwnSubtitle(StreamResultModel stream) {
+    if (subtitle != null) {
+      subtitleDescription.setVisibility(View.VISIBLE);
+      String favorites = subtitle.getContext()
+          .getResources()
+          .getQuantityString(R.plurals.listing_favorites,
+              stream.getStreamModel().getTotalFavorites(),
+              stream.getStreamModel().getTotalFavorites());
       subtitleDescription.setText(favorites);
     }
   }
