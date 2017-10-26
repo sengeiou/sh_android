@@ -17,6 +17,7 @@
 
   <include layout="@layout/content_poll_results"/>
   <RelativeLayout
+      android:id="@+id/vote_number_container"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"

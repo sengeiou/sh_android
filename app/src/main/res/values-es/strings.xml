@@ -313,6 +313,7 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
   <string name="poll_live_results">Resultados en vivo</string>
+  <string name="poll_legal_text">Esta es una encuesta segura que permite solo un voto por cuenta y dispositivo. No se computarán segundos votos.</string>
   <string name="poll_manual_close">Tiempo restante: No definido</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Encuesta</string>
@@ -513,6 +514,7 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Actualizar ahora</string>
   <string name="update_warning_message">Hemos hecho mejoras que requieren actualizarse a la última versión de Shootr.</string>
+  <string name="results_hidden_poll">Encuesta finalizada</string>
   <string name="user_blocked">Este usuario no te molestará ni a ti ni a los participantes de tus streams. Tampoco podrá encontrar tu perfil ni ver tu contenido.</string>
   <string name="user_cannot_vote_alert_description">Solo es posible un voto por dispositivo y por usuario</string>
   <string name="user_not_found">Usuario no encontrado.</string>
@@ -549,4 +551,7 @@
   <string name="poll_finished">Encuesta finalizada en</string>
   <string name="poll_published">Nueva encuesta en</string>
   <string name="poll_shared">ha compartido una encuesta en</string>
+  <string name="share_poll">Compartir voto</string>
+  <string name="back_button_poll">Atrás</string>
+  <string name="not_allowed_to_vote">Solo es posible un voto por dispositivo y por usuario</string>
 </resources>

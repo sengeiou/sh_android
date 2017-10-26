@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -49,10 +50,12 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @BindView(R.id.pollresults_progress) ProgressBar progressBar;
   @BindView(R.id.poll_countdown) TextView pollCountdown;
   @BindView(R.id.poll_votes) TextView pollVoteNumber;
+  @BindView(R.id.vote_number_container) RelativeLayout footerContainer;
 
   @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
   @BindString(R.string.timeline_poll_results) String pollResultsResource;
   @BindString(R.string.shared_poll_feedback) String sharedPoll;
+  @BindString(R.string.poll_legal_text) String legalText;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PercentageUtils percentageUtils;
@@ -122,7 +125,8 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override protected void initializePresenter() {
     presenter.initialize(this, getIntent().getStringExtra(EXTRA_ID_POLL),
-        getIntent().getStringExtra(EXTRA_STREAM_ID), getIntent().getBooleanExtra(EXTRA_HAS_VOTED, false));
+        getIntent().getStringExtra(EXTRA_STREAM_ID),
+        getIntent().getBooleanExtra(EXTRA_HAS_VOTED, false));
     sendAnalythics();
   }
 
@@ -169,7 +173,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @Override public void renderPollResults(PollModel pollModel, boolean showShare) {
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
     pollModel.setStreamTitle(title == null ? NO_TITLE : title);
-    adapter.setPollModel(pollModel, showShare);
+    adapter.setPollModel(pollModel, showShare, legalText);
     adapter.notifyDataSetChanged();
     sendMixPanel();
   }
@@ -251,14 +255,19 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   }
 
   private void openSharePollMenu() {
-    new CustomContextMenu.Builder(this).addAction(R.string.menu_share_poll_via_shootr, new Runnable() {
-      @Override public void run() {
-        presenter.shareViaShootr();
-      }
-    }).addAction(R.string.menu_share_shot_via, new Runnable() {
+    new CustomContextMenu.Builder(this).addAction(R.string.menu_share_poll_via_shootr,
+        new Runnable() {
+          @Override public void run() {
+            presenter.shareViaShootr();
+          }
+        }).addAction(R.string.menu_share_shot_via, new Runnable() {
       @Override public void run() {
         presenter.share();
       }
     }).show();
+  }
+
+  @Override public void hideFooter() {
+    footerContainer.setVisibility(View.GONE);
   }
 }

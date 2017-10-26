@@ -71,8 +71,8 @@
         android:name=".ui.activities.registro.LoginSelectionActivity"
         android:label="@string/app_name"
         android:launchMode="singleTop"
-        android:theme="@style/ShootrTheme.NoActionBar"
-        android:screenOrientation="portrait"/>
+        android:screenOrientation="portrait"
+        android:theme="@style/ShootrTheme.NoActionBar"/>
     <activity
         android:name=".ui.activities.registro.EmailRegistrationActivity"
         android:label="@string/title_activity_registration_email"
@@ -285,6 +285,10 @@
         android:theme="@style/ShootrTheme">
     </activity>
     <activity
+        android:name=".ui.activities.HiddenPollResultsActivity"
+        android:theme="@style/ShootrTheme">
+    </activity>
+    <activity
         android:name=".ui.activities.SettingsActivity"
         android:configChanges="orientation|screenSize"
         android:label="@string/profile_settings"
@@ -321,7 +325,8 @@
         android:name=".ui.activities.OnBoardingStreamActivity"
         android:screenOrientation="portrait">
     </activity>
-    <activity android:name=".ui.activities.OnBoardingUserActivity"
+    <activity
+        android:name=".ui.activities.OnBoardingUserActivity"
         android:screenOrientation="portrait">
     </activity>
     <activity
@@ -335,6 +340,8 @@
     <activity android:name=".ui.activities.ShareStreamActivity">
     </activity>
     <activity android:name=".ui.activities.SplashScreenActivity">
+    </activity>
+    <activity android:name=".ui.activities.PollOptionVotedActivity">
     </activity>
   </application>
 

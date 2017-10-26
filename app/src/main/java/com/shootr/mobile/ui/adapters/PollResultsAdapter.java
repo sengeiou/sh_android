@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.adapters.holders.LegalTextInPollViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PollResultViewHolder;
 import com.shootr.mobile.ui.adapters.holders.SharePollVotedViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnPollOptionClickListener;
@@ -27,6 +28,7 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   private static final int TYPE_POLL = 0;
   private static final int TYPE_POLL_OPTION = 1;
   private static final int TYPE_SHARE_POLL = 2;
+  private static final int TYPE_FOOTER_LEGAL_TEXT = 3;
 
   private List<Object> items;
   private final OnPollOptionClickListener onPollOptionClickListener;
@@ -62,6 +64,8 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       return TYPE_SHARE_POLL;
     } else if (items.get(position) instanceof PollOptionModel) {
       return TYPE_POLL_OPTION;
+    } else if (items.get(position) instanceof String) {
+      return TYPE_FOOTER_LEGAL_TEXT;
     }
     return -1;
   }
@@ -81,9 +85,13 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
           new PollResultViewHolder(view, onPollOptionClickListener, imageLoader, initialsLoader,
               percentageUtils, totalVotes, showShared);
     } else if (viewType == TYPE_SHARE_POLL) {
-      view = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_share_poll, parent, false);
+      view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_share_poll, parent, false);
       viewHolder = new SharePollVotedViewHolder(view, onClickListener);
+    } else if (viewType == TYPE_FOOTER_LEGAL_TEXT) {
+      view =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_legal_text, parent, false);
+      viewHolder = new LegalTextInPollViewHolder(view);
     }
 
     return viewHolder;
@@ -97,6 +105,8 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
       ((PollResultViewHolder) holder).render((PollOptionModel) items.get(position), position);
     } else if (holder.getItemViewType() == TYPE_SHARE_POLL) {
       ((SharePollVotedViewHolder) holder).render((PollModel) items.get(position - 1));
+    } else if (holder.getItemViewType() == TYPE_FOOTER_LEGAL_TEXT) {
+      ((LegalTextInPollViewHolder) holder).render((String) items.get(position));
     }
   }
 
@@ -104,7 +114,7 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     return items != null ? items.size() : 0;
   }
 
-  public void setPollModel(PollModel model, boolean showShare) {
+  public void setPollModel(PollModel model, boolean showShare, String legalText) {
     this.showShared = showShare;
     items = new ArrayList<>();
     items.add(model);
@@ -113,6 +123,9 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
     for (PollOptionModel pollOptionModel : model.getPollOptionModels()) {
       items.add(pollOptionModel);
+    }
+    if (model.isVerifiedPoll()) {
+      items.add(legalText);
     }
     calculateTotalVotes(model.getPollOptionModels());
   }

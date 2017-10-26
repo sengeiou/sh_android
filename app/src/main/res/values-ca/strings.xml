@@ -313,6 +313,7 @@
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_ignore">Llevar enquesta</string>
   <string name="poll_live_results">Resultats en viu</string>
+  <string name="poll_legal_text">Aquesta és una enquesta segura y permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
   <string name="poll_manual_close">Temps restant: No definit</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Enquesta</string>
@@ -513,6 +514,7 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Actualitzar ara</string>
   <string name="update_warning_message">Hem fet millores que requereixen actualitzar-se a la darrera versió de Shootr.</string>
+  <string name="results_hidden_poll">Enquesta finalitzada</string>
   <string name="user_blocked">Aquest usuari no et molestarà ni a tu ni als participants dels teus streams. Tampoc podrà trobar el teu perfil ni veure el teu contingut.</string>
   <string name="user_cannot_vote_alert_description">Només és possible un vot per dispositiu i per usuari</string>
   <string name="user_not_found">Usuari no trobat.</string>
@@ -549,4 +551,7 @@
   <string name="poll_finished">Enquesta finalitzada a</string>
   <string name="poll_published">Nova enquesta a</string>
   <string name="poll_shared">ha compartit una enquesta a</string>
+  <string name="share_poll">Compartir vot</string>
+  <string name="back_button_poll">Enrere</string>
+  <string name="not_allowed_to_vote">Només és possible un vot per dispositiu i per usuari</string>
 </resources>

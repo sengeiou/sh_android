@@ -47,8 +47,10 @@ import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
+import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
@@ -1984,6 +1986,16 @@ public class StreamTimelineFragment extends BaseFragment
     Intent intent =
         PollResultsActivity.newLiveResultsIntent(getContext(), idPoll, streamTitle, idStream,
             false);
+    startActivity(intent);
+  }
+
+  @Override public void goToOptionVoted(PollModel pollModel) {
+    Intent intent = PollOptionVotedActivity.getIntentForActivity(getContext(), pollModel);
+    startActivity(intent);
+  }
+
+  @Override public void goToHiddenResults(String question) {
+    Intent intent = HiddenPollResultsActivity.newResultsIntent(getContext(), question);
     startActivity(intent);
   }
 

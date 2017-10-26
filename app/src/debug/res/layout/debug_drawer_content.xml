@@ -190,7 +190,8 @@
       android:layout_height="wrap_content"
       android:layout_columnSpan="2"
       android:layout_gravity="start|fill_horizontal"
-      android:text="Unauthorized" />
+      android:text="Unauthorized"
+      android:textColor="@color/black"/>
 
     <!-- NOTIFICATIONS SECTION -->
     <TextView style="@style/Widget.U2020.DebugDrawer.Header"
@@ -275,7 +276,8 @@
       android:layout_height="wrap_content"
       android:layout_columnSpan="2"
       android:layout_gravity="start|fill_horizontal"
-      android:text="Show logs" />
+      android:text="Show logs"
+      android:textColor="@color/black"/>
 
     <TextView style="@style/Widget.U2020.DebugDrawer.Header"
       android:layout_width="0dp"
@@ -288,7 +290,8 @@
       android:layout_height="wrap_content"
       android:layout_columnSpan="2"
       android:layout_gravity="start|fill_horizontal"
-      android:text="Extract to SD" />
+      android:text="Extract to SD"
+      android:textColor="@color/black"/>
 
     <!-- BUILD INFORMATION SECTION -->
 

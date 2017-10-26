@@ -605,8 +605,8 @@ public class SQLiteUtils {
         + " NUMBER NULL,"
         + DatabaseContract.PollTable.VERIFIED_POLL
         + " NUMBER NULL,"
-        + DatabaseContract.PollTable.ID_POLL_OPTION_VOTED
-        + " TEXT NULL,"
+        + DatabaseContract.PollTable.HIDE_RESULTS
+        + " NUMBER NULL,"
         + DatabaseContract.PollTable.PUBLISHED
         + " NUMBER NOT NULL)";
 
@@ -623,6 +623,8 @@ public class SQLiteUtils {
         + " TEXT NOT NULL,"
         + DatabaseContract.PollOptionTable.ORDER
         + " INT NOT NULL,"
+        + DatabaseContract.PollOptionTable.VOTED
+        + " INT NULL,"
         + DatabaseContract.PollOptionTable.VOTES
         + " NUMBER NULL)";
 
