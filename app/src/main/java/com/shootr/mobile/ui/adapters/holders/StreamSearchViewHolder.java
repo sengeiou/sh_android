@@ -91,7 +91,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
           .getResources()
           .getQuantityString(R.plurals.listing_favorites, stream.getTotalFavorites(),
               stream.getTotalFavorites());
-      subtitle.setText(favorites);
+      subtitleDescription.setText(favorites);
     }
   }
 
