@@ -220,12 +220,12 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   private void setupAuthorAndDescriptionSubtitle(StreamModel stream) {
     if (subtitle != null && subtitleDescription != null) {
       subtitle.setText("@" + stream.getAuthorUsername());
-      if (stream.getDescription() != null) {
-        subtitleDescription.setVisibility(View.VISIBLE);
-        subtitleDescription.setText(stream.getDescription());
-      } else {
-        subtitleDescription.setVisibility(View.GONE);
-      }
+      subtitleDescription.setVisibility(View.VISIBLE);
+      String favorites = subtitle.getContext()
+          .getResources()
+          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFavorites(),
+              stream.getTotalFavorites());
+      subtitle.setText(favorites);
     }
   }
 
