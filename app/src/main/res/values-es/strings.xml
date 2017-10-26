@@ -313,7 +313,7 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_ignore">Quitar encuesta</string>
   <string name="poll_live_results">Resultados en vivo</string>
-  <string name="poll_legal_text">Esta es una encuesta segura que permite solo un voto por cuenta y dispositivo. No se computarán segundos votos.</string>
+  <string name="poll_legal_text">Esta es una encuesta segura y permite solo un voto por cuenta y dispositivo. No se computarán segundos votos.</string>
   <string name="poll_manual_close">Tiempo restante: No definido</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Encuesta</string>

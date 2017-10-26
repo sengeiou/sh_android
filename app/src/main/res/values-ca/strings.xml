@@ -313,7 +313,7 @@
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_ignore">Llevar enquesta</string>
   <string name="poll_live_results">Resultats en viu</string>
-  <string name="poll_legal_text">Aquesta és una enquesta segura y permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
+  <string name="poll_legal_text">Aquesta és una enquesta segura i permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
   <string name="poll_manual_close">Temps restant: No definit</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Enquesta</string>
