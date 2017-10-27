@@ -22,7 +22,7 @@
   <string name="activity_login_email_forgot">Forgot Password?</string>
   <string name="activity_login_email_id_hint">Username or Email</string>
   <string name="activity_login_email_password_hint">Password</string>
-  <string name="activity_login_register_email">Create account</string>
+  <string name="activity_login_register_email">Create Account</string>
   <string name="activity_login_register_facebook">Log in with Facebook</string>
   <!-- Activity literals -->
   <string name="activity_login_signin">Sign In</string>
@@ -41,6 +41,7 @@
   <string name="add_contributor_button">Add contributor</string>
   <string name="add_contributor_confirmation_message">Add %s?</string>
   <string name="add_to_favorites_menu_title">Follow</string>
+  <string name="admin">"Admin. "</string>
   <string name="alert_report_confirmed_email_message">Go to Account &gt; Edit Profile and confirm your email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Confirmed Email Required</string>
@@ -50,23 +51,27 @@
   <string name="all_messages_title_plural">ALL (%d)</string>
   <string name="all_participants_button">All participants</string>
   <string name="all_push_settings">All</string>
+  <string name="back_button_poll">Back</string>
   <string name="block_unblock_user">Unblock</string>
   <string name="block_user_dialog_block">Block</string>
   <string name="block_user_dialog_cancel">Cancel</string>
   <string name="block_user_dialog_message">This user won\'t disturb you or the participants in your streams, and won\'t be able to find your profile or see any of your content.</string>
   <string name="block_user_error">To block this user you need to unfollow first.</string>
   <string name="cancel">Cancel</string>
-  <string formatted="false" name="cancel_hide_shot">Cancel</string>
+  <string name="cancel_hide_shot" formatted="false">Cancel</string>
   <string name="change_password_button_text">DONE</string>
   <string name="change_password_logout_message">Password changed. Must sign in again…</string>
   <string name="change_photo">Change photo</string>
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
   <string name="check_in_show_case">Check-in to say you\'re here</string>
-  <string name="filter_show_case">Tap here to see the important shots</string>
   <!-- Errors -->
   <string name="communication_error">There\'s a problem connecting with the internet. Check your connection and try again.</string>
   <string name="connection_lost">The network connection was lost</string>
+  <!-- Context menu on profile to mute notifications from this user -->
+  <string name="context_menu_mute">Mute notifications</string>
+  <!-- Context menu on profile to unmute notifications from this user -->
+  <string name="context_menu_unmute">Unmute notifications</string>
   <string name="contributors_empty">No contributors</string>
   <string name="copied_to_clipboard">Text copied to clipboard.</string>
   <string name="current_password_hint">Current password</string>
@@ -81,16 +86,16 @@
   <string name="dismiss_highlight_shot">Dismiss</string>
   <string name="done">Done</string>
   <string name="done_label">Done</string>
-  <string formatted="false" name="done_pin_topic">Pin</string>
+  <string name="done_pin_topic" formatted="false">Pin</string>
   <string name="downloaded_pictures_subfolder">Shootr/</string>
   <string name="download_photo_permission_denied">Permission denied. You need to grant access to save the image.</string>
   <string name="download_photo_permission_explaination">You must give Shootr permission to save images.</string>
   <string name="drafts_action_discard">Discard</string>
   <string name="drafts_action_shoot">Shoot</string>
   <string name="drafts_empty">No Drafts</string>
-  <string formatted="false" name="drawer_activity_me">Me</string>
+  <string name="drawer_activity_me" formatted="false">Me</string>
   <string name="drawer_activity_title">Activity</string>
-  <string formatted="false" name="drawer_following_activity_title">Following</string>
+  <string name="drawer_following_activity_title" formatted="false">Following</string>
   <string name="drawer_streams_title">Streams</string>
   <string name="drawer_users_title">Users</string>
   <string name="edit_stream">Edit</string>
@@ -175,6 +180,8 @@
   <string name="favorite_streams_push_settings">Streams I follow</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtered by: Important</string>
+  <!-- Tap here to see the important shots -->
+  <string name="filter_show_case">Tap here to see the important shots</string>
   <string name="finished_poll">Results for the poll %s</string>
   <string name="follower_list_empty">No followers</string>
   <string name="following_followers_separator">|</string>
@@ -216,6 +223,7 @@
   <string name="listing_title_favorites">Following</string>
   <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Loading…</string>
+  <string name="login_message">Talk about anything</string>
   <string name="main_activity_title">Activity</string>
   <string name="mentioned_shot_activity_with_comment">" mentioned you in"</string>
   <string name="menu_all_shots">Show all shots</string>
@@ -259,16 +267,16 @@
   <string name="new_shot_repeated">Whoops! You already shot that</string>
   <string name="new_stream_description_label">Description</string>
   <string name="new_stream_title_label">Title</string>
-  <string formatted="false" name="new_topic">New message…</string>
+  <string name="new_topic" formatted="false">New message…</string>
   <string name="next">Next</string>
-  <string name="niced_by">"Niced by "</string>
-  <string name="niced_shot_activity">" niced this from %s"</string>
-  <string name="niced_shot_activity_with_comment">" niced a shot in"</string>
+  <string name="niced_by">Niced by </string>
+  <string name="niced_shot_activity">niced this from %s</string>
+  <string name="niced_shot_activity_with_comment">" niced this in"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
     <item quantity="one">%d nice        </item>
-    <item quantity="other">%d nices       </item>
+    <item quantity="other">%d nices        </item>
   </plurals>
   <string name="no">No</string>
   <string name="notification_image">Image</string>
@@ -289,10 +297,18 @@
   <string name="no_filter_shots">No shots by you or verified accounts.</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="official_poll_button_text">Go to Notifications</string>
-  <string name="official_poll_description">Para garantizar un solo voto por cuenta y dispositivo, antes de votar debes activar las notificaciones de Shootr. Puedes configurarlas en tu perfil.</string>
+  <string name="official_poll_description">For security reasons, in order to vote you must unblock Shootr push notifications in your device.</string>
   <string name="official_poll_title">Official poll</string>
   <string name="off_push_settings">Off</string>
   <string name="ok">OK</string>
+  <!-- Continuar en el menú de onBoarding -->
+  <string name="onboarding_continue">Next</string>
+  <!-- botón entrar del onboarding -->
+  <string name="onboarding_enter">Next</string>
+  <!-- Header of the onBoarding Streams -->
+  <string name="onboarding_streams_header">Follow streams about topics you like</string>
+  <!-- Header on onBoarding Users -->
+  <string name="onboarding_users_header">And follow people you like</string>
   <string name="on_boarding_add_favorites">Popular streams</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Enter Shootr</string>
@@ -304,19 +320,23 @@
   <string name="photo_edit_remove">Remove</string>
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
   <string name="photo_edit_take">Camera</string>
-  <string formatted="false" name="pin_message_notification_confirmation_no">No</string>
-  <string formatted="false" name="pin_message_notification_confirmation_text">Notification will be sent to the stream\'s followers and current participants.</string>
-  <string formatted="false" name="pin_message_notification_confirmation_yes">Notify</string>
-  <string formatted="false" name="pin_topic">Pin message</string>
+  <string name="pin_message_notification_confirmation_no" formatted="false">No</string>
+  <string name="pin_message_notification_confirmation_text" formatted="false">Notification will be sent to the stream\'s followers and current participants.</string>
+  <string name="pin_message_notification_confirmation_yes" formatted="false">Notify</string>
+  <string name="pin_topic" formatted="false">Pin message</string>
+  <string name="poll_finished">Poll has finished in</string>
   <string name="poll_ignore">Dismiss poll</string>
-  <string name="poll_live_results">Live results</string>
   <string name="poll_legal_text">This a secure poll and admits only one vote per count and device. Second votes will not be counted.</string>
+  <string name="poll_live_results">Live results</string>
   <string name="poll_manual_close">Remaining time: Not defined</string>
+  <string name="poll_option_voted">You voted %s</string>
+  <string name="poll_published">New poll in</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Poll</string>
   <string name="poll_results">View results</string>
   <string name="poll_results_dialog">Once you see the results you won\'t be able to vote in this poll.</string>
   <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_shared">shared this poll in</string>
   <string name="poll_view">View</string>
   <string name="poll_vote">Vote</string>
   <plurals name="poll_votes_count">
@@ -378,8 +398,6 @@
   <string name="reply_name_pattern">%1$s to %2$s</string>
   <string name="reply_placeholder_pattern">Respond to %s…</string>
   <string name="report_context_menu_block">Block</string>
-  <string name="context_menu_mute">Mute notifications</string>
-  <string name="context_menu_unmute">Unmute notifications</string>
   <string name="report_context_menu_delete">Delete</string>
   <string name="report_context_menu_report">Report</string>
   <string name="report_context_menu_unblock">Unblock</string>
@@ -398,22 +416,27 @@
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restore stream</string>
   <string name="restore_stream_snackbar_action">Restore</string>
+  <string name="results_hidden_poll">Poll finished</string>
   <string name="search_users_hint">Search for users</string>
   <string name="seconds">s</string>
   <plurals name="seconds_left">
     <item quantity="one">%d second</item>
     <item quantity="other">%d seconds</item>
   </plurals>
-  <string name="shared_poll">shared poll %s</string>
+  <string name="shared_poll">Shared poll %s</string>
+  <string name="shared_poll_feedback">Shared poll</string>
   <string name="shared_shot_activity">" reshot  from %s"</string>
-  <string name="shared_shot_activity_with_comment">" reshot in"</string>
+  <string name="shared_shot_activity_with_comment">" reshot this in"</string>
   <string name="shared_stream_notification">Stream shared</string>
+  <string name="share_poll">Share vote</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Poll %s</string>
+  <string name="share_poll_voted_comment">You voted  \"%s\"</string>
+  <string name="share_poll_voted_subject">I voted \"%1$s\" in %2$s</string>
   <string name="share_shot_chooser_title">Share</string>
   <string name="share_shot_message">%s</string>
   <string name="share_shot_subject">Shot by %1$s on %2$s · Shootr</string>
-  <string name="share_stream_activity_text_pattern"> " shared"</string>
+  <string name="share_stream_activity_text_pattern">" shared"</string>
   <string name="share_stream_button">Share now</string>
   <string name="share_stream_description">Surely you have lots of people out there who would like your stream. Share it now through your social media or website, bring in people and start having fun.</string>
   <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s</string>
@@ -422,6 +445,7 @@
   <string name="share_stream_via_shootr">Share via Shootr</string>
   <string name="share_via">Share via…</string>
   <string name="share_via_shootr">Reshoot</string>
+  <string name="share_voted_poll">Share</string>
   <string name="shoot_all_button">Shoot all</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="one">%s response</item>
@@ -453,12 +477,12 @@
     <item quantity="zero">%s participants</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
-  <string name="stream_favorited_activity_text_pattern">" started following"</string>
+  <string name="stream_favorited_activity_text_pattern">" followed this stream"</string>
   <string name="stream_followers">Followers</string>
   <string name="stream_list_empty">No results</string>
   <string name="stream_media_empty_title">No photos or videos</string>
   <string name="stream_media_no_more_media">No more media</string>
-  <string name="stream_notification_confirmation_message">Notify your followers about this addition?</string>
+  <string name="stream_notification_confirmation_message">Notify your Shootr followers about this stream?</string>
   <string name="stream_notification_confirmation_no">Nope</string>
   <string name="stream_notification_confirmation_yes">Notify</string>
   <string name="stream_participants_following_number">following %d</string>
@@ -510,7 +534,6 @@
   <string name="update_shootr_version_url">https://play.google.com/store/apps/details?id=com.shootr.mobile</string>
   <string name="update_warning_button">Update now</string>
   <string name="update_warning_message">We\'ve built improvements that require updating to the newest version of Shootr.</string>
-  <string name="results_hidden_poll">Poll finished</string>
   <string name="user_blocked">This user won\'t disturb you or the participants in your streams, and won\'t be able to find your profile or see any of your content.</string>
   <string name="user_cannot_vote_alert_description">Only allowed one vote per device and per user</string>
   <string name="user_not_found">User not found.</string>
@@ -521,34 +544,17 @@
     <item quantity="other">%s views</item>
     <item quantity="zero">%s views</item>
   </plurals>
+  <string name="voted_in_a_poll">voted in</string>
   <string name="voted_poll">" voted in (question)"</string>
   <string name="voted_public_poll">" voted \"%s\" in (question)"</string>
   <string name="watching_stream_connected">connected</string>
   <string name="watching_stream_connected_muted">connected (muted)</string>
-  <string formatted="false" name="watch_profile_photo">View</string>
+  <string name="watch_profile_photo" formatted="false">View</string>
   <string name="welcome_get_started_button">Got it</string>
+  <string name="welcome_shootr">Entering Shootr…</string>
   <string name="welcome_shootr_title">Follow people to always read their messages</string>
   <string name="whale_message_default">We\'re busy polishing Shootr for you and will be back soon.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
-  <string name="onboarding_streams_header">Follow streams \n about topics you like</string>
-  <string name="onboarding_users_header">And follow people \n you like</string>
-  <string name="onboarding_continue">Next</string>
-  <string name="onboarding_enter">Next</string>
-  <string name="login_message">Talk about anything</string>
-  <string name="welcome_shootr">Entering Shootr…</string>
-  <string name="shared_poll_feedback">Poll shared</string>
-  <string name="share_poll_voted_subject">I voted \"%1$s\" in %2$s</string>
-  <string name="share_poll_voted_comment">You voted \"%s\"</string>
-  <string name="share_voted_poll">Share</string>
-  <string name="admin">"Admin. "</string>
-  <string name="voted_in_a_poll">voted in a poll in</string>
-  <string name="poll_finished">Poll has finished in</string>
-  <string name="poll_published">New poll in</string>
-  <string name="poll_shared">shared a poll in</string>
-  <string name="share_poll">Share vote</string>
-  <string name="poll_option_voted">Has votado %s</string>
-  <string name="back_button_poll">Back</string>
-  <string name="not_allowed_to_vote">Only allowed one vote per device and per user</string>
 </resources>
