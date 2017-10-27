@@ -21,8 +21,7 @@ public class RemotePollRepository implements ExternalPollRepository {
   private final PollDataSource localPollDataSource;
   private final PollEntityMapper pollEntityMapper;
 
-  @Inject
-  public RemotePollRepository(@Remote PollDataSource remotePollDataSource,
+  @Inject public RemotePollRepository(@Remote PollDataSource remotePollDataSource,
       @Local PollDataSource localPollDataSource, PollEntityMapper pollEntityMapper) {
     this.remotePollDataSource = remotePollDataSource;
     this.localPollDataSource = localPollDataSource;
@@ -30,8 +29,7 @@ public class RemotePollRepository implements ExternalPollRepository {
   }
 
   @Override public List<Poll> getPollByIdStream(String idStream)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException,
-      PollDeletedException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException, PollDeletedException {
     List<PollEntity> polls = remotePollDataSource.getPolls(idStream);
     if (polls.size() > 0) {
       PollEntity pollEntity = polls.get(0);
@@ -43,8 +41,7 @@ public class RemotePollRepository implements ExternalPollRepository {
   }
 
   @Override public Poll getPollByIdPoll(String idPoll)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException,
-      PollDeletedException {
+      throws UserCannotVoteRequestException, UserHasVotedRequestException, PollDeletedException {
     PollEntity pollEntity = remotePollDataSource.getPollById(idPoll);
     setPollVoteStatus(pollEntity);
     localPollDataSource.putPoll(pollEntity);
@@ -58,6 +55,8 @@ public class RemotePollRepository implements ExternalPollRepository {
       pollEntity.setVoteStatus(PollStatus.IGNORED);
     } else if (pollById != null && pollById.getVoteStatus().equals(PollStatus.HASSEENRESULTS)) {
       pollEntity.setVoteStatus(PollStatus.HASSEENRESULTS);
+    } else if (pollById != null && pollById.getVoteStatus().equals(PollStatus.VOTED)) {
+      pollEntity.setVoteStatus(PollStatus.VOTED);
     } else {
       pollEntity.setVoteStatus(pollEntity.getUserHasVoted() ? PollStatus.VOTED : PollStatus.VOTE);
     }
