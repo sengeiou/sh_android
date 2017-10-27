@@ -225,7 +225,7 @@
   <string name="loading_activity_message">Loading…</string>
   <string name="login_message">Talk about anything</string>
   <string name="main_activity_title">Activity</string>
-  <string name="mentioned_shot_activity_with_comment">"mentioned you in "</string>
+  <string name="mentioned_shot_activity_with_comment">" mentioned you in"</string>
   <string name="menu_all_shots">Show all shots</string>
   <string name="menu_check_in">Check-in</string>
   <string name="menu_copy_text">Copy text</string>
@@ -271,7 +271,7 @@
   <string name="next">Next</string>
   <string name="niced_by">Niced by </string>
   <string name="niced_shot_activity">niced this from %s</string>
-  <string name="niced_shot_activity_with_comment">" niced this in "</string>
+  <string name="niced_shot_activity_with_comment">" niced this in"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">

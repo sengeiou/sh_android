@@ -274,7 +274,7 @@
   <string name="next">Próximo</string>
   <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">" deu um nice a %s"</string>
-  <string name="niced_shot_activity_with_comment">" deu um nice em "</string>
+  <string name="niced_shot_activity_with_comment">" deu um nice em"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">

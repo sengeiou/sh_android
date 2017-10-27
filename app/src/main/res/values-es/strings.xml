@@ -274,7 +274,7 @@
   <string name="next">Siguiente</string>
   <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">" ha hecho nice a %s"</string>
-  <string name="niced_shot_activity_with_comment">" ha hecho un nice en "</string>
+  <string name="niced_shot_activity_with_comment">" ha hecho un nice en"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
