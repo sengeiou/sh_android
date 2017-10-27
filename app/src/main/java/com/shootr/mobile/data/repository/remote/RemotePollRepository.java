@@ -58,8 +58,28 @@ public class RemotePollRepository implements ExternalPollRepository {
       pollEntity.setVoteStatus(PollStatus.HASSEENRESULTS);
     } else if (pollById != null && pollById.getVoteStatus().equals(PollStatus.VOTED)) {
       pollEntity.setVoteStatus(PollStatus.VOTED);
+      pollEntity.setUserHasVoted(true);
+      overrideVotedOption(pollEntity, pollById);
+
     } else {
       pollEntity.setVoteStatus(pollEntity.getUserHasVoted() ? PollStatus.VOTED : PollStatus.VOTE);
+    }
+  }
+
+  private void overrideVotedOption(PollEntity pollEntity, PollEntity pollById) {
+    String votedOptionId = null;
+    for (PollOptionEntity pollOptionEntity : pollById.getPollOptions()) {
+      if (pollOptionEntity.isVoted()) {
+        votedOptionId = pollOptionEntity.getIdPollOption();
+      }
+    }
+
+    if (votedOptionId != null) {
+      for (PollOptionEntity pollOptionEntity : pollEntity.getPollOptions()) {
+        if (pollOptionEntity.getIdPollOption().equals(votedOptionId)) {
+          pollOptionEntity.setVoted(true);
+        }
+      }
     }
   }
 

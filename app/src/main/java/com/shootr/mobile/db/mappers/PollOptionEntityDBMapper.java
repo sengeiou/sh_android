@@ -22,7 +22,7 @@ public class PollOptionEntityDBMapper extends GenericDBMapper {
         c.getString(c.getColumnIndex(DatabaseContract.PollOptionTable.ID_POLL_OPTION)));
     pollOptionEntity.setVotes(c.getLong(c.getColumnIndex(DatabaseContract.PollOptionTable.VOTES)));
     pollOptionEntity.setOrder(c.getInt(c.getColumnIndex(DatabaseContract.PollOptionTable.ORDER)));
-    pollOptionEntity.setVoted(c.getColumnIndex(DatabaseContract.PollOptionTable.VOTED) == 1);
+    pollOptionEntity.setVoted(c.getInt(c.getColumnIndex(DatabaseContract.PollOptionTable.VOTED)) == 1);
     retrieveEntities(c, pollOptionEntity);
     return pollOptionEntity;
   }
