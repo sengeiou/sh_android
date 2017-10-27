@@ -16,7 +16,7 @@ public class PollEntity {
   private String votePrivacy;
   private Long expirationDate;
   private Boolean verifiedPoll;
-  private String idPollOptionVoted;
+  private boolean hideResults;
 
   public String getIdPoll() {
     return idPoll;
@@ -114,11 +114,11 @@ public class PollEntity {
     this.verifiedPoll = verifiedPoll;
   }
 
-  public String getIdPollOptionVoted() {
-    return idPollOptionVoted;
+  public Boolean isHideResults() {
+    return hideResults;
   }
 
-  public void setIdPollOptionVoted(String idPollOptionVoted) {
-    this.idPollOptionVoted = idPollOptionVoted;
+  public void setHideResults(Boolean hideResults) {
+    this.hideResults = hideResults;
   }
 }

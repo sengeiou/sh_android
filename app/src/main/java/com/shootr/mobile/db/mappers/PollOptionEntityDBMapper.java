@@ -22,6 +22,7 @@ public class PollOptionEntityDBMapper extends GenericDBMapper {
         c.getString(c.getColumnIndex(DatabaseContract.PollOptionTable.ID_POLL_OPTION)));
     pollOptionEntity.setVotes(c.getLong(c.getColumnIndex(DatabaseContract.PollOptionTable.VOTES)));
     pollOptionEntity.setOrder(c.getInt(c.getColumnIndex(DatabaseContract.PollOptionTable.ORDER)));
+    pollOptionEntity.setVoted(c.getInt(c.getColumnIndex(DatabaseContract.PollOptionTable.VOTED)) == 1);
     retrieveEntities(c, pollOptionEntity);
     return pollOptionEntity;
   }
@@ -39,6 +40,7 @@ public class PollOptionEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PollOptionTable.TEXT, pollOptionEntity.getText());
     cv.put(DatabaseContract.PollOptionTable.VOTES, pollOptionEntity.getVotes());
     cv.put(DatabaseContract.PollOptionTable.ORDER, pollOptionEntity.getOrder());
+    cv.put(DatabaseContract.PollOptionTable.VOTED, pollOptionEntity.isVoted() ? 1 : 0);
     storeImages(pollOptionEntity, cv);
     return cv;
   }

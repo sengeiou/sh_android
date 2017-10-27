@@ -29,7 +29,7 @@ public class PollEntityMapper {
       poll.setVotePrivacy(pollEntity.getVotePrivacy());
       poll.setExpirationDate(pollEntity.getExpirationDate());
       poll.setVerifiedPoll(pollEntity.getVerifiedPoll() != null ? pollEntity.getVerifiedPoll() : false);
-      poll.setIdPollOptionVoted(pollEntity.getIdPollOptionVoted());
+      poll.setHideResults(pollEntity.isHideResults());
     }
     return poll;
   }
@@ -48,7 +48,7 @@ public class PollEntityMapper {
     pollEntity.setVotePrivacy(poll.getVotePrivacy());
     pollEntity.setExpirationDate(poll.getExpirationDate());
     pollEntity.setVerifiedPoll(poll.isVerifiedPoll());
-    pollEntity.setIdPollOptionVoted(poll.getIdPollOptionVoted());
+    pollEntity.setHideResults(poll.isHideResults());
     return pollEntity;
   }
 

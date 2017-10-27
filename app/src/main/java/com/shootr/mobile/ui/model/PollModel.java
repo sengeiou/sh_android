@@ -1,8 +1,9 @@
 package com.shootr.mobile.ui.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PollModel {
+public class PollModel implements Serializable {
 
   private final long ONE_HOUR_MILISECONDS = 3600000;
   private String idPoll;
@@ -18,7 +19,7 @@ public class PollModel {
   private String votePrivacy;
   private Long expirationDate;
   private boolean verifiedPoll;
-  private String idPollOptionVoted;
+  private boolean hideResults;
 
   public String getIdPoll() {
     return idPoll;
@@ -141,11 +142,11 @@ public class PollModel {
     this.verifiedPoll = verifiedPoll;
   }
 
-  public String getIdPollOptionVoted() {
-    return idPollOptionVoted;
+  public boolean isHideResults() {
+    return hideResults;
   }
 
-  public void setIdPollOptionVoted(String idPollOptionVoted) {
-    this.idPollOptionVoted = idPollOptionVoted;
+  public void setHideResults(boolean hideResults) {
+    this.hideResults = hideResults;
   }
 }

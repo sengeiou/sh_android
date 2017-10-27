@@ -13,6 +13,18 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.46.0] - 2017-10-27
+### Added
+- Hidden polls
+
+### Fixed
+- Upload photo size to 1024 Mb
+- Upload profile photo size to 512 Mb
+
+### Changed
+- Changed #followers instead of Description on a cell stream
+
+
 ## [1.45.2] - 2017-10-23
 ### Fixed
 - Crash on streams from profile on some devices

@@ -25,7 +25,8 @@ public class StreamPollIndicatorPresenter implements Presenter {
   private String streamAuthorIdUser;
   private boolean hasBeenPaused;
   private String action;
-  String idPoll;
+  private String idPoll;
+  private PollModel pollModel;
 
   @Inject
   public StreamPollIndicatorPresenter(GetPollByIdStreamInteractor getPollByIdStreamInteractor,
@@ -50,6 +51,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
   public void loadPoll() {
     getPollByIdStreamInteractor.loadPoll(idStream, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
+        pollModel = pollModelMapper.transform(poll);
         handlePollResult(pollModelMapper.transform(poll));
       }
     }, new Interactor.ErrorCallback() {
@@ -71,7 +73,12 @@ public class StreamPollIndicatorPresenter implements Presenter {
   private void getPollAction(PollModel pollModel) {
     if (pollModel.getStatus().equals(PollStatus.CLOSED)) {
       action = RESULTS;
-      streamPollView.showPollIndicatorWithResultsAction(pollModel);
+      if (pollModel.isHideResults()) {
+        action = VIEW;
+        streamPollView.showPollIndicatorWithViewAction(pollModel);
+      } else {
+        streamPollView.showPollIndicatorWithResultsAction(pollModel);
+      }
       return;
     }
     handleVoteStatus(pollModel);
@@ -108,13 +115,25 @@ public class StreamPollIndicatorPresenter implements Presenter {
   public void onActionPressed() {
     switch (action) {
       case RESULTS:
-        streamPollView.goToPollResults(idPoll, idStream);
+        if (pollModel.isHideResults() && pollModel.getHasVoted()) {
+          streamPollView.goToOptionVoted(pollModel);
+        } else if (pollModel.isHideResults()) {
+          streamPollView.goToHiddenResults(pollModel.getQuestion());
+        } else {
+          streamPollView.goToPollResults(idPoll, idStream);
+        }
         break;
       case VOTE:
         streamPollView.goToPollVote(idStream, streamAuthorIdUser);
         break;
       default:
-        streamPollView.goToPollLiveResults(idPoll, idStream);
+        if (pollModel.isHideResults() && pollModel.getHasVoted()) {
+          streamPollView.goToOptionVoted(pollModel);
+        } else if (pollModel.isHideResults()) {
+          streamPollView.goToHiddenResults(pollModel.getQuestion());
+        } else {
+          streamPollView.goToPollLiveResults(idPoll, idStream);
+        }
         break;
     }
   }

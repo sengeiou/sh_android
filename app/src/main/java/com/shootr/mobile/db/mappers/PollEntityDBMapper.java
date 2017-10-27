@@ -24,10 +24,9 @@ public class PollEntityDBMapper extends GenericDBMapper {
     pollEntity.setQuestion(c.getString(c.getColumnIndex(DatabaseContract.PollTable.QUESTION)));
     pollEntity.setVotePrivacy(c.getString(c.getColumnIndex(DatabaseContract.PollTable.VOTE_PRIVACY)));
     pollEntity.setExpirationDate(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.EXPIRATION_DATE)));
+    pollEntity.setHideResults(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HIDE_RESULTS)) == 1L);
     pollEntity.setVerifiedPoll(
         c.getLong(c.getColumnIndex(DatabaseContract.PollTable.VERIFIED_POLL)) == 1L);
-    pollEntity.setIdPollOptionVoted(
-        c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_POLL_OPTION_VOTED)));
     return pollEntity;
   }
 
@@ -46,7 +45,8 @@ public class PollEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.PollTable.EXPIRATION_DATE, pollEntity.getExpirationDate());
     cv.put(DatabaseContract.PollTable.VERIFIED_POLL,
         pollEntity.getVerifiedPoll() != null && pollEntity.getVerifiedPoll() ? 1L : 0L);
-    cv.put(DatabaseContract.PollTable.ID_POLL_OPTION_VOTED, pollEntity.getIdPollOptionVoted());
+    cv.put(DatabaseContract.PollTable.HIDE_RESULTS,
+        pollEntity.isHideResults() != null && pollEntity.isHideResults() ? 1L : 0L);
     return cv;
   }
 }

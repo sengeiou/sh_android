@@ -11,6 +11,7 @@ public class PollOption {
   private String title;
   private Long votes;
   private Integer order;
+  private boolean voted;
 
   public String getIdPoll() {
     return idPoll;
@@ -76,5 +77,13 @@ public class PollOption {
 
   public void setOptionImage(ImageMedia optionImage) {
     this.optionImage = optionImage;
+  }
+
+  public boolean isVoted() {
+    return voted;
+  }
+
+  public void setVoted(boolean voted) {
+    this.voted = voted;
   }
 }

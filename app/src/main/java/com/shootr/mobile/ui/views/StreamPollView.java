@@ -19,4 +19,8 @@ public interface StreamPollView {
   void goToPollResults(String idPoll, String idStream);
 
   void goToPollLiveResults(String idPoll, String idStream);
+
+  void goToOptionVoted(PollModel pollModel);
+
+  void goToHiddenResults(String question);
 }

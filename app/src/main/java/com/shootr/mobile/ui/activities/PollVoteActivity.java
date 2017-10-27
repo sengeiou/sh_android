@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -55,10 +56,12 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @BindView(R.id.container) CoordinatorLayout container;
   @BindView(R.id.poll_countdown) TextView pollCountdown;
   @BindView(R.id.poll_votes) TextView pollVoteNumber;
+  @BindView(R.id.vote_number_container) RelativeLayout footerContainer;
 
   @BindString(R.string.analytics_screen_poll_vote) String analyticsPollVote;
   @BindString(R.string.private_vote) String privatePoll;
   @BindString(R.string.poll_vote) String pollVote;
+  @BindString(R.string.poll_legal_text) String legalText;
 
   @Inject InitialsLoader initialsLoader;
   @Inject PollVotePresenter presenter;
@@ -73,6 +76,7 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   private MenuItemValueHolder ignorePollMenu = new MenuItemValueHolder();
   private MenuItemValueHolder publicPollVoteMenu = new MenuItemValueHolder();
   private MenuItemValueHolder privatePollVoteMenu = new MenuItemValueHolder();
+  private MenuItemValueHolder showResultsMenu = new MenuItemValueHolder();
   private ActionBar actionBar;
 
   private boolean isPrivateVote = true;
@@ -123,6 +127,14 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
       }
     }, imageLoader, initialsLoader);
     GridLayoutManager layoutManager = new GridLayoutManager(this, COLUMNS_NUMBER);
+    layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+      @Override public int getSpanSize(int position) {
+        if (pollVoteAdapter.getItemViewType(position) == PollVoteAdapter.TYPE_FOOTER_LEGAL_TEXT) {
+          return COLUMNS_NUMBER;
+        }
+        return 1;
+      }
+    });
     pollOptionsRecycler.setLayoutManager(layoutManager);
     pollOptionsRecycler.setAdapter(pollVoteAdapter);
     pollOptionsRecycler.addItemDecoration(new BottomOffsetDecoration(200));
@@ -185,7 +197,8 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
     streamTitle.setText(title);
     pollQuestion.setText(pollModel.getQuestion());
-    pollVoteAdapter.setPollOptionModels(pollModel.getPollOptionModels());
+    pollVoteAdapter.setPollOptionModels(pollModel.getPollOptionModels(),
+        pollModel.isVerifiedPoll() ? legalText : null);
     pollVoteAdapter.notifyDataSetChanged();
     sendMixPanel();
   }
@@ -211,7 +224,14 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
 
   @Override public void goToResults(String idPoll, String idStream, boolean hasVoted) {
     String title = getIntent().getStringExtra(EXTRA_STREAM_TITLE);
-    Intent intent = PollResultsActivity.newLiveResultsIntent(this, idPoll, title, idStream, hasVoted);
+    Intent intent =
+        PollResultsActivity.newLiveResultsIntent(this, idPoll, title, idStream, hasVoted);
+    startActivity(intent);
+    finish();
+  }
+
+  @Override public void goToHiddenResults(String pollQuestion) {
+    Intent intent = HiddenPollResultsActivity.newResultsIntent(this, pollQuestion);
     startActivity(intent);
     finish();
   }
@@ -274,8 +294,13 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
     alertDialogBuilder //
         .setMessage(getString(R.string.user_cannot_vote_alert_description)) //
-        .setPositiveButton(getString(R.string.ok),
-            null).show();
+        .setPositiveButton(getString(R.string.ok), null).show();
+  }
+
+  @Override public void goToVotedOption(PollModel pollModel) {
+    Intent intent = PollOptionVotedActivity.getIntentForActivity(this, pollModel);
+    startActivity(intent);
+    finish();
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -285,7 +310,12 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
     publicPollVoteMenu.setVisible(false);
     privatePollVoteMenu.bindRealMenuItem(menu.findItem(R.id.menu_private_poll));
     privatePollVoteMenu.setVisible(false);
+    showResultsMenu.bindRealMenuItem(menu.findItem(R.id.menu_show_results));
     return true;
+  }
+
+  @Override public void hideShowResultsMenu() {
+    showResultsMenu.setVisible(false);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -336,5 +366,9 @@ public class PollVoteActivity extends BaseToolbarDecoratedActivity implements Po
   @Override public void hideLoading() {
     pollOptionsRecycler.setVisibility(View.VISIBLE);
     progressBar.setVisibility(View.GONE);
+  }
+
+  @Override public void hideFooter() {
+    footerContainer.setVisibility(View.GONE);
   }
 }

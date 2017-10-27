@@ -8,6 +8,7 @@ public class PollOptionEntity {
   private String text;
   private Long votes;
   private Integer order;
+  private boolean voted;
 
   public String getIdPoll() {
     return idPoll;
@@ -55,5 +56,13 @@ public class PollOptionEntity {
 
   public void setOptionImage(ImageMediaEntity optionImage) {
     this.optionImage = optionImage;
+  }
+
+  public boolean isVoted() {
+    return voted;
+  }
+
+  public void setVoted(boolean voted) {
+    this.voted = voted;
   }
 }

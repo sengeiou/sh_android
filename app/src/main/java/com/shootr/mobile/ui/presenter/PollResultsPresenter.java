@@ -49,7 +49,8 @@ public class PollResultsPresenter implements Presenter {
     this.poller = poller;
   }
 
-  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream, boolean hasVoted) {
+  public void initialize(PollResultsView pollResultsView, String idPoll, String idStream,
+      boolean hasVoted) {
     setView(pollResultsView);
     this.idPoll = idPoll;
     this.idStream = idStream;
@@ -84,18 +85,19 @@ public class PollResultsPresenter implements Presenter {
     if (pollModel != null) {
       idPoll = pollModel.getIdPoll();
       pollResultsView.renderPollResults(pollModel, shouldShowShareVoted(pollModel));
+      if (pollModel.isHideResults()) {
+        pollResultsView.hideFooter();
+      }
       showPollVotesTimeToExpire(pollModel.getExpirationDate());
       setupPoller();
     }
   }
 
   private boolean shouldShowShareVoted(PollModel pollModel) {
-    if (pollModel.getIdPollOptionVoted() != null) {
-      for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
-        if (pollOptionModel.getIdPollOption().equals(pollModel.getIdPollOptionVoted())) {
-          pollOptionVoted = pollOptionModel;
-          return true;
-        }
+    for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
+      if (pollOptionModel.isVoted()) {
+        pollOptionVoted = pollOptionModel;
+        return true;
       }
     }
     return false;

@@ -13,6 +13,8 @@ public interface PollVoteView  extends LoadDataView {
 
   void goToResults(String idPoll, String idStream, boolean hasVoted);
 
+  void goToHiddenResults(String pollQuestion);
+
   void showError(String message);
 
   void showTimeoutAlert();
@@ -28,4 +30,10 @@ public interface PollVoteView  extends LoadDataView {
   void showNotificationsScreen();
 
   void showUserCannotVoteAlert();
+
+  void hideFooter();
+
+  void hideShowResultsMenu();
+
+  void goToVotedOption(PollModel pollModel);
 }

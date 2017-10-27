@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.shootr.mobile.ui.activities.PollOptionVotedActivity"
+    >
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical"
+      android:gravity="center"
+      android:layout_marginTop="75dp"
+      >
+
+    <LinearLayout
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:orientation="vertical"
+        android:background="@drawable/option_voted_image"
+        android:padding="6dp"
+        >
+      <com.shootr.mobile.ui.widgets.AvatarView
+          android:id="@+id/poll_option_image"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          />
+    </LinearLayout>
+
+    <TextView
+      android:id="@+id/voted_option"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:layout_marginRight="50dp"
+      android:layout_marginLeft="50dp"
+      android:gravity="center"
+      android:textSize="20sp"
+      android:fontFamily="sans-serif"
+      android:textColor="@color/material_black"
+      tools:text="Has votado Pepito el grillo"
+      />
+
+  <Button
+      android:id="@+id/share_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:text="@string/share_poll"
+      app:backgroundTint="@color/accent"
+      />
+  </LinearLayout>
+
+  <TextView
+      android:id="@+id/legal_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_above="@+id/poll_votes_container"
+      android:gravity="center"
+      android:textColor="#999999"
+      android:layout_marginRight="24dp"
+      android:layout_marginLeft="24dp"
+      android:layout_marginBottom="16dp"
+      android:visibility="gone"
+      android:text="@string/poll_legal_text"
+      tools:visibility="visible"
+      />
+
+  <RelativeLayout
+      android:id="@+id/poll_votes_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      android:visibility="visible"
+      android:orientation="vertical"
+      android:background="#fafafa"
+      android:paddingTop="16dp"
+      android:paddingLeft="16dp"
+      android:paddingBottom="16dp"
+      android:paddingRight="8dp"
+      android:layout_alignParentBottom="true"
+      android:gravity="center"
+      >
+
+    <TextView
+        android:id="@+id/poll_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:visibility="visible"
+        android:gravity="end"
+        tools:text="2 hours 25 seconds left"
+        android:layout_marginRight="8dp"
+        android:layout_toRightOf="@+id/poll_votes"
+        android:fontFamily="sans-serif"
+        android:textColor="#999999"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:paddingLeft="16dp"
+        />
+  </RelativeLayout>
+</RelativeLayout>

@@ -423,11 +423,11 @@ public class DatabaseContract {
     public static final String VOTE_PRIVACY = "votePrivacy";
     public static final String EXPIRATION_DATE = "expirationDate";
     public static final String VERIFIED_POLL = "verifiedPoll";
-    public static final String ID_POLL_OPTION_VOTED = "idPollOptionVoted";
+    public static final String HIDE_RESULTS = "hideResults";
 
     public static final String[] PROJECTION = {
         ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, VOTE_PRIVACY,
-        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL, ID_POLL_OPTION_VOTED
+        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL, HIDE_RESULTS
     };
   }
 
@@ -445,9 +445,10 @@ public class DatabaseContract {
     public static final String TEXT = "text";
     public static final String VOTES = "votes";
     public static final String ORDER = "'order'";
+    public static final String VOTED = "voted";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_POLL_OPTION, OPTION_IMAGE, TEXT, VOTES, ORDER
+        ID_POLL, ID_POLL_OPTION, OPTION_IMAGE, TEXT, VOTES, ORDER, VOTED
     };
   }
 

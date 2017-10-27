@@ -41,6 +41,7 @@
   <string name="add_contributor_button">Afegir col·laborador</string>
   <string name="add_contributor_confirmation_message">Afegir %s?</string>
   <string name="add_to_favorites_menu_title">Seguir</string>
+  <string name="admin">"Admin. "</string>
   <string name="alert_report_confirmed_email_message">Vés a Compte &gt; Editar Perfil i confirma el teu email.</string>
   <string name="alert_report_confirmed_email_ok">OK</string>
   <string name="alert_report_confirmed_email_title">Cal un email confirmat</string>
@@ -50,6 +51,7 @@
   <string name="all_messages_title_plural">TOTHOM (%d)</string>
   <string name="all_participants_button">Tots els participants</string>
   <string name="all_push_settings">Totes</string>
+  <string name="back_button_poll">Enrere</string>
   <string name="block_unblock_user">Desbloquejar</string>
   <string name="block_user_dialog_block">Bloquejar</string>
   <string name="block_user_dialog_cancel">Cancel·lar</string>
@@ -63,10 +65,13 @@
   <!-- It's the title of the settings that mean receive push on do a check-in -->
   <string name="checkin_push_settings">Check-in</string>
   <string name="check_in_show_case">Fes check-in per dir que ets aquí</string>
-  <string name="filter_show_case">Prem aquí per veure els shots importants</string>
   <!-- Errors -->
   <string name="communication_error">Hi ha un problema de connexió a Internet. Comprova la teva connexió i prova un altre cop.</string>
   <string name="connection_lost">S\'ha perdut la connexió</string>
+  <!-- Context menu on profile to mute notifications from this user -->
+  <string name="context_menu_mute">Silenciar notificacions</string>
+  <!-- Context menu on profile to unmute notifications from this user -->
+  <string name="context_menu_unmute">Activar notificacions</string>
   <string name="contributors_empty">No n\'hi ha</string>
   <string name="copied_to_clipboard">Text copiat al portapapers.</string>
   <string name="current_password_hint">Contrasenya actual</string>
@@ -176,6 +181,8 @@
   <string name="favorite_streams_push_settings">Streams que segueixo</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtrat per: Important</string>
+  <!-- Tap here to see the important shots -->
+  <string name="filter_show_case">Prem aquí per veure els shots importants</string>
   <string name="finished_poll">Resultat de l\'enquesta %s</string>
   <string name="follower_list_empty">No hi ha seguidors</string>
   <string name="following_followers_separator">|</string>
@@ -218,6 +225,7 @@
   <string name="listing_title_favorites">Seguint</string>
   <string name="listing_title_holding">Admin</string>
   <string name="loading_activity_message">Carregant…</string>
+  <string name="login_message">Talk about anything</string>
   <string name="main_activity_title">Activitat</string>
   <string name="mentioned_shot_activity_with_comment">" t\'ha mencionat a"</string>
   <string name="menu_all_shots">Mostrar tots els shots</string>
@@ -231,7 +239,7 @@
   <string name="menu_search_participants">Buscar participants</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
-  <string name="menu_share_poll_via_shootr">Compartir enquesta</string>
+  <string name="menu_share_poll_via_shootr">Compartir via Shootr</string>
   <string name="menu_share_shot_via">Compartir via…</string>
   <string name="menu_share_shot_via_shootr">Reshoot</string>
   <string name="menu_stream_edit_info">Info</string>
@@ -266,7 +274,7 @@
   <string name="next">Següent</string>
   <string name="niced_by">"Nice de "</string>
   <string name="niced_shot_activity">" ha fet nice a %s"</string>
-  <string name="niced_shot_activity_with_comment">" ha fet nice a un shot a"</string>
+  <string name="niced_shot_activity_with_comment">" ha fet un nice a"</string>
   <string name="nicers">Nicers</string>
   <string name="nices_push_settings">Nice shot</string>
   <plurals name="nice_count_pattern">
@@ -292,10 +300,18 @@
   <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="official_poll_button_text">Anar a Notificacions</string>
-  <string name="official_poll_description">Per raons de seguretat, per votar cal desbloquejar les notificacions de Shootr en el teu dispositiu. Pots configurar les notificiacions al teu perfil.</string>
+  <string name="official_poll_description">Per garantir un sol vot per compte i dispositiu, abans de votar has d\'activar les notificacions de Shootr.</string>
   <string name="official_poll_title">Enquesta oficial</string>
   <string name="off_push_settings">Cap</string>
   <string name="ok">OK</string>
+  <!-- Continuar en el menú de onBoarding -->
+  <string name="onboarding_continue">Continuar</string>
+  <!-- botón entrar del onboarding -->
+  <string name="onboarding_enter">Continuar</string>
+  <!-- Header of the onBoarding Streams -->
+  <string name="onboarding_streams_header">Segueix streams de temes que t\'agradin</string>
+  <!-- Header on onBoarding Users -->
+  <string name="onboarding_users_header">I segueix gent que t\'interessi</string>
   <string name="on_boarding_add_favorites">Streams populars</string>
   <!-- Button enter Shootr -->
   <string name="on_boarding_enter_shootr">Entrar a Shootr</string>
@@ -311,14 +327,19 @@
   <string name="pin_message_notification_confirmation_text" formatted="false">La notificació s\'enviarà als seguidors i participants actuals de l\'stream.</string>
   <string name="pin_message_notification_confirmation_yes" formatted="false">Notificar</string>
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
+  <string name="poll_finished">Enquesta finalitzada a</string>
   <string name="poll_ignore">Llevar enquesta</string>
+  <string name="poll_legal_text">Aquesta és una enquesta segura i permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
   <string name="poll_live_results">Resultats en viu</string>
   <string name="poll_manual_close">Temps restant: No definit</string>
+  <string name="poll_option_voted">Has votat %s</string>
+  <string name="poll_published">Nova enquesta a</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Enquesta</string>
   <string name="poll_results">Veure resultats</string>
   <string name="poll_results_dialog">Un cop vistos els resultats no podràs votar en aquesta enquesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
+  <string name="poll_shared">ha compartit aquesta enquesta a</string>
   <string name="poll_view">Veure</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
@@ -381,8 +402,6 @@
   <string name="reply_name_pattern">%1$s a %2$s</string>
   <string name="reply_placeholder_pattern">Respondre a %s…</string>
   <string name="report_context_menu_block">Bloquejar</string>
-  <string name="context_menu_mute">Silenciar notificacions</string>
-  <string name="context_menu_unmute">Activar notificacions</string>
   <string name="report_context_menu_delete">Eliminar</string>
   <string name="report_context_menu_report">Reportar</string>
   <string name="report_context_menu_unblock">Desbloquejar</string>
@@ -401,6 +420,7 @@
   <string name="reshot_push_settings">Reshot</string>
   <string name="restore_stream_label">Restaurar stream</string>
   <string name="restore_stream_snackbar_action">Restaurar</string>
+  <string name="results_hidden_poll">Enquesta finalitzada</string>
   <string name="search_users_hint">Buscar usuaris</string>
   <string name="seconds">s</string>
   <plurals name="seconds_left">
@@ -408,12 +428,16 @@
     <item quantity="other">%d segons</item>
     <item quantity="zero">%d segon</item>
   </plurals>
-  <string name="shared_poll">ha compartit l\'enquesta %s</string>
+  <string name="shared_poll">Ha compartit l\'enquesta %s</string>
+  <string name="shared_poll_feedback">Enquesta compartida</string>
   <string name="shared_shot_activity">" reshot de %s"</string>
   <string name="shared_shot_activity_with_comment">" ha fet un reshot a"</string>
   <string name="shared_stream_notification">Stream compartit</string>
+  <string name="share_poll">Compartir vot</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Enquesta %s</string>
+  <string name="share_poll_voted_comment">Has votat \"%s\"</string>
+  <string name="share_poll_voted_subject">He votat \"%1$s\" a %2$s</string>
   <string name="share_shot_chooser_title">Compartir</string>
   <string name="share_shot_message">%s</string>
   <string name="share_shot_subject">%1$s ha fet un shot a %2$s</string>
@@ -426,6 +450,7 @@
   <string name="share_stream_via_shootr">Compartir via Shootr</string>
   <string name="share_via">Compartir via…</string>
   <string name="share_via_shootr">Reshoot</string>
+  <string name="share_voted_poll">Compartir</string>
   <string name="shoot_all_button">Enviar tot</string>
   <plurals name="shot_replies_count_pattern">
     <item quantity="one">%s resposta</item>
@@ -462,7 +487,7 @@
   <string name="stream_list_empty">No hi ha resultats</string>
   <string name="stream_media_empty_title">No hi ha fotos ni vídeos</string>
   <string name="stream_media_no_more_media">No hi ha més arxius</string>
-  <string name="stream_notification_confirmation_message">Notificar als teus seguidors sobre aquest stream?</string>
+  <string name="stream_notification_confirmation_message">Notificar als teus seguidors de Shootr sobre aquest stream?</string>
   <string name="stream_notification_confirmation_no">No</string>
   <string name="stream_notification_confirmation_yes">Notificar</string>
   <string name="stream_participants_following_number">seguint a %d</string>
@@ -523,30 +548,17 @@
     <item quantity="other">%s visualitzacions</item>
     <item quantity="zero">%s visualitzacions</item>
   </plurals>
+  <string name="voted_in_a_poll">ha votat a</string>
   <string name="voted_poll">" ha votat a (question)"</string>
   <string name="voted_public_poll">" ha votat \"%s\" a (question)"</string>
   <string name="watching_stream_connected">connectat</string>
   <string name="watching_stream_connected_muted">connectat (silenciat)</string>
   <string name="watch_profile_photo" formatted="false">Veure</string>
   <string name="welcome_get_started_button">Començar</string>
+  <string name="welcome_shootr">Entrant a Shootr…</string>
   <string name="welcome_shootr_title">Segueix la gent que t\'interessa i mai et perdis els seus missatges</string>
   <string name="whale_message_default">Estem millorant Shootr per a tu. Tornem aviat.</string>
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
-  <string name="onboarding_streams_header">Segueix streams \n de temes que t\'agradin</string>
-  <string name="onboarding_users_header">I segueix gent \n que t\'interessi</string>
-  <string name="onboarding_continue">Continuar</string>
-  <string name="onboarding_enter">Continuar</string>
-  <string name="login_message">Talk about anything</string>
-  <string name="welcome_shootr">Entrant a Shootr…</string>
-  <string name="shared_poll_feedback">Enquesta compartida</string>
-  <string name="share_poll_voted_subject">He votat \"%1$s\" a %2$s</string>
-  <string name="share_poll_voted_comment">Has votat \"%s\"</string>
-  <string name="share_voted_poll">Compartir</string>
-  <string name="admin">"Admin. "</string>
-  <string name="voted_in_a_poll">ha votat a una enquesta a</string>
-  <string name="poll_finished">Enquesta finalitzada a</string>
-  <string name="poll_published">Nova enquesta a</string>
-  <string name="poll_shared">ha compartit una enquesta a</string>
 </resources>

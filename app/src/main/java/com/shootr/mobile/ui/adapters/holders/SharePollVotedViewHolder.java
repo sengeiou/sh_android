@@ -34,8 +34,9 @@ public class SharePollVotedViewHolder extends RecyclerView.ViewHolder {
     String pollVotedText = "";
 
     for (PollOptionModel pollOptionModel : model.getPollOptionModels()) {
-      if (pollOptionModel.getIdPollOption().equals(model.getIdPollOptionVoted())) {
+      if (pollOptionModel.isVoted()) {
         pollVotedText = pollOptionModel.getText();
+        break;
       }
     }
 

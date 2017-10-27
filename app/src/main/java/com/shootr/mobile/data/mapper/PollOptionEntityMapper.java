@@ -21,6 +21,7 @@ public class PollOptionEntityMapper {
     pollOption.setIdPoll(pollOptionEntity.getIdPoll());
     pollOption.setIdPollOption(pollOptionEntity.getIdPollOption());
     pollOption.setOrder(pollOptionEntity.getOrder());
+    pollOption.setVoted(pollOptionEntity.isVoted());
     pollOption.setOptionImage(imageMediaEntityMapper.transform(pollOptionEntity.getOptionImage()));
     return pollOption;
   }
@@ -40,6 +41,7 @@ public class PollOptionEntityMapper {
     pollOptionEntity.setText(pollOption.getTitle());
     pollOptionEntity.setVotes(pollOption.getVotes());
     pollOptionEntity.setIdPollOption(pollOption.getIdPollOption());
+    pollOptionEntity.setVoted(pollOption.isVoted());
     pollOptionEntity.setOptionImage(imageMediaEntityMapper.transform(pollOption.getOptionImage()));
     return pollOptionEntity;
   }

@@ -12,12 +12,12 @@ import com.shootr.mobile.domain.interactor.poll.ShowPollResultsInteractor;
 import com.shootr.mobile.domain.interactor.poll.VotePollOptionInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.model.poll.Poll;
+import com.shootr.mobile.domain.model.poll.PollOption;
 import com.shootr.mobile.domain.model.poll.PollStatus;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
-
-import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.domain.service.user.UserCannotVoteDueToDeviceException;
+import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.mappers.PollModelMapper;
@@ -42,7 +42,6 @@ public class PollVotePresenter implements Presenter {
   private final ErrorMessageFactory errorMessageFactory;
   private final Poller poller;
   private final Context appContext;
-
 
   private PollVoteView pollVoteView;
   private String idStream;
@@ -121,11 +120,25 @@ public class PollVotePresenter implements Presenter {
     if (canRenderPoll()) {
       idStream = pollModel.getIdStream();
       pollVoteView.renderPoll(pollModel);
+      if (pollModel.isHideResults()) {
+        pollVoteView.hideFooter();
+        pollVoteView.hideShowResultsMenu();
+      }
       showPollVotesTimeToExpire(pollModel.getExpirationDate());
       setupPoller();
       handlePollPrivacy();
     } else {
-      if (pollModel != null) {
+      handleNextScreen();
+    }
+  }
+
+  private void handleNextScreen() {
+    if (pollModel != null) {
+      if (pollModel.isHideResults() && pollModel.getHasVoted()) {
+        pollVoteView.goToVotedOption(pollModel);
+      } else if (pollModel.isHideResults()) {
+        pollVoteView.goToHiddenResults(pollModel.getQuestion());
+      } else {
         pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
       }
     }
@@ -201,7 +214,7 @@ public class PollVotePresenter implements Presenter {
     }
   }
 
-  public void voteOption(String pollOptionId) {
+  public void voteOption(final String pollOptionId) {
     if (pollModel != null) {
       if (pollModel.isVerifiedPoll() && !NotificationManagerCompat.from(appContext)
           .areNotificationsEnabled()) {
@@ -213,8 +226,12 @@ public class PollVotePresenter implements Presenter {
         votePollOptionInteractor.vote(pollModel.getIdPoll(), pollOptionId, isPrivateVote,
             pollModel.isVerifiedPoll(), new Interactor.Callback<Poll>() {
               @Override public void onLoaded(Poll poll) {
-                pollVoteView.hideLoading();
-                pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), true);
+                if (pollModel.isHideResults()) {
+                  manageHideResults(poll, pollOptionId);
+                } else {
+                  pollVoteView.hideLoading();
+                  pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), true);
+                }
               }
             }, new Interactor.ErrorCallback() {
               @Override public void onError(ShootrException error) {
@@ -228,6 +245,15 @@ public class PollVotePresenter implements Presenter {
             });
       }
     }
+  }
+
+  private void manageHideResults(Poll poll, String pollOptionId) {
+    for (PollOption pollOption : poll.getPollOptions()) {
+      if (pollOption.getIdPollOption().equals(pollOptionId)) {
+        pollOption.setVoted(true);
+      }
+    }
+    pollVoteView.goToVotedOption(pollModelMapper.transform(poll));
   }
 
   public void retryVote() {
