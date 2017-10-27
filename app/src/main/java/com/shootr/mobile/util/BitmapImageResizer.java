@@ -17,10 +17,12 @@ public class BitmapImageResizer implements ImageResizer {
 
   private static final int MAX_SIZE = 2400;
   private static final long MAX_WEIGHT_KB = 1024;
+  private static final long MAX_WEIGHT_KB_PROFILE = 512;
 
   public static final String OUTPUT_IMAGE_NAME = "profileUploadResized.jpg";
   public static final int INITIAL_COMPRESSION_QUALITY = 90;
   public static final int COMPRESSION_QUALITY_DECREMENT = 5;
+  private boolean isFromProfile = false;
 
   private final Context context;
 
@@ -160,7 +162,11 @@ public class BitmapImageResizer implements ImageResizer {
 
       long imageSizeInKb = imageFile.length() / 1000;
       Timber.i("Image size: %s KB", imageSizeInKb);
-      needsCompression = needsCompression(compressionQuality, imageSizeInKb);
+      if (isFromProfile) {
+        needsCompression = needsCompressionToProfile(compressionQuality, imageSizeInKb);
+      } else {
+        needsCompression = needsCompression(compressionQuality, imageSizeInKb);
+      }
       compressionQuality -= COMPRESSION_QUALITY_DECREMENT;
       compressedImageStream.close();
     }
@@ -169,6 +175,10 @@ public class BitmapImageResizer implements ImageResizer {
 
   private boolean needsCompression(int compressionQuality, long imageSizeInKb) {
     return imageSizeInKb > MAX_WEIGHT_KB && compressionQuality > 0;
+  }
+
+  private boolean needsCompressionToProfile(int compressionQuality, long imageSizeInKb) {
+    return imageSizeInKb > MAX_WEIGHT_KB_PROFILE && compressionQuality > 0;
   }
 
   private String getOutputImageName() {
@@ -222,5 +232,9 @@ public class BitmapImageResizer implements ImageResizer {
     }
 
     return inSampleSize;
+  }
+
+  @Override public void setFromProfile(boolean fromProfile) {
+    isFromProfile = fromProfile;
   }
 }

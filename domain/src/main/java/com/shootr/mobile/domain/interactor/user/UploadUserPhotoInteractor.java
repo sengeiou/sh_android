@@ -79,6 +79,7 @@ public class UploadUserPhotoInteractor implements com.shootr.mobile.domain.inter
     }
 
     private File getResizedImage(File newPhotoFile) throws IOException {
+        imageResizer.setFromProfile(true);
         return imageResizer.getResizedCroppedImageFile(newPhotoFile);
     }
 
