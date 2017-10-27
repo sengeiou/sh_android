@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.PollEntity;
+import com.shootr.mobile.data.entity.PollOptionEntity;
 import com.shootr.mobile.data.mapper.PollEntityMapper;
 import com.shootr.mobile.data.repository.datasource.poll.PollDataSource;
 import com.shootr.mobile.domain.exception.PollDeletedException;
@@ -67,8 +68,18 @@ public class RemotePollRepository implements ExternalPollRepository {
       UserCannotVoteDueToDeviceRequestException {
     PollEntity pollEntity = remotePollDataSource.vote(idPoll, idPollOption, isPrivateVote);
     pollEntity.setVoteStatus(PollStatus.VOTED);
+    storePollOptionVoted(idPollOption, pollEntity);
     localPollDataSource.putPoll(pollEntity);
     return pollEntityMapper.transform(pollEntity);
+  }
+
+  private void storePollOptionVoted(String idPollOption, PollEntity pollEntity) {
+    for (PollOptionEntity pollOptionEntity : pollEntity.getPollOptions()) {
+      if (pollOptionEntity.getIdPollOption().equals(idPollOption)) {
+        pollOptionEntity.setVoted(true);
+        break;
+      }
+    }
   }
 
   @Override public void sharePoll(String idPoll) throws PollDeletedException {
