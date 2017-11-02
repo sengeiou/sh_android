@@ -959,13 +959,24 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private String handleSubtitle() {
-    return getContext().getResources()
-        .getQuantityString(R.plurals.total_followers_pattern, watchNumberCount[1].intValue(),
-            formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWERS]))
-        + ", "
-        + getContext().getResources()
-        .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[1].intValue(),
-            formatNumberUtils.formatNumbers(watchNumberCount[CONNECTED]));
+    long followers = watchNumberCount[FOLLOWERS], connected = watchNumberCount[CONNECTED];
+    String result = "";
+    if (followers > 0) {
+      result = getContext().getResources()
+          .getQuantityString(R.plurals.total_followers_pattern,
+              watchNumberCount[FOLLOWERS].intValue(),
+              formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWERS]));
+    }
+    if (followers > 0 && connected > 0) {
+      result += ", ";
+    }
+    if (connected > 0) {
+      result += getContext().getResources()
+          .getQuantityString(R.plurals.total_watchers_pattern,
+              watchNumberCount[CONNECTED].intValue(),
+              formatNumberUtils.formatNumbers(watchNumberCount[CONNECTED]));
+    }
+    return result;
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
