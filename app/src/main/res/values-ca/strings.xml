@@ -317,7 +317,7 @@
   <string name="on_boarding_enter_shootr">Entrar a Shootr</string>
   <string name="opened_activity_text_pattern">" ha creat aquest stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
-  <string name="participants">Participants</string>
+  <string name="participants">Connectats</string>
   <string name="participants_list_empty">No hi ha connectats</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Treure</string>
@@ -477,9 +477,9 @@
   <string name="stream_detail_menu_data_info">Nombres</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">
-    <item quantity="one">%s participant</item>
-    <item quantity="other">%s participants</item>
-    <item quantity="zero">%s participants</item>
+    <item quantity="one">%s connectat</item>
+    <item quantity="other">%s connectats</item>
+    <item quantity="zero">%s connectats</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">" segueix"</string>

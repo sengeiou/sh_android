@@ -317,7 +317,7 @@
   <string name="on_boarding_enter_shootr">Entrar em Shootr</string>
   <string name="opened_activity_text_pattern">" criou este stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
-  <string name="participants">Participantes</string>
+  <string name="participants">Conectados</string>
   <string name="participants_list_empty">Nenhum conectado</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Apagar</string>
@@ -477,9 +477,9 @@
   <string name="stream_detail_menu_data_info">Estatísticas</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">
-    <item quantity="one">%s participante</item>
-    <item quantity="other">%s participantes</item>
-    <item quantity="zero">%s participantes</item>
+    <item quantity="one">%s conectado</item>
+    <item quantity="other">%s conectados</item>
+    <item quantity="zero">%s conectados</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">" começou a seguir"</string>

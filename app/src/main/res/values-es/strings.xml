@@ -317,7 +317,7 @@
   <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
   <string name="opened_activity_text_pattern">" ha creado este stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
-  <string name="participants">Participantes</string>
+  <string name="participants">Conectados</string>
   <string name="participants_list_empty">No hay conectados</string>
   <string name="photo_edit_gallery">Galería</string>
   <string name="photo_edit_remove">Quitar</string>
