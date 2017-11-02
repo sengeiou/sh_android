@@ -49,7 +49,7 @@
   <string name="alert_update_shootr">Este conteúdo só pode ser visto com a última versão de Shootr</string>
   <string name="all_messages_title">TODOS</string>
   <string name="all_messages_title_plural">TODOS (%d)</string>
-  <string name="all_participants_button">Todos os conectados</string>
+  <string name="all_participants_button">Todos</string>
   <string name="all_push_settings">Todas</string>
   <string name="back_button_poll">Voltar</string>
   <string name="block_unblock_user">Desbloquear</string>
@@ -112,8 +112,8 @@
   <string name="entered_a_minute_ago">Faz 1 minuto</string>
   <string name="entered_days_ago">Faz %d dias</string>
   <string name="entered_hours_ago">Faz %d horas</string>
-  <string name="entered_just_now">Acaba de entrar</string>
-  <string name="entered_long_time_ago">Muito tempo atrás</string>
+  <string name="entered_just_now">Agora</string>
+  <string name="entered_long_time_ago">Há muitos dias</string>
   <string name="entered_minutes_ago">Faz %d minutos</string>
   <string name="error_adding_contributor">Você pode adicionar até 100 colaboradores</string>
   <string name="error_deleted_shot">Este shot foi eliminado</string>
@@ -300,7 +300,7 @@
   <string name="no_filter_shots">Não há shots seus ou de contas verificadas.</string>
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="official_poll_button_text">Ir a Notificações</string>
-  <string name="official_poll_description">Por razões de segurança, para votar você deve desbloquear as notificações de Shootr em seu dispositivo.</string>
+  <string name="official_poll_description">Para garantir um só voto por conta e dispositivo, antes de votar você deve ativar as notificações do Shootr.</string>
   <string name="official_poll_title">Enquete oficial</string>
   <string name="off_push_settings">Nenhuma</string>
   <string name="ok">OK</string>
@@ -318,7 +318,7 @@
   <string name="opened_activity_text_pattern">" criou este stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants">Conectados</string>
-  <string name="participants_list_empty">Nenhum conectado</string>
+  <string name="participants_list_empty">Nenhuma pessoa conectada</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Apagar</string>
   <string name="photo_edit_remove_confirmation">Apagar foto?</string>
@@ -332,14 +332,14 @@
   <string name="poll_legal_text">Esta é uma enquete segura que permite somente um voto por conta e dispositivo. Não serão contabilizados segundos votos.</string>
   <string name="poll_live_results">Resultados ao vivo</string>
   <string name="poll_manual_close">Tempo restante: Não definido</string>
-  <string name="poll_option_voted">Você votou %s</string>
+  <string name="poll_option_voted">Você votou \"%s\"</string>
   <string name="poll_published">Nova enquete em</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Enquete</string>
   <string name="poll_results">Ver resultados</string>
   <string name="poll_results_dialog">Uma vez que você viu os resultados não pode votar nesse questionário.</string>
   <string name="poll_results_pct">(%s%%)</string>
-  <string name="poll_shared">compartilhou uma enquete em</string>
+  <string name="poll_shared">compartilhou uma enquete de</string>
   <string name="poll_view">Ver</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
@@ -506,7 +506,7 @@
   <string name="support_terms_service">Condições de uso</string>
   <string name="support_version">Versão</string>
   <string name="timeline_poll_results">Resultados</string>
-  <string name="title_activity_all_participants">Todos os conectados</string>
+  <string name="title_activity_all_participants">Conectados</string>
   <string name="title_activity_all_shots">Todos os reshots</string>
   <string name="title_activity_change_password">Modificar senha</string>
   <string name="title_activity_channels">Mensagens Privadas</string>
@@ -528,8 +528,8 @@
   </plurals>
   <plurals name="total_followers_pattern">
     <item quantity="one">%s seguidor       </item>
-    <item quantity="other">%s seguidors        </item>
-    <item quantity="zero">%s seguidors</item>
+    <item quantity="other">%s seguidores        </item>
+    <item quantity="zero">%s seguidores</item>
   </plurals>
   <string name="undo_reshoot">Desfazer reshoot</string>
   <string name="unfollowstream_dialog_message">Deixar de seguir %s?</string>

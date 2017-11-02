@@ -49,7 +49,7 @@
   <string name="alert_update_shootr">This content can only be viewed with the latest version of Shootr</string>
   <string name="all_messages_title">ALL</string>
   <string name="all_messages_title_plural">ALL (%d)</string>
-  <string name="all_participants_button">All connected</string>
+  <string name="all_participants_button">All</string>
   <string name="all_push_settings">All</string>
   <string name="back_button_poll">Back</string>
   <string name="block_unblock_user">Unblock</string>
@@ -111,7 +111,7 @@
   <string name="entered_a_minute_ago">1 minute ago</string>
   <string name="entered_days_ago">%d days ago</string>
   <string name="entered_hours_ago">%d hours ago</string>
-  <string name="entered_just_now">Just now</string>
+  <string name="entered_just_now">Now</string>
   <string name="entered_long_time_ago">Many days ago</string>
   <string name="entered_minutes_ago">%d minutes ago</string>
   <string name="error_adding_contributor">You can add up to  100 contributors</string>
@@ -297,7 +297,7 @@
   <string name="no_filter_shots">No shots by you or verified accounts.</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="official_poll_button_text">Go to Notifications</string>
-  <string name="official_poll_description">For security reasons, in order to vote you must unblock Shootr push notifications in your device.</string>
+  <string name="official_poll_description">In order to secure one vote per account and device, please activate Shootr push notifications before voting.</string>
   <string name="official_poll_title">Official poll</string>
   <string name="off_push_settings">Off</string>
   <string name="ok">OK</string>
@@ -315,7 +315,7 @@
   <string name="opened_activity_text_pattern">" created this stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants">Connected</string>
-  <string name="participants_list_empty">Nadie conectado</string>
+  <string name="participants_list_empty">No people connected</string>
   <string name="photo_edit_gallery">Gallery</string>
   <string name="photo_edit_remove">Remove</string>
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
@@ -329,14 +329,14 @@
   <string name="poll_legal_text">This a secure poll and admits only one vote per count and device. Second votes will not be counted.</string>
   <string name="poll_live_results">Live results</string>
   <string name="poll_manual_close">Remaining time: Not defined</string>
-  <string name="poll_option_voted">You voted %s</string>
+  <string name="poll_option_voted">You voted \"%s\"</string>
   <string name="poll_published">New poll in</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Poll</string>
   <string name="poll_results">View results</string>
   <string name="poll_results_dialog">Once you see the results you won\'t be able to vote in this poll.</string>
   <string name="poll_results_pct">(%s%%)</string>
-  <string name="poll_shared">shared this poll in</string>
+  <string name="poll_shared">shared this poll from</string>
   <string name="poll_view">View</string>
   <string name="poll_vote">Vote</string>
   <plurals name="poll_votes_count">
@@ -501,7 +501,7 @@
   <string name="support_terms_service">Terms of Service</string>
   <string name="support_version">Version</string>
   <string name="timeline_poll_results">Results</string>
-  <string name="title_activity_all_participants">All connected</string>
+  <string name="title_activity_all_participants">Connected</string>
   <string name="title_activity_all_shots">All reshots</string>
   <string name="title_activity_change_password">Change Password</string>
   <string name="title_activity_channels">Private messages</string>

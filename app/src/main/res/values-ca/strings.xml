@@ -49,7 +49,7 @@
   <string name="alert_update_shootr">Aquest contingut només pot veure\'s amb la darrera versió de Shootr</string>
   <string name="all_messages_title">TOTHOM</string>
   <string name="all_messages_title_plural">TOTHOM (%d)</string>
-  <string name="all_participants_button">Tots els participants</string>
+  <string name="all_participants_button">Tots</string>
   <string name="all_push_settings">Totes</string>
   <string name="back_button_poll">Enrere</string>
   <string name="block_unblock_user">Desbloquejar</string>
@@ -112,8 +112,8 @@
   <string name="entered_a_minute_ago">Fa 1 minut</string>
   <string name="entered_days_ago">Fa %d dies</string>
   <string name="entered_hours_ago">Fa %d hores</string>
-  <string name="entered_just_now">Acaba d\'entrar</string>
-  <string name="entered_long_time_ago">Fa dies</string>
+  <string name="entered_just_now">Ara</string>
+  <string name="entered_long_time_ago">Fa molts dies</string>
   <string name="entered_minutes_ago">Fa %d minuts</string>
   <string name="error_adding_contributor">Pots afegir fins a 100 col·laboradors</string>
   <string name="error_deleted_shot">Aquest shot ha estat eliminat</string>
@@ -300,7 +300,7 @@
   <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="official_poll_button_text">Anar a Notificacions</string>
-  <string name="official_poll_description">Per garantir un sol vot per compte i dispositiu, abans de votar has d\'activar les notificacions de Shootr.</string>
+  <string name="official_poll_description">Per garantir un sol vot per compte i dispositiu, abans de votar has d'activar les notificacions de Shootr.</string>
   <string name="official_poll_title">Enquesta oficial</string>
   <string name="off_push_settings">Cap</string>
   <string name="ok">OK</string>
@@ -318,7 +318,7 @@
   <string name="opened_activity_text_pattern">" ha creat aquest stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
   <string name="participants">Connectats</string>
-  <string name="participants_list_empty">No hi ha connectats</string>
+  <string name="participants_list_empty">No hi ha gent connectada</string>
   <string name="photo_edit_gallery">Galeria</string>
   <string name="photo_edit_remove">Treure</string>
   <string name="photo_edit_remove_confirmation">Esborrar foto?</string>
@@ -332,14 +332,14 @@
   <string name="poll_legal_text">Aquesta és una enquesta segura i permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
   <string name="poll_live_results">Resultats en viu</string>
   <string name="poll_manual_close">Temps restant: No definit</string>
-  <string name="poll_option_voted">Has votat %s</string>
+  <string name="poll_option_voted">Has votat \"%s\"</string>
   <string name="poll_published">Nova enquesta a</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Enquesta</string>
   <string name="poll_results">Veure resultats</string>
   <string name="poll_results_dialog">Un cop vistos els resultats no podràs votar en aquesta enquesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
-  <string name="poll_shared">ha compartit aquesta enquesta a</string>
+  <string name="poll_shared">ha compartit aquesta enquesta de</string>
   <string name="poll_view">Veure</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
@@ -506,7 +506,7 @@
   <string name="support_terms_service">Condicions d\'ús</string>
   <string name="support_version">Versió</string>
   <string name="timeline_poll_results">Resultats</string>
-  <string name="title_activity_all_participants">Tots els connectats</string>
+  <string name="title_activity_all_participants">Connectats</string>
   <string name="title_activity_all_shots">Tots els reshots</string>
   <string name="title_activity_change_password">Canviar contrasenya</string>
   <string name="title_activity_channels">Missatges privats</string>
