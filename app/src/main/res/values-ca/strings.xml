@@ -300,7 +300,7 @@
   <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="official_poll_button_text">Anar a Notificacions</string>
-  <string name="official_poll_description">Per garantir un sol vot per compte i dispositiu, abans de votar has d'activar les notificacions de Shootr.</string>
+  <string name="official_poll_description">Per garantir un sol vot per compte i dispositiu, abans de votar has d\'activar les notificacions de Shootr.</string>
   <string name="official_poll_title">Enquesta oficial</string>
   <string name="off_push_settings">Cap</string>
   <string name="ok">OK</string>
