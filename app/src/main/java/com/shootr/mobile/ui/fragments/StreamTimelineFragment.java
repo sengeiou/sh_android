@@ -132,8 +132,8 @@ public class StreamTimelineFragment extends BaseFragment
 
   public static final String EXTRA_READ_WRITE_MODE = "readWriteMode";
   private static final int REQUEST_STREAM_DETAIL = 1;
-  private static final int FOLLOWINGS = 0;
-  private static final int PARTICIPANTS = 1;
+  private static final int FOLLOWERS = 0;
+  private static final int CONNECTED = 1;
 
   private static final Interpolator INTERPOLATOR = new FastOutSlowInInterpolator();
   private static final int ANIMATION_DURATION = 200;
@@ -225,7 +225,7 @@ public class StreamTimelineFragment extends BaseFragment
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
-  private Integer[] watchNumberCount;
+  private Long[] watchNumberCount;
   private View footerProgress;
   private MenuItemValueHolder showHoldingShotsMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder showAllShotsMenuItem = new MenuItemValueHolder();
@@ -952,24 +952,31 @@ public class StreamTimelineFragment extends BaseFragment
   private void updateWatchNumberIcon() {
     if (watchNumberCount != null && !isFilterActivated) {
       toolbarDecorator.showSubtitle();
-      toolbarDecorator.setSubtitle(
-          getContext().getString(R.string.stream_subtitle_pattern_multiple_participants,
-              formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWINGS].longValue()),
-              formatNumberUtils.formatNumbers(watchNumberCount[PARTICIPANTS].longValue())));
+      toolbarDecorator.setSubtitle(handleSubtitle());
     } else {
       toolbarDecorator.hideSubtitle();
     }
   }
 
-  private void updateParticipants() {
-    if (watchNumberCount != null && !isFilterActivated) {
-      toolbarDecorator.showSubtitle();
-      toolbarDecorator.setSubtitle(getContext().getResources()
-          .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[1],
-              formatNumberUtils.formatNumbers(watchNumberCount[1].longValue())));
-    } else {
-      toolbarDecorator.hideSubtitle();
+  private String handleSubtitle() {
+    long followers = watchNumberCount[FOLLOWERS], connected = watchNumberCount[CONNECTED];
+    String result = "";
+    if (followers > 0) {
+      result = getContext().getResources()
+          .getQuantityString(R.plurals.total_followers_pattern,
+              watchNumberCount[FOLLOWERS].intValue(),
+              formatNumberUtils.formatNumbers(watchNumberCount[FOLLOWERS]));
     }
+    if (followers > 0 && connected > 0) {
+      result += ", ";
+    }
+    if (connected > 0) {
+      result += getContext().getResources()
+          .getQuantityString(R.plurals.total_watchers_pattern,
+              watchNumberCount[CONNECTED].intValue(),
+              formatNumberUtils.formatNumbers(watchNumberCount[CONNECTED]));
+    }
+    return result;
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
@@ -1393,14 +1400,9 @@ public class StreamTimelineFragment extends BaseFragment
     newShotBarContainer.hideDraftsButton();
   }
 
-  @Override public void showWatchingPeopleCount(Integer[] peopleWatchingCount) {
+  @Override public void showWatchingPeopleCount(Long[] peopleWatchingCount) {
     watchNumberCount = peopleWatchingCount;
     updateWatchNumberIcon();
-  }
-
-  @Override public void showParticipantsCount(Integer[] peopleWatchingCount) {
-    watchNumberCount = peopleWatchingCount;
-    updateParticipants();
   }
 
   @Override public void showAuthorContextMenuWithoutPin(final ShotModel shotModel) {

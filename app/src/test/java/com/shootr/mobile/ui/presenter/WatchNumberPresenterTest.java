@@ -23,10 +23,10 @@ import static org.mockito.Mockito.verify;
 
 public class WatchNumberPresenterTest {
 
-  private static final Integer[] COUNT_1_PERSON = new Integer[] { 0, 1 };
-  private static final Integer[] COUNT_2_PEOPLE = new Integer[] { 0, 2 };
-  private static final Integer[] COUNT_NOBODY = new Integer[] { 0, 0 };
-  private static final Integer[] NO_STREAM = new Integer[] { 0, 0 };
+  private static final Long[] COUNT_1_PERSON = new Long[] { 0L, 1L };
+  private static final Long[] COUNT_2_PEOPLE = new Long[] { 0L, 2L };
+  private static final Long[] COUNT_NOBODY = new Long[] { 0L, 0L };
+  private static final Long[] NO_STREAM = new Long[] { 0L, 0L };
   private static final WatchUpdateRequest.Event WATCH_UPDATE_EVENT =
       new WatchUpdateRequest.Event(true);
   private static final Boolean LOCAL_ONLY = false;
@@ -52,7 +52,7 @@ public class WatchNumberPresenterTest {
 
     presenter.retrieveData(LOCAL_ONLY);
 
-    verify(watchNumberView).showParticipantsCount(eq(COUNT_1_PERSON));
+    verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_1_PERSON));
   }
 
   @Test public void shouldShowCountTwoInViewWhenTwoPeopleWatching() throws Exception {
@@ -60,7 +60,7 @@ public class WatchNumberPresenterTest {
 
     presenter.retrieveData(LOCAL_ONLY);
 
-    verify(watchNumberView).showParticipantsCount(eq(COUNT_2_PEOPLE));
+    verify(watchNumberView).showWatchingPeopleCount(eq(COUNT_2_PEOPLE));
   }
 
   @Test public void shouldHideWatchingPeopleCountWhenNobodyWatching() throws Exception {
@@ -111,7 +111,7 @@ public class WatchNumberPresenterTest {
     return new StreamChanged.Event(null);
   }
 
-  private void setupWatchNumberInteractorCallbacks(final Integer[] count) {
+  private void setupWatchNumberInteractorCallbacks(final Long[] count) {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         ((WatchNumberInteractor.Callback) invocation.getArguments()[2]).onLoaded(count);

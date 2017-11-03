@@ -124,10 +124,12 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
   private void updateDraftsButtonVisibility() {
     getDraftsInteractor.loadDrafts(new GetDraftsInteractor.Callback() {
       @Override public void onLoaded(List<QueuedShot> drafts) {
-        if (!drafts.isEmpty()) {
-          newShotBarView.showDraftsButton();
-        } else {
-          newShotBarView.hideDraftsButton();
+        if (newShotBarView != null) {
+          if (!drafts.isEmpty()) {
+            newShotBarView.showDraftsButton();
+          } else {
+            newShotBarView.hideDraftsButton();
+          }
         }
       }
     });

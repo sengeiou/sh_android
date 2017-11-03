@@ -16,8 +16,8 @@ import javax.inject.Inject;
  */
 public class WatchNumberInteractor implements Interactor {
 
-  public static final int FRIENDS = 0;
-  public static final int WATCHERS = 1;
+  public static final int FOLLOWERS = 0;
+  public static final int CONNECTED = 1;
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
@@ -46,16 +46,16 @@ public class WatchNumberInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    Integer[] watchersCount = new Integer[] { 0, 0 };
+    Long[] watchersCount = new Long[] { 0L, 0L };
     Stream stream = getRemoteStreamOrFallbackToLocal();
     if (stream != null) {
-      watchersCount[FRIENDS] = stream.getTotalFollowingWatchers();
-      watchersCount[WATCHERS] = stream.getTotalWatchers();
+      watchersCount[FOLLOWERS] = stream.getTotalFavorites().longValue();
+      watchersCount[CONNECTED] = stream.getTotalWatchers().longValue();
     }
     notifyLoaded(watchersCount);
   }
 
-  private void notifyLoaded(final Integer[] countIsWatching) {
+  private void notifyLoaded(final Long[] countIsWatching) {
     postExecutionThread.post(new Runnable() {
       @Override public void run() {
         callback.onLoaded(countIsWatching);
@@ -78,6 +78,6 @@ public class WatchNumberInteractor implements Interactor {
 
   public interface Callback {
 
-    void onLoaded(Integer[] watchers);
+    void onLoaded(Long[] watchers);
   }
 }

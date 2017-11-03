@@ -295,7 +295,11 @@ public class ShotsTimelineAdapter
     int oldSize = shots.size();
     this.shots.addAll(newShots);
     insertExistingHeader(shots);
-    notifyItemRangeInserted(oldSize, newShots.size());
+    try {
+      notifyItemRangeInserted(oldSize, newShots.size());
+    } catch (Exception e) {
+      notifyDataSetChanged();
+    }
   }
 
   public void removeShot(ShotModel shotModel) {

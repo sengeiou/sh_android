@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.widgets;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -21,24 +22,39 @@ public class FollowButton extends FrameLayout {
 
     public FollowButton(Context context) {
         super(context);
-        init();
+        init(context, null);
     }
 
     public FollowButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        init(context, attrs);
     }
 
     public FollowButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init();
+        init(context, attrs);
     }
 
-    private void init() {
+    private void init(Context context, AttributeSet attributeSet) {
         setClickable(true);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        inflater.inflate(R.layout.generic_state_button_layout, this);
+        if (attributeSet != null) {
+            TypedArray attributes =
+                context.obtainStyledAttributes(attributeSet, R.styleable.FollowButton);
+            try {
+                boolean isDetail = attributes.getBoolean(R.styleable.FollowButton_detail_button, false);
+                if (isDetail) {
+                    inflater.inflate(R.layout.generic_state_detail_button_layout, this);
+                } else {
+                    inflater.inflate(R.layout.generic_state_button_layout, this);
+                }
+            } finally {
+                attributes.recycle();
+            }
+        } else {
+            inflater.inflate(R.layout.generic_state_button_layout, this);
+        }
 
         ButterKnife.bind(this);
 
