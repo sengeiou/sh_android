@@ -238,21 +238,17 @@
   <style name="FollowButtonText.Follow">
     <item name="android:text">@string/profile_following</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:textColor">@color/follow_button</item>
-    <item name="android:textStyle">normal</item>
-  </style>
-
-  <style name="FollowButton.Checked">
-    <item name="android:background">@drawable/btn_following</item>
+    <item name="android:textColor">@color/icons</item>
+    <item name="android:textStyle">bold</item>
   </style>
 
   <style name="FollowButtonText.Checked">
-    <item name="android:textColor">@color/white</item>
-    <item name="android:textStyle">normal</item>
+    <item name="android:textColor">@color/links</item>
     <item name="android:drawablePadding">4dp</item>
     <item name="android:gravity">center_vertical</item>
     <item name="android:text">@string/profile_follow</item>
     <item name="android:textAllCaps">true</item>
+    <item name="android:textStyle">bold</item>
   </style>
 
   <!--Follows button-->
