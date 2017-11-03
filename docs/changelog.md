@@ -13,6 +13,11 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.46.1] - 2017-11-03
+### Changed
+- Follow button new style
+- Subtitle bar on streamTimeline --> New info: Connected and followers
+
 ## [1.46.0] - 2017-10-27
 ### Added
 - Hidden polls
