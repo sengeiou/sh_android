@@ -12,4 +12,8 @@
         <attr name="av_border_width" format="dimension" />
         <attr name="av_text_size_percentage" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="FollowButton">
+        <attr name="detail_button" format="boolean" />
+    </declare-styleable>
 </resources>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
 
     <TextView
         android:id="@+id/text"
@@ -28,5 +30,6 @@
         android:paddingLeft="30dp"
         android:paddingBottom="15dp"
         android:layout_gravity="center_horizontal"
+        app:detail_button="true"
         />
 </LinearLayout>

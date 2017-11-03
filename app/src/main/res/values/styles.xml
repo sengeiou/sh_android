@@ -238,7 +238,7 @@
   <style name="FollowButtonText.Follow">
     <item name="android:text">@string/profile_following</item>
     <item name="android:textAllCaps">true</item>
-    <item name="android:textColor">@color/icons</item>
+    <item name="android:textColor">@color/gray_material</item>
     <item name="android:textStyle">bold</item>
   </style>
 
