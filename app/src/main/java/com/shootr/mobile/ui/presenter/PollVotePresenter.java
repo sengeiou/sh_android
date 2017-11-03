@@ -168,27 +168,29 @@ public class PollVotePresenter implements Presenter {
   }
 
   private void setupPoller() {
-    this.poller.init(REFRESH_INTERVAL_MILLISECONDS_SEC, new Runnable() {
-      @Override public void run() {
-        showPollVotesTimeToExpire(pollModel.getExpirationDate());
-        if (pollModel.isExpired()) {
-          poller.stopPolling();
-          pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
+    if (pollModel != null) {
+      this.poller.init(REFRESH_INTERVAL_MILLISECONDS_SEC, new Runnable() {
+        @Override public void run() {
+          showPollVotesTimeToExpire(pollModel.getExpirationDate());
+          if (pollModel.isExpired()) {
+            poller.stopPolling();
+            pollVoteView.goToResults(pollModel.getIdPoll(), pollModel.getIdStream(), false);
+          }
+          if (!pollModel.isLessThanHourToExpire()
+              && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
+            poller.stopPolling();
+            poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
+            poller.startPolling();
+          } else if (pollModel.isLessThanHourToExpire()
+              && poller.getIntervalMilliseconds() == REFRESH_INTERVAL_MILLISECONDS_MIN) {
+            poller.stopPolling();
+            poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_SEC);
+            poller.startPolling();
+          }
         }
-        if (!pollModel.isLessThanHourToExpire()
-            && poller.getIntervalMilliseconds() != REFRESH_INTERVAL_MILLISECONDS_MIN) {
-          poller.stopPolling();
-          poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_MIN);
-          poller.startPolling();
-        } else if (pollModel.isLessThanHourToExpire()
-            && poller.getIntervalMilliseconds() == REFRESH_INTERVAL_MILLISECONDS_MIN) {
-          poller.stopPolling();
-          poller.setIntervalMilliseconds(REFRESH_INTERVAL_MILLISECONDS_SEC);
-          poller.startPolling();
-        }
-      }
-    });
-    poller.startPolling();
+      });
+      poller.startPolling();
+    }
   }
 
   private boolean canRenderPoll() {
