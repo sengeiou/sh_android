@@ -49,7 +49,7 @@
   <string name="alert_update_shootr">Este contenido solo puede verse con la última versión de Shootr</string>
   <string name="all_messages_title">TODOS</string>
   <string name="all_messages_title_plural">TODOS (%d)</string>
-  <string name="all_participants_button">Todos los participantes</string>
+  <string name="all_participants_button">Todos</string>
   <string name="all_push_settings">Todas</string>
   <string name="back_button_poll">Atrás</string>
   <string name="block_unblock_user">Desbloquear</string>
@@ -107,14 +107,14 @@
   <string name="email_confirmation_ok">OK</string>
   <string name="email_confirmation_title">Confirma tu email</string>
   <string name="empty_followings">-</string>
-  <string name="entered_an_hour_ago">Ha entrado hace 1 hora</string>
-  <string name="entered_a_day_ago">Entró hace 1 día</string>
-  <string name="entered_a_minute_ago">Ha entrado hace 1 minuto</string>
-  <string name="entered_days_ago">Ha entrado hace %d días</string>
-  <string name="entered_hours_ago">Ha entrado hace %d horas</string>
-  <string name="entered_just_now">Acaba de entrar</string>
-  <string name="entered_long_time_ago">Entró hace días</string>
-  <string name="entered_minutes_ago">Ha entrado hace %d minutos</string>
+  <string name="entered_an_hour_ago">Hace 1 hora</string>
+  <string name="entered_a_day_ago">Hace 1 día</string>
+  <string name="entered_a_minute_ago">Hace 1 minuto</string>
+  <string name="entered_days_ago">Hace %d días</string>
+  <string name="entered_hours_ago">Hace %d horas</string>
+  <string name="entered_just_now">Ahora</string>
+  <string name="entered_long_time_ago">Hace muchos días</string>
+  <string name="entered_minutes_ago">Hace %d minutos</string>
   <string name="error_adding_contributor">Puedes añadir hasta 100 colaboradores</string>
   <string name="error_deleted_shot">Este shot ha sido eliminado</string>
   <string name="error_facebook_login">No se ha podido iniciar sesión con Facebook. Prueba más tarde.</string>
@@ -317,8 +317,8 @@
   <string name="on_boarding_enter_shootr">Entrar en Shootr</string>
   <string name="opened_activity_text_pattern">" ha creado este stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
-  <string name="participants">Participantes</string>
-  <string name="participants_list_empty">No hay participantes</string>
+  <string name="participants">Conectados</string>
+  <string name="participants_list_empty">Conectados</string>
   <string name="photo_edit_gallery">Galería</string>
   <string name="photo_edit_remove">Quitar</string>
   <string name="photo_edit_remove_confirmation">¿Borrar foto?</string>
@@ -332,14 +332,14 @@
   <string name="poll_legal_text">Esta es una encuesta segura y permite solo un voto por cuenta y dispositivo. No se computarán segundos votos.</string>
   <string name="poll_live_results">Resultados en vivo</string>
   <string name="poll_manual_close">Tiempo restante: No definido</string>
-  <string name="poll_option_voted">Has votado %s</string>
+  <string name="poll_option_voted">Has votado \"%s\"</string>
   <string name="poll_published">Nueva encuesta en</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Encuesta</string>
   <string name="poll_results">Ver resultados</string>
   <string name="poll_results_dialog">Una vez vistos los resultados no podrás votar en esta encuesta.</string>
   <string name="poll_results_pct">(%s%%)</string>
-  <string name="poll_shared">ha compartido esta encuesta en</string>
+  <string name="poll_shared">ha compartido esta encuesta de</string>
   <string name="poll_view">Ver</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
@@ -477,9 +477,9 @@
   <string name="stream_detail_menu_data_info">Estadísticas</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">
-    <item quantity="one">%s participante</item>
-    <item quantity="other">%s participantes</item>
-    <item quantity="zero">%s participantes</item>
+    <item quantity="one">%s conectado</item>
+    <item quantity="other">%s conectados</item>
+    <item quantity="zero">%s conectados</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">" sigue"</string>
@@ -495,7 +495,6 @@
   <string name="stream_removed_feedback">Stream borrado</string>
   <string name="stream_restored_feedback">Stream restaurado</string>
   <string name="stream_subtitle">siguiendo a %d</string>
-  <string name="stream_subtitle_pattern_multiple_participants">siguiendo a %1$s de %2$s participantes</string>
   <string name="stream_timeline_add_favorite">Seguir</string>
   <string name="stream_timeline_empty_message">Comprobando shots…</string>
   <string name="stream_timeline_remove_favorite">Dejar de seguir</string>
@@ -507,7 +506,7 @@
   <string name="support_terms_service">Condiciones de uso</string>
   <string name="support_version">Versión</string>
   <string name="timeline_poll_results">Resultado</string>
-  <string name="title_activity_all_participants">Todos los participantes</string>
+  <string name="title_activity_all_participants">Todos los conectados</string>
   <string name="title_activity_all_shots">Todos los shots</string>
   <string name="title_activity_change_password">Cambiar contraseña</string>
   <string name="title_activity_channels">Mensajes privados</string>
@@ -524,8 +523,13 @@
   <string name="title_pin_message_notification" formatted="false">¿Notificar mensaje?</string>
   <string name="topic" formatted="false">Mensaje</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">%s participante</item>
-    <item quantity="other">%s participantes</item>
+    <item quantity="one">%s conectado</item>
+    <item quantity="other">%s conectados</item>
+  </plurals>
+  <plurals name="total_followers_pattern">
+    <item quantity="one">%s seguidor       </item>
+    <item quantity="other">%s seguidores        </item>
+    <item quantity="zero">%s seguidores</item>
   </plurals>
   <string name="undo_reshoot">Deshacer reshoot</string>
   <string name="unfollowstream_dialog_message">¿Dejar de seguir a %s?</string>
@@ -561,4 +565,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
+  <string name="connected">conectados</string>
 </resources>

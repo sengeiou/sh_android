@@ -49,7 +49,7 @@
   <string name="alert_update_shootr">This content can only be viewed with the latest version of Shootr</string>
   <string name="all_messages_title">ALL</string>
   <string name="all_messages_title_plural">ALL (%d)</string>
-  <string name="all_participants_button">All participants</string>
+  <string name="all_participants_button">All</string>
   <string name="all_push_settings">All</string>
   <string name="back_button_poll">Back</string>
   <string name="block_unblock_user">Unblock</string>
@@ -106,14 +106,14 @@
   <string name="email_confirmation_ok">OK</string>
   <string name="email_confirmation_title">Confirm Your Email</string>
   <string name="empty_followings">-</string>
-  <string name="entered_an_hour_ago">Entered 1 hour ago</string>
-  <string name="entered_a_day_ago">Entered 1 day ago</string>
-  <string name="entered_a_minute_ago">Entered 1 minute ago</string>
-  <string name="entered_days_ago">Entered %d days ago</string>
-  <string name="entered_hours_ago">Entered %d hours ago</string>
-  <string name="entered_just_now">Entered just now</string>
-  <string name="entered_long_time_ago">Entered many days ago</string>
-  <string name="entered_minutes_ago">Entered %d minutes ago</string>
+  <string name="entered_an_hour_ago">1 hour ago</string>
+  <string name="entered_a_day_ago">1 day ago</string>
+  <string name="entered_a_minute_ago">1 minute ago</string>
+  <string name="entered_days_ago">%d days ago</string>
+  <string name="entered_hours_ago">%d hours ago</string>
+  <string name="entered_just_now">Now</string>
+  <string name="entered_long_time_ago">Many days ago</string>
+  <string name="entered_minutes_ago">%d minutes ago</string>
   <string name="error_adding_contributor">You can add up to  100 contributors</string>
   <string name="error_deleted_shot">This shot was deleted</string>
   <string name="error_facebook_login">Couldn\'t log in with Facebook. Try again later.</string>
@@ -297,7 +297,7 @@
   <string name="no_filter_shots">No shots by you or verified accounts.</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="official_poll_button_text">Go to Notifications</string>
-  <string name="official_poll_description">For security reasons, in order to vote you must unblock Shootr push notifications in your device.</string>
+  <string name="official_poll_description">In order to secure one vote per account and device, please activate Shootr push notifications before voting.</string>
   <string name="official_poll_title">Official poll</string>
   <string name="off_push_settings">Off</string>
   <string name="ok">OK</string>
@@ -314,8 +314,8 @@
   <string name="on_boarding_enter_shootr">Enter Shootr</string>
   <string name="opened_activity_text_pattern">" created this stream"</string>
   <string name="order_poll_option">%1$s. %2$s</string>
-  <string name="participants">Participants</string>
-  <string name="participants_list_empty">No participants</string>
+  <string name="participants">Connected</string>
+  <string name="participants_list_empty">No people connected</string>
   <string name="photo_edit_gallery">Gallery</string>
   <string name="photo_edit_remove">Remove</string>
   <string name="photo_edit_remove_confirmation">Remove photo?</string>
@@ -329,14 +329,14 @@
   <string name="poll_legal_text">This a secure poll and admits only one vote per count and device. Second votes will not be counted.</string>
   <string name="poll_live_results">Live results</string>
   <string name="poll_manual_close">Remaining time: Not defined</string>
-  <string name="poll_option_voted">You voted %s</string>
+  <string name="poll_option_voted">You voted \"%s\"</string>
   <string name="poll_published">New poll in</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="poll_push_settings">Poll</string>
   <string name="poll_results">View results</string>
   <string name="poll_results_dialog">Once you see the results you won\'t be able to vote in this poll.</string>
   <string name="poll_results_pct">(%s%%)</string>
-  <string name="poll_shared">shared this poll in</string>
+  <string name="poll_shared">shared this poll from</string>
   <string name="poll_view">View</string>
   <string name="poll_vote">Vote</string>
   <plurals name="poll_votes_count">
@@ -472,9 +472,9 @@
   <string name="stream_detail_menu_data_info">Stats</string>
   <string name="stream_detail_mute">Mute</string>
   <plurals name="stream_detail_participants">
-    <item quantity="one">%s participant</item>
-    <item quantity="other">%s participants</item>
-    <item quantity="zero">%s participants</item>
+    <item quantity="one">%s connected</item>
+    <item quantity="other">%s connected</item>
+    <item quantity="zero">%s connected</item>
   </plurals>
   <string name="stream_detail_subtitle_pattern">%1$s %2$s</string>
   <string name="stream_favorited_activity_text_pattern">" followed this stream"</string>
@@ -490,7 +490,6 @@
   <string name="stream_removed_feedback">Stream removed</string>
   <string name="stream_restored_feedback">Stream restored</string>
   <string name="stream_subtitle">following %d</string>
-  <string name="stream_subtitle_pattern_multiple_participants">following %1$s of %2$s participants</string>
   <string name="stream_timeline_add_favorite">Follow</string>
   <string name="stream_timeline_empty_message">Checking for shots…</string>
   <string name="stream_timeline_remove_favorite">Unfollow</string>
@@ -502,7 +501,7 @@
   <string name="support_terms_service">Terms of Service</string>
   <string name="support_version">Version</string>
   <string name="timeline_poll_results">Results</string>
-  <string name="title_activity_all_participants">All Participants</string>
+  <string name="title_activity_all_participants">Connected</string>
   <string name="title_activity_all_shots">All reshots</string>
   <string name="title_activity_change_password">Change Password</string>
   <string name="title_activity_channels">Private messages</string>
@@ -519,9 +518,14 @@
   <string formatted="false" name="title_pin_message_notification">Notify message?</string>
   <string formatted="false" name="topic">Message</string>
   <plurals name="total_watchers_pattern">
-    <item quantity="one">%s participant       </item>
-    <item quantity="other">%s participants        </item>
-    <item quantity="zero">%s participants</item>
+  <item quantity="one">%s connected       </item>
+  <item quantity="other">%s connected        </item>
+  <item quantity="zero">%s connected</item>
+</plurals>
+  <plurals name="total_followers_pattern">
+    <item quantity="one">%s follower       </item>
+    <item quantity="other">%s followers        </item>
+    <item quantity="zero">%s followers</item>
   </plurals>
   <string name="undo_reshoot">Undo reshoot</string>
   <string name="unfollowstream_dialog_message">Unfollow %s?</string>
@@ -557,4 +561,5 @@
   <string name="whale_retry_button_text">OK</string>
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
+  <string name="connected">connected</string>
 </resources>

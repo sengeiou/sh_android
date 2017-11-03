@@ -37,25 +37,17 @@ public class WatchNumberPresenter implements Presenter, WatchUpdateRequest.Recei
 
     protected void retrieveData(boolean localOnly) {
         watchNumberInteractor.loadWatchersNumber(idStream, localOnly, new WatchNumberInteractor.Callback() {
-            @Override public void onLoaded(Integer[] count) {
+            @Override public void onLoaded(Long[] count) {
                 setViewWathingCount(count);
             }
         });
     }
 
-    private void setViewWathingCount(Integer[] count) {
-        if (count[WatchNumberInteractor.WATCHERS] > 0) {
-            handleWatchers(count);
-        } else {
-            watchNumberView.hideWatchingPeopleCount();
-        }
-    }
-
-    private void handleWatchers(Integer[] count) {
-        if (count[WatchNumberInteractor.FRIENDS] > 0) {
+    private void setViewWathingCount(Long[] count) {
+        if (count[WatchNumberInteractor.CONNECTED] > 0 || count[WatchNumberInteractor.FOLLOWERS] > 0) {
             watchNumberView.showWatchingPeopleCount(count);
         } else {
-            watchNumberView.showParticipantsCount(count);
+            watchNumberView.hideWatchingPeopleCount();
         }
     }
 
