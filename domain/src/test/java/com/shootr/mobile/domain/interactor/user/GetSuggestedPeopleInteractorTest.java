@@ -85,7 +85,6 @@ public class GetSuggestedPeopleInteractorTest {
   }
 
   @Test public void shouldCallbackWhenNoPeopleFound() throws Exception {
-    when(localUserRepository.getPeople()).thenReturn(Collections.<User>emptyList());
 
     interactor.loadSuggestedPeople(cacheKeepAlive(), callback, errorCallback);
 
@@ -93,7 +92,7 @@ public class GetSuggestedPeopleInteractorTest {
   }
 
   protected void setupDoesFollowSomeone() {
-    when(localUserRepository.getPeople()).thenReturn(Collections.singletonList(followedUser()));
+    /* no-op */
   }
 
   private SuggestedPeople followedSuggestion() {

@@ -271,7 +271,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
         this.totalFollowingWatchers = totalFollowingWatchers;
     }
 
-    public Boolean getFollowing() {
+    public Boolean isFollowing() {
         return following;
     }
 

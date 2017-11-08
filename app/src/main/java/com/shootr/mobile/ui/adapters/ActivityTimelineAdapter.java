@@ -76,7 +76,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private List<ActivityModel> activities = Collections.emptyList();
   private String currentUserId;
-  private Boolean isStrategic;
   private boolean showFooter = false;
 
   public ActivityTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,

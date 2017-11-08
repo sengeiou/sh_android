@@ -50,28 +50,14 @@ public class LocalUserRepository implements UserRepository {
     this.privateMessageChannelDataSource = privateMessageChannelDataSource;
   }
 
-  @Override public List<User> getPeople() {
-    List<UserEntity> userEntities =
-        localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE, PAGE_SIZE);
-    return transformUserEntitiesForPeople(userEntities);
-  }
-
   @Override public User getUserById(String id) {
     return userEntityMapper.transform(localUserDataSource.getUser(id),
-        sessionRepository.getCurrentUserId(), isFollower(id), isFollowing(id));
+        sessionRepository.getCurrentUserId());
   }
 
   @Override public User getUserByUsername(String username) {
     return userEntityMapper.transform(localUserDataSource.getUserByUsername(username),
         sessionRepository.getCurrentUserId());
-  }
-
-  @Override public boolean isFollower(String userId) {
-    return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
-  }
-
-  @Override public boolean isFollowing(String userId) {
-    return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
   }
 
   @Override public User putUser(User user) {
@@ -103,14 +89,6 @@ public class LocalUserRepository implements UserRepository {
     return streamEntityMapper.transform(localUserDataSource.updateWatch(entity));
   }
 
-  @Override public void synchronizeFollow() {
-    throw new IllegalArgumentException("Find Participants has no local implementation");
-  }
-
-  @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
-    throw new IllegalArgumentException("this method has no local implementation");
-  }
-
   @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
     throw new IllegalArgumentException("this method has no local implementation");
   }
@@ -137,9 +115,7 @@ public class LocalUserRepository implements UserRepository {
     List<User> userList = new ArrayList<>();
     String currentUserId = sessionRepository.getCurrentUserId();
     for (UserEntity localUserEntity : localUserEntities) {
-      String idUser = localUserEntity.getIdUser();
-      User user = userEntityMapper.transform(localUserEntity, currentUserId, isFollower(idUser),
-          isFollowing(idUser));
+      User user = userEntityMapper.transform(localUserEntity, currentUserId);
       userList.add(user);
     }
     return userList;
@@ -152,10 +128,6 @@ public class LocalUserRepository implements UserRepository {
       suggestedPeoples.add(suggestedPeopleEntityMapper.transform(suggestedPeople));
     }
     return suggestedPeoples;
-  }
-
-  @Override public List<String> getFollowingIds(String userId) {
-    return localUserDataSource.getFollowingIds(userId);
   }
 
   @Override public void mute(String idUser) {

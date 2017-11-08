@@ -7,11 +7,9 @@ import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.FollowUnfollow;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetFavoritesIdsInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -22,22 +20,18 @@ import com.shootr.mobile.ui.presenter.interactorwrapper.ActivityTimelineInteract
 import com.shootr.mobile.ui.views.GenericActivityTimelineView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
-public class GenericActivityTimelinePresenter implements Presenter, FollowUnfollow.Receiver {
+public class GenericActivityTimelinePresenter implements Presenter {
 
   private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
   private static final long MAX_REFRESH_INTERVAL_MILLISECONDS = 60 * 1000;
 
   private final ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper;
   private final ActivityModelMapper activityModelMapper;
-  private final AddToFavoritesInteractor addToFavoritesInteractor;
-  private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
-  private final GetFollowingIdsInteractor getFollowingIdsInteractor;
-  private final GetFavoritesIdsInteractor getFavoritesIdsInteractor;
+  private final FollowStreamInteractor followStreamInteractor;
+  private final UnfollowStreamInteractor unfollowStreamInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
   private final Bus bus;
@@ -52,24 +46,21 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   private boolean mightHaveMoreActivities = true;
   private boolean isEmpty;
   private Boolean isHistoryActivity;
-  private ArrayList<String> followingIds = new ArrayList<>();
-  private ArrayList<String> favoritesIds = new ArrayList<>();
+
 
   @Inject public GenericActivityTimelinePresenter(
       ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
-      ActivityModelMapper activityModelMapper, AddToFavoritesInteractor addToFavoritesInteractor,
-      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-      GetFollowingIdsInteractor getFollowingIdsInteractor,
-      GetFavoritesIdsInteractor getFavoritesIdsInteractor, FollowInteractor followInteractor,
+      ActivityModelMapper activityModelMapper, FollowStreamInteractor followStreamInteractor,
+      UnfollowStreamInteractor unfollowStreamInteractor,
+      FollowInteractor followInteractor,
       UnfollowInteractor unfollowInteractor, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, @ActivityBadgeCount IntPreference badgeCount,
       SessionRepository sessionRepository, BusPublisher busPublisher) {
+
     this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
     this.activityModelMapper = activityModelMapper;
-    this.addToFavoritesInteractor = addToFavoritesInteractor;
-    this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
-    this.getFollowingIdsInteractor = getFollowingIdsInteractor;
-    this.getFavoritesIdsInteractor = getFavoritesIdsInteractor;
+    this.followStreamInteractor = followStreamInteractor;
+    this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
     this.bus = bus;
@@ -88,10 +79,10 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
       boolean usePoller) {
     this.setView(timelineView);
     this.isHistoryActivity = isUserActivityTimeline;
-    getFollowingIds();
     if (usePoller) {
       setupPoller();
     }
+    loadTimeline();
     loadNewActivities(badgeCount.get());
   }
 
@@ -101,27 +92,6 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
       @Override public void run() {
         loadNewActivities(badgeCount.get());
         changeSynchroTimePoller();
-      }
-    });
-  }
-
-  private void getFollowingIds() {
-    getFollowingIdsInteractor.loadFollowingsIds(sessionRepository.getCurrentUserId(),
-        new Interactor.Callback<List<String>>() {
-          @Override public void onLoaded(List<String> strings) {
-            followingIds.clear();
-            followingIds.addAll(strings);
-            loadFavoritesIds();
-          }
-        });
-  }
-
-  private void loadFavoritesIds() {
-    getFavoritesIdsInteractor.loadFavoriteStreams(new Interactor.Callback<List<String>>() {
-      @Override public void onLoaded(List<String> strings) {
-        favoritesIds.clear();
-        favoritesIds.addAll(strings);
-        loadTimeline();
       }
     });
   }
@@ -165,8 +135,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
         new Interactor.Callback<ActivityTimeline>() {
           @Override public void onLoaded(ActivityTimeline timeline) {
             List<ActivityModel> activityModels =
-                activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
-                    followingIds, favoritesIds);
+                activityModelMapper.mapActivities(timeline.getActivities());
             timelineView.setActivities(activityModels, sessionRepository.getCurrentUserId());
             isEmpty = activityModels.isEmpty();
             if (isEmpty) {
@@ -204,8 +173,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
         new Interactor.Callback<ActivityTimeline>() {
           @Override public void onLoaded(ActivityTimeline timeline) {
             List<ActivityModel> newActivity =
-                activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
-                    followingIds, favoritesIds);
+                activityModelMapper.mapActivities(timeline.getActivities());
             boolean hasNewActivity = !newActivity.isEmpty();
             if (hasNewActivity) {
               timelineView.setNewContentArrived();
@@ -241,8 +209,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
             isLoadingOlderActivities = false;
             timelineView.hideLoadingOldActivities();
             List<ActivityModel> activityModels =
-                activityModelMapper.mapWithFollowingsAndFavorites(timeline.getActivities(),
-                    followingIds, favoritesIds);
+                activityModelMapper.mapActivities(timeline.getActivities());
             if (!activityModels.isEmpty()) {
               timelineView.addOldActivities(activityModels);
             } else {
@@ -258,7 +225,6 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   }
 
   @Override public void resume() {
-    getFollowingIds();
     bus.register(this);
     startPollingActivities();
   }
@@ -278,45 +244,5 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
         timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
       }
     });
-  }
-
-  public void unFollowUser(final String idUser) {
-    unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        followingIds.remove(idUser);
-        busPublisher.post(new FollowUnfollow.Event(idUser, false));
-      }
-    });
-  }
-
-  public void addFavorite(final String idStream) {
-    addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        favoritesIds.add(idStream);
-        loadTimeline();
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-      }
-    });
-  }
-
-  public void removeFavorite(final String idStream) {
-    removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        favoritesIds.remove(idStream);
-        loadTimeline();
-      }
-    });
-  }
-
-  @Subscribe @Override public void onFollowUnfollow(FollowUnfollow.Event event) {
-    if (event.isFollow()) {
-      followingIds.add(event.getIdUser());
-    } else {
-      followingIds.remove(event.getIdUser());
-    }
-    loadTimeline();
   }
 }

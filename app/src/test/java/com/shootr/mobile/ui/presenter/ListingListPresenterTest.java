@@ -2,12 +2,11 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetUserListingStreamsInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.model.stream.Listing;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
@@ -20,7 +19,6 @@ import com.shootr.mobile.ui.views.ListingView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -48,9 +46,8 @@ public class ListingListPresenterTest {
     @Mock ListingView listingView;
     @Mock SessionRepository sessionRepository;
     @Mock ListingListPresenter listingListPresenter;
-    @Mock AddToFavoritesInteractor addToFavoritesInteractor;
-    @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
-    @Mock GetFavoriteStreamsInteractor getFavoriteStreamInteractor;
+    @Mock FollowStreamInteractor followStreamInteractor;
+    @Mock UnfollowStreamInteractor unfollowStreamInteractor;
     @Mock RemoveStreamInteractor removeStreamInteractor;
     @Mock ShareStreamInteractor shareStreamInteractor;
     @Mock ErrorMessageFactory errorMessageFactory;
@@ -61,15 +58,12 @@ public class ListingListPresenterTest {
         MockitoAnnotations.initMocks(this);
         this.streamResultModelMapper = new StreamResultModelMapper(new StreamModelMapper(sessionRepository));
         listingListPresenter = new ListingListPresenter(getUserListingStreamsInteractor,
-          addToFavoritesInteractor,
-          removeFromFavoritesInteractor,
-          getFavoriteStreamInteractor,
+            followStreamInteractor, unfollowStreamInteractor,
           shareStreamInteractor,
           removeStreamInteractor,
           streamResultModelMapper,
           errorMessageFactory);
         listingListPresenter.setView(listingView);
-        setupFavoritesInteractorCallbacks();
     }
 
     @Test public void shouldShowContentIfUserHasHoldingOrFavoriteStreams() throws Exception {
@@ -175,7 +169,6 @@ public class ListingListPresenterTest {
     @Test public void shouldShowCurrentUserContextMenuWithAddFavoriteIfIsCurrentUserAndItsMyStreamAndIsFavorite()
       throws Exception {
         setupGetUserWithFavoritesListingCallback();
-        setupFavoritesInteractorCallback();
 
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
         listingListPresenter.openContextualMenu(streamResultModelFavorite());
@@ -212,8 +205,6 @@ public class ListingListPresenterTest {
     }
 
     @Test public void shouldShowContextMenuWithoutAddFavoriteIfIsCurrentUserAndItsNotMyStream() throws Exception {
-        setupFavoritesInteractorCallback();
-
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_CURRENT_USER);
         listingListPresenter.openContextualMenu(getStreamResultModel());
 
@@ -221,8 +212,6 @@ public class ListingListPresenterTest {
     }
 
     @Test public void shouldShowContextMenuWithoutAddFavoriteIfIsNotCurrentUser() throws Exception {
-        setupFavoritesInteractorCallback();
-
         listingListPresenter.initialize(listingView, PROFILE_ID_USER, IS_NOT_CURRENT_USER);
         listingListPresenter.openContextualMenu(getStreamResultModel());
 
@@ -260,30 +249,6 @@ public class ListingListPresenterTest {
         verify(listingView).hideAddStream();
     }
 
-    protected void setupFavoritesInteractorCallbacks() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<StreamSearchResult>> callback =
-                  (Interactor.Callback) invocation.getArguments()[0];
-                callback.onLoaded(Collections.<StreamSearchResult>emptyList());
-
-                return null;
-            }
-        }).when(getFavoriteStreamInteractor).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
-    }
-
-    protected void setupFavoritesInteractorCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<List<StreamSearchResult>> callback =
-                  (Interactor.Callback) invocation.getArguments()[0];
-                callback.onLoaded(Arrays.asList(getStreamSearchResult()));
-
-                return null;
-            }
-        }).when(getFavoriteStreamInteractor).loadFavoriteStreamsFromLocalOnly(any(Interactor.Callback.class));
-    }
-
     private void setupShareStreamErrorCallback() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
@@ -314,7 +279,7 @@ public class ListingListPresenterTest {
         streamModel.setIdStream(STREAM_ID);
         streamModel.setAuthorId(PROFILE_ID_USER);
         streamModel.setRemoved(false);
-        streamModel.setFavorite(false);
+        streamModel.setFollowing(false);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
     }
@@ -325,7 +290,7 @@ public class ListingListPresenterTest {
         streamModel.setIdStream(STREAM_ID);
         streamModel.setAuthorId(PROFILE_ID_USER);
         streamModel.setRemoved(false);
-        streamModel.setFavorite(true);
+        streamModel.setFollowing(true);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;
     }
@@ -372,7 +337,7 @@ public class ListingListPresenterTest {
         streamModel.setIdStream(STREAM_ID);
         streamModel.setAuthorId(STREAM_AUTHOR_ID);
         streamModel.setTitle(STREAM_TITLE);
-        streamModel.setFavorite(true);
+        streamModel.setFollowing(true);
         streamResultModel.setStreamModel(streamModel);
         streamResultModel.setStreamModel(streamModel);
         return streamResultModel;

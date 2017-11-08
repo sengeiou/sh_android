@@ -274,7 +274,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void showContextMenuWithMute(final StreamResultModel stream) {
-    if (stream.isFavorited()) {
+    if (stream.isFollowing()) {
       baseContextualMenuWithoutFavorite(stream).addAction(R.string.mute, new Runnable() {
         @Override public void run() {
           presenter.onMuteClicked(stream);
@@ -290,7 +290,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void showContextMenuWithUnmute(final StreamResultModel stream) {
-    if (stream.isFavorited()) {
+    if (stream.isFollowing()) {
       baseContextualMenuWithoutFavorite(stream).addAction(R.string.unmute, new Runnable() {
         @Override public void run() {
           presenter.onUnmuteClicked(stream);

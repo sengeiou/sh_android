@@ -46,7 +46,6 @@ public class GetAllParticipantsInteractorTest {
   }
 
   @Test public void shouldNotifyLoadedWHenObtainAllParticipants() throws Exception {
-    when(remoteUserRepository.getPeople()).thenReturn(users());
     when(remoteUserRepository.getAllParticipants(anyString(), anyLong())).thenReturn(
         new ArrayList<User>());
 
@@ -57,7 +56,6 @@ public class GetAllParticipantsInteractorTest {
 
   @Test public void shouldNotifyLoadedWHenObtainAllParticipantsAndIsNotPaginating()
       throws Exception {
-    when(remoteUserRepository.getPeople()).thenReturn(users());
     when(remoteUserRepository.getAllParticipants(anyString(), anyLong())).thenReturn(
         new ArrayList<User>());
 
@@ -69,7 +67,6 @@ public class GetAllParticipantsInteractorTest {
 
   @Test public void shouldNotifyErrorWhenRemoteRepositoryThrowsServerComunicationException()
       throws Exception {
-    when(remoteUserRepository.getPeople()).thenReturn(users());
     doThrow(ServerCommunicationException.class).when(remoteUserRepository)
         .getAllParticipants(anyString(), anyLong());
 

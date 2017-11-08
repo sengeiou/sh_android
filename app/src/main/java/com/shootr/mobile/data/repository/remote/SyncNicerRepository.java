@@ -39,18 +39,9 @@ public class SyncNicerRepository implements NicerRepository {
   private List<Nicer> transformNicersEntities(List<NicerEntity> nicerEntityList) {
     List<Nicer> nicers = new ArrayList<>(nicerEntityList.size());
     for (NicerEntity nicerEntity : nicerEntityList) {
-      Nicer nicer = nicerEntityMapper.transform(nicerEntity, sessionRepository.getCurrentUserId(),
-          isFollower(nicerEntity.getIdUser()), isFollowing(nicerEntity.getIdUser()));
+      Nicer nicer = nicerEntityMapper.transform(nicerEntity, sessionRepository.getCurrentUserId());
       nicers.add(nicer);
     }
     return nicers;
-  }
-
-  private boolean isFollower(String userId) {
-    return remoteUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
-  }
-
-  private boolean isFollowing(String userId) {
-    return remoteUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
   }
 }

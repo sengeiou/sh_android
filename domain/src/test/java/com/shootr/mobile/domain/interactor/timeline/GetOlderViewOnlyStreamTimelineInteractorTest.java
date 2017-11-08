@@ -83,7 +83,7 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
     when(shotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(
         holderShots());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(true);
+
     setupSessionAndStreamRepositories();
 
     interactor.loadOlderStreamTimeline(WATCHING_STREAM, CURRENT_OLDEST_DATE, callback, errorCallback);
@@ -95,7 +95,6 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
     when(shotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(
         followingShots());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(true);
     setupSessionAndStreamRepositories();
 
     interactor.loadOlderStreamTimeline(WATCHING_STREAM, CURRENT_OLDEST_DATE, callback, errorCallback);
@@ -107,7 +106,6 @@ public class GetOlderViewOnlyStreamTimelineInteractorTest {
     when(shotRepository.getShotsForStreamTimeline(any(StreamTimelineParameters.class))).thenReturn(
         myShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(true);
     setupSessionAndStreamRepositories();
 
     interactor.loadOlderStreamTimeline(WATCHING_STREAM, CURRENT_OLDEST_DATE, callback, errorCallback);

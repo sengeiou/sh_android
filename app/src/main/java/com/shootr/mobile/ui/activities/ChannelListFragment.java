@@ -47,6 +47,7 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
   @Inject ImageLoader imageLoader;
   @Inject CrashReportTool crashReportTool;
 
+
   private MessageChannelListAdapter adapter;
   private Unbinder unbinder;
   private MenuItemValueHolder activeFilter = new MenuItemValueHolder();

@@ -16,7 +16,8 @@ import com.shootr.mobile.ui.model.UserModel;
         userModel.setNumFollowers(user.getNumFollowers());
         userModel.setNumFollowings(user.getNumFollowings());
         userModel.setPhoto(user.getPhoto());
-        userModel.setRelationship(isMe ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(follow));
+        userModel.setMe(isMe);
+        userModel.setFollowing(user.isFollowing());
         userModel.setWebsite(user.getWebsite());
         userModel.setStreamWatchingId(user.getIdWatchingStream());
         userModel.setStreamWatchingTitle(user.getWatchingStreamTitle());
@@ -25,13 +26,5 @@ import com.shootr.mobile.ui.model.UserModel;
         userModel.setVerifiedUser(user.getVerifiedUser() == 1);
         userModel.setMuted(user.isMuted());
         return userModel;
-    }
-
-    private int getRelationShip(FollowEntity f) {
-        if (f != null && f.getBirth() != null && f.getDeleted() == null) {
-            return FollowEntity.RELATIONSHIP_FOLLOWING;
-        } else {
-            return FollowEntity.RELATIONSHIP_NONE;
-        }
     }
 }

@@ -3,8 +3,8 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.GetStreamFollowersListInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -20,8 +20,8 @@ import javax.inject.Inject;
 
 public class StreamFollowersPresenter implements Presenter {
 
-  private final AddToFavoritesInteractor addToFavoritesInteractor;
-  private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  private final FollowStreamInteractor followStreamInteractor;
+  private final UnfollowStreamInteractor unfollowStreamInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
@@ -35,14 +35,14 @@ public class StreamFollowersPresenter implements Presenter {
   private boolean isLoadingItems;
   private boolean mightHaveMoreItems;
 
-  @Inject public StreamFollowersPresenter(AddToFavoritesInteractor addToFavoritesInteractor,
-      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+  @Inject public StreamFollowersPresenter(FollowStreamInteractor followStreamInteractor,
+      UnfollowStreamInteractor unfollowStreamInteractor,
       FollowInteractor followInteractor, UnfollowInteractor unfollowInteractor,
       SelectStreamInteractor selectStreamInteractor,
       GetStreamFollowersListInteractor getStreamFollowersListInteractor, FollowModelMapper followingModelMapper,
       ErrorMessageFactory errorMessageFactory) {
-    this.addToFavoritesInteractor = addToFavoritesInteractor;
-    this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+    this.followStreamInteractor = followStreamInteractor;
+    this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
@@ -96,7 +96,7 @@ public class StreamFollowersPresenter implements Presenter {
   }
 
   public void addToFavorites(final StreamModel streamModel) {
-    addToFavoritesInteractor.addToFavorites(streamModel.getIdStream(),
+    followStreamInteractor.follow(streamModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             /* no-op */
@@ -109,7 +109,7 @@ public class StreamFollowersPresenter implements Presenter {
   }
 
   public void removeFromFavorites(final StreamModel streamModel) {
-    removeFromFavoritesInteractor.removeFromFavorites(streamModel.getIdStream(),
+    unfollowStreamInteractor.unfollow(streamModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             /* no-op */

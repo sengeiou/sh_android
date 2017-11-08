@@ -35,7 +35,6 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserByIdInteractor;
-import com.shootr.mobile.domain.interactor.user.PerformAutoLoginInteractor;
 import com.shootr.mobile.domain.interactor.user.PerformFacebookLoginInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.user.User;
@@ -48,7 +47,6 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
-import com.shootr.mobile.util.LoginTypeUtils;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -69,9 +67,6 @@ public class LoginSelectionActivity extends BaseActivity {
   @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
   @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
   @BindString(R.string.analytics_action_signup) String analyticsActionSignup;
-  @BindString(R.string.analytics_label_signup) String analyticsLabelSignup;
-  @BindString(R.string.analytics_action_short_login) String analyticsActionShortLogin;
-  @BindString(R.string.analytics_action_long_login) String analyticsActionLongLogin;
   @BindString(R.string.analytics_action_open_app) String analyticsActionOpenApp;
 
   @Inject PerformFacebookLoginInteractor performFacebookLoginInteractor;
@@ -85,8 +80,6 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject IntentFactory intentFactory;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
-  @Inject PerformAutoLoginInteractor performAutoLoginInteractor;
-  @Inject LoginTypeUtils loginTypeUtils;
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
@@ -220,7 +213,6 @@ public class LoginSelectionActivity extends BaseActivity {
     getUserByIdInteractor.loadUserById(currentUserIdPreference.get(), false,
         new Interactor.Callback<User>() {
           @Override public void onLoaded(User user) {
-            performAutoLoginInteractor.storePostAutoLoginInfo(user.getIdUser());
             String visibleStreamId = user.getIdWatchingStream();
             if (visibleStreamId != null) {
               getStreamById.loadStream(visibleStreamId, new GetStreamInteractor.Callback() {

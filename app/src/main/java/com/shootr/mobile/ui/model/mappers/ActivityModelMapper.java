@@ -1,7 +1,6 @@
 package com.shootr.mobile.ui.model.mappers;
 
 import com.shootr.mobile.domain.model.activity.Activity;
-import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.infraestructure.Mapper;
 import com.shootr.mobile.ui.model.ActivityModel;
 import java.util.ArrayList;
@@ -54,16 +53,10 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
         return activityModel;
     }
 
-    public List<ActivityModel> mapWithFollowingsAndFavorites(List<Activity> activities,
-        ArrayList<String> followingsIds, ArrayList<String> favoritesIds) {
+    public List<ActivityModel> mapActivities(List<Activity> activities) {
         ArrayList<ActivityModel> activityModels = new ArrayList<>();
         for (Activity activity : activities) {
             ActivityModel activityModel = map(activity);
-            if (activityModel.getType().equals(ActivityType.START_FOLLOW)) {
-                activityModel.setAmIFollowing(followingsIds.contains(activityModel.getIdUser()));
-            } else if (activityModel.getType().equals(ActivityType.STARTED_SHOOTING)) {
-                activityModel.setFavorite(favoritesIds.contains(activityModel.getIdStream()));
-            }
             activityModels.add(activityModel);
         }
         return activityModels;

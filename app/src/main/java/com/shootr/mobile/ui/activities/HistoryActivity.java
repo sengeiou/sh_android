@@ -166,12 +166,11 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
     }, new ActivityFavoriteClickListener() {
       @Override
       public void onFavoriteClick(String idStream, String streamTitle, boolean isStrategic) {
-        timelinePresenter.addFavorite(idStream);
         sendFavoriteAnalytics(idStream, streamTitle, isStrategic);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
-        timelinePresenter.removeFavorite(idStream);
+        /* no-op */
       }
     });
     activityList.setAdapter(adapter);
@@ -183,7 +182,7 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
         .setPositiveButton(getString(R.string.unfollow_dialog_yes),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                timelinePresenter.unFollowUser(idUser);
+                /* no-op */
               }
             })
         .setNegativeButton(getString(R.string.unfollow_dialog_no), null)

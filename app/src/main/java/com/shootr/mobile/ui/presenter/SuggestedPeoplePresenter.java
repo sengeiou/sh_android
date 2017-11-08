@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.prefs.CacheTimeKeepAlive;
 import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -95,8 +94,7 @@ public class SuggestedPeoplePresenter implements Presenter {
     for (int i = 0; i < suggestedPeople.size(); i++) {
       UserModel userModel = suggestedPeople.get(i);
       if (userModel.getIdUser().equals(idUser)) {
-        userModel.setRelationship(
-            following ? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+        userModel.setFollowing(following);
         suggestedPeopleView.refreshSuggestedPeople(suggestedPeople);
         break;
       }

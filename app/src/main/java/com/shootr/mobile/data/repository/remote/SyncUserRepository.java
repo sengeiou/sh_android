@@ -1,12 +1,9 @@
 package com.shootr.mobile.data.repository.remote;
 
-import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Default;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.SuggestedPeopleEntity;
-import com.shootr.mobile.data.entity.SynchroEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.SuggestedPeopleEntityMapper;
@@ -44,8 +41,6 @@ import timber.log.Timber;
 public class SyncUserRepository
     implements UserRepository, SyncableRepository, WatchUpdateRequest.Receiver {
 
-  public static final int PAGE_SIZE = 100;
-  public static final int PAGE = 0;
   private final SessionRepository sessionRepository;
   private final UserDataSource localUserDataSource;
   private final UserDataSource remoteUserDataSource;
@@ -94,64 +89,6 @@ public class SyncUserRepository
     this.bus.register(this);
   }
 
-  @Override public synchronized List<User> getPeople() {
-
-    SynchroEntity synchroEntity = getSynchroEntity(SynchroDataSource.USER);
-    Long userTimestamp = synchroDataSource.getTimestamp(SynchroDataSource.USER);
-    try {
-      List<UserEntity> remotePeopleEntities =
-          remoteUserDataSource.getRelatedUsers(sessionRepository.getCurrentUserId(), userTimestamp);
-      savePeopleInLocal(remotePeopleEntities);
-      synchroDataSource.putEntity(synchroEntity);
-    } catch (ServerCommunicationException networkError) {
-      Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
-            /* swallow silently */
-    }
-    return transformUserEntitiesForPeople(
-        localUserDataSource.getFollowing(sessionRepository.getCurrentUserId(), PAGE, PAGE_SIZE));
-  }
-
-  private SynchroEntity getSynchroEntity(String entity) {
-    SynchroEntity synchroEntity = new SynchroEntity();
-    synchroEntity.setEntity(entity);
-    synchroEntity.setTimestamp(androidTimeUtils.getCurrentTime());
-    return synchroEntity;
-  }
-
-  private void savePeopleInLocal(List<UserEntity> remotePeople) {
-    markSynchronized(remotePeople);
-    List<FollowEntity> follows = getFollows();
-    localFollowDataSource.putFollows(follows);
-    localUserDataSource.putUsers(remotePeople);
-  }
-
-  @NonNull private List<FollowEntity> getFollows() {
-    SynchroEntity synchroEntity = getSynchroEntity(SynchroDataSource.FOLLOW);
-    Long followTimestamp = synchroDataSource.getTimestamp(SynchroDataSource.FOLLOW);
-    Integer page = 0;
-    List<FollowEntity> follows =
-        serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page,
-            followTimestamp);
-    while (follows.size() == PAGE_SIZE) {
-      localFollowDataSource.putFollows(follows);
-      page++;
-      follows = serviceFollowDataSource.getFollows(sessionRepository.getCurrentUserId(), page,
-          followTimestamp);
-    }
-    synchroDataSource.putEntity(synchroEntity);
-    return follows;
-  }
-
-  @Override public void synchronizeFollow() {
-    try {
-      List<FollowEntity> follows = getFollows();
-      localFollowDataSource.putFollows(follows);
-    } catch (ServerCommunicationException networkError) {
-      Timber.e(networkError, "Network error when updating data for a WatchUpdateRequest");
-            /* swallow silently */
-    }
-  }
-
   @Override public User getUserById(String id) {
     UserEntity remoteUser = remoteUserDataSource.getUser(id);
     remoteUser.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
@@ -173,8 +110,7 @@ public class SyncUserRepository
     if (remoteUser == null) {
       return null;
     }
-    return userEntityMapper.transform(remoteUser, sessionRepository.getCurrentUserId(),
-        isFollower(remoteUser.getIdUser()), isFollowing(remoteUser.getIdUser()));
+    return userEntityMapper.transform(remoteUser, sessionRepository.getCurrentUserId());
   }
 
   private SuggestedPeople suggestedPeopleEntityToDomain(
@@ -192,14 +128,6 @@ public class SyncUserRepository
       suggestedPeoples.add(suggestedPeopleEntityToDomain(suggestedPeople));
     }
     return suggestedPeoples;
-  }
-
-  @Override public boolean isFollower(String userId) {
-    return localUserDataSource.isFollower(sessionRepository.getCurrentUserId(), userId);
-  }
-
-  @Override public boolean isFollowing(String userId) {
-    return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
   }
 
   @Override public User putUser(User user) {
@@ -250,11 +178,6 @@ public class SyncUserRepository
     return streamEntityMapper.transform(watchingStream);
   }
 
-  @Override public List<User> getFollowing(String idUser, Integer page, Integer pageSize) {
-    return userEntityMapper.transformEntities(
-        remoteUserDataSource.getFollowing(idUser, page, pageSize));
-  }
-
   @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
     return userEntityMapper.transformEntities(
         remoteUserDataSource.getFollowers(idUser, page, pageSize));
@@ -287,9 +210,7 @@ public class SyncUserRepository
     List<User> participants = new ArrayList<>(allParticipants.size());
     for (UserEntity participantEntity : allParticipants) {
       User participant =
-          userEntityMapper.transform(participantEntity, sessionRepository.getCurrentUserId(),
-              isFollower(participantEntity.getIdUser()),
-              isFollowing(participantEntity.getIdUser()));
+          userEntityMapper.transform(participantEntity, sessionRepository.getCurrentUserId());
       participants.add(participant);
     }
     return participants;
@@ -365,10 +286,6 @@ public class SyncUserRepository
 
   private void markEntitySynchronized(UserEntity userEntity) {
     userEntity.setSynchronizedStatus(LocalSynchronized.SYNC_SYNCHRONIZED);
-  }
-
-  @Override public List<String> getFollowingIds(String userId) {
-    throw new IllegalArgumentException("No remote implementation");
   }
 
   @Override public void mute(String idUser) {

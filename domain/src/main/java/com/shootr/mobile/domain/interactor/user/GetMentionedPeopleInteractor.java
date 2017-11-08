@@ -1,6 +1,5 @@
 package com.shootr.mobile.domain.interactor.user;
 
-import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -43,25 +42,7 @@ public class GetMentionedPeopleInteractor implements Interactor {
     }
 
     @Override public void execute() throws Exception {
-        obtainLocalPeopleThenFallbackToRemote();
-    }
-
-    private void obtainLocalPeopleThenFallbackToRemote() {
-        List<User> userList = localUserRepository.getLocalPeople(sessionRepository.getCurrentUserId());
-        if (!userList.isEmpty()) {
-            notifyResult(getUsersPossiblyMentioned(userList));
-        } else {
-            obtainRemotePeople();
-        }
-    }
-
-    private void obtainRemotePeople() {
-        try {
-            List<User> userList = remoteUserRepository.getPeople();
-            notifyResult(getUsersPossiblyMentioned(userList));
-        } catch (ServerCommunicationException networkError) {
-            /* no-op */
-        }
+        //TODO rehacer esto
     }
 
     private List<User> getUsersPossiblyMentioned(List<User> userList) {

@@ -58,8 +58,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
     contentValues.put(UserTable.FIRST_SESSION_ACTIVATION,
         (entity.isFirstSessionActivation() == null ? false : entity.isFirstSessionActivation()));
     contentValues.put(UserTable.STRATEGIC, entity.isStrategic());
-    contentValues.put(UserTable.FOLLOWING,
-        (entity.isFollowing() == null ? false : entity.isFollowing()));
+    contentValues.put(UserTable.FOLLOWING, (entity.isFollowing()));
     contentValues.put(UserTable.MUTED,
         (entity.isMuted() == null ? false : entity.isMuted()));
     setSynchronizedtoContentValues(entity, contentValues);

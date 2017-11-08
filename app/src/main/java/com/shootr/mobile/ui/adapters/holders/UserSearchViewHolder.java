@@ -6,7 +6,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
@@ -56,12 +55,12 @@ public class UserSearchViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupFollowUnfollow(final UserModel userModel) {
-    if (userModel.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
-      followButton.setVisibility(View.VISIBLE);
-      followButton.setFollowing(true);
-    } else if (userModel.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+    if (userModel.isMe()) {
       followButton.setVisibility(View.GONE);
       followButton.setEditProfile();
+    } else if (userModel.isFollowing()) {
+      followButton.setVisibility(View.VISIBLE);
+      followButton.setFollowing(true);
     } else {
       followButton.setVisibility(View.VISIBLE);
       followButton.setFollowing(false);

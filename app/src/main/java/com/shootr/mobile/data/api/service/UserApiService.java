@@ -61,12 +61,6 @@ public interface UserApiService {
       @Path("query") String query, @Query("page") int pageOffset, @Query("locale") String locale)
       throws IOException, ApiException;
 
-  @POST("/follow/{idUser}") Response follow(@Path("idUser") String idUser)
-      throws IOException, ApiException;
-
-  @DELETE("/follow/{idUser}") Response unfollow(@Path("idUser") String idUser)
-      throws IOException, ApiException;
-
   @POST("/block/{idUser}") Response block(@Path("idUser") String idUser)
       throws IOException, ApiException;
 
@@ -100,5 +94,11 @@ public interface UserApiService {
       throws IOException, ApiException;
 
   @DELETE("/user/{idUser}/mute") Response unMute(@Path("idUser") String idUser)
+      throws IOException, ApiException;
+
+  @POST("/user/{idUser}/follow") Response follow(@Path("idUser") String idUser)
+      throws IOException, ApiException;
+
+  @DELETE("/user/{idUser}/follow") Response unfollow(@Path("idUser") String idUser)
       throws IOException, ApiException;
 }

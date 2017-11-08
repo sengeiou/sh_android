@@ -34,7 +34,7 @@ public class UserEntity extends FollowableEntity
     private Long numMutuals;
     private Boolean firstSessionActivation;
     private Boolean strategic;
-    private Boolean following;
+    private boolean following;
     private Boolean muted;
 
     public UserEntity() {
@@ -286,11 +286,11 @@ public class UserEntity extends FollowableEntity
         return SearchableType.USER;
     }
 
-    public Boolean isFollowing() {
+    public boolean isFollowing() {
         return following;
     }
 
-    public void setFollowing(Boolean following) {
+    public void setFollowing(boolean following) {
         this.following = following;
     }
 

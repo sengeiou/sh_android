@@ -10,17 +10,11 @@ import java.util.List;
 
 public interface UserDataSource extends SyncableDataSource<UserEntity> {
 
-    List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize);
-
     UserEntity putUser(UserEntity userEntity);
 
     List<UserEntity> putUsers(List<UserEntity> userEntities);
 
     UserEntity getUser(String id);
-
-    boolean isFollower(String from, String who);
-
-    boolean isFollowing(String who, String to);
 
     UserEntity getUserByUsername(String username);
 
@@ -40,8 +34,6 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
     List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
-
-    List<String> getFollowingIds(String userId);
 
     void mute(String idUser);
 

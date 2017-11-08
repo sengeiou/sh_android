@@ -11,6 +11,7 @@ public class PrivateMessageChannelModel {
   private Long lastMessageTime;
   private String lastMessageComment;
   private boolean isMuted;
+  private boolean isFollowingTargetUser;
 
   public String getIdPrivateMessageChannel() {
     return idPrivateMessageChannel;
@@ -82,6 +83,14 @@ public class PrivateMessageChannelModel {
 
   public void setMuted(boolean muted) {
     isMuted = muted;
+  }
+
+  public boolean isFollowingTargetUser() {
+    return isFollowingTargetUser;
+  }
+
+  public void setFollowingTargetUser(boolean followingTargetUser) {
+    isFollowingTargetUser = followingTargetUser;
   }
 }
 

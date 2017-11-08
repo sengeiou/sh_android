@@ -86,7 +86,15 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     streamManager.mute(idStream);
   }
 
-  @Override public void unMute(String idStream) {
+  @Override public void unmute(String idStream) {
     streamManager.unMute(idStream);
+  }
+
+  @Override public void follow(String idStream) {
+    streamManager.follow(idStream);
+  }
+
+  @Override public void unfollow(String idStream) {
+    streamManager.unFollow(idStream);
   }
 }

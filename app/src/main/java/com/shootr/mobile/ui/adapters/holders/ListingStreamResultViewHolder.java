@@ -48,7 +48,7 @@ public class ListingStreamResultViewHolder extends StreamResultViewHolder {
   }
 
   private void setupFavoriteIndicator(StreamResultModel streamResultModel) {
-    checkNotNull(isFavorite, "Should call setFavorite(boolean) before calling render()");
+    checkNotNull(isFavorite, "Should call setFollowing(boolean) before calling render()");
     updateIndicatorStatus();
   }
 

@@ -89,7 +89,7 @@ public class CreateStreamInteractor implements Interactor {
     String currentUserId = sessionRepository.getCurrentUserId();
     stream.setAuthorId(currentUserId);
     stream.setAuthorUsername(localUserRepository.getUserById(currentUserId).getUsername());
-    stream.setTotalFavorites(0);
+    stream.setTotalFollowers(0);
     stream.setTotalWatchers(0);
     if (idMedia != null) {
       stream.setPhotoIdMedia(idMedia);

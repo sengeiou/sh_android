@@ -4,7 +4,6 @@ import com.shootr.mobile.data.entity.RecentSearchEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.UserEntityMapper;
-import com.shootr.mobile.data.repository.datasource.favorite.InternalFavoriteDatasource;
 import com.shootr.mobile.data.repository.datasource.stream.RecentSearchDataSource;
 import com.shootr.mobile.data.repository.datasource.user.UserDataSource;
 import com.shootr.mobile.domain.model.FollowableType;
@@ -25,18 +24,15 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
   private final UserEntityMapper userEntityMapper;
   private final UserDataSource localUserDataSource;
   private final SessionRepository sessionRepository;
-  private final InternalFavoriteDatasource localFavoriteDataSource;
 
   @Inject public LocalRecentSearchRepository(RecentSearchDataSource localRecentSearchDataSource,
       StreamEntityMapper streamEntityMapper, UserEntityMapper userEntityMapper,
-      @Local UserDataSource localUserDataSource, SessionRepository sessionRepository,
-      InternalFavoriteDatasource localFavoriteDataSource) {
+      @Local UserDataSource localUserDataSource, SessionRepository sessionRepository) {
     this.localRecentSearchDataSource = localRecentSearchDataSource;
     this.streamEntityMapper = streamEntityMapper;
     this.userEntityMapper = userEntityMapper;
     this.localUserDataSource = localUserDataSource;
     this.sessionRepository = sessionRepository;
-    this.localFavoriteDataSource = localFavoriteDataSource;
   }
 
   @Override public void putRecentStream(Stream stream, long currentTime) {
@@ -64,14 +60,12 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
         switch (searchableEntity.getSearchableType()) {
           case FollowableType.STREAM:
             searchables.add(streamEntityMapper.transform(searchableEntity.getStream(),
-                localFavoriteDataSource.getFavoriteByIdStream(
-                    searchableEntity.getStream().getIdStream()) != null));
+                searchableEntity.getStream().isFollowing()));
             break;
           case FollowableType.USER:
             UserEntity userEntity = searchableEntity.getUser();
             searchables.add(
-                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId(), false,
-                    isFollowing(userEntity.getIdUser())));
+                userEntityMapper.transform(userEntity, sessionRepository.getCurrentUserId()));
             break;
           default:
             break;
@@ -82,9 +76,5 @@ public class LocalRecentSearchRepository implements RecentSearchRepository {
     }
 
     return searchables;
-  }
-
-  private boolean isFollowing(String userId) {
-    return localUserDataSource.isFollowing(sessionRepository.getCurrentUserId(), userId);
   }
 }

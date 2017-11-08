@@ -10,19 +10,11 @@ import java.util.List;
 
 public interface UserRepository {
 
-    List<User> getPeople();
-
-    void synchronizeFollow();
-
     User getUserById(String id);
 
     User getUserForAnalythicsById(String id);
 
     User getUserByUsername(String username);
-
-    boolean isFollower(String userId);
-
-    boolean isFollowing(String userId);
 
     User putUser(User user);
 
@@ -34,8 +26,6 @@ public interface UserRepository {
 
     Stream updateWatch(User user);
 
-    List<User> getFollowing(String idUser, Integer page, Integer pageSize);
-
     List<User> getFollowers(String idUser, Integer page, Integer pageSize);
 
     List<User> getLocalPeople(String idUser);
@@ -44,9 +34,6 @@ public interface UserRepository {
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
 
     List<User> findFriends(String searchString, Integer pageOffset, String locale) throws IOException;
-
-
-    List<String> getFollowingIds(String userId);
 
     void mute(String idUser);
 

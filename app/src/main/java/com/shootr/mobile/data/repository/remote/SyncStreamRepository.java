@@ -106,8 +106,16 @@ public class SyncStreamRepository
     remoteStreamDataSource.mute(idStream);
   }
 
-  @Override public void unMute(String idStream) {
-    remoteStreamDataSource.unMute(idStream);
+  @Override public void unmute(String idStream) {
+    remoteStreamDataSource.unmute(idStream);
+  }
+
+  @Override public void follow(String idStream) {
+    remoteStreamDataSource.follow(idStream);
+  }
+
+  @Override public void unfollow(String idStream) {
+    remoteStreamDataSource.unfollow(idStream);
   }
 
   @Override public Stream getBlogStream(String country, String language) {

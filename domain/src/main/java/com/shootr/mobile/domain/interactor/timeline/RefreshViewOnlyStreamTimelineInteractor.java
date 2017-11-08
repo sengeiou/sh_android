@@ -122,7 +122,8 @@ public class RefreshViewOnlyStreamTimelineInteractor implements Interactor {
   }
 
   private boolean isFollowingShotAuthor(Shot shot) {
-    return localUserRepository.isFollowing(shot.getUserInfo().getIdUser());
+    //TODO ARREGLAR ESTO
+    return true;
   }
 
   //region Result

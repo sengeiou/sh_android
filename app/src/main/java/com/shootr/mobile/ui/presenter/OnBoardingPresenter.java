@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddSuggestedfavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.AddSuggestedFollowingInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetOnBoardingStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.user.GetOnBoardingUserInteractor;
@@ -30,25 +30,24 @@ public class OnBoardingPresenter implements Presenter {
   private final StreamsListInteractor streamsListInteractor;
   private final GetOnBoardingStreamInteractor getOnBoardingStreamInteractor;
   private final GetOnBoardingUserInteractor getOnBoardingUserInteractor;
-  private final AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor;
+  private final AddSuggestedFollowingInteractor addSuggestedFollowingInteractor;
   private final ErrorMessageFactory errorMessageFactory;
   private final OnBoardingModelMapper onBoardingModelMapper;
 
   private OnBoardingView onBoardingView;
-  private boolean streamsLoaded = false;
   private boolean getStartedClicked = false;
-  private HashMap<String, StreamModel> favoriteStreams = new HashMap<>();
-  private HashMap<String, UserModel> favoriteUsers = new HashMap<>();
+  private HashMap<String, StreamModel> followingStreams = new HashMap<>();
+  private HashMap<String, UserModel> followingUsers = new HashMap<>();
 
   @Inject public OnBoardingPresenter(StreamsListInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
       GetOnBoardingUserInteractor getOnBoardingUserInteractor,
-      AddSuggestedfavoritesInteractor addSuggestedfavoritesInteractor,
+      AddSuggestedFollowingInteractor addSuggestedFollowingInteractor,
       ErrorMessageFactory errorMessageFactory, OnBoardingModelMapper onBoardingModelMapper) {
     this.streamsListInteractor = streamsListInteractor;
     this.getOnBoardingStreamInteractor = getOnBoardingStreamInteractor;
     this.getOnBoardingUserInteractor = getOnBoardingUserInteractor;
-    this.addSuggestedfavoritesInteractor = addSuggestedfavoritesInteractor;
+    this.addSuggestedFollowingInteractor = addSuggestedFollowingInteractor;
     this.errorMessageFactory = errorMessageFactory;
     this.onBoardingModelMapper = onBoardingModelMapper;
   }
@@ -124,7 +123,6 @@ public class OnBoardingPresenter implements Presenter {
   private void loadDefaultStreams() {
     streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
       @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
-        streamsLoaded = true;
         if (getStartedClicked) {
           onBoardingView.goNextScreen();
         }
@@ -142,9 +140,9 @@ public class OnBoardingPresenter implements Presenter {
   }
 
   private void sendFavorites() {
-    if (!favoriteStreams.isEmpty()) {
-      ArrayList<String> itemsIds = new ArrayList<>(favoriteStreams.keySet());
-      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.STREAM,
+    if (!followingStreams.isEmpty()) {
+      ArrayList<String> itemsIds = new ArrayList<>(followingStreams.keySet());
+      addSuggestedFollowingInteractor.addSuggestedFollowing(itemsIds, FollowableType.STREAM,
           new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               sendStreamAnalytics();
@@ -155,9 +153,9 @@ public class OnBoardingPresenter implements Presenter {
               showViewError(error);
             }
           });
-    } else if (!favoriteUsers.isEmpty()) {
-      ArrayList<String> itemsIds = new ArrayList<>(favoriteUsers.keySet());
-      addSuggestedfavoritesInteractor.addSuggestedFavorites(itemsIds, FollowableType.USER,
+    } else if (!followingUsers.isEmpty()) {
+      ArrayList<String> itemsIds = new ArrayList<>(followingUsers.keySet());
+      addSuggestedFollowingInteractor.addSuggestedFollowing(itemsIds, FollowableType.USER,
           new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               sendUserAnalytics();
@@ -174,14 +172,14 @@ public class OnBoardingPresenter implements Presenter {
   }
 
   private void sendStreamAnalytics() {
-    for (Map.Entry<String, StreamModel> entry : favoriteStreams.entrySet()) {
+    for (Map.Entry<String, StreamModel> entry : followingStreams.entrySet()) {
       onBoardingView.sendStreamAnalytics(entry.getKey(), entry.getValue().getTitle(),
           entry.getValue().isStrategic());
     }
   }
 
   private void sendUserAnalytics() {
-    for (Map.Entry<String, UserModel> entry : favoriteUsers.entrySet()) {
+    for (Map.Entry<String, UserModel> entry : followingUsers.entrySet()) {
       onBoardingView.sendUserAnalytics(entry.getValue());
     }
   }
@@ -189,27 +187,27 @@ public class OnBoardingPresenter implements Presenter {
 
   public void putFavorite(OnBoardingModel onBoardingModel) {
     StreamModel streamModel = onBoardingModel.getStreamModel();
-    if (!favoriteStreams.containsKey(streamModel.getIdStream())) {
-      favoriteStreams.put(streamModel.getIdStream(), streamModel);
+    if (!followingStreams.containsKey(streamModel.getIdStream())) {
+      followingStreams.put(streamModel.getIdStream(), streamModel);
     }
   }
 
   public void putUserFavorite(OnBoardingModel onBoardingModel) {
     UserModel userModel = onBoardingModel.getUserModel();
-    if (!favoriteUsers.containsKey(userModel.getIdUser())) {
-      favoriteUsers.put(userModel.getIdUser(), userModel);
+    if (!followingUsers.containsKey(userModel.getIdUser())) {
+      followingUsers.put(userModel.getIdUser(), userModel);
     }
   }
 
   public void removeFavorite(String idStream) {
-    if (favoriteStreams.containsKey(idStream)) {
-      favoriteStreams.remove(idStream);
+    if (followingStreams.containsKey(idStream)) {
+      followingStreams.remove(idStream);
     }
   }
 
   public void removeUserFavorite(String idStream) {
-    if (favoriteUsers.containsKey(idStream)) {
-      favoriteUsers.remove(idStream);
+    if (followingUsers.containsKey(idStream)) {
+      followingUsers.remove(idStream);
     }
   }
 

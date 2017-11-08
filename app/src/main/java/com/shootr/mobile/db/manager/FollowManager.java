@@ -21,7 +21,7 @@ public class FollowManager extends AbstractManager {
     private static final String BLOCK_TABLE = DatabaseContract.BlockTable.TABLE;
     private static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_USER;
     private static final String ID_BLOCKED_USER = DatabaseContract.BlockTable.ID_BLOCKED_USER;
-    private static final String ID_USER = DatabaseContract.FollowTable.ID_USER;
+    private static final String ID_USER = "IDUSER";
 
     @Inject public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper,
       BlockEntityDBMapper blockMapper) {
@@ -31,7 +31,7 @@ public class FollowManager extends AbstractManager {
     }
 
     /** Insert a Follow **/
-    public void saveFollow(FollowEntity follow) {
+    public void saveFailedFollow(FollowEntity follow) {
         if (follow != null) {
             ContentValues contentValues = followMapper.toContentValues(follow);
             getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE,
@@ -41,111 +41,11 @@ public class FollowManager extends AbstractManager {
         }
     }
 
-    /**
-     * Insert a Follow list from Server datas
-     * *
-     */
-    public void saveFollowsFromServer(List<FollowEntity> followList) {
-        SQLiteDatabase database = getWritableDatabase();
-        try {
-            database.beginTransaction();
-            for (FollowEntity follow : followList) {
-                ContentValues contentValues = followMapper.toContentValues(follow);
-                if (contentValues.getAsLong(DatabaseContract.SyncColumns.DELETED) != null) {
-                    deleteFollow(follow.getIdFollowedUser(), follow.getIdUser(), database);
-                } else {
-                    contentValues.put(DatabaseContract.SyncColumns.SYNCHRONIZED, "S");
-                    database.insertWithOnConflict(FOLLOW_TABLE, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
-                }
-            }
-            database.setTransactionSuccessful();
-        } finally {
-            database.endTransaction();
-        }
-    }
-
-    public FollowEntity getFollowByUserIds(String idUserWhoFollow, String idUserFollowed) {
-        String args = ID_USER
-          + "=? AND "
-          + ID_FOLLOWED_USER
-          + " =? AND ("
-          + DatabaseContract.SyncColumns.DELETED
-          + " IS NULL OR "
-          + DatabaseContract.SyncColumns.SYNCHRONIZED
-          + " = 'D')";
-        String[] argsString = new String[] { String.valueOf(idUserWhoFollow), String.valueOf(idUserFollowed) };
-        FollowEntity follow = null;
-        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
-          DatabaseContract.FollowTable.PROJECTION,
-          args,
-          argsString,
-          null,
-          null,
-          null,
-          null);
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            follow = followMapper.fromCursor(c);
-        }
-        c.close();
-        return follow;
-    }
-
-    /**
-     * Retrieve a Follows User
-     */
-    public List<String> getUserFollowingIds(String idUser) {
-        List<String> userIds = new ArrayList<>();
-
-        String args = ID_USER + "=? AND " + DatabaseContract.SyncColumns.DELETED + " IS NULL";
-        String[] argsString = new String[] { String.valueOf(idUser) };
-        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
-          DatabaseContract.FollowTable.PROJECTION,
-          args,
-          argsString,
-          null,
-          null,
-          null,
-          null);
-
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                userIds.add(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
-                c.moveToNext();
-            }
-        }
-        c.close();
-        return userIds;
-    }
-
-    /**
-     * Delete one Follow
-     */
-
-    public long deleteFollow(String followedUser, String idUser) {
-        String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
-        String[] whereArgs = new String[] { followedUser, idUser };
-        return getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
-    }
-
-    private long deleteFollow(String followedUser, String idUser, SQLiteDatabase database) {
-        String whereClause = ID_FOLLOWED_USER + "=? AND " + ID_USER + "=?";
-        String[] whereArgs = new String[] { followedUser, idUser };
-        return database.delete(FOLLOW_TABLE, whereClause, whereArgs);
-    }
-
-    public List<FollowEntity> getFollowsNotSynchronized() {
+    public List<FollowEntity> getFailedFollows() {
         List<FollowEntity> followsToUpdate = new ArrayList<>();
-        String args = DatabaseContract.SyncColumns.SYNCHRONIZED
-          + "='N' OR "
-          + DatabaseContract.SyncColumns.SYNCHRONIZED
-          + "= 'D' OR "
-          + DatabaseContract.SyncColumns.SYNCHRONIZED
-          + "='U'";
         Cursor c = getReadableDatabase().query(FOLLOW_TABLE,
           DatabaseContract.FollowTable.PROJECTION,
-          args,
+          null,
           null,
           null,
           null,
@@ -209,30 +109,11 @@ public class FollowManager extends AbstractManager {
         return blockeds;
     }
 
-    public List<String> getMutuals() {
-        List<String> mutuals = new ArrayList<>();
-        String args = DatabaseContract.FollowTable.IS_FRIEND + " <> 0";
-        Cursor c = getReadableDatabase().query(DatabaseContract.FollowTable.TABLE,
-          DatabaseContract.FollowTable.PROJECTION,
-          args,
-          null,
-          null,
-          null,
-          null,
-          null);
-
-        if (c.getCount() > 0) {
-            c.moveToFirst();
-            while (!c.isAfterLast()) {
-                mutuals.add(c.getString(c.getColumnIndex(ID_FOLLOWED_USER)));
-                c.moveToNext();
-            }
-        }
-        c.close();
-        return mutuals;
-    }
-
     public void removeAllBlocks() {
         getWritableDatabase().delete(BLOCK_TABLE, null, null);
+    }
+
+    public void deleteFailedFollows() {
+        getWritableDatabase().delete(FOLLOW_TABLE, null, null);
     }
 }

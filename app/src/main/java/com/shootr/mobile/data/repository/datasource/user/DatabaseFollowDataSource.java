@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.FollowsEntity;
 import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.db.manager.FollowManager;
+import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -12,24 +13,21 @@ public class DatabaseFollowDataSource implements FollowDataSource {
 
     private final SessionRepository sessionRepository;
     private final FollowManager followManager;
+    private final UserManager userManager;
 
-    @Inject public DatabaseFollowDataSource(SessionRepository sessionRepository, FollowManager followManager) {
+    @Inject public DatabaseFollowDataSource(SessionRepository sessionRepository,
+        FollowManager followManager, UserManager userManager) {
         this.sessionRepository = sessionRepository;
         this.followManager = followManager;
+        this.userManager = userManager;
     }
 
-    @Override public List<FollowEntity> putFollows(List<FollowEntity> followEntities) {
-        followManager.saveFollowsFromServer(followEntities);
-        return followEntities;
-    }
-
-    @Override public FollowEntity putFollow(FollowEntity followEntity) {
-        followManager.saveFollow(followEntity);
-        return followEntity;
+    @Override public void putFollow(String idUser) {
+        userManager.updateFollowing(idUser, true);
     }
 
     @Override public void removeFollow(String idUser) {
-        followManager.deleteFollow(idUser, sessionRepository.getCurrentUserId());
+        userManager.updateFollowing(idUser, false);
     }
 
     @Override public void block(BlockEntity block) {
@@ -52,10 +50,6 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         followManager.saveBlockedsFromServer(blockeds);
     }
 
-    @Override public List<String> getMutuals() {
-        return followManager.getMutuals();
-    }
-
     @Override public List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp) {
         throw new IllegalArgumentException("no local implementation");
     }
@@ -74,7 +68,15 @@ public class DatabaseFollowDataSource implements FollowDataSource {
         throw new IllegalArgumentException("no local implementation");
     }
 
+    @Override public void putFailedFollow(FollowEntity followEntity) {
+        followManager.saveFailedFollow(followEntity);
+    }
+
+    @Override public void deleteFailedFollows() {
+        followManager.deleteFailedFollows();
+    }
+
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {
-        return followManager.getFollowsNotSynchronized();
+        return followManager.getFailedFollows();
     }
 }

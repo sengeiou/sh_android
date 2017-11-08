@@ -28,7 +28,6 @@ public class User implements Searchable, Followable {
   private String watchingStreamTitle;
 
   private boolean isFollowing;
-  private boolean isFollower;
   private boolean isMe;
 
   private EntityMetadata metadata;
@@ -36,7 +35,6 @@ public class User implements Searchable, Followable {
   private Long createdStreamsCount;
   private Long favoritedStreamsCount;
 
-  private Integer relationship;
   private boolean socialLogin;
   private String analyticsUserType;
   private Long receivedReactions;
@@ -141,14 +139,6 @@ public class User implements Searchable, Followable {
     this.isFollowing = isFollowing;
   }
 
-  public boolean isFollower() {
-    return isFollower;
-  }
-
-  public void setFollower(boolean isFollower) {
-    this.isFollower = isFollower;
-  }
-
   public boolean isMe() {
     return isMe;
   }
@@ -247,14 +237,6 @@ public class User implements Searchable, Followable {
 
   public void setVerifiedUser(boolean verifiedUser) {
     this.verifiedUser = verifiedUser;
-  }
-
-  public Integer getRelationship() {
-    return relationship;
-  }
-
-  public void setRelationship(Integer relationship) {
-    this.relationship = relationship;
   }
 
   @Override public String getSearchableType() {

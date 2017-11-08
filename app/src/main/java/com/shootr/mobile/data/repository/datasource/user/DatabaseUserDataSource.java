@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.repository.datasource.user;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.db.manager.FollowManager;
@@ -23,11 +22,6 @@ public class DatabaseUserDataSource implements UserDataSource {
         this.streamManager = streamManager;
     }
 
-    @Override public List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize) {
-        List<String> usersFollowingIds = followManager.getUserFollowingIds(userId);
-        return userManager.getUsersByIds(usersFollowingIds);
-    }
-
     @Override public UserEntity putUser(UserEntity userEntity) {
         userManager.saveUser(userEntity);
         return userEntity;
@@ -40,22 +34,6 @@ public class DatabaseUserDataSource implements UserDataSource {
 
     @Override public UserEntity getUser(String id) {
         return userManager.getUserByIdUser(id);
-    }
-
-    @Override public boolean isFollower(String from, String who) {
-        if (from == null || who == null) {
-            return false;
-        }
-        FollowEntity follow = followManager.getFollowByUserIds(who, from);
-        return follow != null;
-    }
-
-    @Override public boolean isFollowing(String who, String to) {
-        if (who == null | to == null) {
-            return false;
-        }
-        FollowEntity follow = followManager.getFollowByUserIds(who, to);
-        return follow != null;
     }
 
     @Override public UserEntity getUserByUsername(String username) {
@@ -96,10 +74,6 @@ public class DatabaseUserDataSource implements UserDataSource {
     @Override public List<UserEntity> findFriends(String searchString, Integer pageOffset, String locale)
       throws IOException {
         return userManager.searchUsers(searchString);
-    }
-
-    @Override public List<String> getFollowingIds(String userId) {
-        return followManager.getUserFollowingIds(userId);
     }
 
     @Override public void mute(String idUser) {

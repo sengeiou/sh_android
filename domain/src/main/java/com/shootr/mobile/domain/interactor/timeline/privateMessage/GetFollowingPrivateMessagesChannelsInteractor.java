@@ -7,7 +7,6 @@ import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.privateMessage.PrivateMessageChannelRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -17,7 +16,6 @@ public class GetFollowingPrivateMessagesChannelsInteractor implements Interactor
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final PrivateMessageChannelRepository privateMessageChannelRepository;
-  private final UserRepository localUserRepository;
 
   private String idUser;
   private Callback<List<PrivateMessageChannel>> callback;
@@ -25,12 +23,10 @@ public class GetFollowingPrivateMessagesChannelsInteractor implements Interactor
 
   @Inject public GetFollowingPrivateMessagesChannelsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      @Local PrivateMessageChannelRepository privateMessageChannelRepository,
-      @Local UserRepository localUserRepository) {
+      @Local PrivateMessageChannelRepository privateMessageChannelRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.privateMessageChannelRepository = privateMessageChannelRepository;
-    this.localUserRepository = localUserRepository;
   }
 
   public void loadChannels(String idUser, Callback<List<PrivateMessageChannel>> callback,
@@ -53,10 +49,9 @@ public class GetFollowingPrivateMessagesChannelsInteractor implements Interactor
   }
 
   private ArrayList<PrivateMessageChannel> filterChannels(List<PrivateMessageChannel> channels) {
-    List<String> userList = localUserRepository.getFollowingIds(idUser);
     ArrayList<PrivateMessageChannel> followingChannels = new ArrayList<>();
     for (PrivateMessageChannel channel : channels) {
-      if (userList.contains(channel.getIdTargetUser())) {
+      if (channel.isFollowingTargetUser()) {
         followingChannels.add(channel);
       }
     }

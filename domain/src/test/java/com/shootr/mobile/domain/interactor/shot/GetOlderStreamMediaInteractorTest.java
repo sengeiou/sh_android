@@ -18,7 +18,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class GetOlderStreamMediaInteractorTest {
 
@@ -42,7 +41,6 @@ public class GetOlderStreamMediaInteractorTest {
   }
 
   @Test public void shouldNotifyResultsWhenGetMediaFromRemote() throws Exception {
-    when(remoteUserRepository.getPeople()).thenReturn(users());
 
     interactor.getOlderStreamMedia(ID_STREAM, TIME, callback, errorCallback);
 

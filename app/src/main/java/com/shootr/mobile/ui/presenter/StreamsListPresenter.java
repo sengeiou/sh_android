@@ -6,12 +6,11 @@ import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetFavoriteStreamsInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
@@ -23,16 +22,14 @@ import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
 public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
 
   private final StreamsListInteractor streamsListInteractor;
-  private final AddToFavoritesInteractor addToFavoritesInteractor;
-  private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
-  private final GetFavoriteStreamsInteractor getFavoriteStreamsInteractor;
+  private final FollowStreamInteractor followStreamInteractor;
+  private final UnfollowStreamInteractor unfollowStreamInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final ShareStreamInteractor shareStreamInteractor;
   private final MuteInteractor muteInteractor;
@@ -44,20 +41,17 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
 
   private StreamsListView streamsListView;
   private boolean hasBeenPaused;
-  private List<String> favoritedStreamIds;
 
   @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
-      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
-      GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
+      FollowStreamInteractor followStreamInteractor,
+      UnfollowStreamInteractor unfollowStreamInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, ShareStreamInteractor shareStreamInteractor,
       MuteInteractor muteInteractor, UnmuteInteractor unmuteInterator,
       StreamResultModelMapper streamResultModelMapper, SessionRepository sessionRepository,
       ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.streamsListInteractor = streamsListInteractor;
-    this.addToFavoritesInteractor = addToFavoritesInteractor;
-    this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
-    this.getFavoriteStreamsInteractor = getFavoriteStreamsInteractor;
+    this.followStreamInteractor = followStreamInteractor;
+    this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.shareStreamInteractor = shareStreamInteractor;
     this.muteInteractor = muteInteractor;
@@ -74,21 +68,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void initialize(StreamsListView streamsListView) {
-    this.loadFavoritedStreamIds();
+    loadDefaultStreamList();
     this.setView(streamsListView);
-  }
-
-  private void loadFavoritedStreamIds() {
-    getFavoriteStreamsInteractor.loadFavoriteStreamsFromLocalOnly(
-        new Interactor.Callback<List<StreamSearchResult>>() {
-          @Override public void onLoaded(List<StreamSearchResult> favoritedStreams) {
-            favoritedStreamIds = new ArrayList<>(favoritedStreams.size());
-            for (StreamSearchResult favorite : favoritedStreams) {
-              favoritedStreamIds.add(favorite.getStream().getId());
-            }
-            loadDefaultStreamList();
-          }
-        });
   }
 
   public void refresh() {
@@ -135,7 +116,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     List<StreamSearchResult> streamSearchResults = resultList.getStreamSearchResults();
     if (!streamSearchResults.isEmpty()) {
       List<StreamResultModel> streamResultModels =
-          streamResultModelMapper.transformWithFavorites(streamSearchResults, favoritedStreamIds);
+          streamResultModelMapper.transformWithFavorites(streamSearchResults);
       this.renderViewStreamsList(streamResultModels);
       StreamSearchResult currentWatchingStream = resultList.getCurrentWatchingStream();
       this.setViewCurrentVisibleWatchingStream(
@@ -173,13 +154,12 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void addToFavorites(StreamResultModel streamResultModel, final Boolean notify) {
-    addToFavoritesInteractor.addToFavorites(streamResultModel.getStreamModel().getIdStream(),
+    followStreamInteractor.follow(streamResultModel.getStreamModel().getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
               streamsListView.showAddedToFavorites();
             }
-            loadFavoritedStreamIds();
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -189,13 +169,12 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void removeFromFavorites(StreamResultModel streamResultModel, final Boolean notify) {
-    removeFromFavoritesInteractor.removeFromFavorites(
-        streamResultModel.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+    unfollowStreamInteractor.unfollow(streamResultModel.getStreamModel().getIdStream(),
+        new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
               streamsListView.showRemovedFromFavorites();
             }
-            loadFavoritedStreamIds();
           }
         });
   }
@@ -250,7 +229,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   @Override public void resume() {
     bus.register(this);
     if (hasBeenPaused) {
-      this.loadFavoritedStreamIds();
+      loadDefaultStreamList();
     }
   }
 

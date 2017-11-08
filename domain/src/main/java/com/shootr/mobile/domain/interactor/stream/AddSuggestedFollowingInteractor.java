@@ -5,16 +5,16 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.favorite.ExternalFavoriteRepository;
+import com.shootr.mobile.domain.repository.onBoarding.ExternalOnBoardingRepository;
 import com.shootr.mobile.domain.service.StreamIsAlreadyInFavoritesException;
 import java.util.List;
 import javax.inject.Inject;
 
-public class AddSuggestedfavoritesInteractor implements Interactor {
+public class AddSuggestedFollowingInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
-  private final ExternalFavoriteRepository remoteFavoriteRepository;
+  private final ExternalOnBoardingRepository remoteFavoriteRepository;
 
   private Interactor.CompletedCallback completedCallback;
   private ErrorCallback errorCallback;
@@ -22,15 +22,15 @@ public class AddSuggestedfavoritesInteractor implements Interactor {
   private List<String> idOnBoardings;
   private String type;
 
-  @Inject public AddSuggestedfavoritesInteractor(InteractorHandler interactorHandler,
+  @Inject public AddSuggestedFollowingInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
-      ExternalFavoriteRepository remoteFavoriteRepository) {
+      ExternalOnBoardingRepository remoteFavoriteRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteFavoriteRepository = remoteFavoriteRepository;
   }
 
-  public void addSuggestedFavorites(List<String> idOnBoardings, String type, CompletedCallback completedCallback,
+  public void addSuggestedFollowing(List<String> idOnBoardings, String type, CompletedCallback completedCallback,
       ErrorCallback errorCallback) {
     this.completedCallback = completedCallback;
     this.errorCallback = errorCallback;

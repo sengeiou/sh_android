@@ -14,7 +14,6 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private Long numFollowers;
   private String website;
   private String bio;
-  private int relationship;
   private Long points;
   private String streamWatchingId;
   private String streamWatchingTitle;
@@ -28,6 +27,8 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private Long favoritedStreamsCount;
   private boolean isStrategic;
   private boolean muted;
+  private boolean isFollowing;
+  private boolean isMe;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -137,16 +138,16 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
     return bio;
   }
 
+  public boolean isFollowing() {
+    return isFollowing;
+  }
+
+  public void setFollowing(boolean following) {
+    isFollowing = following;
+  }
+
   public void setBio(String bio) {
     this.bio = bio;
-  }
-
-  public int getRelationship() {
-    return relationship;
-  }
-
-  public void setRelationship(int relationship) {
-    this.relationship = relationship;
   }
 
   public Long getJoinStreamTimestamp() {
@@ -171,6 +172,14 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   public void setMuted(boolean muted) {
     this.muted = muted;
+  }
+
+  public boolean isMe() {
+    return isMe;
+  }
+
+  public void setMe(boolean me) {
+    isMe = me;
   }
 
   @Override public UserModel clone() {

@@ -16,8 +16,6 @@ public interface FollowRepository {
 
     List<String> getBlockedIdUsers();
 
-    List<String> getMutualIdUsers();
-
     Follows getFollowing(String idUser, String[] type, Long maxTimestamp);
 
     Follows getFollowers(String idUser, String[] type, Long maxTimestamp);

@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FindParticipantsInteractor;
@@ -97,7 +96,7 @@ public class FindParticipantsPresenter implements Presenter {
     public void followUser(final UserModel userModel) {
         followInteractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
+                refreshParticipantsFollowings(userModel.getIdUser(), true);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -113,15 +112,15 @@ public class FindParticipantsPresenter implements Presenter {
     public void unfollowUser(final UserModel userModel) {
         unfollowInteractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                refreshParticipantsFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_NONE);
+                refreshParticipantsFollowings(userModel.getIdUser(), false);
             }
         });
     }
 
-    private void refreshParticipantsFollowings(String idUser, int relationshipFollowing) {
+    private void refreshParticipantsFollowings(String idUser, boolean following) {
         for (UserModel participant : participants) {
             if (participant.getIdUser().equals(idUser)) {
-                participant.setRelationship(relationshipFollowing);
+                participant.setFollowing(following);
                 findParticipantsView.renderParticipants(participants);
                 break;
             }

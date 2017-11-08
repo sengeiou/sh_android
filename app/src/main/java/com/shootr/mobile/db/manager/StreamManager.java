@@ -271,6 +271,15 @@ public class StreamManager extends AbstractManager {
         whereArguments);
   }
 
+  private void followUnfollowStreamSearchResult(String idStream, boolean mute) {
+    String whereClause = DatabaseContract.StreamSearchTable.ID_STREAM + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.StreamSearchTable.FOLLOWING, mute ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.StreamSearchTable.TABLE, values, whereClause,
+        whereArguments);
+  }
+
   public Long getLastTimeFilteredStream(String streamId) {
     String whereClause = DatabaseContract.StreamFilterTable.ID_STREAM + " = ?";
 
@@ -292,4 +301,30 @@ public class StreamManager extends AbstractManager {
     queryResult.close();
     return resultDate;
   }
+
+  public void followStreamSearchResult(String idStream) {
+    followUnfollowStreamSearchResult(idStream, true);
+  }
+
+  public void unFollowStreamSearchResult(String idStream) {
+    followUnfollowStreamSearchResult(idStream, false);
+  }
+
+  public void follow(String idStream) {
+    followUnfollow(idStream, true);
+  }
+
+  public void unFollow(String idStream) {
+    followUnfollow(idStream, false);
+  }
+
+  private void followUnfollow(String idStream, boolean following) {
+    String whereClause = DatabaseContract.StreamTable.ID_STREAM + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.StreamTable.FOLLOWING, following ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.StreamTable.TABLE, values, whereClause,
+        whereArguments);
+  }
+
 }

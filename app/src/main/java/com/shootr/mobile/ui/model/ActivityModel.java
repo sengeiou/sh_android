@@ -141,14 +141,6 @@ public class ActivityModel {
         this.pollQuestion = pollQuestion;
     }
 
-    public boolean amIFollowing() {
-        return amIFollowing;
-    }
-
-    public void setAmIFollowing(boolean amIFollowing) {
-        this.amIFollowing = amIFollowing;
-    }
-
     public boolean isFavorite() {
         return isFavorite;
     }

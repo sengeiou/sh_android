@@ -11,7 +11,7 @@ import javax.inject.Singleton;
         UserRepositoryModule.class,
         StreamRepositoryModule.class,
         ShotRepositoryModule.class,
-        FavoriteRepositoryModule.class,
+        OnBoardingRepositoryModule.class,
         ActivityRepositoryModule.class,
         DatabaseUtilsModule.class,
         NiceShotRepositoryModule.class,

@@ -14,8 +14,7 @@ public class UserEntityMapper {
     this.metadataMapper = metadataMapper;
   }
 
-  public User transform(UserEntity userEntity, String currentUserId, boolean isFollower,
-      boolean isFollowing) {
+  public User transform(UserEntity userEntity, String currentUserId) {
     if (userEntity == null) {
       return null;
     }
@@ -48,10 +47,8 @@ public class UserEntityMapper {
     user.setSocialLogin(userEntity.getSocialLogin() == null ? false : userEntity.getSocialLogin());
     user.setNumMutuals(userEntity.getNumMutuals());
     user.setFirstSessionActivation(userEntity.isFirstSessionActivation());
-    user.setFollower(isFollower);
 
-    user.setFollowing((currentUserId.equals(user.getIdUser())) ? false
-        : (userEntity.isFollowing() == null ? isFollowing : userEntity.isFollowing()));
+    user.setFollowing(userEntity.isFollowing());
 
     user.setJoinStreamDate(userEntity.getJoinStreamDate());
     user.setReceivedReactions(
@@ -129,11 +126,7 @@ public class UserEntityMapper {
     return users;
   }
 
-  public User transform(UserEntity user, String idCurrentUser) {
-    return transform(user, idCurrentUser, false, (user == null ? false : user.isFollowing()));
-  }
-
   public User transform(UserEntity user) {
-    return transform(user, "-1L", false, user.isFollowing());
+    return transform(user, "-1L");
   }
 }

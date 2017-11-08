@@ -80,44 +80,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     }
 
     /**
-     * Verifies that the actual User is follower.
-     *
-     * @return this assertion object.
-     * @throws AssertionError - if the actual User is not follower.
-     */
-    public UserAssert isFollower() {
-        // check that actual User we want to make assertions on is not null.
-        isNotNull();
-
-        // check
-        if (!actual.isFollower()) {
-            failWithMessage("\nExpected actual User to be follower but was not.");
-        }
-
-        // return the current assertion for method chaining
-        return this;
-    }
-
-    /**
-     * Verifies that the actual User is not follower.
-     *
-     * @return this assertion object.
-     * @throws AssertionError - if the actual User is follower.
-     */
-    public UserAssert isNotFollower() {
-        // check that actual User we want to make assertions on is not null.
-        isNotNull();
-
-        // check
-        if (actual.isFollower()) {
-            failWithMessage("\nExpected actual User not to be follower but was.");
-        }
-
-        // return the current assertion for method chaining
-        return this;
-    }
-
-    /**
      * Verifies that the actual User is following.
      *
      * @return this assertion object.

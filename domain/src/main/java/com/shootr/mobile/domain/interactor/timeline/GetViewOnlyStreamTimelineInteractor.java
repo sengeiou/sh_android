@@ -4,21 +4,10 @@ import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.model.stream.Timeline;
-import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.repository.ContributorRepository;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.shot.InternalShotRepository;
-import com.shootr.mobile.domain.repository.stream.StreamRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.TreeSet;
 import javax.inject.Inject;
 
 public class GetViewOnlyStreamTimelineInteractor implements Interactor {
@@ -26,26 +15,16 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
   private final InternalShotRepository localShotRepository;
-  private final UserRepository localUserRepository;
-  private final ContributorRepository localContributorRepository;
-  private final StreamRepository localStreamRepository;
-  private final SessionRepository sessionRepository;
+
   private String idStream;
   private Callback callback;
   private Boolean goneBackground;
 
   @Inject public GetViewOnlyStreamTimelineInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread, InternalShotRepository localShotRepository,
-      @Local UserRepository localUserRepository,
-      @Local ContributorRepository localContributorRepository,
-      @Local StreamRepository localStreamRepository, SessionRepository sessionRepository) {
+      PostExecutionThread postExecutionThread, InternalShotRepository localShotRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localShotRepository = localShotRepository;
-    this.localUserRepository = localUserRepository;
-    this.localContributorRepository = localContributorRepository;
-    this.localStreamRepository = localStreamRepository;
-    this.sessionRepository = sessionRepository;
   }
 
   public void loadStreamTimeline(String idStream, Boolean goneBackground,
@@ -62,43 +41,12 @@ public class GetViewOnlyStreamTimelineInteractor implements Interactor {
 
   private void loadLocalTimeline() {
     List<Shot> shotsForStreamTimeline = getShots();
-    TreeSet<String> visibleIdUsers = getVisibleIdUsers();
-    List<Shot> filteredShots = filterShotsByRelevantUsers(shotsForStreamTimeline, visibleIdUsers);
-    List<Shot> shots = sortShotsByPublishDate(filteredShots);
-    notifyTimelineFromShots(shots);
+    notifyTimelineFromShots(shotsForStreamTimeline);
   }
 
   private List<Shot> getShots() {
     StreamTimelineParameters streamTimelineParameters = buildParameters();
     return localShotRepository.getShotsForStreamTimeline(streamTimelineParameters);
-  }
-
-  private List<Shot> filterShotsByRelevantUsers(List<Shot> shotsForStreamTimeline,
-      TreeSet<String> visibleIdUsers) {
-    List<Shot> filteredShots = new ArrayList<>();
-    for (Shot shot : shotsForStreamTimeline) {
-      if (visibleIdUsers.contains(shot.getUserInfo().getIdUser()) || shot.isFromContributor()) {
-        filteredShots.add(shot);
-      }
-    }
-    return filteredShots;
-  }
-
-  private TreeSet<String> getVisibleIdUsers() {
-    List<User> people = localUserRepository.getPeople();
-    Stream stream = localStreamRepository.getStreamById(idStream, StreamMode.TYPES_STREAM);
-    TreeSet<String> visibleIdUsers = new TreeSet<>();
-    visibleIdUsers.add(stream.getAuthorId());
-    visibleIdUsers.add(sessionRepository.getCurrentUserId());
-    for (User user : people) {
-      visibleIdUsers.add(user.getIdUser());
-    }
-    return visibleIdUsers;
-  }
-
-  private List<Shot> sortShotsByPublishDate(List<Shot> remoteShots) {
-    Collections.sort(remoteShots, new Shot.NewerAboveComparator());
-    return remoteShots;
   }
 
   private StreamTimelineParameters buildParameters() {

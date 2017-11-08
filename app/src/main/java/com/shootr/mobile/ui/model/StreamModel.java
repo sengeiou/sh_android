@@ -16,7 +16,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean amIAuthor;
     private Integer mediaCount;
     private Boolean removed;
-    private Integer totalFavorites;
+    private Integer totalFollowers;
     private Integer totalWatchers;
     private Long historicWatchers;
     private Long totalShots;
@@ -25,7 +25,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
-    private boolean isFavorite;
+    private boolean isFollowing;
     private int totalFollowingWatchers;
     private boolean isStrategic;
     private boolean muted;
@@ -122,12 +122,12 @@ public class StreamModel implements Serializable, SearchableModel {
         this.mediaCount = mediaCount;
     }
 
-    public Integer getTotalFavorites() {
-        return totalFavorites;
+    public Integer getTotalFollowers() {
+        return totalFollowers;
     }
 
-    public void setTotalFavorites(Integer totalFavorites) {
-        this.totalFavorites = totalFavorites;
+    public void setTotalFollowers(Integer totalFollowers) {
+        this.totalFollowers = totalFollowers;
     }
 
     public Integer getTotalWatchers() {
@@ -224,12 +224,12 @@ public class StreamModel implements Serializable, SearchableModel {
         this.muted = muted;
     }
 
-    public boolean isFavorite() {
-        return isFavorite;
+    public boolean isFollowing() {
+        return isFollowing;
     }
 
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
+    public void setFollowing(boolean following) {
+        isFollowing = following;
     }
 
     @Override public String getSearchableType() {

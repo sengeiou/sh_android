@@ -128,9 +128,25 @@ public class ServiceStreamDataSource implements StreamDataSource {
     }
   }
 
-  @Override public void unMute(String idStream) {
+  @Override public void unmute(String idStream) {
     try {
       streamApiService.unMute(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void follow(String idStream) {
+    try {
+      streamApiService.followStream(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void unfollow(String idStream) {
+    try {
+      streamApiService.unFollowStream(idStream);
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     }

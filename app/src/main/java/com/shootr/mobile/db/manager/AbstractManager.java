@@ -47,4 +47,5 @@ public abstract class AbstractManager {
             return sb.toString();
         }
     }
+
 }

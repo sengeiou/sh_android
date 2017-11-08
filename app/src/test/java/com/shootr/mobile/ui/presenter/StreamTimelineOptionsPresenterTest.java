@@ -1,11 +1,10 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.ui.views.StreamTimelineOptionsView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -25,10 +24,9 @@ public class StreamTimelineOptionsPresenterTest {
 
   private static final String STUB_STREAM_ID = "stream_id";
 
-  @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
-  @Mock AddToFavoritesInteractor addToFavoritesInteractor;
+  @Mock FollowStreamInteractor followStreamInteractor;
   @Mock StreamTimelineOptionsView streamTimelineOptionsView;
-  @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  @Mock UnfollowStreamInteractor unfollowStreamInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock MuteInteractor muteInteractor;
   @Mock UnmuteInteractor unmuteInteractor;
@@ -39,28 +37,10 @@ public class StreamTimelineOptionsPresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     presenter =
-        new StreamTimelineOptionsPresenter(getFavoriteStatusInteractor, addToFavoritesInteractor,
-            removeFromFavoritesInteractor, muteInteractor, unmuteInteractor, getStreamInteractor,
+        new StreamTimelineOptionsPresenter(followStreamInteractor,
+            unfollowStreamInteractor, muteInteractor, unmuteInteractor, getStreamInteractor,
             errorMessageFactory);
     presenter.setView(streamTimelineOptionsView);
-  }
-
-  @Test public void shouldShowRemoveFromFavoritesButtonWhenInitializedIfIsFavorite()
-      throws Exception {
-    setupFavoriteStatusCallbacks(true);
-
-    presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
-
-    verify(streamTimelineOptionsView).showRemoveFromFavoritesButton();
-  }
-
-  @Test public void shouldShowAddToFavoritesButtonWhenInitializeIfStreamIsNotFavorite()
-      throws Exception {
-    setupFavoriteStatusCallbacks(false);
-
-    presenter.initialize(streamTimelineOptionsView, STUB_STREAM_ID);
-
-    verify(streamTimelineOptionsView).showAddToFavoritesButton();
   }
 
   @Test public void shouldHideAddToFavoritesButtonWhenAddToFavorite() throws Exception {
@@ -101,8 +81,8 @@ public class StreamTimelineOptionsPresenterTest {
         ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
         return null;
       }
-    }).when(removeFromFavoritesInteractor)
-        .removeFromFavorites(anyString(), any(Interactor.CompletedCallback.class));
+    }).when(unfollowStreamInteractor)
+        .unfollow(anyString(), any(Interactor.CompletedCallback.class));
   }
 
   private void setupAddToFavoriteCallbacks() {
@@ -111,18 +91,9 @@ public class StreamTimelineOptionsPresenterTest {
         ((Interactor.CompletedCallback) invocation.getArguments()[1]).onCompleted();
         return null;
       }
-    }).when(addToFavoritesInteractor)
-        .addToFavorites(anyString(), any(Interactor.CompletedCallback.class),
+    }).when(followStreamInteractor)
+        .follow(anyString(), any(Interactor.CompletedCallback.class),
             any(Interactor.ErrorCallback.class));
   }
 
-  private void setupFavoriteStatusCallbacks(final boolean isFavorite) {
-    doAnswer(new Answer() {
-      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((Interactor.Callback) invocation.getArguments()[1]).onLoaded(isFavorite);
-        return null;
-      }
-    }).when(getFavoriteStatusInteractor)
-        .loadFavoriteStatus(anyString(), any(Interactor.Callback.class));
-  }
 }

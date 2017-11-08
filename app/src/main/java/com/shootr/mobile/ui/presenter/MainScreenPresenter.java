@@ -25,8 +25,6 @@ import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserForAnalythicsByIdInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
 import com.shootr.mobile.domain.model.stream.Stream;
@@ -59,9 +57,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
   private final IntPreference badgeCount;
-  private final GetFollowingInteractor followingInteractor;
   private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
-  private final GetFollowingIdsInteractor getFollowingIdsInteractor;
   private final GetLocalStreamInteractor getStreamInteractor;
   private final GetShootrEventsInteractor getShootrEventsInteractor;
   private final StreamModelMapper streamModelMapper;
@@ -86,9 +82,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
       UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
-      GetFollowingInteractor followingInteractor,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
-      GetFollowingIdsInteractor getFollowingIdsInteractor,
       GetLocalStreamInteractor getStreamInteractor,
       GetShootrEventsInteractor getShootrEventsInteractor, StreamModelMapper streamModelMapper,
       @Main Bus bus, BusPublisher busPublisher, @ApplicationContext Context context,
@@ -102,9 +96,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.sessionRepository = sessionRepository;
     this.userModelMapper = userModelMapper;
     this.badgeCount = badgeCount;
-    this.followingInteractor = followingInteractor;
     this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
-    this.getFollowingIdsInteractor = getFollowingIdsInteractor;
     this.getStreamInteractor = getStreamInteractor;
     this.getShootrEventsInteractor = getShootrEventsInteractor;
     this.streamModelMapper = streamModelMapper;
@@ -121,12 +113,12 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   public void initialize(MainScreenView mainScreenView) {
     setView(mainScreenView);
     this.loadCurrentUser();
-    this.getFollows();
     this.getRecentSearch();
     this.setupDeviceInfo();
     this.sendShotEventStats();
     this.updateActivityBadge();
     this.loadConnectedStream();
+    this.getChannels(false);
   }
 
   private void setupDeviceInfo() {
@@ -139,10 +131,6 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
         }
       }
     });
-  }
-
-  private void getFollows() {
-    followingInteractor.synchronizeFollow();
   }
 
   private void getRecentSearch() {
@@ -199,19 +187,14 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   }
 
   public void loadChannelsForBadge(final boolean localOnly) {
-    getFollowingIdsInteractor.loadFollowingsIds(sessionRepository.getCurrentUserId(),
-        new Interactor.Callback<List<String>>() {
-          @Override public void onLoaded(final List<String> results) {
-            getChannels(results, localOnly);
-          }
-        });
+    //TODO
   }
 
-  private void getChannels(final List<String> results, boolean localOnly) {
+  private void getChannels(boolean localOnly) {
     getPrivateMessagesChannelsInteractor.loadChannels(localOnly,
         new Interactor.Callback<List<PrivateMessageChannel>>() {
           @Override public void onLoaded(List<PrivateMessageChannel> privateMessageChannels) {
-            countUnreadsChannels(privateMessageChannels, results);
+            countUnreadsChannels(privateMessageChannels);
             publishChannelBadge();
           }
         }, new Interactor.ErrorCallback() {
@@ -221,16 +204,12 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
         });
   }
 
-  private void countUnreadsChannels(List<PrivateMessageChannel> privateMessageChannels,
-      List<String> results) {
+  private void countUnreadsChannels(List<PrivateMessageChannel> privateMessageChannels) {
     unreadChannels = 0;
     unreadFollowChannels = 0;
     for (PrivateMessageChannel privateMessageChannel : privateMessageChannels) {
       if (!privateMessageChannel.isRead()) {
         unreadChannels++;
-        if (results.contains(privateMessageChannel.getIdTargetUser())) {
-          unreadFollowChannels++;
-        }
       }
     }
   }
