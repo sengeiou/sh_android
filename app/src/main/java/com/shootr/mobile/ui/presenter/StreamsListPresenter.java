@@ -16,6 +16,7 @@ import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.StreamsListView;
@@ -37,6 +38,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInterator;
   private final StreamResultModelMapper streamResultModelMapper;
+  private final SessionRepository sessionRepository;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
 
@@ -50,8 +52,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
       GetFavoriteStreamsInteractor getFavoriteStreamsInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, ShareStreamInteractor shareStreamInteractor,
       MuteInteractor muteInteractor, UnmuteInteractor unmuteInterator,
-      StreamResultModelMapper streamResultModelMapper, ErrorMessageFactory errorMessageFactory,
-      @Main Bus bus) {
+      StreamResultModelMapper streamResultModelMapper, SessionRepository sessionRepository,
+      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.streamsListInteractor = streamsListInteractor;
     this.addToFavoritesInteractor = addToFavoritesInteractor;
     this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
@@ -61,6 +63,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     this.muteInteractor = muteInteractor;
     this.unmuteInterator = unmuteInterator;
     this.streamResultModelMapper = streamResultModelMapper;
+    this.sessionRepository = sessionRepository;
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
   }
@@ -254,6 +257,10 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   @Override public void pause() {
     bus.unregister(this);
     hasBeenPaused = true;
+  }
+
+  public void clickMyStreams() {
+    streamsListView.navigateToMyStreams(sessionRepository.getCurrentUserId(), true);
   }
   //endregion
 }

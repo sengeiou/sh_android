@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindString;
@@ -17,7 +19,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
+import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.StreamsListAdapter;
@@ -59,6 +63,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       analyticsLabelExternalShareStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
+  @BindString(R.string.analytics_action_my_streams) String analyticsActionMyStreams;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_streams) String streamsSource;
 
@@ -310,6 +315,12 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     /* no -op */
   }
 
+  @Override public void navigateToMyStreams(String currentUserId, boolean isCurrentUser) {
+    sendMyStreamsAnalytics();
+    Intent intent = ListingActivity.getIntent(getContext(), currentUserId, isCurrentUser);
+    this.startActivity(intent);
+  }
+
   @Override public void showEmpty() {
     emptyView.setVisibility(View.VISIBLE);
   }
@@ -336,5 +347,48 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Override public void onStart() {
     super.onStart();
     analyticsTool.analyticsStart(getContext(), analyticsScreenStreamList);
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.streams_list, menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_add_stream:
+        navigateToNewStream();
+        return true;
+      case R.id.menu_search:
+        navigateToSearch();
+        return true;
+      case R.id.menu_my_streams:
+        presenter.clickMyStreams();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
+  private void navigateToNewStream() {
+    Intent intent = new Intent(getContext(), NewStreamActivity.class);
+    intent.putExtra(NewStreamActivity.SOURCE, streamsSource);
+    startActivityForResult(intent, REQUEST_NEW_STREAM);
+  }
+
+  private void navigateToSearch() {
+    Intent intent = new Intent(getContext(), SearchActivity.class);
+    startActivity(intent);
+    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+  }
+
+  private void sendMyStreamsAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionMyStreams);
+    builder.setLabelId(analyticsActionMyStreams);
+    builder.setSource(streamsSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
   }
 }

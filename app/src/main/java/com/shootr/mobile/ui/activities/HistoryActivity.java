@@ -1,16 +1,15 @@
-package com.shootr.mobile.ui.fragments;
+package com.shootr.mobile.ui.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -18,10 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.activities.PollVoteActivity;
-import com.shootr.mobile.ui.activities.ProfileActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
-import com.shootr.mobile.ui.activities.StreamTimelineActivity;
+import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
@@ -30,24 +26,21 @@ import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
-import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.GenericActivityTimelinePresenter;
 import com.shootr.mobile.ui.views.MeActivityTimelineView;
-import com.shootr.mobile.ui.views.nullview.NullMeActivityTimelineView;
 import com.shootr.mobile.ui.widgets.DividerItemDecoration;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
-import dagger.ObjectGraph;
 import java.util.List;
 import javax.inject.Inject;
 
-public class MeActivityTimelineFragment extends BaseFragment implements MeActivityTimelineView {
+public class HistoryActivity extends BaseToolbarDecoratedActivity implements
+    MeActivityTimelineView {
 
-  //region Fields
   @Inject GenericActivityTimelinePresenter timelinePresenter;
 
   @Inject ImageLoader imageLoader;
@@ -68,46 +61,37 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
   @Inject FeedbackMessage feedbackMessage;
-  //endregion
 
-  public static MeActivityTimelineFragment newInstance() {
-    return new MeActivityTimelineFragment();
+  public static HistoryActivity newInstance() {
+    return new HistoryActivity();
   }
 
-  //region Lifecycle methods
-  @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    View fragmentView = inflater.inflate(R.layout.fragment_me_activity_timeline, container, false);
-    unbinder = ButterKnife.bind(this, fragmentView);
-    return fragmentView;
+  @Override protected int getLayoutResource() {
+    return R.layout.activity_history;
   }
 
-  @Override public void onDestroyView() {
-    super.onDestroyView();
-    unbinder.unbind();
-    timelinePresenter.setView(new NullMeActivityTimelineView());
-  }
-
-  @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-    initializeViews();
-    initializePresenter();
-  }
-
-  @Override public void onResume() {
-    super.onResume();
-    timelinePresenter.resume();
-  }
-
-  @Override public void onPause() {
-    super.onPause();
-    timelinePresenter.pause();
-  }
-
-  private void initializeViews() {
+  @Override protected void initializeViews(Bundle savedInstanceState) {
+    ButterKnife.bind(this);
     setupListAdapter();
     setupSwipeRefreshLayout();
     setupListScrollListeners();
+    setupActionBar();
+  }
+
+  private void setupActionBar() {
+    ActionBar actionBar = getSupportActionBar();
+    if (actionBar != null) {
+      actionBar.setDisplayHomeAsUpEnabled(true);
+      actionBar.setDisplayShowHomeEnabled(false);
+    }
+  }
+
+  @Override protected void initializePresenter() {
+    timelinePresenter.initialize(this, true, false);
+  }
+
+  @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
+    /* no-op */
   }
 
   private void setupSwipeRefreshLayout() {
@@ -140,9 +124,9 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
   }
 
   private void setupListAdapter() {
-    layoutManager = new LinearLayoutManager(getActivity());
+    layoutManager = new LinearLayoutManager(this);
     activityList.setLayoutManager(layoutManager);
-    activityList.addItemDecoration(new DividerItemDecoration(getContext(), 68,
+    activityList.addItemDecoration(new DividerItemDecoration(this, 68,
         getResources().getDrawable(R.drawable.line_divider), false, false));
 
     adapter = new ActivityTimelineAdapter(imageLoader, timeUtils, //
@@ -194,7 +178,7 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
   }
 
   private void setupUnFollowDialog(final String idUser, String username) {
-    new AlertDialog.Builder(getContext()).setMessage(
+    new AlertDialog.Builder(this).setMessage(
         String.format(getString(R.string.unfollow_dialog_message), username))
         .setPositiveButton(getString(R.string.unfollow_dialog_yes),
             new DialogInterface.OnClickListener() {
@@ -210,7 +194,7 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
   private void sendFollowAnalytics(String idTargetUser, String targetUsername,
       Boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
+    builder.setContext(this);
     builder.setActionId(analyticsActionFollow);
     builder.setSource(activitySource);
     builder.setUser(sessionRepository.getCurrentUser());
@@ -223,7 +207,7 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
 
   private void sendFavoriteAnalytics(String idStream, String streamTitle, boolean isStrategic) {
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
+    builder.setContext(this);
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
     builder.setSource(activitySource);
@@ -237,38 +221,29 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
 
   private void openPollVote(String idPoll, String streamTitle) {
     Intent pollVoteIntent =
-        PollVoteActivity.newIntentWithIdPoll(getActivity(), idPoll, streamTitle);
+        PollVoteActivity.newIntentWithIdPoll(this, idPoll, streamTitle);
     startActivity(pollVoteIntent);
   }
 
   protected void openProfile(String idUser) {
-    Intent profileIntent = ProfileActivity.getIntent(getActivity(), idUser);
+    Intent profileIntent = ProfileActivity.getIntent(this, idUser);
     startActivity(profileIntent);
   }
 
   protected void openStream(String idStream, String streamTitle, String authorId) {
     Intent streamIntent =
-        StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle, authorId);
+        StreamTimelineActivity.newIntent(this, idStream, streamTitle, authorId);
     startActivity(streamIntent);
   }
 
   private void openProfileFromUsername(String username) {
-    Intent intentForUser = ProfileActivity.getIntentWithUsername(getActivity(), username);
+    Intent intentForUser = ProfileActivity.getIntentWithUsername(this, username);
     startActivity(intentForUser);
   }
 
   private void openShotDetail(ShotModel shot) {
-    Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+    Intent shotIntent = ShotDetailActivity.getIntentForActivity(this, shot);
     startActivity(shotIntent);
-  }
-
-  private void initializePresenter() {
-    timelinePresenter.initialize(this, true, false);
-  }
-  //endregion
-
-  @Override protected ObjectGraph getObjectGraph() {
-    return super.getObjectGraph();
   }
 
   //region View methods
@@ -335,5 +310,13 @@ public class MeActivityTimelineFragment extends BaseFragment implements MeActivi
   public void scrollListToTop() {
     activityList.scrollToPosition(0);
   }
-  //endregion
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    if (item.getItemId() == android.R.id.home) {
+      finish();
+      return true;
+    } else {
+      return super.onOptionsItemSelected(item);
+    }
+  }
 }

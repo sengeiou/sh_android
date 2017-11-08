@@ -9,6 +9,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -18,8 +21,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.activities.HistoryActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
@@ -65,6 +70,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
   @BindString(R.string.analytics_action_home) String analyticsActionHome;
+  @BindString(R.string.analytics_action_historic) String analyticsActionHistoric;
   @BindString(R.string.analytics_source_activity) String activitySource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
@@ -84,6 +90,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
       @Nullable Bundle savedInstanceState) {
     View fragmentView = inflater.inflate(R.layout.timeline_activity, container, false);
     unbinder = ButterKnife.bind(this, fragmentView);
+    setHasOptionsMenu(true);
     return fragmentView;
   }
 
@@ -111,7 +118,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   }
 
   private void initializePresenter() {
-    timelinePresenter.initialize(this, false);
+    timelinePresenter.initialize(this, false, true);
   }
   //endregion
 
@@ -198,6 +205,17 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
     builder.setContext(getContext());
     builder.setActionId(analyticsActionHome);
+    builder.setSource(activitySource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setNewContent(hasNewContent);
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendHistoricAnalythics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionHistoric);
     builder.setSource(activitySource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setNewContent(hasNewContent);
@@ -359,5 +377,34 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @Override public void onStart() {
     super.onStart();
     analyticsTool.analyticsStart(getContext(), analyticsScreenActivity);
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.activity_menu, menu);
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_history:
+        navigateToHistory();
+        return true;
+      case R.id.menu_search:
+        navigateToSearch();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
+  private void navigateToSearch() {
+    Intent intent = new Intent(getContext(), SearchActivity.class);
+    startActivity(intent);
+    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+  }
+
+  private void navigateToHistory() {
+    sendHistoricAnalythics();
+    Intent intent = new Intent(getContext(), HistoryActivity.class);
+    startActivity(intent);
   }
 }

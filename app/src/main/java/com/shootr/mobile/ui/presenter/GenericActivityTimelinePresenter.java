@@ -51,7 +51,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   private boolean isLoadingOlderActivities;
   private boolean mightHaveMoreActivities = true;
   private boolean isEmpty;
-  private Boolean isUserActivityTimeline;
+  private Boolean isHistoryActivity;
   private ArrayList<String> followingIds = new ArrayList<>();
   private ArrayList<String> favoritesIds = new ArrayList<>();
 
@@ -84,11 +84,14 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
     this.timelineView = timelineView;
   }
 
-  public void initialize(GenericActivityTimelineView timelineView, Boolean isUserActivityTimeline) {
+  public void initialize(GenericActivityTimelineView timelineView, Boolean isUserActivityTimeline,
+      boolean usePoller) {
     this.setView(timelineView);
-    this.isUserActivityTimeline = isUserActivityTimeline;
+    this.isHistoryActivity = isUserActivityTimeline;
     getFollowingIds();
-    setupPoller();
+    if (usePoller) {
+      setupPoller();
+    }
     loadNewActivities(badgeCount.get());
   }
 
@@ -158,7 +161,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   }
 
   protected void loadTimeline() {
-    activityTimelineInteractorWrapper.loadTimeline(isUserActivityTimeline,
+    activityTimelineInteractorWrapper.loadTimeline(isHistoryActivity,
         new Interactor.Callback<ActivityTimeline>() {
           @Override public void onLoaded(ActivityTimeline timeline) {
             List<ActivityModel> activityModels =
@@ -197,7 +200,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
       timelineView.hideEmpty();
       timelineView.showLoadingActivity();
     }
-    activityTimelineInteractorWrapper.refreshTimeline(isUserActivityTimeline,
+    activityTimelineInteractorWrapper.refreshTimeline(isHistoryActivity,
         new Interactor.Callback<ActivityTimeline>() {
           @Override public void onLoaded(ActivityTimeline timeline) {
             List<ActivityModel> newActivity =
@@ -232,7 +235,7 @@ public class GenericActivityTimelinePresenter implements Presenter, FollowUnfoll
   private void loadOlderActivities(long lastActivityInScreenDate) {
     isLoadingOlderActivities = true;
     timelineView.showLoadingOldActivities();
-    activityTimelineInteractorWrapper.obtainOlderTimeline(isUserActivityTimeline,
+    activityTimelineInteractorWrapper.obtainOlderTimeline(isHistoryActivity,
         lastActivityInScreenDate, new Interactor.Callback<ActivityTimeline>() {
           @Override public void onLoaded(ActivityTimeline timeline) {
             isLoadingOlderActivities = false;

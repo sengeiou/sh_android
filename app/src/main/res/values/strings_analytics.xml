@@ -116,4 +116,6 @@
     <string name="analytics_action_long_login">LongLogin</string>
     <string name="analytics_action_short_login">ShortLogin</string>
     <string name="analytics_action_open_app">OpenApp</string>
+    <string name="analytics_action_historic">Historic</string>
+    <string name="analytics_action_my_streams">UserStreams</string>
 </resources>

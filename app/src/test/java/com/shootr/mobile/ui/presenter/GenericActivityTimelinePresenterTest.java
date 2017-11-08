@@ -81,7 +81,7 @@ public class GenericActivityTimelinePresenterTest {
       throws Exception {
         setupLoadTimelineCallback();
 
-        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
+        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE, true);
 
         verify(view).setActivities(anyList(), anyString());
     }
@@ -89,7 +89,7 @@ public class GenericActivityTimelinePresenterTest {
     @Test public void shouldHideEmptyWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
         setupLoadTimelineCallback();
 
-        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
+        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE, true);
 
         verify(view).hideEmpty();
     }
@@ -97,7 +97,7 @@ public class GenericActivityTimelinePresenterTest {
     @Test public void shouldShowActivitiesWhenInitializeAllActivitiesAndTimelineNotEmptyCallback() throws Exception {
         setupLoadTimelineCallback();
 
-        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
+        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE, true);
 
         verify(view).showActivities();
     }
@@ -105,7 +105,7 @@ public class GenericActivityTimelinePresenterTest {
     @Test public void shouldShowEmptyWhenInitializeAllActivitiesAndTimelineEmptyCallback() throws Exception {
         setupLoadEmptyTimelineCallback();
 
-        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
+        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE, true);
 
         verify(view).showEmpty();
     }
@@ -113,7 +113,7 @@ public class GenericActivityTimelinePresenterTest {
     @Test public void shouldHideActivitiesWhenInitializeAllActivitiesAndTimelineEmptyCallback() throws Exception {
         setupLoadEmptyTimelineCallback();
 
-        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE);
+        genericActivityTimelinePresenter.initialize(view, NOT_USER_ACTIVITY_TIMELINE, true);
 
         verify(view).hideActivities();
     }

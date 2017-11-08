@@ -16,6 +16,7 @@ import com.shootr.mobile.ui.activities.FindContributorsActivity;
 import com.shootr.mobile.ui.activities.FindParticipantsActivity;
 import com.shootr.mobile.ui.activities.FollowingChannelListFragment;
 import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
+import com.shootr.mobile.ui.activities.HistoryActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -116,7 +117,7 @@ import javax.inject.Singleton;
     OnBoardingStreamActivity.class,
     OnBoardingUserActivity.class,
     GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class,
-      PollOptionVotedActivity.class, HiddenPollResultsActivity.class
+      PollOptionVotedActivity.class, HiddenPollResultsActivity.class, HistoryActivity.class
   },
   complete = false) public class UiModule {
 

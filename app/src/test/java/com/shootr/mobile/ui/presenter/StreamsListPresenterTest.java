@@ -70,7 +70,7 @@ public class StreamsListPresenterTest {
         presenter = new StreamsListPresenter(streamsListInteractor, addToFavoritesInteractor,
             removeFromFavoritesInteractor, getFavoriteStreamsInteractor, unwatchStreamInteractor,
             shareStreamInteractor, muteInteractor, unmuteInterator,
-            streamResultModelMapper, errorMessageFactory, bus);
+            streamResultModelMapper, sessionRepository, errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
 

@@ -2,9 +2,11 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetFollowingPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.RemovePrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -28,6 +30,8 @@ public class PrivateMessagesChannelListPresenterTest {
 
   @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
   @Mock RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor;
+  @Mock GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor;
+  @Mock SessionRepository sessionRepository;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock PrivateMessageChannelListView view;
   @Mock Bus bus;
@@ -41,7 +45,8 @@ public class PrivateMessagesChannelListPresenterTest {
 
     presenter =
         new PrivateMessagesChannelListPresenter(getPrivateMessagesChannelsInteractor,
-            removePrivateMessagesChannelsInteractor, mapper,
+            getFollowingPrivateMessagesChannelsInteractor, removePrivateMessagesChannelsInteractor,
+            sessionRepository, mapper,
             errorMessageFactory, busPublisher, bus);
   }
 

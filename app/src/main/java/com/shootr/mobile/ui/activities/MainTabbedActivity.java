@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,7 +25,7 @@ import com.roughike.bottombar.OnTabSelectListener;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
+import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.fragments.StreamsListFragment;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -119,18 +118,18 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
             switchTab(streamsListFragment);
             break;
           case R.id.bottombar_messages:
-            Fragment favoritesFragment = ChannelsContainerFragment.newInstance();
-            currentFragment = favoritesFragment;
-            switchTab(favoritesFragment);
-            toolbarDecorator.hideElevation();
+            Fragment channelFragment = ChannelListFragment.newInstance();
+            currentFragment = channelFragment;
+            switchTab(channelFragment);
+            toolbarDecorator.showElevation();
             channelTab.removeBadge();
             break;
           case R.id.bottombar_activity:
-            ActivityTimelineContainerFragment activityTimelineFragment =
-                ActivityTimelineContainerFragment.newInstance();
+            ActivityTimelineFragment activityTimelineFragment =
+                ActivityTimelineFragment.newInstance();
             currentFragment = activityTimelineFragment;
             switchTab(activityTimelineFragment);
-            toolbarDecorator.hideElevation();
+            toolbarDecorator.showElevation();
             activitiesTab.removeBadge();
             break;
           default:
@@ -161,6 +160,9 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     switch (menuItemId) {
       case R.id.bottombar_streams:
         ((StreamsListFragment) currentFragment).scrollListToTop();
+        break;
+      case R.id.bottombar_activity:
+        ((ActivityTimelineFragment) currentFragment).scrollListToTop();
         break;
       default:
         break;
@@ -236,7 +238,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override public void showActivityBadge(int count) {
     if (currentFragment != null
-        && !(currentFragment instanceof ActivityTimelineContainerFragment)) {
+        && !(currentFragment instanceof ActivityTimelineFragment)) {
       showBadge(count);
     }
   }
@@ -301,49 +303,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @OnClick(R.id.stream_info_container) public void onConnectControllerClick() {
     mainScreenPresenter.onControllerClick();
-  }
-
-  @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.streams_list, menu);
-    this.menu = menu;
-    return true;
-  }
-
-  @Override public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_add_stream:
-        navigateToNewStream();
-        return true;
-      case R.id.menu_search:
-        navigateToDiscoverSearch();
-        return true;
-      default:
-        return super.onOptionsItemSelected(item);
-    }
-  }
-
-  private void navigateToNewStream() {
-    Intent intent = new Intent(this, NewStreamActivity.class);
-    intent.putExtra(NewStreamActivity.SOURCE, getSource());
-    startActivityForResult(intent, REQUEST_NEW_STREAM);
-  }
-
-  private String getSource() {
-    @IdRes int tabItemId = bottomBar.getCurrentTabId();
-    switch (tabItemId) {
-      case R.id.bottombar_streams:
-        return streamsSource;
-      case R.id.bottombar_favorites:
-        return favoriteSource;
-      default:
-        return activitySource;
-    }
-  }
-
-  private void navigateToDiscoverSearch() {
-    Intent intent = new Intent(this, SearchActivity.class);
-    startActivity(intent);
-    this.overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 
   @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {

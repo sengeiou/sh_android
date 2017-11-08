@@ -1,10 +1,14 @@
 package com.shootr.mobile.ui.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
@@ -14,7 +18,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.MessageChannelListAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ChannelClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
-import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.presenter.PrivateMessagesChannelListPresenter;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
@@ -25,6 +28,7 @@ import com.shootr.mobile.util.CustomContextMenu;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.MenuItemValueHolder;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -45,6 +49,8 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
 
   private MessageChannelListAdapter adapter;
   private Unbinder unbinder;
+  private MenuItemValueHolder activeFilter = new MenuItemValueHolder();
+  private MenuItemValueHolder removeFilter = new MenuItemValueHolder();
 
   public static ChannelListFragment newInstance() {
     return new ChannelListFragment();
@@ -61,6 +67,7 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
     super.onActivityCreated(savedInstanceState);
     initializeViews();
     initializePresenter();
+    setHasOptionsMenu(true);
   }
 
   private void initializeViews() {
@@ -128,11 +135,21 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
   }
 
   @Override public void updateTitle(int unreads) {
-    try {
-      ((ChannelsContainerFragment) getParentFragment()).setTabTitle(this, unreads);
-    } catch (NullPointerException error) {
-      /* no-op */
-    }
+    /* no- op */
+  }
+
+  @Override public void clearChannels() {
+    adapter.clear();
+  }
+
+  @Override public void showRemoveFilter() {
+    removeFilter.setVisible(true);
+    activeFilter.setVisible(false);
+  }
+
+  @Override public void showActiveFilter() {
+    removeFilter.setVisible(false);
+    activeFilter.setVisible(true);
   }
 
   @Override public void onResume() {
@@ -156,5 +173,35 @@ public class ChannelListFragment extends BaseFragment implements PrivateMessageC
             presenter.removePrivateMessageChannel(privateMessageChannelId);
           }
         });
+  }
+
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.private_messages_menu, menu);
+    activeFilter.bindRealMenuItem(menu.findItem(R.id.menu_active_filter));
+    removeFilter.bindRealMenuItem(menu.findItem(R.id.menu_remove_filter));
+    removeFilter.setVisible(false);
+
+  }
+
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.menu_active_filter:
+        presenter.onFilterActivated();
+        return true;
+      case R.id.menu_remove_filter:
+        presenter.onRemoveFilter();
+        return true;
+      case R.id.menu_search:
+        navigateToSearch();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
+  private void navigateToSearch() {
+    Intent intent = new Intent(getContext(), SearchActivity.class);
+    startActivity(intent);
+    getActivity().overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
   }
 }
