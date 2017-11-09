@@ -294,6 +294,8 @@
   <string name="notification_shot_multiple_title">%d shots nuevos</string>
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot enviado</string>
+  <string name="notification_pm_sending">Enviando…</string>
+  <string name="notification_pm_sent">Mensaje enviado</string>
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloqueado este usuario. Desbloquea para enviar mensajes.</string>
   <string name="now">ahora</string>

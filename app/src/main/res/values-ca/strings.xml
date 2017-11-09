@@ -294,6 +294,8 @@
   <string name="notification_shot_multiple_title">%d shots nous</string>
   <string name="notification_shot_sending">Enviant…</string>
   <string name="notification_shot_sent">Shot enviat</string>
+  <string name="notification_pm_sending">Enviant…</string>
+  <string name="notification_pm_sent">Missatge enviat</string>
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloquejat aquest usuari. Desbloqueja per enviar missatges.</string>
   <string name="now">ara</string>
