@@ -49,6 +49,8 @@ public class MessageChannelListAdapter extends RecyclerView.Adapter<RecyclerView
   }
 
   public void clear() {
-    privateMessageChannelModels.clear();
+    if (privateMessageChannelModels != null) {
+      privateMessageChannelModels.clear();
+    }
   }
 }
