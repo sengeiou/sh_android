@@ -73,11 +73,12 @@ public class SuggestedPeoplePresenter implements Presenter {
   public void followUser(final UserModel user) {
     followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        onFollowUpdated(user.getIdUser(), true);
+          /* no-op */
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
         showErrorInView(error);
+        onFollowUpdated(user.getIdUser(), false);
       }
     });
   }
@@ -85,7 +86,7 @@ public class SuggestedPeoplePresenter implements Presenter {
   public void unfollowUser(final UserModel user) {
     unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        onFollowUpdated(user.getIdUser(), false);
+        /* no-op */
       }
     });
   }

@@ -75,7 +75,7 @@ public class SuggestedPeoplePresenterTest {
   }
 
   @Test public void shouldRefreshSuggestedPeopleWhenFollowUser() throws Exception {
-    setupFollowInteractorCallback();
+    setupFollowInteractorErrorCallback();
     presenter.setSuggestedPeople(Collections.singletonList(userModel()));
 
     presenter.followUser(userModel());
@@ -85,19 +85,11 @@ public class SuggestedPeoplePresenterTest {
 
   @Test public void shouldShowErrorWhenFollowUserAndThrowError() throws Exception {
     setupFollowInteractorErrorCallback();
+    presenter.setSuggestedPeople(Collections.singletonList(userModel()));
 
     presenter.followUser(userModel());
 
     verify(suggestedPeopleView).showError(anyString());
-  }
-
-  @Test public void shouldRefreshSuggestedPeopleWhenUnfollowUser() throws Exception {
-    setupUnfollowInteractorCallback();
-    presenter.setSuggestedPeople(Collections.singletonList(userModel()));
-
-    presenter.unfollowUser(userModel());
-
-    verify(suggestedPeopleView).refreshSuggestedPeople(anyList());
   }
 
   @Test public void shouldRenderSuggestedPeopleWhenResume() throws Exception {

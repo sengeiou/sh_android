@@ -975,12 +975,13 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {
-    getSuggestedPeopleAdapter().setItems(suggestedPeople);
     getSuggestedPeopleAdapter().notifyDataSetChanged();
   }
 
   @Override public void follow(int position) {
     suggestedPeoplePresenter.followUser(getSuggestedPeopleAdapter().getItem(position));
+    getSuggestedPeopleAdapter().getItem(position).setFollowing(true);
+    getSuggestedPeopleAdapter().notifyDataSetChanged();
     sendWhoToFollowAnalytics(getSuggestedPeopleAdapter().getItem(position));
   }
 
@@ -990,6 +991,8 @@ public class ProfileActivity extends BaseActivity
         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
           @Override public void onClick(DialogInterface dialog, int which) {
             suggestedPeoplePresenter.unfollowUser(userModel);
+            getSuggestedPeopleAdapter().getItem(position).setFollowing(false);
+            getSuggestedPeopleAdapter().notifyDataSetChanged();
           }
         })
         .setNegativeButton("No", null)
