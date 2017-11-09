@@ -198,7 +198,7 @@ public class GCMIntentService extends IntentService {
   private void setupGoToPrivateMessageNotification(PushNotification push) {
     String idTargetUser = push.getParameters().getIdTargetUser();
     messageNotificationManager.sendOpenPrivateMessageNotification(push.getNotificationValues(),
-        checkNotNull(idTargetUser), push.getParameters().getComment());
+        checkNotNull(idTargetUser), push.getNotificationValues().getContentText());
   }
 
   private void setupGoToStreamTimelineNotification(PushNotification push) {
