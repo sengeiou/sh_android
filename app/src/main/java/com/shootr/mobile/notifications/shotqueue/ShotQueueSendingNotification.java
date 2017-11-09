@@ -6,6 +6,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 
@@ -17,7 +18,11 @@ public class ShotQueueSendingNotification extends CommonNotification {
     public ShotQueueSendingNotification(Context context, NotificationBuilderFactory builderFactory, QueuedShot shot) {
         super(context, builderFactory);
         this.shot = shot;
+        if (shot.getBaseMessage() instanceof Shot) {
         this.titleText = context.getResources().getString(R.string.notification_shot_sending);
+        } else {
+            this.titleText = context.getResources().getString(R.string.notification_pm_sending);
+        }
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder,
