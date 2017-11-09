@@ -29,6 +29,7 @@ public class GetPollByIdStreamInteractor implements Interactor {
   private Callback<Poll> callback;
   private ErrorCallback errorCallback;
   private String idStream;
+  private boolean fromLocal;
 
   @Inject public GetPollByIdStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, InternalPollRepository localPollRepository,
@@ -39,15 +40,18 @@ public class GetPollByIdStreamInteractor implements Interactor {
     this.remotePollRepository = remotePollRepository;
   }
 
-  public void loadPoll(String idStream, Callback<Poll> callback, ErrorCallback errorCallback) {
+  public void loadPoll(String idStream, boolean fromLocal, Callback<Poll> callback, ErrorCallback errorCallback) {
     this.idStream = idStream;
     this.callback = callback;
+    this.fromLocal = fromLocal;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    obtainPollFromRepository(localPollRepository);
+    if (fromLocal) {
+      obtainPollFromRepository(localPollRepository);
+    }
     try {
       obtainPollFromRepository(remotePollRepository);
     } catch (ServerCommunicationException error) {

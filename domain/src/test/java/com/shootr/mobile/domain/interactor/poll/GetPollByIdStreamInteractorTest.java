@@ -51,7 +51,7 @@ public class GetPollByIdStreamInteractorTest {
     when(localPollRepository.getPollByIdStream(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdStream(anyString())).thenReturn(poll());
 
-    interactor.loadPoll(ID_STREAM, callback, errorCallback);
+    interactor.loadPoll(ID_STREAM, true, callback, errorCallback);
 
     verify(localPollRepository).getPollByIdStream(anyString());
   }
@@ -60,7 +60,7 @@ public class GetPollByIdStreamInteractorTest {
     when(localPollRepository.getPollByIdStream(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdStream(anyString())).thenReturn(poll());
 
-    interactor.loadPoll(ID_STREAM, callback, errorCallback);
+    interactor.loadPoll(ID_STREAM, true, callback, errorCallback);
 
     verify(remotePollRepository).getPollByIdStream(anyString());
   }
@@ -69,7 +69,7 @@ public class GetPollByIdStreamInteractorTest {
     when(localPollRepository.getPollByIdStream(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdStream(anyString())).thenReturn(poll());
 
-    interactor.loadPoll(ID_STREAM, callback, errorCallback);
+    interactor.loadPoll(ID_STREAM, true, callback, errorCallback);
 
     verify(callback, times(2)).onLoaded(any(Poll.class));
   }
@@ -79,7 +79,7 @@ public class GetPollByIdStreamInteractorTest {
     when(remotePollRepository.getPollByIdStream(ID_STREAM)).thenThrow(
         new ServerCommunicationException(new Throwable()));
 
-    interactor.loadPoll(ID_STREAM, callback, errorCallback);
+    interactor.loadPoll(ID_STREAM, true, callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
   }
@@ -88,7 +88,7 @@ public class GetPollByIdStreamInteractorTest {
     when(localPollRepository.getPollByIdStream(anyString())).thenReturn(poll());
     when(remotePollRepository.getPollByIdStream(anyString())).thenReturn(poll());
 
-    interactor.loadPoll(ID_STREAM, callback, errorCallback);
+    interactor.loadPoll(ID_STREAM, true, callback, errorCallback);
 
     verify(callback, times(2)).onLoaded(pollArgumentCaptor.capture());
     assertThat(pollArgumentCaptor.getValue().getPollOptions()).isSortedAccordingTo(
@@ -99,7 +99,7 @@ public class GetPollByIdStreamInteractorTest {
     when(localPollRepository.getPollByIdStream(anyString())).thenReturn(nopoll());
     when(remotePollRepository.getPollByIdStream(anyString())).thenReturn(nopoll());
 
-    interactor.loadPoll(ID_STREAM, callback, errorCallback);
+    interactor.loadPoll(ID_STREAM, true, callback, errorCallback);
 
     verify(callback, times(2)).onLoaded(null);
   }

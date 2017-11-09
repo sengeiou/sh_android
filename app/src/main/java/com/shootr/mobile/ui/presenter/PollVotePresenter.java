@@ -103,7 +103,7 @@ public class PollVotePresenter implements Presenter {
 
   public void loadPollByIdStream() {
     pollVoteView.showLoading();
-    getPollByIdStreamInteractor.loadPoll(idStream, new Interactor.Callback<Poll>() {
+    getPollByIdStreamInteractor.loadPoll(idStream, true, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         handlePollModel(poll);
         pollVoteView.hideLoading();
