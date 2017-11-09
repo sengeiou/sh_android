@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
@@ -503,11 +504,11 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @Override public void takePhotoFromCamera() {
-    photoPickerController.pickPhotoFromCamera(this);
+    photoPickerController.setupPhotoFromCamera();
   }
 
   @Override public void choosePhotoFromGallery() {
-    photoPickerController.pickPhotoFromGallery();
+    photoPickerController.setupPhotoGallery();
   }
 
   @Override public void showReplyToUsername(String replyToUsername) {
@@ -638,6 +639,19 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         intent.putExtra(EXTRA_IS_PRIVATE_MESSAGE, isPrivateMessage);
       }
       return intent;
+    }
+  }
+
+  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+    if (requestCode == 1) {
+      if (grantResults.length > 0) {
+        if (photoPickerController.getLastRequest() == PhotoPickerController.REQUEST_CHOOSE_PHOTO) {
+          choosePhotoFromGallery();
+        } else {
+          takePhotoFromCamera();
+        }
+      }
     }
   }
 }

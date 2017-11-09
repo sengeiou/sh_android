@@ -18,227 +18,234 @@ import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class PhotoPickerController {
 
-    private static final int REQUEST_TAKE_PHOTO = 993;
-    private static final int REQUEST_CHOOSE_PHOTO = 994;
-    private static final String CAMERA_PHOTO_TMP_FILE = "cameraPhoto.jpg";
+  public static final int REQUEST_TAKE_PHOTO = 993;
+  public static final int REQUEST_CHOOSE_PHOTO = 994;
+  private static final String CAMERA_PHOTO_TMP_FILE = "cameraPhoto.jpg";
 
-    private final Activity activity;
-    private final Handler handler;
-    private final File temporaryFiles;
-    private String pickerTitle;
+  private final Activity activity;
+  private final Handler handler;
+  private final File temporaryFiles;
+  private String pickerTitle;
+  private int lastRequest = 0;
 
-    public static class Builder {
+  public static class Builder {
 
-        private Activity activity;
-        private Handler handler;
-        private String title;
-        private File temporaryFiles;
+    private Activity activity;
+    private Handler handler;
+    private String title;
+    private File temporaryFiles;
 
-        public Builder onActivity(Activity activity) {
-            this.activity = activity;
-            return this;
-        }
-
-        public Builder withTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
-        public Builder withHandler(Handler handler) {
-            this.handler = handler;
-            return this;
-        }
-
-        public Builder withTemporaryDir(File temporaryDir) {
-            this.temporaryFiles = temporaryDir;
-            return this;
-        }
-
-        public PhotoPickerController build() {
-            checkNotNull(activity, "Picker must have a source activity");
-            checkNotNull(handler, "Picker must have a callback");
-            checkNotNull(temporaryFiles, "Picker mus have a temporary files directory.");
-
-            PhotoPickerController pickerController = new PhotoPickerController(activity, handler, temporaryFiles);
-            pickerController.setTitle(title);
-            return pickerController;
-        }
+    public Builder onActivity(Activity activity) {
+      this.activity = activity;
+      return this;
     }
 
-    private PhotoPickerController(Activity activity, Handler handler, File temporaryFiles) {
-        this.activity = activity;
-        this.handler = handler;
-        this.temporaryFiles = temporaryFiles;
+    public Builder withTitle(String title) {
+      this.title = title;
+      return this;
     }
 
-    private void setTitle(String title) {
-        this.pickerTitle = title;
+    public Builder withHandler(Handler handler) {
+      this.handler = handler;
+      return this;
     }
 
-    public void pickPhoto() {
-        pickTimelineOptions();
+    public Builder withTemporaryDir(File temporaryDir) {
+      this.temporaryFiles = temporaryDir;
+      return this;
     }
 
-    public void pickOption() {
-        pickHolderOptions();
+    public PhotoPickerController build() {
+      checkNotNull(activity, "Picker must have a source activity");
+      checkNotNull(handler, "Picker must have a callback");
+      checkNotNull(temporaryFiles, "Picker mus have a temporary files directory.");
+
+      PhotoPickerController pickerController =
+          new PhotoPickerController(activity, handler, temporaryFiles);
+      pickerController.setTitle(title);
+      return pickerController;
     }
+  }
 
-    private void pickTimelineOptions() {
-        if (!activity.isFinishing()) {
-            BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
-                .sheet(R.menu.photo_picker_bottom_sheet)
-                .listener(new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case R.id.menu_photo_gallery:
-                                setupPhotoGallery();
-                                break;
-                            case R.id.menu_photo_take:
-                                setupPhotoFromCamera();
-                                break;
-                            case R.id.menu_check_in:
-                                handler.onCheckIn();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-            builder.show();
-        }
-    }
+  private PhotoPickerController(Activity activity, Handler handler, File temporaryFiles) {
+    this.activity = activity;
+    this.handler = handler;
+    this.temporaryFiles = temporaryFiles;
+  }
 
-    public void pickPrivateMessageOptions() {
-        if (!activity.isFinishing()) {
-            BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
-                .sheet(R.menu.private_messages_bottom_sheet)
-                .listener(new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case R.id.menu_photo_gallery:
-                                setupPhotoGallery();
-                                break;
-                            case R.id.menu_photo_take:
-                                setupPhotoFromCamera();
-                                break;
-                            case R.id.menu_check_in:
-                                handler.onCheckIn();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                });
-            builder.show();
-        }
-    }
+  private void setTitle(String title) {
+    this.pickerTitle = title;
+  }
 
+  public void pickPhoto() {
+    pickTimelineOptions();
+  }
 
-    private void pickHolderOptions() {
-        BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
-          .sheet(R.menu.option_picker_author_bottom_sheet)
+  public void pickOption() {
+    pickHolderOptions();
+  }
+
+  private void pickTimelineOptions() {
+    if (!activity.isFinishing()) {
+      BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
+          .sheet(R.menu.photo_picker_bottom_sheet)
           .listener(new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                  switch (which) {
-                      case R.id.menu_stream_topic:
-                          handler.openEditTopicDialog();
-                          break;
-                      case R.id.menu_photo_gallery:
-                          setupPhotoGallery();
-                          break;
-                      case R.id.menu_photo_take:
-                          setupPhotoFromCamera();
-                          break;
-                      case R.id.menu_check_in:
-                          handler.onCheckIn();
-                          break;
-                      default:
-                          break;
-                  }
+            @Override public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case R.id.menu_photo_gallery:
+                  setupPhotoGallery();
+                  break;
+                case R.id.menu_photo_take:
+                  setupPhotoFromCamera();
+                  break;
+                case R.id.menu_check_in:
+                  handler.onCheckIn();
+                  break;
+                default:
+                  break;
               }
-          });
-        builder.show();
-    }
-
-    private void setupPhotoFromCamera() {
-        if (handler.hasWritePermission()) {
-            pickPhotoFromCamera(activity);
-        } else {
-            handler.requestWritePermissionToUser();
-        }
-    }
-
-    private void setupPhotoGallery() {
-        if (handler.hasWritePermission()) {
-            pickPhotoFromGallery();
-        } else {
-            handler.requestWritePermissionToUser();
-        }
-    }
-
-    public void pickPhotoFromCamera(Activity activity) {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        File pictureTemporaryFile = getCameraPhotoFile();
-        if (!pictureTemporaryFile.exists()) {
-            try {
-                pictureTemporaryFile.getParentFile().mkdirs();
-                pictureTemporaryFile.createNewFile();
-            } catch (IOException e) {
-                Timber.e(e, "No se pudo crear el archivo temporal para la foto");
-                handler.onError(e);
             }
-        }
-        Uri temporaryPhotoUri = FileProvider.getUriForFile(activity,
-            BuildConfig.APPLICATION_ID + ".provider",
+          });
+      builder.show();
+    }
+  }
+
+  public void pickPrivateMessageOptions() {
+    if (!activity.isFinishing()) {
+      BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
+          .sheet(R.menu.private_messages_bottom_sheet)
+          .listener(new DialogInterface.OnClickListener() {
+            @Override public void onClick(DialogInterface dialog, int which) {
+              switch (which) {
+                case R.id.menu_photo_gallery:
+                  setupPhotoGallery();
+                  break;
+                case R.id.menu_photo_take:
+                  setupPhotoFromCamera();
+                  break;
+                case R.id.menu_check_in:
+                  handler.onCheckIn();
+                  break;
+                default:
+                  break;
+              }
+            }
+          });
+      builder.show();
+    }
+  }
+
+  private void pickHolderOptions() {
+    BottomSheet.Builder builder = new BottomSheet.Builder(activity).title(pickerTitle)
+        .sheet(R.menu.option_picker_author_bottom_sheet)
+        .listener(new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+              case R.id.menu_stream_topic:
+                handler.openEditTopicDialog();
+                break;
+              case R.id.menu_photo_gallery:
+                setupPhotoGallery();
+                break;
+              case R.id.menu_photo_take:
+                setupPhotoFromCamera();
+                break;
+              case R.id.menu_check_in:
+                handler.onCheckIn();
+                break;
+              default:
+                break;
+            }
+          }
+        });
+    builder.show();
+  }
+
+  public void setupPhotoFromCamera() {
+    lastRequest = REQUEST_TAKE_PHOTO;
+    if (handler.hasWritePermission()) {
+      pickPhotoFromCamera(activity);
+    } else {
+      handler.requestWritePermissionToUser();
+    }
+  }
+
+  public void setupPhotoGallery() {
+    lastRequest = REQUEST_CHOOSE_PHOTO;
+    if (handler.hasWritePermission()) {
+      pickPhotoFromGallery();
+    } else {
+      handler.requestWritePermissionToUser();
+    }
+  }
+
+  public int getLastRequest() {
+    return lastRequest;
+  }
+
+  private void pickPhotoFromCamera(Activity activity) {
+    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    File pictureTemporaryFile = getCameraPhotoFile();
+    if (!pictureTemporaryFile.exists()) {
+      try {
+        pictureTemporaryFile.getParentFile().mkdirs();
+        pictureTemporaryFile.createNewFile();
+      } catch (IOException e) {
+        Timber.e(e, "No se pudo crear el archivo temporal para la foto");
+        handler.onError(e);
+      }
+    }
+    Uri temporaryPhotoUri =
+        FileProvider.getUriForFile(activity, BuildConfig.APPLICATION_ID + ".provider",
             pictureTemporaryFile);
-        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
-        handler.startPickerActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, temporaryPhotoUri);
+    handler.startPickerActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+  }
+
+  private File getCameraPhotoFile() {
+    return new File(temporaryFiles, CAMERA_PHOTO_TMP_FILE);
+  }
+
+  private void pickPhotoFromGallery() {
+    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+    handler.startPickerActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
+  }
+
+  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+      onTakePhotoResult();
+    } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
+      onChoosePhotoResult(data);
     }
+  }
 
-    private File getCameraPhotoFile() {
-        return new File(temporaryFiles, CAMERA_PHOTO_TMP_FILE);
+  private void onChoosePhotoResult(Intent data) {
+    Uri selectedImageUri = data.getData();
+    String path = FileChooserUtils.getPath(activity, selectedImageUri);
+    if (path != null) {
+      handler.onSelected(new File(path));
     }
+  }
 
-    public void pickPhotoFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        handler.startPickerActivityForResult(intent, REQUEST_CHOOSE_PHOTO);
-    }
+  private void onTakePhotoResult() {
+    //TODO validation, maybe
+    handler.onSelected(getCameraPhotoFile());
+  }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            onTakePhotoResult();
-        } else if (requestCode == REQUEST_CHOOSE_PHOTO && resultCode == Activity.RESULT_OK) {
-            onChoosePhotoResult(data);
-        }
-    }
+  public interface Handler {
 
-    private void onChoosePhotoResult(Intent data) {
-        Uri selectedImageUri = data.getData();
-        String path = FileChooserUtils.getPath(activity, selectedImageUri);
-        if (path != null) {
-            handler.onSelected(new File(path));
-        }
-    }
+    void onSelected(File imageFile);
 
-    private void onTakePhotoResult() {
-        //TODO validation, maybe
-        handler.onSelected(getCameraPhotoFile());
-    }
+    void onError(Exception e);
 
-    public interface Handler {
+    void startPickerActivityForResult(Intent intent, int requestCode);
 
-        void onSelected(File imageFile);
+    void openEditTopicDialog();
 
-        void onError(Exception e);
+    void onCheckIn();
 
-        void startPickerActivityForResult(Intent intent, int requestCode);
+    boolean hasWritePermission();
 
-        void openEditTopicDialog();
-
-        void onCheckIn();
-
-        boolean hasWritePermission();
-
-        void requestWritePermissionToUser();
-    }
+    void requestWritePermissionToUser();
+  }
 }
