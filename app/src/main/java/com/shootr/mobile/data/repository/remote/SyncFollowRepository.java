@@ -55,7 +55,8 @@ public class SyncFollowRepository implements FollowRepository, SyncableRepositor
   @NonNull private FollowEntity createFailedFollow(String idUser, boolean isFollowing) {
     FollowEntity followEntity = new FollowEntity();
     followEntity.setFollowing(isFollowing);
-    followEntity.setIdFollowedUser(idUser);
+    followEntity.setIdFollowed(idUser);
+    followEntity.setType("USER");
     return followEntity;
   }
 

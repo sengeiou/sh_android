@@ -19,8 +19,9 @@ public class FollowManager extends AbstractManager {
     BlockEntityDBMapper blockMapper;
     private static final String FOLLOW_TABLE = DatabaseContract.FollowTable.TABLE;
     private static final String BLOCK_TABLE = DatabaseContract.BlockTable.TABLE;
-    private static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_USER;
+    private static final String ID_FOLLOWED_USER = DatabaseContract.FollowTable.ID_FOLLOWED_ENTITY;
     private static final String ID_BLOCKED_USER = DatabaseContract.BlockTable.ID_BLOCKED_USER;
+    private static final String TYPE = DatabaseContract.FollowTable.TYPE;
     private static final String ID_USER = "IDUSER";
 
     @Inject public FollowManager(SQLiteOpenHelper openHelper, FollowEntityDBMapper followMapper,
@@ -43,10 +44,12 @@ public class FollowManager extends AbstractManager {
 
     public List<FollowEntity> getFailedFollows() {
         List<FollowEntity> followsToUpdate = new ArrayList<>();
+        String whereClause = TYPE + "= ?";
+        String[] whereArgs = new String[] { "USER" };
         Cursor c = getReadableDatabase().query(FOLLOW_TABLE,
           DatabaseContract.FollowTable.PROJECTION,
-          null,
-          null,
+          whereClause,
+          whereArgs,
           null,
           null,
           null);
@@ -114,6 +117,8 @@ public class FollowManager extends AbstractManager {
     }
 
     public void deleteFailedFollows() {
-        getWritableDatabase().delete(FOLLOW_TABLE, null, null);
+        String whereClause = TYPE + "= ?";
+        String[] whereArgs = new String[] { "USER" };
+        getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
     }
 }

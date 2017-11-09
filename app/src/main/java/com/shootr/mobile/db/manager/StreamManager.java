@@ -4,10 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.db.DatabaseContract;
 import com.shootr.mobile.db.DatabaseContract.TimelineSyncTable;
+import com.shootr.mobile.db.mappers.FollowEntityDBMapper;
 import com.shootr.mobile.db.mappers.StreamEntityDBMapper;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +18,16 @@ import javax.inject.Inject;
 public class StreamManager extends AbstractManager {
 
   private final StreamEntityDBMapper streamEntityMapper;
+  private final FollowEntityDBMapper followMapper;
+  private static final String FOLLOW_TABLE = DatabaseContract.FollowTable.TABLE;
+  private static final String TYPE = DatabaseContract.FollowTable.TYPE;
 
   @Inject
-  public StreamManager(SQLiteOpenHelper openHelper, StreamEntityDBMapper streamEntityMapper) {
+  public StreamManager(SQLiteOpenHelper openHelper, StreamEntityDBMapper streamEntityMapper,
+      FollowEntityDBMapper followMapper) {
     super(openHelper);
     this.streamEntityMapper = streamEntityMapper;
+    this.followMapper = followMapper;
   }
 
   public StreamEntity getStreamById(String streamId) {
@@ -325,6 +332,43 @@ public class StreamManager extends AbstractManager {
     values.put(DatabaseContract.StreamTable.FOLLOWING, following ? 1 : 0);
     getWritableDatabase().update(DatabaseContract.StreamTable.TABLE, values, whereClause,
         whereArguments);
+  }
+
+  public void saveFailedFollow(FollowEntity follow) {
+    if (follow != null) {
+      ContentValues contentValues = followMapper.toContentValues(follow);
+      getWritableDatabase().insertWithOnConflict(FOLLOW_TABLE,
+          null,
+          contentValues,
+          SQLiteDatabase.CONFLICT_REPLACE);
+    }
+  }
+
+  public List<FollowEntity> getFailedFollows() {
+    List<FollowEntity> followsToUpdate = new ArrayList<>();
+    String whereClause = TYPE + "= ?";
+    String[] whereArgs = new String[] { "STREAM" };
+    Cursor c = getReadableDatabase().query(FOLLOW_TABLE,
+        DatabaseContract.FollowTable.PROJECTION,
+        whereClause,
+        whereArgs,
+        null,
+        null,
+        null);
+    if (c.getCount() > 0) {
+      c.moveToFirst();
+      do {
+        followsToUpdate.add(followMapper.fromCursor(c));
+      } while (c.moveToNext());
+    }
+    c.close();
+    return followsToUpdate;
+  }
+
+  public void deleteFailedFollows() {
+    String whereClause = TYPE + "=?";
+    String[] whereArgs = new String[] { "STREAM" };
+    getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
   }
 
 }

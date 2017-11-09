@@ -4,6 +4,7 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
+import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.model.stream.Stream;
 import java.util.Collections;
@@ -34,6 +35,7 @@ public class SyncStreamRepositoryTest {
   @Mock StreamDataSource remoteStreamDataSource;
   @Mock SyncableStreamEntityFactory syncableStreamEntityFactory;
   @Mock StreamCache streamCache;
+  @Mock SyncTrigger syncTrigger;
 
   private SyncStreamRepository syncStreamRepository;
 
@@ -41,7 +43,7 @@ public class SyncStreamRepositoryTest {
     MockitoAnnotations.initMocks(this);
     syncStreamRepository =
         new SyncStreamRepository(streamEntityMapper, localStreamDataSource, remoteStreamDataSource,
-            syncableStreamEntityFactory, streamCache);
+            syncableStreamEntityFactory, streamCache, syncTrigger);
   }
 
   @Test public void shouldPutStreamInCacheWhenGetStreamByIdAndRemoteStreamIsNotNull()

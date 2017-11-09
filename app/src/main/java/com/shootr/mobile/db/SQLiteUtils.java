@@ -264,12 +264,14 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.FollowTable.TABLE
       + " ("
-      + DatabaseContract.FollowTable.ID_FOLLOWED_USER
+      + DatabaseContract.FollowTable.TYPE
+      + " TEXT NOT NULL,"
+      + DatabaseContract.FollowTable.ID_FOLLOWED_ENTITY
       + " TEXT NOT NULL,"
       + DatabaseContract.FollowTable.IS_FOLLOWING
       + " INT NOT NULL,"
       + " PRIMARY KEY("
-      + DatabaseContract.FollowTable.ID_FOLLOWED_USER
+      + DatabaseContract.FollowTable.ID_FOLLOWED_ENTITY
       + "))";
 
     public static final String CREATE_TABLE_BLOCK = "CREATE TABLE IF NOT EXISTS "

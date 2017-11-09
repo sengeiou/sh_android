@@ -1,10 +1,13 @@
 package com.shootr.mobile.data.repository.remote;
 
+import android.support.annotation.NonNull;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
+import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -25,16 +28,19 @@ public class SyncStreamRepository
   private final StreamDataSource remoteStreamDataSource;
   private final SyncableStreamEntityFactory syncableStreamEntityFactory;
   private final StreamCache streamCache;
+  private final SyncTrigger syncTrigger;
 
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
       @Local StreamDataSource localStreamDataSource,
       @Remote StreamDataSource remoteStreamDataSource,
-      SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache) {
+      SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
+      SyncTrigger syncTrigger) {
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
     this.streamEntityMapper = streamEntityMapper;
     this.syncableStreamEntityFactory = syncableStreamEntityFactory;
     this.streamCache = streamCache;
+    this.syncTrigger = syncTrigger;
   }
 
   @Override public Stream getStreamById(String idStream, String[] types) {
@@ -111,11 +117,23 @@ public class SyncStreamRepository
   }
 
   @Override public void follow(String idStream) {
-    remoteStreamDataSource.follow(idStream);
+    try {
+      remoteStreamDataSource.follow(idStream);
+      syncTrigger.triggerSync();
+    } catch (ServerCommunicationException e) {
+      localStreamDataSource.putFailedFollow(createFailedFollow(idStream, true));
+      syncTrigger.notifyNeedsSync(this);
+    }
   }
 
   @Override public void unfollow(String idStream) {
-    remoteStreamDataSource.unfollow(idStream);
+    try {
+      remoteStreamDataSource.unfollow(idStream);
+      syncTrigger.triggerSync();
+    } catch (ServerCommunicationException e) {
+      localStreamDataSource.putFailedFollow(createFailedFollow(idStream, false));
+      syncTrigger.notifyNeedsSync(this);
+    }
   }
 
   @Override public Stream getBlogStream(String country, String language) {
@@ -151,6 +169,26 @@ public class SyncStreamRepository
   }
 
   @Override public void dispatchSync() {
-    throw new RuntimeException("Method not implemented yet!");
+    List<FollowEntity> pendingEntities = localStreamDataSource.getEntitiesNotSynchronized();
+    localStreamDataSource.deleteFailedFollows();
+    for (FollowEntity entity : pendingEntities) {
+      if (entity.isFollowing()) {
+        followFailed(entity);
+      } else {
+        unfollow(entity.getIdFollowedUser());
+      }
+    }
+  }
+
+  private void followFailed(FollowEntity entity) {
+    follow(entity.getIdFollowedUser());
+  }
+
+  @NonNull private FollowEntity createFailedFollow(String idStream, boolean isFollowing) {
+    FollowEntity followEntity = new FollowEntity();
+    followEntity.setFollowing(isFollowing);
+    followEntity.setIdFollowed(idStream);
+    followEntity.setType("STREAM");
+    return followEntity;
   }
 }

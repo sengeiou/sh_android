@@ -144,12 +144,13 @@ public class DatabaseContract {
     }
 
     public static final String TABLE = "Follow";
-    public static final String ID_FOLLOWED_USER = "idFollowedUser";
+    public static final String TYPE = "type";
+    public static final String ID_FOLLOWED_ENTITY = "idFollowedEntity";
     public static final String IS_FOLLOWING = "isFollowing";
 
 
     public static final String[] PROJECTION = {
-        ID_FOLLOWED_USER, IS_FOLLOWING
+        ID_FOLLOWED_ENTITY, IS_FOLLOWING, TYPE
     };
   }
 

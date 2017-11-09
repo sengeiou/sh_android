@@ -1,10 +1,12 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.util.List;
 
-public interface StreamDataSource {
+public interface StreamDataSource extends SyncableDataSource<FollowEntity> {
 
   StreamEntity getStreamById(String idStream, String[] types);
 
@@ -43,4 +45,8 @@ public interface StreamDataSource {
   void follow(String idStream);
 
   void unfollow(String idStream);
+
+  void putFailedFollow(FollowEntity followEntity);
+
+  void deleteFailedFollows();
 }
