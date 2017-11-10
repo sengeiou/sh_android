@@ -267,6 +267,7 @@ public class StreamDetailPresenter implements Presenter {
         streamDetailView.showNoTextPicture();
         streamDetailView.setupStreamInitials(streamModel);
       } else {
+        streamDetailView.setupStreamInitials(streamModel);
         streamDetailView.showPicture();
         streamDetailView.hideNoTextPicture();
       }

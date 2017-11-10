@@ -218,13 +218,13 @@ public class StreamDetailPresenterTest {
     verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
   }
 
-  @Test public void shouldNotSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
+  @Test public void shouldSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
     setupStreamInfoCallback();
 
     presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
 
-    verify(streamDetailView, never()).setupStreamInitials(any(StreamModel.class));
+    verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
   }
 
   @Test public void shouldShowPictureIfNotStreamPictureAndImAuthor() throws Exception {
