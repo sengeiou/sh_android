@@ -290,6 +290,7 @@
   <string name="notification_shot_failed_subtitle_pattern_no_comment">Rascunho salvo</string>
   <string name="notification_shot_has_parent_deleted_subtitle">O shot que está respondendo foi eliminado</string>
   <string name="notification_shot_has_stream_removed_subtitle">Este stream foi apagado</string>
+  <string name="empty_home">Atividade dos streams e pessoas que você segue</string>
   <!-- Notifications -->
   <string name="notification_shot_multiple_title">%d novos shots</string>
   <string name="notification_shot_sending">Enviando…</string>
@@ -568,4 +569,6 @@
   <string name="whale_title_default">Voltaremos logo</string>
   <string name="yes">Sim</string>
   <string name="connected">conectados</string>
+  <string name="title_activity_history">Histórico</string>
+  <string name="home">Inicio</string>
 </resources>

@@ -454,6 +454,7 @@
     <item quantity="other">%s responses</item>
     <item quantity="zero">%s responses</item>
   </plurals>
+  <string name="empty_home">Activity from streams and people you follow</string>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No Shots</string>
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
@@ -565,5 +566,5 @@
   <string name="yes">Yes</string>
   <string name="connected">connected</string>
   <string name="home">Home</string>
-  <string name="title_activity_history">Historial</string>
+  <string name="title_activity_history">Activity Log</string>
 </resources>

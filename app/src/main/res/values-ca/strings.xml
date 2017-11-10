@@ -353,6 +353,7 @@
   <string name="poll_vote_timeout_retry">Reintentar</string>
   <string name="private_message_image">Foto</string>
   <!-- Push Settings -->
+  <string name="empty_home">Activitat dels streams i persones que segueixes</string>
   <string name="private_message_push_settings">Missatges Privats</string>
   <string name="private_message_timeline_empty_title">Sense missatges</string>
   <string name="private_message_video">Vídeo</string>
@@ -568,4 +569,6 @@
   <string name="whale_title_default">Tornem aviat</string>
   <string name="yes">Sí</string>
   <string name="connected">conectats</string>
+  <string name="title_activity_history">Historial</string>
+  <string name="home">Inici</string>
 </resources>
