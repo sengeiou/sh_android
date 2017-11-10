@@ -1,17 +1,15 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
@@ -38,14 +36,13 @@ public class StreamDetailPresenter implements Presenter {
   private final ShareStreamInteractor shareStreamInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
-  private final GetFavoriteStatusInteractor getFavoriteStatusInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInteractor;
   private final RemoveStreamInteractor removeStreamInteractor;
   private final RestoreStreamInteractor restoreStreamInteractor;
-  private final AddToFavoritesInteractor addToFavoritesInteractor;
-  private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  private final FollowStreamInteractor followStreamInteractor;
+  private final UnfollowStreamInteractor unfollowStreamInteractor;
 
   private final StreamModelMapper streamModelMapper;
   private final UserModelMapper userModelMapper;
@@ -64,27 +61,25 @@ public class StreamDetailPresenter implements Presenter {
   @Inject public StreamDetailPresenter(GetStreamInfoInteractor streamInfoInteractor,
       ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor,
       UnfollowInteractor unfollowInteractor,
-      GetFavoriteStatusInteractor getFavoriteStatusInteractor,
       SelectStreamInteractor selectStreamInteractor,
       MuteInteractor muteInteractor,
       UnmuteInteractor unmuteInteractor, RemoveStreamInteractor removeStreamInteractor,
       RestoreStreamInteractor restoreStreamInteractor,
-      AddToFavoritesInteractor addToFavoritesInteractor,
-      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+      FollowStreamInteractor followStreamInteractor,
+      UnfollowStreamInteractor unfollowStreamInteractor,
       StreamModelMapper streamModelMapper, UserModelMapper userModelMapper,
       ErrorMessageFactory errorMessageFactory) {
     this.streamInfoInteractor = streamInfoInteractor;
     this.shareStreamInteractor = shareStreamInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
-    this.getFavoriteStatusInteractor = getFavoriteStatusInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
     this.muteInteractor = muteInteractor;
     this.unmuteInteractor = unmuteInteractor;
     this.removeStreamInteractor = removeStreamInteractor;
     this.restoreStreamInteractor = restoreStreamInteractor;
-    this.addToFavoritesInteractor = addToFavoritesInteractor;
-    this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+    this.followStreamInteractor = followStreamInteractor;
+    this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.streamModelMapper = streamModelMapper;
     this.userModelMapper = userModelMapper;
     this.errorMessageFactory = errorMessageFactory;
@@ -98,26 +93,24 @@ public class StreamDetailPresenter implements Presenter {
   public void initialize(final StreamDetailView streamDetailView, final String idStream) {
     setView(streamDetailView);
     this.idStream = idStream;
-    this.loadFavoriteStatus();
     this.loadStreamInfo();
   }
 
-  public void loadFavoriteStatus() {
-    getFavoriteStatusInteractor.loadFavoriteStatus(idStream, new Interactor.Callback<Boolean>() {
-      @Override public void onLoaded(Boolean isFollowing) {
-        streamDetailView.setFollowingStream(isFollowing);
-      }
-    });
+  public void loadFollowStatus() {
+    if (streamModel != null) {
+      streamDetailView.setFollowingStream(streamModel.isFollowing());
+    }
   }
 
   public void loadMutedStatus() {
     streamDetailView.setMuteStatus(streamModel.isMuted());
   }
 
-  public void addStreamAsFavorite() {
-    addToFavoritesInteractor.addToFavorites(idStream, new Interactor.CompletedCallback() {
+  public void addStreamAsFollowing() {
+    followStreamInteractor.follow(idStream, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadFavoriteStatus();
+        streamModel.setFollowing(true);
+        loadFollowStatus();
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -126,10 +119,11 @@ public class StreamDetailPresenter implements Presenter {
     });
   }
 
-  public void removeStreamFromFavorites() {
-    removeFromFavoritesInteractor.removeFromFavorites(idStream, new Interactor.CompletedCallback() {
+  public void unfollowStream() {
+    unfollowStreamInteractor.unfollow(idStream, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadFavoriteStatus();
+        streamModel.setFollowing(false);
+        loadFollowStatus();
       }
     });
   }
@@ -185,13 +179,14 @@ public class StreamDetailPresenter implements Presenter {
     this.renderWatchersList(streamInfo);
     this.renderFollowingNumber(streamInfo.getNumberOfFollowing());
     this.getContributorsNumber();
-    renderStreamFollowers(streamInfo.getStream().getTotalFavorites());
+    renderStreamFollowers(streamInfo.getStream().getTotalFollowers());
     if (streamModel.amIAuthor()) {
       this.setupRemoveStreamMenuOption();
     }
     this.showViewDetail();
     this.hideViewLoading();
     this.loadMutedStatus();
+    loadFollowStatus();
   }
 
   private void setupRemoveStreamMenuOption() {
@@ -272,6 +267,7 @@ public class StreamDetailPresenter implements Presenter {
         streamDetailView.showNoTextPicture();
         streamDetailView.setupStreamInitials(streamModel);
       } else {
+        streamDetailView.setupStreamInitials(streamModel);
         streamDetailView.showPicture();
         streamDetailView.hideNoTextPicture();
       }
@@ -300,7 +296,7 @@ public class StreamDetailPresenter implements Presenter {
   public void follow(final String idUser) {
     followInteractor.follow(idUser, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_FOLLOWING);
+        refreshParticipantsFollowings(idUser, true);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
@@ -316,15 +312,15 @@ public class StreamDetailPresenter implements Presenter {
   public void unfollow(final String idUser) {
     unfollowInteractor.unfollow(idUser, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        refreshParticipantsFollowings(idUser, FollowEntity.RELATIONSHIP_NONE);
+        refreshParticipantsFollowings(idUser, false);
       }
     });
   }
 
-  private void refreshParticipantsFollowings(String idUser, int relationshipFollowing) {
+  private void refreshParticipantsFollowings(String idUser, boolean following) {
     for (UserModel participant : participantsShown) {
       if (participant.getIdUser().equals(idUser)) {
-        participant.setRelationship(relationshipFollowing);
+        participant.setFollowing(following);
         streamDetailView.setWatchers(participantsShown);
         break;
       }

@@ -29,4 +29,6 @@ public interface StreamsListView extends LoadDataView {
     void scrollListToTop();
 
     void updateChannelBadge(int unreadChannels, boolean followingsChannel);
+
+    void navigateToMyStreams(String currentUserId, boolean isCurrentUser);
 }

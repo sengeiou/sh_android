@@ -264,26 +264,14 @@ public class SQLiteUtils {
     public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.FollowTable.TABLE
       + " ("
-      + DatabaseContract.FollowTable.ID_USER
+      + DatabaseContract.FollowTable.TYPE
       + " TEXT NOT NULL,"
-      + DatabaseContract.FollowTable.ID_FOLLOWED_USER
+      + DatabaseContract.FollowTable.ID_FOLLOWED_ENTITY
       + " TEXT NOT NULL,"
-      + DatabaseContract.FollowTable.IS_FRIEND
-      + " NUMBER,"
-      + DatabaseContract.SyncColumns.BIRTH
-      + " DATETIME NOT NULL,"
-      + DatabaseContract.SyncColumns.MODIFIED
-      + " DATETIME NOT NULL,"
-      + DatabaseContract.SyncColumns.DELETED
-      + " DATETIME NULL,"
-      + DatabaseContract.SyncColumns.REVISION
+      + DatabaseContract.FollowTable.IS_FOLLOWING
       + " INT NOT NULL,"
-      + DatabaseContract.SyncColumns.SYNCHRONIZED
-      + " CHAR(1) NULL,"
       + " PRIMARY KEY("
-      + DatabaseContract.FollowTable.ID_USER
-      + ","
-      + DatabaseContract.FollowTable.ID_FOLLOWED_USER
+      + DatabaseContract.FollowTable.ID_FOLLOWED_ENTITY
       + "))";
 
     public static final String CREATE_TABLE_BLOCK = "CREATE TABLE IF NOT EXISTS "
@@ -348,7 +336,7 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.REMOVED
       + " INT NOT NULL,"
-      + DatabaseContract.StreamTable.TOTAL_FAVORITES
+      + DatabaseContract.StreamTable.TOTAL_FOLLOWERS
       + " INTEGER NOT NULL,"
       + DatabaseContract.StreamTable.TOTAL_WATCHERS
       + " INTEGER NOT NULL,"
@@ -371,6 +359,8 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.STRATEGIC
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.MUTED
+      + " INTEGER NULL,"
+      + DatabaseContract.StreamTable.FOLLOWING
       + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
@@ -408,7 +398,7 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.REMOVED
       + " INT NOT NULL,"
-      + DatabaseContract.StreamTable.TOTAL_FAVORITES
+      + DatabaseContract.StreamTable.TOTAL_FOLLOWERS
       + " INTEGER NOT NULL,"
       + DatabaseContract.StreamTable.TOTAL_WATCHERS
       + " INTEGER NOT NULL,"
@@ -432,6 +422,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.MUTED
       + " INTEGER NULL,"
+      + DatabaseContract.StreamTable.FOLLOWING
+      + " INTEGER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -444,16 +436,6 @@ public class SQLiteUtils {
       + " CHAR(1) NULL,"
       + DatabaseContract.StreamSearchTable.WATCHERS
       + " INT NOT NULL)";
-
-    public static final String CREATE_TABLE_FAVORITE = "CREATE TABLE IF NOT EXISTS "
-      + DatabaseContract.FavoriteTable.TABLE
-      + " ("
-      + DatabaseContract.FavoriteTable.ID_STREAM
-      + " TEXT NOT NULL PRIMARY KEY,"
-      + DatabaseContract.FavoriteTable.ORDER
-      + " NUMBER NULL,"
-      + DatabaseContract.SyncColumns.SYNCHRONIZED
-      + " TEXT NULL)";
 
     public static final String CREATE_TABLE_ACTIVITY = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ActivityTable.TABLE

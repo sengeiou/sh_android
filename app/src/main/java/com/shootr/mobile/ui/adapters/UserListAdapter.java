@@ -8,7 +8,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FollowButton;
@@ -86,12 +85,12 @@ public class UserListAdapter extends BindableAdapter<UserModel> {
         imageLoader.loadProfilePhoto(photo, viewHolder.avatar, item.getUsername());
 
         if (isFollowButtonVisible()) {
-            if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
-                viewHolder.followButton.setVisibility(View.VISIBLE);
-                viewHolder.followButton.setFollowing(true);
-            } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+            if (item.isMe()) {
                 viewHolder.followButton.setVisibility(View.GONE);
                 viewHolder.followButton.setEditProfile();
+            } else if (item.isFollowing()) {
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(true);
             } else {
                 viewHolder.followButton.setVisibility(View.VISIBLE);
                 viewHolder.followButton.setFollowing(false);

@@ -80,8 +80,18 @@ public class LocalStreamRepository implements StreamRepository {
         localStreamSearchDataSource.mute(idStream);
     }
 
-    @Override public void unMute(String idStream) {
-        localStreamDataSource.unMute(idStream);
+    @Override public void unmute(String idStream) {
+        localStreamDataSource.unmute(idStream);
         localStreamSearchDataSource.unmute(idStream);
+    }
+
+    @Override public void follow(String idStream) {
+        localStreamDataSource.follow(idStream);
+        localStreamSearchDataSource.follow(idStream);
+    }
+
+    @Override public void unfollow(String idStream) {
+        localStreamDataSource.unfollow(idStream);
+        localStreamSearchDataSource.unfollow(idStream);
     }
 }

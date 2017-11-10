@@ -2,12 +2,7 @@ package com.shootr.mobile.data.repository.datasource.stream;
 
 import android.support.v4.util.ArrayMap;
 import com.shootr.mobile.data.entity.StreamSearchEntity;
-import com.shootr.mobile.data.entity.UserEntity;
-import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.StreamManager;
-import com.shootr.mobile.db.manager.UserManager;
-import com.shootr.mobile.domain.repository.SessionRepository;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -17,17 +12,10 @@ import javax.inject.Singleton;
 
     private final StreamManager streamManager;
     private final Map<String, StreamSearchEntity> lastStreamSearchResults;
-    private final SessionRepository sessionRepository;
-    private final FollowManager followManager;
-    private final UserManager userManager;
 
     @Inject
-    public DatabaseMemoryStreamSearchDataSource(StreamManager streamManager, SessionRepository sessionRepository,
-      FollowManager followManager, UserManager userManager) {
+    public DatabaseMemoryStreamSearchDataSource(StreamManager streamManager) {
         this.streamManager = streamManager;
-        this.sessionRepository = sessionRepository;
-        this.followManager = followManager;
-        this.userManager = userManager;
         lastStreamSearchResults = new ArrayMap<>();
     }
 
@@ -45,20 +33,7 @@ import javax.inject.Singleton;
     }
 
     @Override public List<StreamSearchEntity> getDefaultStreams(String locale) {
-        Map<String, Integer> watchersCountByStreams = getWatchersCountByStreams();
-        List<StreamSearchEntity> defaultStreamSearch = streamManager.getDefaultStreamSearch();
-        return updateWatchNumberInStreams(watchersCountByStreams, defaultStreamSearch);
-    }
-
-    private List<StreamSearchEntity> updateWatchNumberInStreams(Map<String, Integer> watchersCountByStreams,
-      List<StreamSearchEntity> defaultStreamSearch) {
-        for (StreamSearchEntity streamSearchEntity : defaultStreamSearch) {
-            Integer streamWatchers = watchersCountByStreams.get(streamSearchEntity.getIdStream());
-            if (streamWatchers != null) {
-                streamSearchEntity.setTotalFollowingWatchers(streamWatchers);
-            }
-        }
-        return defaultStreamSearch;
+        return streamManager.getDefaultStreamSearch();
     }
 
     @Override public void putDefaultStreams(List<StreamSearchEntity> streamSearchEntities) {
@@ -86,21 +61,11 @@ import javax.inject.Singleton;
         streamManager.unMuteStreamSearchResult(idStream);
     }
 
-    private Map<String, Integer> getWatchersCountByStreams() {
-        String currentUserId = sessionRepository.getCurrentUserId();
+    @Override public void follow(String idStream) {
+        streamManager.followStreamSearchResult(idStream);
+    }
 
-        List<String> followingUserIds = followManager.getUserFollowingIds(currentUserId);
-        List<UserEntity> watchers = userManager.getUsersWatchingSomething(followingUserIds);
-
-        Map<String, Integer> streamsWatchesCounts = new HashMap<>();
-        for (UserEntity watcher : watchers) {
-            Integer currentCount = streamsWatchesCounts.get(watcher.getIdWatchingStream());
-            if (currentCount != null) {
-                streamsWatchesCounts.put(watcher.getIdWatchingStream(), currentCount + 1);
-            } else {
-                streamsWatchesCounts.put(watcher.getIdWatchingStream(), 1);
-            }
-        }
-        return streamsWatchesCounts;
+    @Override public void unfollow(String idStream) {
+        streamManager.unFollowStreamSearchResult(idStream);
     }
 }

@@ -82,7 +82,6 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
     when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithHolderShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(true);
     setupSessionAndStreamRepository();
 
     interactor.refreshStreamTimeline(ID_STREAM, LAST_REFRESH_DATE, PAUSED, callback, errorCallback);
@@ -94,7 +93,6 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
     when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithFollowingShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(true);
     setupSessionAndStreamRepository();
 
     interactor.refreshStreamTimeline(ID_STREAM, LAST_REFRESH_DATE, PAUSED, callback, errorCallback);
@@ -106,24 +104,11 @@ public class RefreshViewOnlyStreamTimelineInteractorTest {
     when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
         timelineWithMyShot());
     when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(true);
     setupSessionAndStreamRepository();
 
     interactor.refreshStreamTimeline(ID_STREAM, LAST_REFRESH_DATE, PAUSED, callback, errorCallback);
 
     verify(callback).onLoaded(timelineWithMyShot());
-  }
-
-  @Test public void shouldRefreshStreamTimelineOnlyWithViewOnlyShots() throws Exception {
-    when(shootrTimelineService.refreshTimelinesForStream(ID_STREAM, FILTER_ACTIVATED, NOT_PAUSED)).thenReturn(
-        timelineWithShots());
-    when(contributorRepository.getContributors(anyString())).thenReturn(contributors());
-    when(userRepository.isFollowing(anyString())).thenReturn(false);
-    setupSessionAndStreamRepository();
-
-    interactor.refreshStreamTimeline(ID_STREAM, LAST_REFRESH_DATE, PAUSED, callback, errorCallback);
-
-    verify(callback).onLoaded(timelineWithViewOnlyShots());
   }
 
   @Test public void shouldNotifyErrorWhenShootrTimelineServiceThrowsException() throws Exception {

@@ -38,7 +38,7 @@ public class StreamEntityMapper {
     if (streamEntity.getWatchers() != null) {
       stream.setWatchers(userEntityMapper.transformEntities(streamEntity.getWatchers()));
     }
-    stream.setTotalFavorites(
+    stream.setTotalFollowers(
         streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
     stream.setTotalWatchers(
         streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
@@ -60,8 +60,8 @@ public class StreamEntityMapper {
     }
 
     stream.setTotalFollowingWatchers(streamEntity.getTotalFollowingWatchers());
-    if (streamEntity.getFollowing() != null) {
-      stream.setFavorite(streamEntity.getFollowing());
+    if (streamEntity.isFollowing() != null) {
+      stream.setFollowing(streamEntity.isFollowing());
     }
     if (streamEntity.isMuted() != null) {
       stream.setMuted(streamEntity.isMuted());
@@ -72,7 +72,7 @@ public class StreamEntityMapper {
 
   public Stream transform(StreamEntity streamEntity, boolean isFavorite) {
     Stream stream = transform(streamEntity);
-    stream.setFavorite(isFavorite);
+    stream.setFollowing(isFavorite);
     return stream;
   }
 
@@ -104,7 +104,7 @@ public class StreamEntityMapper {
 
     entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);
     entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
-    entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFavorites()));
+    entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFollowers()));
     entityTemplate.setTotalWatchers(Long.valueOf(stream.getTotalWatchers()));
     entityTemplate.setHistoricWatchers(stream.getHistoricWatchers());
     entityTemplate.setTotalShots(stream.getTotalShots());

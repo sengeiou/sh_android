@@ -49,7 +49,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
   }
 
   public void loadPoll() {
-    getPollByIdStreamInteractor.loadPoll(idStream, new Interactor.Callback<Poll>() {
+    getPollByIdStreamInteractor.loadPoll(idStream, false, new Interactor.Callback<Poll>() {
       @Override public void onLoaded(Poll poll) {
         pollModel = pollModelMapper.transform(poll);
         handlePollResult(pollModelMapper.transform(poll));

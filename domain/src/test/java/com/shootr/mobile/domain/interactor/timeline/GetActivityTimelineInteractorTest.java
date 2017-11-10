@@ -66,7 +66,6 @@ public class GetActivityTimelineInteractorTest {
     InteractorHandler interactorHandler = new TestInteractorHandler();
     PostExecutionThread postExecutionThread = new TestPostExecutionThread();
 
-    when(localUserRepository.getPeople()).thenReturn(people());
     when(sessionRepository.getCurrentUserId()).thenReturn(ID_CURRENT_USER);
 
     interactor =

@@ -137,19 +137,20 @@ public class DatabaseContract {
     };
   }
 
-  public static final class FollowTable implements SyncColumns {
+  public static final class FollowTable {
 
     private FollowTable() {
             /* no instances */
     }
 
     public static final String TABLE = "Follow";
-    public static final String ID_USER = "idUser";
-    public static final String ID_FOLLOWED_USER = "idFollowedUser";
-    public static final String IS_FRIEND = "isFriend";
+    public static final String TYPE = "type";
+    public static final String ID_FOLLOWED_ENTITY = "idFollowedEntity";
+    public static final String IS_FOLLOWING = "isFollowing";
+
 
     public static final String[] PROJECTION = {
-        ID_USER, ID_FOLLOWED_USER, IS_FRIEND, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        ID_FOLLOWED_ENTITY, IS_FOLLOWING, TYPE
     };
   }
 
@@ -209,7 +210,7 @@ public class DatabaseContract {
     public static final String COUNTRY = "country";
     public static final String MEDIA_COUNT = "mediaCount";
     public static final String REMOVED = "removed";
-    public static final String TOTAL_FAVORITES = "totalFavorites";
+    public static final String TOTAL_FOLLOWERS = "totalFollowers";
     public static final String TOTAL_WATCHERS = "totalWatchers";
     public static final String HISTORIC_WATCHERS = "historicWatchers";
     public static final String TOTAL_SHOTS = "totalShots";
@@ -222,13 +223,14 @@ public class DatabaseContract {
     public static final String TOTAL_FOLLOWING_WATCHERS = "totalFollowingWatchers";
     public static final String STRATEGIC = "strategic";
     public static final String MUTED = "muted";
+    public static final String FOLLOWING = "following";
 
     public static final String[] PROJECTION = {
         ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, LANDSCAPE_PHOTO,
-        DESCRIPTION, TOPIC, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FAVORITES,
+        DESCRIPTION, TOPIC, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FOLLOWERS,
         TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE,
         VERIFIED_USER, CONTRIBUTORS_COUNT, I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC,
-        MUTED, REMOVED, DELETED, REVISION, SYNCHRONIZED
+        FOLLOWING, MUTED, REMOVED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -240,10 +242,10 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, LANDSCAPE_PHOTO, DESCRIPTION,
-        TOPIC, REMOVED, MEDIA_COUNT, TOTAL_FAVORITES, TOTAL_WATCHERS, HISTORIC_WATCHERS,
+        TOPIC, REMOVED, MEDIA_COUNT, TOTAL_FOLLOWERS, TOTAL_WATCHERS, HISTORIC_WATCHERS,
         TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE, VERIFIED_USER, CONTRIBUTORS_COUNT,
-        I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC, MUTED, BIRTH, MODIFIED, DELETED,
-        REVISION, SYNCHRONIZED
+        I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC, MUTED, FOLLOWING, BIRTH, MODIFIED,
+        DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -285,21 +287,6 @@ public class DatabaseContract {
     };
   }
 
-  public static final class FavoriteTable implements SyncColumns {
-
-    private FavoriteTable() {
-    }
-
-    public static final String TABLE = "Favorite";
-
-    public static final String ID_STREAM = "idStream";
-    public static final String ORDER = "position";
-
-    public static final String[] PROJECTION = {
-        ID_STREAM, ORDER, SYNCHRONIZED,
-    };
-  }
-
   public static final class ActivityTable implements SyncColumns {
 
     private ActivityTable() {
@@ -332,8 +319,8 @@ public class DatabaseContract {
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
         ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE,
-        IS_VERIFIED, NAME, TARGET_NAME, STREAM_PHOTO, TARGET_USER_PHOTO, TARGET_USERNAME,
-        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        IS_VERIFIED, NAME, TARGET_NAME, STREAM_PHOTO, TARGET_USER_PHOTO, TARGET_USERNAME, BIRTH,
+        MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -369,8 +356,8 @@ public class DatabaseContract {
     public static final String[] PROJECTION = {
         ID_ACTIVITY, ID_USER, ID_TARGET_USER, USERNAME, ID_STREAM, USER_PHOTO, STREAM_TITLE,
         ID_SHOT, ID_STREAM_AUTHOR, COMMENT, ID_POLL, POLL_QUESTION, POLL_OPTION_TEXT, TYPE,
-        IS_VERIFIED, NAME, TARGET_NAME, STREAM_PHOTO, TARGET_USER_PHOTO, TARGET_USERNAME,
-        BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        IS_VERIFIED, NAME, TARGET_NAME, STREAM_PHOTO, TARGET_USER_PHOTO, TARGET_USERNAME, BIRTH,
+        MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 

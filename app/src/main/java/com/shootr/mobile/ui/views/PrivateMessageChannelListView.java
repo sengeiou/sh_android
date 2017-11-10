@@ -20,4 +20,10 @@ public interface PrivateMessageChannelListView {
   void navigateToChannelTimeline(String channelId, String targetUserId);
 
   void updateTitle(int unreads);
+
+  void clearChannels();
+
+  void showRemoveFilter();
+
+  void showActiveFilter();
 }

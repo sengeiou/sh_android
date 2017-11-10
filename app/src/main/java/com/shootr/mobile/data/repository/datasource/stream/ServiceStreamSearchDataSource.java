@@ -32,4 +32,12 @@ public class ServiceStreamSearchDataSource implements StreamSearchDataSource {
     @Override public void unmute(String idStream) {
         throw new IllegalStateException("Method not implemented in remote datasource");
     }
+
+    @Override public void follow(String idStream) {
+        throw new IllegalStateException("Method not implemented in remote datasource");
+    }
+
+    @Override public void unfollow(String idStream) {
+        throw new IllegalStateException("Method not implemented in remote datasource");
+    }
 }

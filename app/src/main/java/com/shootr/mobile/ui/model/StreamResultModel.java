@@ -6,7 +6,6 @@ public class StreamResultModel implements Serializable {
 
     private StreamModel streamModel;
     private boolean isWatching;
-    private Boolean isFavorited;
 
     public StreamModel getStreamModel() {
         return streamModel;
@@ -16,23 +15,15 @@ public class StreamResultModel implements Serializable {
         this.streamModel = streamModel;
     }
 
-    public boolean isWatching() {
-        return isWatching;
-    }
-
     public void setIsWatching(boolean isWatching) {
         this.isWatching = isWatching;
     }
 
-    public boolean isFavorited() {
-        if (isFavorited == null) {
+    public boolean isFollowing() {
+        if (streamModel == null) {
             return false;
         }
-        return isFavorited;
-    }
-
-    public void setFavorited(boolean favorited) {
-        isFavorited = favorited;
+        return streamModel.isFollowing();
     }
 
     @Override public boolean equals(Object o) {

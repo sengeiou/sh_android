@@ -9,9 +9,7 @@ import java.util.List;
 
 public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
 
-    List<FollowEntity> putFollows(List<FollowEntity> followEntities);
-
-    FollowEntity putFollow(FollowEntity followEntity) throws FollowingBlockedUserException;
+    void putFollow(String idUser) throws FollowingBlockedUserException;
 
     void removeFollow(String idUser);
 
@@ -25,8 +23,6 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
 
     void putBlockeds(List<BlockEntity> blockeds);
 
-    List<String> getMutuals();
-
     List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp);
 
     FollowsEntity getFollowings(String idUser, String[] type, Long maxTimestamp);
@@ -34,4 +30,8 @@ public interface FollowDataSource extends SyncableDataSource<FollowEntity> {
     FollowsEntity getFollowers(String idUser, String[] type, Long maxTimestamp);
 
     FollowsEntity getStreamFollowers(String idStream, String[] type, Long maxTimestamp);
+
+    void putFailedFollow(FollowEntity followEntity);
+
+    void deleteFailedFollows();
 }

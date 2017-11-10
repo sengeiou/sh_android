@@ -32,6 +32,9 @@ public class PrivateMessageChannelEntityMapper {
     if (privateMessageChannelEntity.getTargetUser() != null) {
       privateMessageChannel.setMuted(privateMessageChannelEntity.getTargetUser().isMuted() != null
           ? privateMessageChannelEntity.getTargetUser().isMuted() : false);
+
+      privateMessageChannel.setFollowingTargetUser(
+          privateMessageChannelEntity.getTargetUser().isFollowing());
     }
     return privateMessageChannel;
   }

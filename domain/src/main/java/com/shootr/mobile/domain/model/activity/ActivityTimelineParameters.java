@@ -8,8 +8,8 @@ import java.util.List;
 
 public class ActivityTimelineParameters extends TimelineParameters {
 
-    public static final String FOLLOWING = "FOLLOWING";
-    public static final String ME = "ME";
+    public static final String FOLLOWING = "HOME";
+    public static final String ME = "HISTORIC";
     private List<String> includedTypes;
     private String[] streamTypes;
     private String[] shotTypes;

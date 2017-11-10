@@ -28,14 +28,6 @@ public class ServiceUserDataSource implements UserDataSource {
         this.sessionRepository = sessionRepository;
     }
 
-    @Override public List<UserEntity> getFollowing(String userId, Integer page, Integer pageSize) {
-        try {
-            return userApiService.getFollowing(userId, page, pageSize);
-        } catch (IOException | ApiException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
     @Override public UserEntity putUser(UserEntity userEntity) {
         try {
             return userApiService.putUser(userApiEntityMapper.transform(userEntity));
@@ -62,14 +54,6 @@ public class ServiceUserDataSource implements UserDataSource {
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
-    }
-
-    @Override public boolean isFollower(String from, String who) {
-        throw new RuntimeException("Method not implemented for service.");
-    }
-
-    @Override public boolean isFollowing(String who, String to) {
-        throw new RuntimeException("Method not implemented for service.");
     }
 
     @Override public UserEntity getUserByUsername(String username) {
@@ -154,10 +138,6 @@ public class ServiceUserDataSource implements UserDataSource {
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }
-    }
-
-    @Override public List<String> getFollowingIds(String userId) {
-        throw new RuntimeException("Method not implemented for service.");
     }
 
     @Override public void mute(String idUser) {

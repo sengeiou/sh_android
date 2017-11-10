@@ -14,8 +14,6 @@ public interface ListingView extends LoadDataView {
 
     void navigateToStreamTimeline(String idStream, String tag, String authorId);
 
-    void setCurrentUserFavorites(List<StreamResultModel> transform);
-
     void hideContent();
 
     void navigateToCreatedStreamDetail(String streamId);
@@ -29,8 +27,6 @@ public interface ListingView extends LoadDataView {
     void showContextMenuWithAddFavorite(StreamResultModel stream);
 
     void askRemoveStreamConfirmation();
-
-    void updateStreams();
 
     void showAddStream();
 

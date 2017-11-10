@@ -291,6 +291,8 @@
   <string name="notification_shot_multiple_title">%d new shots</string>
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot sent</string>
+  <string name="notification_pm_sending">Sending…</string>
+  <string name="notification_pm_sent">Message sent</string>
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">You blocked this user. Unblock to shoot a message. </string>
   <string name="now">now</string>
@@ -452,6 +454,7 @@
     <item quantity="other">%s responses</item>
     <item quantity="zero">%s responses</item>
   </plurals>
+  <string name="empty_home">Activity from streams and people you follow</string>
   <string name="shot_shared_message">Reshot</string>
   <string name="shot_timeline_empty_title">No Shots</string>
   <string name="showing_shots_by_holder">Showing shots by holder.</string>
@@ -562,4 +565,6 @@
   <string name="whale_title_default">We\'ll be back</string>
   <string name="yes">Yes</string>
   <string name="connected">connected</string>
+  <string name="home">Home</string>
+  <string name="title_activity_history">Activity Log</string>
 </resources>

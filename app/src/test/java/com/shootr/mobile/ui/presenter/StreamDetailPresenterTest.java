@@ -2,22 +2,20 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.ChangeStreamPhotoInteractor;
-import com.shootr.mobile.domain.interactor.stream.GetFavoriteStatusInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInfoInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
 import com.shootr.mobile.domain.interactor.stream.RemoveStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.RestoreStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
 import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamInfo;
-import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
@@ -75,9 +73,8 @@ public class StreamDetailPresenterTest {
   @Mock UnmuteInteractor unmuteInteractor;
   @Mock RemoveStreamInteractor removeStreamInteractor;
   @Mock RestoreStreamInteractor restoreStreamInteractor;
-  @Mock GetFavoriteStatusInteractor getFavoriteStatusInteractor;
-  @Mock AddToFavoritesInteractor addToFavoritesInteractor;
-  @Mock RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  @Mock FollowStreamInteractor followStreamInteractor;
+  @Mock UnfollowStreamInteractor unfollowStreamInteractor;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
@@ -86,11 +83,12 @@ public class StreamDetailPresenterTest {
         new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
     presenter =
         new StreamDetailPresenter(streamInfoInteractor, shareStreamInteractor, followInteractor,
-            unfollowInteractor, getFavoriteStatusInteractor, selectStreamInteractor, muteInteractor,
+            unfollowInteractor, selectStreamInteractor, muteInteractor,
             unmuteInteractor, removeStreamInteractor, restoreStreamInteractor,
-            addToFavoritesInteractor, removeFromFavoritesInteractor, streamModelMapper,
+            followStreamInteractor, unfollowStreamInteractor, streamModelMapper,
             userModelMapper, errorMessageFactory);
     presenter.setView(streamDetailView);
+    presenter.setStreamModel(streamModel());
   }
 
   @Test public void shouldShowTotalWatchers() throws Exception {
@@ -220,13 +218,13 @@ public class StreamDetailPresenterTest {
     verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
   }
 
-  @Test public void shouldNotSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
+  @Test public void shouldSetupStreamInitialsIfNotStreamPictureAndImAuthor() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
     setupStreamInfoCallback();
 
     presenter.onStreamInfoLoaded(streamInfoWithoutPhoto());
 
-    verify(streamDetailView, never()).setupStreamInitials(any(StreamModel.class));
+    verify(streamDetailView).setupStreamInitials(any(StreamModel.class));
   }
 
   @Test public void shouldShowPictureIfNotStreamPictureAndImAuthor() throws Exception {
@@ -440,7 +438,7 @@ public class StreamDetailPresenterTest {
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
-    stream.setTotalFavorites(THREE_WATCHERS);
+    stream.setTotalFollowers(THREE_WATCHERS);
     stream.setPicture(PICTURE_URL);
     stream.setContributorCount(1L);
     return stream;
@@ -451,10 +449,11 @@ public class StreamDetailPresenterTest {
     streamModel.setIdStream(SELECTED_STREAM_ID);
     streamModel.setTitle(SELECTED_STREAM_TITLE);
     streamModel.setAuthorId(STREAM_AUTHOR_ID);
-    streamModel.setTotalFavorites(THREE_WATCHERS);
+    streamModel.setTotalFollowers(THREE_WATCHERS);
     streamModel.setTotalWatchers(NO_WATCHERS);
     streamModel.setPicture(PICTURE_URL);
     streamModel.setContributorCount(CONTRIBUTORS_COUNT);
+    streamModel.setFollowing(true);
     return streamModel;
   }
 
@@ -464,9 +463,10 @@ public class StreamDetailPresenterTest {
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
     stream.setTotalWatchers(NO_WATCHERS);
-    stream.setTotalFavorites(THREE_WATCHERS);
+    stream.setTotalFollowers(THREE_WATCHERS);
     stream.setPicture(PICTURE_URL);
     stream.setContributorCount(CONTRIBUTORS_COUNT);
+    stream.setFollowing(true);
     return stream;
   }
 
@@ -475,9 +475,10 @@ public class StreamDetailPresenterTest {
     stream.setId(SELECTED_STREAM_ID);
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
-    stream.setTotalFavorites(THREE_WATCHERS);
+    stream.setTotalFollowers(THREE_WATCHERS);
     stream.setTotalWatchers(NO_WATCHERS);
     stream.setContributorCount(CONTRIBUTORS_COUNT);
+    stream.setFollowing(true);
     return stream;
   }
 
@@ -486,19 +487,11 @@ public class StreamDetailPresenterTest {
     stream.setId(SELECTED_STREAM_ID);
     stream.setTitle(SELECTED_STREAM_TITLE);
     stream.setAuthorId(STREAM_AUTHOR_ID);
-    stream.setTotalFavorites(THREE_WATCHERS);
+    stream.setTotalFollowers(THREE_WATCHERS);
     stream.setTotalWatchers(FIFTY_PLUS_WATCHERS);
     stream.setContributorCount(CONTRIBUTORS_COUNT);
+    stream.setFollowing(true);
     return stream;
   }
 
-  private List<Contributor> contributorList() {
-    List<Contributor> contributors = new ArrayList<>();
-    Contributor contributor = new Contributor();
-    contributor.setIdStream(ID_STREAM);
-    contributor.setUser(user());
-    contributor.setIdUser(ID_USER);
-    contributors.add(contributor);
-    return contributors;
-  }
 }

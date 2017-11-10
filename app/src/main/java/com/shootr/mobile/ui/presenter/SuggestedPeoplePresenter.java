@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.prefs.CacheTimeKeepAlive;
 import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -74,11 +73,12 @@ public class SuggestedPeoplePresenter implements Presenter {
   public void followUser(final UserModel user) {
     followInteractor.follow(user.getIdUser(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        onFollowUpdated(user.getIdUser(), true);
+          /* no-op */
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
         showErrorInView(error);
+        onFollowUpdated(user.getIdUser(), false);
       }
     });
   }
@@ -86,7 +86,7 @@ public class SuggestedPeoplePresenter implements Presenter {
   public void unfollowUser(final UserModel user) {
     unfollowInteractor.unfollow(user.getIdUser(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        onFollowUpdated(user.getIdUser(), false);
+        /* no-op */
       }
     });
   }
@@ -95,8 +95,7 @@ public class SuggestedPeoplePresenter implements Presenter {
     for (int i = 0; i < suggestedPeople.size(); i++) {
       UserModel userModel = suggestedPeople.get(i);
       if (userModel.getIdUser().equals(idUser)) {
-        userModel.setRelationship(
-            following ? FollowEntity.RELATIONSHIP_FOLLOWING : FollowEntity.RELATIONSHIP_NONE);
+        userModel.setFollowing(following);
         suggestedPeopleView.refreshSuggestedPeople(suggestedPeople);
         break;
       }

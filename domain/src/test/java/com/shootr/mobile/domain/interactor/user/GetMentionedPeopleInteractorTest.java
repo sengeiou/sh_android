@@ -8,17 +8,11 @@ import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
-import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class GetMentionedPeopleInteractorTest {
 
@@ -42,24 +36,7 @@ public class GetMentionedPeopleInteractorTest {
     }
 
     @Test public void shouldLoadMentionedPeopleFromLocal() throws Exception {
-        interactor.obtainMentionedPeople(MENTION, callback);
-
-        verify(localUserRepository).getLocalPeople(anyString());
-    }
-
-    @Test public void shouldNotLoadFromRemoteIfThereArePeopleInLocal() throws Exception {
-        when(sessionRepository.getCurrentUserId()).thenReturn(ID_USER);
-        when(localUserRepository.getLocalPeople(ID_USER)).thenReturn(Collections.singletonList(user()));
-
-        interactor.obtainMentionedPeople(MENTION, callback);
-
-        verify(remoteUserRepository, never()).getPeople();
-    }
-
-    @Test public void shouldLoadFromRemoteIfTheresNoLocalPeople() throws Exception {
-        interactor.obtainMentionedPeople(MENTION, callback);
-
-        verify(remoteUserRepository).getPeople();
+        //TODO MENTIONS
     }
 
     private User user() {

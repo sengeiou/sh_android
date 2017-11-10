@@ -236,7 +236,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
           }
         }, new OnFollowUnfollowStreamListener() {
       @Override public void onFollow(StreamModel stream) {
-        streamDetailPresenter.addStreamAsFavorite();
+        streamDetailPresenter.addStreamAsFollowing();
         adapter.setButtonFollowingState(true);
       }
 
@@ -246,7 +246,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
             .setPositiveButton(getString(R.string.unfollowstream_dialog_yes),
                 new DialogInterface.OnClickListener() {
                   @Override public void onClick(DialogInterface dialog, int which) {
-                    streamDetailPresenter.removeStreamFromFavorites();
+                    streamDetailPresenter.unfollowStream();
                     adapter.setButtonFollowingState(false);
                   }
                 })
@@ -602,7 +602,7 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         streamModel.getHistoricWatchers());
     intent.putExtra(StreamDataInfoActivity.ARGUMENT_SHOTS_NUMBER, streamModel.getTotalShots());
     intent.putExtra(StreamDataInfoActivity.ARGUMENT_FAVORITES_NUMBER,
-        streamModel.getTotalFavorites());
+        streamModel.getTotalFollowers());
     intent.putExtra(StreamDataInfoActivity.ARGUMENT_UNIQUE_SHOTS, streamModel.getUniqueShots());
     intent.putExtra(StreamDataInfoActivity.ARGUMENT_STREAM_NAME, streamModel.getTitle());
     startActivity(intent);

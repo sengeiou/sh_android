@@ -15,11 +15,14 @@ import javax.inject.Inject;
 public class PrivateMessageChannelManager extends AbstractManager {
 
   private final PrivateMessageChannelEntityDBMapper privateMessageChannelEntityDBMapper;
+  private final UserManager userManager;
 
   @Inject public PrivateMessageChannelManager(SQLiteOpenHelper openHelper,
-      PrivateMessageChannelEntityDBMapper privateMessageChannelEntityDBMapper) {
+      PrivateMessageChannelEntityDBMapper privateMessageChannelEntityDBMapper,
+      UserManager userManager) {
     super(openHelper);
     this.privateMessageChannelEntityDBMapper = privateMessageChannelEntityDBMapper;
+    this.userManager = userManager;
   }
 
   public PrivateMessageChannelEntity getPrivateMessageChannelById(String privateMessageChannelId) {
@@ -72,6 +75,7 @@ public class PrivateMessageChannelManager extends AbstractManager {
               privateMessageChannelEntityDBMapper.toContentValues(privateMessageChannelEntity);
           database.insertWithOnConflict(DatabaseContract.PrivateMessageChannelTable.TABLE, null,
               contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+          userManager.saveUser(privateMessageChannelEntity.getTargetUser());
         }
       }
       database.setTransactionSuccessful();
@@ -131,6 +135,8 @@ public class PrivateMessageChannelManager extends AbstractManager {
       queryResult.moveToFirst();
       do {
         privateMessageChannelEntity = privateMessageChannelEntityDBMapper.fromCursor(queryResult);
+        privateMessageChannelEntity.setTargetUser(
+            userManager.getUserByIdUser(privateMessageChannelEntity.getIdTargetUser()));
         resultShots.add(privateMessageChannelEntity);
       } while (queryResult.moveToNext());
     }

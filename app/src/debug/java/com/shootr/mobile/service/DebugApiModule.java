@@ -8,7 +8,7 @@ import com.shootr.mobile.data.api.service.AuthApiService;
 import com.shootr.mobile.data.api.service.ChangePasswordApiService;
 import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.api.service.DeviceApiService;
-import com.shootr.mobile.data.api.service.FavoriteApiService;
+import com.shootr.mobile.data.api.service.OnBoardingApiService;
 import com.shootr.mobile.data.api.service.NicerApiService;
 import com.shootr.mobile.data.api.service.ResetPasswordApiService;
 import com.shootr.mobile.data.api.service.ShotApiService;
@@ -81,9 +81,9 @@ import retrofit.android.AndroidMockValuePersistence;
     return mockOrRealService(VideoApiService.class, restAdapter, mockRestAdapter, debugMode.get());
   }
 
-  @Provides FavoriteApiService provideFavoriteApiService(RestAdapter restAdapter,
+  @Provides OnBoardingApiService provideFavoriteApiService(RestAdapter restAdapter,
       MockRestAdapter mockRestAdapter, @DebugMode BooleanPreference debugMode) {
-    return mockOrRealService(FavoriteApiService.class, restAdapter, mockRestAdapter,
+    return mockOrRealService(OnBoardingApiService.class, restAdapter, mockRestAdapter,
         debugMode.get());
   }
 

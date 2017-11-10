@@ -49,7 +49,7 @@ public class WatchNumberInteractor implements Interactor {
     Long[] watchersCount = new Long[] { 0L, 0L };
     Stream stream = getRemoteStreamOrFallbackToLocal();
     if (stream != null) {
-      watchersCount[FOLLOWERS] = stream.getTotalFavorites().longValue();
+      watchersCount[FOLLOWERS] = stream.getTotalFollowers().longValue();
       watchersCount[CONNECTED] = stream.getTotalWatchers().longValue();
     }
     notifyLoaded(watchersCount);

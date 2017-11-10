@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.holders.UserSearchViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
@@ -77,13 +76,13 @@ public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
   public void followUser(UserModel user) {
     int index = users.indexOf(user);
-    (users.get(index)).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
+    (users.get(index)).setFollowing(true);
     notifyDataSetChanged();
   }
 
   public void unfollowUser(UserModel user) {
     int index = users.indexOf(user);
-    (users.get(index)).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+    (users.get(index)).setFollowing(false);
     notifyDataSetChanged();
   }
 }

@@ -15,9 +15,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ListingAdapter
     extends SectionedRecyclerViewAdapter<HeaderViewHolder, StreamResultViewHolder> {
@@ -29,9 +27,8 @@ public class ListingAdapter
   private final InitialsLoader initialsLoader;
 
   private List<StreamResultModel> createdStreams = Collections.emptyList();
-  private List<StreamResultModel> favoritedStreams = Collections.emptyList();
+  private List<StreamResultModel> followingStreams = Collections.emptyList();
 
-  private Set<String> favoriteStreamsIds = Collections.emptySet();
   private boolean showTitles = true;
 
   public ListingAdapter(ImageLoader imageLoader, boolean isCurrentUser,
@@ -52,7 +49,7 @@ public class ListingAdapter
     if (section == 0) {
       return createdStreams.size();
     } else if (section == 1) {
-      return favoritedStreams.size();
+      return followingStreams.size();
     } else {
       throw new IllegalArgumentException(String.format("Section %d not allowed", section));
     }
@@ -100,10 +97,10 @@ public class ListingAdapter
 
   @Override
   protected void onBindItemViewHolder(StreamResultViewHolder holder, int section, int position) {
-    ((ListingStreamResultViewHolder) holder).setFavorite(isFavorite(section, position));
+    ((ListingStreamResultViewHolder) holder).setFavorite(isFollowing(section, position));
     StreamResultModel stream = getItem(section, position);
     if (isCurrentUser) {
-      holder.render(stream, favoritedStreams, true, position, false, section == 0);
+      holder.render(stream, followingStreams, true, position, false, section == 0);
     } else {
       holder.render(stream, true, position, false);
     }
@@ -113,19 +110,12 @@ public class ListingAdapter
     if (section == 0) {
       return createdStreams.get(position);
     } else {
-      return favoritedStreams.get(position);
+      return followingStreams.get(position);
     }
   }
 
-  private boolean isFavorite(int section, int position) {
-    return getItem(section, position).getStreamModel().isFavorite();
-  }
-
-  public void setFavoriteStreams(List<StreamResultModel> favoriteStreams) {
-    favoriteStreamsIds = new HashSet<>(favoriteStreams.size());
-    for (StreamResultModel stream : favoriteStreams) {
-      favoriteStreamsIds.add(stream.getStreamModel().getIdStream());
-    }
+  private boolean isFollowing(int section, int position) {
+    return getItem(section, position).getStreamModel().isFollowing();
   }
 
   public void setCreatedStreams(List<StreamResultModel> streams) {
@@ -133,8 +123,8 @@ public class ListingAdapter
     this.notifyDataSetChanged();
   }
 
-  public void setFavoritedStreams(List<StreamResultModel> streams) {
-    this.favoritedStreams = streams;
+  public void setFollowingStreams(List<StreamResultModel> streams) {
+    this.followingStreams = streams;
     this.notifyDataSetChanged();
   }
 
@@ -142,27 +132,19 @@ public class ListingAdapter
     this.showTitles = showTitles;
   }
 
-  public void addFavorite(StreamResultModel streamModel) {
-    streamModel.getStreamModel().setFavorite(true);
-    if (!favoritedStreams.contains(streamModel)) {
-      favoritedStreams.add(streamModel);
-    }
-
-    if (createdStreams.contains(streamModel)) {
-      createdStreams.get(createdStreams.indexOf(streamModel)).setFavorited(true);
+  public void follow(StreamResultModel streamModel) {
+    streamModel.getStreamModel().setFollowing(true);
+    if (!followingStreams.contains(streamModel)) {
+      followingStreams.add(streamModel);
     }
 
     notifyDataSetChanged();
   }
 
-  public void removeFavorite(StreamResultModel streamModel) {
-    streamModel.getStreamModel().setFavorite(false);
-    if (favoritedStreams.contains(streamModel)) {
-      favoritedStreams.remove(streamModel);
-    }
-
-    if (createdStreams.contains(streamModel)) {
-      createdStreams.get(createdStreams.indexOf(streamModel)).setFavorited(false);
+  public void unfollow(StreamResultModel streamModel) {
+    streamModel.getStreamModel().setFollowing(false);
+    if (followingStreams.contains(streamModel)) {
+      followingStreams.remove(streamModel);
     }
 
     notifyDataSetChanged();

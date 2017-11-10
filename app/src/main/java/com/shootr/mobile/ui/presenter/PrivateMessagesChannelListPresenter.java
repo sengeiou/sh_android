@@ -6,9 +6,11 @@ import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetFollowingPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.RemovePrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.model.privateMessageChannel.PrivateMessageChannel;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.PrivateMessageChannelModel;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageChannelModelMapper;
 import com.shootr.mobile.ui.views.PrivateMessageChannelListView;
@@ -20,7 +22,9 @@ import javax.inject.Inject;
 public class PrivateMessagesChannelListPresenter implements Presenter {
 
   private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
+  private final GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor;
   private final RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor;
+  private final SessionRepository sessionRepository;
   private final PrivateMessageChannelModelMapper mapper;
   private final ErrorMessageFactory errorMessageFactory;
   private final BusPublisher busPublisher;
@@ -32,11 +36,15 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
 
   @Inject public PrivateMessagesChannelListPresenter(
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
+      GetFollowingPrivateMessagesChannelsInteractor getFollowingPrivateMessagesChannelsInteractor,
       RemovePrivateMessagesChannelsInteractor removePrivateMessagesChannelsInteractor,
-      PrivateMessageChannelModelMapper mapper, ErrorMessageFactory errorMessageFactory,
-      BusPublisher busPublisher, @Main Bus bus) {
+      SessionRepository sessionRepository, PrivateMessageChannelModelMapper mapper,
+      ErrorMessageFactory errorMessageFactory, BusPublisher busPublisher, @Main Bus bus) {
     this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
+    this.getFollowingPrivateMessagesChannelsInteractor =
+        getFollowingPrivateMessagesChannelsInteractor;
     this.removePrivateMessagesChannelsInteractor = removePrivateMessagesChannelsInteractor;
+    this.sessionRepository = sessionRepository;
     this.mapper = mapper;
     this.errorMessageFactory = errorMessageFactory;
     this.busPublisher = busPublisher;
@@ -58,6 +66,7 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
         new Interactor.Callback<List<PrivateMessageChannel>>() {
           @Override public void onLoaded(List<PrivateMessageChannel> result) {
             onLoadResults(result);
+            view.showActiveFilter();
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -66,6 +75,33 @@ public class PrivateMessagesChannelListPresenter implements Presenter {
           }
         });
   }
+
+  public void onFilterActivated() {
+    view.clearChannels();
+    loadFollowingChannels();
+  }
+
+  public void onRemoveFilter() {
+    view.clearChannels();
+    loadChannels();
+  }
+
+  private void loadFollowingChannels() {
+    view.showLoading();
+    getFollowingPrivateMessagesChannelsInteractor.loadChannels(sessionRepository.getCurrentUserId(),
+        new Interactor.Callback<List<PrivateMessageChannel>>() {
+          @Override public void onLoaded(List<PrivateMessageChannel> result) {
+            onLoadResults(result);
+            view.showRemoveFilter();
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+            view.hideLoading();
+            showViewError(error);
+          }
+        });
+  }
+
 
   public void onLoadResults(List<PrivateMessageChannel> resultList) {
     if (!resultList.isEmpty()) {

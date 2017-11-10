@@ -40,9 +40,9 @@ public class UnmuteInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    localStreamRepository.unMute(idStream);
+    localStreamRepository.unmute(idStream);
     notifyAdditionToBus();
-    remoteStreamRepository.unMute(idStream);
+    remoteStreamRepository.unmute(idStream);
     notifyCompleted();
   }
 

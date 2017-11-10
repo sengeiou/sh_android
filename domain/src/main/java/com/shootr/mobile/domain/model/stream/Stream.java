@@ -24,7 +24,7 @@ public class Stream implements Searchable, Followable, Validable {
     private Integer mediaCount;
     private boolean removed;
     private List<User> watchers;
-    private Integer totalFavorites;
+    private Integer totalFollowers;
     private Integer totalWatchers;
     private Long historicWatchers;
     private Long totalShots;
@@ -33,7 +33,7 @@ public class Stream implements Searchable, Followable, Validable {
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
-    private boolean isFavorite;
+    private boolean isFollowing;
     private boolean isStrategic;
     private int totalFollowingWatchers;
     private String photoIdMedia;
@@ -173,12 +173,12 @@ public class Stream implements Searchable, Followable, Validable {
         this.mediaCount = mediaCount;
     }
 
-    public Integer getTotalFavorites() {
-        return totalFavorites;
+    public Integer getTotalFollowers() {
+        return totalFollowers;
     }
 
-    public void setTotalFavorites(Integer totalFavorites) {
-        this.totalFavorites = totalFavorites;
+    public void setTotalFollowers(Integer totalFollowers) {
+        this.totalFollowers = totalFollowers;
     }
 
     public Integer getTotalWatchers() {
@@ -301,12 +301,12 @@ public class Stream implements Searchable, Followable, Validable {
         isStrategic = strategic;
     }
 
-    public boolean isFavorite() {
-        return isFavorite;
+    public boolean isFollowing() {
+        return isFollowing;
     }
 
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
+    public void setFollowing(boolean following) {
+        isFollowing = following;
     }
 
     public int getTotalFollowingWatchers() {

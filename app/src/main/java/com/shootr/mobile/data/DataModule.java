@@ -35,7 +35,6 @@ import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.FollowFragment;
 import com.shootr.mobile.ui.fragments.StreamFollowersFragment;
-import com.shootr.mobile.ui.fragments.UserFollowsFragment;
 import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.presenter.NewMessageBarPresenter;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
@@ -98,7 +97,7 @@ import static android.content.Context.MODE_PRIVATE;
 
         BaseSignedInActivity.class,
 
-        FollowManager.class, UserFollowsContainerActivity.class, UserFollowsFragment.class,
+        FollowManager.class, UserFollowsContainerActivity.class,
 
         ShotManager.class,
 

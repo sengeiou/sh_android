@@ -10,6 +10,7 @@ public class PrivateMessageChannel {
   private Long lastMessageTime;
   private String lastMessageComment;
   private boolean muted;
+  private boolean followingTargetUser;
 
   public String getIdPrivateMessageChanel() {
     return idPrivateMessageChanel;
@@ -73,5 +74,13 @@ public class PrivateMessageChannel {
 
   public void setMuted(boolean muted) {
     this.muted = muted;
+  }
+
+  public boolean isFollowingTargetUser() {
+    return followingTargetUser;
+  }
+
+  public void setFollowingTargetUser(boolean followingTargetUser) {
+    this.followingTargetUser = followingTargetUser;
   }
 }

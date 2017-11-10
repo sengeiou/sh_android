@@ -294,6 +294,9 @@
   <string name="notification_shot_multiple_title">%d shots nuevos</string>
   <string name="notification_shot_sending">Shooting…</string>
   <string name="notification_shot_sent">Shot enviado</string>
+  <string name="notification_pm_sending">Enviando…</string>
+  <string name="notification_pm_sent">Mensaje enviado</string>
+  <string name="empty_home">Actividad de los streams y personas que sigues</string>
   <!-- When you try to send a private message to a blocked user -->
   <string name="not_allowed_blocked_user">Has bloqueado este usuario. Desbloquea para enviar mensajes.</string>
   <string name="now">ahora</string>
@@ -566,4 +569,6 @@
   <string name="whale_title_default">Volvemos pronto</string>
   <string name="yes">Sí</string>
   <string name="connected">conectados</string>
+  <string name="title_activity_history">Historial</string>
+  <string name="home">Inicio</string>
 </resources>

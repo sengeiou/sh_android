@@ -25,6 +25,7 @@ public class PrivateMessageChannelModelMapper {
     model.setLastMessageTime(privateMessageChannel.getLastMessageTime());
     model.setLastMessageComment(privateMessageChannel.getLastMessageComment());
     model.setMuted(privateMessageChannel.isMuted());
+    model.setFollowingTargetUser(privateMessageChannel.isFollowingTargetUser());
 
     return model;
   }

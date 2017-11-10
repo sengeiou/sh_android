@@ -58,7 +58,7 @@ public class FollowInteractor implements Interactor {
       localFollowRepository.follow(idUser);
       try {
         remoteFollowRepository.follow(idUser);
-        ensureUserExistInLocal();
+        //ensureUserExistInLocal();
         updateSuggestedPeopleCache();
         notifyCompleted();
       } catch (FollowingBlockedUserException error) {

@@ -29,7 +29,7 @@ public class StreamModelMapper {
         streamModel.setTopic(stream.getTopic());
         streamModel.setMediaCount(stream.getMediaCount() != null ? stream.getMediaCount() : 0);
         streamModel.setRemoved(stream.isRemoved());
-        streamModel.setTotalFavorites(stream.getTotalFavorites());
+        streamModel.setTotalFollowers(stream.getTotalFollowers());
         streamModel.setTotalWatchers(stream.getTotalWatchers());
         streamModel.setHistoricWatchers(stream.getHistoricWatchers() != null ? stream.getHistoricWatchers() : 0);
         streamModel.setTotalShots(stream.getTotalShots() != null ? stream.getTotalShots() : 0);
@@ -39,7 +39,7 @@ public class StreamModelMapper {
         streamModel.setContributorCount(stream.getContributorCount());
         streamModel.setCurrentUserContributor(stream.isCurrentUserContributor());
         streamModel.setVerifiedUser(stream.isVerifiedUser());
-        streamModel.setFavorite(stream.isFavorite());
+        streamModel.setFollowing(stream.isFollowing());
         streamModel.setTotalFollowingWatchers(stream.getTotalFollowingWatchers());
         streamModel.setStrategic(stream.isStrategic());
         streamModel.setMuted(stream.isMuted());

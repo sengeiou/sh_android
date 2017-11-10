@@ -44,6 +44,7 @@ public class FollowFragment extends BaseFragment
 
   private static final String ARGUMENT_FOLLOW_TYPE = "followtype";
   private static final String ARGUMENT_USER_ID = "userId";
+  public static final String TAG = "follows";
 
   private SearchAdapter adapter;
 

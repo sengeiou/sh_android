@@ -5,7 +5,7 @@
 
     <item
       android:id="@+id/menu_add_contributor"
-      android:icon="@drawable/ic_add_contributor"
+      android:icon="@drawable/ic_add"
       android:title="@string/add_contributor"
       app:showAsAction="always"
       tools:visible="true" />

@@ -20,7 +20,6 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Matchers.anyList;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class GetStreamMediaInteractorTest {
 
@@ -46,9 +45,6 @@ public class GetStreamMediaInteractorTest {
   }
 
   @Test public void shouldNotifyMediaWhenGetShotsFromRepository() throws Exception {
-    when(localUserRepository.getPeople()).thenReturn(users());
-    when(remoteUserRepository.getPeople()).thenReturn(users());
-
     interactor.getStreamMedia(ID_STREAM, callback, errorCallback);
 
     verify(callback, atLeastOnce()).onLoaded(anyList());

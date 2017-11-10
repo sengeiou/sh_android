@@ -2,8 +2,8 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.AddToFavoritesInteractor;
-import com.shootr.mobile.domain.interactor.stream.RemoveFromFavoritesInteractor;
+import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
@@ -18,8 +18,8 @@ import javax.inject.Inject;
 
 public class SearchItemsPresenter implements Presenter {
 
-  private final AddToFavoritesInteractor addToFavoritesInteractor;
-  private final RemoveFromFavoritesInteractor removeFromFavoritesInteractor;
+  private final FollowStreamInteractor followStreamInteractor;
+  private final UnfollowStreamInteractor unfollowStreamInteractor;
   private final ShareStreamInteractor shareStreamInteractor;
   private final FollowInteractor followInteractor;
   private final UnfollowInteractor unfollowInteractor;
@@ -29,13 +29,13 @@ public class SearchItemsPresenter implements Presenter {
   private SearchStreamView searchStreamView;
   private SearchUserView searchUserView;
 
-  @Inject public SearchItemsPresenter(AddToFavoritesInteractor addToFavoritesInteractor,
-      RemoveFromFavoritesInteractor removeFromFavoritesInteractor,
+  @Inject public SearchItemsPresenter(FollowStreamInteractor followStreamInteractor,
+      UnfollowStreamInteractor unfollowStreamInteractor,
       ShareStreamInteractor shareStreamInteractor, FollowInteractor followInteractor,
       UnfollowInteractor unfollowInteractor, SelectStreamInteractor selectStreamInteractor,
       ErrorMessageFactory errorMessageFactory) {
-    this.addToFavoritesInteractor = addToFavoritesInteractor;
-    this.removeFromFavoritesInteractor = removeFromFavoritesInteractor;
+    this.followStreamInteractor = followStreamInteractor;
+    this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.shareStreamInteractor = shareStreamInteractor;
     this.followInteractor = followInteractor;
     this.unfollowInteractor = unfollowInteractor;
@@ -49,7 +49,7 @@ public class SearchItemsPresenter implements Presenter {
   }
 
   public void addToFavorites(final StreamModel streamModel) {
-    addToFavoritesInteractor.addToFavorites(streamModel.getIdStream(),
+    followStreamInteractor.follow(streamModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             searchStreamView.showAddedToFavorites(streamModel);
@@ -62,7 +62,7 @@ public class SearchItemsPresenter implements Presenter {
   }
 
   public void removeFromFavorites(final StreamModel streamModel) {
-    removeFromFavoritesInteractor.removeFromFavorites(streamModel.getIdStream(),
+    unfollowStreamInteractor.unfollow(streamModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             searchStreamView.showRemovedFromFavorites(streamModel);
@@ -125,7 +125,7 @@ public class SearchItemsPresenter implements Presenter {
   }
 
   public void openContextualMenu(StreamModel streamModel) {
-    if (streamModel.isFavorite()) {
+    if (streamModel.isFollowing()) {
       searchStreamView.openContextualMenuWithUnmarkFavorite(streamModel);
     } else {
       searchStreamView.openContextualMenuWithAddFavorite(streamModel);

@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.model.mappers;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
@@ -26,7 +25,7 @@ public class UserModelMapper {
         userModel.setNumFollowers(user.getNumFollowers());
         userModel.setNumFollowings(user.getNumFollowings());
         userModel.setPhoto(user.getPhoto());
-        userModel.setRelationship(user.isMe() ? FollowEntity.RELATIONSHIP_OWN : getRelationShip(user));
+        userModel.setMe(user.isMe());
         userModel.setWebsite(user.getWebsite());
         userModel.setEmail(user.getEmail());
         userModel.setEmailConfirmed(user.isEmailConfirmed());
@@ -38,13 +37,11 @@ public class UserModelMapper {
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userModel.setStrategic(user.isStrategic());
         userModel.setMuted(user.isMuted());
+        userModel.setFollowing(user.isFollowing());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));
             userModel.setJoinStreamTimestamp(joinStreamDate);
-        }
-        if (user.getRelationship() != null) {
-            userModel.setRelationship(user.getRelationship());
         }
         return userModel;
     }
@@ -55,19 +52,5 @@ public class UserModelMapper {
             userModels.add(transform(user));
         }
         return userModels;
-    }
-
-    private int getRelationShip(User user) {
-        boolean following = user.isFollowing();
-        boolean follower = user.isFollower();
-        if (following && follower) {
-            return FollowEntity.RELATIONSHIP_BOTH;
-        } else if (following) {
-            return FollowEntity.RELATIONSHIP_FOLLOWING;
-        } else if (follower) {
-            return FollowEntity.RELATIONSHIP_FOLLOWER;
-        } else {
-            return FollowEntity.RELATIONSHIP_NONE;
-        }
     }
 }

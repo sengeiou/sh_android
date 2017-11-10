@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -86,7 +87,27 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     streamManager.mute(idStream);
   }
 
-  @Override public void unMute(String idStream) {
+  @Override public void unmute(String idStream) {
     streamManager.unMute(idStream);
+  }
+
+  @Override public void follow(String idStream) {
+    streamManager.follow(idStream);
+  }
+
+  @Override public void unfollow(String idStream) {
+    streamManager.unFollow(idStream);
+  }
+
+  @Override public void putFailedFollow(FollowEntity followEntity) {
+    streamManager.saveFailedFollow(followEntity);
+  }
+
+  @Override public void deleteFailedFollows() {
+    streamManager.deleteFailedFollows();
+  }
+
+  @Override public List<FollowEntity> getEntitiesNotSynchronized() {
+    return streamManager.getFailedFollows();
   }
 }

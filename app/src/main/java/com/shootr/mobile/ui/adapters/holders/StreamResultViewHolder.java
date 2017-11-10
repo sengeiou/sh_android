@@ -125,7 +125,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   private void handleShowFavorite(StreamResultModel streamResultModel,
       boolean hasToShowIsFavorite) {
     if (hasToShowIsFavorite) {
-      if (streamResultModel.isFavorited() && !isWatchingStateEnabled) {
+      if (streamResultModel.isFollowing() && !isWatchingStateEnabled) {
         showIsFavorite();
       } else if (isWatchingStateEnabled) {
         favorite.setVisibility(View.GONE);
@@ -227,8 +227,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
       subtitleDescription.setVisibility(View.VISIBLE);
       String favorites = subtitle.getContext()
           .getResources()
-          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFavorites(),
-              stream.getTotalFavorites());
+          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFollowers(),
+              stream.getTotalFollowers());
       subtitleDescription.setText(favorites);
     }
   }
@@ -239,8 +239,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
       String favorites = subtitle.getContext()
           .getResources()
           .getQuantityString(R.plurals.listing_favorites,
-              stream.getStreamModel().getTotalFavorites(),
-              stream.getStreamModel().getTotalFavorites());
+              stream.getStreamModel().getTotalFollowers(),
+              stream.getStreamModel().getTotalFollowers());
       subtitleDescription.setText(favorites);
     }
   }
@@ -253,8 +253,8 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
         String favorites = subtitle.getContext()
             .getResources()
             .getQuantityString(R.plurals.listing_favorites,
-                stream.getStreamModel().getTotalFavorites(),
-                stream.getStreamModel().getTotalFavorites());
+                stream.getStreamModel().getTotalFollowers(),
+                stream.getStreamModel().getTotalFollowers());
         subtitle.setText(favorites);
       }
     }
@@ -284,7 +284,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     if (onFavoriteClickListener != null) {
       followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          if (streamResult.isFavorited()) {
+          if (streamResult.isFollowing()) {
             onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
           } else {
             onFavoriteClickListener.onFavoriteClick(streamResult);

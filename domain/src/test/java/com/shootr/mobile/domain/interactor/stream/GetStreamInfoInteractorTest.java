@@ -66,13 +66,11 @@ public class GetStreamInfoInteractorTest {
   private void setupRemoteRepositories() {
     when(remoteUserRepository.getUserById(anyString())).thenReturn(user());
     when(remoteStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
-    when(remoteUserRepository.getPeople()).thenReturn(users());
   }
 
   private void setupLocalRepositories() {
     when(localUserRepository.getUserById(anyString())).thenReturn(user());
     when(localStreamRepository.getStreamById(anyString(), anyArray())).thenReturn(stream());
-    when(localUserRepository.getPeople()).thenReturn(users());
   }
 
   private User user() {

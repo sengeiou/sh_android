@@ -16,4 +16,8 @@ public interface StreamSearchDataSource {
     void mute(String idStream);
 
     void unmute(String idStream);
+
+    void follow(String idStream);
+
+    void unfollow(String idStream);
 }

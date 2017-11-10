@@ -12,8 +12,6 @@ import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.privateMessage.GetPrivateMessagesChannelsInteractor;
 import com.shootr.mobile.domain.interactor.user.GetCurrentUserInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingIdsInteractor;
-import com.shootr.mobile.domain.interactor.user.GetFollowingInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserForAnalythicsByIdInteractor;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -56,8 +54,6 @@ public class MainScreenPresenterTest {
     @Mock GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
     @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
     @Mock SessionRepository sessionRepository;
-    @Mock GetFollowingInteractor getFollowingInteractor;
-    @Mock GetFollowingIdsInteractor getFollowingIdsInteractor;
     @Mock IntPreference badgeCount;
     @Mock Bus bus;
     @Mock BusPublisher busPublisher;
@@ -74,16 +70,14 @@ public class MainScreenPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         UserModelMapper userModelMapper =
-          new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+            new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         mainScreenPresenter =
-          new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
-              sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor,
-              shouldUpdateDeviceInfoInteractor, unwatchStreamInteractor, sessionRepository,
-              userModelMapper, badgeCount, getFollowingInteractor,
-              getPrivateMessagesChannelsInteractor,
-              getFollowingIdsInteractor, getStreamInteractor, getShootrEventsInteractor,
-              streamModelMapper, bus, busPublisher,
-              context, analyticsTool);
+            new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
+                sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor,
+                shouldUpdateDeviceInfoInteractor, unwatchStreamInteractor, sessionRepository,
+                userModelMapper, badgeCount, getPrivateMessagesChannelsInteractor,
+                getStreamInteractor, getShootrEventsInteractor, streamModelMapper, bus,
+                busPublisher, context, analyticsTool);
         mainScreenPresenter.setView(view);
         User user = new User();
         user.setIdWatchingStream(ID_STREAM);

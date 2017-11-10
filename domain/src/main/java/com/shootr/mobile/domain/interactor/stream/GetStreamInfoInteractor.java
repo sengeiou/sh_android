@@ -89,7 +89,6 @@ public class GetStreamInfoInteractor implements Interactor {
     boolean hasMoreParticipants = false;
     if (!localOnly) {
       watchers.addAll(stream.getWatchers());
-      setupFollowing(watchers);
       removeCurrentUserFromWatchers(watchers);
       watchers.add(0, currentUser);
       if (watchers.size() >= MAX_WATCHERS_VISIBLE) {
@@ -102,13 +101,6 @@ public class GetStreamInfoInteractor implements Interactor {
 
     return buildStreamInfo(stream, watchers, currentUser, stream.getTotalFollowingWatchers(),
         hasMoreParticipants, localOnly);
-  }
-
-  private void setupFollowing(List<User> watchers) {
-    for (User watcher : watchers) {
-      watcher.setFollowing(localUserRepository.isFollowing(watcher.getIdUser()));
-      watcher.setMe(sessionRepository.getCurrentUserId().equals(watcher.getIdUser()));
-    }
   }
 
   private List<User> removeCurrentUserFromWatchers(List<User> watchers) {

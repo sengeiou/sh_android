@@ -47,4 +47,10 @@ public class MessageChannelListAdapter extends RecyclerView.Adapter<RecyclerView
   @Override public int getItemCount() {
     return privateMessageChannelModels != null ? privateMessageChannelModels.size() : 0;
   }
+
+  public void clear() {
+    if (privateMessageChannelModels != null) {
+      privateMessageChannelModels.clear();
+    }
+  }
 }

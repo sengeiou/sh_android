@@ -1,6 +1,5 @@
 package com.shootr.mobile.data.api.service;
 
-import com.shootr.mobile.data.api.entity.FavoritesApiEntity;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -17,10 +16,9 @@ import retrofit.http.Query;
 
 public interface StreamApiService {
 
-  @GET("/stream/{idStream}?watchersCount=51&includeWatchers=true"
-      + "&includeLinks=false") StreamEntity getStream(
-      @Path("idStream") String idStream, @Query("streamReadWriteMode") String[] types)
-      throws IOException, ApiException;
+  @GET("/stream/{idStream}?watchersCount=51&includeWatchers=true" + "&includeLinks=false")
+  StreamEntity getStream(@Path("idStream") String idStream,
+      @Query("streamReadWriteMode") String[] types) throws IOException, ApiException;
 
   @GET("/stream?includeLinks=false") List<StreamEntity> getStreams(
       @Query("idStreams") List<String> idStreams, @Query("streamReadWriteMode") String[] types)
@@ -38,10 +36,6 @@ public interface StreamApiService {
   @GET("/stream/search?includeLinks=false&includeEmbed=false") List<StreamEntity> getStreams(
       @Query("query") String query, @Query("locale") String locale,
       @Query("streamReadWriteMode") String[] types) throws ApiException, IOException;
-
-  @GET("/stream/favoriteCount/") List<FavoritesApiEntity> getHolderFavorites(
-      @Query("idUser") String idUser, @Query("streamReadWriteMode") String[] types)
-      throws IOException, ApiException;
 
   @GET("/stream/blog/") StreamEntity getBlogStream(@Query("country") String country,
       @Query("language") String language) throws IOException, ApiException;
@@ -64,7 +58,6 @@ public interface StreamApiService {
   @POST("/stream") StreamEntity createStream(@Body StreamEntity streamEntity)
       throws IOException, ApiException;
 
-
   @PUT("/stream/") StreamEntity updateStream(@Body StreamUpdateParameters streamUpdateParameters)
       throws IOException, ApiException;
 
@@ -72,5 +65,11 @@ public interface StreamApiService {
       throws IOException, ApiException;
 
   @DELETE("/stream/{idStream}/mute") Response unMute(@Path("idStream") String idStream)
+      throws IOException, ApiException;
+
+  @POST("/stream/{idStream}/follow") Response followStream(@Path("idStream") String idStream)
+      throws IOException, ApiException;
+
+  @DELETE("/stream/{idStream}/follow") Response unFollowStream(@Path("idStream") String idStream)
       throws IOException, ApiException;
 }

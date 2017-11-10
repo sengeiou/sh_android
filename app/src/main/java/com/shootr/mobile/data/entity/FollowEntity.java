@@ -1,38 +1,32 @@
 package com.shootr.mobile.data.entity;
 
-public class FollowEntity extends Synchronized {
+public class FollowEntity {
 
-    public static final int RELATIONSHIP_NONE = 0;
-    public static final int RELATIONSHIP_OWN = 1;
-    public static final int RELATIONSHIP_FOLLOWING = 2;
-    public static final int RELATIONSHIP_FOLLOWER = 3;
-    public static final int RELATIONSHIP_BOTH = 4;
-
-    private String idUser;
     private String idFollowedUser;
-    private Long isFriend;
-
-    public String getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(String idUser) {
-        this.idUser = idUser;
-    }
+    private boolean isFollowing;
+    private String type;
 
     public String getIdFollowedUser() {
         return idFollowedUser;
     }
 
-    public void setIdFollowedUser(String idFollowedUser) {
+    public void setIdFollowed(String idFollowedUser) {
         this.idFollowedUser = idFollowedUser;
     }
 
-    public Long isFriend() {
-        return isFriend;
+    public boolean isFollowing() {
+        return isFollowing;
     }
 
-    public void setIsFriend(Long isFriend) {
-        this.isFriend = isFriend;
+    public void setFollowing(boolean following) {
+        isFollowing = following;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

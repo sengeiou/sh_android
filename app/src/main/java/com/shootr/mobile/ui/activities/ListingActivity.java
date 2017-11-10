@@ -143,7 +143,7 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
   @Override
   public void renderFavoritedStreams(List<StreamResultModel> listingUserFavoritedStreams) {
-    adapter.setFavoritedStreams(listingUserFavoritedStreams);
+    adapter.setFollowingStreams(listingUserFavoritedStreams);
   }
 
   @Override public void navigateToStreamTimeline(String idStream, String tag, String authorId) {
@@ -160,10 +160,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
 
   @Override public void showLoading() {
     loadingView.setVisibility(View.VISIBLE);
-  }
-
-  @Override public void setCurrentUserFavorites(List<StreamResultModel> favoriteStreams) {
-    adapter.setFavoriteStreams(favoriteStreams);
   }
 
   @Override public void hideContent() {
@@ -191,10 +187,6 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
         })
         .setNegativeButton(R.string.cancel, null)
         .show();
-  }
-
-  @Override public void updateStreams() {
-    adapter.notifyDataSetChanged();
   }
 
   @Override public void showAddStream() {
@@ -236,11 +228,11 @@ public class ListingActivity extends BaseToolbarDecoratedActivity implements Lis
   }
 
   @Override public void addCurrentUserFavorite(StreamResultModel streamModel) {
-    adapter.addFavorite(streamModel);
+    adapter.follow(streamModel);
   }
 
   @Override public void removeCurrentUserFavorite(StreamResultModel streamModel) {
-    adapter.removeFavorite(streamModel);
+    adapter.unfollow(streamModel);
   }
 
   @Override

@@ -10,17 +10,14 @@ import com.shootr.mobile.domain.interactor.TestInteractorHandler;
 import com.shootr.mobile.domain.model.Followable;
 import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.Follows;
-import com.shootr.mobile.domain.model.stream.Favorite;
 import com.shootr.mobile.domain.model.stream.Listing;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.favorite.InternalFavoriteRepository;
 import com.shootr.mobile.domain.repository.follow.FollowRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.InternalStreamSearchRepository;
-import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamSearchRepository;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -47,9 +44,7 @@ public class GetUserListingStreamsInteractorTest {
   String[] TYPES_STREAM = StreamMode.TYPES_STREAM;
   @Mock InternalStreamSearchRepository localStreamSearchRepository;
   @Mock StreamSearchRepository remoteStreamSearchRepository;
-  @Mock StreamRepository localStreamRepository;
   @Mock ExternalStreamRepository remoteStreamRepository;
-  @Mock InternalFavoriteRepository localFavoriteRepository;
   @Mock FollowRepository remoteFollowRepository;
   @Mock Interactor.ErrorCallback errorCallback;
   @Mock SessionRepository sessionRepository;
@@ -81,14 +76,14 @@ public class GetUserListingStreamsInteractorTest {
     when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
         listingStreams());
     when(remoteStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
-        favoriteStreams());
+        followingStreams());
     when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
         .thenReturn(follow());
 
     interactor.loadUserListingStreams(spyCallback, errorCallback, ID_USER);
     Listing listing = spyCallback.lastResult();
 
-    assertEquals(listing.getFavoritedStreams(), favoriteStreamResults());
+    assertEquals(listing.getFavoritedStreams(), followStreamResults());
   }
 
   @Test public void shouldReturnListingWithIncludeHoldingTrueIfUserHaveHoldingStreams()
@@ -109,7 +104,7 @@ public class GetUserListingStreamsInteractorTest {
     when(remoteStreamSearchRepository.getStreamsListing(ID_USER, TYPES_STREAM)).thenReturn(
         listingStreams());
     when(remoteStreamRepository.getStreamsByIds(anyList(), anyArray())).thenReturn(
-        favoriteStreams());
+        followingStreams());
     when(remoteFollowRepository.getFollowing(ID_USER, new String[] { FollowableType.STREAM }, null))
         .thenReturn(follow());
 
@@ -191,9 +186,9 @@ public class GetUserListingStreamsInteractorTest {
     verify(errorCallback).onError(any(ServerCommunicationException.class));
   }
 
-  private List<StreamSearchResult> favoriteStreamResults() {
+  private List<StreamSearchResult> followStreamResults() {
     List<StreamSearchResult> streamSearchResults = new ArrayList<>();
-    for (Stream stream : favoriteStreams()) {
+    for (Stream stream : followingStreams()) {
       StreamSearchResult streamSearchResult = new StreamSearchResult();
       streamSearchResult.setStream(stream);
       streamSearchResults.add(streamSearchResult);
@@ -201,7 +196,7 @@ public class GetUserListingStreamsInteractorTest {
     return streamSearchResults;
   }
 
-  private List<Stream> favoriteStreams() {
+  private List<Stream> followingStreams() {
     List<Stream> streams = new ArrayList<>();
     for (Followable follow : follow().getData()) {
       Stream stream = new Stream();
@@ -241,15 +236,6 @@ public class GetUserListingStreamsInteractorTest {
     streamSearchResult.setStream(stream);
     streamSearchResults.add(streamSearchResult);
     return streamSearchResults;
-  }
-
-  private List<Favorite> favorites() {
-    List<Favorite> favorites = new ArrayList<>();
-    Favorite favorite = new Favorite();
-    favorite.setOrder(0);
-    favorite.setIdStream(ID_STREAM);
-    favorites.add(favorite);
-    return favorites;
   }
 
   private String[] anyArray() {

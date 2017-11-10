@@ -68,6 +68,7 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
 
   @Override public List<Shot> getShotsForStreamTimeline(StreamTimelineParameters parameters) {
     try {
+      syncTrigger.triggerSync();
       List<ShotEntity> shotEntitiesFromTimeline =
           remoteShotDataSource.getShotsForStreamTimeline(parameters);
       localShotDataSource.putShots(shotEntitiesFromTimeline, sessionRepository.getCurrentUserId());

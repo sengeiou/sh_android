@@ -19,6 +19,7 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyBoolean;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.verify;
@@ -161,73 +162,73 @@ public class StreamPollIndicatorPresenterTest {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(poll());
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetVotedPollByIdStreamInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(votedPoll());
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetSeenResultsPollByIdStreamInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(seenResultsPoll());
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetClosedPollByIdStreamInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(closedPoll());
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetPollByIdStreamErrorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.ErrorCallback errorCallback =
-            (Interactor.ErrorCallback) invocation.getArguments()[2];
+            (Interactor.ErrorCallback) invocation.getArguments()[3];
         errorCallback.onError(new ShootrException() {
         });
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetNotPublishedPollByIdStreamInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(notPublishedPoll());
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetIgnoredPollByIdStreamInteractor() {
@@ -236,24 +237,24 @@ public class StreamPollIndicatorPresenterTest {
         Poll poll = poll();
         poll.setVoteStatus(IGNORED);
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(notPublishedPoll());
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupGetNullPollByIdStreamInteractor() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.Callback<Poll> callback =
-            (Interactor.Callback<Poll>) invocation.getArguments()[1];
+            (Interactor.Callback<Poll>) invocation.getArguments()[2];
         callback.onLoaded(null);
         return null;
       }
     }).when(getPollByIdStreamInteractor)
-        .loadPoll(anyString(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .loadPoll(anyString(), anyBoolean(), any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private Poll poll() {

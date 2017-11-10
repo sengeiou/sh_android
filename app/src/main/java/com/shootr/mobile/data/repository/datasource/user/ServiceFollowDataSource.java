@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
 
-import static com.shootr.mobile.domain.utils.Preconditions.checkArgument;
-
 public class ServiceFollowDataSource implements FollowDataSource {
 
     public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
@@ -26,17 +24,9 @@ public class ServiceFollowDataSource implements FollowDataSource {
         this.userApiService = userApiService;
     }
 
-    @Override public List<FollowEntity> putFollows(List<FollowEntity> followEntities) {
-        throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
-    }
-
-    @Override public FollowEntity putFollow(FollowEntity followEntity) throws FollowingBlockedUserException {
-        checkArgument(followEntity.getIdUser().equals(sessionRepository.getCurrentUserId()),
-          "Only follows from the current user are allowed in service");
-
+    @Override public void putFollow(String idUser) throws FollowingBlockedUserException {
         try {
-            userApiService.follow(followEntity.getIdFollowedUser());
-            return followEntity;
+            userApiService.follow(idUser);
         } catch (ApiException apiException) {
             if (ErrorInfo.FollowingBlockedUserException == apiException.getErrorInfo()) {
                 throw new FollowingBlockedUserException(apiException);
@@ -88,10 +78,6 @@ public class ServiceFollowDataSource implements FollowDataSource {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
     }
 
-    @Override public List<String> getMutuals() {
-        throw new IllegalArgumentException("this method should not have remote implementation");
-    }
-
     @Override public List<FollowEntity> getFollows(String idUser, Integer page, Long timestamp) {
         try {
             return userApiService.getFollows(idUser, page, timestamp);
@@ -124,6 +110,14 @@ public class ServiceFollowDataSource implements FollowDataSource {
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }
+    }
+
+    @Override public void putFailedFollow(FollowEntity followEntity) {
+        throw new IllegalArgumentException("this method should not have remote implementation");
+    }
+
+    @Override public void deleteFailedFollows() {
+        throw new IllegalArgumentException("this method should not have remote implementation");
     }
 
     @Override public List<FollowEntity> getEntitiesNotSynchronized() {

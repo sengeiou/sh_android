@@ -36,7 +36,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.StreamTable.MEDIA_COUNT,
         streamEntity.getMediaCountByRelatedUsers());
     contentValues.put(DatabaseContract.StreamTable.REMOVED, streamEntity.getRemoved());
-    contentValues.put(DatabaseContract.StreamTable.TOTAL_FAVORITES,
+    contentValues.put(DatabaseContract.StreamTable.TOTAL_FOLLOWERS,
         streamEntity.getTotalFavorites());
     contentValues.put(DatabaseContract.StreamTable.TOTAL_WATCHERS, streamEntity.getTotalWatchers());
     contentValues.put(DatabaseContract.StreamTable.HISTORIC_WATCHERS,
@@ -57,6 +57,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     }
     contentValues.put(DatabaseContract.StreamTable.STRATEGIC, streamEntity.isStrategic());
     contentValues.put(DatabaseContract.StreamTable.MUTED, streamEntity.isMuted());
+    contentValues.put(DatabaseContract.StreamTable.FOLLOWING, streamEntity.isFollowing());
     contentValues.put(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS,
         streamEntity.getTotalFollowingWatchers());
     setSynchronizedtoContentValues(streamEntity, contentValues);
@@ -84,7 +85,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MEDIA_COUNT)));
     streamEntity.setRemoved(c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.REMOVED)));
     streamEntity.setTotalFavorites(
-        c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FAVORITES)));
+        c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FOLLOWERS)));
     streamEntity.setTotalWatchers(
         c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_WATCHERS)));
     streamEntity.setHistoricWatchers(
@@ -102,9 +103,11 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     streamEntity.setiAmContributor(
         c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.I_AM_CONTRIBUTOR)));
     streamEntity.setStrategic(
-        (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.STRATEGIC)) == 1) ? true : false);
+        (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.STRATEGIC)) == 1));
     streamEntity.setMuted(
-        (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MUTED)) == 1) ? true : false);
+        (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.MUTED)) == 1));
+    streamEntity.setFollowing(
+        (c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.FOLLOWING)) == 1));
     streamEntity.setTotalFollowingWatchers(
         c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS)));
     setSynchronizedfromCursor(c, streamEntity);

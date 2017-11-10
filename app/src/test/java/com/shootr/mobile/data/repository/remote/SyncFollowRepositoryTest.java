@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.FollowEntity;
-import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.mapper.FollowsEntityMapper;
 import com.shootr.mobile.data.repository.datasource.user.FollowDataSource;
 import com.shootr.mobile.data.repository.remote.cache.UserCache;
@@ -44,7 +43,7 @@ public class SyncFollowRepositoryTest {
     }
 
     @Test public void shouldNotInvalidatePeopleWhenFollowAndThrowServerComunicationException() throws Exception {
-        doThrow(ServerCommunicationException.class).when(remoteFollowDataSource).putFollow(any(FollowEntity.class));
+        doThrow(ServerCommunicationException.class).when(remoteFollowDataSource).putFollow(anyString());
 
         syncFollowRepository.follow(ID_USER);
 
@@ -52,7 +51,7 @@ public class SyncFollowRepositoryTest {
     }
 
     @Test public void shouldNotifyNeedsSyncWhenFollowAndThrowServerComunicationException() throws Exception {
-        doThrow(ServerCommunicationException.class).when(remoteFollowDataSource).putFollow(any(FollowEntity.class));
+        doThrow(ServerCommunicationException.class).when(remoteFollowDataSource).putFollow(anyString());
 
         syncFollowRepository.follow(ID_USER);
 
@@ -75,14 +74,6 @@ public class SyncFollowRepositoryTest {
         verify(syncTrigger).notifyNeedsSync(any(SyncableRepository.class));
     }
 
-    @Test public void shouldInvalidatePeopleWhenDispatchPeopleAndAlmostOneEntityNotSynchronized() throws Exception {
-        when(localFollowDataSource.getEntitiesNotSynchronized()).thenReturn(followEntitiesSyncDeleted());
-
-        syncFollowRepository.dispatchSync();
-
-        verify(userCache).invalidatePeople();
-    }
-
     @Test public void shouldNotInvalidatePeopleWhenDispatchPeopleAndZeroEntityNotSynchronized() throws Exception {
         when(localFollowDataSource.getEntitiesNotSynchronized()).thenReturn(new ArrayList<FollowEntity>());
 
@@ -99,28 +90,12 @@ public class SyncFollowRepositoryTest {
         verify(remoteFollowDataSource).removeFollow(anyString());
     }
 
-    @Test public void shouldPutRemoteFollowWhenDispatchSyncAndAlmostOneEntityIsNotSyncDeleted() throws Exception {
-        when(localFollowDataSource.getEntitiesNotSynchronized()).thenReturn(followEntitiesSyncNew());
-
-        syncFollowRepository.dispatchSync();
-
-        verify(remoteFollowDataSource).putFollow(any(FollowEntity.class));
-    }
-
     private FollowEntity followEntitySyncDeleted() {
-        FollowEntity followEntity = new FollowEntity();
-        followEntity.setIdUser(ID_USER);
-        followEntity.setSynchronizedStatus(Synchronized.SYNC_DELETED);
-
-        return followEntity;
+        return new FollowEntity();
     }
 
     private FollowEntity followEntitySyncNew() {
-        FollowEntity followEntity = new FollowEntity();
-        followEntity.setIdUser(ID_USER);
-        followEntity.setSynchronizedStatus(Synchronized.SYNC_NEW);
-
-        return followEntity;
+        return new FollowEntity();
     }
 
     private List<FollowEntity> followEntitiesSyncDeleted() {

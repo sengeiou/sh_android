@@ -134,6 +134,18 @@ public class FollowingChannelListFragment extends BaseFragment
     }
   }
 
+  @Override public void clearChannels() {
+    /* no-op */
+  }
+
+  @Override public void showRemoveFilter() {
+    /* no-op */
+  }
+
+  @Override public void showActiveFilter() {
+    /* no-op */
+  }
+
   @Override public void onResume() {
     super.onResume();
     if (presenter != null) {

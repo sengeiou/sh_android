@@ -54,6 +54,16 @@ public class UserManager extends AbstractManager {
     }
   }
 
+  public void updateFollowing(String idUser, boolean following) {
+    String whereClause = DatabaseContract.UserTable.ID + "=?";
+    String[] whereArguments = new String[] { idUser };
+
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.UserTable.FOLLOWING, following);
+    getWritableDatabase().update(DatabaseContract.UserTable.TABLE, values,
+        whereClause, whereArguments);
+  }
+
   public long deleteUser(UserEntity user) {
     String where = DatabaseContract.UserTable.ID + "=?";
     String[] whereArguments = new String[] { user.getIdUser() };

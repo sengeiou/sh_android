@@ -159,4 +159,12 @@ public class ToolbarDecorator implements ViewContainerDecorator {
   public void showElevation() {
     ViewCompat.setElevation(toolbar, 10);
   }
+
+  public void hideToolbar() {
+    toolbar.setVisibility(View.GONE);
+  }
+
+  public void showToolbar() {
+    toolbar.setVisibility(View.VISIBLE);
+  }
 }

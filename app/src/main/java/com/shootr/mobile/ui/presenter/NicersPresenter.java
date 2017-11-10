@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.presenter;
 
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.user.FollowInteractor;
@@ -75,7 +74,7 @@ public class NicersPresenter implements Presenter {
     public void followUser(final UserModel userModel) {
         followInteractor.follow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                refreshNicersFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_FOLLOWING);
+                refreshNicersFollowings(userModel.getIdUser(), true);
             }
         }, new Interactor.ErrorCallback() {
             @Override public void onError(ShootrException error) {
@@ -91,15 +90,15 @@ public class NicersPresenter implements Presenter {
     public void unfollowUser(final UserModel userModel) {
         unfollowInteractor.unfollow(userModel.getIdUser(), new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-                refreshNicersFollowings(userModel.getIdUser(), FollowEntity.RELATIONSHIP_NONE);
+                refreshNicersFollowings(userModel.getIdUser(), false);
             }
         });
     }
 
-    private void refreshNicersFollowings(String idUser, int relationshipFollowing) {
+    private void refreshNicersFollowings(String idUser, boolean following) {
         for (UserModel userModel : nicers) {
             if (userModel.getIdUser().equals(idUser)) {
-                userModel.setRelationship(relationshipFollowing);
+                userModel.setFollowing(following);
                 nicersView.renderNicers(nicers);
                 break;
             }

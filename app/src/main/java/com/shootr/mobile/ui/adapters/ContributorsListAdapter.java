@@ -8,7 +8,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.FollowButton;
@@ -46,13 +45,13 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     public void followUser(UserModel user) {
         int index = users.indexOf(user);
-        users.get(index).setRelationship(FollowEntity.RELATIONSHIP_FOLLOWING);
+        users.get(index).setFollowing(true);
         notifyDataSetChanged();
     }
 
     public void unfollowUser(UserModel user) {
         int index = users.indexOf(user);
-        users.get(index).setRelationship(FollowEntity.RELATIONSHIP_NONE);
+        users.get(index).setFollowing(false);
         notifyDataSetChanged();
     }
 
@@ -113,17 +112,16 @@ public class ContributorsListAdapter extends BindableAdapter<UserModel> {
 
     private void setupFollowButton(UserModel item, int position, ViewHolder viewHolder) {
         if (!isAdding) {
-            if (item.getRelationship() == FollowEntity.RELATIONSHIP_FOLLOWING) {
-                viewHolder.followButton.setVisibility(View.VISIBLE);
-                viewHolder.followButton.setFollowing(true);
-            } else if (item.getRelationship() == FollowEntity.RELATIONSHIP_OWN) {
+            if (item.isMe()) {
                 viewHolder.followButton.setVisibility(View.GONE);
                 viewHolder.followButton.setEditProfile();
+            } else if (item.isFollowing()) {
+                viewHolder.followButton.setVisibility(View.VISIBLE);
+                viewHolder.followButton.setFollowing(true);
             } else {
                 viewHolder.followButton.setVisibility(View.VISIBLE);
                 viewHolder.followButton.setFollowing(false);
             }
-
             setupFollowButtonListener(position, viewHolder);
         } else {
             viewHolder.followButton.setVisibility(View.GONE);

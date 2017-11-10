@@ -21,5 +21,9 @@ public interface StreamRepository {
 
     void mute(String idStream);
 
-    void unMute(String idStream);
+    void unmute(String idStream);
+
+    void follow(String idStream);
+
+    void unfollow(String idStream);
 }

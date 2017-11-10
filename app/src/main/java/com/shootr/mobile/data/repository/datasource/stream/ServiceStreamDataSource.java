@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
+import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -128,11 +129,39 @@ public class ServiceStreamDataSource implements StreamDataSource {
     }
   }
 
-  @Override public void unMute(String idStream) {
+  @Override public void unmute(String idStream) {
     try {
       streamApiService.unMute(idStream);
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     }
+  }
+
+  @Override public void follow(String idStream) {
+    try {
+      streamApiService.followStream(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void unfollow(String idStream) {
+    try {
+      streamApiService.unFollowStream(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void putFailedFollow(FollowEntity followEntity) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public void deleteFailedFollows() {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public List<FollowEntity> getEntitiesNotSynchronized() {
+    throw new RuntimeException("Method not implemented yet!");
   }
 }

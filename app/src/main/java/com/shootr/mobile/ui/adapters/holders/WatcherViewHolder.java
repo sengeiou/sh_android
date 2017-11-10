@@ -6,7 +6,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.ui.adapters.listeners.OnFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUserClickListener;
 import com.shootr.mobile.ui.model.UserModel;
@@ -61,18 +60,15 @@ public class WatcherViewHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     private void setupFollowButton(final UserModel userModel) {
-        switch (userModel.getRelationship()) {
-            case FollowEntity.RELATIONSHIP_FOLLOWING:
-                boolean shouldShowButton = keepFollowButtonIds.contains(userModel.getIdUser());
-                followButton.setVisibility(shouldShowButton ? View.VISIBLE : View.GONE);
-                followButton.setFollowing(true);
-                break;
-            case FollowEntity.RELATIONSHIP_OWN:
-                followButton.setVisibility(View.GONE);
-                break;
-            default:
-                followButton.setVisibility(View.VISIBLE);
-                followButton.setFollowing(false);
+        if (userModel.isMe()) {
+            followButton.setVisibility(View.GONE);
+            followButton.setEditProfile();
+        } else if (userModel.isFollowing()) {
+            followButton.setVisibility(View.VISIBLE);
+            followButton.setFollowing(true);
+        } else {
+            followButton.setVisibility(View.VISIBLE);
+            followButton.setFollowing(false);
         }
         followButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {

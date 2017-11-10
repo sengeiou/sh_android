@@ -89,8 +89,8 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
       subtitleDescription.setVisibility(View.VISIBLE);
       String favorites = subtitle.getContext()
           .getResources()
-          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFavorites(),
-              stream.getTotalFavorites());
+          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFollowers(),
+              stream.getTotalFollowers());
       subtitleDescription.setText(favorites);
     }
   }
@@ -99,12 +99,12 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
     if (onFavoriteClickListener != null) {
       followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          if (streamResult.isFavorite()) {
+          if (streamResult.isFollowing()) {
             onFavoriteClickListener.onRemoveFavoriteClick(streamResult);
           } else {
             onFavoriteClickListener.onFavoriteClick(streamResult);
           }
-          followButton.setFollowing(streamResult.isFavorite());
+          followButton.setFollowing(streamResult.isFollowing());
         }
       });
     }
@@ -112,7 +112,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
 
   private void handleShowFavorite(StreamModel streamResultModel) {
     followButton.setVisibility(View.VISIBLE);
-    followButton.setFollowing(streamResultModel.isFavorite());
+    followButton.setFollowing(streamResultModel.isFollowing());
   }
 
   private void setupStreamPicture(StreamModel streamModel) {

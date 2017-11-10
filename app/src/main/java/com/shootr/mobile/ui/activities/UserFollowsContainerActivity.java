@@ -11,7 +11,6 @@ import com.shootr.mobile.domain.utils.UserFollowingRelationship;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
 import com.shootr.mobile.ui.fragments.FollowFragment;
 import com.shootr.mobile.ui.fragments.StreamFollowersFragment;
-import com.shootr.mobile.ui.fragments.UserFollowsFragment;
 import timber.log.Timber;
 
 public class UserFollowsContainerActivity extends BaseSignedInActivity {
@@ -89,13 +88,13 @@ public class UserFollowsContainerActivity extends BaseSignedInActivity {
             FollowFragment userFollowsFragment = FollowFragment.newInstance(userId, followType);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             //TODO check que no hubiera ya uno? necesario?
-            transaction.add(R.id.container, userFollowsFragment, UserFollowsFragment.TAG);
+            transaction.add(R.id.container, userFollowsFragment, FollowFragment.TAG);
             transaction.commit();
         } else {
             StreamFollowersFragment streamFollowersFragment =
                 StreamFollowersFragment.newInstance(streamId);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.container, streamFollowersFragment, UserFollowsFragment.TAG);
+            transaction.add(R.id.container, streamFollowersFragment, FollowFragment.TAG);
             transaction.commit();
         }
     }
