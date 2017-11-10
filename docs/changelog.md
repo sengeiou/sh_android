@@ -13,6 +13,25 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.47.0] - 2017-11-10
+### Added
+- Home to landing
+- Historic activity
+-
+
+### Changed
+- New follow on streams and user (kill favorites and follow tables)
+- Filter following on private message
+- New mentions (online)
+
+### Fixed
+- Create stream without picture (white text)
+- Allow permission to camera and SD on shotDetail
+- Sent and sending message notification
+- Poll vote to poll question transition
+- Suggested People late click
+- Fix pinned message on stream timeline
+
 ## [1.46.1] - 2017-11-03
 ### Changed
 - Follow button new style
