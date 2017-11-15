@@ -38,7 +38,6 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
   @BindView(R.id.open_menu) ImageView openHighlightedMenu;
-  @BindView(R.id.dissmiss_action) ImageView dissmissAction;
   @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
 
   public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
@@ -65,7 +64,6 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
         onReshootClickListener);
     setupSwipeLayout();
     setupHighlightedMenu();
-    setupDissmissHighlighted(shotModel);
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick,
         onOpenShotMenuListener);
 
@@ -75,12 +73,6 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     } else {
       dismissContainer.setBackgroundColor(
           dismissContainer.getResources().getColor(R.color.gray_50));
-    }
-  }
-
-  private void setupDissmissHighlighted(ShotModel shotModel) {
-    if (shotModel.hasMedia()) {
-      dissmissAction.setVisibility(View.VISIBLE);
     }
   }
 
@@ -117,11 +109,6 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     openHighlightedMenu.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onOpenShotMenuListener.openMenu(highlightedShotModel.getShotModel());
-      }
-    });
-    dissmissAction.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        onHideHighlightClickListener.onHideClick(highlightedShotModel);
       }
     });
   }
