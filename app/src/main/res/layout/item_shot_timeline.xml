@@ -232,7 +232,6 @@
         android:id="@+id/open_menu_container"
         android:layout_width="match_parent"
         android:layout_height="36dp"
-        android:layout_above="@+id/include"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="14dp"
@@ -246,4 +245,14 @@
           android:layout_gravity="center|end"
           />
     </FrameLayout>
+  <ImageView
+      android:id="@+id/dissmiss_action"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_above="@+id/actions"
+      android:layout_alignParentEnd="true"
+      android:layout_gravity="bottom|end"
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
+      android:visibility="gone"
+      />
   </RelativeLayout>
