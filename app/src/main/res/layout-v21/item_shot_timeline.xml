@@ -250,4 +250,15 @@
             />
 
     </FrameLayout>
+  <ImageView
+      android:id="@+id/dissmiss_action"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_above="@+id/actions"
+      android:layout_alignParentEnd="true"
+      android:layout_gravity="bottom|end"
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
+      android:visibility="gone"
+      tools:visibility="visible"
+      />
   </RelativeLayout>
