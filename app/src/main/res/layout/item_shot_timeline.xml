@@ -12,237 +12,249 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <com.shootr.mobile.ui.widgets.AvatarView
-        android:id="@+id/shot_avatar"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginRight="8dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:src="@drawable/ic_contact_picture_default"
-    />
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/shot_avatar"
-        android:layout_toStartOf="@+id/action_container"
-        android:orientation="vertical"
-    >
-      <RelativeLayout
-          android:id="@+id/shot_name_container"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:orientation="horizontal"
+  <com.shootr.mobile.ui.widgets.AvatarView
+      android:id="@+id/shot_avatar"
+      android:layout_width="36dp"
+      android:layout_height="36dp"
+      android:layout_marginRight="8dp"
+      android:focusable="false"
+      android:focusableInTouchMode="false"
+      android:src="@drawable/ic_contact_picture_default"
+      />
+  <LinearLayout
+      android:id="@+id/linearLayout2"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_toRightOf="@+id/shot_avatar"
+      android:layout_toStartOf="@+id/action_container"
+      android:orientation="vertical"
       >
-
-        <TextView
-            android:id="@+id/shot_user_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:ellipsize="end"
-            android:maxWidth="176dp"
-            android:singleLine="true"
-            android:textColor="@color/gray_10"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="Ignasi to cnhdscbhbggkk gfggdfjkjbrbf"
-        />
-        <FrameLayout
-            android:id="@+id/verified_user_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/shot_user_name"
+    <RelativeLayout
+        android:id="@+id/shot_name_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         >
-          <ImageView
-              android:id="@+id/verified_user"
-              android:layout_width="10dp"
-              android:layout_height="10dp"
-              android:layout_marginLeft="2dp"
-              android:src="@drawable/ic_action_verified_shot"
-              android:visibility="gone"
-              tools:visibility="visible"
-          />
 
-          <ImageView
-              android:id="@+id/holder_or_contributor_user"
-              android:layout_width="16dp"
-              android:layout_height="16dp"
-              android:layout_gravity="center"
-              android:layout_marginTop="0dp"
-              android:src="@drawable/ic_stars"
-              android:visibility="gone"
-              tools:visibility="visible"
-          />
-        </FrameLayout>
-        <TextView
-            android:id="@+id/shot_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="3dp"
-            android:layout_toEndOf="@+id/verified_user_container"
-            android:maxLines="1"
-            android:textColor="@color/gray_80"
-            android:textSize="14sp"
-            tools:text="22m"
-        />
-
-
-      </RelativeLayout>
-
-      <com.shootr.mobile.ui.widgets.CustomBaseMessageTextView
-          android:id="@+id/shot_text"
+      <TextView
+          android:id="@+id/shot_user_name"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-
-          tools:text="Who's the referee? vfdvsdfvgdngjbn mgjknjn gmkfg"
-          tools:visibility="visible"
-
-      />
+          android:layout_alignParentStart="true"
+          android:layout_alignParentTop="true"
+          android:ellipsize="end"
+          android:maxWidth="176dp"
+          android:singleLine="true"
+          android:textColor="@color/gray_10"
+          android:textSize="14sp"
+          android:textStyle="bold"
+          tools:text="Ignasi to cnhdscbhbggkk gfggdfjkjbrbf"
+          />
       <FrameLayout
-          android:id="@+id/shot_media_content"
-          android:layout_width="match_parent"
+          android:id="@+id/verified_user_container"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginRight="24dp"
-          android:layout_marginTop="4dp"
-          android:focusable="false"
-          android:focusableInTouchMode="false"
-          android:visibility="gone"
-          tools:visibility="gone"
-      >
-
-        <com.shootr.mobile.ui.widgets.ProportionalImageView
-            android:id="@+id/shot_image_landscape"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="1dp"
-            android:visibility="gone"
-            app:riv_corner_radius="10dp"
-            tools:src="@drawable/sample_avatar"
-            tools:visibility="gone"
-        />
-        <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/default_image"
-            android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:scaleType="centerCrop"
-            android:visibility="gone"
-            app:riv_corner_radius="5dp"
-            tools:visibility="visible"/>
-
-        <FrameLayout
-            android:id="@+id/shot_video_frame"
-            android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:layout_gravity="left|bottom"
-            android:background="@drawable/round_corner"
-            android:foreground="?selectableItemBackground"
+          android:layout_centerVertical="true"
+          android:layout_toEndOf="@+id/shot_user_name"
+          >
+        <ImageView
+            android:id="@+id/verified_user"
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_action_verified_shot"
             android:visibility="gone"
             tools:visibility="visible"
-        >
+            />
 
-          <TextView
-              android:id="@+id/shot_video_title"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="8dp"
-              android:textColor="@color/white"
-              tools:text="Titulo del video"
-          />
-
-          <ImageView
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="center"
-              android:scaleType="center"
-              android:src="@drawable/ic_video_play_circle_48_white"
-          />
-
-          <TextView
-              android:id="@+id/shot_video_duration"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_gravity="right|bottom"
-              android:layout_margin="8dp"
-              android:textColor="@color/white"
-              tools:text="0:00"
-          />
-        </FrameLayout>
+        <ImageView
+            android:id="@+id/holder_or_contributor_user"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:src="@drawable/ic_stars"
+            android:visibility="gone"
+            tools:visibility="visible"
+            />
       </FrameLayout>
       <TextView
-          android:id="@+id/shot_reply_count"
+          android:id="@+id/shot_timestamp"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
+          android:layout_marginLeft="3dp"
+          android:layout_toEndOf="@+id/verified_user_container"
+          android:maxLines="1"
           android:textColor="@color/gray_80"
           android:textSize="14sp"
-          android:visibility="gone"
-          tools:text="8 responses"
-          tools:visibility="visible"
-      />
-    </LinearLayout>
+          tools:text="22m"
+          />
 
-    <include
-        layout="@layout/stream_shot_actions"
+
+    </RelativeLayout>
+
+    <com.shootr.mobile.ui.widgets.BaseMessageTextView
+        android:id="@+id/shot_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        tools:text="Who's the referee? vfdvsdfvgdngjbn mgjknjn gmkfg"
+        tools:visibility="visible"
+
+        />
+    <FrameLayout
+        android:id="@+id/shot_media_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/linearLayout2"
-        android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_alignRight="@+id/linearLayout2"
-        android:layout_alignStart="@+id/linearLayout2"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_marginTop="8dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="4dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
+
+      <com.shootr.mobile.ui.widgets.ProportionalImageView
+          android:id="@+id/shot_image_landscape"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginBottom="1dp"
+          android:visibility="gone"
+          app:riv_corner_radius="10dp"
+          tools:src="@drawable/sample_avatar"
+          tools:visibility="gone"
+          />
+      <com.makeramen.roundedimageview.RoundedImageView
+          android:id="@+id/default_image"
+          android:layout_width="match_parent"
+          android:layout_height="165dp"
+          android:focusable="false"
+          android:focusableInTouchMode="false"
+          android:scaleType="centerCrop"
+          android:visibility="gone"
+          app:riv_corner_radius="5dp"
+          tools:visibility="visible"/>
+
+      <FrameLayout
+          android:id="@+id/shot_video_frame"
+          android:layout_width="match_parent"
+          android:layout_height="165dp"
+          android:layout_gravity="left|bottom"
+          android:background="@drawable/round_corner"
+          android:foreground="?selectableItemBackground"
+          android:visibility="gone"
+          tools:visibility="visible"
+          >
+
+        <TextView
+            android:id="@+id/shot_video_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:textColor="@color/white"
+            tools:text="Titulo del video"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:scaleType="center"
+            android:src="@drawable/ic_video_play_circle_48_white"
+            />
+
+        <TextView
+            android:id="@+id/shot_video_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|bottom"
+            android:layout_margin="8dp"
+            android:textColor="@color/white"
+            tools:text="0:00"
+            />
+      </FrameLayout>
+    </FrameLayout>
+    <TextView
+        android:id="@+id/shot_reply_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/gray_80"
+        android:textSize="14sp"
+        android:visibility="gone"
+        tools:text="8 responses"
+        tools:visibility="visible"
+        />
+  </LinearLayout>
+
+  <include
+      layout="@layout/stream_shot_actions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignEnd="@+id/linearLayout2"
+      android:layout_alignLeft="@+id/linearLayout2"
+      android:layout_alignRight="@+id/linearLayout2"
+      android:layout_alignStart="@+id/linearLayout2"
+      android:layout_below="@+id/linearLayout2"
+      android:layout_marginTop="8dp"
+      />
+
+  <LinearLayout
+      android:id="@+id/action_container"
+      android:layout_width="46dp"
+      android:layout_height="28dp"
+      android:layout_alignParentEnd="true"
+      android:layout_alignParentRight="true"
+      android:layout_alignParentTop="true"
+      android:gravity="end"
+      android:orientation="horizontal"
+      >
+    <TextView
+        android:id="@+id/shot_nice_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="2dp"
+        android:gravity="center"
+        android:textColor="@color/gray_80"
+        android:textSize="12sp"
+        tools:text="2"
+        />
+    <com.shootr.mobile.ui.widgets.NiceButtonView
+        style="@style/HearthButton"
+        android:id="@+id/shot_nice_button"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:visibility="visible"
         />
 
-    <LinearLayout
-        android:id="@+id/action_container"
-        android:layout_width="46dp"
-        android:layout_height="28dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:gravity="end"
-        android:orientation="horizontal"
-    >
-      <TextView
-          android:id="@+id/shot_nice_count"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginRight="4dp"
-          android:layout_marginTop="2dp"
-          android:gravity="center"
-          android:textColor="@color/gray_80"
-          android:textSize="12sp"
-          tools:text="2"
+  </LinearLayout>
+  <FrameLayout
+      android:id="@+id/open_menu_container"
+      android:layout_width="match_parent"
+      android:layout_height="36dp"
+      android:layout_alignParentLeft="true"
+      android:layout_alignParentStart="true"
+      android:layout_marginBottom="14dp"
+      >
+    <ImageView
+        android:id="@+id/open_menu"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginTop="1dp"
+        android:src="@drawable/ic_more_vert"
+        android:layout_gravity="center|end"
+        />
+  </FrameLayout>
+  <ImageView
+      android:id="@+id/dissmiss_action"
+      android:layout_width="24dp"
+      android:layout_height="24dp"
+      android:layout_alignBottom="@+id/linearLayout2"
+      android:layout_alignParentEnd="true"
+      android:layout_gravity="bottom|end"
+      android:src="@drawable/ic_action_close_gray60_24_nopadding"
+      android:visibility="gone"
+      tools:visibility="visible"
       />
-      <com.shootr.mobile.ui.widgets.NiceButtonView
-          style="@style/HearthButton"
-          android:id="@+id/shot_nice_button"
-          android:layout_width="20dp"
-          android:layout_height="20dp"
-          android:visibility="visible"
-          />
-
-    </LinearLayout>
-    <FrameLayout
-        android:id="@+id/open_menu_container"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="14dp"
-        >
-      <ImageView
-          android:id="@+id/open_menu"
-          android:layout_width="16dp"
-          android:layout_height="16dp"
-          android:layout_marginLeft="6dp"
-          android:src="@drawable/ic_more_vert"
-          android:layout_gravity="center|end"
-          />
-    </FrameLayout>
-  </RelativeLayout>
+</RelativeLayout>
