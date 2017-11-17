@@ -10,5 +10,5 @@ import retrofit.http.Query;
 public interface SearchApiService {
 
   @GET("/search/") List<SearchItemEntity> searchItems(@Query("query") String query,
-      @Query("type") String[] types) throws ApiException, IOException;
+      @Query("types") String[] types) throws ApiException, IOException;
 }

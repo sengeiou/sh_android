@@ -7,6 +7,8 @@ import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PostNewPrivateMessageInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
+import com.shootr.mobile.domain.model.Searchable;
+import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -14,6 +16,8 @@ import com.shootr.mobile.ui.views.MessageBoxView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -92,15 +96,13 @@ public class MessageBoxPresenter {
   }
 
   private void postMessage(String idTargetUser) {
-    postNewPrivateMessageInteractor.postNewPrivateMessage(shotCommentToSend,
-        selectedImageFile, idTargetUser,
-        new Interactor.CompletedCallback() {
+    postNewPrivateMessageInteractor.postNewPrivateMessage(shotCommentToSend, selectedImageFile,
+        idTargetUser, new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             messageBoxView.hideSendButton();
             messageBoxView.clearTextBox();
           }
-        },
-        new Interactor.ErrorCallback() {
+        }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
             onShotError();
           }
@@ -142,7 +144,6 @@ public class MessageBoxPresenter {
     }
   }
 
-
   private String filterText(String originalText) {
     String trimmed = originalText.trim();
     while (trimmed.contains("\n\n\n")) {
@@ -164,15 +165,13 @@ public class MessageBoxPresenter {
   }
 
   private void postStreamShot() {
-    postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend,
-        selectedImageFile,
+    postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend, selectedImageFile,
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             messageBoxView.hideSendButton();
             messageBoxView.clearTextBox();
           }
-        },
-        new Interactor.ErrorCallback() {
+        }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
             onShotError();
           }
@@ -197,17 +196,33 @@ public class MessageBoxPresenter {
   }
 
   public void loadMentions(String extractedUsername) {
-    getMentionedPeopleInteractor.obtainMentionedPeople(extractedUsername, new Interactor.Callback<List<User>>() {
-      @Override public void onLoaded(List<User> users) {
-        List<UserModel> mentionSuggestions = userModelMapper.transform(users);
-        if (!mentionSuggestions.isEmpty()) {
-          messageBoxView.showMentionSuggestions();
-          messageBoxView.renderMentionSuggestions(mentionSuggestions);
-        } else {
-          messageBoxView.hideMentionSuggestions();
-        }
+    getMentionedPeopleInteractor.searchItems(extractedUsername,
+        new Interactor.Callback<List<Searchable>>() {
+          @Override public void onLoaded(List<Searchable> searchables) {
+            List<UserModel> mentionSuggestions = filterMentions(searchables);
+            if (!mentionSuggestions.isEmpty()) {
+              Collections.sort(mentionSuggestions, new UserModel.MentionComparator());
+              messageBoxView.showMentionSuggestions();
+              messageBoxView.renderMentionSuggestions(mentionSuggestions);
+            } else {
+              messageBoxView.hideMentionSuggestions();
+            }
+          }
+        }, new Interactor.ErrorCallback() {
+          @Override public void onError(ShootrException error) {
+              /* no-op */
+          }
+        });
+  }
+
+  @NonNull private List<UserModel> filterMentions(List<Searchable> searchables) {
+    List<UserModel> mentionSuggestions = new ArrayList<>();
+    for (Searchable searchable : searchables) {
+      if (searchable.getSearchableType().equals(SearchableType.USER)) {
+        mentionSuggestions.add(userModelMapper.transform((User) searchable));
       }
-    });
+    }
+    return mentionSuggestions;
   }
 
   public void onMentionClicked(UserModel user) {
@@ -217,8 +232,7 @@ public class MessageBoxPresenter {
     messageBoxView.setCursorToEndOfText();
   }
 
-  @NonNull
-  public String mountShotComment(UserModel user) {
+  @NonNull public String mountShotComment(UserModel user) {
     String shotComment = "";
     Integer position = 0;
     for (String word : words) {
@@ -239,4 +253,6 @@ public class MessageBoxPresenter {
   public void onStopMentioning() {
     messageBoxView.hideMentionSuggestions();
   }
+
+
 }

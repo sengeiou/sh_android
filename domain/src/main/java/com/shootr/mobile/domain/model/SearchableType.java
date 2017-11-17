@@ -8,4 +8,8 @@ public interface SearchableType {
   String[] SEARCHABLE_TYPES = {
       USER, STREAM
   };
+
+  String[] USER_TYPE = {
+      USER
+  };
 }

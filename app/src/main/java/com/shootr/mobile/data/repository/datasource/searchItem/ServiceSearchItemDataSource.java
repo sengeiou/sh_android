@@ -23,7 +23,7 @@ public class ServiceSearchItemDataSource implements ExternalSearchItemDataSource
     try {
       ArrayList<SearchableEntity> searchableEntities = new ArrayList<>();
       ArrayList<SearchItemEntity> searchItemEntities = new ArrayList<>(searchApiService.searchItems(query,
-          SearchableType.SEARCHABLE_TYPES));
+          searchTypes));
 
       for (SearchItemEntity searchItemEntity : searchItemEntities) {
         switch (searchItemEntity.getType()) {

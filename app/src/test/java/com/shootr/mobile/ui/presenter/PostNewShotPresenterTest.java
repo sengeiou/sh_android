@@ -7,6 +7,7 @@ import com.shootr.mobile.domain.interactor.shot.IncrementReplyCountShotInteracto
 import com.shootr.mobile.domain.interactor.shot.PostNewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
+import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.UserModel;
@@ -349,36 +350,42 @@ public class PostNewShotPresenterTest {
             any(Interactor.ErrorCallback.class));
   }
 
-  private List<User> mentionSuggestions() {
-    List<User> participants = new ArrayList<>();
+  private List<Searchable> mentionSuggestions() {
+    List<Searchable> participants = new ArrayList<>();
     participants.add(user());
-    participants.add(new User());
+    participants.add(user());
     return participants;
   }
 
   private User user() {
     User user = new User();
     user.setIdUser(ID_USER);
+    user.setFollowing(false);
+    user.setUsername(USERNAME);
+    user.setName(USERNAME);
     return user;
   }
 
   private UserModel userModel() {
     UserModel userModel = new UserModel();
+    userModel.setFollowing(false);
     userModel.setIdUser(ID_USER);
     userModel.setUsername(USERNAME);
+    userModel.setName(USERNAME);
     return userModel;
   }
 
   public void setupMentionedPeopleCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<List<User>> callback =
-            (Interactor.Callback<List<User>>) invocation.getArguments()[1];
+        Interactor.Callback<List<Searchable>> callback =
+            (Interactor.Callback<List<Searchable>>) invocation.getArguments()[1];
         callback.onLoaded(mentionSuggestions());
         return null;
       }
     }).when(getMentionedPeopleInteractor)
-        .obtainMentionedPeople(anyString(), any(Interactor.Callback.class));
+        .searchItems(anyString(), any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
   }
 
   public void setupNoMentionedPeopleCallback() {
@@ -390,6 +397,7 @@ public class PostNewShotPresenterTest {
         return null;
       }
     }).when(getMentionedPeopleInteractor)
-        .obtainMentionedPeople(anyString(), any(Interactor.Callback.class));
+        .searchItems(anyString(), any(Interactor.Callback.class),
+            any(Interactor.ErrorCallback.class));
   }
 }

@@ -1,16 +1,13 @@
 package com.shootr.mobile.domain.interactor.user;
 
+import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.model.user.User;
-import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.domain.repository.user.UserRepository;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import com.shootr.mobile.domain.model.Searchable;
+import com.shootr.mobile.domain.model.SearchableType;
+import com.shootr.mobile.domain.repository.searchItem.ExternalSearchItemRepository;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -18,66 +15,49 @@ public class GetMentionedPeopleInteractor implements Interactor {
 
     private final InteractorHandler interactorHandler;
     private final PostExecutionThread postExecutionThread;
-    private final UserRepository remoteUserRepository;
-    private final UserRepository localUserRepository;
-    private final SessionRepository sessionRepository;
-    private String mention;
-    private Callback<List<User>> callback;
+    private final ExternalSearchItemRepository externalSearchItemRepository;
+    private ErrorCallback errorCallback;
+    private String query;
+    private Interactor.Callback<List<Searchable>> callback;
 
     @Inject
-    public GetMentionedPeopleInteractor(InteractorHandler interactorHandler, PostExecutionThread postExecutionThread,
-      @Remote UserRepository remoteUserRepository, @Local UserRepository localUserRepository,
-      SessionRepository sessionRepository) {
+    public GetMentionedPeopleInteractor(InteractorHandler interactorHandler,
+        PostExecutionThread postExecutionThread,
+        ExternalSearchItemRepository externalSearchItemRepository) {
         this.interactorHandler = interactorHandler;
         this.postExecutionThread = postExecutionThread;
-        this.remoteUserRepository = remoteUserRepository;
-        this.localUserRepository = localUserRepository;
-        this.sessionRepository = sessionRepository;
+        this.externalSearchItemRepository = externalSearchItemRepository;
     }
 
-    public void obtainMentionedPeople(String mention, Callback<List<User>> callback) {
-        this.mention = mention;
+    public void searchItems(String query, Callback<List<Searchable>> callback, ErrorCallback errorCallback) {
+        this.query = query;
         this.callback = callback;
+        this.errorCallback = errorCallback;
         interactorHandler.execute(this);
     }
 
     @Override public void execute() throws Exception {
-        //TODO rehacer esto
-    }
-
-    private List<User> getUsersPossiblyMentioned(List<User> userList) {
-        List<User> users = new ArrayList<>();
-        for (User user : userList) {
-            if (user.getUsername().toLowerCase().contains(mention.toLowerCase()) || user.getName()
-              .toLowerCase()
-              .contains(mention.toLowerCase())) {
-                users.add(user);
-            }
-        }
-        return reorderPeopleByUsername(users);
-    }
-
-    private List<User> reorderPeopleByUsername(List<User> userList) {
-        if (userList != null) {
-            Collections.sort(userList, new UsernameComparator());
-            return userList;
-        } else {
-            return Collections.emptyList();
+        try {
+            List<Searchable> searchables = externalSearchItemRepository.getSearch(query, SearchableType.USER_TYPE);
+            notifyResult(searchables);
+        } catch (ServerCommunicationException error) {
+            notifyError(error);
         }
     }
 
-    private void notifyResult(final List<User> suggestedPeople) {
+    private void notifyResult(final List<Searchable> searchables) {
         postExecutionThread.post(new Runnable() {
             @Override public void run() {
-                callback.onLoaded(suggestedPeople);
+                callback.onLoaded(searchables);
             }
         });
     }
 
-    static class UsernameComparator implements Comparator<User> {
-
-        @Override public int compare(User user1, User user2) {
-            return user1.getUsername().compareToIgnoreCase(user2.getUsername());
-        }
+    private void notifyError(final ShootrException error) {
+        postExecutionThread.post(new Runnable() {
+            @Override public void run() {
+                errorCallback.onError(error);
+            }
+        });
     }
 }

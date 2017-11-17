@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.model;
 
 import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
+import java.util.Comparator;
 import timber.log.Timber;
 
 public class UserModel implements Serializable, Cloneable, SearchableModel {
@@ -192,10 +193,7 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   }
 
   @Override public String toString() {
-    return "UserModel{" +
-        "idUser=" + idUser +
-        ", userName='" + userName + '\'' +
-        '}';
+    return "UserModel{" + "idUser=" + idUser + ", userName='" + userName + '\'' + '}';
   }
 
   public String getStreamWatchingId() {
@@ -232,5 +230,17 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   @Override public String getSearchableType() {
     return SearchableType.USER;
+  }
+
+  static public class MentionComparator implements Comparator<UserModel> {
+    @Override public int compare(UserModel user1, UserModel user2) {
+      if (user1.isFollowing() && !user2.isFollowing()) {
+        return -1;
+      } else if (!user1.isFollowing() && user2.isFollowing()) {
+        return 1;
+      } else {
+        return user1.getName().compareToIgnoreCase(user2.getName());
+      }
+    }
   }
 }
