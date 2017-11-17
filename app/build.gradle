@@ -187,7 +187,7 @@ dependencies {
     exclude group: 'com.android.support'
   }
 
-  compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+  compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
     transitive = true;
   }
   // If you want to use the GPU Filters
