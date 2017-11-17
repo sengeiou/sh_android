@@ -4,8 +4,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import butterknife.OnClick;
+import butterknife.BindView;
 import com.daimajia.swipe.SwipeLayout;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -26,8 +25,6 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
-
-import butterknife.BindView;
 
 public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
@@ -112,5 +109,4 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
       }
     });
   }
-
 }
