@@ -12,7 +12,7 @@
   <string name="activity_find_friends_cant_load_message">Can\'t load data. Check your connection.</string>
   <string name="activity_find_friends_empty_message">No Results</string>
   <string name="activity_find_participants_empty_message">No results</string>
-  <string name="activity_find_participants_hint">Search for participants</string>
+  <string name="activity_find_participants_hint">Search</string>
   <string name="activity_find_streams_hint">Search for streams</string>
   <string name="activity_find_streams_title">Search for streams</string>
   <string name="activity_followers_title">Followers</string>
@@ -234,7 +234,7 @@
   <string name="menu_profile_chage_password">Change password</string>
   <string name="menu_remove_favorite">Unfollow</string>
   <string name="menu_save_photo">Save image</string>
-  <string name="menu_search_participants">Search for participants</string>
+  <string name="menu_search_participants">Search</string>
   <string name="menu_search_streams">Search</string>
   <string name="menu_search_timeline">Search timeline</string>
   <string name="menu_share_poll_via_shootr">Share poll</string>
@@ -465,7 +465,7 @@
   <string name="stream_checked">Checked in</string>
   <string name="stream_check_in_activity_text_pattern">" checked-in"</string>
   <string name="stream_data_info_favorites">Followers</string>
-  <string name="stream_data_info_participants">Participants</string>
+  <string name="stream_data_info_participants">Unique visitors</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
   <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -569,7 +569,7 @@
   <string name="title_activity_history">Activity Log</string>
   <string name="follow_stream">Follow this stream</string>
   <string name="activity_onboarding_action">Got it</string>
-  <string name="activity_onboarding_text">At &lt;b&gt;Home&lt;/b&gt; you\'ll see the activity from streams and people you follow.</string>
+  <string name="activity_onboarding_text">&lt;b&gt;Home&lt;/b&gt; will show the activity from streams and people you follow.</string>
   <string name="daily_poll_feedback">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
   <string name="daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
   <string name="secure_daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
