@@ -34,7 +34,7 @@ public class RemotePollRepository implements ExternalPollRepository {
     List<PollEntity> polls = remotePollDataSource.getPolls(idStream);
     if (polls.size() > 0) {
       PollEntity pollEntity = polls.get(0);
-      setPollVoteStatus(pollEntity);
+      pollEntity.setVoteStatus(pollEntity.canVote() ? PollStatus.VOTE : PollStatus.VOTED);
       localPollDataSource.removePolls(idStream);
       localPollDataSource.putPoll(pollEntity);
     }
@@ -44,43 +44,9 @@ public class RemotePollRepository implements ExternalPollRepository {
   @Override public Poll getPollByIdPoll(String idPoll)
       throws UserCannotVoteRequestException, UserHasVotedRequestException, PollDeletedException {
     PollEntity pollEntity = remotePollDataSource.getPollById(idPoll);
-    setPollVoteStatus(pollEntity);
+    pollEntity.setVoteStatus(pollEntity.canVote() ? PollStatus.VOTE : PollStatus.VOTED);
     localPollDataSource.putPoll(pollEntity);
     return pollEntityMapper.transform(pollEntity);
-  }
-
-  private void setPollVoteStatus(PollEntity pollEntity)
-      throws UserCannotVoteRequestException, UserHasVotedRequestException, PollDeletedException {
-    PollEntity pollById = localPollDataSource.getPollById(pollEntity.getIdPoll());
-    if (pollById != null && pollById.getVoteStatus().equals(PollStatus.IGNORED)) {
-      pollEntity.setVoteStatus(PollStatus.IGNORED);
-    } else if (pollById != null && pollById.getVoteStatus().equals(PollStatus.HASSEENRESULTS)) {
-      pollEntity.setVoteStatus(PollStatus.HASSEENRESULTS);
-    } else if (pollById != null && pollById.getVoteStatus().equals(PollStatus.VOTED)) {
-      pollEntity.setVoteStatus(PollStatus.VOTED);
-      pollEntity.setUserHasVoted(true);
-      overrideVotedOption(pollEntity, pollById);
-
-    } else {
-      pollEntity.setVoteStatus(pollEntity.getUserHasVoted() ? PollStatus.VOTED : PollStatus.VOTE);
-    }
-  }
-
-  private void overrideVotedOption(PollEntity pollEntity, PollEntity pollById) {
-    String votedOptionId = null;
-    for (PollOptionEntity pollOptionEntity : pollById.getPollOptions()) {
-      if (pollOptionEntity.isVoted()) {
-        votedOptionId = pollOptionEntity.getIdPollOption();
-      }
-    }
-
-    if (votedOptionId != null) {
-      for (PollOptionEntity pollOptionEntity : pollEntity.getPollOptions()) {
-        if (pollOptionEntity.getIdPollOption().equals(votedOptionId)) {
-          pollOptionEntity.setVoted(true);
-        }
-      }
-    }
   }
 
   @Override public Poll vote(String idPoll, String idPollOption, boolean isPrivateVote)

@@ -12,7 +12,7 @@
   <string name="activity_find_friends_cant_load_message">No és possible carregar dades. Comprova la teva connexió.</string>
   <string name="activity_find_friends_empty_message">No hi ha resultats</string>
   <string name="activity_find_participants_empty_message">No hi ha resultats</string>
-  <string name="activity_find_participants_hint">Buscar participants</string>
+  <string name="activity_find_participants_hint">Buscar</string>
   <string name="activity_find_streams_hint">Buscar streams</string>
   <string name="activity_find_streams_title">Buscar streams</string>
   <string name="activity_followers_title">Seguidors</string>
@@ -236,7 +236,7 @@
   <string name="menu_profile_chage_password">Canviar contrasenya</string>
   <string name="menu_remove_favorite">Deixar de seguir</string>
   <string name="menu_save_photo">Desar imatge</string>
-  <string name="menu_search_participants">Buscar participants</string>
+  <string name="menu_search_participants">Buscar</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
   <string name="menu_share_poll_via_shootr">Compartir via Shootr</string>
@@ -331,7 +331,7 @@
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_finished">Enquesta finalitzada a</string>
   <string name="poll_ignore">Llevar enquesta</string>
-  <string name="poll_legal_text">Aquesta és una enquesta segura i permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
+  <string name="poll_legal_text">Només un vot per compte i dispositiu. No es computen segones votacions.</string>
   <string name="poll_live_results">Resultats en viu</string>
   <string name="poll_manual_close">Temps restant: No definit</string>
   <string name="poll_option_voted">Has votat \"%s\"</string>
@@ -470,7 +470,7 @@
   <string name="stream_checked">Fet</string>
   <string name="stream_check_in_activity_text_pattern">" ha fet check-in"</string>
   <string name="stream_data_info_favorites">Seguidors</string>
-  <string name="stream_data_info_participants">Participants</string>
+  <string name="stream_data_info_participants">Visites úniques</string>
   <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -571,4 +571,10 @@
   <string name="connected">conectats</string>
   <string name="title_activity_history">Historial</string>
   <string name="home">Inici</string>
+  <string name="activity_onboarding_action">Entès</string>
+  <string name="activity_onboarding_text">A &lt;b&gt;Inici&lt;/b&gt; veuràs l\'activitat dels streams i de les persones que segueixes.</string>
+  <string name="secure_daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
+  <string name="daily_poll_feedback">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
+  <string name="daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
+  <string name="follow_stream">Segueix aquest stream</string>
 </resources>

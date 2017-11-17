@@ -4,7 +4,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import butterknife.BindView;
 import com.daimajia.swipe.SwipeLayout;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -26,8 +26,6 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 
-import butterknife.BindView;
-
 public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
 
   protected final OnHideHighlightShot onHideHighlightClickListener;
@@ -36,8 +34,8 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
   @BindView(R.id.shot_container) View shotContainer;
   @BindView(R.id.dismiss_container) FrameLayout dismissContainer;
   @BindView(R.id.swipe) SwipeLayout swipeLayout;
-  @BindView(R.id.open_menu)
-  ImageView openHighlightedMenu;
+  @BindView(R.id.open_menu) ImageView openHighlightedMenu;
+  @BindView(R.id.dissmiss_action) ImageView dissmissAction;
   @BindView(R.id.open_menu_container) FrameLayout openMenuContainer;
 
   public HighLightedShotViewHolder(View view, OnAvatarClickListener avatarClickListener,
@@ -57,11 +55,14 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
       final ShotClickListener shotClickListener, final OnShotLongClick onShotLongClick,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
       OnImageClickListener onImageClickListener, OnUrlClickListener onUrlClickListener,
-      OnOpenShotMenuListener onOpenShotMenuListener, OnReshootClickListener onReshootClickListener, Boolean isAdmin) {
+      OnOpenShotMenuListener onOpenShotMenuListener, OnReshootClickListener onReshootClickListener,
+      Boolean isAdmin) {
     super.render(shotModel, shotClickListener, onShotLongClick, onLongClickListener,
-        onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener);
+        onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
+        onReshootClickListener);
     setupSwipeLayout();
     setupHighlightedMenu();
+    setupDissmissHighlighted(shotModel);
     setupListeners(highlightedShotModel, shotClickListener, onShotLongClick,
         onOpenShotMenuListener);
 
@@ -71,6 +72,12 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     } else {
       dismissContainer.setBackgroundColor(
           dismissContainer.getResources().getColor(R.color.gray_50));
+    }
+  }
+
+  private void setupDissmissHighlighted(ShotModel shotModel) {
+    if (shotModel.hasMedia()) {
+      dissmissAction.setVisibility(View.VISIBLE);
     }
   }
 
@@ -107,6 +114,11 @@ public class HighLightedShotViewHolder extends ShotTimelineViewHolder {
     openHighlightedMenu.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onOpenShotMenuListener.openMenu(highlightedShotModel.getShotModel());
+      }
+    });
+    dissmissAction.setOnClickListener(new View.OnClickListener() {
+      @Override public void onClick(View v) {
+        onHideHighlightClickListener.onHideClick(highlightedShotModel);
       }
     });
   }

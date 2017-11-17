@@ -12,7 +12,7 @@
   <string name="activity_find_friends_cant_load_message">No es posible cargar datos. Comprueba tu conexión.</string>
   <string name="activity_find_friends_empty_message">No hay resultados</string>
   <string name="activity_find_participants_empty_message">No hay resultados</string>
-  <string name="activity_find_participants_hint">Buscar participantes</string>
+  <string name="activity_find_participants_hint">Buscar</string>
   <string name="activity_find_streams_hint">Buscar streams</string>
   <string name="activity_find_streams_title">Buscar streams</string>
   <string name="activity_followers_title">Seguidores</string>
@@ -236,7 +236,7 @@
   <string name="menu_profile_chage_password">Cambiar contraseña</string>
   <string name="menu_remove_favorite">Dejar de seguir</string>
   <string name="menu_save_photo">Guardar imagen</string>
-  <string name="menu_search_participants">Buscar participantes</string>
+  <string name="menu_search_participants">Buscar</string>
   <string name="menu_search_streams">Buscar</string>
   <string name="menu_search_timeline">Buscar timeline</string>
   <string name="menu_share_poll_via_shootr">Compartir vía Shootr</string>
@@ -332,7 +332,7 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_finished">Encuesta finalizada en</string>
   <string name="poll_ignore">Quitar encuesta</string>
-  <string name="poll_legal_text">Esta es una encuesta segura y permite solo un voto por cuenta y dispositivo. No se computarán segundos votos.</string>
+  <string name="poll_legal_text">Solo un voto por cuenta y dispositivo. No se computan segundos votos.</string>
   <string name="poll_live_results">Resultados en vivo</string>
   <string name="poll_manual_close">Tiempo restante: No definido</string>
   <string name="poll_option_voted">Has votado \"%s\"</string>
@@ -470,7 +470,7 @@
   <string name="stream_checked">Hecho</string>
   <string name="stream_check_in_activity_text_pattern">" ha hecho check-in"</string>
   <string name="stream_data_info_favorites">Seguidores</string>
-  <string name="stream_data_info_participants">Participantes</string>
+  <string name="stream_data_info_participants">Visitas únicas</string>
   <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -571,4 +571,10 @@
   <string name="connected">conectados</string>
   <string name="title_activity_history">Historial</string>
   <string name="home">Inicio</string>
+  <string name="activity_onboarding_action">Entendido</string>
+  <string name="activity_onboarding_text">En &lt;b&gt;Inicio&lt;/b&gt; verás la actividad de los streams y las personas que sigues.</string>
+  <string name="secure_daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
+  <string name="daily_poll_feedback">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
+  <string name="daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
+  <string name="follow_stream">Sigue este stream</string>
 </resources>

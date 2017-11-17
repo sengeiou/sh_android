@@ -45,7 +45,8 @@ public class SessionRepositoryImpl implements SessionRepository {
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
       @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
-      @ActivityBadgeCount IntPreference badgeCount, CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
+      @ActivityBadgeCount IntPreference badgeCount,
+      CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;

@@ -60,6 +60,11 @@ import javax.inject.Singleton;
         return new BooleanPreference(preferences, "public_vote_alert", true);
     }
 
+    @Provides @Singleton @ActivityShowcase
+    BooleanPreference provideActivityShowcasePreference(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "activity_showcase", false);
+    }
+
     @Provides @Singleton @DevicePref DevicePreferences provideDevicePreferences(
         SharedPreferences preferences) {
         return new DevicePreferences(preferences, "device_preference", null);

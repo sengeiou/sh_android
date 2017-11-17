@@ -27,7 +27,6 @@ public class PollModelMapper {
     pollModel.setQuestion(poll.getQuestion());
     pollModel.setStatus(poll.getStatus());
     pollModel.setPublished(poll.getPublished());
-    pollModel.setHasVoted(poll.hasVoted());
     if (poll.getVoteStatus() == null) {
       pollModel.setVoteStatus(PollStatus.VOTE);
     } else {
@@ -40,6 +39,8 @@ public class PollModelMapper {
     pollModel.setExpirationDate(poll.getExpirationDate());
     pollModel.setVerifiedPoll(poll.isVerifiedPoll());
     pollModel.setHideResults(poll.isHideResults());
+    pollModel.setCanVote(poll.canVote());
+    pollModel.setDailyPoll(poll.isDailyPoll());
     return pollModel;
   }
 

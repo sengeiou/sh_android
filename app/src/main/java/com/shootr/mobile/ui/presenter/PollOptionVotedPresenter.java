@@ -35,15 +35,23 @@ public class PollOptionVotedPresenter implements Presenter {
   }
 
   private void renderPollOptionVoted(PollModel pollModel) {
-    if (pollModel.isVerifiedPoll()) {
-      view.showLegalText();
-    }
+    setupFeedbackText(pollModel);
     for (PollOptionModel pollOptionModel : pollModel.getPollOptionModels()) {
       if (pollOptionModel.isVoted()) {
         this.pollOptionVoted = pollOptionModel;
         view.renderPollOptionVoted(pollOptionModel);
         break;
       }
+    }
+  }
+
+  private void setupFeedbackText(PollModel pollModel) {
+    if (pollModel.isDailyPoll() && pollModel.isVerifiedPoll()) {
+      view.showSecureHiddenDailyText();
+    } else if (pollModel.isDailyPoll() && !pollModel.isVerifiedPoll()) {
+      view.showHiddenDailyText();
+    } else if (pollModel.isVerifiedPoll()) {
+      view.showLegalText();
     }
   }
 

@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,18 +10,31 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
+import com.eftimoff.androidplayer.Player;
+import com.eftimoff.androidplayer.actions.property.PropertyAction;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.ActivityShowcase;
+import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.HistoryActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
@@ -60,12 +75,17 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @Inject FeedbackMessage feedbackMessage;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject @ActivityShowcase BooleanPreference activityShowcasePreference;
 
   @BindView(R.id.timeline_activity_list) RecyclerView activityList;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindView(R.id.timeline_empty) View emptyView;
 
   @BindView(R.id.timeline_loading_activity) TextView loadingActivityView;
+  @BindView(R.id.onboarding_container) RelativeLayout onBoardingContainer;
+  @BindView(R.id.container) FrameLayout container;
+  @BindView(R.id.onboarding_text) TextView onboardingText;
+  @BindView(R.id.onboarding_action) Button onboardingButton;
 
   @BindString(R.string.analytics_screen_activity) String analyticsScreenActivity;
   @BindString(R.string.analytics_action_follow) String analyticsActionFollow;
@@ -74,11 +94,13 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   @BindString(R.string.analytics_source_activity) String activitySource;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.activity_onboarding_text) String activityOnboardingText;
 
   private ActivityTimelineAdapter adapter;
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
   private boolean hasNewContent = false;
+  private ViewPropertyAnimator onBoardingAnimator;
   //endregion
 
   public static ActivityTimelineFragment newInstance() {
@@ -102,6 +124,10 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    if (activityShowcasePreference != null && activityShowcasePreference.get()) {
+      setupOnboarding();
+      activityShowcasePreference.set(false);
+    }
     initializeViews();
     initializePresenter();
   }
@@ -405,5 +431,55 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     sendHistoricAnalythics();
     Intent intent = new Intent(getContext(), HistoryActivity.class);
     startActivity(intent);
+  }
+
+  private void setupOnboarding() {
+    Spanned text;
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+      text = Html.fromHtml(
+          activityOnboardingText,
+          Html.FROM_HTML_MODE_LEGACY);
+    } else {
+      text = Html.fromHtml(
+          activityOnboardingText);
+    }
+
+    onboardingText.setText(text);
+    onBoardingContainer.setVisibility(View.VISIBLE);
+    final PropertyAction onboardingTextAnimation = PropertyAction.newPropertyAction(onboardingText).
+        interpolator(new AccelerateDecelerateInterpolator()).
+        translationY(-200).
+        duration(500).
+        alpha(0f).
+        build();
+    Player.init().animate(onboardingTextAnimation).play();
+  }
+
+  @OnClick(R.id.onboarding_action) void onBoardingActionClick() {
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+      int x = onBoardingContainer.getRight();
+      int y = onBoardingContainer.getBottom();
+
+      int startRadius =
+          (int) Math.hypot(onBoardingContainer.getWidth(), onBoardingContainer.getHeight());
+      int endRadius = 0;
+
+      Animator anim =
+          ViewAnimationUtils.createCircularReveal(onBoardingContainer, x, y, startRadius,
+              endRadius);
+      anim.setDuration(400);
+      anim.addListener(new AnimatorListenerAdapter() {
+        @Override public void onAnimationEnd(Animator animation) {
+          super.onAnimationEnd(animation);
+          if (onBoardingContainer != null) {
+            onBoardingContainer.setVisibility(View.GONE);
+          }
+        }
+      });
+
+      anim.start();
+    } else {
+      onBoardingContainer.setVisibility(View.GONE);
+    }
   }
 }

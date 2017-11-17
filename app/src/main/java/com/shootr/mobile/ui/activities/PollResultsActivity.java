@@ -55,6 +55,7 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   @BindString(R.string.analytics_screen_poll_result) String analyticsPollResult;
   @BindString(R.string.timeline_poll_results) String pollResultsResource;
   @BindString(R.string.shared_poll_feedback) String sharedPoll;
+  @BindString(R.string.daily_poll_feedback) String dailyPollFeedback;
   @BindString(R.string.poll_legal_text) String legalText;
 
   @Inject InitialsLoader initialsLoader;
@@ -269,5 +270,9 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
 
   @Override public void hideFooter() {
     footerContainer.setVisibility(View.GONE);
+  }
+
+  @Override public void showDailyPollText() {
+    feedbackMessage.showLong(getView(), dailyPollFeedback);
   }
 }

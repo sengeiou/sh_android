@@ -55,15 +55,6 @@ public class RemotePollRepositoryTest {
   }
 
   @Test
-  public void shouldGetPollFromLocalWhenGetPollByIdStream() throws Exception {
-    when(servicePollDataSource.getPolls(ID_STREAM)).thenReturn(polls());
-
-    repository.getPollByIdStream(ID_STREAM);
-
-    verify(databasePollDataSource).getPollById(ID_POLL);
-  }
-
-  @Test
   public void shouldRemoveLocalPollsByIdStreamWhenGetPollByIdStream() throws Exception {
     when(servicePollDataSource.getPolls(ID_STREAM)).thenReturn(polls());
 
@@ -99,7 +90,6 @@ public class RemotePollRepositoryTest {
   @NonNull private PollEntity pollEntity() {
     PollEntity pollEntity = new PollEntity();
     pollEntity.setIdPoll(ID_POLL);
-    pollEntity.setUserHasVoted(true);
     pollEntity.setIdStream(ID_STREAM);
     pollEntity.setPollOptions(Collections.<PollOptionEntity>emptyList());
     pollEntity.setPublished(1L);

@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -222,6 +221,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
   @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
   @BindString(R.string.no_filter_shots) String emptyFilter;
+  @BindString(R.string.follow_stream) String followStream;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -1101,7 +1101,6 @@ public class StreamTimelineFragment extends BaseFragment
             sendPinMessageOpenlinkAnalythics();
           }
         });
-        streamMessage.setLinkTextColor(Color.WHITE);
       }
     } catch (NullPointerException ex) {
       /* no-op */
@@ -1300,6 +1299,15 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void setIsContributor(boolean isCurrentUserContributor) {
     reportShotPresenter.setCurrentUserContributor(isCurrentUserContributor);
+  }
+
+  @Override public void showFollowToast() {
+    feedbackMessage.showLong(getView(), R.string.follow_stream,
+        R.string.stream_timeline_add_favorite, new View.OnClickListener() {
+          @Override public void onClick(View v) {
+            streamTimelineOptionsPresenter.addToFavorites();
+          }
+        });
   }
 
   @Override public void showEmpty() {

@@ -36,6 +36,9 @@ public class AndroidTimeUtils implements TimeUtils {
     Resources res = context.getResources();
     if (days > 0) {
       String time = res.getString(R.string.days);
+      if (days > 30) {
+        return "∞";
+      }
       return String.valueOf(days + time);
     }
 

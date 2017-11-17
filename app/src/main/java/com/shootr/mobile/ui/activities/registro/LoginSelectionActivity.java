@@ -26,6 +26,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.ActivityShowcase;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.SessionToken;
@@ -80,6 +81,7 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject IntentFactory intentFactory;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
+  @Inject @ActivityShowcase BooleanPreference activityShowcase;
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
@@ -255,6 +257,7 @@ public class LoginSelectionActivity extends BaseActivity {
                 Intent intent;
                 if (isNewUser) {
                   sendSignUpAnalythics();
+                  activityShowcase.set(true);
                   intent = new Intent(LoginSelectionActivity.this, OnBoardingStreamActivity.class);
                 } else {
                   sendLoginToMixpanel();

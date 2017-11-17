@@ -13,6 +13,24 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.48.0] - 2017-11-17
+### Added
+- X to dissmiss highlighted shot
+- Snackbar to follow stream
+- New onboarding activity with got it button
+- New daily polls
+- Infinite if date > 30 days
+
+
+### Changed
+- Update Fabric
+
+### Fixed
+- Not defined on CLOSED polls
+- Fix Mentions and order it
+- Fix link in pinned message
+
+
 ## [1.47.0] - 2017-11-10
 ### Added
 - Home to landing

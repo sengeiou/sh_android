@@ -134,7 +134,7 @@ public class PollVotePresenter implements Presenter {
 
   private void handleNextScreen() {
     if (pollModel != null) {
-      if (pollModel.isHideResults() && pollModel.getHasVoted()) {
+      if (pollModel.isHideResults() && !pollModel.canVote()) {
         pollVoteView.goToVotedOption(pollModel);
       } else if (pollModel.isHideResults()) {
         pollVoteView.goToHiddenResults(pollModel.getQuestion());

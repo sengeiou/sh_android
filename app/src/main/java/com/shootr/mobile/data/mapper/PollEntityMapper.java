@@ -22,7 +22,6 @@ public class PollEntityMapper {
       poll.setIdStream(pollEntity.getIdStream());
       poll.setIdPoll(pollEntity.getIdPoll());
       poll.setIdUser(pollEntity.getIdUser());
-      poll.setHasVoted(pollEntity.getUserHasVoted());
       poll.setPollOptions(mapper.transform(pollEntity.getPollOptions()));
       poll.setQuestion(pollEntity.getQuestion());
       poll.setVoteStatus(pollEntity.getVoteStatus());
@@ -30,6 +29,8 @@ public class PollEntityMapper {
       poll.setExpirationDate(pollEntity.getExpirationDate());
       poll.setVerifiedPoll(pollEntity.getVerifiedPoll() != null ? pollEntity.getVerifiedPoll() : false);
       poll.setHideResults(pollEntity.isHideResults());
+      poll.setCanVote(pollEntity.canVote());
+      poll.setDailyPoll(pollEntity.isDailyPoll());
     }
     return poll;
   }
@@ -41,7 +42,6 @@ public class PollEntityMapper {
     pollEntity.setQuestion(poll.getQuestion());
     pollEntity.setIdStream(poll.getIdStream());
     pollEntity.setIdUser(poll.getIdUser());
-    pollEntity.setUserHasVoted(poll.hasVoted());
     pollEntity.setIdPoll(poll.getIdPoll());
     pollEntity.setPublished(poll.getPublished() ? 1L : 0L);
     pollEntity.setVoteStatus(poll.getVoteStatus());
@@ -49,6 +49,8 @@ public class PollEntityMapper {
     pollEntity.setExpirationDate(poll.getExpirationDate());
     pollEntity.setVerifiedPoll(poll.isVerifiedPoll());
     pollEntity.setHideResults(poll.isHideResults());
+    pollEntity.setCanVote(poll.canVote());
+    pollEntity.setDailyPoll(poll.isDailyPoll());
     return pollEntity;
   }
 

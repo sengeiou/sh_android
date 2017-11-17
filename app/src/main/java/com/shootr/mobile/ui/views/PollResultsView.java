@@ -25,4 +25,6 @@ public interface PollResultsView extends LoadDataView {
   void showSharedPoll();
 
   void hideFooter();
+
+  void showDailyPollText();
 }

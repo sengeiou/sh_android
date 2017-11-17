@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.model;
 
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,7 +11,6 @@ public class PollModel implements Serializable {
   private String idStream;
   private String idUser;
   private String question;
-  private Boolean hasVoted;
   private String status;
   private String voteStatus;
   private Boolean published;
@@ -20,6 +20,8 @@ public class PollModel implements Serializable {
   private Long expirationDate;
   private boolean verifiedPoll;
   private boolean hideResults;
+  private boolean canVote;
+  private boolean dailyPoll;
 
   public String getIdPoll() {
     return idPoll;
@@ -43,14 +45,6 @@ public class PollModel implements Serializable {
 
   public void setQuestion(String question) {
     this.question = question;
-  }
-
-  public Boolean getHasVoted() {
-    return hasVoted;
-  }
-
-  public void setHasVoted(Boolean hasVoted) {
-    this.hasVoted = hasVoted;
   }
 
   public String getStatus() {
@@ -118,7 +112,9 @@ public class PollModel implements Serializable {
   }
 
   public boolean isExpired() {
-    if (this.expirationDate != null) {
+    if (status.equals(PollStatus.CLOSED)) {
+      return true;
+    } else if (this.expirationDate != null) {
       return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
     } else {
       return false;
@@ -148,5 +144,21 @@ public class PollModel implements Serializable {
 
   public void setHideResults(boolean hideResults) {
     this.hideResults = hideResults;
+  }
+
+  public boolean canVote() {
+    return canVote;
+  }
+
+  public void setCanVote(boolean canVote) {
+    this.canVote = canVote;
+  }
+
+  public boolean isDailyPoll() {
+    return dailyPoll;
+  }
+
+  public void setDailyPoll(boolean dailyPoll) {
+    this.dailyPoll = dailyPoll;
   }
 }
