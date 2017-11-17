@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.model;
 
+import com.shootr.mobile.domain.model.poll.PollStatus;
 import java.io.Serializable;
 import java.util.List;
 
@@ -118,7 +119,9 @@ public class PollModel implements Serializable {
   }
 
   public boolean isExpired() {
-    if (this.expirationDate != null) {
+    if (status.equals(PollStatus.CLOSED)) {
+      return true;
+    } else if (this.expirationDate != null) {
       return (this.expirationDate - System.currentTimeMillis() < 0) ? true : false;
     } else {
       return false;
