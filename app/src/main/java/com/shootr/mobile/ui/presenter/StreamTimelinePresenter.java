@@ -239,6 +239,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         postWatchNumberEvent(true);
         handleFilterVisibility(model.getReadWriteMode());
         setStreamMode(model.getReadWriteMode());
+        if (!model.isFollowing()) {
+          streamTimelineView.showFollowToast();
+        }
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {

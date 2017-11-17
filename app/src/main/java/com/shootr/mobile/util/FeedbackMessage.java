@@ -21,4 +21,7 @@ public interface FeedbackMessage {
 
     @UiThread void showForever(View view, @StringRes int feedback, @StringRes int action,
       View.OnClickListener onClickListener);
+
+    @UiThread void showLong(View view, @StringRes int feedback, @StringRes int action,
+        View.OnClickListener onClickListener);
 }

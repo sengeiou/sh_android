@@ -53,4 +53,11 @@ public class SnackbarFeedbackMessage implements FeedbackMessage {
             Snackbar.make(view, feedback, Snackbar.LENGTH_INDEFINITE).setAction(action, onClickListener).show();
         }
     }
+
+    @Override public void showLong(View view, @StringRes int feedback, @StringRes int action,
+        View.OnClickListener onClickListener) {
+        if (view != null) {
+            Snackbar.make(view, feedback, Snackbar.LENGTH_LONG).setAction(action, onClickListener).show();
+        }
+    }
 }
