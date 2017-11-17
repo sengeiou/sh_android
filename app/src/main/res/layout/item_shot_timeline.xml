@@ -82,7 +82,7 @@
             android:id="@+id/shot_timestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="3dp"
             android:layout_toEndOf="@+id/verified_user_container"
             android:maxLines="1"
             android:textColor="@color/gray_80"
