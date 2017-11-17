@@ -59,9 +59,9 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
   @Override public int getItemViewType(int position) {
     if (items.get(position) instanceof PollModel) {
-      return TYPE_POLL;
-    } else if (items.get(position) instanceof Boolean) {
       return TYPE_SHARE_POLL;
+    } else if (items.get(position) instanceof Boolean) {
+      return TYPE_POLL;
     } else if (items.get(position) instanceof PollOptionModel) {
       return TYPE_POLL_OPTION;
     } else if (items.get(position) instanceof String) {
@@ -87,7 +87,7 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     } else if (viewType == TYPE_SHARE_POLL) {
       view =
           LayoutInflater.from(parent.getContext()).inflate(R.layout.item_share_poll, parent, false);
-      viewHolder = new SharePollVotedViewHolder(view, onClickListener);
+      viewHolder = new SharePollVotedViewHolder(view, onClickListener, imageLoader);
     } else if (viewType == TYPE_FOOTER_LEGAL_TEXT) {
       view =
           LayoutInflater.from(parent.getContext()).inflate(R.layout.item_legal_text, parent, false);
@@ -100,11 +100,11 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   @Override public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
     runEnterAnimation(holder.itemView, position);
     if (holder.getItemViewType() == TYPE_POLL) {
-      ((PollQuestionViewHolder) holder).render((PollModel) items.get(position));
+      ((PollQuestionViewHolder) holder).render();
     } else if (holder.getItemViewType() == TYPE_POLL_OPTION) {
       ((PollResultViewHolder) holder).render((PollOptionModel) items.get(position), position);
     } else if (holder.getItemViewType() == TYPE_SHARE_POLL) {
-      ((SharePollVotedViewHolder) holder).render((PollModel) items.get(position - 1));
+      ((SharePollVotedViewHolder) holder).render((PollModel) items.get(position));
     } else if (holder.getItemViewType() == TYPE_FOOTER_LEGAL_TEXT) {
       ((LegalTextInPollViewHolder) holder).render((String) items.get(position));
     }
@@ -117,10 +117,10 @@ public class PollResultsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
   public void setPollModel(PollModel model, boolean showShare, String legalText) {
     this.showShared = showShare;
     items = new ArrayList<>();
-    items.add(model);
     if (showShare) {
-      items.add(true);
+      items.add(model);
     }
+    items.add(true);
     for (PollOptionModel pollOptionModel : model.getPollOptionModels()) {
       items.add(pollOptionModel);
     }

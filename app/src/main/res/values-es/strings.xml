@@ -332,7 +332,7 @@
   <string name="pin_topic" formatted="false">Anclar mensaje</string>
   <string name="poll_finished">Encuesta finalizada en</string>
   <string name="poll_ignore">Quitar encuesta</string>
-  <string name="poll_legal_text">Esta es una encuesta segura y permite solo un voto por cuenta y dispositivo. No se computarán segundos votos.</string>
+  <string name="poll_legal_text">Solo un voto por cuenta y dispositivo. No se computan segundos votos.</string>
   <string name="poll_live_results">Resultados en vivo</string>
   <string name="poll_manual_close">Tiempo restante: No definido</string>
   <string name="poll_option_voted">Has votado \"%s\"</string>
@@ -571,4 +571,7 @@
   <string name="connected">conectados</string>
   <string name="title_activity_history">Historial</string>
   <string name="home">Inicio</string>
+  <string name="secure_daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
+  <string name="daily_poll_feedback">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
+  <string name="daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
 </resources>

@@ -88,6 +88,9 @@ public class PollResultsPresenter implements Presenter {
       if (pollModel.isHideResults()) {
         pollResultsView.hideFooter();
       }
+      if (pollModel.isDailyPoll()) {
+        pollResultsView.showDailyPollText();
+      }
       showPollVotesTimeToExpire(pollModel.getExpirationDate());
       setupPoller();
     }

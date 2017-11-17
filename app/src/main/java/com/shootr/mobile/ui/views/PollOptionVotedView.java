@@ -12,4 +12,8 @@ public interface PollOptionVotedView {
   void shareVoted(PollModel pollModel, PollOptionModel pollOptionModel);
 
   void showLegalText();
+
+  void showHiddenDailyText();
+
+  void showSecureHiddenDailyText();
 }

@@ -328,7 +328,7 @@
   <string name="pin_topic" formatted="false">Pin message</string>
   <string name="poll_finished">Poll has finished in</string>
   <string name="poll_ignore">Dismiss poll</string>
-  <string name="poll_legal_text">This a secure poll and admits only one vote per count and device. Second votes will not be counted.</string>
+  <string name="poll_legal_text">Only one vote per account and device. Second votes are not counted.</string>
   <string name="poll_live_results">Live results</string>
   <string name="poll_manual_close">Remaining time: Not defined</string>
   <string name="poll_option_voted">You voted \"%s\"</string>
@@ -567,4 +567,7 @@
   <string name="connected">connected</string>
   <string name="home">Home</string>
   <string name="title_activity_history">Activity Log</string>
+  <string name="daily_poll_feedback">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
+  <string name="daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
+  <string name="secure_daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
 </resources>

@@ -6,7 +6,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.model.PollModel;
 
 public class PollQuestionViewHolder extends RecyclerView.ViewHolder {
 
@@ -17,8 +16,8 @@ public class PollQuestionViewHolder extends RecyclerView.ViewHolder {
     ButterKnife.bind(this, itemView);
   }
 
-  public void render(final PollModel model) {
-    pollQuestion.setText(model.getQuestion());
+  public void render() {
+   /* no-op */
   }
 
 }

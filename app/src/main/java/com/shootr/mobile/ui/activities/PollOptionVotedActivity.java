@@ -33,6 +33,8 @@ public class PollOptionVotedActivity extends BaseActivity implements PollOptionV
   @BindView(R.id.voted_option) TextView votedOption;
   @BindView(R.id.legal_text) TextView legalText;
   @BindString(R.string.poll_option_voted) String optionVotedResource;
+  @BindString(R.string.daily_hidden_text) String dailyHiddenText;
+  @BindString(R.string.secure_daily_hidden_text) String secureDailyHiddenText;
 
 
   @Inject ShareManager shareManager;
@@ -87,6 +89,16 @@ public class PollOptionVotedActivity extends BaseActivity implements PollOptionV
 
   @Override public void showLegalText() {
     legalText.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void showHiddenDailyText() {
+    legalText.setVisibility(View.VISIBLE);
+    legalText.setText(dailyHiddenText);
+  }
+
+  @Override public void showSecureHiddenDailyText() {
+    legalText.setVisibility(View.VISIBLE);
+    legalText.setText(secureDailyHiddenText);
   }
 
   @OnClick(R.id.share_button) void onShareClick() {

@@ -115,7 +115,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
   public void onActionPressed() {
     switch (action) {
       case RESULTS:
-        if (pollModel.isHideResults() && pollModel.getHasVoted()) {
+        if (pollModel.isHideResults() && !pollModel.canVote()) {
           streamPollView.goToOptionVoted(pollModel);
         } else if (pollModel.isHideResults()) {
           streamPollView.goToHiddenResults(pollModel.getQuestion());
@@ -127,7 +127,7 @@ public class StreamPollIndicatorPresenter implements Presenter {
         streamPollView.goToPollVote(idStream, streamAuthorIdUser);
         break;
       default:
-        if (pollModel.isHideResults() && pollModel.getHasVoted()) {
+        if (pollModel.isHideResults() && !pollModel.canVote()) {
           streamPollView.goToOptionVoted(pollModel);
         } else if (pollModel.isHideResults()) {
           streamPollView.goToHiddenResults(pollModel.getQuestion());

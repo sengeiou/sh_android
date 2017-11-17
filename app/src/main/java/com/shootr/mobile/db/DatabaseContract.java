@@ -403,7 +403,6 @@ public class DatabaseContract {
     public static final String ID_STREAM = "idStream";
     public static final String ID_USER = "idUser";
     public static final String QUESTION = "question";
-    public static final String HAS_VOTED = "hasVoted";
     public static final String STATUS = "status";
     public static final String PUBLISHED = "published";
     public static final String VOTE_STATUS = "voteStatus";
@@ -411,10 +410,12 @@ public class DatabaseContract {
     public static final String EXPIRATION_DATE = "expirationDate";
     public static final String VERIFIED_POLL = "verifiedPoll";
     public static final String HIDE_RESULTS = "hideResults";
+    public static final String CAN_VOTE = "canVote";
+    public static final String DAILY_POLL = "dailyPoll";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_STREAM, ID_USER, QUESTION, HAS_VOTED, STATUS, VOTE_STATUS, VOTE_PRIVACY,
-        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL, HIDE_RESULTS
+        ID_POLL, ID_STREAM, ID_USER, QUESTION, STATUS, VOTE_STATUS, VOTE_PRIVACY,
+        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL, HIDE_RESULTS, CAN_VOTE, DAILY_POLL
     };
   }
 

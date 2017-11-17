@@ -331,7 +331,7 @@
   <string name="pin_topic" formatted="false">Fixar un missatge</string>
   <string name="poll_finished">Enquesta finalitzada a</string>
   <string name="poll_ignore">Llevar enquesta</string>
-  <string name="poll_legal_text">Aquesta és una enquesta segura i permet només un vot per compte y dispositiu. No es computaran segones votacions.</string>
+  <string name="poll_legal_text">Només un vot per compte i dispositiu. No es computen segones votacions.</string>
   <string name="poll_live_results">Resultats en viu</string>
   <string name="poll_manual_close">Temps restant: No definit</string>
   <string name="poll_option_voted">Has votat \"%s\"</string>
@@ -571,4 +571,7 @@
   <string name="connected">conectats</string>
   <string name="title_activity_history">Historial</string>
   <string name="home">Inici</string>
+  <string name="secure_daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
+  <string name="daily_poll_feedback">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
+  <string name="daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
 </resources>

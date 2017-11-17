@@ -18,6 +18,8 @@ public class Poll {
   private Long expirationDate;
   private boolean verifiedPoll;
   private boolean hideResults;
+  private boolean canVote;
+  private boolean dailyPoll;
 
   public String getIdPoll() {
     return idPoll;
@@ -129,5 +131,21 @@ public class Poll {
 
   public void setHideResults(boolean hideResults) {
     this.hideResults = hideResults;
+  }
+
+  public boolean canVote() {
+    return canVote;
+  }
+
+  public void setCanVote(boolean canVote) {
+    this.canVote = canVote;
+  }
+
+  public boolean isDailyPoll() {
+    return dailyPoll;
+  }
+
+  public void setDailyPoll(boolean dailyPoll) {
+    this.dailyPoll = dailyPoll;
   }
 }

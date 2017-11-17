@@ -14,7 +14,6 @@ public class PollEntityDBMapper extends GenericDBMapper {
 
   public PollEntity fromCursor(Cursor c) {
     PollEntity pollEntity = new PollEntity();
-    pollEntity.setUserHasVoted(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HAS_VOTED)) == 1L);
     pollEntity.setIdPoll(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_POLL)));
     pollEntity.setIdStream(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_STREAM)));
     pollEntity.setIdUser(c.getString(c.getColumnIndex(DatabaseContract.PollTable.ID_USER)));
@@ -27,12 +26,13 @@ public class PollEntityDBMapper extends GenericDBMapper {
     pollEntity.setHideResults(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.HIDE_RESULTS)) == 1L);
     pollEntity.setVerifiedPoll(
         c.getLong(c.getColumnIndex(DatabaseContract.PollTable.VERIFIED_POLL)) == 1L);
+    pollEntity.setCanVote(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.CAN_VOTE)) == 1L);
+    pollEntity.setDailyPoll(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.DAILY_POLL)) == 1L);
     return pollEntity;
   }
 
   public ContentValues toContentValues(PollEntity pollEntity) {
     ContentValues cv = new ContentValues();
-    cv.put(DatabaseContract.PollTable.HAS_VOTED, pollEntity.getUserHasVoted() ? 1L : 0L);
     cv.put(DatabaseContract.PollTable.ID_POLL, pollEntity.getIdPoll());
     cv.put(DatabaseContract.PollTable.ID_STREAM, pollEntity.getIdStream());
     cv.put(DatabaseContract.PollTable.ID_USER, pollEntity.getIdStream());
@@ -47,6 +47,10 @@ public class PollEntityDBMapper extends GenericDBMapper {
         pollEntity.getVerifiedPoll() != null && pollEntity.getVerifiedPoll() ? 1L : 0L);
     cv.put(DatabaseContract.PollTable.HIDE_RESULTS,
         pollEntity.isHideResults() != null && pollEntity.isHideResults() ? 1L : 0L);
+    cv.put(DatabaseContract.PollTable.CAN_VOTE,
+        pollEntity.canVote() ? 1L : 0L);
+    cv.put(DatabaseContract.PollTable.DAILY_POLL,
+        pollEntity.isDailyPoll() ? 1L : 0L);
     return cv;
   }
 }

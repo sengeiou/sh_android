@@ -8,7 +8,6 @@ public class PollEntity {
   private String idStream;
   private String idUser;
   private String question;
-  private Boolean userHasVoted;
   private String status;
   private Long published;
   private List<PollOptionEntity> pollOptions;
@@ -17,6 +16,8 @@ public class PollEntity {
   private Long expirationDate;
   private Boolean verifiedPoll;
   private boolean hideResults;
+  private boolean canVote;
+  private boolean dailyPoll;
 
   public String getIdPoll() {
     return idPoll;
@@ -40,14 +41,6 @@ public class PollEntity {
 
   public void setQuestion(String question) {
     this.question = question;
-  }
-
-  public Boolean getUserHasVoted() {
-    return userHasVoted;
-  }
-
-  public void setUserHasVoted(Boolean userHasVoted) {
-    this.userHasVoted = userHasVoted;
   }
 
   public String getStatus() {
@@ -120,5 +113,21 @@ public class PollEntity {
 
   public void setHideResults(Boolean hideResults) {
     this.hideResults = hideResults;
+  }
+
+  public boolean canVote() {
+    return canVote;
+  }
+
+  public void setCanVote(boolean canVote) {
+    this.canVote = canVote;
+  }
+
+  public boolean isDailyPoll() {
+    return dailyPoll;
+  }
+
+  public void setDailyPoll(boolean dailyPoll) {
+    this.dailyPoll = dailyPoll;
   }
 }

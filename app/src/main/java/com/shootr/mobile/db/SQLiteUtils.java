@@ -575,8 +575,6 @@ public class SQLiteUtils {
         + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.QUESTION
         + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.HAS_VOTED
-        + " NUMBER NULL,"
         + DatabaseContract.PollTable.STATUS
         + " TEXT NOT NULL,"
         + DatabaseContract.PollTable.VOTE_STATUS
@@ -588,6 +586,10 @@ public class SQLiteUtils {
         + DatabaseContract.PollTable.VERIFIED_POLL
         + " NUMBER NULL,"
         + DatabaseContract.PollTable.HIDE_RESULTS
+        + " NUMBER NULL,"
+        + DatabaseContract.PollTable.CAN_VOTE
+        + " NUMBER NULL,"
+        + DatabaseContract.PollTable.DAILY_POLL
         + " NUMBER NULL,"
         + DatabaseContract.PollTable.PUBLISHED
         + " NUMBER NOT NULL)";
