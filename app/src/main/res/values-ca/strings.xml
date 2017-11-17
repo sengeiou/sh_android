@@ -571,6 +571,8 @@
   <string name="connected">conectats</string>
   <string name="title_activity_history">Historial</string>
   <string name="home">Inici</string>
+  <string name="activity_onboarding_action">Entès</string>
+  <string name="activity_onboarding_text">A &lt;b&gt;Inici&lt;/b&gt; veuràs l\'activitat dels streams i de les persones que segueixes.</string>
   <string name="secure_daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
   <string name="daily_poll_feedback">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
   <string name="daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>

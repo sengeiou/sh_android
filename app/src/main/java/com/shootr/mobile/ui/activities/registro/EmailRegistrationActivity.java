@@ -13,6 +13,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.prefs.ActivityShowcase;
+import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.BaseToolbarDecoratedActivity;
@@ -38,6 +40,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     @Inject FeedbackMessage feedbackMessage;
     @Inject AnalyticsTool analyticsTool;
     @Inject SessionRepository sessionRepository;
+    @Inject @ActivityShowcase BooleanPreference activityShowcase;
 
     //region Initialization
     @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -170,6 +173,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
 
     @Override public void navigateToWelcomePage() {
         analyticsTool.sendSignUpEvent(sessionRepository.getCurrentUser(), analyticsActionSignup, this);
+        activityShowcase.set(true);
         finish();
         Intent navigateToWelcomePageIntent = new Intent(this, OnBoardingStreamActivity.class);
         navigateToWelcomePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

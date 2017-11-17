@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:animateLayoutChanges="true">
+  android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout android:id="@+id/timeline_swipe_refresh"
       android:layout_width="match_parent"
@@ -20,26 +20,69 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView android:id="@+id/timeline_empty"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="@string/empty_home"
-      android:gravity="center"
-      android:padding="50dp"
-      android:textColor="@color/gray_50"
-      android:textSize="20sp"
-      android:visibility="gone"
-      tools:visibility="visible" />
+        <TextView android:id="@+id/timeline_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/empty_home"
+            android:gravity="center"
+            android:padding="50dp"
+            android:textColor="@color/gray_50"
+            android:layout_marginBottom="25dp"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-    <TextView android:id="@+id/timeline_loading_activity"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_gravity="center"
-      android:text="@string/loading_activity_message"
-      android:textColor="@color/gray_50"
-      android:textSize="20sp"
-      android:visibility="gone"
-      tools:visibility="visible" />
+        <TextView android:id="@+id/timeline_loading_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/loading_activity_message"
+            android:textColor="@color/gray_50"
+            android:layout_marginBottom="25dp"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+
+    <RelativeLayout
+        android:id="@+id/onboarding_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#eeeeee"
+        android:gravity="center"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/onboarding_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="25dp"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:paddingTop="25dp"
+            android:text="@string/activity_onboarding_text"
+            android:textColor="@color/material_black"
+            android:textSize="18sp"
+            />
+
+        <Button
+            android:id="@+id/onboarding_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/onboarding_text"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="75dp"
+            android:background="@color/links"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="@string/activity_onboarding_action"
+            android:visibility="visible"
+            />
+
+    </RelativeLayout>
+
 
 </FrameLayout>

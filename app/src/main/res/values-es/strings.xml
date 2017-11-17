@@ -571,6 +571,8 @@
   <string name="connected">conectados</string>
   <string name="title_activity_history">Historial</string>
   <string name="home">Inicio</string>
+  <string name="activity_onboarding_action">Entendido</string>
+  <string name="activity_onboarding_text">En &lt;b&gt;Inicio&lt;/b&gt; verás la actividad de los streams y las personas que sigues</string>
   <string name="secure_daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
   <string name="daily_poll_feedback">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
   <string name="daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
