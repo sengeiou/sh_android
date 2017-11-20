@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.48.1] - 2017-11-20
+### Fixed
+- Vista correcta para android anterior a v5
+
+### Changed
+- Remove Snackbar to follow stream
+
+
 ## [1.48.0] - 2017-11-17
 ### Added
 - X to dissmiss highlighted shot
