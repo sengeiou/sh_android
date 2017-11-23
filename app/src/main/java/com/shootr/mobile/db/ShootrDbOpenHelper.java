@@ -40,6 +40,7 @@ public class ShootrDbOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQLiteUtils.CREATE_TABLE_PRIVATE_MESSAGE);
         db.execSQL(SQLiteUtils.CREATE_TABLE_MESSAGE_QUEUE);
         db.execSQL(SQLiteUtils.CREATE_TABLE_STREAM_FILTER);
+        db.execSQL(SQLiteUtils.CREATE_TABLE_STREAM_CONNECTIONS);
     }
 
     @Override public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

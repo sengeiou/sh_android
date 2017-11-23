@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetConnectionTimesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
@@ -42,6 +43,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private static final long MAX_REFRESH_INTERVAL_MILLISECONDS = 60 * 1000;
   private static final int MAX_LENGTH = 40;
   private static final String SCHEMA = "shootr://";
+  private static final long CONNECTION_TIMES = 3;
 
   private final StreamTimelineInteractorsWrapper timelineInteractorWrapper;
   private final SelectStreamInteractor selectStreamInteractor;
@@ -58,6 +60,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final UpdateWatchNumberInteractor updateWatchNumberInteractor;
   private final UpdateStreamInteractor updateStreamInteractor;
   private final GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
+  private final GetConnectionTimesInteractor getConnectionTimesInteractor;
   private final SessionRepository sessionRepository;
 
   private StreamTimelineView streamTimelineView;
@@ -82,6 +85,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private Integer streamMode;
   private boolean isReadOnly;
   private boolean isCurrentUserContributor;
+  private boolean shouldShowFollowDialog;
 
   @Inject public StreamTimelinePresenter(StreamTimelineInteractorsWrapper timelineInteractorWrapper,
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
@@ -92,7 +96,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       UpdateStreamInteractor updateStreamInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
-      SessionRepository sessionRepository) {
+      GetConnectionTimesInteractor getConnectionTimesInteractor, SessionRepository sessionRepository) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
     this.selectStreamInteractor = selectStreamInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
@@ -108,6 +112,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.updateWatchNumberInteractor = updateWatchNumberInteractor;
     this.updateStreamInteractor = updateStreamInteractor;
     this.getNewFilteredShotsInteractor = getNewFilteredShotsInteractor;
+    this.getConnectionTimesInteractor = getConnectionTimesInteractor;
     this.sessionRepository = sessionRepository;
   }
 
@@ -126,9 +131,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     if (idAuthor != null) {
       setIdAuthor(idAuthor);
     }
+    this.setupConnectionTimes(idStream);
     this.setView(streamTimelineView);
     this.selectStream();
     setupPoller();
+  }
+
+  private void setupConnectionTimes(String idStream) {
+    getConnectionTimesInteractor.getConnectionTimes(idStream, true,
+        new Interactor.Callback<Long>() {
+          @Override public void onLoaded(Long times) {
+            shouldShowFollowDialog = times == CONNECTION_TIMES;
+          }
+        });
   }
 
   private void handleFilterVisibility(Integer streamMode) {
@@ -239,6 +254,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
         postWatchNumberEvent(true);
         handleFilterVisibility(model.getReadWriteMode());
         setStreamMode(model.getReadWriteMode());
+        if (shouldShowFollowDialog && !model.isFollowing()) {
+          shouldShowFollowDialog = false;
+          streamTimelineView.showFollowDialog();
+        }
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {

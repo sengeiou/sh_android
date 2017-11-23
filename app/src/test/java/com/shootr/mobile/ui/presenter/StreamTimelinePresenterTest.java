@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetConnectionTimesInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetNewFilteredShotsInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
@@ -98,6 +99,7 @@ public class StreamTimelinePresenterTest {
   @Mock SessionRepository sessionRepository;
   @Mock CallCtaCheckInInteractor callCtaCheckInInteractor;
   @Mock GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
+  @Mock GetConnectionTimesInteractor getConnectionTimesInteractor;
   @Mock UpdateStreamInteractor updateStreamInteractor;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
@@ -112,7 +114,8 @@ public class StreamTimelinePresenterTest {
         undoReshootInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
-        updateStreamInteractor, getNewFilteredShotsInteractor, sessionRepository);
+        updateStreamInteractor, getNewFilteredShotsInteractor, getConnectionTimesInteractor,
+        sessionRepository);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
   }

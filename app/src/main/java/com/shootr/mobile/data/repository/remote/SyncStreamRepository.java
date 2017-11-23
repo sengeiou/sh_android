@@ -136,6 +136,14 @@ public class SyncStreamRepository
     }
   }
 
+  @Override public long getConnectionTimes(String idStream) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public void storeConnection(String idStream, long connections) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
   @Override public Stream getBlogStream(String country, String language) {
     StreamEntity blogStream = remoteStreamDataSource.getBlogStream(country, language);
     if (blogStream != null) {

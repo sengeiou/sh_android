@@ -567,4 +567,20 @@ public class DatabaseContract {
         ID_STREAM, LAST_TIME_FILTERED
     };
   }
+
+  public static final class StreamConnectionsTable {
+
+    private StreamConnectionsTable() {
+    }
+
+    public static final String TABLE = "StreamConnections";
+
+    public static final String ID_STREAM = "idStream";
+    public static final String CONNECTION_TIMES = "connectionsTime";
+
+    public static final String[] PROJECTION = {
+        ID_STREAM, CONNECTION_TIMES
+    };
+  }
+
 }

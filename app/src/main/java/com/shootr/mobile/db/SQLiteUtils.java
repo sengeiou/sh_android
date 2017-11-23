@@ -805,4 +805,12 @@ public class SQLiteUtils {
         + DatabaseContract.StreamFilterTable.LAST_TIME_FILTERED
         + " INTEGER NULL)";
 
+    public static final String CREATE_TABLE_STREAM_CONNECTIONS = "CREATE TABLE IF NOT EXISTS "
+        + DatabaseContract.StreamConnectionsTable.TABLE
+        + " ("
+        + DatabaseContract.StreamConnectionsTable.ID_STREAM
+        + " TEXT NOT NULL PRIMARY KEY,"
+        + DatabaseContract.StreamConnectionsTable.CONNECTION_TIMES
+        + " INTEGER NULL)";
+
 }

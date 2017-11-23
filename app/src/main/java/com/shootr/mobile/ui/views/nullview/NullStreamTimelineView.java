@@ -174,7 +174,7 @@ public class NullStreamTimelineView implements StreamTimelineView {
         /* no-op */
     }
 
-    @Override public void showFollowToast() {
+    @Override public void showFollowDialog() {
         /* no-op */
     }
 

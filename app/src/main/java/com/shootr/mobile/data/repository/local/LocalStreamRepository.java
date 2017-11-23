@@ -94,4 +94,12 @@ public class LocalStreamRepository implements StreamRepository {
         localStreamDataSource.unfollow(idStream);
         localStreamSearchDataSource.unfollow(idStream);
     }
+
+    @Override public long getConnectionTimes(String idStream) {
+        return localStreamDataSource.getConnectionTimes(idStream);
+    }
+
+    @Override public void storeConnection(String idStream, long connections) {
+        localStreamDataSource.storeConnection(idStream, connections);
+    }
 }

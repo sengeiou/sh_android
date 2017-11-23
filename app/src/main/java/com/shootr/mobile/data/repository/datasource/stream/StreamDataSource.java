@@ -49,4 +49,8 @@ public interface StreamDataSource extends SyncableDataSource<FollowEntity> {
   void putFailedFollow(FollowEntity followEntity);
 
   void deleteFailedFollows();
+
+  long getConnectionTimes(String idStream);
+
+  void storeConnection(String idStream, long connections);
 }

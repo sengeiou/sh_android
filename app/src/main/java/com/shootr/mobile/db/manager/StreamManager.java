@@ -371,4 +371,33 @@ public class StreamManager extends AbstractManager {
     getWritableDatabase().delete(FOLLOW_TABLE, whereClause, whereArgs);
   }
 
+  public long getConnectionTimes(String idStream) {
+    String whereClause = DatabaseContract.StreamConnectionsTable.ID_STREAM + " = ?";
+
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+
+    Cursor queryResult = getReadableDatabase().query(DatabaseContract.StreamConnectionsTable.TABLE,
+        DatabaseContract.StreamConnectionsTable.PROJECTION, whereClause, whereArguments, null, null,
+        null, null);
+
+    long times;
+    if (queryResult.getCount() > 0) {
+      queryResult.moveToFirst();
+      int dateColumnIndex =
+          queryResult.getColumnIndex(DatabaseContract.StreamConnectionsTable.CONNECTION_TIMES);
+      times = queryResult.getLong(dateColumnIndex);
+    } else {
+      times = 1L;
+    }
+    queryResult.close();
+    return times;
+  }
+
+  public void storeConnection(String idStream, long connections) {
+    ContentValues values = new ContentValues(2);
+    values.put(DatabaseContract.StreamConnectionsTable.ID_STREAM, idStream);
+    values.put(DatabaseContract.StreamConnectionsTable.CONNECTION_TIMES, connections);
+    getWritableDatabase().insertWithOnConflict(DatabaseContract.StreamConnectionsTable.TABLE, null,
+        values, SQLiteDatabase.CONFLICT_REPLACE);
+  }
 }

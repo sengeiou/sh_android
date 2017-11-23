@@ -573,4 +573,5 @@
   <string name="daily_poll_feedback">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
   <string name="daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
   <string name="secure_daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
+  <string name="not_now">Not now</string>
 </resources>
