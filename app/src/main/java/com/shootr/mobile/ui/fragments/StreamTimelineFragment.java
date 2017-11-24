@@ -1301,13 +1301,21 @@ public class StreamTimelineFragment extends BaseFragment
     reportShotPresenter.setCurrentUserContributor(isCurrentUserContributor);
   }
 
-  @Override public void showFollowToast() {
-    feedbackMessage.showLong(getView(), R.string.follow_stream,
-        R.string.stream_timeline_add_favorite, new View.OnClickListener() {
-          @Override public void onClick(View v) {
-            streamTimelineOptionsPresenter.addToFavorites();
+  @Override public void showFollowDialog() {
+    new AlertDialog.Builder(getActivity()).setMessage(R.string.follow_stream)
+        .setPositiveButton(R.string.stream_timeline_add_favorite,
+            new DialogInterface.OnClickListener() {
+              @Override public void onClick(DialogInterface dialog, int which) {
+                streamTimelineOptionsPresenter.addToFavorites();
+              }
+            })
+        .setNegativeButton(R.string.not_now, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
           }
-        });
+        })
+        .create()
+        .show();
   }
 
   @Override public void showEmpty() {

@@ -161,6 +161,14 @@ public class ServiceStreamDataSource implements StreamDataSource {
     throw new RuntimeException("Method not implemented yet!");
   }
 
+  @Override public long getConnectionTimes(String idStream) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public void storeConnection(String idStream, long connections) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
   @Override public List<FollowEntity> getEntitiesNotSynchronized() {
     throw new RuntimeException("Method not implemented yet!");
   }

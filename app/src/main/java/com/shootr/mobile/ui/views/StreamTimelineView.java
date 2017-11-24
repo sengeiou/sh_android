@@ -57,5 +57,5 @@ public interface StreamTimelineView extends TimelineView  {
 
     void setIsContributor(boolean isCurrentUserContributor);
 
-    void showFollowToast();
+    void showFollowDialog();
 }

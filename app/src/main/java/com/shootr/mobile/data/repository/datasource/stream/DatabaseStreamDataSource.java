@@ -107,6 +107,14 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     streamManager.deleteFailedFollows();
   }
 
+  @Override public long getConnectionTimes(String idStream) {
+    return streamManager.getConnectionTimes(idStream);
+  }
+
+  @Override public void storeConnection(String idStream, long connections) {
+    streamManager.storeConnection(idStream, connections);
+  }
+
   @Override public List<FollowEntity> getEntitiesNotSynchronized() {
     return streamManager.getFailedFollows();
   }

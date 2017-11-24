@@ -26,4 +26,8 @@ public interface StreamRepository {
     void follow(String idStream);
 
     void unfollow(String idStream);
+
+    long getConnectionTimes(String idStream);
+
+    void storeConnection(String idStream, long connections);
 }
