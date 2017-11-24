@@ -576,5 +576,6 @@
   <string name="secure_daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
   <string name="daily_poll_feedback">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
   <string name="daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
-  <string name="follow_stream">Sigue este stream</string>
+  <string name="follow_stream">Sigue el stream para mantenerte al día de su actividad.</string>
+  <string name="not_now">Ahora no</string>
 </resources>

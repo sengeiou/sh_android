@@ -567,7 +567,7 @@
   <string name="connected">connected</string>
   <string name="home">Home</string>
   <string name="title_activity_history">Activity Log</string>
-  <string name="follow_stream">Follow this stream</string>
+  <string name="follow_stream">Follow the stream to keep posted with its activity.</string>
   <string name="activity_onboarding_action">Got it</string>
   <string name="activity_onboarding_text">&lt;b&gt;Home&lt;/b&gt; will show the activity from streams and people you follow.</string>
   <string name="daily_poll_feedback">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>

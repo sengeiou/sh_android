@@ -576,5 +576,6 @@
   <string name="secure_daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
   <string name="daily_poll_feedback">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
   <string name="daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
-  <string name="follow_stream">Segueix aquest stream</string>
+  <string name="follow_stream">Segueix l\'stream per estar al dia de la seva activitat.</string>
+  <string name="not_now">Ara no</string>
 </resources>
