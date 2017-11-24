@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.49.0] - 2017-11-24
+### Added
+- Action Dialog follow stream at 3th time
+
 ## [1.48.1] - 2017-11-20
 ### Fixed
 - Vista correcta para android anterior a v5
