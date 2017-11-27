@@ -10,11 +10,14 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.StreamPercentageUtils;
 import javax.inject.Inject;
 
 public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
+
+  public static final String EXTRA_STREAM = "stream";
 
   public static final String ARGUMENT_PARTICIPANTS_NUMBER = "participantsNumber";
   public static final String ARGUMENT_SHOTS_NUMBER = "shotsNumber";
@@ -65,11 +68,13 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
   private void setupStatics() {
     Intent intent = getIntent();
-    String streamName = (String) intent.getExtras().get(ARGUMENT_STREAM_NAME);
-    Long participantsNumber = (Long) intent.getExtras().get(ARGUMENT_PARTICIPANTS_NUMBER);
-    Integer favoritesNumber = intent.getExtras().getInt(ARGUMENT_FAVORITES_NUMBER);
-    Long shotsNumber = (Long) intent.getExtras().get(ARGUMENT_SHOTS_NUMBER);
-    Long participantsWithShotsNumber = (Long) intent.getExtras().get(ARGUMENT_UNIQUE_SHOTS);
+    StreamModel streamModel = (StreamModel) intent.getSerializableExtra(EXTRA_STREAM);
+
+    String streamName = streamModel.getTitle();
+    Long participantsNumber =  streamModel.getHistoricWatchers();
+    Integer favoritesNumber = streamModel.getTotalFollowers();
+    Long shotsNumber = streamModel.getTotalShots();
+    Long participantsWithShotsNumber = streamModel.getUniqueShots();
     Double pctParticipantsWithShots =
         streamPercentageUtils.getPercentage(participantsWithShotsNumber, participantsNumber);
     Double pctFavoritesNumber =
