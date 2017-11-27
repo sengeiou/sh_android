@@ -45,4 +45,8 @@ public class DatabaseShootrEventDataSource implements ShootrEventDataSource {
     @Override public void getShootrEvents() {
         throw new IllegalStateException(METHOD_NOT_VALID_FOR_DATABASE);
     }
+
+    @Override public void timelineViewed(ShootrEventEntity shootrEvent) {
+        shootrEventManager.timelineViewed(shootrEvent);
+    }
 }

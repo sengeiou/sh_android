@@ -110,7 +110,8 @@ public class StreamTimelinePresenterTest {
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         selectStreamInteractor, markNiceShotInteractor,
-        unmarkNiceShotInteractor, callCtaCheckInInteractor, reshootInteractor,
+        unmarkNiceShotInteractor, callCtaCheckInInteractor, viewTimelineEventInteractor,
+        reshootInteractor,
         undoReshootInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
