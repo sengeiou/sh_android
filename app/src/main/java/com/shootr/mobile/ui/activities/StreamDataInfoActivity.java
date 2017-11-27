@@ -3,6 +3,8 @@ package com.shootr.mobile.ui.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -27,6 +29,8 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
   @BindView(R.id.stream_data_info_stream_name) TextView streamNameTextView;
   @BindView(R.id.stream_data_info_participants_with_shots_number_pct) TextView
       participantsWithShotsPtcNumberTextView;
+  @BindView(R.id.stream_data_info_total_container) FrameLayout viewsContainer;
+  @BindView(R.id.stream_data_info_total_number) TextView viewsText;
 
   @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
 
@@ -77,6 +81,16 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     participantsWithShotsNumberTextView.setText(String.valueOf(participantsWithShotsNumber));
     participantsWithShotsPtcNumberTextView.setText(getString(R.string.stream_data_info_pct,
         streamPercentageUtils.formatPercentage(pctParticipantsWithShots)));
+    setupViewsVisibility(streamModel);
+  }
+
+  private void setupViewsVisibility(StreamModel streamModel) {
+    if (streamModel.getViews() != 0) {
+      viewsContainer.setVisibility(View.VISIBLE);
+      viewsText.setText(String.valueOf(streamModel.getViews()));
+    } else {
+      viewsContainer.setVisibility(View.GONE);
+    }
   }
 
   @Override protected void initializePresenter() {
