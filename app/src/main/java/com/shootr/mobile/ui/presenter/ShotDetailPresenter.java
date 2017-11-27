@@ -148,7 +148,6 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     private void renderReplies(int previousReplyCount, int newReplyCount) {
         shotDetailView.renderReplies(repliesModels);
         if (justSentReply && previousReplyCount < newReplyCount) {
-            shotDetailView.scrollToBottom();
             justSentReply = false;
         }
     }

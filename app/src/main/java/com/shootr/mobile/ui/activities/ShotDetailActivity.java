@@ -602,10 +602,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
   }
 
-  @Override public void scrollToBottom() {
-    detailList.smoothScrollToPosition(detailAdapter.getItemCount() - 1);
-  }
-
   @Override public void renderParents(List<ShotModel> parentShot) {
     detailAdapter.renderParentShot(parentShot);
   }
