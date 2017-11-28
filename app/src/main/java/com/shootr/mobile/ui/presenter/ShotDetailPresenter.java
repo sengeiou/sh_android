@@ -80,7 +80,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
         this.setShotDetailView(shotDetailView);
         this.setShotModel(shotModel);
-        this.loadShotDetail(shotModel, false);
+        this.loadShotDetail(shotModel, false, true);
         if (shotModel != null) {
             this.storeViewCount(shotModel.getIdShot());
         }
@@ -152,16 +152,18 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
         }
     }
 
-    private void loadShotDetail(ShotModel shotModel, boolean localOnly) {
+    private void loadShotDetail(ShotModel shotModel, boolean localOnly, boolean showLoading) {
         if (shotModel != null) {
-            handleShotDetail(shotModel, localOnly);
+            handleShotDetail(shotModel, localOnly, showLoading);
         } else {
             shotDetailView.showError(errorMessageFactory.getCommunicationErrorMessage());
         }
     }
 
-    private void handleShotDetail(ShotModel shotModel, boolean localOnly) {
-        shotDetailView.showLoading();
+    private void handleShotDetail(ShotModel shotModel, boolean localOnly, boolean showLoading) {
+        if(showLoading) {
+            shotDetailView.showLoading();
+        }
         getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), localOnly, new Interactor.Callback<ShotDetail>() {
             @Override public void onLoaded(ShotDetail shotDetail) {
                 shotDetailView.hideLoading();
@@ -217,7 +219,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             setNiceBlocked(true);
             markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
-                    loadShotDetail(shotModel, true);
+                    loadShotDetail(shotModel, true, false);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -232,7 +234,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
             setNiceBlocked(true);
             unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
                 @Override public void onCompleted() {
-                    loadShotDetail(shotModel, true);
+                    loadShotDetail(shotModel, true, false);
                 }
             }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
@@ -256,7 +258,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
 
     @Subscribe @Override public void onShotSent(ShotSent.Event event) {
         justSentReply = true;
-        this.loadShotDetail(shotModel, true);
+        this.loadShotDetail(shotModel, true, false);
     }
 
     public void reshoot() {
