@@ -6,29 +6,41 @@
     tools:context="com.shootr.mobile.ui.activities.StreamDataInfoActivity"
     >
 
-  <FrameLayout
+  <LinearLayout
       android:id="@+id/stream_data_info_stream_name_container"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="94dp"
       android:layout_marginBottom="12dp"
+      android:gravity="center"
+      android:paddingBottom="4dp"
+      android:paddingTop="4dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:background="@color/white_bar"
       >
+
+    <com.shootr.mobile.ui.widgets.AvatarView
+        android:id="@+id/stream_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
 
     <TextView
         android:id="@+id/stream_data_info_stream_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:gravity="center_vertical"
-        android:paddingLeft="@dimen/keyline_1"
-        android:paddingRight="16dp"
-        android:paddingTop="14dp"
-        android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
-        android:textColor="@color/gray_material"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif-medium"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_favorites"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
         />
 
-  </FrameLayout>
+  </LinearLayout>
 
   <FrameLayout
       android:id="@+id/stream_data_info_favorites_container"
@@ -60,7 +72,7 @@
         android:text="@string/stream_data_info_favorites"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         />
 
   </FrameLayout>
@@ -68,7 +80,7 @@
   <View
       android:layout_width="match_parent"
       android:layout_height="0.5dp"
-      android:background="@color/black"
+      android:background="@color/primary_disabled"
       android:layout_marginTop="8dp"
       />
 
@@ -89,7 +101,6 @@
         android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
         android:textColor="@color/gray_material"
         android:textSize="14sp"
-        android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
         />
 
@@ -123,7 +134,7 @@
         android:text="@string/stream_data_info_total_views"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         />
 
   </FrameLayout>
@@ -156,7 +167,7 @@
         android:text="@string/stream_data_info_participants"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         />
 
   </FrameLayout>
@@ -211,7 +222,7 @@
         android:text="@string/stream_data_info_participants_with_shots"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         />
 
   </FrameLayout>
@@ -244,7 +255,7 @@
         android:text="@string/stream_data_info_shots"
         android:textAppearance="@style/TextAppearance.Switch"
         android:textColor="@color/material_black"
-        android:fontFamily="sans-serif-medium"
+        android:fontFamily="sans-serif"
         />
 
   </FrameLayout>

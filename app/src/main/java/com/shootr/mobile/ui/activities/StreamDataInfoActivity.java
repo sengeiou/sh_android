@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +14,9 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.StreamPercentageUtils;
 import javax.inject.Inject;
 
@@ -31,15 +34,18 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
       participantsWithShotsPtcNumberTextView;
   @BindView(R.id.stream_data_info_total_container) FrameLayout viewsContainer;
   @BindView(R.id.stream_data_info_total_number) TextView viewsText;
+  @BindView(R.id.stream_image) AvatarView streamImage;
 
   @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
 
   @Inject AnalyticsTool analyticsTool;
   @Inject StreamPercentageUtils streamPercentageUtils;
   @Inject SessionRepository sessionRepository;
+  @Inject ImageLoader imageLoader;
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        /* no-op */
+    toolbarDecorator.hideElevation();
+    toolbarDecorator.getToolbar().setBackgroundColor(Color.parseColor("#F5F5F5"));
   }
 
   @Override protected int getLayoutResource() {
@@ -82,6 +88,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     participantsWithShotsPtcNumberTextView.setText(getString(R.string.stream_data_info_pct,
         streamPercentageUtils.formatPercentage(pctParticipantsWithShots)));
     setupViewsVisibility(streamModel);
+    imageLoader.loadProfilePhoto(streamModel.getPicture(), streamImage, streamModel.getTitle());
   }
 
   private void setupViewsVisibility(StreamModel streamModel) {

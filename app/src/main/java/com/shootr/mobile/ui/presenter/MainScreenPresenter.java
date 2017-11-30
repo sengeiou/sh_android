@@ -232,6 +232,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     bus.register(this);
     if (hasBeenPaused) {
       loadCurrentUser();
+      sendShotEventStats();
     }
   }
 
