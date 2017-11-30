@@ -470,7 +470,7 @@
   <string name="stream_checked">Pronto!</string>
   <string name="stream_check_in_activity_text_pattern">" fez check-in"</string>
   <string name="stream_data_info_favorites">Seguidores</string>
-  <string name="stream_data_info_participants">Visitas únicas</string>
+  <string name="stream_data_info_participants">Únicas</string>
   <string name="stream_data_info_participants_with_shots">Fizeram um shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -578,4 +578,6 @@
   <string name="activity_onboarding_text">Em &lt;b&gt;Início&lt;/b&gt; você poderá ver a atividade dos streams e das pessoas que você segue.</string>
   <string name="follow_stream">Siga o stream para estar por dentro de sua atividade.</string>
   <string name="not_now">Agora não</string>
+  <string name="stream_data_info_total_views">Total</string>
+  <string name="stream_data_info_views">Visualizações</string>
 </resources>
