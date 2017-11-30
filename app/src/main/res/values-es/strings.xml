@@ -470,7 +470,7 @@
   <string name="stream_checked">Hecho</string>
   <string name="stream_check_in_activity_text_pattern">" ha hecho check-in"</string>
   <string name="stream_data_info_favorites">Seguidores</string>
-  <string name="stream_data_info_participants">Visitas únicas</string>
+  <string name="stream_data_info_participants">Únicas</string>
   <string name="stream_data_info_participants_with_shots">Han hecho un shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -578,4 +578,6 @@
   <string name="daily_hidden_text">En esta encuesta puedes votar más de una vez y todos los votos computan. Máximo un voto al día por cuenta y dispositivo.</string>
   <string name="follow_stream">Sigue el stream para mantenerte al día de su actividad.</string>
   <string name="not_now">Ahora no</string>
+  <string name="stream_data_info_total_views">Totales</string>
+  <string name="stream_data_info_views">Visitas</string>
 </resources>

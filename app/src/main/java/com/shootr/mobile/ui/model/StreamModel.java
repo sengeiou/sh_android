@@ -29,6 +29,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private int totalFollowingWatchers;
     private boolean isStrategic;
     private boolean muted;
+    private long views;
 
     public Boolean isRemoved() {
         return removed;
@@ -242,5 +243,13 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setTotalFollowingWatchers(int totalFollowingWatchers) {
         this.totalFollowingWatchers = totalFollowingWatchers;
+    }
+
+    public long getViews() {
+        return views;
+    }
+
+    public void setViews(long views) {
+        this.views = views;
     }
 }

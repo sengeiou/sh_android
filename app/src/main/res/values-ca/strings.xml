@@ -470,7 +470,7 @@
   <string name="stream_checked">Fet</string>
   <string name="stream_check_in_activity_text_pattern">" ha fet check-in"</string>
   <string name="stream_data_info_favorites">Seguidors</string>
-  <string name="stream_data_info_participants">Visites úniques</string>
+  <string name="stream_data_info_participants">Úniques</string>
   <string name="stream_data_info_participants_with_shots">Han fet un shot</string>
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -578,4 +578,6 @@
   <string name="daily_hidden_text">En aquesta enquesta pots votar més d\'un cop i tots els vots computen. Màxim un vot al dia per compte i dispositiu.</string>
   <string name="follow_stream">Segueix l\'stream per estar al dia de la seva activitat.</string>
   <string name="not_now">Ara no</string>
+  <string name="stream_data_info_total_views">Totals</string>
+  <string name="stream_data_info_views">Visites</string>
 </resources>

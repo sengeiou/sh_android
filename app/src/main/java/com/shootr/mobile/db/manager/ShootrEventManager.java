@@ -70,4 +70,9 @@ public class ShootrEventManager extends AbstractManager {
           SQLiteDatabase.CONFLICT_REPLACE);
     }
   }
+
+  public void timelineViewed(ShootrEventEntity shootrEvent) {
+    shootrEvent.setType(ShootrEventType.TIMELINE_VIEWED);
+    putShootrEventEntity(shootrEvent);
+  }
 }

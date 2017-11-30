@@ -38,6 +38,7 @@ public class Stream implements Searchable, Followable, Validable {
     private int totalFollowingWatchers;
     private String photoIdMedia;
     private boolean muted;
+    private long views;
 
     public Boolean isRemoved() {
         return removed;
@@ -331,5 +332,13 @@ public class Stream implements Searchable, Followable, Validable {
 
     public void setPhotoIdMedia(String photoIdMedia) {
         this.photoIdMedia = photoIdMedia;
+    }
+
+    public long getViews() {
+        return views;
+    }
+
+    public void setViews(long views) {
+        this.views = views;
     }
 }

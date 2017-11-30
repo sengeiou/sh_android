@@ -17,4 +17,6 @@ public interface ShootrEventDataSource {
     void deleteShootrEvents();
 
     void getShootrEvents();
+
+    void timelineViewed(ShootrEventEntity shootrEvent);
 }

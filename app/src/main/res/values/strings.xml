@@ -465,7 +465,7 @@
   <string name="stream_checked">Checked in</string>
   <string name="stream_check_in_activity_text_pattern">" checked-in"</string>
   <string name="stream_data_info_favorites">Followers</string>
-  <string name="stream_data_info_participants">Unique visitors</string>
+  <string name="stream_data_info_participants">Unique</string>
   <string name="stream_data_info_participants_with_shots">Sent a shot</string>
   <string formatted="false" name="stream_data_info_pct">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
@@ -574,4 +574,6 @@
   <string name="daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
   <string name="secure_daily_hidden_text">This poll lets you vote more than once and all votes count. Maximum one vote per day per account and device.</string>
   <string name="not_now">Not now</string>
+  <string name="stream_data_info_views">Views</string>
+  <string name="stream_data_info_total_views">Totals</string>
 </resources>
