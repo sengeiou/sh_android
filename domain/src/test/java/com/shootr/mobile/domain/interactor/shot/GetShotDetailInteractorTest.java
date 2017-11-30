@@ -60,6 +60,7 @@ public class GetShotDetailInteractorTest {
     interactor.loadShotDetail(String.valueOf(ANY_SHOT_ID), true, spyCallback, errorCallback);
 
     List<Shot> localReplies = spyCallback.firstResult().getReplies();
+    Collections.reverse(localReplies);
     assertThat(localReplies).isSortedAccordingTo(new Shot.NewerBelowComparator());
   }
 

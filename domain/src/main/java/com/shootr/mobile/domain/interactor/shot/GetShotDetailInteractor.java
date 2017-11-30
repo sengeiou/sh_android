@@ -99,6 +99,7 @@ public class GetShotDetailInteractor implements Interactor {
 
   private List<Shot> orderShots(List<Shot> replies) {
     Collections.sort(replies, new Shot.NewerBelowComparator());
+    Collections.reverse(replies);
     return replies;
   }
 
