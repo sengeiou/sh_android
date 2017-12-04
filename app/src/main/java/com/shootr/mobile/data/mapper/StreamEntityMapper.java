@@ -67,6 +67,7 @@ public class StreamEntityMapper {
       stream.setMuted(streamEntity.isMuted());
     }
     stream.setPhotoIdMedia(streamEntity.getPhotoIdMedia());
+    stream.setViews(streamEntity.getViews());
     return stream;
   }
 
@@ -117,5 +118,6 @@ public class StreamEntityMapper {
     entityTemplate.setStrategic(stream.isStrategic());
     entityTemplate.setMuted(stream.isMuted());
     entityTemplate.setPhotoIdMedia(stream.getPhotoIdMedia());
+    entityTemplate.setViews(stream.getViews());
   }
 }

@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.50.0] - 2017-12-04
+### Added
+- New stats image
+- New stats data
+
+### Changed
+- Order of the responses on Shot Detail
+
 ## [1.49.0] - 2017-11-24
 ### Added
 - Action Dialog follow stream at 3th time

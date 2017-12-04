@@ -43,6 +43,7 @@ public class StreamModelMapper {
         streamModel.setTotalFollowingWatchers(stream.getTotalFollowingWatchers());
         streamModel.setStrategic(stream.isStrategic());
         streamModel.setMuted(stream.isMuted());
+        streamModel.setViews(stream.getViews());
         return streamModel;
     }
 

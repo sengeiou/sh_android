@@ -29,6 +29,10 @@ public class RemoteShootrEventRepository implements ShootrEventRepository {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_REPOSITORY);
   }
 
+  @Override public void timelineViewed(ShootrEvent shootrEvent) {
+    throw new IllegalStateException(METHOD_NOT_VALID_FOR_REPOSITORY);
+  }
+
   @Override public void sendShotEvents() {
     shootrEventDataSource.sendShotEvents();
   }

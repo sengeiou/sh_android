@@ -30,6 +30,10 @@ public class LocalShootrEventRepository implements ShootrEventRepository {
     shootrEventDataSource.shotDetailViewed(shootrEventEntityMapper.transform(shootrEvent));
   }
 
+  @Override public void timelineViewed(ShootrEvent shootrEvent) {
+    shootrEventDataSource.timelineViewed(shootrEventEntityMapper.transform(shootrEvent));
+  }
+
   @Override public void sendShotEvents() {
     throw new IllegalStateException("Method not valid for local repository");
   }

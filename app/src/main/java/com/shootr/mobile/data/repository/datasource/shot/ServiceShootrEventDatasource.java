@@ -63,6 +63,10 @@ public class ServiceShootrEventDatasource implements ShootrEventDataSource {
     }
   }
 
+  @Override public void timelineViewed(ShootrEventEntity shootrEvent) {
+    throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
+  }
+
   @Override public void viewHighlightedShot(ShootrEventEntity shootrEventEntity) {
     throw new IllegalStateException(METHOD_NOT_VALID_FOR_SERVICE);
   }

@@ -1,8 +1,11 @@
 package com.shootr.mobile.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -10,36 +13,39 @@ import butterknife.ButterKnife;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.StreamPercentageUtils;
 import javax.inject.Inject;
 
 public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
-  public static final String ARGUMENT_PARTICIPANTS_NUMBER = "participantsNumber";
-  public static final String ARGUMENT_SHOTS_NUMBER = "shotsNumber";
-  public static final String ARGUMENT_FAVORITES_NUMBER = "favoritesNumber";
-  public static final String ARGUMENT_UNIQUE_SHOTS = "uniqueShotsNumber";
-  public static final String ARGUMENT_STREAM_NAME = "streamName";
+  public static final String EXTRA_STREAM = "stream";
 
   @BindView(R.id.stream_data_info_participants_number) TextView participantsNumberTextView;
   @BindView(R.id.stream_data_info_shots_number) TextView shotsNumberTextView;
   @BindView(R.id.stream_data_info_favorites_number) TextView favoritesNumberTextView;
-  @BindView(R.id.stream_data_info_favorites_number_pct) TextView favoritesNumberPtcTextView;
   @BindView(R.id.stream_data_info_participants_with_shots_number) TextView
       participantsWithShotsNumberTextView;
   @BindView(R.id.stream_data_info_stream_name) TextView streamNameTextView;
   @BindView(R.id.stream_data_info_participants_with_shots_number_pct) TextView
       participantsWithShotsPtcNumberTextView;
+  @BindView(R.id.stream_data_info_total_container) FrameLayout viewsContainer;
+  @BindView(R.id.stream_data_info_total_number) TextView viewsText;
+  @BindView(R.id.stream_image) AvatarView streamImage;
 
   @BindString(R.string.analytics_screen_stream_numbers) String analyticsScreenStreamNumbers;
 
   @Inject AnalyticsTool analyticsTool;
   @Inject StreamPercentageUtils streamPercentageUtils;
   @Inject SessionRepository sessionRepository;
+  @Inject ImageLoader imageLoader;
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        /* no-op */
+    toolbarDecorator.hideElevation();
+    toolbarDecorator.getToolbar().setBackgroundColor(Color.parseColor("#F5F5F5"));
   }
 
   @Override protected int getLayoutResource() {
@@ -65,16 +71,15 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
 
   private void setupStatics() {
     Intent intent = getIntent();
-    String streamName = (String) intent.getExtras().get(ARGUMENT_STREAM_NAME);
-    Long participantsNumber = (Long) intent.getExtras().get(ARGUMENT_PARTICIPANTS_NUMBER);
-    Integer favoritesNumber = intent.getExtras().getInt(ARGUMENT_FAVORITES_NUMBER);
-    Long shotsNumber = (Long) intent.getExtras().get(ARGUMENT_SHOTS_NUMBER);
-    Long participantsWithShotsNumber = (Long) intent.getExtras().get(ARGUMENT_UNIQUE_SHOTS);
+    StreamModel streamModel = (StreamModel) intent.getSerializableExtra(EXTRA_STREAM);
+
+    String streamName = streamModel.getTitle();
+    Long participantsNumber =  streamModel.getHistoricWatchers();
+    Integer favoritesNumber = streamModel.getTotalFollowers();
+    Long shotsNumber = streamModel.getTotalShots();
+    Long participantsWithShotsNumber = streamModel.getUniqueShots();
     Double pctParticipantsWithShots =
         streamPercentageUtils.getPercentage(participantsWithShotsNumber, participantsNumber);
-    Double pctFavoritesNumber =
-        streamPercentageUtils.getPercentage(favoritesNumber.longValue(), participantsNumber);
-
     streamNameTextView.setText(streamName);
     participantsNumberTextView.setText(String.valueOf(participantsNumber));
     favoritesNumberTextView.setText(String.valueOf(favoritesNumber));
@@ -82,8 +87,17 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     participantsWithShotsNumberTextView.setText(String.valueOf(participantsWithShotsNumber));
     participantsWithShotsPtcNumberTextView.setText(getString(R.string.stream_data_info_pct,
         streamPercentageUtils.formatPercentage(pctParticipantsWithShots)));
-    favoritesNumberPtcTextView.setText(getString(R.string.stream_data_info_pct,
-        streamPercentageUtils.formatPercentage(pctFavoritesNumber)));
+    setupViewsVisibility(streamModel);
+    imageLoader.loadProfilePhoto(streamModel.getPicture(), streamImage, streamModel.getTitle());
+  }
+
+  private void setupViewsVisibility(StreamModel streamModel) {
+    if (streamModel.getViews() != 0) {
+      viewsContainer.setVisibility(View.VISIBLE);
+      viewsText.setText(String.valueOf(streamModel.getViews()));
+    } else {
+      viewsContainer.setVisibility(View.GONE);
+    }
   }
 
   @Override protected void initializePresenter() {

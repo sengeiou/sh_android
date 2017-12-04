@@ -1,183 +1,264 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  tools:context="com.shootr.mobile.ui.activities.StreamDataInfoActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.shootr.mobile.ui.activities.StreamDataInfoActivity"
+    >
 
-    <FrameLayout android:id="@+id/stream_data_info_stream_name_container"
+  <LinearLayout
+      android:id="@+id/stream_data_info_stream_name_container"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="94dp"
+      android:layout_marginBottom="12dp"
+      android:gravity="center"
+      android:paddingBottom="4dp"
+      android:paddingTop="4dp"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:background="@color/white_bar"
+      >
 
-        <TextView android:id="@+id/stream_data_info_stream_name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:gravity="center_vertical"
-          android:paddingLeft="@dimen/keyline_1"
-          android:paddingRight="16dp"
-          android:paddingTop="14dp"
-          android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
-          android:textColor="@color/watching"
-          android:textSize="14sp" />
+    <com.shootr.mobile.ui.widgets.AvatarView
+        android:id="@+id/stream_image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginRight="8dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        />
 
-    </FrameLayout>
+    <TextView
+        android:id="@+id/stream_data_info_stream_name"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_favorites"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
+        />
 
-    <FrameLayout android:id="@+id/stream_data_info_participants_container"
+  </LinearLayout>
+
+  <FrameLayout
+      android:id="@+id/stream_data_info_favorites_container"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      >
 
-        <TextView android:id="@+id/stream_data_info_participants_number"
+
+    <TextView
+        android:id="@+id/stream_data_info_favorites_number"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="center_vertical"
+        android:paddingRight="16dp"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/gray_60"
+        android:fontFamily="sans-serif"
+        tools:text="288"
+        />
+
+
+    <TextView
+        android:id="@+id/stream_data_info_favorites_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_favorites"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
+        />
+
+  </FrameLayout>
+
+  <View
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:background="@color/primary_disabled"
+      android:layout_marginTop="8dp"
+      />
+
+  <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="12dp"
+      >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/keyline_1"
+        android:paddingRight="16dp"
+        android:paddingTop="14dp"
+        android:text="@string/stream_data_info_views"
+        android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
+        android:textColor="@color/gray_material"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-medium"
+        />
+
+  </FrameLayout>
+
+  <FrameLayout
+      android:id="@+id/stream_data_info_total_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <TextView
+        android:id="@+id/stream_data_info_total_number"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="center_vertical"
+        android:paddingRight="16dp"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/gray_60"
+        android:fontFamily="sans-serif"
+        tools:text="288"
+        />
+
+    <TextView
+        android:id="@+id/stream_data_info_total_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_total_views"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
+        />
+
+  </FrameLayout>
+
+  <FrameLayout
+      android:id="@+id/stream_data_info_participants_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <TextView
+        android:id="@+id/stream_data_info_participants_number"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="center_vertical"
+        android:paddingRight="16dp"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/gray_60"
+        android:fontFamily="sans-serif"
+        tools:text="288"
+        />
+
+    <TextView
+        android:id="@+id/stream_data_info_participants_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_participants"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
+        />
+
+  </FrameLayout>
+
+  <FrameLayout
+      android:id="@+id/stream_data_info_participants_with_shots_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      >
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        >
+
+      <TextView
+          android:id="@+id/stream_data_info_participants_with_shots_number"
           android:layout_width="wrap_content"
           android:layout_height="56dp"
           android:layout_gravity="end|center_vertical"
           android:gravity="center_vertical"
-          android:paddingRight="16dp"
+          android:paddingRight="4dp"
           android:textAppearance="@style/TextAppearance.Switch"
           android:textColor="@color/gray_60"
-          tools:text="288" />
+          android:fontFamily="sans-serif"
+          tools:text="88"
+          />
 
-        <TextView android:id="@+id/stream_data_info_participants_text"
-          android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:gravity="center_vertical"
-          android:paddingLeft="16dp"
-          android:text="@string/stream_data_info_participants"
-          android:textAppearance="@style/TextAppearance.Switch"
-          android:textColor="@color/gray_30" />
-
-    </FrameLayout>
-
-    <View android:layout_width="match_parent"
-      android:layout_height="0.5dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:background="@color/separator" />
-
-    <FrameLayout android:id="@+id/stream_data_info_participants_with_shots_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-        <LinearLayout android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="end|center_vertical"
-          android:gravity="center_vertical"
-          android:orientation="horizontal">
-
-            <TextView android:id="@+id/stream_data_info_participants_with_shots_number"
-              android:layout_width="wrap_content"
-              android:layout_height="56dp"
-              android:layout_gravity="end|center_vertical"
-              android:gravity="center_vertical"
-              android:paddingRight="4dp"
-              android:textAppearance="@style/TextAppearance.Switch"
-              android:textColor="@color/gray_60"
-              tools:text="88" />
-
-            <TextView android:id="@+id/stream_data_info_participants_with_shots_number_pct"
-              android:layout_width="wrap_content"
-              android:layout_height="56dp"
-              android:gravity="center_vertical"
-              android:paddingRight="16dp"
-              android:textAppearance="@style/TextAppearance.Switch"
-              android:textColor="@color/gray_60"
-              tools:text="84%" />
-
-        </LinearLayout>
-
-        <TextView android:id="@+id/stream_data_info_participants_with_shots_text"
-          android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:gravity="center_vertical"
-          android:paddingLeft="16dp"
-          android:text="@string/stream_data_info_participants_with_shots"
-          android:textAppearance="@style/TextAppearance.Switch"
-          android:textColor="@color/gray_30" />
-
-    </FrameLayout>
-
-    <View android:layout_width="match_parent"
-      android:layout_height="0.5dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:background="@color/separator" />
-
-    <FrameLayout android:id="@+id/stream_data_info_shots_container"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content">
-
-        <TextView android:id="@+id/stream_data_info_shots_number"
+      <TextView
+          android:id="@+id/stream_data_info_participants_with_shots_number_pct"
           android:layout_width="wrap_content"
           android:layout_height="56dp"
-          android:layout_gravity="end|center_vertical"
           android:gravity="center_vertical"
           android:paddingRight="16dp"
           android:textAppearance="@style/TextAppearance.Switch"
           android:textColor="@color/gray_60"
-          tools:text="14" />
+          android:fontFamily="sans-serif"
+          tools:text="84%"
+          />
 
-        <TextView android:id="@+id/stream_data_info_shots_text"
-          android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:gravity="center_vertical"
-          android:paddingLeft="16dp"
-          android:text="@string/stream_data_info_shots"
-          android:textAppearance="@style/TextAppearance.Switch"
-          android:textColor="@color/gray_30" />
+    </LinearLayout>
 
-    </FrameLayout>
+    <TextView
+        android:id="@+id/stream_data_info_participants_with_shots_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_participants_with_shots"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
+        />
 
-    <View android:layout_width="match_parent"
-      android:layout_height="0.5dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:background="@color/separator" />
+  </FrameLayout>
 
-    <FrameLayout android:id="@+id/stream_data_info_favorites_container"
+  <FrameLayout
+      android:id="@+id/stream_data_info_shots_container"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content">
+      android:layout_height="wrap_content"
+      >
 
-        <LinearLayout android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="end|center_vertical"
-          android:gravity="center_vertical"
-          android:orientation="horizontal">
+    <TextView
+        android:id="@+id/stream_data_info_shots_number"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_gravity="end|center_vertical"
+        android:gravity="center_vertical"
+        android:paddingRight="16dp"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/gray_60"
+        android:fontFamily="sans-serif"
+        tools:text="14"
+        />
 
-            <TextView android:id="@+id/stream_data_info_favorites_number"
-              android:layout_width="wrap_content"
-              android:layout_height="56dp"
-              android:layout_gravity="end|center_vertical"
-              android:gravity="center_vertical"
-              android:paddingRight="4dp"
-              android:textAppearance="@style/TextAppearance.Switch"
-              android:textColor="@color/gray_60"
-              tools:text="88" />
+    <TextView
+        android:id="@+id/stream_data_info_shots_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/stream_data_info_shots"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/material_black"
+        android:fontFamily="sans-serif"
+        />
 
-            <TextView android:id="@+id/stream_data_info_favorites_number_pct"
-              android:layout_width="wrap_content"
-              android:layout_height="56dp"
-              android:layout_gravity="end|center_vertical"
-              android:gravity="center_vertical"
-              android:paddingRight="16dp"
-              android:textAppearance="@style/TextAppearance.Switch"
-              android:textColor="@color/gray_60"
-              tools:text="88%" />
-        </LinearLayout>
+  </FrameLayout>
 
-        <TextView android:id="@+id/stream_data_info_favorites_text"
-          android:layout_width="match_parent"
-          android:layout_height="56dp"
-          android:gravity="center_vertical"
-          android:paddingLeft="16dp"
-          android:text="@string/stream_data_info_favorites"
-          android:textAppearance="@style/TextAppearance.Switch"
-          android:textColor="@color/gray_30" />
-
-    </FrameLayout>
-
-    <View android:layout_width="match_parent"
-      android:layout_height="0.5dp"
-      android:layout_marginLeft="8dp"
-      android:layout_marginRight="8dp"
-      android:background="@color/separator" />
 
 </LinearLayout>

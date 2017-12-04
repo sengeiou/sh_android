@@ -10,6 +10,8 @@ public interface ShootrEventRepository {
 
     void shotDetailViewed(ShootrEvent shootrEvent);
 
+    void timelineViewed(ShootrEvent shootrEvent);
+
     void sendShotEvents();
 
     void viewUserProfileEvent(ShootrEvent shootrEvent);
