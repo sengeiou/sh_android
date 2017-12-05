@@ -30,12 +30,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
+import com.google.android.gms.ads.formats.NativeContentAd;
+import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mopub.nativeads.MoPubNativeAdPositioning;
 import com.mopub.nativeads.MoPubRecyclerAdapter;
@@ -123,6 +132,8 @@ import java.io.File;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
@@ -230,6 +241,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
   @BindString(R.string.no_filter_shots) String emptyFilter;
   @BindString(R.string.follow_stream) String followStream;
+  @BindString(R.string.admob_app_id) String adMobId;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -257,6 +269,8 @@ public class StreamTimelineFragment extends BaseFragment
   private boolean animatorIsRunning;
   private boolean isShowingPollIndicator;
   private MoPubRecyclerAdapter moPubRecyclerAdapter;
+  private RewardedVideoAd mAd;
+  private boolean hasShownAd = false;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -1020,6 +1034,8 @@ public class StreamTimelineFragment extends BaseFragment
     }
     adapter.setShots(shots);
     adapter.notifyDataSetChanged();
+
+    loadAds();
   }
 
   @Override public void hideShots() {
@@ -2102,4 +2118,31 @@ public class StreamTimelineFragment extends BaseFragment
     streamTimelinePresenter.onShotInserted(number);
   }
   //endregion
+
+  private void loadAds() {
+
+    if (!hasShownAd) {
+
+      //MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+
+      AdLoader.Builder builder = new AdLoader.Builder(getContext(), "/6499/example/native");
+
+      AdLoader adLoader = builder.forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
+        @Override public void onContentAdLoaded(NativeContentAd nativeContentAd) {
+          hasShownAd = true;
+          adapter.showAd(nativeContentAd);
+
+        }
+      }).withAdListener(new AdListener() {
+        @Override public void onAdFailedToLoad(int i) {
+          super.onAdFailedToLoad(i);
+          Toast.makeText(getContext(), "Fallo al crear ad " + i, Toast.LENGTH_LONG).show();
+        }
+      }).build();
+
+      adLoader.loadAd(new AdRequest.Builder().addTestDevice("B118C51043936AD9537C79463255C2E9").build());
+
+      //adLoader.loadAd(new PublisherAdRequest.Builder().build());
+    }
+  }
 }

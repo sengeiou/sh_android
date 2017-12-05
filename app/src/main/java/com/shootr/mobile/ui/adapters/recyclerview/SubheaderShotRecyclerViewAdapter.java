@@ -16,6 +16,7 @@ public abstract class SubheaderShotRecyclerViewAdapter<VH extends RecyclerView.V
   protected static final int TYPE_SUBHEADER_CHECK_IN = -7;
   protected static final int TYPE_ITEM_SHOT = -8;
   protected static final int TYPE_ITEM_CHECK_IN = -10;
+  protected static final int TYPE_ITEM_CONTENT_AD = -11;
 
   private H header;
   private List<T> items = Collections.emptyList();
@@ -121,7 +122,7 @@ public abstract class SubheaderShotRecyclerViewAdapter<VH extends RecyclerView.V
     return header;
   }
 
-  public T getItem(int position) {
+  public Object getItem(int position) {
     int itemPosition = position;
     if (hasHeader() && hasItems()) {
       itemPosition = position;

@@ -454,9 +454,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.loadNewShots();
   }
 
-  public void showingLastShot(ShotModel lastShot) {
-    if (!isLoadingOlderShots && mightHaveMoreShots) {
-      handleOlderShotsToLoad(lastShot);
+  public void showingLastShot(Object lastShot) {
+    if (lastShot instanceof ShotModel) {
+      if (!isLoadingOlderShots && mightHaveMoreShots) {
+        handleOlderShotsToLoad((ShotModel) lastShot);
+      }
     }
   }
 
