@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.ads.formats.NativeContentAd;
-import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.ui.adapters.holders.HighLightedShotViewHolder;
@@ -44,7 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ShotsTimelineAdapter
-    extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, ShotModel, ShotModel> {
+    extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, Object, Object> {
 
   private static final int HEADER_POSITION = 0;
 
@@ -75,9 +74,10 @@ public class ShotsTimelineAdapter
 
   private List<Object> shots;
   private Deque<List<ShotModel>> pendingUpdates = new ArrayDeque<>();
-  private HighlightedShotModel highlightedShotModel;
+  private Object highlightedShotModel;
   private Boolean isAdmin;
   private int avatarSize;
+  private boolean isShowingAd = false;
 
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
@@ -179,6 +179,13 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+
+    if (viewType == TYPE_ITEM_CONTENT_AD) {
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_ad_content, parent, false);
+      return new NativeContentAdViewHolder(v);
+    }
+
     if (viewType == TYPE_HEADER_CHECK_IN) {
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.highlighted_shot_promoted, parent, false);
@@ -198,6 +205,12 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
+    if (viewType == TYPE_ITEM_CONTENT_AD) {
+      View v = LayoutInflater.from(parent.getContext())
+          .inflate(R.layout.item_ad_content, parent, false);
+      return new NativeContentAdViewHolder(v);
+    }
+
     return getShotViewHolder(parent, viewType);
   }
 
@@ -228,14 +241,21 @@ public class ShotsTimelineAdapter
   }
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
+      ((NativeContentAdViewHolder) holder).render((NativeContentAd) highlightedShotModel);
+      return;
+    }
+
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
-      ((HighlightedPromotedShotViewHolder) holder).render(highlightedShotModel,
+      ((HighlightedPromotedShotViewHolder) holder).render(
+          (HighlightedShotModel) highlightedShotModel,
           (ShotModel) shots.get(position),
           shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
           onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
           isAdmin, onCtaClickListener);
     } else {
-      ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel,
+      ((HighLightedShotViewHolder) holder).renderHighLight(
+          (HighlightedShotModel) highlightedShotModel,
           (ShotModel) shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
           onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
           onReshootClickListener, isAdmin);
@@ -243,6 +263,10 @@ public class ShotsTimelineAdapter
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
+      ((NativeContentAdViewHolder) holder).render((NativeContentAd) shots.get(position));
+      return;
+    }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 
@@ -268,7 +292,7 @@ public class ShotsTimelineAdapter
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 
-  public void setHighlightedShot(HighlightedShotModel highlightedShot) {
+  public void setHighlightedShot(Object highlightedShot) {
     if (!hasHeader()) {
       putNewHeader(highlightedShot);
     } else {
@@ -284,15 +308,22 @@ public class ShotsTimelineAdapter
     notifyItemRemoved(HEADER_POSITION);
   }
 
-  private void putNewHeader(HighlightedShotModel highlightedShot) {
-    shots.add(HEADER_POSITION, highlightedShot.getShotModel());
-    this.setHeader(highlightedShot.getShotModel());
+  private void putNewHeader(Object highlightedShot) {
+    if (highlightedShot instanceof NativeContentAd) {
+      shots.add(HEADER_POSITION, (highlightedShot));
+      this.setHeader(highlightedShot);
+    } else if (highlightedShot instanceof HighlightedShotModel) {
+      shots.add(HEADER_POSITION, ((HighlightedShotModel)highlightedShot).getShotModel());
+      this.setHeader(((HighlightedShotModel)highlightedShot).getShotModel());
+    }
   }
 
   public void removeHighlightShot() {
-    if (hasHeader()) {
-      removeCurrentHeader();
-      setHeader(null);
+    if (!isShowingAd) {
+      if (hasHeader()) {
+        removeCurrentHeader();
+        setHeader(null);
+      }
     }
   }
 
@@ -450,8 +481,12 @@ public class ShotsTimelineAdapter
   }
 
   public void showAd(NativeContentAd nativeContentAd) {
-    shots.add(0, nativeContentAd);
-    notifyItemInserted(0);
+    isShowingAd = true;
+    setHighlightedShot(nativeContentAd);
+  }
+
+  public void onPause() {
+    isShowingAd = false;
   }
 
   public interface ShotsInsertedListener {

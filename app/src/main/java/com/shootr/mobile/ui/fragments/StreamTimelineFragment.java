@@ -271,6 +271,7 @@ public class StreamTimelineFragment extends BaseFragment
   private MoPubRecyclerAdapter moPubRecyclerAdapter;
   private RewardedVideoAd mAd;
   private boolean hasShownAd = false;
+  private NativeContentAd activeAd;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -2123,14 +2124,15 @@ public class StreamTimelineFragment extends BaseFragment
 
     if (!hasShownAd) {
 
-      //MobileAds.initialize(getContext(), "ca-app-pub-3940256099942544~3347511713");
+      MobileAds.initialize(getContext(), "ca-app-pub-2370248371658050~8618475721");
 
-      AdLoader.Builder builder = new AdLoader.Builder(getContext(), "/6499/example/native");
+      AdLoader.Builder builder = new AdLoader.Builder(getContext(), "ca-app-pub-2370248371658050/5286618991");
 
       AdLoader adLoader = builder.forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
         @Override public void onContentAdLoaded(NativeContentAd nativeContentAd) {
           hasShownAd = true;
-          adapter.showAd(nativeContentAd);
+          activeAd = nativeContentAd;
+          adapter.showAd(activeAd);
 
         }
       }).withAdListener(new AdListener() {
@@ -2140,7 +2142,10 @@ public class StreamTimelineFragment extends BaseFragment
         }
       }).build();
 
-      adLoader.loadAd(new AdRequest.Builder().addTestDevice("B118C51043936AD9537C79463255C2E9").build());
+      //adLoader.loadAd(new AdRequest.Builder().addTestDevice("B118C51043936AD9537C79463255C2E9").addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
+
+
+      adLoader.loadAd(new AdRequest.Builder().build());
 
       //adLoader.loadAd(new PublisherAdRequest.Builder().build());
     }
