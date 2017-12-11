@@ -255,6 +255,8 @@ dependencies {
     // Excludes the support library because it's already included by Glide.
     transitive = false
   }
+  compile 'com.github.devahamed:multi-view-adapter:1.2.2'
+  compile 'com.github.devahamed:multi-view-adapter-databinding:1.2.2'
 }
 
 /**
