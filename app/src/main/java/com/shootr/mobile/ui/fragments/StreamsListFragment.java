@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUnwatchClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
+import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.views.StreamsListView;
@@ -319,6 +320,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     sendMyStreamsAnalytics();
     Intent intent = ListingActivity.getIntent(getContext(), currentUserId, isCurrentUser);
     this.startActivity(intent);
+  }
+
+  @Override public void renderLanding(LandingStreamsModel landingStreamsModel) {
+    //TODO
   }
 
   @Override public void showEmpty() {

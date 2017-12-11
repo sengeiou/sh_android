@@ -64,10 +64,11 @@ public class StreamsListPresenterTest {
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         StreamResultModelMapper streamResultModelMapper =
             new StreamResultModelMapper(streamModelMapper);
-        presenter = new StreamsListPresenter(streamsListInteractor, followStreamInteractor,
+        presenter = new StreamsListPresenter(streamsListInteractor, getLandingStreamsInteractor,
+            followStreamInteractor,
             unfollowStreamInteractor, unwatchStreamInteractor,
             shareStreamInteractor, muteInteractor, unmuteInterator,
-            streamResultModelMapper, sessionRepository, errorMessageFactory, bus);
+            streamResultModelMapper, streamModelMapper, sessionRepository, errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }
 

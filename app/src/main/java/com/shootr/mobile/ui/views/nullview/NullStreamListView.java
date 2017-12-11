@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.views.nullview;
 
+import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.StreamsListView;
 import java.util.List;
@@ -55,6 +56,10 @@ public class NullStreamListView implements StreamsListView {
     }
 
     @Override public void navigateToMyStreams(String currentUserId, boolean isCurrentUser) {
+        /* no-op */
+    }
+
+    @Override public void renderLanding(LandingStreamsModel landingStreamsModel) {
         /* no-op */
     }
 

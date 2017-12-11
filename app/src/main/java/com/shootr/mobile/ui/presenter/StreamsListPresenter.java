@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
+import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
@@ -13,10 +14,12 @@ import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.StreamResultModel;
+import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -28,6 +31,7 @@ import javax.inject.Inject;
 public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
 
   private final StreamsListInteractor streamsListInteractor;
+  private final GetLandingStreamsInteractor getLandingStreamsInteractor;
   private final FollowStreamInteractor followStreamInteractor;
   private final UnfollowStreamInteractor unfollowStreamInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
@@ -35,6 +39,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInterator;
   private final StreamResultModelMapper streamResultModelMapper;
+  private final StreamModelMapper streamModelMapper;
   private final SessionRepository sessionRepository;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
@@ -43,13 +48,14 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private boolean hasBeenPaused;
 
   @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
-      FollowStreamInteractor followStreamInteractor,
+      GetLandingStreamsInteractor getLandingStreamsInteractor, FollowStreamInteractor followStreamInteractor,
       UnfollowStreamInteractor unfollowStreamInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, ShareStreamInteractor shareStreamInteractor,
       MuteInteractor muteInteractor, UnmuteInteractor unmuteInterator,
-      StreamResultModelMapper streamResultModelMapper, SessionRepository sessionRepository,
-      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
+      StreamResultModelMapper streamResultModelMapper, StreamModelMapper streamModelMapper,
+      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.streamsListInteractor = streamsListInteractor;
+    this.getLandingStreamsInteractor = getLandingStreamsInteractor;
     this.followStreamInteractor = followStreamInteractor;
     this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
@@ -57,6 +63,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     this.muteInteractor = muteInteractor;
     this.unmuteInterator = unmuteInterator;
     this.streamResultModelMapper = streamResultModelMapper;
+    this.streamModelMapper = streamModelMapper;
     this.sessionRepository = sessionRepository;
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
@@ -104,6 +111,19 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
       @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
         streamsListView.hideLoading();
         onDefaultStreamListLoaded(streamSearchResultList);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        showViewError(error);
+      }
+    });
+  }
+
+  private void loadLandingStreams() {
+    getLandingStreamsInteractor.getLandingStreams(new Interactor.Callback<LandingStreams>() {
+      @Override public void onLoaded(LandingStreams landingStreams) {
+        streamsListView.hideLoading();
+        streamsListView.renderLanding(streamModelMapper.transformLandingStreams(landingStreams));
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {

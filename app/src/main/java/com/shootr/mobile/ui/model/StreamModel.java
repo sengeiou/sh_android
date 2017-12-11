@@ -30,6 +30,8 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean isStrategic;
     private boolean muted;
     private long views;
+    private int position;
+    private boolean showRankPosition;
 
     public Boolean isRemoved() {
         return removed;
@@ -251,5 +253,21 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public boolean isShowRankPosition() {
+        return showRankPosition;
+    }
+
+    public void setShowRankPosition(boolean showRankPosition) {
+        this.showRankPosition = showRankPosition;
     }
 }
