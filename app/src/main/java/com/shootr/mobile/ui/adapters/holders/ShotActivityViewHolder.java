@@ -87,19 +87,19 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
       text.setText(shotModel.getComment());
       text.addLinks();
       text.setVisibility(View.VISIBLE);
-    }
-  }
-
-  @Override protected void renderImage(ActivityModel activity) {
-    String shotImage = activity.getShot().getImage().getImageUrl();
-    if (shotImage != null) {
-      image.setVisibility(View.VISIBLE);
-      imageLoader.load(shotImage, image);
     } else {
-      image.setVisibility(View.GONE);
+      text.setText(null);
     }
-  }
+
+    @Override protected void renderImage (ActivityModel activity){
+      String shotImage = activity.getShot().getImage().getImageUrl();
+      if (shotImage != null) {
+        image.setVisibility(View.VISIBLE);
+        imageLoader.load(shotImage, image);
+      } else {
+        image.setVisibility(View.GONE);
+      }
+    }
 
   protected abstract String getActivitySimpleComment(ActivityModel activity);
-
 }
