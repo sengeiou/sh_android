@@ -18,7 +18,7 @@ import javax.inject.Singleton;
   public LandingStreams getLandingStreams() {
     return landingStreamsLruCache.get(LANDING_STREAMS);
   }
-  
+
   public void putLandingStreams(LandingStreams landingStreams) {
     landingStreamsLruCache.evictAll();
     landingStreamsLruCache.put(LANDING_STREAMS, landingStreams);

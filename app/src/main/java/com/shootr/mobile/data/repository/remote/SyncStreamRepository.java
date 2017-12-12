@@ -11,6 +11,7 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import com.shootr.mobile.domain.repository.Local;
@@ -141,6 +142,15 @@ public class SyncStreamRepository
   }
 
   @Override public void storeConnection(String idStream, long connections) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public LandingStreams getLandingStreams() {
+    //TODO
+    return null;
+  }
+
+  @Override public void putLandingStreams(LandingStreams landingStreams) {
     throw new RuntimeException("Method not implemented yet!");
   }
 
