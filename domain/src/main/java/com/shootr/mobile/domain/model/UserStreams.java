@@ -14,4 +14,8 @@ public class UserStreams {
   public void setStreams(ArrayList<Stream> streams) {
     this.streams = streams;
   }
+
+  @Override public String toString() {
+    return "UserStreams{" + "streams=" + streams + '}';
+  }
 }

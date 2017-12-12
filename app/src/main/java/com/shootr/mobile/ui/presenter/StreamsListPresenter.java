@@ -109,8 +109,10 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private void loadLandingStreams() {
     getLandingStreamsInteractor.getLandingStreams(new Interactor.Callback<LandingStreams>() {
       @Override public void onLoaded(LandingStreams landingStreams) {
-        streamsListView.hideLoading();
-        streamsListView.renderLanding(streamModelMapper.transformLandingStreams(landingStreams));
+        if (landingStreams != null) {
+          streamsListView.hideLoading();
+          streamsListView.renderLanding(streamModelMapper.transformLandingStreams(landingStreams));
+        }
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
