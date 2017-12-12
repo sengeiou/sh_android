@@ -42,7 +42,8 @@ public class SyncStreamRepositoryTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     syncStreamRepository =
-        new SyncStreamRepository(streamEntityMapper, localStreamDataSource, remoteStreamDataSource,
+        new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
+            localStreamDataSource, remoteStreamDataSource,
             syncableStreamEntityFactory, streamCache, syncTrigger);
   }
 

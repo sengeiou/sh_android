@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
@@ -25,6 +26,7 @@ public class SyncStreamRepository
     implements StreamRepository, SyncableRepository, ExternalStreamRepository {
 
   private final StreamEntityMapper streamEntityMapper;
+  private final LandingStreamsEntityMapper landingStreamsEntityMapper;
   private final StreamDataSource localStreamDataSource;
   private final StreamDataSource remoteStreamDataSource;
   private final SyncableStreamEntityFactory syncableStreamEntityFactory;
@@ -32,10 +34,11 @@ public class SyncStreamRepository
   private final SyncTrigger syncTrigger;
 
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
-      @Local StreamDataSource localStreamDataSource,
+      LandingStreamsEntityMapper landingStreamsEntityMapper, @Local StreamDataSource localStreamDataSource,
       @Remote StreamDataSource remoteStreamDataSource,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
       SyncTrigger syncTrigger) {
+    this.landingStreamsEntityMapper = landingStreamsEntityMapper;
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
     this.streamEntityMapper = streamEntityMapper;
@@ -146,8 +149,7 @@ public class SyncStreamRepository
   }
 
   @Override public LandingStreams getLandingStreams() {
-    //TODO
-    return null;
+    return landingStreamsEntityMapper.transform(remoteStreamDataSource.getLandingStreams());
   }
 
   @Override public void putLandingStreams(LandingStreams landingStreams) {
