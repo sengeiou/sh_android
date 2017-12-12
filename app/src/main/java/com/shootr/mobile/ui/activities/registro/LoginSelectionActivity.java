@@ -1,11 +1,10 @@
 package com.shootr.mobile.ui.activities.registro;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -51,7 +50,6 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -253,16 +251,16 @@ public class LoginSelectionActivity extends BaseActivity {
         final AccessToken accessToken = loginResult.getAccessToken();
         Timber.d("FB Token: %s", accessToken.getToken());
         if (!checkFacebookPermissions(loginResult.getRecentlyGrantedPermissions())) {
-          new AlertDialog.Builder(getBaseContext()).setMessage(
-              getString(R.string.facebook_permissions_alert))
-              .setPositiveButton(getString(R.string.ok),
-                  new DialogInterface.OnClickListener() {
-                    @Override public void onClick(DialogInterface dialog, int which) {
-                      redirectToLogin();
-                    }
-                  })
-              .create()
-              .show();
+          feedbackMessage.showLong(getView(), getString(R.string.facebook_permissions_alert));
+          final Handler handler = new Handler();
+          handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              final Intent i = new Intent(getBaseContext(), LoginSelectionActivity.class);
+              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+              startActivity(i);
+            }
+          }, 2500);
         } else {
           performFacebookLoginInteractor.attempLogin(accessToken.getToken(),
               new Interactor.Callback<Boolean>() {
