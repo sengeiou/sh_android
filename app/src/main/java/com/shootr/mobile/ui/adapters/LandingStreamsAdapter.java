@@ -12,6 +12,8 @@ import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class LandingStreamsAdapter extends RecyclerAdapter {
 
@@ -50,16 +52,13 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
   }
 
   public void setStreams(LandingStreamsModel landingStreams) {
-    userStreams.clear();
-    hotStreams.clear();
-    separator.clear();
     header.clear();
 
-    hotStreams.addAll(landingStreams.getHotStreams());
-    header.add(new ListElement(ListElement.HEADER));
-    userStreams.addAll(landingStreams.getUserStreams());
+    hotStreams.set(landingStreams.getHotStreams());
+    header.set(Collections.singletonList(new ListElement(ListElement.HEADER)));
+    userStreams.set(landingStreams.getUserStreams());
     if (!userStreams.isEmpty()) {
-      separator.add(new ListElement(ListElement.SEPARATOR));
+      separator.set(Collections.singletonList(new ListElement(ListElement.SEPARATOR)));
     }
   }
 }
