@@ -12,7 +12,6 @@ import com.ahamed.multiviewadapter.BaseViewHolder;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnLandingStreamClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
@@ -24,7 +23,6 @@ import com.shootr.mobile.util.Truss;
 public class StreamViewHolder extends BaseViewHolder<StreamModel> {
 
   private final OnLandingStreamClickListener onStreamClickListener;
-  private final OnFavoriteClickListener onFavoriteClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
 
@@ -47,12 +45,10 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   @BindString(R.string.watching_stream_connected) String connected;
   @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
 
-  public StreamViewHolder(View itemView, OnLandingStreamClickListener onStreamClickListener,
-      OnFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
+  public StreamViewHolder(View itemView, OnLandingStreamClickListener onStreamClickListener, ImageLoader imageLoader,
       InitialsLoader initialsLoader) {
     super(itemView);
     this.onStreamClickListener = onStreamClickListener;
-    this.onFavoriteClickListener = onFavoriteClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
     ButterKnife.bind(this, itemView);

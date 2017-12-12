@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.LandingStreamsModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.StreamsListView;
 import java.util.List;
@@ -39,11 +40,11 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
-    @Override public void showContextMenuWithMute(StreamResultModel stream) {
+    @Override public void showContextMenuWithMute(StreamModel stream) {
         /* no-op */
     }
 
-    @Override public void showContextMenuWithUnmute(StreamResultModel stream) {
+    @Override public void showContextMenuWithUnmute(StreamModel stream) {
         /* no-op */
     }
 

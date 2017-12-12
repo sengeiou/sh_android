@@ -18,6 +18,7 @@ import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
@@ -75,18 +76,17 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void initialize(StreamsListView streamsListView) {
-    loadDefaultStreamList();
+    loadLandingStreams();
     this.setView(streamsListView);
   }
 
   public void refresh() {
-    this.loadDefaultStreamList();
+    loadLandingStreams();
   }
 
-  public void selectStream(StreamResultModel stream) {
-    streamsListView.setCurrentWatchingStreamId(stream);
-    selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(),
-        stream.getStreamModel().getAuthorId());
+  public void selectStream(StreamModel stream) {
+    selectStream(stream.getIdStream(), stream.getTitle(),
+        stream.getAuthorId());
   }
 
   private void selectStream(final String idStream, String streamTag, String authorId) {
@@ -96,7 +96,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   public void unwatchStream() {
     unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadDefaultStreamList();
+        loadLandingStreams();
         removeCurrentWatchingStream();
       }
     });
@@ -104,19 +104,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
 
   private void removeCurrentWatchingStream() {
     streamsListView.setCurrentWatchingStreamId(null);
-  }
-
-  protected void loadDefaultStreamList() {
-    streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
-      @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
-        streamsListView.hideLoading();
-        onDefaultStreamListLoaded(streamSearchResultList);
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        showViewError(error);
-      }
-    });
   }
 
   private void loadLandingStreams() {
@@ -173,8 +160,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     streamsListView.showError(errorMessage);
   }
 
-  public void addToFavorites(StreamResultModel streamResultModel, final Boolean notify) {
-    followStreamInteractor.follow(streamResultModel.getStreamModel().getIdStream(),
+  public void addToFavorites(StreamModel streamResultModel, final Boolean notify) {
+    followStreamInteractor.follow(streamResultModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
@@ -188,8 +175,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         });
   }
 
-  public void removeFromFavorites(StreamResultModel streamResultModel, final Boolean notify) {
-    unfollowStreamInteractor.unfollow(streamResultModel.getStreamModel().getIdStream(),
+  public void removeFromFavorites(StreamModel streamResultModel, final Boolean notify) {
+    unfollowStreamInteractor.unfollow(streamResultModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
@@ -199,8 +186,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         });
   }
 
-  public void shareStream(StreamResultModel stream) {
-    shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(),
+  public void shareStream(StreamModel stream) {
+    shareStreamInteractor.shareStream(stream.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             streamsListView.showStreamShared();
@@ -213,43 +200,43 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   @Subscribe @Override public void onUnwatchDone(UnwatchDone.Event event) {
-    this.loadDefaultStreamList();
+    this.loadLandingStreams();
   }
 
-  public void onStreamLongClicked(final StreamResultModel stream) {
-    if (stream.getStreamModel().isMuted()) {
+  public void onStreamLongClicked(final StreamModel stream) {
+    if (stream.isMuted()) {
       streamsListView.showContextMenuWithUnmute(stream);
     } else {
       streamsListView.showContextMenuWithMute(stream);
     }
   }
 
-  public void onMuteClicked(StreamResultModel stream) {
-    muteInteractor.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+  public void onMuteClicked(StreamModel stream) {
+    muteInteractor.mute(stream.getIdStream(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadDefaultStreamList();
+        loadLandingStreams();
       }
     });
   }
 
-  public void onUnmuteClicked(StreamResultModel stream) {
-    unmuteInterator.unmute(stream.getStreamModel().getIdStream(),
+  public void onUnmuteClicked(StreamModel stream) {
+    unmuteInterator.unmute(stream.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            loadDefaultStreamList();
+            loadLandingStreams();
           }
         });
   }
 
   @Subscribe @Override public void onStreamMuted(StreamMuted.Event event) {
-    loadDefaultStreamList();
+    loadLandingStreams();
   }
 
   //region Lifecycle
   @Override public void resume() {
     bus.register(this);
     if (hasBeenPaused) {
-      loadDefaultStreamList();
+      loadLandingStreams();
     }
   }
 
