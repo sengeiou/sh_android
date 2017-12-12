@@ -580,4 +580,5 @@
   <string name="not_now">Ahora no</string>
   <string name="stream_data_info_total_views">Totales</string>
   <string name="stream_data_info_views">Visitas</string>
+  <string name="facebook_permissions_alert">Se requieren el email y la lista de amigos</string>
 </resources>

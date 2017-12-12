@@ -580,4 +580,5 @@
   <string name="not_now">Ara no</string>
   <string name="stream_data_info_total_views">Totals</string>
   <string name="stream_data_info_views">Visites</string>
+  <string name="facebook_permissions_alert">Es requereixen l\'email i la llista d\'amics</string>
 </resources>
