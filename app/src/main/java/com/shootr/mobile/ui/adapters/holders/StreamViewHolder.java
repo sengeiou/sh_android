@@ -58,22 +58,21 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
     ButterKnife.bind(this, itemView);
   }
 
-  public void render(StreamModel streamModel, Integer position, boolean hasToShowRankNumber) {
+  public void render(StreamModel streamModel) {
     this.setClickListener(streamModel);
     title.setText(streamModel.getTitle());
     setMutedVisibility(streamModel);
     renderSubtitle(streamModel);
     renderHolderOwnSubtitle(streamModel);
-    handleShowRankNumber(position, hasToShowRankNumber);
+    handleShowRankNumber(streamModel);
     handleShowFavorite();
     setupStreamPicture(streamModel);
   }
 
 
-  private void handleShowRankNumber(Integer position, boolean hasToShowRankNumber) {
-    if (hasToShowRankNumber) {
-      position++;
-      rankNumber.setText(position.toString());
+  private void handleShowRankNumber(StreamModel streamModel) {
+    if (streamModel.isShowRankPosition()) {
+        rankNumber.setText(streamModel.getPosition());
     } else {
       rankNumber.setVisibility(View.GONE);
     }

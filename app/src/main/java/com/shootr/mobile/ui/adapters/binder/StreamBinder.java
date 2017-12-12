@@ -18,18 +18,13 @@ public class StreamBinder extends ItemBinder<StreamModel, StreamViewHolder> {
   private final InitialsLoader initialsLoader;
   private final OnLandingStreamClickListener onStreamClickListener;
   private final OnFavoriteClickListener onFavoriteClickListener;
-  private final int position;
-  private final boolean hasToShowRankNumber;
 
   public StreamBinder(ImageLoader imageLoader, InitialsLoader initialsLoader,
-      OnLandingStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener,
-      int position, boolean hasToShowRankNumber) {
+      OnLandingStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener) {
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
-    this.position = position;
-    this.hasToShowRankNumber = hasToShowRankNumber;
   }
 
   @Override public StreamViewHolder create(LayoutInflater inflater, ViewGroup parent) {
@@ -39,7 +34,7 @@ public class StreamBinder extends ItemBinder<StreamModel, StreamViewHolder> {
   }
 
   @Override public void bind(StreamViewHolder holder, StreamModel item) {
-    holder.render(item, position, hasToShowRankNumber);
+    holder.render(item);
   }
 
   @Override public boolean canBindData(Object item) {

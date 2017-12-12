@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.adapters;
 
 import com.ahamed.multiviewadapter.DataListManager;
 import com.ahamed.multiviewadapter.RecyclerAdapter;
+import com.shootr.mobile.ui.adapters.binder.StreamBinder;
 import com.shootr.mobile.ui.adapters.listeners.OnFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnLandingStreamClickListener;
 import com.shootr.mobile.ui.model.LandingStreamsModel;
@@ -25,11 +26,19 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
     this.initialsLoader = initialsLoader;
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
+
+    setupList();
   }
 
   private void setupList() {
     userStreams = new DataListManager<StreamModel>(this);
     hotStreams = new DataListManager<StreamModel>(this);
+
+    addDataManager(userStreams);
+    addDataManager(hotStreams);
+
+    registerBinder(new StreamBinder(imageLoader, initialsLoader, onStreamClickListener,
+        onFavoriteClickListener));
   }
 
   public void setStreams(LandingStreamsModel landingStreams) {
