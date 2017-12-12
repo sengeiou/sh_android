@@ -65,12 +65,12 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
     setupStreamPicture(streamModel);
   }
 
-
   private void handleShowRankNumber(StreamModel streamModel) {
     if (streamModel.isShowRankPosition()) {
-        rankNumber.setText(streamModel.getPosition());
+      rankNumber.setText(String.valueOf(streamModel.getPosition()));
+      rankNumber.setVisibility(View.VISIBLE);
     } else {
-      rankNumber.setVisibility(View.GONE);
+      rankNumber.setVisibility(View.INVISIBLE);
     }
   }
 

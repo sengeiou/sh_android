@@ -69,10 +69,10 @@ public class StreamModelMapper {
 
         for (Stream stream : landingStreams.getHotStreams().getStreams()) {
             StreamModel streamModel = transform(stream);
-            int position = hotStreams.indexOf(stream);
+            int position = landingStreams.getHotStreams().getStreams().indexOf(stream);
             streamModel.setShowRankPosition(true);
             streamModel.setPosition(position + 1);
-            userStreams.add(streamModel);
+            hotStreams.add(streamModel);
         }
 
         LandingStreamsModel landingStreamsModel = new LandingStreamsModel();

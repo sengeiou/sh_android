@@ -309,7 +309,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void renderLanding(LandingStreamsModel landingStreamsModel) {
-    //TODO
+    adapter.setStreams(landingStreamsModel);
   }
 
   @Override public void showEmpty() {
