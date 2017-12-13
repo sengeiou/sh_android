@@ -101,7 +101,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     streamsListView.setCurrentWatchingStreamId(null);
   }
 
-  private void loadLandingStreams() {
+  public void loadLandingStreams() {
+    streamsListView.showLoading();
     getLandingStreamsInteractor.getLandingStreams(new Interactor.Callback<LandingStreams>() {
       @Override public void onLoaded(LandingStreams landingStreams) {
         if (landingStreams != null) {

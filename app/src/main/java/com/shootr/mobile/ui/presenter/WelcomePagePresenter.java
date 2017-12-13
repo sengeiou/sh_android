@@ -18,8 +18,8 @@ public class WelcomePagePresenter implements Presenter {
     private boolean streamsLoaded = false;
     private boolean getStartedClicked = false;
 
-    @Inject
-    public WelcomePagePresenter(GetLandingStreamsInteractor streamsListInteractor, ErrorMessageFactory errorMessageFactory) {
+    @Inject public WelcomePagePresenter(GetLandingStreamsInteractor streamsListInteractor,
+        ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.errorMessageFactory = errorMessageFactory;
     }

@@ -1,18 +1,20 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
+import com.shootr.mobile.domain.model.HotStreams;
+import com.shootr.mobile.domain.model.UserStreams;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -32,10 +34,8 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyListOf;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doAnswer;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 public class StreamsListPresenterTest {
@@ -46,7 +46,7 @@ public class StreamsListPresenterTest {
     public static final String ID_STREAM = "idStream";
 
     @Mock Bus bus;
-    @Mock StreamsListInteractor streamsListInteractor;
+    @Mock GetLandingStreamsInteractor streamsListInteractor;
     @Mock FollowStreamInteractor followStreamInteractor;
     @Mock UnwatchStreamInteractor unwatchStreamInteractor;
     @Mock ShareStreamInteractor shareStreamInteractor;
@@ -64,7 +64,7 @@ public class StreamsListPresenterTest {
         StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
         StreamResultModelMapper streamResultModelMapper =
             new StreamResultModelMapper(streamModelMapper);
-        presenter = new StreamsListPresenter(streamsListInteractor, getLandingStreamsInteractor,
+        presenter = new StreamsListPresenter(streamsListInteractor,
             followStreamInteractor,
             unfollowStreamInteractor, unwatchStreamInteractor,
             shareStreamInteractor, muteInteractor, unmuteInterator,
@@ -92,33 +92,25 @@ public class StreamsListPresenterTest {
     }
 
     @Test public void shouldRenderStreamListWhenStreamListInteractorCallbacksResults() throws Exception {
-        setupStreamListInteractorCallbacks(Arrays.asList(streamResult(), streamResult()));
+        setupStreamListInteractorCallbacks(Arrays.asList(selectedStream(), selectedStream()));
 
-        presenter.loadDefaultStreamList();
+        presenter.loadLandingStreams();
 
-        verify(streamsListView).renderStream(anyListOf(StreamResultModel.class));
+        verify(streamsListView).renderLanding(any(LandingStreamsModel.class));
     }
 
     @Test public void shouldHideLoadingWhenStreamListInteractorCallbacksResults() throws Exception {
-        setupStreamListInteractorCallbacks(Collections.singletonList(streamResult()));
+        setupStreamListInteractorCallbacks(Collections.singletonList(selectedStream()));
 
-        presenter.loadDefaultStreamList();
+        presenter.loadLandingStreams();
 
         verify(streamsListView).hideLoading();
     }
 
-    @Test public void shouldNotShowLoadingWhenStreamListInteractorCallbacksResults() throws Exception {
-        setupStreamListInteractorCallbacks(Collections.singletonList(streamResult()));
-
-        presenter.loadDefaultStreamList();
-
-        verify(streamsListView, never()).showLoading();
-    }
-
     @Test public void shouldShowLoadingWhenStreamListInteractorCallbacksEmpty() throws Exception {
-        setupStreamListInteractorCallbacks(new ArrayList<StreamSearchResult>());
+        setupStreamListInteractorCallbacks(new ArrayList<Stream>());
 
-        presenter.loadDefaultStreamList();
+        presenter.loadLandingStreams();
 
         verify(streamsListView).showLoading();
     }
@@ -144,7 +136,7 @@ public class StreamsListPresenterTest {
 
         presenter.onStreamLongClicked(streamModel());
 
-        verify(streamsListView).showContextMenuWithMute(any(StreamResultModel.class));
+        verify(streamsListView).showContextMenuWithMute(any(StreamModel.class));
     }
 
     @Test public void shouldShowContextMenuWithUnmuteStreamIfStreamMutedWhenLongPress() throws Exception {
@@ -152,7 +144,7 @@ public class StreamsListPresenterTest {
 
         presenter.onStreamLongClicked(streamModelMuted());
 
-        verify(streamsListView).showContextMenuWithUnmute(any(StreamResultModel.class));
+        verify(streamsListView).showContextMenuWithUnmute(any(StreamModel.class));
     }
 
 
@@ -217,56 +209,52 @@ public class StreamsListPresenterTest {
             .unmute(anyString(), any(Interactor.CompletedCallback.class));
     }
 
-    private StreamResultModel streamModel() {
+    private StreamModel streamModel() {
         StreamResultModel streamResultModel = new StreamResultModel();
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(ID_STREAM);
-        streamResultModel.setStreamModel(streamModel);
-        return streamResultModel;
+        return streamModel;
     }
 
-    private StreamResultModel streamModelMuted() {
-        StreamResultModel streamResultModel = new StreamResultModel();
+    private StreamModel streamModelMuted() {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(ID_STREAM);
         streamModel.setMuted(true);
-        streamResultModel.setStreamModel(streamModel);
-        return streamResultModel;
+        return streamModel;
     }
 
     private Interactor.ErrorCallback anyErrorCallback() {
         return any(Interactor.ErrorCallback.class);
     }
 
-    private Interactor.Callback<StreamSearchResultList> anyStreamsCallback() {
+    private Interactor.Callback<LandingStreams> anyStreamsCallback() {
         return any(Interactor.Callback.class);
     }
 
-    private void setupStreamListInteractorCallbacks(final List<StreamSearchResult> result) {
+    private void setupStreamListInteractorCallbacks(final List<Stream> result) {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<StreamSearchResultList> callback =
-                  (Interactor.Callback<StreamSearchResultList>) invocation.getArguments()[0];
-                callback.onLoaded(new StreamSearchResultList(result));
+                Interactor.Callback<LandingStreams> callback =
+                  (Interactor.Callback<LandingStreams>) invocation.getArguments()[0];
+                LandingStreams landingStreams = new LandingStreams();
+                HotStreams hotStreams = new HotStreams();
+                hotStreams.setStreams(new ArrayList<>(result));
+                landingStreams.setHotStreams(hotStreams);
+                UserStreams userStreams = new UserStreams();
+                userStreams.setStreams(new ArrayList<>(result));
+                landingStreams.setUserStreams(userStreams);
+                callback.onLoaded(landingStreams);
                 return null;
             }
-        }).when(streamsListInteractor).loadStreams(anyStreamsCallback(), anyErrorCallback());
+        }).when(streamsListInteractor).getLandingStreams(anyStreamsCallback(), anyErrorCallback());
     }
 
-    private StreamSearchResult streamResult() {
-        StreamSearchResult streamSearchResult = new StreamSearchResult();
-        streamSearchResult.setStream(selectedStream());
-        return streamSearchResult;
-    }
-
-    private StreamResultModel selectedStreamModel() {
+    private StreamModel selectedStreamModel() {
         StreamModel streamModel = new StreamModel();
         streamModel.setIdStream(SELECTED_STREAM_ID);
         streamModel.setTitle(SELECTED_STREAM_TITLE);
         streamModel.setAuthorId(STREAM_AUTHOR_ID);
-        StreamResultModel streamResultModel = new StreamResultModel();
-        streamResultModel.setStreamModel(streamModel);
-        return streamResultModel;
+        return streamModel;
     }
 
     private Stream selectedStream() {
