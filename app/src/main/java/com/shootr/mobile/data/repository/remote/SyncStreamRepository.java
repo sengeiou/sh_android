@@ -6,8 +6,8 @@ import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
+import com.shootr.mobile.data.repository.MemoryStreamListSynchronizationRepository;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
-import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
@@ -19,6 +19,7 @@ import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
+import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.List;
 import javax.inject.Inject;
@@ -30,21 +31,22 @@ public class SyncStreamRepository
   private final LandingStreamsEntityMapper landingStreamsEntityMapper;
   private final StreamDataSource localStreamDataSource;
   private final StreamDataSource remoteStreamDataSource;
-  private final LandingStreamsCache landingStreamsCache;
+  private final StreamListSynchronizationRepository streamListSynchronizationRepository;
   private final SyncableStreamEntityFactory syncableStreamEntityFactory;
   private final StreamCache streamCache;
   private final SyncTrigger syncTrigger;
 
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
       LandingStreamsEntityMapper landingStreamsEntityMapper, @Local StreamDataSource localStreamDataSource,
-      @Remote StreamDataSource remoteStreamDataSource, LandingStreamsCache landingStreamsCache,
+      @Remote StreamDataSource remoteStreamDataSource,
+      StreamListSynchronizationRepository streamListSynchronizationRepository,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
       SyncTrigger syncTrigger) {
     this.landingStreamsEntityMapper = landingStreamsEntityMapper;
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
     this.streamEntityMapper = streamEntityMapper;
-    this.landingStreamsCache = landingStreamsCache;
+    this.streamListSynchronizationRepository = streamListSynchronizationRepository;
     this.syncableStreamEntityFactory = syncableStreamEntityFactory;
     this.streamCache = streamCache;
     this.syncTrigger = syncTrigger;
@@ -92,7 +94,8 @@ public class SyncStreamRepository
   @Override public Stream updateStream(StreamUpdateParameters streamUpdateParameters) {
     StreamEntity streamEntity = remoteStreamDataSource.updateStream(streamUpdateParameters);
     localStreamDataSource.putStream(streamEntity);
-    landingStreamsCache.invalidate();
+    streamListSynchronizationRepository.setStreamsRefreshDate(
+        MemoryStreamListSynchronizationRepository.DEFAULT_REFRESH_DATE);
     return streamEntityMapper.transform(streamEntity);
   }
 
@@ -102,12 +105,14 @@ public class SyncStreamRepository
 
   @Override public void removeStream(String idStream) {
     remoteStreamDataSource.removeStream(idStream);
-    landingStreamsCache.invalidate();
+    streamListSynchronizationRepository.setStreamsRefreshDate(
+        MemoryStreamListSynchronizationRepository.DEFAULT_REFRESH_DATE);
   }
 
   @Override public void restoreStream(String idStream) {
     remoteStreamDataSource.restoreStream(idStream);
-    landingStreamsCache.invalidate();
+    streamListSynchronizationRepository.setStreamsRefreshDate(
+        MemoryStreamListSynchronizationRepository.DEFAULT_REFRESH_DATE);
   }
 
   @Override public String getLastTimeFiltered(String idStream) {
@@ -129,7 +134,8 @@ public class SyncStreamRepository
   @Override public void follow(String idStream) {
     try {
       remoteStreamDataSource.follow(idStream);
-      landingStreamsCache.invalidate();
+      streamListSynchronizationRepository.setStreamsRefreshDate(
+          MemoryStreamListSynchronizationRepository.DEFAULT_REFRESH_DATE);
       syncTrigger.triggerSync();
     } catch (ServerCommunicationException e) {
       localStreamDataSource.putFailedFollow(createFailedFollow(idStream, true));
@@ -140,7 +146,8 @@ public class SyncStreamRepository
   @Override public void unfollow(String idStream) {
     try {
       remoteStreamDataSource.unfollow(idStream);
-      landingStreamsCache.invalidate();
+      streamListSynchronizationRepository.setStreamsRefreshDate(
+          MemoryStreamListSynchronizationRepository.DEFAULT_REFRESH_DATE);
       syncTrigger.triggerSync();
     } catch (ServerCommunicationException e) {
       localStreamDataSource.putFailedFollow(createFailedFollow(idStream, false));

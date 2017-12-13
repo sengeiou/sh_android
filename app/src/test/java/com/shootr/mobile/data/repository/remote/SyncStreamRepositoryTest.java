@@ -44,7 +44,7 @@ public class SyncStreamRepositoryTest {
     syncStreamRepository =
         new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
             localStreamDataSource, remoteStreamDataSource, landingStreamsCache,
-            syncableStreamEntityFactory, streamCache, syncTrigger);
+            streamListSynchronizationRepository, syncableStreamEntityFactory, streamCache, syncTrigger);
   }
 
   @Test public void shouldPutStreamInCacheWhenGetStreamByIdAndRemoteStreamIsNotNull()
