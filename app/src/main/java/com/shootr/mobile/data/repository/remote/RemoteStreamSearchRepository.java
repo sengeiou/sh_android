@@ -35,12 +35,6 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
     this.remoteStreamDataSource = remoteStreamDataSource;
   }
 
-  @Override public List<StreamSearchResult> getDefaultStreams(String locale, String[] types) {
-    List<StreamEntity> streamEntityList = remoteStreamListDataSource.getStreamList(locale, types);
-    localStreamDataSource.putStreams(streamEntityList);
-    return transformStreamEntitiesWithWatchers(streamEntityList);
-  }
-
   private List<StreamSearchResult> transformStreamEntitiesWithWatchers(
       List<StreamEntity> streamEntities) {
     List<StreamSearchResult> results = new ArrayList<>(streamEntities.size());
@@ -79,17 +73,6 @@ public class RemoteStreamSearchRepository implements StreamSearchRepository {
     streamEntity.setRevision(streamEntity.getRevision());
 
     return streamSearchEntity;
-  }
-
-  @Override
-  public List<StreamSearchResult> getStreams(String query, String locale, String[] types) {
-    List<StreamEntity> streamEntityList =
-        remoteStreamListDataSource.getStreams(query, locale, types);
-    localStreamDataSource.putStreams(streamEntityList);
-
-    localStreamSearchDataSource.setLastSearchResults(
-        transformStreamEntitiesInStreamSearchEntities(streamEntityList));
-    return transformStreamEntitiesWithWatchers(streamEntityList);
   }
 
   @Override

@@ -2,14 +2,14 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
+import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.AddSuggestedFollowingInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetOnBoardingStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.user.GetOnBoardingUserInteractor;
 import com.shootr.mobile.domain.model.FollowableType;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.OnBoarding;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
 import com.shootr.mobile.ui.model.OnBoardingModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
@@ -27,7 +27,7 @@ public class OnBoardingPresenter implements Presenter {
   public static final String STREAM_ONBOARDING = "streamOnBoarding";
   public static final String USER_ONBOARDING = "userOnBoarding";
 
-  private final StreamsListInteractor streamsListInteractor;
+  private final GetLandingStreamsInteractor streamsListInteractor;
   private final GetOnBoardingStreamInteractor getOnBoardingStreamInteractor;
   private final GetOnBoardingUserInteractor getOnBoardingUserInteractor;
   private final AddSuggestedFollowingInteractor addSuggestedFollowingInteractor;
@@ -39,7 +39,7 @@ public class OnBoardingPresenter implements Presenter {
   private HashMap<String, StreamModel> followingStreams = new HashMap<>();
   private HashMap<String, UserModel> followingUsers = new HashMap<>();
 
-  @Inject public OnBoardingPresenter(StreamsListInteractor streamsListInteractor,
+  @Inject public OnBoardingPresenter(GetLandingStreamsInteractor streamsListInteractor,
       GetOnBoardingStreamInteractor getOnBoardingStreamInteractor,
       GetOnBoardingUserInteractor getOnBoardingUserInteractor,
       AddSuggestedFollowingInteractor addSuggestedFollowingInteractor,
@@ -121,8 +121,8 @@ public class OnBoardingPresenter implements Presenter {
   }
 
   private void loadDefaultStreams() {
-    streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
-      @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
+    streamsListInteractor.getLandingStreams(new Interactor.Callback<LandingStreams>() {
+      @Override public void onLoaded(LandingStreams streamSearchResultList) {
         if (getStartedClicked) {
           onBoardingView.goNextScreen();
         }
