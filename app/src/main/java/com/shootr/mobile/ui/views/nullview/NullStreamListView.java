@@ -64,6 +64,14 @@ public class NullStreamListView implements StreamsListView {
         /* no-op */
     }
 
+    @Override public void renderFollow(StreamModel streamModel) {
+        /* no-op */
+    }
+
+    @Override public void renderMute(StreamModel stream) {
+        /* no-op */
+    }
+
     @Override public void showEmpty() {
         /* no-op */
     }

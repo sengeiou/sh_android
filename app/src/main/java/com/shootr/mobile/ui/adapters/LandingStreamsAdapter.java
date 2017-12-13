@@ -1,6 +1,5 @@
 package com.shootr.mobile.ui.adapters;
 
-import com.ahamed.multiviewadapter.DataItemManager;
 import com.ahamed.multiviewadapter.DataListManager;
 import com.ahamed.multiviewadapter.RecyclerAdapter;
 import com.shootr.mobile.ui.adapters.binder.HotElementBinder;
@@ -12,7 +11,6 @@ import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class LandingStreamsAdapter extends RecyclerAdapter {
@@ -59,6 +57,26 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
     userStreams.set(landingStreams.getUserStreams());
     if (!userStreams.isEmpty()) {
       separator.set(Collections.singletonList(new ListElement(ListElement.SEPARATOR)));
+    }
+  }
+
+  public void onFollow(StreamModel stream) {
+    if (hotStreams.contains(stream)) {
+      hotStreams.set(hotStreams.indexOf(stream), stream);
+    }
+
+    if (userStreams.contains(stream)) {
+      userStreams.set(userStreams.indexOf(stream), stream);
+    }
+  }
+
+  public void onMute(StreamModel stream) {
+    if (hotStreams.contains(stream)) {
+      hotStreams.set(hotStreams.indexOf(stream), stream);
+    }
+
+    if (userStreams.contains(stream)) {
+      userStreams.set(userStreams.indexOf(stream), stream);
     }
   }
 }

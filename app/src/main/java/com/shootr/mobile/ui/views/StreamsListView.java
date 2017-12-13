@@ -35,4 +35,8 @@ public interface StreamsListView extends LoadDataView {
     void navigateToMyStreams(String currentUserId, boolean isCurrentUser);
 
     void renderLanding(LandingStreamsModel landingStreamsModel);
+
+    void renderFollow(StreamModel streamModel);
+
+    void renderMute(StreamModel stream);
 }

@@ -8,6 +8,7 @@ import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.MemoryStreamListSynchronizationRepository;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
+import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
@@ -34,6 +35,7 @@ public class SyncStreamRepository
   private final StreamListSynchronizationRepository streamListSynchronizationRepository;
   private final SyncableStreamEntityFactory syncableStreamEntityFactory;
   private final StreamCache streamCache;
+  private final LandingStreamsCache landingStreamsCache;
   private final SyncTrigger syncTrigger;
 
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
@@ -41,7 +43,7 @@ public class SyncStreamRepository
       @Remote StreamDataSource remoteStreamDataSource,
       StreamListSynchronizationRepository streamListSynchronizationRepository,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
-      SyncTrigger syncTrigger) {
+      LandingStreamsCache landingStreamsCache, SyncTrigger syncTrigger) {
     this.landingStreamsEntityMapper = landingStreamsEntityMapper;
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
@@ -49,6 +51,7 @@ public class SyncStreamRepository
     this.streamListSynchronizationRepository = streamListSynchronizationRepository;
     this.syncableStreamEntityFactory = syncableStreamEntityFactory;
     this.streamCache = streamCache;
+    this.landingStreamsCache = landingStreamsCache;
     this.syncTrigger = syncTrigger;
   }
 
@@ -124,10 +127,12 @@ public class SyncStreamRepository
   }
 
   @Override public void mute(String idStream) {
+    landingStreamsCache.invalidate();
     remoteStreamDataSource.mute(idStream);
   }
 
   @Override public void unmute(String idStream) {
+    landingStreamsCache.invalidate();
     remoteStreamDataSource.unmute(idStream);
   }
 

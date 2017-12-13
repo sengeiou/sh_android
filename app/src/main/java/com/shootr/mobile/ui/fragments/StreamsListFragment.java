@@ -312,6 +312,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     adapter.setStreams(landingStreamsModel);
   }
 
+  @Override public void renderFollow(StreamModel streamModel) {
+    adapter.onFollow(streamModel);
+  }
+
+  @Override public void renderMute(StreamModel stream) {
+    adapter.onMute(stream);
+  }
+
   @Override public void showEmpty() {
     emptyView.setVisibility(View.VISIBLE);
   }

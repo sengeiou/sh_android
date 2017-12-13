@@ -143,11 +143,13 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     streamsListView.showError(errorMessage);
   }
 
-  public void addToFavorites(StreamModel streamResultModel, final Boolean notify) {
+  public void addToFavorites(final StreamModel streamResultModel, final Boolean notify) {
     followStreamInteractor.follow(streamResultModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
+              streamResultModel.setFollowing(true);
+              streamsListView.renderFollow(streamResultModel);
               streamsListView.showAddedToFavorites();
             }
           }
@@ -158,11 +160,13 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         });
   }
 
-  public void removeFromFavorites(StreamModel streamResultModel, final Boolean notify) {
+  public void removeFromFavorites(final StreamModel streamResultModel, final Boolean notify) {
     unfollowStreamInteractor.unfollow(streamResultModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
+              streamResultModel.setFollowing(false);
+              streamsListView.renderFollow(streamResultModel);
               streamsListView.showRemovedFromFavorites();
             }
           }
@@ -194,25 +198,29 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     }
   }
 
-  public void onMuteClicked(StreamModel stream) {
+  public void onMuteClicked(final StreamModel stream) {
     muteInteractor.mute(stream.getIdStream(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadLandingStreams();
+        stream.setMuted(true);
+        streamsListView.renderMute(stream);
+        //loadLandingStreams();
       }
     });
   }
 
-  public void onUnmuteClicked(StreamModel stream) {
+  public void onUnmuteClicked(final StreamModel stream) {
     unmuteInterator.unmute(stream.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            loadLandingStreams();
+            stream.setMuted(false);
+            streamsListView.renderMute(stream);
+            //loadLandingStreams();
           }
         });
   }
 
   @Subscribe @Override public void onStreamMuted(StreamMuted.Event event) {
-    loadLandingStreams();
+    /* no-op */
   }
 
   //region Lifecycle

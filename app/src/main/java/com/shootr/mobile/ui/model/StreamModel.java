@@ -165,18 +165,30 @@ public class StreamModel implements Serializable, SearchableModel {
         this.uniqueShots = uniqueShots;
     }
 
-    @Override public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+    /*@Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         StreamModel that = (StreamModel) o;
 
-        return idStream.equals(that.idStream);
+        if (isMuted() != that.isMuted()) return false;
+        if (!getIdStream().equals(that.getIdStream())) return false;
+        if (!getTitle().equals(that.getTitle())) return false;
+        if (getPicture() != null ? !getPicture().equals(that.getPicture())
+            : that.getPicture() != null) {
+            return false;
+        }
+        return getTotalFollowers() != null ? getTotalFollowers().equals(that.getTotalFollowers())
+            : that.getTotalFollowers() == null;
+    }*/
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StreamModel that = (StreamModel) o;
+
+        return getIdStream().equals(that.getIdStream());
     }
 
     public Integer getReadWriteMode() {

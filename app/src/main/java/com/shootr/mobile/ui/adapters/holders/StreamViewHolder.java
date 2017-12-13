@@ -116,13 +116,9 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
     pictureWithoutText.setImageDrawable(textDrawable);
   }
 
-  public void setMutedVisibility(StreamModel streamModel) {
-    if (!isWatchingStateEnabled) {
-      if (streamModel.isMuted()) {
-        mute.setVisibility(View.VISIBLE);
-      } else {
-        mute.setVisibility(View.GONE);
-      }
+  private void setMutedVisibility(StreamModel streamModel) {
+    if (streamModel.isMuted()) {
+      mute.setVisibility(View.VISIBLE);
     } else {
       mute.setVisibility(View.GONE);
     }
