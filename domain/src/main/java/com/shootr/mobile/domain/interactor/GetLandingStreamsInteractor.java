@@ -63,8 +63,10 @@ public class GetLandingStreamsInteractor implements Interactor {
   private void refreshStreams() {
     LandingStreams landingStreams =
         remoteStreamRepository.getLandingStreams();
-    notifyLoaded(landingStreams);
-    localStreamRepository.putLandingStreams(landingStreams);
+    if (landingStreams != null) {
+      notifyLoaded(landingStreams);
+      localStreamRepository.putLandingStreams(landingStreams);
+    }
   }
 
 

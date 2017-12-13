@@ -43,7 +43,7 @@ public class SyncStreamRepositoryTest {
     MockitoAnnotations.initMocks(this);
     syncStreamRepository =
         new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
-            localStreamDataSource, remoteStreamDataSource,
+            localStreamDataSource, remoteStreamDataSource, landingStreamsCache,
             syncableStreamEntityFactory, streamCache, syncTrigger);
   }
 
