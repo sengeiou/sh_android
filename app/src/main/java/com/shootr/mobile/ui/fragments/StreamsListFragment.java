@@ -360,9 +360,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       case R.id.menu_search:
         navigateToSearch();
         return true;
-      case R.id.menu_my_streams:
-        presenter.clickMyStreams();
-        return true;
       default:
         return super.onOptionsItemSelected(item);
     }

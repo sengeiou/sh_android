@@ -26,7 +26,7 @@ public class StreamBinder extends ItemBinder<StreamModel, StreamViewHolder> {
 
   @Override public StreamViewHolder create(LayoutInflater inflater, ViewGroup parent) {
     View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_landing_stream, parent, false);
     return new StreamViewHolder(view, onStreamClickListener, imageLoader, initialsLoader);
   }
 

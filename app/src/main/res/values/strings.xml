@@ -576,4 +576,5 @@
   <string name="not_now">Not now</string>
   <string name="stream_data_info_views">Views</string>
   <string name="stream_data_info_total_views">Totals</string>
+  <string name="hot_header">Hot</string>
 </resources>

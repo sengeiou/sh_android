@@ -15,7 +15,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnLandingStreamClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
-import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Truss;
@@ -40,7 +39,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
   @Nullable @BindView(R.id.stream_actions_container) View actionsContainer;
-  @BindView(R.id.user_follow_button) FollowButton followButton;
 
   @BindString(R.string.watching_stream_connected) String connected;
   @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
@@ -84,16 +82,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
 
   private void handleShowFavorite() {
     favorite.setVisibility(View.GONE);
-  }
-
-  private void showIsFavorite() {
-    followButton.setVisibility(View.VISIBLE);
-    followButton.setFollowing(true);
-  }
-
-  private void showIsNotFavorite() {
-    followButton.setVisibility(View.VISIBLE);
-    followButton.setFollowing(false);
   }
 
   private void setupStreamPicture(StreamModel streamResultModel) {
