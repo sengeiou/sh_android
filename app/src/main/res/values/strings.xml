@@ -269,7 +269,7 @@
   <string name="new_stream_title_label">Title</string>
   <string name="new_topic" formatted="false">New message…</string>
   <string name="next">Next</string>
-  <string name="niced_by">Niced by </string>
+  <string name="niced_by">"Niced by "</string>
   <string name="niced_shot_activity">niced this from %s</string>
   <string name="niced_shot_activity_with_comment">" niced this in"</string>
   <string name="nicers">Nicers</string>
