@@ -58,7 +58,7 @@ public class ServiceLoginGateway implements LoginGateway {
         try {
             FacebookUserEntity loggedInUserEntity =
               authApiService.authenticateWithFacebook(new FacebookLoginApiEntity(facebookToken, locale));
-            User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
+            User loggedInUser = userEntityMapper.transform(loggedInUserEntity, loggedInUserEntity.getIdUser());
             String sessionToken = loggedInUserEntity.getSessionToken();
             LoginResult loginResult = new LoginResult(loggedInUser, sessionToken);
             if (loggedInUserEntity.isNewUser() != null && loggedInUserEntity.isNewUser() == 1) {
