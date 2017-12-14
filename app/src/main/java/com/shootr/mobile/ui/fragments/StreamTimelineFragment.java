@@ -37,20 +37,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.doubleclick.PublisherAdRequest;
-import com.google.android.gms.ads.formats.NativeContentAd;
-import com.google.android.gms.ads.formats.NativeCustomTemplateAd;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.facebook.ads.NativeAdsManager;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.mopub.nativeads.MoPubNativeAdPositioning;
-import com.mopub.nativeads.MoPubRecyclerAdapter;
-import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
-import com.mopub.nativeads.RequestParameters;
-import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
@@ -129,11 +117,10 @@ import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
+import java.util.EnumSet;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class StreamTimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, WatchNumberView, StreamTimelineOptionsView,
@@ -177,9 +164,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject SessionRepository sessionRepository;
   @Inject FormatNumberUtils formatNumberUtils;
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
-  @Inject RequestParameters requestParameters;
-  @Inject MoPubStaticNativeAdRenderer moPubStaticNativeAdRenderer;
-  @Inject MoPubNativeAdPositioning.MoPubServerPositioning moPubServerPositioning;
+  @Inject NativeAdsManager adsManager;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -268,10 +253,7 @@ public class StreamTimelineFragment extends BaseFragment
   private ViewPropertyAnimator timelineIndicatorAnimator;
   private boolean animatorIsRunning;
   private boolean isShowingPollIndicator;
-  private MoPubRecyclerAdapter moPubRecyclerAdapter;
-  private RewardedVideoAd mAd;
-  private boolean hasShownAd = false;
-  private NativeContentAd activeAd;
+
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -702,25 +684,7 @@ public class StreamTimelineFragment extends BaseFragment
     }, numberFormatUtil, this, getContext(),
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
 
-    setupAdapter();
-  }
-
-  private void setupAdapter() {
-    if (idStream.equals("59cccdbec9e77c000c725a72")) {
-      moPubRecyclerAdapter =
-          new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
-      moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
-
-      shotsTimeline.setAdapter(moPubRecyclerAdapter);
-
-      if (BuildConfig.DEBUG) {
-        moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
-      } else {
-        moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
-      }
-    } else {
-      shotsTimeline.setAdapter(adapter);
-    }
+    shotsTimeline.setAdapter(adapter);
   }
 
   private void sendOpenlinkAnalythics() {
@@ -1036,7 +1000,7 @@ public class StreamTimelineFragment extends BaseFragment
     adapter.setShots(shots);
     adapter.notifyDataSetChanged();
 
-    loadAds();
+    //loadAds();
   }
 
   @Override public void hideShots() {
@@ -2119,35 +2083,4 @@ public class StreamTimelineFragment extends BaseFragment
     streamTimelinePresenter.onShotInserted(number);
   }
   //endregion
-
-  private void loadAds() {
-
-    if (!hasShownAd) {
-
-      MobileAds.initialize(getContext(), "ca-app-pub-2370248371658050~8618475721");
-
-      AdLoader.Builder builder = new AdLoader.Builder(getContext(), "ca-app-pub-2370248371658050/5286618991");
-
-      AdLoader adLoader = builder.forContentAd(new NativeContentAd.OnContentAdLoadedListener() {
-        @Override public void onContentAdLoaded(NativeContentAd nativeContentAd) {
-          hasShownAd = true;
-          activeAd = nativeContentAd;
-          adapter.showAd(activeAd);
-
-        }
-      }).withAdListener(new AdListener() {
-        @Override public void onAdFailedToLoad(int i) {
-          super.onAdFailedToLoad(i);
-          Toast.makeText(getContext(), "Fallo al crear ad " + i, Toast.LENGTH_LONG).show();
-        }
-      }).build();
-
-      //adLoader.loadAd(new AdRequest.Builder().addTestDevice("B118C51043936AD9537C79463255C2E9").addTestDevice(AdRequest.DEVICE_ID_EMULATOR).build());
-
-
-      adLoader.loadAd(new AdRequest.Builder().build());
-
-      //adLoader.loadAd(new PublisherAdRequest.Builder().build());
-    }
-  }
 }

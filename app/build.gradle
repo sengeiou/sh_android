@@ -259,6 +259,11 @@ dependencies {
   }
   compile 'com.github.devahamed:multi-view-adapter:1.2.2'
   compile 'com.github.devahamed:multi-view-adapter-databinding:1.2.2'
+  compile 'com.google.firebase:firebase-ads:10.2.1'
+
+  compile('com.mopub:mopub-sdk-native-static:4.16.0@aar') {
+    transitive = true
+  }
 }
 
 /**

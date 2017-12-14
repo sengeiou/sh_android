@@ -33,7 +33,6 @@
       android:largeHeap="true"
       android:supportsRtl="false"
       android:theme="@style/ShootrTheme"
-      android:debuggable="true"
       tools:replace="android:allowBackup, android:supportsRtl">
     <activity
         android:name=".ui.activities.MainTabbedActivity"
@@ -349,7 +348,6 @@
     <activity android:name=".ui.activities.HistoryActivity"
         android:label="@string/title_activity_history">
     </activity>
-    <activity android:name="com.mopub.common.MoPubBrowser" android:configChanges="keyboardHidden|orientation|screenSize"/>
   </application>
 
 </manifest>
