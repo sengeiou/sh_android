@@ -329,7 +329,9 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   }
 
   @Override public void showLoading() {
-    loadingView.setVisibility(View.VISIBLE);
+    if (loadingView != null) {
+      loadingView.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideLoading() {

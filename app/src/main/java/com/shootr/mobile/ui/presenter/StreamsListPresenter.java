@@ -71,8 +71,8 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void initialize(StreamsListView streamsListView) {
-    loadLandingStreams();
     this.setView(streamsListView);
+    loadLandingStreams();
   }
 
   public void refresh() {

@@ -171,15 +171,7 @@ public class StreamModel implements Serializable, SearchableModel {
 
         StreamModel that = (StreamModel) o;
 
-        if (isMuted() != that.isMuted()) return false;
-        if (!getIdStream().equals(that.getIdStream())) return false;
-        if (!getTitle().equals(that.getTitle())) return false;
-        if (getPicture() != null ? !getPicture().equals(that.getPicture())
-            : that.getPicture() != null) {
-            return false;
-        }
-        return getTotalFollowers() != null ? getTotalFollowers().equals(that.getTotalFollowers())
-            : that.getTotalFollowers() == null;
+        return getIdStream().equals(that.getIdStream());
     }*/
 
     @Override public boolean equals(Object o) {
@@ -188,6 +180,7 @@ public class StreamModel implements Serializable, SearchableModel {
 
         StreamModel that = (StreamModel) o;
 
+        if (getPosition() != that.getPosition()) return false;
         return getIdStream().equals(that.getIdStream());
     }
 
