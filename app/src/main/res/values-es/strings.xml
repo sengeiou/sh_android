@@ -346,9 +346,9 @@
   <string name="poll_view">Ver</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
-    <item quantity="one">%d voto</item>
-    <item quantity="other">%d votos</item>
-    <item quantity="zero">%d votos</item>
+    <item quantity="one">%s voto</item>
+    <item quantity="other">%s votos</item>
+    <item quantity="zero">%s votos</item>
   </plurals>
   <string name="poll_vote_dialog_confirmation">Votar</string>
   <string name="poll_vote_timeout_retry">Reintentar</string>

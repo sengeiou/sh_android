@@ -342,9 +342,9 @@
   <string name="poll_view">View</string>
   <string name="poll_vote">Vote</string>
   <plurals name="poll_votes_count">
-    <item quantity="one">%d vote</item>
-    <item quantity="other">%d votes</item>
-    <item quantity="zero">%d votes</item>
+    <item quantity="one">%s vote</item>
+    <item quantity="other">%s votes</item>
+    <item quantity="zero">%s votes</item>
   </plurals>
   <string name="poll_vote_dialog_confirmation">Vote</string>
   <string name="poll_vote_timeout_retry">Retry</string>
