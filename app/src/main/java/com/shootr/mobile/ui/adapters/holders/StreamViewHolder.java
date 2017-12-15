@@ -18,6 +18,7 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Truss;
+import java.text.DecimalFormat;
 
 public class StreamViewHolder extends BaseViewHolder<StreamModel> {
 
@@ -145,22 +146,24 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
     if (subtitle != null && subtitleDescription != null) {
       subtitle.setText("@" + stream.getAuthorUsername());
       subtitleDescription.setVisibility(View.VISIBLE);
+      DecimalFormat formatter = new DecimalFormat("#,###,###");
       String favorites = subtitle.getContext()
           .getResources()
           .getQuantityString(R.plurals.listing_favorites, stream.getTotalFollowers(),
-              stream.getTotalFollowers());
+              formatter.format(stream.getTotalFollowers()));
       subtitleDescription.setText(favorites);
     }
   }
 
   private void renderHolderOwnSubtitle(StreamModel stream) {
     if (subtitle != null) {
+      DecimalFormat formatter = new DecimalFormat("#,###,###");
       subtitleDescription.setVisibility(View.VISIBLE);
       String favorites = subtitle.getContext()
           .getResources()
           .getQuantityString(R.plurals.listing_favorites,
               stream.getTotalFollowers(),
-              stream.getTotalFollowers());
+              formatter.format(stream.getTotalFollowers()));
       subtitleDescription.setText(favorites);
     }
   }
@@ -170,11 +173,12 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
       if (isWatchingStateEnabled) {
         subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
       } else {
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
         String favorites = subtitle.getContext()
             .getResources()
             .getQuantityString(R.plurals.listing_favorites,
                 stream.getStreamModel().getTotalFollowers(),
-                stream.getStreamModel().getTotalFollowers());
+                formatter.format(stream.getStreamModel().getTotalFollowers()));
         subtitle.setText(favorites);
       }
     }
