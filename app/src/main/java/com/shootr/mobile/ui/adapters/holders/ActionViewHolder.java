@@ -12,6 +12,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.shootr.mobile.R;
+import java.text.DecimalFormat;
 
 public class ActionViewHolder extends RecyclerView.ViewHolder {
 
@@ -42,8 +43,9 @@ public class ActionViewHolder extends RecyclerView.ViewHolder {
         if (number < 1) {
             optionalNumber.setVisibility(View.GONE);
         } else {
+            DecimalFormat formatter = new DecimalFormat("#,###,###");
             optionalNumber.setVisibility(View.VISIBLE);
-            optionalNumber.setText(String.valueOf(number));
+            optionalNumber.setText(formatter.format(number));
         }
     }
 

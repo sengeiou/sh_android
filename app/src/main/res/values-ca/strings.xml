@@ -219,8 +219,8 @@
     <item quantity="zero">%s clics a l\'enllaç</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">%d seguidor</item>
-    <item quantity="other">%d seguidors</item>
+    <item quantity="one">%s seguidor</item>
+    <item quantity="other">%s seguidors</item>
   </plurals>
   <string name="listing_title_favorites">Seguint</string>
   <string name="listing_title_holding">Admin</string>
@@ -345,9 +345,9 @@
   <string name="poll_view">Veure</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
-    <item quantity="one">%d vot</item>
-    <item quantity="other">%d vots</item>
-    <item quantity="zero">%d vots</item>
+    <item quantity="one">%s vot</item>
+    <item quantity="other">%s vots</item>
+    <item quantity="zero">%s vots</item>
   </plurals>
   <string name="poll_vote_dialog_confirmation">Votar</string>
   <string name="poll_vote_timeout_retry">Reintentar</string>
