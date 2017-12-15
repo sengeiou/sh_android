@@ -19,7 +19,7 @@ public class FollowFormatUtilTest {
     @Test public void shouldReturnStringWithoutFormatWhenNumberIsLowerThanTenThousand() throws Exception {
         String result = followsFormatUtil.formatNumbers(1580L);
 
-        assertThat(result).isEqualTo("1580");
+        assertThat(result).isEqualTo("1.580");
     }
 
     @Test public void shouldReturnStringWithKSuffixWhenNumberIsGreaterOrEqualsThanTenThousand() throws Exception {
@@ -31,7 +31,7 @@ public class FollowFormatUtilTest {
     @Test public void shouldReturnStringWithoutDotWhenNumberIsLowerThanTenThousand() throws Exception {
         String result = followsFormatUtil.formatNumbers(9999L);
 
-        assertThat(result).doesNotContain(DOT);
+        assertThat(result).contains(DOT);
     }
 
     @Test public void shouldReturnStringWithMSuffixWhenNumberIsGreaterOrEqualsThanOneMillion() throws Exception {
