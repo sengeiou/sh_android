@@ -152,25 +152,6 @@ public class StreamManager extends AbstractManager {
     }
   }
 
-  public void putDefaultStreamSearch(List<StreamSearchEntity> eventSearchEntities) {
-    SQLiteDatabase database = getWritableDatabase();
-    try {
-      database.beginTransaction();
-      for (StreamSearchEntity streamSearchEntity : eventSearchEntities) {
-        database.insertWithOnConflict(DatabaseContract.StreamSearchTable.TABLE, null,
-            streamEntityMapper.toSearchContentValues(streamSearchEntity),
-            SQLiteDatabase.CONFLICT_REPLACE);
-      }
-      database.setTransactionSuccessful();
-    } finally {
-      database.endTransaction();
-    }
-  }
-
-  public void deleteDefaultStreamSearch() {
-    getWritableDatabase().delete(DatabaseContract.StreamSearchTable.TABLE, null, null);
-  }
-
   public List<StreamEntity> getStreamsListingNotRemoved(String idUser) {
     String whereSelection = DatabaseContract.StreamTable.ID_USER
         + " = ? AND "

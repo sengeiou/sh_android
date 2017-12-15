@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.repository.stream;
 
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import java.util.List;
 
@@ -30,4 +31,8 @@ public interface StreamRepository {
     long getConnectionTimes(String idStream);
 
     void storeConnection(String idStream, long connections);
+
+    LandingStreams getLandingStreams();
+
+    void putLandingStreams(LandingStreams landingStreams);
 }

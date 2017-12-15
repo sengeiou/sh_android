@@ -2,24 +2,24 @@ package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
+import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.ui.views.WelcomePageView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import javax.inject.Inject;
 
 public class WelcomePagePresenter implements Presenter {
 
-    private final StreamsListInteractor streamsListInteractor;
+    private final GetLandingStreamsInteractor streamsListInteractor;
     private final ErrorMessageFactory errorMessageFactory;
 
     private WelcomePageView welcomePageView;
     private boolean streamsLoaded = false;
     private boolean getStartedClicked = false;
 
-    @Inject
-    public WelcomePagePresenter(StreamsListInteractor streamsListInteractor, ErrorMessageFactory errorMessageFactory) {
+    @Inject public WelcomePagePresenter(GetLandingStreamsInteractor streamsListInteractor,
+        ErrorMessageFactory errorMessageFactory) {
         this.streamsListInteractor = streamsListInteractor;
         this.errorMessageFactory = errorMessageFactory;
     }
@@ -34,8 +34,8 @@ public class WelcomePagePresenter implements Presenter {
     }
 
     private void loadDefaultStreams() {
-        streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
-            @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
+        streamsListInteractor.getLandingStreams(new Interactor.Callback<LandingStreams>() {
+            @Override public void onLoaded(LandingStreams streamSearchResultList) {
                 streamsLoaded = true;
                 if (getStartedClicked) {
                     welcomePageView.goToStreamList();

@@ -576,5 +576,6 @@
   <string name="not_now">Not now</string>
   <string name="stream_data_info_views">Views</string>
   <string name="stream_data_info_total_views">Totals</string>
+  <string name="hot_header">Hot</string>
   <string name="facebook_permissions_alert">Email and Friends are required</string>
 </resources>

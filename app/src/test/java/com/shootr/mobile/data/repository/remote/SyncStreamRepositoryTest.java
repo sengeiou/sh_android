@@ -1,12 +1,15 @@
 package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
+import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,14 +39,18 @@ public class SyncStreamRepositoryTest {
   @Mock SyncableStreamEntityFactory syncableStreamEntityFactory;
   @Mock StreamCache streamCache;
   @Mock SyncTrigger syncTrigger;
+  @Mock LandingStreamsEntityMapper landingStreamsEntityMapper;
+  @Mock LandingStreamsCache landingStreamsCache;
+  @Mock StreamListSynchronizationRepository streamListSynchronizationRepository;
 
   private SyncStreamRepository syncStreamRepository;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     syncStreamRepository =
-        new SyncStreamRepository(streamEntityMapper, localStreamDataSource, remoteStreamDataSource,
-            syncableStreamEntityFactory, streamCache, syncTrigger);
+        new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
+            localStreamDataSource, remoteStreamDataSource, streamListSynchronizationRepository,
+            syncableStreamEntityFactory, streamCache, landingStreamsCache, syncTrigger);
   }
 
   @Test public void shouldPutStreamInCacheWhenGetStreamByIdAndRemoteStreamIsNotNull()
