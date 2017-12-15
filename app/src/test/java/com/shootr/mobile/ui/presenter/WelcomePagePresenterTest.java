@@ -1,13 +1,11 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
-import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.ui.views.WelcomePageView;
 import com.shootr.mobile.util.ErrorMessageFactory;
-import java.util.ArrayList;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.verify;
 
 public class WelcomePagePresenterTest {
 
-  @Mock StreamsListInteractor streamsListInteractor;
+  @Mock GetLandingStreamsInteractor streamsListInteractor;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock WelcomePageView welcomePageView;
 
@@ -71,18 +69,18 @@ public class WelcomePagePresenterTest {
         return null;
       }
     }).when(streamsListInteractor)
-        .loadStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .getLandingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
   private void setupStreamsListInteractorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.Callback<StreamSearchResultList> callback =
-            (Interactor.Callback<StreamSearchResultList>) invocation.getArguments()[0];
-        callback.onLoaded(new StreamSearchResultList(new ArrayList<StreamSearchResult>()));
+        Interactor.Callback<LandingStreams> callback =
+            (Interactor.Callback<LandingStreams>) invocation.getArguments()[0];
+        callback.onLoaded(new LandingStreams());
         return null;
       }
     }).when(streamsListInteractor)
-        .loadStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
+        .getLandingStreams(any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 }

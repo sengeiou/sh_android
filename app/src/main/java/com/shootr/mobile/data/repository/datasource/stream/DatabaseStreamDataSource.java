@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.data.entity.LandingStreamsEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -113,6 +114,10 @@ public class DatabaseStreamDataSource implements StreamDataSource {
 
   @Override public void storeConnection(String idStream, long connections) {
     streamManager.storeConnection(idStream, connections);
+  }
+
+  @Override public LandingStreamsEntity getLandingStreams() {
+    throw new IllegalArgumentException("method not implemented in local datasource");
   }
 
   @Override public List<FollowEntity> getEntitiesNotSynchronized() {

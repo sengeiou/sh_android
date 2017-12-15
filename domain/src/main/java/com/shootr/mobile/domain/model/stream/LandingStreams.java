@@ -23,4 +23,8 @@ public class LandingStreams {
   public void setHotStreams(HotStreams hotStreams) {
     this.hotStreams = hotStreams;
   }
+
+  @Override public String toString() {
+    return "LandingStreams{" + "userStreams=" + userStreams + ", hotStreams=" + hotStreams + '}';
+  }
 }

@@ -23,4 +23,8 @@ public class HotStreams {
   public void setStreams(ArrayList<Stream> streams) {
     this.streams = streams;
   }
+
+  @Override public String toString() {
+    return "HotStreams{" + "pagination=" + pagination + ", streams=" + streams + '}';
+  }
 }

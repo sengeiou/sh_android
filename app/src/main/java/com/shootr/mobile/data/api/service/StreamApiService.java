@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.api.service;
 
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.entity.LandingStreamsEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.io.IOException;
@@ -72,4 +73,7 @@ public interface StreamApiService {
 
   @DELETE("/stream/{idStream}/follow") Response unFollowStream(@Path("idStream") String idStream)
       throws IOException, ApiException;
+
+  @GET("/stream/landing") LandingStreamsEntity getLandingStreams() throws IOException, ApiException;
+
 }

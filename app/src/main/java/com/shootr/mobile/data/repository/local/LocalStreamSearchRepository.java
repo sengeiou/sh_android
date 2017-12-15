@@ -1,7 +1,6 @@
 package com.shootr.mobile.data.repository.local;
 
 import com.shootr.mobile.data.entity.StreamEntity;
-import com.shootr.mobile.data.entity.StreamSearchEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.mapper.StreamSearchEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
@@ -29,34 +28,6 @@ public class LocalStreamSearchRepository implements InternalStreamSearchReposito
     this.streamSearchEntityMapper = streamSearchEntityMapper;
     this.localStreamDataSource = localStreamDataSource;
     this.streamEntityMapper = streamEntityMapper;
-  }
-
-  @Override public List<StreamSearchResult> getDefaultStreams(String locale, String[] types) {
-    List<StreamSearchEntity> defaultEvents = localStreamSearchDataSource.getDefaultStreams(locale);
-    return streamSearchEntityMapper.transformToDomain(defaultEvents);
-  }
-
-  @Override
-  public List<StreamSearchResult> getStreams(String query, String locale, String[] types) {
-    //TODO this is not responsibility of the repository!!!
-    List<StreamSearchEntity> defaultStreams = localStreamSearchDataSource.getDefaultStreams(locale);
-    List<StreamSearchEntity> streams = new ArrayList<>();
-    for (StreamSearchEntity streamSearchEntity : defaultStreams) {
-      if (streamSearchEntity.getTitle().contains(query) && streamSearchEntity.getUserName()
-          .contains(query)) {
-        streams.add(streamSearchEntity);
-      }
-    }
-    return streamSearchEntityMapper.transformToDomain(streams);
-  }
-
-  @Override public void putDefaultStreams(List<StreamSearchResult> streamSearchResults) {
-    localStreamSearchDataSource.putDefaultStreams(
-        streamSearchEntityMapper.transform(streamSearchResults));
-  }
-
-  @Override public void deleteDefaultStreams() {
-    localStreamSearchDataSource.deleteDefaultStreams();
   }
 
   @Override
