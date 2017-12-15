@@ -1,5 +1,6 @@
 package com.shootr.mobile.util;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
@@ -27,7 +28,8 @@ public class NumberFormatUtil implements FormatNumberUtils {
         }
 
         if (number < 10000) {
-            return number.toString();
+            DecimalFormat formatter = new DecimalFormat("#,###,###");
+            return formatter.format(number);
         }
 
         int exp = (int) (Math.log(number) / Math.log(1000));
