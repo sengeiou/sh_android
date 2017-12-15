@@ -43,10 +43,12 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
 
   @BindString(R.string.watching_stream_connected) String connected;
   @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
+  DecimalFormat formatter;
 
   public StreamViewHolder(View itemView, OnLandingStreamClickListener onStreamClickListener, ImageLoader imageLoader,
       InitialsLoader initialsLoader) {
     super(itemView);
+    formatter = new DecimalFormat("#,###,###");
     this.onStreamClickListener = onStreamClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
@@ -146,7 +148,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
     if (subtitle != null && subtitleDescription != null) {
       subtitle.setText("@" + stream.getAuthorUsername());
       subtitleDescription.setVisibility(View.VISIBLE);
-      DecimalFormat formatter = new DecimalFormat("#,###,###");
       String favorites = subtitle.getContext()
           .getResources()
           .getQuantityString(R.plurals.listing_favorites, stream.getTotalFollowers(),
@@ -157,7 +158,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
 
   private void renderHolderOwnSubtitle(StreamModel stream) {
     if (subtitle != null) {
-      DecimalFormat formatter = new DecimalFormat("#,###,###");
       subtitleDescription.setVisibility(View.VISIBLE);
       String favorites = subtitle.getContext()
           .getResources()
@@ -173,7 +173,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
       if (isWatchingStateEnabled) {
         subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
       } else {
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
         String favorites = subtitle.getContext()
             .getResources()
             .getQuantityString(R.plurals.listing_favorites,
