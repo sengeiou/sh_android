@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -49,6 +50,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -146,8 +148,7 @@ public class LoginSelectionActivity extends BaseActivity {
   }
 
   @NonNull public void privacyPolicyClickListener() {
-    String privacyUrl =
-        String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
+    String privacyUrl = String.format(privacyPolicyServiceBaseUrl, localeProvider.getLanguage());
     Intent privacyIntent =
         intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, privacyUrl);
     Intents.maybeStartActivity(LoginSelectionActivity.this, privacyIntent);
@@ -155,8 +156,7 @@ public class LoginSelectionActivity extends BaseActivity {
 
   @NonNull public void termsOfServiceClickListener() {
     String termsUrl = String.format(termsOfServiceBaseUrl, localeProvider.getLanguage());
-    Intent termsIntent =
-        intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
+    Intent termsIntent = intentFactory.openEmbededUrlIntent(LoginSelectionActivity.this, termsUrl);
     Intents.maybeStartActivity(LoginSelectionActivity.this, termsIntent);
   }
 
@@ -250,28 +250,42 @@ public class LoginSelectionActivity extends BaseActivity {
       @Override public void onSuccess(LoginResult loginResult) {
         final AccessToken accessToken = loginResult.getAccessToken();
         Timber.d("FB Token: %s", accessToken.getToken());
-        performFacebookLoginInteractor.attempLogin(accessToken.getToken(),
-            new Interactor.Callback<Boolean>() {
-              @Override public void onLoaded(Boolean isNewUser) {
-                finish();
-                Intent intent;
-                if (isNewUser) {
-                  sendSignUpAnalythics();
-                  activityShowcase.set(true);
-                  intent = new Intent(LoginSelectionActivity.this, OnBoardingStreamActivity.class);
-                } else {
-                  sendLoginToMixpanel();
-                  intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
+        if (!checkFacebookPermissions(loginResult.getRecentlyGrantedPermissions())) {
+          feedbackMessage.showLong(getView(), getString(R.string.facebook_permissions_alert));
+          final Handler handler = new Handler();
+          handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              final Intent i = new Intent(getBaseContext(), LoginSelectionActivity.class);
+              i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+              startActivity(i);
+            }
+          }, 2500);
+        } else {
+          performFacebookLoginInteractor.attempLogin(accessToken.getToken(),
+              new Interactor.Callback<Boolean>() {
+                @Override public void onLoaded(Boolean isNewUser) {
+                  finish();
+                  Intent intent;
+                  if (isNewUser) {
+                    sendSignUpAnalythics();
+                    activityShowcase.set(true);
+                    intent =
+                        new Intent(LoginSelectionActivity.this, OnBoardingStreamActivity.class);
+                  } else {
+                    sendLoginToMixpanel();
+                    intent = new Intent(LoginSelectionActivity.this, MainTabbedActivity.class);
+                  }
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                  startActivity(intent);
                 }
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-              }
-            }, new Interactor.ErrorCallback() {
-              @Override public void onError(ShootrException error) {
-                showFacebookError(facebookMethodError);
-                hideLoading();
-              }
-            });
+              }, new Interactor.ErrorCallback() {
+                @Override public void onError(ShootrException error) {
+                  showFacebookError(facebookMethodError);
+                  hideLoading();
+                }
+              });
+        }
       }
 
       private void sendLoginToMixpanel() {
@@ -294,6 +308,15 @@ public class LoginSelectionActivity extends BaseActivity {
         hideLoading();
       }
     });
+  }
+
+  private boolean checkFacebookPermissions(Set<String> facebookPermissions) {
+    for (int i = 0; i < 3; i++) {
+      if (!facebookPermissions.contains(FACEBOOK_PERMISIONS[i])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private void sendSignUpAnalythics() {
