@@ -217,8 +217,8 @@
     <item quantity="zero">%s link clicks</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">%d follower\n        </item>
-    <item quantity="other">%d followers\n        </item>
+    <item quantity="one">%s follower\n        </item>
+    <item quantity="other">%s followers\n        </item>
   </plurals>
   <string name="listing_title_favorites">Following</string>
   <string name="listing_title_holding">Admin</string>

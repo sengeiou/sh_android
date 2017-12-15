@@ -219,8 +219,8 @@
     <item quantity="zero">%s clics a l\'enllaç</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">%d seguidor</item>
-    <item quantity="other">%d seguidors</item>
+    <item quantity="one">%s seguidor</item>
+    <item quantity="other">%s seguidors</item>
   </plurals>
   <string name="listing_title_favorites">Seguint</string>
   <string name="listing_title_holding">Admin</string>
