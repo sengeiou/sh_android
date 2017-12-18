@@ -17,6 +17,7 @@ import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.PercentageUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
+import java.text.DecimalFormat;
 
 public class PollResultViewHolder extends RecyclerView.ViewHolder {
 
@@ -60,6 +61,7 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupVotes(PollOptionModel model) {
+    DecimalFormat formatter = new DecimalFormat("#,###,###");
     Double pollVotes = percentageUtils.getPercentage(model.getVotes(), totalVotes);
     String percentageString =
         context.getString(R.string.poll_results_pct, percentageUtils.formatPercentage(pollVotes));
@@ -67,7 +69,7 @@ public class PollResultViewHolder extends RecyclerView.ViewHolder {
     progressBar.setProgress(pollVotes.intValue());
     progressBar.getProgressDrawable()
         .setColorFilter(initialsLoader.getColorForLetters(model.getText()), PorterDuff.Mode.SRC_IN);
-    votes.setText(String.valueOf(model.getVotes()));
+    votes.setText(formatter.format(model.getVotes()));
   }
 
   private void setupImage(final PollOptionModel model) {
