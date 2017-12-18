@@ -37,6 +37,11 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.mopub.nativeads.MoPubNativeAdPositioning;
+import com.mopub.nativeads.MoPubRecyclerAdapter;
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
+import com.mopub.nativeads.RequestParameters;
+import com.mopub.nativeads.ViewBinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
@@ -161,6 +166,9 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject SessionRepository sessionRepository;
   @Inject FormatNumberUtils formatNumberUtils;
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
+  @Inject RequestParameters requestParameters;
+  @Inject MoPubStaticNativeAdRenderer moPubStaticNativeAdRenderer;
+  @Inject MoPubNativeAdPositioning.MoPubServerPositioning moPubServerPositioning;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -248,6 +256,7 @@ public class StreamTimelineFragment extends BaseFragment
   private ViewPropertyAnimator timelineIndicatorAnimator;
   private boolean animatorIsRunning;
   private boolean isShowingPollIndicator;
+  private MoPubRecyclerAdapter moPubRecyclerAdapter;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -677,7 +686,13 @@ public class StreamTimelineFragment extends BaseFragment
       }
     }, numberFormatUtil, this, getContext(),
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
-    shotsTimeline.setAdapter(adapter);
+
+    moPubRecyclerAdapter = new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
+    moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
+
+    shotsTimeline.setAdapter(moPubRecyclerAdapter);
+
+    moPubRecyclerAdapter.loadAds("30f1124f02b5468ab2a346c0d4513d79", requestParameters);
   }
 
   private void sendOpenlinkAnalythics() {

@@ -1,6 +1,11 @@
 package com.shootr.mobile.ui;
 
 import android.os.Handler;
+import com.mopub.nativeads.MoPubNativeAdPositioning;
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
+import com.mopub.nativeads.RequestParameters;
+import com.mopub.nativeads.ViewBinder;
+import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.DateRangeTextProvider;
 import com.shootr.mobile.ui.activities.AllParticipantsActivity;
 import com.shootr.mobile.ui.activities.AllShotsActivity;
@@ -64,6 +69,7 @@ import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
 import dagger.Module;
 import dagger.Provides;
+import java.util.EnumSet;
 import javax.inject.Singleton;
 
 @Module(
@@ -119,7 +125,7 @@ import javax.inject.Singleton;
     GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class,
       PollOptionVotedActivity.class, HiddenPollResultsActivity.class, HistoryActivity.class
   },
-  complete = false) public class UiModule {
+  complete = false, library = true) public class UiModule {
 
     @Provides @Singleton AppContainer provideAppContainer() {
         return AppContainer.DEFAULT;
@@ -136,5 +142,31 @@ import javax.inject.Singleton;
 
     @Provides @Singleton IntentFactory provideIntentFactory() {
         return IntentFactory.REAL;
+    }
+
+    @Provides @Singleton RequestParameters provideRequestParameters() {
+      EnumSet desiredAssets =
+          EnumSet.of(RequestParameters.NativeAdAsset.TITLE, RequestParameters.NativeAdAsset.TEXT,
+              RequestParameters.NativeAdAsset.ICON_IMAGE, RequestParameters.NativeAdAsset.MAIN_IMAGE,
+              RequestParameters.NativeAdAsset.CALL_TO_ACTION_TEXT);
+
+      return new RequestParameters.Builder().desiredAssets(desiredAssets).build();
+    }
+
+    @Provides MoPubStaticNativeAdRenderer provideAdRenderer() {
+
+      ViewBinder viewBinder = new ViewBinder.Builder(R.layout.item_ad_content)
+          .titleId(R.id.contentad_advertiser)
+          .textId(R.id.contentad_body)
+          .mainImageId(R.id.contentad_image)
+          .iconImageId(R.id.contentad_logo)
+          .callToActionId(R.id.contentad_call_to_action)
+          .build();
+
+      return new MoPubStaticNativeAdRenderer(viewBinder);
+    }
+
+    @Provides @Singleton MoPubNativeAdPositioning.MoPubServerPositioning provideMoPubServerPositioning() {
+      return  MoPubNativeAdPositioning.serverPositioning();
     }
 }
