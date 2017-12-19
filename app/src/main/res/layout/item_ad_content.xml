@@ -52,6 +52,20 @@
             android:textStyle="bold"
             tools:text="Ignasi "
             />
+
+        <TextView
+            android:id="@+id/shot_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="3dp"
+            android:layout_toEndOf="@+id/contentad_advertiser"
+            android:maxLines="1"
+            android:textColor="@color/gray_80"
+            android:textSize="14sp"
+            android:text="Promoted"
+            android:layout_toRightOf="@+id/contentad_advertiser"
+            />
+
       </RelativeLayout>
       <TextView
           android:id="@+id/contentad_headline"
@@ -97,21 +111,34 @@
 
       </FrameLayout>
     </LinearLayout>
+
     <TextView
         android:id="@+id/contentad_call_to_action"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/linearLayout2"
-        android:layout_alignLeft="@+id/linearLayout2"
-        android:layout_alignRight="@+id/linearLayout2"
+        android:background="?selectableItemBackground"
         android:layout_alignStart="@+id/linearLayout2"
         android:layout_below="@+id/linearLayout2"
-        android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
-        android:textColor="#0000FF"
-        android:textSize="16sp"
+        android:textSize="12sp"
+        android:visibility="visible"
+        android:text="Más información"
+        android:textAllCaps="true"
         android:textStyle="bold"
-        android:visibility="gone"
+        android:textColor="@color/links"
+        android:layout_alignLeft="@+id/linearLayout2"
         />
   </RelativeLayout>
+
+  <ImageView
+      android:id="@+id/promoted_icon"
+      android:layout_width="20dp"
+      android:layout_height="24dp"
+      android:layout_gravity="right"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginLeft="8dp"
+      android:layout_marginRight="16dp"
+      />
+
 </FrameLayout>

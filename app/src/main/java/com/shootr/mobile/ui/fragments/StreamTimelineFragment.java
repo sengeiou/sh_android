@@ -692,7 +692,7 @@ public class StreamTimelineFragment extends BaseFragment
 
     shotsTimeline.setAdapter(moPubRecyclerAdapter);
 
-    moPubRecyclerAdapter.loadAds("30f1124f02b5468ab2a346c0d4513d79", requestParameters);
+    moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
   }
 
   private void sendOpenlinkAnalythics() {

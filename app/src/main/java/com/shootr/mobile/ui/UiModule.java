@@ -160,7 +160,7 @@ import javax.inject.Singleton;
           .textId(R.id.contentad_body)
           .mainImageId(R.id.contentad_image)
           .iconImageId(R.id.contentad_logo)
-          .callToActionId(R.id.contentad_call_to_action)
+          .privacyInformationIconImageId(R.id.promoted_icon)
           .build();
 
       return new MoPubStaticNativeAdRenderer(viewBinder);
