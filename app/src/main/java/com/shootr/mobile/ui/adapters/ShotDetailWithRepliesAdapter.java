@@ -266,10 +266,8 @@ public class ShotDetailWithRepliesAdapter extends RecyclerView.Adapter<RecyclerV
 
     public void renderParentShot(List<ShotModel> parentShot) {
         this.parents = parentShot;
-        notifyDataSetChanged();
-        if (!isShowingParent) {
-            showParent();
-        }
+        notifyItemRangeInserted(0, parentShot.size());
+        showParent();
     }
 
     public void renderReplies(List<ShotModel> replies) {
