@@ -8,7 +8,8 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.google.android.gms.ads.formats.NativeContentAd;
+import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.ui.adapters.holders.HighLightedShotViewHolder;
@@ -122,7 +123,7 @@ public class ShotsTimelineAdapter
   @Override public int getItemViewType(int position) {
     int typeHeader = TYPE_ITEM_SHOT;
 
-    if (getItem(position) instanceof NativeContentAd) {
+    if (getItem(position) instanceof NativeAd) {
       return TYPE_ITEM_CONTENT_AD;
     }
 
@@ -242,7 +243,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      ((NativeContentAdViewHolder) holder).render((NativeContentAd) highlightedShotModel);
+      ((NativeContentAdViewHolder) holder).render((NativeAd) highlightedShotModel);
       return;
     }
 
@@ -264,7 +265,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      ((NativeContentAdViewHolder) holder).render((NativeContentAd) shots.get(position));
+      ((NativeContentAdViewHolder) holder).render((NativeAd) shots.get(position));
       return;
     }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
@@ -286,7 +287,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      ((NativeContentAdViewHolder) holder).render((NativeContentAd) shots.get(position));
+      ((NativeContentAdViewHolder) holder).render((NativeAd) shots.get(position));
       return;
     }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
@@ -309,7 +310,7 @@ public class ShotsTimelineAdapter
   }
 
   private void putNewHeader(Object highlightedShot) {
-    if (highlightedShot instanceof NativeContentAd) {
+    if (highlightedShot instanceof NativeAd) {
       shots.add(HEADER_POSITION, (highlightedShot));
       this.setHeader(highlightedShot);
     } else if (highlightedShot instanceof HighlightedShotModel) {
@@ -480,13 +481,22 @@ public class ShotsTimelineAdapter
     }
   }
 
-  public void showAd(NativeContentAd nativeContentAd) {
+  public void showAd(NativeAd nativeContentAd) {
     isShowingAd = true;
     setHighlightedShot(nativeContentAd);
   }
 
   public void onPause() {
     isShowingAd = false;
+  }
+
+  public void showAds(NativeAdsManager adsManager) {
+    for (int i = 0; i < shots.size(); i++) {
+      if (i !=0 && i % 10 == 0) {
+        shots.add(i, adsManager.nextNativeAd());
+      }
+    }
+    notifyDataSetChanged();
   }
 
   public interface ShotsInsertedListener {

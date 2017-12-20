@@ -30,7 +30,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -117,7 +116,6 @@ import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
-import java.util.EnumSet;
 import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -993,14 +991,13 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   //region View methods
+
   @Override public void setShots(List<ShotModel> shots) {
     if (shots.size() > 0) {
       hideEmpty();
     }
     adapter.setShots(shots);
     adapter.notifyDataSetChanged();
-
-    //loadAds();
   }
 
   @Override public void hideShots() {
