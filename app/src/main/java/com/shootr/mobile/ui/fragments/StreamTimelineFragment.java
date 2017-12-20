@@ -328,10 +328,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    idStream = getArguments().getString(EXTRA_STREAM_ID);
     initializeViews();
     setHasOptionsMenu(true);
     streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-    idStream = getArguments().getString(EXTRA_STREAM_ID);
     setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idStream);
@@ -686,13 +686,21 @@ public class StreamTimelineFragment extends BaseFragment
     }, numberFormatUtil, this, getContext(),
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
 
-    moPubRecyclerAdapter = new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
-    moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
+    setupAdapter();
+  }
 
-    shotsTimeline.setAdapter(moPubRecyclerAdapter);
+  private void setupAdapter() {
+    if (idStream.equals("59cccdbec9e77c000c725a72")) {
+      moPubRecyclerAdapter = new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
+      moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
 
-    //moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
-    moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
+      shotsTimeline.setAdapter(moPubRecyclerAdapter);
+
+      //moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
+      moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
+    } else {
+      shotsTimeline.setAdapter(adapter);
+    }
   }
 
   private void sendOpenlinkAnalythics() {
