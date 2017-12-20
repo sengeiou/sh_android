@@ -41,7 +41,6 @@ import com.mopub.nativeads.MoPubNativeAdPositioning;
 import com.mopub.nativeads.MoPubRecyclerAdapter;
 import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
 import com.mopub.nativeads.RequestParameters;
-import com.mopub.nativeads.ViewBinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
@@ -692,7 +691,8 @@ public class StreamTimelineFragment extends BaseFragment
 
     shotsTimeline.setAdapter(moPubRecyclerAdapter);
 
-    moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
+    //moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
+    moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
   }
 
   private void sendOpenlinkAnalythics() {
