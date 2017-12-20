@@ -87,6 +87,7 @@ public class ShareShotViewHolder extends ShotActivityViewHolder {
             embedShotComment.addLinks();
             embedShotComment.setVisibility(View.VISIBLE);
         } else {
+            embedShotComment.setText("");
             embedShotComment.setVisibility(View.GONE);
             embedUsername.setPadding(getDps(8), getDps(8), getDps(8), getDps(8));
         }
