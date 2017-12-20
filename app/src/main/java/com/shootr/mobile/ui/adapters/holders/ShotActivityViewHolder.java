@@ -88,7 +88,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
       text.addLinks();
       text.setVisibility(View.VISIBLE);
     } else {
-      text.setText(null);
+      text.setText("");
     }
   }
 
