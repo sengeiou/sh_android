@@ -41,6 +41,7 @@ import com.mopub.nativeads.MoPubNativeAdPositioning;
 import com.mopub.nativeads.MoPubRecyclerAdapter;
 import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
 import com.mopub.nativeads.RequestParameters;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
@@ -691,13 +692,17 @@ public class StreamTimelineFragment extends BaseFragment
 
   private void setupAdapter() {
     if (idStream.equals("59cccdbec9e77c000c725a72")) {
-      moPubRecyclerAdapter = new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
+      moPubRecyclerAdapter =
+          new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
       moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
 
       shotsTimeline.setAdapter(moPubRecyclerAdapter);
 
-      //moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
-      moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
+      if (BuildConfig.DEBUG) {
+        moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
+      } else {
+        moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
+      }
     } else {
       shotsTimeline.setAdapter(adapter);
     }
