@@ -1,5 +1,6 @@
 package com.shootr.mobile.util;
 
+import java.text.DecimalFormat;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockitoAnnotations;
@@ -18,20 +19,14 @@ public class FollowFormatUtilTest {
 
     @Test public void shouldReturnStringWithoutFormatWhenNumberIsLowerThanTenThousand() throws Exception {
         String result = followsFormatUtil.formatNumbers(1580L);
-
-        assertThat(result).isEqualTo("1580");
+        DecimalFormat formatter = new DecimalFormat("#,###,###");
+        assertThat(result).isEqualTo(formatter.format(1580L));
     }
 
     @Test public void shouldReturnStringWithKSuffixWhenNumberIsGreaterOrEqualsThanTenThousand() throws Exception {
         String result = followsFormatUtil.formatNumbers(45000L);
 
         assertThat(result).isEqualTo("45.0K");
-    }
-
-    @Test public void shouldReturnStringWithoutDotWhenNumberIsLowerThanTenThousand() throws Exception {
-        String result = followsFormatUtil.formatNumbers(9999L);
-
-        assertThat(result).doesNotContain(DOT);
     }
 
     @Test public void shouldReturnStringWithMSuffixWhenNumberIsGreaterOrEqualsThanOneMillion() throws Exception {

@@ -219,8 +219,8 @@
     <item quantity="zero">%s clics en el enlace</item>
   </plurals>
   <plurals name="listing_favorites">
-    <item quantity="one">%d seguidor</item>
-    <item quantity="other">%d seguidores</item>
+    <item quantity="one">%s seguidor</item>
+    <item quantity="other">%s seguidores</item>
   </plurals>
   <string name="listing_title_favorites">Siguiendo</string>
   <string name="listing_title_holding">Admin</string>
@@ -346,9 +346,9 @@
   <string name="poll_view">Ver</string>
   <string name="poll_vote">Vota</string>
   <plurals name="poll_votes_count">
-    <item quantity="one">%d voto</item>
-    <item quantity="other">%d votos</item>
-    <item quantity="zero">%d votos</item>
+    <item quantity="one">%s voto</item>
+    <item quantity="other">%s votos</item>
+    <item quantity="zero">%s votos</item>
   </plurals>
   <string name="poll_vote_dialog_confirmation">Votar</string>
   <string name="poll_vote_timeout_retry">Reintentar</string>
@@ -580,4 +580,5 @@
   <string name="not_now">Ahora no</string>
   <string name="stream_data_info_total_views">Totales</string>
   <string name="stream_data_info_views">Visitas</string>
+  <string name="facebook_permissions_alert">Se requieren el email y la lista de amigos</string>
 </resources>

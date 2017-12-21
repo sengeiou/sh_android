@@ -5,18 +5,19 @@ import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrValidationException;
+import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.StreamsListInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
-import com.shootr.mobile.domain.model.stream.StreamSearchResult;
-import com.shootr.mobile.domain.model.stream.StreamSearchResultList;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
+import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -27,7 +28,7 @@ import javax.inject.Inject;
 
 public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, StreamMuted.Receiver {
 
-  private final StreamsListInteractor streamsListInteractor;
+  private final GetLandingStreamsInteractor getLandingStreamsInteractor;
   private final FollowStreamInteractor followStreamInteractor;
   private final UnfollowStreamInteractor unfollowStreamInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
@@ -35,6 +36,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private final MuteInteractor muteInteractor;
   private final UnmuteInteractor unmuteInterator;
   private final StreamResultModelMapper streamResultModelMapper;
+  private final StreamModelMapper streamModelMapper;
   private final SessionRepository sessionRepository;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
@@ -42,14 +44,14 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private StreamsListView streamsListView;
   private boolean hasBeenPaused;
 
-  @Inject public StreamsListPresenter(StreamsListInteractor streamsListInteractor,
+  @Inject public StreamsListPresenter(GetLandingStreamsInteractor getLandingStreamsInteractor,
       FollowStreamInteractor followStreamInteractor,
       UnfollowStreamInteractor unfollowStreamInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, ShareStreamInteractor shareStreamInteractor,
       MuteInteractor muteInteractor, UnmuteInteractor unmuteInterator,
-      StreamResultModelMapper streamResultModelMapper, SessionRepository sessionRepository,
-      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
-    this.streamsListInteractor = streamsListInteractor;
+      StreamResultModelMapper streamResultModelMapper, StreamModelMapper streamModelMapper,
+      SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
+    this.getLandingStreamsInteractor = getLandingStreamsInteractor;
     this.followStreamInteractor = followStreamInteractor;
     this.unfollowStreamInteractor = unfollowStreamInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
@@ -57,6 +59,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     this.muteInteractor = muteInteractor;
     this.unmuteInterator = unmuteInterator;
     this.streamResultModelMapper = streamResultModelMapper;
+    this.streamModelMapper = streamModelMapper;
     this.sessionRepository = sessionRepository;
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
@@ -68,18 +71,17 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void initialize(StreamsListView streamsListView) {
-    loadDefaultStreamList();
     this.setView(streamsListView);
+    loadLandingStreams();
   }
 
   public void refresh() {
-    this.loadDefaultStreamList();
+    loadLandingStreams();
   }
 
-  public void selectStream(StreamResultModel stream) {
-    streamsListView.setCurrentWatchingStreamId(stream);
-    selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(),
-        stream.getStreamModel().getAuthorId());
+  public void selectStream(StreamModel stream) {
+    selectStream(stream.getIdStream(), stream.getTitle(),
+        stream.getAuthorId());
   }
 
   private void selectStream(final String idStream, String streamTag, String authorId) {
@@ -89,7 +91,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   public void unwatchStream() {
     unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadDefaultStreamList();
+        loadLandingStreams();
         removeCurrentWatchingStream();
       }
     });
@@ -99,31 +101,20 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     streamsListView.setCurrentWatchingStreamId(null);
   }
 
-  protected void loadDefaultStreamList() {
-    streamsListInteractor.loadStreams(new Interactor.Callback<StreamSearchResultList>() {
-      @Override public void onLoaded(StreamSearchResultList streamSearchResultList) {
-        streamsListView.hideLoading();
-        onDefaultStreamListLoaded(streamSearchResultList);
+  public void loadLandingStreams() {
+    streamsListView.showLoading();
+    getLandingStreamsInteractor.getLandingStreams(new Interactor.Callback<LandingStreams>() {
+      @Override public void onLoaded(LandingStreams landingStreams) {
+        if (landingStreams != null) {
+          streamsListView.hideLoading();
+          streamsListView.renderLanding(streamModelMapper.transformLandingStreams(landingStreams));
+        }
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
         showViewError(error);
       }
     });
-  }
-
-  public void onDefaultStreamListLoaded(StreamSearchResultList resultList) {
-    List<StreamSearchResult> streamSearchResults = resultList.getStreamSearchResults();
-    if (!streamSearchResults.isEmpty()) {
-      List<StreamResultModel> streamResultModels =
-          streamResultModelMapper.transformWithFavorites(streamSearchResults);
-      this.renderViewStreamsList(streamResultModels);
-      StreamSearchResult currentWatchingStream = resultList.getCurrentWatchingStream();
-      this.setViewCurrentVisibleWatchingStream(
-          streamResultModelMapper.transform(currentWatchingStream));
-    } else {
-      streamsListView.showLoading();
-    }
   }
 
   public void streamCreated(String streamId) {
@@ -153,11 +144,13 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     streamsListView.showError(errorMessage);
   }
 
-  public void addToFavorites(StreamResultModel streamResultModel, final Boolean notify) {
-    followStreamInteractor.follow(streamResultModel.getStreamModel().getIdStream(),
+  public void addToFavorites(final StreamModel streamResultModel, final Boolean notify) {
+    followStreamInteractor.follow(streamResultModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
+              streamResultModel.setFollowing(true);
+              streamsListView.renderFollow(streamResultModel);
               streamsListView.showAddedToFavorites();
             }
           }
@@ -168,19 +161,21 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         });
   }
 
-  public void removeFromFavorites(StreamResultModel streamResultModel, final Boolean notify) {
-    unfollowStreamInteractor.unfollow(streamResultModel.getStreamModel().getIdStream(),
+  public void removeFromFavorites(final StreamModel streamResultModel, final Boolean notify) {
+    unfollowStreamInteractor.unfollow(streamResultModel.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             if (notify) {
+              streamResultModel.setFollowing(false);
+              streamsListView.renderFollow(streamResultModel);
               streamsListView.showRemovedFromFavorites();
             }
           }
         });
   }
 
-  public void shareStream(StreamResultModel stream) {
-    shareStreamInteractor.shareStream(stream.getStreamModel().getIdStream(),
+  public void shareStream(StreamModel stream) {
+    shareStreamInteractor.shareStream(stream.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             streamsListView.showStreamShared();
@@ -193,43 +188,47 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   @Subscribe @Override public void onUnwatchDone(UnwatchDone.Event event) {
-    this.loadDefaultStreamList();
+    /* no-op */
   }
 
-  public void onStreamLongClicked(final StreamResultModel stream) {
-    if (stream.getStreamModel().isMuted()) {
+  public void onStreamLongClicked(final StreamModel stream) {
+    if (stream.isMuted()) {
       streamsListView.showContextMenuWithUnmute(stream);
     } else {
       streamsListView.showContextMenuWithMute(stream);
     }
   }
 
-  public void onMuteClicked(StreamResultModel stream) {
-    muteInteractor.mute(stream.getStreamModel().getIdStream(), new Interactor.CompletedCallback() {
+  public void onMuteClicked(final StreamModel stream) {
+    muteInteractor.mute(stream.getIdStream(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        loadDefaultStreamList();
+        stream.setMuted(true);
+        streamsListView.renderMute(stream);
+        //loadLandingStreams();
       }
     });
   }
 
-  public void onUnmuteClicked(StreamResultModel stream) {
-    unmuteInterator.unmute(stream.getStreamModel().getIdStream(),
+  public void onUnmuteClicked(final StreamModel stream) {
+    unmuteInterator.unmute(stream.getIdStream(),
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
-            loadDefaultStreamList();
+            stream.setMuted(false);
+            streamsListView.renderMute(stream);
+            //loadLandingStreams();
           }
         });
   }
 
   @Subscribe @Override public void onStreamMuted(StreamMuted.Event event) {
-    loadDefaultStreamList();
+    /* no-op */
   }
 
   //region Lifecycle
   @Override public void resume() {
     bus.register(this);
     if (hasBeenPaused) {
-      loadDefaultStreamList();
+      loadLandingStreams();
     }
   }
 

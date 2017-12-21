@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.data.entity.LandingStreamsEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -53,4 +54,6 @@ public interface StreamDataSource extends SyncableDataSource<FollowEntity> {
   long getConnectionTimes(String idStream);
 
   void storeConnection(String idStream, long connections);
+
+  LandingStreamsEntity getLandingStreams();
 }

@@ -22,6 +22,7 @@ import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShootrEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DeviceFactory;
@@ -285,6 +286,10 @@ import static android.content.Context.MODE_PRIVATE;
   }
 
   @Provides @Singleton LruCache<String, SuggestedPeople> provideLruCache() {
+    return new LruCache(LRU_CACHE_SIZE);
+  }
+
+  @Provides @Singleton LruCache<String, LandingStreams> provideLandingStreamsLruCache() {
     return new LruCache(LRU_CACHE_SIZE);
   }
 }

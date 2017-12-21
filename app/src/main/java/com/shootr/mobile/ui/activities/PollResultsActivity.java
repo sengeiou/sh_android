@@ -36,6 +36,7 @@ import com.shootr.mobile.util.MenuItemValueHolder;
 import com.shootr.mobile.util.PercentageUtils;
 import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.SwipeDialog;
+import java.text.DecimalFormat;
 import javax.inject.Inject;
 
 public class PollResultsActivity extends BaseToolbarDecoratedActivity implements PollResultsView {
@@ -201,8 +202,9 @@ public class PollResultsActivity extends BaseToolbarDecoratedActivity implements
   public void showPollVotesTimeToExpire(Long votes, Long timeToExpire, boolean isExpired) {
     Integer pollVotes = votes.intValue();
     String timeToExpireText = timeUtils.getPollElapsedTime(getBaseContext(), timeToExpire);
+    DecimalFormat formatter = new DecimalFormat("#,###,###");
     String pollVotesText =
-        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, pollVotes);
+        getResources().getQuantityString(R.plurals.poll_votes_count, pollVotes, formatter.format(pollVotes));
     pollVoteNumber.setText(pollVotesText);
     if (!isExpired) {
       pollCountdown.setText(timeToExpireText);

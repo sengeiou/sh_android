@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.datasource.stream;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.entity.FollowEntity;
+import com.shootr.mobile.data.entity.LandingStreamsEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -167,6 +168,14 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
   @Override public void storeConnection(String idStream, long connections) {
     throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public LandingStreamsEntity getLandingStreams() {
+    try {
+      return streamApiService.getLandingStreams();
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
   }
 
   @Override public List<FollowEntity> getEntitiesNotSynchronized() {

@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,10 +10,12 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindString;
@@ -268,6 +271,21 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     startActivity(NicersActivity.newIntent(this, idShot));
   }
 
+  private int getScreenHeight() {
+    try {
+      if (screenHeight == 0) {
+        WindowManager wm = (WindowManager) getBaseContext().getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        screenHeight = size.y;
+      }
+      return screenHeight;
+    } catch (NullPointerException error) {
+      return OFFSET;
+    }
+  }
+
   private void setupAdapter() {
     detailAdapter = new ShotDetailWithRepliesAdapter(imageLoader, new AvatarClickListener() {
       @Override public void onClick(String userId) {
@@ -303,10 +321,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
         }, //
         numberFormatUtil,  new OnParentShownListener() {
       @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
-        linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
-        if (repliesNumber == 0) {
-          detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET_WITH_REPLIES));
-        }
+          detailList.addItemDecoration(new EndOffsetItemDecoration((getScreenHeight() / 2)));
+          linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
       }
     }, //
         new OnNiceShotListener() {
@@ -383,23 +399,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     linearLayoutManager = new LinearLayoutManager(this);
     detailList.setLayoutManager(linearLayoutManager);
     detailList.setAdapter(detailAdapter);
-    detailList.addItemDecoration(new EndOffsetItemDecoration(OFFSET));
-    detailList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-      @Override public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-        overallYScroll = overallYScroll + dy;
-        int itemsCount = recyclerView.getAdapter().getItemCount();
-        if (itemsCount == 1) {
-          int viewSize = recyclerView.getChildAt(0).getHeight();
-          if (viewSize < screenHeight) {
-            linearLayoutManager.scrollToPosition(0);
-          } else {
-            super.onScrolled(recyclerView, dx, dy);
-          }
-        } else {
-          super.onScrolled(recyclerView, dx, dy);
-        }
-      }
-    });
   }
 
   private void onStreamTitleClick(ShotModel shotModel) {

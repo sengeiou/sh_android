@@ -22,7 +22,6 @@ public class UserEntityMapper {
     user.setIdUser(userEntity.getIdUser());
     user.setUsername(userEntity.getUserName());
     user.setName(userEntity.getName());
-    user.setVerifiedUser(userEntity.getVerifiedUser() != null && userEntity.getVerifiedUser() == 1);
     user.setPhoto(userEntity.getPhoto());
     user.setNumFollowings(userEntity.getNumFollowings());
     user.setNumFollowers(userEntity.getNumFollowers());
@@ -44,6 +43,7 @@ public class UserEntityMapper {
         }
       }
     }
+    user.setVerifiedUser(userEntity.getVerifiedUser() != null && userEntity.getVerifiedUser() == 1);
     user.setSocialLogin(userEntity.getSocialLogin() == null ? false : userEntity.getSocialLogin());
     user.setNumMutuals(userEntity.getNumMutuals());
     user.setFirstSessionActivation(userEntity.isFirstSessionActivation());

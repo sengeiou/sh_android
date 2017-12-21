@@ -5,7 +5,7 @@ import javax.inject.Inject;
 
 public class MemoryStreamListSynchronizationRepository implements StreamListSynchronizationRepository {
 
-    private static final long DEFAULT_REFRESH_DATE = 0L;
+    public static final long DEFAULT_REFRESH_DATE = 0L;
 
     long lastRefreshDate;
 

@@ -32,18 +32,6 @@ import javax.inject.Singleton;
         }
     }
 
-    @Override public List<StreamSearchEntity> getDefaultStreams(String locale) {
-        return streamManager.getDefaultStreamSearch();
-    }
-
-    @Override public void putDefaultStreams(List<StreamSearchEntity> streamSearchEntities) {
-        streamManager.putDefaultStreamSearch(streamSearchEntities);
-    }
-
-    @Override public void deleteDefaultStreams() {
-        streamManager.deleteDefaultStreamSearch();
-    }
-
     @Override public StreamSearchEntity getStreamResult(String idStream) {
         StreamSearchEntity streamFromDefaultList = streamManager.getStreamSearchResultById(idStream);
         if (streamFromDefaultList != null) {

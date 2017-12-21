@@ -30,6 +30,8 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean isStrategic;
     private boolean muted;
     private long views;
+    private int position;
+    private boolean showRankPosition;
 
     public Boolean isRemoved() {
         return removed;
@@ -163,18 +165,23 @@ public class StreamModel implements Serializable, SearchableModel {
         this.uniqueShots = uniqueShots;
     }
 
-    @Override public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
+    /*@Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
         StreamModel that = (StreamModel) o;
 
-        return idStream.equals(that.idStream);
+        return getIdStream().equals(that.getIdStream());
+    }*/
+
+    @Override public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StreamModel that = (StreamModel) o;
+
+        if (getPosition() != that.getPosition()) return false;
+        return getIdStream().equals(that.getIdStream());
     }
 
     public Integer getReadWriteMode() {
@@ -251,5 +258,21 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public boolean isShowRankPosition() {
+        return showRankPosition;
+    }
+
+    public void setShowRankPosition(boolean showRankPosition) {
+        this.showRankPosition = showRankPosition;
     }
 }

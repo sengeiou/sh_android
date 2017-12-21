@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.views;
 
+import com.shootr.mobile.ui.model.LandingStreamsModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.base.LoadDataView;
 import java.util.List;
@@ -22,13 +24,19 @@ public interface StreamsListView extends LoadDataView {
 
     void showStreamShared();
 
-    void showContextMenuWithMute(StreamResultModel stream);
+    void showContextMenuWithMute(StreamModel stream);
 
-    void showContextMenuWithUnmute(StreamResultModel stream);
+    void showContextMenuWithUnmute(StreamModel stream);
 
     void scrollListToTop();
 
     void updateChannelBadge(int unreadChannels, boolean followingsChannel);
 
     void navigateToMyStreams(String currentUserId, boolean isCurrentUser);
+
+    void renderLanding(LandingStreamsModel landingStreamsModel);
+
+    void renderFollow(StreamModel streamModel);
+
+    void renderMute(StreamModel stream);
 }

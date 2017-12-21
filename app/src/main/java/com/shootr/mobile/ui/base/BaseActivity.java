@@ -156,7 +156,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 
-    private void redirectToLogin() {
+    protected void redirectToLogin() {
         startActivity(new Intent(this, LoginSelectionActivity.class));
         finish();
     }

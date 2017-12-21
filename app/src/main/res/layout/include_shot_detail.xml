@@ -58,6 +58,7 @@
                     android:id="@+id/verified_user"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
+                    android:layout_marginLeft="2dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_action_verified_shot"
                     android:visibility="gone"

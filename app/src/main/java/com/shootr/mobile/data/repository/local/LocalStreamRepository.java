@@ -4,7 +4,9 @@ import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.stream.StreamSearchDataSource;
+import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -17,14 +19,16 @@ public class LocalStreamRepository implements StreamRepository {
     private final StreamSearchDataSource localStreamSearchDataSource;
     private final StreamEntityMapper streamEntityMapper;
     private final StreamCache streamCache;
+    private final LandingStreamsCache landingStreamsCache;
 
     @Inject public LocalStreamRepository(@Local StreamDataSource localStreamDataSource,
-      @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper,
-      StreamCache streamCache) {
+        @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper,
+        StreamCache streamCache, LandingStreamsCache landingStreamsCache) {
         this.localStreamDataSource = localStreamDataSource;
         this.localStreamSearchDataSource = localStreamSearchDataSource;
         this.streamEntityMapper = streamEntityMapper;
         this.streamCache = streamCache;
+        this.landingStreamsCache = landingStreamsCache;
     }
 
     @Override public Stream getStreamById(String idStream, String[] types) {
@@ -101,5 +105,13 @@ public class LocalStreamRepository implements StreamRepository {
 
     @Override public void storeConnection(String idStream, long connections) {
         localStreamDataSource.storeConnection(idStream, connections);
+    }
+
+    @Override public LandingStreams getLandingStreams() {
+        return landingStreamsCache.getLandingStreams();
+    }
+
+    @Override public void putLandingStreams(LandingStreams landingStreams) {
+        landingStreamsCache.putLandingStreams(landingStreams);
     }
 }

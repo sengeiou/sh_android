@@ -1,8 +1,10 @@
 package com.shootr.mobile.ui.model.mappers;
 
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,5 +55,31 @@ public class StreamModelMapper {
             models.add(transform(stream));
         }
         return models;
+    }
+
+    public LandingStreamsModel transformLandingStreams(LandingStreams landingStreams) {
+        ArrayList<StreamModel> userStreams = new ArrayList<>();
+        for (Stream stream : landingStreams.getUserStreams().getStreams()) {
+            StreamModel streamModel = transform(stream);
+            streamModel.setShowRankPosition(false);
+            userStreams.add(streamModel);
+        }
+
+        ArrayList<StreamModel> hotStreams = new ArrayList<>();
+
+        for (Stream stream : landingStreams.getHotStreams().getStreams()) {
+            StreamModel streamModel = transform(stream);
+            int position = landingStreams.getHotStreams().getStreams().indexOf(stream);
+            streamModel.setShowRankPosition(true);
+            streamModel.setPosition(position + 1);
+            hotStreams.add(streamModel);
+        }
+
+        LandingStreamsModel landingStreamsModel = new LandingStreamsModel();
+
+        landingStreamsModel.setHotStreams(hotStreams);
+        landingStreamsModel.setUserStreams(userStreams);
+
+        return landingStreamsModel;
     }
 }

@@ -13,11 +13,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyList;
-import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class RemoteStreamSearchRepositoryTest {
 
@@ -42,26 +39,6 @@ public class RemoteStreamSearchRepositoryTest {
         new RemoteStreamSearchRepository(localStreamSearchDataSource, remoteStreamListDataSource,
             streamEntityMapper, localStreamDataSource,
             remoteStreamDataSource);
-  }
-
-  @Test public void shouldPutInLocalStreamListWhenAreObtainedFromRemote() throws Exception {
-    when(remoteStreamListDataSource.getStreamList(anyString(), any(String[].class))).thenReturn(
-        streamEntityList());
-    when(streamEntityMapper.transform(any(StreamEntity.class))).thenReturn(stream());
-
-    repository.getDefaultStreams(LOCALE, TYPES);
-
-    verify(localStreamDataSource).putStreams(anyList());
-  }
-
-  @Test public void shouldSetLastSearchResultsInLocalWhenGetStreams() throws Exception {
-    when(remoteStreamListDataSource.getStreams(anyString(), anyString(),
-        any(String[].class))).thenReturn(streamEntityList());
-    when(streamEntityMapper.transform(any(StreamEntity.class))).thenReturn(stream());
-
-    repository.getStreams(QUERY, LOCALE, TYPES);
-
-    verify(localStreamSearchDataSource).setLastSearchResults(anyList());
   }
 
   @Test public void shouldPutStreamsInLocalWhenGetStreamsListing() throws Exception {

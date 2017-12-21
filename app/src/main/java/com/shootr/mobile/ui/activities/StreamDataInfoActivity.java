@@ -18,6 +18,7 @@ import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.StreamPercentageUtils;
+import java.text.DecimalFormat;
 import javax.inject.Inject;
 
 public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
@@ -42,6 +43,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
   @Inject StreamPercentageUtils streamPercentageUtils;
   @Inject SessionRepository sessionRepository;
   @Inject ImageLoader imageLoader;
+  DecimalFormat formatter;
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
     toolbarDecorator.hideElevation();
@@ -53,6 +55,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
   }
 
   @Override protected void initializeViews(Bundle savedInstanceState) {
+    formatter = new DecimalFormat("#,###,###");
     ButterKnife.bind(this);
     analyticsTool.analyticsStart(getBaseContext(), analyticsScreenStreamNumbers);
     AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
@@ -81,10 +84,10 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
     Double pctParticipantsWithShots =
         streamPercentageUtils.getPercentage(participantsWithShotsNumber, participantsNumber);
     streamNameTextView.setText(streamName);
-    participantsNumberTextView.setText(String.valueOf(participantsNumber));
-    favoritesNumberTextView.setText(String.valueOf(favoritesNumber));
-    shotsNumberTextView.setText(String.valueOf(shotsNumber));
-    participantsWithShotsNumberTextView.setText(String.valueOf(participantsWithShotsNumber));
+    participantsNumberTextView.setText(formatter.format(participantsNumber));
+    favoritesNumberTextView.setText(formatter.format(favoritesNumber));
+    shotsNumberTextView.setText(formatter.format(shotsNumber));
+    participantsWithShotsNumberTextView.setText(formatter.format(participantsWithShotsNumber));
     participantsWithShotsPtcNumberTextView.setText(getString(R.string.stream_data_info_pct,
         streamPercentageUtils.formatPercentage(pctParticipantsWithShots)));
     setupViewsVisibility(streamModel);
@@ -94,7 +97,7 @@ public class StreamDataInfoActivity extends BaseToolbarDecoratedActivity {
   private void setupViewsVisibility(StreamModel streamModel) {
     if (streamModel.getViews() != 0) {
       viewsContainer.setVisibility(View.VISIBLE);
-      viewsText.setText(String.valueOf(streamModel.getViews()));
+      viewsText.setText(formatter.format(streamModel.getViews()));
     } else {
       viewsContainer.setVisibility(View.GONE);
     }

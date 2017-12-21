@@ -154,7 +154,7 @@ public abstract class SectionedRecyclerViewAdapter<H extends RecyclerView.ViewHo
     protected abstract int getItemCountForSection(int section);
 
     /**
-     * Creates a ViewHolder of class H for a Header
+     * Creates a ViewHolder of class H for a ListElement
      */
     protected abstract H onCreateSectionHeaderViewHolder(ViewGroup parent, int viewType);
 
