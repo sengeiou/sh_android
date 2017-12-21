@@ -37,6 +37,11 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
+import com.mopub.nativeads.MoPubNativeAdPositioning;
+import com.mopub.nativeads.MoPubRecyclerAdapter;
+import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
+import com.mopub.nativeads.RequestParameters;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
@@ -161,6 +166,9 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject SessionRepository sessionRepository;
   @Inject FormatNumberUtils formatNumberUtils;
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
+  @Inject RequestParameters requestParameters;
+  @Inject MoPubStaticNativeAdRenderer moPubStaticNativeAdRenderer;
+  @Inject MoPubNativeAdPositioning.MoPubServerPositioning moPubServerPositioning;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -248,6 +256,7 @@ public class StreamTimelineFragment extends BaseFragment
   private ViewPropertyAnimator timelineIndicatorAnimator;
   private boolean animatorIsRunning;
   private boolean isShowingPollIndicator;
+  private MoPubRecyclerAdapter moPubRecyclerAdapter;
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -320,10 +329,10 @@ public class StreamTimelineFragment extends BaseFragment
 
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    idStream = getArguments().getString(EXTRA_STREAM_ID);
     initializeViews();
     setHasOptionsMenu(true);
     streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
-    idStream = getArguments().getString(EXTRA_STREAM_ID);
     setStreamTitle(getArguments().getString(EXTRA_STREAM_TITLE));
     Integer streamMode = getArguments().getInt(EXTRA_READ_WRITE_MODE, 0);
     setStreamTitleClickListener(idStream);
@@ -677,7 +686,26 @@ public class StreamTimelineFragment extends BaseFragment
       }
     }, numberFormatUtil, this, getContext(),
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
-    shotsTimeline.setAdapter(adapter);
+
+    setupAdapter();
+  }
+
+  private void setupAdapter() {
+    if (idStream.equals("59cccdbec9e77c000c725a72")) {
+      moPubRecyclerAdapter =
+          new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
+      moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
+
+      shotsTimeline.setAdapter(moPubRecyclerAdapter);
+
+      if (BuildConfig.DEBUG) {
+        moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
+      } else {
+        moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
+      }
+    } else {
+      shotsTimeline.setAdapter(adapter);
+    }
   }
 
   private void sendOpenlinkAnalythics() {

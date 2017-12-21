@@ -30,6 +30,7 @@ repositories {
   maven { url 'http://dl.bintray.com/sloy/maven' }
   //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
   mavenCentral()
+  maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
@@ -148,7 +149,7 @@ android {
       minSdkVersion 21
     }
     prod {
-      minSdkVersion 15
+      minSdkVersion 16
     }
   }
 
@@ -257,6 +258,9 @@ dependencies {
   }
   compile 'com.github.devahamed:multi-view-adapter:1.2.2'
   compile 'com.github.devahamed:multi-view-adapter-databinding:1.2.2'
+  compile('com.mopub:mopub-sdk-native-static:4.16.0@aar') {
+    transitive = true
+  }
 }
 
 /**
