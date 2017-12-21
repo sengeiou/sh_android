@@ -13,6 +13,16 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.51.0] - 2017-12-21
+### Added
+- My streams on top
+- Ads on OT Stream
+- Format decimals on poll results
+
+### Fixed
+- Activities duplicated
+- Activities without comment (appears the last one)
+
 ## [1.50.0] - 2017-12-04
 ### Added
 - New stats image
