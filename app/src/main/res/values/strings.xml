@@ -101,6 +101,7 @@
   <string name="edit_stream">Edit</string>
   <string name="edit_stream_listing_context_menu">Edit</string>
   <string name="email_already_registered">Email already registered</string>
+  <string name="error_massive_register">Too Much Register</string>
   <string name="email_confirmation_message">Enter a valid email address to help secure your account.</string>
   <string name="email_confirmation_message_content">Click the link in the email we\'ve just sent to %s</string>
   <string name="email_confirmation_ok">OK</string>
