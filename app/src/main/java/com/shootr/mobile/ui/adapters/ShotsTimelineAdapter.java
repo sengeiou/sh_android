@@ -46,6 +46,7 @@ import java.util.List;
 public class ShotsTimelineAdapter
     extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, Object, Object> {
 
+  private static final int ADS_POSITION = 10;
   private static final int HEADER_POSITION = 0;
 
   private static final int ITEM_POSITION_WITH_HEADER = 1;
@@ -79,6 +80,7 @@ public class ShotsTimelineAdapter
   private Boolean isAdmin;
   private int avatarSize;
   private boolean isShowingAd = false;
+  private NativeAdsManager adsManager;
 
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
@@ -343,10 +345,12 @@ public class ShotsTimelineAdapter
       shots.remove(0);
     }
     int oldSize = shots.size();
-    this.shots.addAll(newShots);
+    List<Object> oldShots = new ArrayList<Object>(newShots);
+    putAds(oldShots);
+    this.shots.addAll(oldShots);
     insertExistingHeader(shots);
     try {
-      notifyItemRangeInserted(oldSize, newShots.size());
+      notifyItemRangeInserted(oldSize, oldShots.size());
     } catch (Exception e) {
       notifyDataSetChanged();
     }
@@ -360,6 +364,7 @@ public class ShotsTimelineAdapter
   public void setShots(List<ShotModel> shots) {
     this.shots = new ArrayList<Object>(shots);
     insertExistingHeader(this.shots);
+    putAds(this.shots);
   }
 
   private void insertExistingHeader(List<Object> shots) {
@@ -490,13 +495,18 @@ public class ShotsTimelineAdapter
     isShowingAd = false;
   }
 
-  public void showAds(NativeAdsManager adsManager) {
-    for (int i = 0; i < shots.size(); i++) {
-      if (i !=0 && i % 10 == 0) {
-        shots.add(i, adsManager.nextNativeAd());
+  public void setAdsManager (NativeAdsManager adsManager) {
+    this.adsManager = adsManager;
+  }
+
+  private void putAds(List<Object> shots) {
+    if (adsManager != null) {
+      for (int i = 0; i < shots.size(); i++) {
+        if (i != 0 && i % ADS_POSITION == 0) {
+          shots.add(i, adsManager.nextNativeAd());
+        }
       }
     }
-    notifyDataSetChanged();
   }
 
   public interface ShotsInsertedListener {

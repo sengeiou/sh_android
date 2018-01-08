@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.v4.util.LruCache;
+import com.facebook.ads.NativeAdsManager;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
@@ -210,6 +211,10 @@ import static android.content.Context.MODE_PRIVATE;
 
   @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
     return GoogleCloudMessaging.getInstance(application);
+  }
+
+  @Provides @Singleton NativeAdsManager provideNativeAdsManager(Application application) {
+    return new NativeAdsManager(application, "389817011219847_757627404438804", 1);
   }
 
   @Provides CrashReportTool.Factory provideCrashReportToolFactory() {
