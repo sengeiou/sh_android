@@ -184,8 +184,8 @@ public class ShotsTimelineAdapter
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
 
     if (viewType == TYPE_ITEM_CONTENT_AD) {
-      View v = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_ad_content, parent, false);
+      View v =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
       return new NativeContentAdViewHolder(v);
     }
 
@@ -209,8 +209,8 @@ public class ShotsTimelineAdapter
   @Override
   protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM_CONTENT_AD) {
-      View v = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_ad_content, parent, false);
+      View v =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
       return new NativeContentAdViewHolder(v);
     }
 
@@ -236,8 +236,8 @@ public class ShotsTimelineAdapter
   @Override
   protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM_CONTENT_AD) {
-      View v = LayoutInflater.from(parent.getContext())
-          .inflate(R.layout.item_ad_content, parent, false);
+      View v =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
       return new NativeContentAdViewHolder(v);
     }
     return getShotViewHolder(parent, viewType);
@@ -251,17 +251,16 @@ public class ShotsTimelineAdapter
 
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
       ((HighlightedPromotedShotViewHolder) holder).render(
-          (HighlightedShotModel) highlightedShotModel,
-          (ShotModel) shots.get(position),
+          (HighlightedShotModel) highlightedShotModel, (ShotModel) shots.get(position),
           shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
           onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
           isAdmin, onCtaClickListener);
     } else {
       ((HighLightedShotViewHolder) holder).renderHighLight(
-          (HighlightedShotModel) highlightedShotModel,
-          (ShotModel) shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
-          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
-          onReshootClickListener, isAdmin);
+          (HighlightedShotModel) highlightedShotModel, (ShotModel) shots.get(position),
+          shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
+          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
+          isAdmin);
     }
   }
 
@@ -316,8 +315,8 @@ public class ShotsTimelineAdapter
       shots.add(HEADER_POSITION, (highlightedShot));
       this.setHeader(highlightedShot);
     } else if (highlightedShot instanceof HighlightedShotModel) {
-      shots.add(HEADER_POSITION, ((HighlightedShotModel)highlightedShot).getShotModel());
-      this.setHeader(((HighlightedShotModel)highlightedShot).getShotModel());
+      shots.add(HEADER_POSITION, ((HighlightedShotModel) highlightedShot).getShotModel());
+      this.setHeader(((HighlightedShotModel) highlightedShot).getShotModel());
     }
   }
 
@@ -450,10 +449,10 @@ public class ShotsTimelineAdapter
     int index = 0;
     for (Object shot : shots) {
       if (shot instanceof ShotModel) {
-        if (((ShotModel)shot).getIdShot().equals(shotModel.getIdShot())) {
-          int niceCount = ((ShotModel)shot).getNiceCount() + 1;
-          ((ShotModel)shot).setNiceCount(niceCount);
-          ((ShotModel)shot).setNiced(true);
+        if (((ShotModel) shot).getIdShot().equals(shotModel.getIdShot())) {
+          int niceCount = ((ShotModel) shot).getNiceCount() + 1;
+          ((ShotModel) shot).setNiceCount(niceCount);
+          ((ShotModel) shot).setNiced(true);
           notifyItemChanged(index);
         }
       }
@@ -464,12 +463,13 @@ public class ShotsTimelineAdapter
   public void unmarkNice(String idShot) {
     int index = 0;
     for (Object shot : shots) {
-      if (shot instanceof ShotModel)
-      if (((ShotModel)shot).getIdShot().equals(idShot)) {
-        int niceCount = ((ShotModel)shot).getNiceCount() - 1;
-        ((ShotModel)shot).setNiceCount(niceCount);
-        ((ShotModel)shot).setNiced(false);
-        notifyItemChanged(index);
+      if (shot instanceof ShotModel) {
+        if (((ShotModel) shot).getIdShot().equals(idShot)) {
+          int niceCount = ((ShotModel) shot).getNiceCount() - 1;
+          ((ShotModel) shot).setNiceCount(niceCount);
+          ((ShotModel) shot).setNiced(false);
+          notifyItemChanged(index);
+        }
       }
       index++;
     }
@@ -478,8 +478,8 @@ public class ShotsTimelineAdapter
   public void reshoot(String idShot, boolean mark) {
     int index = 0;
     for (Object shot : shots) {
-      if (((ShotModel)shot).getIdShot().equals(idShot)) {
-        ((ShotModel)shot).setReshooted(mark);
+      if (((ShotModel) shot).getIdShot().equals(idShot)) {
+        ((ShotModel) shot).setReshooted(mark);
         notifyItemChanged(index);
       }
       index++;
@@ -495,7 +495,7 @@ public class ShotsTimelineAdapter
     isShowingAd = false;
   }
 
-  public void setAdsManager (NativeAdsManager adsManager) {
+  public void setAdsManager(NativeAdsManager adsManager) {
     this.adsManager = adsManager;
   }
 
