@@ -15,9 +15,11 @@ import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException
 import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrError;
+import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.model.user.LoginResult;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.service.user.LoginGateway;
+import com.shootr.mobile.domain.utils.DeviceFactory;
 import java.io.IOException;
 import javax.inject.Inject;
 
@@ -26,12 +28,14 @@ public class ServiceLoginGateway implements LoginGateway {
     private final AuthApiService authApiService;
     private final UserEntityMapper userEntityMapper;
     private final DeviceManager deviceManager;
+    private final DeviceFactory deviceFactory;
 
     @Inject public ServiceLoginGateway(AuthApiService authApiService, UserEntityMapper userEntityMapper,
-      DeviceManager deviceManager) {
+        DeviceManager deviceManager, DeviceFactory deviceFactory) {
         this.authApiService = authApiService;
         this.userEntityMapper = userEntityMapper;
         this.deviceManager = deviceManager;
+        this.deviceFactory = deviceFactory;
     }
 
     @Override public LoginResult performLogin(String usernameOrEmail, String password)
@@ -89,6 +93,9 @@ public class ServiceLoginGateway implements LoginGateway {
         } else {
             loginApiEntity.setUserName(usernameOrEmail);
         }
+        Device device = deviceFactory.createDevice();
+        loginApiEntity.setAdvertisingId(device.getAdvertisingId());
+        loginApiEntity.setDeviceUUID(device.getDeviceUUID());
 
         return authApiService.authenticate(loginApiEntity);
     }
