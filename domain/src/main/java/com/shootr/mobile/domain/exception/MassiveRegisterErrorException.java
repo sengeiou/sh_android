@@ -1,12 +1,12 @@
 package com.shootr.mobile.domain.exception;
 
-public class InvalidLoginMethodForShootrException extends ShootrException {
+public class MassiveRegisterErrorException extends ShootrException {
 
-  public InvalidLoginMethodForShootrException(String message) {
+  public MassiveRegisterErrorException(String message) {
     super(message);
   }
 
-  public InvalidLoginMethodForShootrException(Throwable cause) {
+  public MassiveRegisterErrorException(Throwable cause) {
     super(cause);
   }
 }
