@@ -2,7 +2,6 @@ package com.shootr.mobile.domain.interactor.user;
 
 import com.shootr.mobile.domain.exception.InvalidLoginException;
 import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
-import com.shootr.mobile.domain.exception.MassiveRegisterErrorException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -45,8 +44,8 @@ public class PerformEmailLoginInteractor implements Interactor {
       notifyLoaded();
     } catch (InvalidLoginException loginError) {
       handleServerError(new LoginException(loginError));
-    } catch (MassiveRegisterErrorException | InvalidLoginMethodForShootrException massiveRegisterErrorException) {
-      notifyError(massiveRegisterErrorException);
+    } catch (InvalidLoginMethodForShootrException invalidLoginMethodForShootrException) {
+      notifyError(invalidLoginMethodForShootrException);
     } catch (ShootrException unknownError) {
       handleServerError(unknownError);
     }
