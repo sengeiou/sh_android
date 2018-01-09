@@ -119,6 +119,10 @@ public class ErrorMessageFactory {
     return context.getString(R.string.communication_error);
   }
 
+  public String getMassiveRegisterErrorMessage() {
+    return context.getString(R.string.error_massive_register);
+  }
+
   public String getConnectionNotAvailableMessage() {
     return context.getString(R.string.connection_lost);
   }

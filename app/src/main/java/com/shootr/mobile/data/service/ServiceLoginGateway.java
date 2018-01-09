@@ -41,8 +41,7 @@ public class ServiceLoginGateway implements LoginGateway {
   }
 
   @Override public LoginResult performLogin(String usernameOrEmail, String password)
-      throws InvalidLoginException, InvalidLoginMethodForShootrException,
-      MassiveRegisterErrorException {
+      throws InvalidLoginException, InvalidLoginMethodForShootrException {
     try {
       UserEntity loggedInUserEntity = loginWithUsernameOrEmail(usernameOrEmail, password);
       User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
@@ -52,9 +51,6 @@ public class ServiceLoginGateway implements LoginGateway {
       if (String.valueOf(error.getErrorInfo().code())
           .equals(ShootrError.ERROR_CODE_INVALID_LOGIN_SHOOTR_METHOD)) {
         throw new InvalidLoginMethodForShootrException(error);
-      } else if (String.valueOf(error.getErrorInfo().code())
-          .equals(ShootrError.ERROR_CODE_MASSIVE_REGISTER)) {
-        throw new MassiveRegisterErrorException(error);
       } else {
         throw new InvalidLoginException(error);
       }
@@ -64,7 +60,8 @@ public class ServiceLoginGateway implements LoginGateway {
   }
 
   @Override public LoginResult performFacebookLogin(String facebookToken, String locale)
-      throws InvalidLoginException, InvalidLoginMethodForFacebookException {
+      throws InvalidLoginException, InvalidLoginMethodForFacebookException,
+      MassiveRegisterErrorException {
     try {
       Device device = deviceFactory.createDevice();
       FacebookUserEntity loggedInUserEntity = authApiService.authenticateWithFacebook(
@@ -84,6 +81,9 @@ public class ServiceLoginGateway implements LoginGateway {
       if (String.valueOf(error.getErrorInfo().code())
           .equals(ShootrError.ERROR_CODE_INVALID_LOGIN_FACEBOOK_METHOD)) {
         throw new InvalidLoginMethodForFacebookException(error);
+      } else if (String.valueOf(error.getErrorInfo().code())
+          .equals(ShootrError.ERROR_CODE_MASSIVE_REGISTER)) {
+        throw new MassiveRegisterErrorException(error);
       } else {
         throw new InvalidLoginException(error);
       }
@@ -102,9 +102,6 @@ public class ServiceLoginGateway implements LoginGateway {
     } else {
       loginApiEntity.setUserName(usernameOrEmail);
     }
-    Device device = deviceFactory.createDevice();
-    loginApiEntity.setAdvertisingId(device.getAdvertisingId());
-    loginApiEntity.setDeviceUUID(device.getDeviceUUID());
 
     return authApiService.authenticate(loginApiEntity);
   }

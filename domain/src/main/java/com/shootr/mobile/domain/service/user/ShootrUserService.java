@@ -55,21 +55,21 @@ public class ShootrUserService {
   }
 
   public void createAccount(String username, String email, String password, String locale)
-      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException,
+      MassiveRegisterErrorException {
     LoginResult loginResult =
         createAccountGateway.performCreateAccount(username, email, password, locale);
     retrievePostLoginInformation(loginResult);
   }
 
   public void performLogin(String usernameOrEmail, String password)
-      throws InvalidLoginException, InvalidLoginMethodForShootrException,
-      MassiveRegisterErrorException {
+      throws InvalidLoginException, InvalidLoginMethodForShootrException {
     LoginResult loginResult = loginGateway.performLogin(usernameOrEmail, password);
     retrievePostLoginInformation(loginResult);
   }
 
   public Boolean performFacebookLogin(String facebookToken, String locale)
-      throws InvalidLoginException, InvalidLoginMethodForFacebookException {
+      throws InvalidLoginException, InvalidLoginMethodForFacebookException, MassiveRegisterErrorException {
     LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, locale);
     retrievePostLoginInformation(loginResult);
     return loginResult.isNewUser();
