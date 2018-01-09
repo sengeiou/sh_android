@@ -15,14 +15,6 @@ public class FacebookLoginApiEntity {
     this.deviceUUID = deviceUUID;
   }
 
-  public String getAccessToken() {
-    return accessToken;
-  }
-
-  public void setAccessToken(String accessToken) {
-    this.accessToken = accessToken;
-  }
-
   public String getLocale() {
     return locale;
   }
@@ -31,19 +23,4 @@ public class FacebookLoginApiEntity {
     this.locale = locale;
   }
 
-  public String getDeviceUUID() {
-    return deviceUUID;
-  }
-
-  public void setDeviceUUID(String deviceUUID) {
-    this.deviceUUID = deviceUUID;
-  }
-
-  public String getAdvertisingId() {
-    return advertisingId;
-  }
-
-  public void setAdvertisingId(String advertisingId) {
-    this.advertisingId = advertisingId;
-  }
 }
