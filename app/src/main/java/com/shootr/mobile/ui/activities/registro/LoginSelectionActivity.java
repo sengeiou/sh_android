@@ -46,6 +46,7 @@ import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.ErrorMessageFactory;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -84,6 +85,7 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
   @Inject @ActivityShowcase BooleanPreference activityShowcase;
+  @Inject ErrorMessageFactory errorMessageFactory;
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
@@ -254,8 +256,7 @@ public class LoginSelectionActivity extends BaseActivity {
           feedbackMessage.showLong(getView(), getString(R.string.facebook_permissions_alert));
           final Handler handler = new Handler();
           handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
               final Intent i = new Intent(getBaseContext(), LoginSelectionActivity.class);
               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
               startActivity(i);
@@ -281,7 +282,8 @@ public class LoginSelectionActivity extends BaseActivity {
                 }
               }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
-                  showFacebookError(facebookMethodError);
+                  String errorMessage = errorMessageFactory.getMessageForError(error);
+                  showFacebookError((errorMessage == null) ? facebookMethodError : errorMessage);
                   hideLoading();
                 }
               });
