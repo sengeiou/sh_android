@@ -41,7 +41,8 @@ public class ServiceLoginGateway implements LoginGateway {
   }
 
   @Override public LoginResult performLogin(String usernameOrEmail, String password)
-      throws InvalidLoginException, InvalidLoginMethodForShootrException, MassiveRegisterErrorException {
+      throws InvalidLoginException, InvalidLoginMethodForShootrException,
+      MassiveRegisterErrorException {
     try {
       UserEntity loggedInUserEntity = loginWithUsernameOrEmail(usernameOrEmail, password);
       User loggedInUser = userEntityMapper.transform(loggedInUserEntity);
@@ -65,8 +66,10 @@ public class ServiceLoginGateway implements LoginGateway {
   @Override public LoginResult performFacebookLogin(String facebookToken, String locale)
       throws InvalidLoginException, InvalidLoginMethodForFacebookException {
     try {
+      Device device = deviceFactory.createDevice();
       FacebookUserEntity loggedInUserEntity = authApiService.authenticateWithFacebook(
-          new FacebookLoginApiEntity(facebookToken, locale));
+          new FacebookLoginApiEntity(facebookToken, locale, device.getAdvertisingId(),
+              device.getDeviceUUID()));
       User loggedInUser =
           userEntityMapper.transform(loggedInUserEntity, loggedInUserEntity.getIdUser());
       String sessionToken = loggedInUserEntity.getSessionToken();
