@@ -2,47 +2,53 @@ package com.shootr.mobile.data.api.entity;
 
 public class CreateAccountApiEntity {
 
-    private String userName;
-    private String email;
-    private String password;
-    private String locale;
+  private String userName;
+  private String email;
+  private String password;
+  private String locale;
+  private String deviceUUID;
+  private String advertisingId;
 
-    public CreateAccountApiEntity(String userName, String email, String password, String locale) {
-        this.userName = userName;
-        this.email = email;
-        this.password = password;
-        this.locale = locale;
-    }
+  public CreateAccountApiEntity(String userName, String email, String password, String locale,
+      String deviceUUID, String advertisingId) {
+    this.userName = userName;
+    this.email = email;
+    this.password = password;
+    this.locale = locale;
+    this.deviceUUID = deviceUUID;
+    this.advertisingId = advertisingId;
+  }
 
-    public String getUserName() {
-        return userName;
-    }
+  public String getUserName() {
+    return userName;
+  }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+  public void setUserName(String userName) {
+    this.userName = userName;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public String getPassword() {
-        return password;
-    }
+  public String getPassword() {
+    return password;
+  }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+  public void setPassword(String password) {
+    this.password = password;
+  }
 
-    public String getLocale() {
-        return locale;
-    }
+  public String getLocale() {
+    return locale;
+  }
 
-    public void setLocale(String locale) {
-        this.locale = locale;
-    }
+  public void setLocale(String locale) {
+    this.locale = locale;
+  }
+
 }
