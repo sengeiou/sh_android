@@ -48,8 +48,5 @@ public class NativeContentAdViewHolder extends RecyclerView.ViewHolder {
     clickableViews.add(callToAction);
 
     nativeContentAd.registerViewForInteraction(container, clickableViews);
-    //callToAction.setText(nativeContentAd.getCallToAction());
-
-    //adView.setCallToActionView(itemView);
   }
 }

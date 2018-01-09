@@ -9,6 +9,7 @@ import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.data.prefs.PreferenceModule;
 import com.shootr.mobile.data.repository.SessionRepositoryImpl;
 import com.shootr.mobile.data.repository.dagger.RepositoryModule;
@@ -142,6 +143,7 @@ import static android.content.Context.MODE_PRIVATE;
   private static final long TIMEOUT_SECONDS = 30;
   private static final long TIMEOUT_CONNECT_SECONDS = 15;
   private static final int LRU_CACHE_SIZE = 100;
+  private static final int ADS_COUNT = 4;
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -214,7 +216,11 @@ import static android.content.Context.MODE_PRIVATE;
   }
 
   @Provides @Singleton NativeAdsManager provideNativeAdsManager(Application application) {
-    return new NativeAdsManager(application, "389817011219847_757627404438804", 1);
+    if (BuildConfig.DEBUG) {
+      return new NativeAdsManager(application, "389817011219847_757627404438804", ADS_COUNT);
+    } else {
+      return new NativeAdsManager(application, "389647124570169_757732677761610", ADS_COUNT);
+    }
   }
 
   @Provides CrashReportTool.Factory provideCrashReportToolFactory() {
