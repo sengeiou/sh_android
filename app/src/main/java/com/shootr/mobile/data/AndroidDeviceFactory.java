@@ -92,7 +92,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
     }
   }
 
-  private String getAdvertisingId() {
+  @Override public String getAdvertisingId() {
     AdvertisingIdClient.Info idInfo = null;
     try {
       idInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
@@ -199,7 +199,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
     return imei;
   }
 
-  private String getAndroidId() {
+  @Override public String getAndroidId() {
     return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
   }
 }

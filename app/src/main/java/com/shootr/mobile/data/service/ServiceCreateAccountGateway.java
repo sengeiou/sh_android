@@ -58,10 +58,9 @@ public class ServiceCreateAccountGateway implements CreateAccountGateway {
 
   @NonNull protected LoginResult sendCreateAccount(String username, String email, String password,
       String locale) throws ApiException, IOException {
-    Device device = deviceFactory.createDevice();
     CreateAccountApiEntity createAccountApiEntity =
-        new CreateAccountApiEntity(username, email, password, locale, device.getDeviceUUID(),
-            device.getAdvertisingId());
+        new CreateAccountApiEntity(username, email, password, locale, deviceFactory.getAndroidId(),
+            deviceFactory.getAdvertisingId());
     UserEntity newLoggedInUser = authApiService.createAccount(createAccountApiEntity);
     checkNotNull(newLoggedInUser);
     User loggedInUser = userEntityMapper.transform(newLoggedInUser);

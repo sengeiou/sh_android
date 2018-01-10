@@ -63,10 +63,9 @@ public class ServiceLoginGateway implements LoginGateway {
       throws InvalidLoginException, InvalidLoginMethodForFacebookException,
       MassiveRegisterErrorException {
     try {
-      Device device = deviceFactory.createDevice();
       FacebookUserEntity loggedInUserEntity = authApiService.authenticateWithFacebook(
-          new FacebookLoginApiEntity(facebookToken, locale, device.getAdvertisingId(),
-              device.getDeviceUUID()));
+          new FacebookLoginApiEntity(facebookToken, locale, deviceFactory.getAdvertisingId(),
+              deviceFactory.getAndroidId()));
       User loggedInUser =
           userEntityMapper.transform(loggedInUserEntity, loggedInUserEntity.getIdUser());
       String sessionToken = loggedInUserEntity.getSessionToken();
