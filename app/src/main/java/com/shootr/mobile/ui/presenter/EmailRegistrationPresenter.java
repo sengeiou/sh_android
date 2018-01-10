@@ -1,5 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import com.shootr.mobile.R;
 import com.shootr.mobile.domain.exception.DomainValidationException;
 import com.shootr.mobile.domain.exception.MassiveRegisterErrorException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -134,7 +137,8 @@ public class EmailRegistrationPresenter implements Presenter {
   }
 
   private void onMassiveRegisterError() {
-    showViewError(errorMessageFactory.getMassiveRegisterErrorMessage());
+    emailRegistrationView.showMassiveRegisterError(
+        errorMessageFactory.getMassiveRegisterErrorMessage());
   }
 
   private void showViewError(String errorMessage) {

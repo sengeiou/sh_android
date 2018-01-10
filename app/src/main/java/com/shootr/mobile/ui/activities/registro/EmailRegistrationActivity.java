@@ -108,6 +108,16 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         feedbackMessage.show(getView(), message);
     }
 
+    @Override public void showMassiveRegisterError(String message) {
+        new AlertDialog.Builder(this).setMessage(message)
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override public void onClick(DialogInterface dialog, int which) {
+            /* no-op */
+                }
+            })
+            .show();
+    }
+
     @Override public void showCreateButton() {
         createButton.setVisibility(View.VISIBLE);
     }

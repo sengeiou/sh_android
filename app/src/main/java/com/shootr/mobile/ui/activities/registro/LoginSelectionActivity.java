@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.activities.registro;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -283,7 +285,11 @@ public class LoginSelectionActivity extends BaseActivity {
               }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
                   String errorMessage = errorMessageFactory.getMessageForError(error);
-                  showFacebookError((errorMessage == null) ? facebookMethodError : errorMessage);
+                  if (errorMessage != null) {
+                    showMassiveRegisterError(errorMessage);
+                  } else {
+                    showFacebookError(facebookMethodError);
+                  }
                   hideLoading();
                 }
               });
@@ -357,6 +363,16 @@ public class LoginSelectionActivity extends BaseActivity {
 
   private void showFacebookError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+  }
+
+  private void showMassiveRegisterError(String errorMessage) {
+    new AlertDialog.Builder(this).setMessage(errorMessage)
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            /* no-op */
+          }
+        })
+        .show();
   }
 
   @Override protected void onResume() {
