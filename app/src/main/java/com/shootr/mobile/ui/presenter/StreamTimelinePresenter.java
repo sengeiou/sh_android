@@ -811,7 +811,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void loadAds() {
-    AdSettings.addTestDevice("c6d6d33dfea57be9e77c28ab302b0abc");
+    AdSettings.addTestDevice("2bb86c4af48c03280c3975fcb69148fb");
     adsManager.setListener(new NativeAdsManager.Listener() {
       @Override public void onAdsLoaded() {
         streamTimelineView.putAds(adsManager);
