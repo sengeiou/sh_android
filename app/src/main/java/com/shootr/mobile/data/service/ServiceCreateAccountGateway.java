@@ -12,7 +12,6 @@ import com.shootr.mobile.domain.exception.MassiveRegisterErrorException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
-import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.model.user.LoginResult;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.service.user.CreateAccountGateway;
