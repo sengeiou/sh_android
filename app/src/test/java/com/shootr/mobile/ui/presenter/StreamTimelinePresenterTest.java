@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
@@ -103,6 +104,7 @@ public class StreamTimelinePresenterTest {
   @Mock GetConnectionTimesInteractor getConnectionTimesInteractor;
   @Mock UpdateStreamInteractor updateStreamInteractor;
   @Mock ViewTimelineEventInteractor viewTimelineEventInteractor;
+  @Mock NativeAdsManager adsManager;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
 
