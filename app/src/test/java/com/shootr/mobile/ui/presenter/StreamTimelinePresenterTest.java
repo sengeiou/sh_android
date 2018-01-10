@@ -118,7 +118,7 @@ public class StreamTimelinePresenterTest {
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
         updateStreamInteractor, getNewFilteredShotsInteractor, getConnectionTimesInteractor,
-        sessionRepository);
+        sessionRepository, adsManager);
     presenter.setView(streamTimelineView);
     shotSentReceiver = presenter;
   }

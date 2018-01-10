@@ -1,5 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdSettings;
+import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -64,6 +67,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final GetNewFilteredShotsInteractor getNewFilteredShotsInteractor;
   private final GetConnectionTimesInteractor getConnectionTimesInteractor;
   private final SessionRepository sessionRepository;
+  private final NativeAdsManager adsManager;
 
   private StreamTimelineView streamTimelineView;
   private String streamId;
@@ -99,7 +103,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
       UpdateStreamInteractor updateStreamInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
-      GetConnectionTimesInteractor getConnectionTimesInteractor, SessionRepository sessionRepository) {
+      GetConnectionTimesInteractor getConnectionTimesInteractor,
+      SessionRepository sessionRepository, NativeAdsManager adsManager) {
     this.timelineInteractorWrapper = timelineInteractorWrapper;
     this.selectStreamInteractor = selectStreamInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
@@ -118,6 +123,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.getNewFilteredShotsInteractor = getNewFilteredShotsInteractor;
     this.getConnectionTimesInteractor = getConnectionTimesInteractor;
     this.sessionRepository = sessionRepository;
+    this.adsManager = adsManager;
   }
 
   public void setView(StreamTimelineView streamTimelineView) {
@@ -371,6 +377,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       isFirstShotPosition = true;
     } else if (isTimelineInitialized) {
       showFirstLoad(shots);
+      loadAds();
       isTimelineInitialized = false;
       isFirstLoad = false;
     } else {
@@ -802,4 +809,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     newShotsNumber += number;
     showTimeLineIndicator();
   }
+
+  private void loadAds() {
+    AdSettings.addTestDevice("c6d6d33dfea57be9e77c28ab302b0abc");
+    adsManager.setListener(new NativeAdsManager.Listener() {
+      @Override public void onAdsLoaded() {
+        streamTimelineView.putAds(adsManager);
+      }
+
+      @Override public void onAdError(AdError adError) {
+        /* no-op */
+      }
+    });
+    adsManager.loadAds();
+  }
+
 }

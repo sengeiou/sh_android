@@ -143,7 +143,7 @@ import static android.content.Context.MODE_PRIVATE;
   private static final long TIMEOUT_SECONDS = 30;
   private static final long TIMEOUT_CONNECT_SECONDS = 15;
   private static final int LRU_CACHE_SIZE = 100;
-  private static final int ADS_COUNT = 4;
+  private static final int ADS_COUNT = 8;
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {

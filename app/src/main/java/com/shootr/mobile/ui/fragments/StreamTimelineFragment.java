@@ -1324,6 +1324,10 @@ public class StreamTimelineFragment extends BaseFragment
         .show();
   }
 
+  @Override public void putAds(NativeAdsManager adsManager) {
+    adapter.setAdsManager(adsManager);
+  }
+
   @Override public void showEmpty() {
     /* no-op */
   }

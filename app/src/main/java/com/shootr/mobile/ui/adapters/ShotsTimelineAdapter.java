@@ -46,7 +46,7 @@ import java.util.List;
 public class ShotsTimelineAdapter
     extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, Object, Object> {
 
-  private static final int ADS_POSITION = 10;
+  private static final int ADS_POSITION = 15;
   private static final int HEADER_POSITION = 0;
 
   private static final int ITEM_POSITION_WITH_HEADER = 1;
@@ -497,11 +497,15 @@ public class ShotsTimelineAdapter
 
   public void setAdsManager(NativeAdsManager adsManager) {
     this.adsManager = adsManager;
+    putAds(shots);
   }
 
   private void putAds(List<Object> shots) {
     if (adsManager != null) {
       for (int i = 0; i < shots.size(); i++) {
+        if (i == 5) {
+          shots.add(i, adsManager.nextNativeAd());
+        }
         if (i != 0 && i % ADS_POSITION == 0) {
           shots.add(i, adsManager.nextNativeAd());
         }
