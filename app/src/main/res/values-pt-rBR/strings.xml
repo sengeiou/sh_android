@@ -102,6 +102,7 @@
   <string name="edit_stream">Editar</string>
   <string name="edit_stream_listing_context_menu">Editar</string>
   <string name="email_already_registered">Email já registrado</string>
+  <string name="error_massive_register">Você superou o número permitido de registros neste dispositivo. Tente mais tarde.</string>
   <string name="email_confirmation_message">Introduza um email válido para proteger sua conta.</string>
   <string name="email_confirmation_message_content">Clique no link que foi enviado a %s</string>
   <string name="email_confirmation_ok">OK</string>
