@@ -478,11 +478,13 @@ public class ShotsTimelineAdapter
   public void reshoot(String idShot, boolean mark) {
     int index = 0;
     for (Object shot : shots) {
-      if (((ShotModel) shot).getIdShot().equals(idShot)) {
-        ((ShotModel) shot).setReshooted(mark);
-        notifyItemChanged(index);
+      if (shot instanceof ShotModel) {
+        if (((ShotModel) shot).getIdShot().equals(idShot)) {
+          ((ShotModel) shot).setReshooted(mark);
+          notifyItemChanged(index);
+        }
+        index++;
       }
-      index++;
     }
   }
 
