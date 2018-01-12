@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.51.0] - 2018-01-12
+### Added
+- Added facebook ads
+- Add massive register error control
+
+### Removed
+- Mopub (Twitter ads)
+
 ## [1.51.0] - 2017-12-21
 ### Added
 - My streams on top
