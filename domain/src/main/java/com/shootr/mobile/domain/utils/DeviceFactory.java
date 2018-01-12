@@ -9,4 +9,8 @@ public interface DeviceFactory {
     Device updateDevice(Device device);
 
     boolean needsUpdate(Device device);
+
+    String getAndroidId();
+
+    String getAdvertisingId();
 }
