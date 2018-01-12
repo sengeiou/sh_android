@@ -46,7 +46,7 @@ import java.util.List;
 public class ShotsTimelineAdapter
     extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, Object, Object> {
 
-  private static final int ADS_POSITION = 15;
+  private static final int ADS_POSITION = 20;
   private static final int HEADER_POSITION = 0;
 
   private static final int ITEM_POSITION_WITH_HEADER = 1;
