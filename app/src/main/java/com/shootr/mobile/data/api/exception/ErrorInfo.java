@@ -23,6 +23,7 @@ public enum ErrorInfo {
   RejectedAuthorizationException(1019, "Rejected authorization", 401),
   InvalidLoginForFacebookException(1020, "Invalid login method for Facebook account", 401),
   InvalidLoginForShootrException(1021, "Invalid login method for Shootr account", 401),
+  MassiveRegisterErrorException(1022, "Too much registers in this device", 401),
   InvalidRequestException(2001, "invalid request due to validation errors", 422),
   InvalidAppVersionException(2002, "invalid App Version", 412),
   InvalidAppVersionPlatformException(2003, "Invalid App platform", 412),

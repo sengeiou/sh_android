@@ -36,12 +36,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
+import com.facebook.ads.NativeAdsManager;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
-import com.mopub.nativeads.MoPubNativeAdPositioning;
-import com.mopub.nativeads.MoPubRecyclerAdapter;
-import com.mopub.nativeads.MoPubStaticNativeAdRenderer;
-import com.mopub.nativeads.RequestParameters;
-import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
@@ -166,9 +162,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject SessionRepository sessionRepository;
   @Inject FormatNumberUtils formatNumberUtils;
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
-  @Inject RequestParameters requestParameters;
-  @Inject MoPubStaticNativeAdRenderer moPubStaticNativeAdRenderer;
-  @Inject MoPubNativeAdPositioning.MoPubServerPositioning moPubServerPositioning;
+  @Inject NativeAdsManager adsManager;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -230,6 +224,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
   @BindString(R.string.no_filter_shots) String emptyFilter;
   @BindString(R.string.follow_stream) String followStream;
+  @BindString(R.string.admob_app_id) String adMobId;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -256,7 +251,7 @@ public class StreamTimelineFragment extends BaseFragment
   private ViewPropertyAnimator timelineIndicatorAnimator;
   private boolean animatorIsRunning;
   private boolean isShowingPollIndicator;
-  private MoPubRecyclerAdapter moPubRecyclerAdapter;
+
   //endregion
 
   public static StreamTimelineFragment newInstance(Bundle fragmentArguments) {
@@ -687,25 +682,7 @@ public class StreamTimelineFragment extends BaseFragment
     }, numberFormatUtil, this, getContext(),
         highlightedShotPresenter.currentUserIsAdmin(getArguments().getString(EXTRA_ID_USER)));
 
-    setupAdapter();
-  }
-
-  private void setupAdapter() {
-    if (idStream.equals("59cccdbec9e77c000c725a72")) {
-      moPubRecyclerAdapter =
-          new MoPubRecyclerAdapter(getActivity(), adapter, moPubServerPositioning);
-      moPubRecyclerAdapter.registerAdRenderer(moPubStaticNativeAdRenderer);
-
-      shotsTimeline.setAdapter(moPubRecyclerAdapter);
-
-      if (BuildConfig.DEBUG) {
-        moPubRecyclerAdapter.loadAds("7a2039877de84b74a0dacb9872262af1", requestParameters);
-      } else {
-        moPubRecyclerAdapter.loadAds("2c816912013a43da94f592849c7b3988", requestParameters);
-      }
-    } else {
-      shotsTimeline.setAdapter(adapter);
-    }
+    shotsTimeline.setAdapter(adapter);
   }
 
   private void sendOpenlinkAnalythics() {
@@ -1014,6 +991,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   //region View methods
+
   @Override public void setShots(List<ShotModel> shots) {
     if (shots.size() > 0) {
       hideEmpty();
@@ -1344,6 +1322,10 @@ public class StreamTimelineFragment extends BaseFragment
         })
         .create()
         .show();
+  }
+
+  @Override public void putAds(NativeAdsManager adsManager) {
+    adapter.setAdsManager(adsManager);
   }
 
   @Override public void showEmpty() {

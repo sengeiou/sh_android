@@ -348,7 +348,6 @@
     <activity android:name=".ui.activities.HistoryActivity"
         android:label="@string/title_activity_history">
     </activity>
-    <activity android:name="com.mopub.common.MoPubBrowser" android:configChanges="keyboardHidden|orientation|screenSize"/>
   </application>
 
 </manifest>

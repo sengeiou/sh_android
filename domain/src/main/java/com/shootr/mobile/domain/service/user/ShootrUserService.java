@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.exception.InvalidLoginException;
 import com.shootr.mobile.domain.exception.InvalidLoginMethodForFacebookException;
 import com.shootr.mobile.domain.exception.InvalidLoginMethodForShootrException;
 import com.shootr.mobile.domain.exception.InvalidPasswordException;
+import com.shootr.mobile.domain.exception.MassiveRegisterErrorException;
 import com.shootr.mobile.domain.exception.UnauthorizedRequestException;
 import com.shootr.mobile.domain.exception.UsernameAlreadyExistsException;
 import com.shootr.mobile.domain.model.stream.StreamMode;
@@ -54,7 +55,8 @@ public class ShootrUserService {
   }
 
   public void createAccount(String username, String email, String password, String locale)
-      throws EmailAlreadyExistsException, UsernameAlreadyExistsException {
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException,
+      MassiveRegisterErrorException {
     LoginResult loginResult =
         createAccountGateway.performCreateAccount(username, email, password, locale);
     retrievePostLoginInformation(loginResult);
@@ -67,7 +69,7 @@ public class ShootrUserService {
   }
 
   public Boolean performFacebookLogin(String facebookToken, String locale)
-      throws InvalidLoginException, InvalidLoginMethodForFacebookException {
+      throws InvalidLoginException, InvalidLoginMethodForFacebookException, MassiveRegisterErrorException {
     LoginResult loginResult = loginGateway.performFacebookLogin(facebookToken, locale);
     retrievePostLoginInformation(loginResult);
     return loginResult.isNewUser();

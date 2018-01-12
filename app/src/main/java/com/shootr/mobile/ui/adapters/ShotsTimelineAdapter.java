@@ -8,10 +8,13 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.ui.adapters.holders.HighLightedShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.HighlightedPromotedShotViewHolder;
+import com.shootr.mobile.ui.adapters.holders.NativeContentAdViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PromotedShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShotTimelineViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -41,8 +44,9 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ShotsTimelineAdapter
-    extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, ShotModel, ShotModel> {
+    extends SubheaderShotRecyclerViewAdapter<RecyclerView.ViewHolder, Object, Object> {
 
+  private static final int ADS_POSITION = 20;
   private static final int HEADER_POSITION = 0;
 
   private static final int ITEM_POSITION_WITH_HEADER = 1;
@@ -70,11 +74,13 @@ public class ShotsTimelineAdapter
   private final ShotsInsertedListener shotsInsertedListener;
   private final Context context;
 
-  private List<ShotModel> shots;
+  private List<Object> shots;
   private Deque<List<ShotModel>> pendingUpdates = new ArrayDeque<>();
-  private HighlightedShotModel highlightedShotModel;
+  private Object highlightedShotModel;
   private Boolean isAdmin;
   private int avatarSize;
+  private boolean isShowingAd = false;
+  private NativeAdsManager adsManager;
 
   public ShotsTimelineAdapter(ImageLoader imageLoader, AndroidTimeUtils timeUtils,
       OnAvatarClickListener avatarClickListener, OnVideoClickListener videoClickListener,
@@ -118,6 +124,11 @@ public class ShotsTimelineAdapter
 
   @Override public int getItemViewType(int position) {
     int typeHeader = TYPE_ITEM_SHOT;
+
+    if (getItem(position) instanceof NativeAd) {
+      return TYPE_ITEM_CONTENT_AD;
+    }
+
     ShotModel shotModel =
         shots != null && !shots.isEmpty() ? (ShotModel) shots.get(position) : null;
     if (isHeaderPosition(position)) {
@@ -171,6 +182,13 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
+
+    if (viewType == TYPE_ITEM_CONTENT_AD) {
+      View v =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
+      return new NativeContentAdViewHolder(v);
+    }
+
     if (viewType == TYPE_HEADER_CHECK_IN) {
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.highlighted_shot_promoted, parent, false);
@@ -190,6 +208,12 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
+    if (viewType == TYPE_ITEM_CONTENT_AD) {
+      View v =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
+      return new NativeContentAdViewHolder(v);
+    }
+
     return getShotViewHolder(parent, viewType);
   }
 
@@ -211,46 +235,66 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+    if (viewType == TYPE_ITEM_CONTENT_AD) {
+      View v =
+          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
+      return new NativeContentAdViewHolder(v);
+    }
     return getShotViewHolder(parent, viewType);
   }
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
+      ((NativeContentAdViewHolder) holder).render((NativeAd) highlightedShotModel);
+      return;
+    }
+
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
-      ((HighlightedPromotedShotViewHolder) holder).render(highlightedShotModel, shots.get(position),
+      ((HighlightedPromotedShotViewHolder) holder).render(
+          (HighlightedShotModel) highlightedShotModel, (ShotModel) shots.get(position),
           shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
           onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
           isAdmin, onCtaClickListener);
     } else {
-      ((HighLightedShotViewHolder) holder).renderHighLight(highlightedShotModel,
-          shots.get(position), shotClickListener, onShotLongClick, onLongClickListener,
-          onTouchListener, onImageClickListener, onUrlClickListener, onOpenShotMenuListener,
-          onReshootClickListener, isAdmin);
+      ((HighLightedShotViewHolder) holder).renderHighLight(
+          (HighlightedShotModel) highlightedShotModel, (ShotModel) shots.get(position),
+          shotClickListener, onShotLongClick, onLongClickListener, onTouchListener,
+          onImageClickListener, onUrlClickListener, onOpenShotMenuListener, onReshootClickListener,
+          isAdmin);
     }
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
+      ((NativeContentAdViewHolder) holder).render((NativeAd) shots.get(position));
+      return;
+    }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 
   private void renderShotViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_SUBHEADER_CHECK_IN
         || holder.getItemViewType() == TYPE_ITEM_CHECK_IN) {
-      ((PromotedShotViewHolder) holder).render(shots.get(position), shotClickListener,
+      ((PromotedShotViewHolder) holder).render((ShotModel) shots.get(position), shotClickListener,
           onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener,
           onReshootClickListener, onShotUrlClickListener, onOpenShotMenuListener,
           onCtaClickListener);
     } else {
-      ((ShotTimelineViewHolder) holder).render(shots.get(position), shotClickListener,
+      ((ShotTimelineViewHolder) holder).render((ShotModel) shots.get(position), shotClickListener,
           onShotLongClick, onLongClickListener, onTouchListener, onImageClickListener,
           onReshootClickListener, onShotUrlClickListener, onOpenShotMenuListener);
     }
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
+    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
+      ((NativeContentAdViewHolder) holder).render((NativeAd) shots.get(position));
+      return;
+    }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 
-  public void setHighlightedShot(HighlightedShotModel highlightedShot) {
+  public void setHighlightedShot(Object highlightedShot) {
     if (!hasHeader()) {
       putNewHeader(highlightedShot);
     } else {
@@ -266,15 +310,22 @@ public class ShotsTimelineAdapter
     notifyItemRemoved(HEADER_POSITION);
   }
 
-  private void putNewHeader(HighlightedShotModel highlightedShot) {
-    shots.add(HEADER_POSITION, highlightedShot.getShotModel());
-    this.setHeader(highlightedShot.getShotModel());
+  private void putNewHeader(Object highlightedShot) {
+    if (highlightedShot instanceof NativeAd) {
+      shots.add(HEADER_POSITION, (highlightedShot));
+      this.setHeader(highlightedShot);
+    } else if (highlightedShot instanceof HighlightedShotModel) {
+      shots.add(HEADER_POSITION, ((HighlightedShotModel) highlightedShot).getShotModel());
+      this.setHeader(((HighlightedShotModel) highlightedShot).getShotModel());
+    }
   }
 
   public void removeHighlightShot() {
-    if (hasHeader()) {
-      removeCurrentHeader();
-      setHeader(null);
+    if (!isShowingAd) {
+      if (hasHeader()) {
+        removeCurrentHeader();
+        setHeader(null);
+      }
     }
   }
 
@@ -293,10 +344,12 @@ public class ShotsTimelineAdapter
       shots.remove(0);
     }
     int oldSize = shots.size();
-    this.shots.addAll(newShots);
+    List<Object> oldShots = new ArrayList<Object>(newShots);
+    putAds(oldShots);
+    this.shots.addAll(oldShots);
     insertExistingHeader(shots);
     try {
-      notifyItemRangeInserted(oldSize, newShots.size());
+      notifyItemRangeInserted(oldSize, oldShots.size());
     } catch (Exception e) {
       notifyDataSetChanged();
     }
@@ -308,19 +361,20 @@ public class ShotsTimelineAdapter
   }
 
   public void setShots(List<ShotModel> shots) {
-    this.shots = shots;
-    insertExistingHeader(shots);
+    this.shots = new ArrayList<Object>(shots);
+    insertExistingHeader(this.shots);
+    putAds(this.shots);
   }
 
-  private void insertExistingHeader(List<ShotModel> shots) {
+  private void insertExistingHeader(List<Object> shots) {
     if (hasHeader()) {
       shots.add(HEADER_POSITION, getHeader());
     }
   }
 
   public void addShotsAbove(List<ShotModel> shotModels) {
-    List<ShotModel> newShotList = new ArrayList<>(shotModels);
-    Iterator<ShotModel> iterator = newShotList.iterator();
+    List<Object> newShotList = new ArrayList<Object>(shotModels);
+    Iterator<Object> iterator = newShotList.iterator();
     while (iterator.hasNext()) {
       if (shots.contains(iterator.next())) {
         iterator.remove();
@@ -361,11 +415,11 @@ public class ShotsTimelineAdapter
     }
   }
 
-  public ShotModel getItem(int position) {
+  public Object getItem(int position) {
     return shots.get(position);
   }
 
-  public ShotModel getLastShot() {
+  public Object getLastShot() {
     Integer shotsNumber = shots.size();
     if (shotsNumber > 0) {
       return shots.get(shots.size() - 1);
@@ -393,12 +447,14 @@ public class ShotsTimelineAdapter
 
   public void markNice(ShotModel shotModel) {
     int index = 0;
-    for (ShotModel shot : shots) {
-      if (shot.getIdShot().equals(shotModel.getIdShot())) {
-        int niceCount = shot.getNiceCount() + 1;
-        shot.setNiceCount(niceCount);
-        shot.setNiced(true);
-        notifyItemChanged(index);
+    for (Object shot : shots) {
+      if (shot instanceof ShotModel) {
+        if (((ShotModel) shot).getIdShot().equals(shotModel.getIdShot())) {
+          int niceCount = ((ShotModel) shot).getNiceCount() + 1;
+          ((ShotModel) shot).setNiceCount(niceCount);
+          ((ShotModel) shot).setNiced(true);
+          notifyItemChanged(index);
+        }
       }
       index++;
     }
@@ -406,12 +462,14 @@ public class ShotsTimelineAdapter
 
   public void unmarkNice(String idShot) {
     int index = 0;
-    for (ShotModel shot : shots) {
-      if (shot.getIdShot().equals(idShot)) {
-        int niceCount = shot.getNiceCount() - 1;
-        shot.setNiceCount(niceCount);
-        shot.setNiced(false);
-        notifyItemChanged(index);
+    for (Object shot : shots) {
+      if (shot instanceof ShotModel) {
+        if (((ShotModel) shot).getIdShot().equals(idShot)) {
+          int niceCount = ((ShotModel) shot).getNiceCount() - 1;
+          ((ShotModel) shot).setNiceCount(niceCount);
+          ((ShotModel) shot).setNiced(false);
+          notifyItemChanged(index);
+        }
       }
       index++;
     }
@@ -419,12 +477,41 @@ public class ShotsTimelineAdapter
 
   public void reshoot(String idShot, boolean mark) {
     int index = 0;
-    for (ShotModel shot : shots) {
-      if (shot.getIdShot().equals(idShot)) {
-        shot.setReshooted(mark);
-        notifyItemChanged(index);
+    for (Object shot : shots) {
+      if (shot instanceof ShotModel) {
+        if (((ShotModel) shot).getIdShot().equals(idShot)) {
+          ((ShotModel) shot).setReshooted(mark);
+          notifyItemChanged(index);
+        }
+        index++;
       }
-      index++;
+    }
+  }
+
+  public void showAd(NativeAd nativeContentAd) {
+    isShowingAd = true;
+    setHighlightedShot(nativeContentAd);
+  }
+
+  public void onPause() {
+    isShowingAd = false;
+  }
+
+  public void setAdsManager(NativeAdsManager adsManager) {
+    this.adsManager = adsManager;
+    putAds(shots);
+  }
+
+  private void putAds(List<Object> shots) {
+    if (adsManager != null) {
+      for (int i = 0; i < shots.size(); i++) {
+        if (i == 5) {
+          shots.add(i, adsManager.nextNativeAd());
+        }
+        if (i != 0 && i % ADS_POSITION == 0) {
+          shots.add(i, adsManager.nextNativeAd());
+        }
+      }
     }
   }
 

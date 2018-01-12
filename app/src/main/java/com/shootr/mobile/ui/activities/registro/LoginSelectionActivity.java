@@ -1,5 +1,7 @@
 package com.shootr.mobile.ui.activities.registro;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
@@ -46,6 +48,7 @@ import com.shootr.mobile.ui.activities.MainTabbedActivity;
 import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
 import com.shootr.mobile.ui.base.BaseActivity;
 import com.shootr.mobile.util.AnalyticsTool;
+import com.shootr.mobile.util.ErrorMessageFactory;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.Intents;
@@ -84,6 +87,7 @@ public class LoginSelectionActivity extends BaseActivity {
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
   @Inject @ActivityShowcase BooleanPreference activityShowcase;
+  @Inject ErrorMessageFactory errorMessageFactory;
 
   private CallbackManager callbackManager;
   private LoginManager loginManager;
@@ -254,8 +258,7 @@ public class LoginSelectionActivity extends BaseActivity {
           feedbackMessage.showLong(getView(), getString(R.string.facebook_permissions_alert));
           final Handler handler = new Handler();
           handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
+            @Override public void run() {
               final Intent i = new Intent(getBaseContext(), LoginSelectionActivity.class);
               i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
               startActivity(i);
@@ -281,7 +284,12 @@ public class LoginSelectionActivity extends BaseActivity {
                 }
               }, new Interactor.ErrorCallback() {
                 @Override public void onError(ShootrException error) {
-                  showFacebookError(facebookMethodError);
+                  String errorMessage = errorMessageFactory.getMessageForError(error);
+                  if (errorMessage != null) {
+                    showMassiveRegisterError(errorMessage);
+                  } else {
+                    showFacebookError(facebookMethodError);
+                  }
                   hideLoading();
                 }
               });
@@ -355,6 +363,16 @@ public class LoginSelectionActivity extends BaseActivity {
 
   private void showFacebookError(String errorMessage) {
     feedbackMessage.show(getView(), errorMessage);
+  }
+
+  private void showMassiveRegisterError(String errorMessage) {
+    new AlertDialog.Builder(this).setMessage(errorMessage)
+        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            /* no-op */
+          }
+        })
+        .show();
   }
 
   @Override protected void onResume() {

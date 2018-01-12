@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.views;
 
+import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.ui.model.ShotModel;
 import java.util.List;
 
@@ -58,4 +59,6 @@ public interface StreamTimelineView extends TimelineView  {
     void setIsContributor(boolean isCurrentUserContributor);
 
     void showFollowDialog();
+
+    void putAds(NativeAdsManager adsManager);
 }
