@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.views.nullview;
 
+import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.views.StreamTimelineView;
 import java.util.List;
@@ -175,6 +176,10 @@ public class NullStreamTimelineView implements StreamTimelineView {
     }
 
     @Override public void showFollowDialog() {
+        /* no-op */
+    }
+
+    @Override public void putAds(NativeAdsManager adsManager) {
         /* no-op */
     }
 
