@@ -811,17 +811,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   private void loadAds() {
-    AdSettings.addTestDevice("2bb86c4af48c03280c3975fcb69148fb");
-    adsManager.setListener(new NativeAdsManager.Listener() {
-      @Override public void onAdsLoaded() {
-        streamTimelineView.putAds(adsManager);
-      }
+    if (streamId != null && streamId.equals("59cccdbec9e77c000c725a72")) {
+      AdSettings.addTestDevice("2bb86c4af48c03280c3975fcb69148fb");
+      adsManager.setListener(new NativeAdsManager.Listener() {
+        @Override public void onAdsLoaded() {
+          streamTimelineView.putAds(adsManager);
+        }
 
-      @Override public void onAdError(AdError adError) {
+        @Override public void onAdError(AdError adError) {
         /* no-op */
-      }
-    });
-    adsManager.loadAds();
+        }
+      });
+      adsManager.loadAds();
+    }
   }
 
 }
