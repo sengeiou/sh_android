@@ -63,7 +63,7 @@
             android:maxLines="1"
             android:textColor="@color/gray_80"
             android:textSize="14sp"
-            android:text="Promoted"
+            android:text="@string/promoted"
             android:layout_toRightOf="@+id/contentad_advertiser"
             />
       </RelativeLayout>
