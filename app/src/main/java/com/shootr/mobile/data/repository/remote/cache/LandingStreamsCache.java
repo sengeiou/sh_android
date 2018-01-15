@@ -1,17 +1,17 @@
 package com.shootr.mobile.data.repository.remote.cache;
 
-import android.support.v4.util.LruCache;
 import com.shootr.mobile.data.repository.datasource.CachedDataSource;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
+import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton public class LandingStreamsCache implements CachedDataSource {
 
-  private static final String LANDING_STREAMS = "LANDING_STREAMS";
-  private final LruCache<String, LandingStreams> landingStreamsLruCache;
+  private static final String LANDING_STREAMS = "landing_stream";
+  private final DualCache<LandingStreams> landingStreamsLruCache;
 
-  @Inject public LandingStreamsCache(LruCache<String, LandingStreams> landingStreamsLruCache) {
+  @Inject public LandingStreamsCache(DualCache<LandingStreams> landingStreamsLruCache) {
     this.landingStreamsLruCache = landingStreamsLruCache;
   }
 
@@ -20,7 +20,7 @@ import javax.inject.Singleton;
   }
 
   public void putLandingStreams(LandingStreams landingStreams) {
-    landingStreamsLruCache.evictAll();
+    landingStreamsLruCache.invalidate();
     landingStreamsLruCache.put(LANDING_STREAMS, landingStreams);
   }
 
@@ -29,6 +29,6 @@ import javax.inject.Singleton;
   }
 
   @Override public void invalidate() {
-    landingStreamsLruCache.evictAll();
+    landingStreamsLruCache.invalidate();
   }
 }
