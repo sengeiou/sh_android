@@ -150,6 +150,7 @@ import static android.content.Context.MODE_PRIVATE;
   private static final int LRU_CACHE_SIZE = 100;
   private static final int ADS_COUNT = 8;
   private static final String LANDING_STREAM = "landing_streams";
+  private static final String LAST_VISIT = "last_visit";
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -311,6 +312,16 @@ import static android.content.Context.MODE_PRIVATE;
     CacheSerializer<LandingStreams> jsonSerializer = new JsonSerializer<>(LandingStreams.class);
 
     return new Builder<LandingStreams>(LANDING_STREAM, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(LANDING_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<Long> provideLastStreamVisitCache(
+      Application application) {
+    CacheSerializer<Long> jsonSerializer = new JsonSerializer<>(Long.class);
+
+    return new Builder<Long>(LANDING_STREAM, BuildConfig.VERSION_CODE).useSerializerInRam(
         LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(LANDING_DISK_CACHE_SIZE, true, jsonSerializer, application)
         .build();
