@@ -83,6 +83,10 @@ import com.shootr.mobile.util.Version;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.vincentbrison.openlibraries.android.dualcache.Builder;
+import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer;
+import com.vincentbrison.openlibraries.android.dualcache.DualCache;
+import com.vincentbrison.openlibraries.android.dualcache.JsonSerializer;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
@@ -140,10 +144,12 @@ import static android.content.Context.MODE_PRIVATE;
     library = true) public class DataModule {
 
   static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
+  static final int LANDING_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 50MB
   private static final long TIMEOUT_SECONDS = 30;
   private static final long TIMEOUT_CONNECT_SECONDS = 15;
   private static final int LRU_CACHE_SIZE = 100;
   private static final int ADS_COUNT = 8;
+  private static final String LANDING_STREAM = "landing_streams";
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -300,7 +306,13 @@ import static android.content.Context.MODE_PRIVATE;
     return new LruCache(LRU_CACHE_SIZE);
   }
 
-  @Provides @Singleton LruCache<String, LandingStreams> provideLandingStreamsLruCache() {
-    return new LruCache(LRU_CACHE_SIZE);
+  @Provides @Singleton DualCache<LandingStreams> provideLandingStreamsLruCache(
+      Application application) {
+    CacheSerializer<LandingStreams> jsonSerializer = new JsonSerializer<>(LandingStreams.class);
+
+    return new Builder<LandingStreams>(LANDING_STREAM, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(LANDING_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
   }
 }

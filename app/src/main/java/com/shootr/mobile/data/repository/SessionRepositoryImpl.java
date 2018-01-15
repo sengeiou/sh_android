@@ -15,10 +15,12 @@ import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
 import com.shootr.mobile.domain.model.Device;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
+import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 import javax.inject.Inject;
 
 public class SessionRepositoryImpl implements SessionRepository {
@@ -35,6 +37,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final IntPreference badgeCount;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
+  private final DualCache<LandingStreams> landingStreamsLruCache;
   private User currentUser;
   private int synchroTime;
 
@@ -45,8 +48,8 @@ public class SessionRepositoryImpl implements SessionRepository {
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
       @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
-      @ActivityBadgeCount IntPreference badgeCount,
-      CrashReportTool crashReportTool, AnalyticsTool analyticsTool) {
+      @ActivityBadgeCount IntPreference badgeCount, CrashReportTool crashReportTool,
+      AnalyticsTool analyticsTool, DualCache<LandingStreams> landingStreamsLruCache) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;
@@ -58,6 +61,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.badgeCount = badgeCount;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
+    this.landingStreamsLruCache = landingStreamsLruCache;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
   }
 
@@ -106,6 +110,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     cacheTimeKeepAlive.delete();
     badgeCount.delete();
     analyticsTool.reset();
+    landingStreamsLruCache.invalidate();
     currentUser = null;
   }
 
