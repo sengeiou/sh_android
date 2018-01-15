@@ -68,6 +68,7 @@ public class StreamEntityMapper {
     }
     stream.setPhotoIdMedia(streamEntity.getPhotoIdMedia());
     stream.setViews(streamEntity.getViews());
+    stream.setLastTimeShooted(streamEntity.getLastTimeShooted());
     return stream;
   }
 
@@ -119,5 +120,6 @@ public class StreamEntityMapper {
     entityTemplate.setMuted(stream.isMuted());
     entityTemplate.setPhotoIdMedia(stream.getPhotoIdMedia());
     entityTemplate.setViews(stream.getViews());
+    entityTemplate.setLastTimeShooted(stream.getLastTimeShooted());
   }
 }
