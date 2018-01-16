@@ -51,8 +51,6 @@ public interface StreamDetailView extends DataTransferView {
 
     void setFollowingStream(Boolean isFollowing);
 
-    void goToStreamDataInfo(StreamModel streamModel);
-
     void goToContributorsActivityAsHolder(String idStream);
 
     void goToContributorsActivity(String idStream);

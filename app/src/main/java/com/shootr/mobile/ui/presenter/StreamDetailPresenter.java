@@ -380,12 +380,6 @@ public class StreamDetailPresenter implements Presenter {
     });
   }
 
-  public void dataInfoClicked() {
-    if (streamModel != null) {
-      streamDetailView.goToStreamDataInfo(streamModel);
-    }
-  }
-
   public void contributorsClicked() {
     if (streamModel.amIAuthor()) {
       streamDetailView.goToContributorsActivityAsHolder(streamModel.getIdStream());

@@ -18,15 +18,15 @@ public class StreamModel implements Serializable, SearchableModel {
     private Boolean removed;
     private Integer totalFollowers;
     private Integer totalWatchers;
-    private Long historicWatchers;
-    private Long totalShots;
-    private Long uniqueShots;
+    private Long historicWatchers; //todelete
+    private Long totalShots;//todelete
+    private Long uniqueShots; //todelete
     private Integer readWriteMode;
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFollowing;
-    private int totalFollowingWatchers;
+    private int totalFollowingWatchers; //todelete
     private boolean isStrategic;
     private boolean muted;
     private long views;
