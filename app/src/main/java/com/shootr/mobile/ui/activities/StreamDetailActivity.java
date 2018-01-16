@@ -369,6 +369,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
     setTitleResultForPreviousActivity(title);
   }
 
+  @Override public void setStreamSubtitle(Long numViews) {
+    if (numViews == 0L) {
+      streamSubtitle.setVisibility(View.GONE);
+    } else {
+      streamSubtitle.setText(
+          getResources().getQuantityString(R.plurals.view_count_pattern, numViews.intValue(),
+              numberFormatUtil.formatNumbers(numViews)));
+    }
+  }
+
   @Override public void setStreamVerified(boolean isVerified) {
     if (isVerified) {
       verifiedStream.setVisibility(View.VISIBLE);
