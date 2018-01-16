@@ -3,6 +3,7 @@ package com.shootr.mobile.domain.interactor;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
@@ -47,6 +48,7 @@ public class GetLandingStreamsInteractor implements Interactor {
   @Override public void execute() throws Exception {
 
     LandingStreams landingStreams = localStreamRepository.getLandingStreams();
+    setupUserStreamsBadge(landingStreams);
     notifyLoaded(landingStreams);
 
     Long currentTime = timeUtils.getCurrentTime();
@@ -60,10 +62,22 @@ public class GetLandingStreamsInteractor implements Interactor {
     }
   }
 
+  private void setupUserStreamsBadge(LandingStreams landingStreams) {
+    if (landingStreams != null) {
+      for (Stream stream : landingStreams.getUserStreams().getStreams()) {
+        Long lastVisit = localStreamRepository.getLastStreamVisit(stream.getId());
+        if (lastVisit != null) {
+          stream.setShowBadge(stream.getLastTimeShooted() > lastVisit);
+        }
+      }
+    }
+  }
+
   private void refreshStreams() {
     LandingStreams landingStreams =
         remoteStreamRepository.getLandingStreams();
     if (landingStreams != null) {
+      setupUserStreamsBadge(landingStreams);
       notifyLoaded(landingStreams);
       localStreamRepository.putLandingStreams(landingStreams);
     }

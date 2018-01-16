@@ -1,13 +1,14 @@
 package com.shootr.mobile.data.repository.remote.cache;
 
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 @Singleton public class LastStreamVisitCache {
 
   private final DualCache<Long> lastVisitCache;
 
-  public LastStreamVisitCache(DualCache<Long> lastVisitCache) {
+  @Inject public LastStreamVisitCache(DualCache<Long> lastVisitCache) {
     this.lastVisitCache = lastVisitCache;
   }
 

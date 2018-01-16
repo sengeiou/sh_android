@@ -32,6 +32,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private long views;
     private int position;
     private boolean showRankPosition;
+    private boolean showBadge;
 
     public Boolean isRemoved() {
         return removed;
@@ -274,5 +275,13 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setShowRankPosition(boolean showRankPosition) {
         this.showRankPosition = showRankPosition;
+    }
+
+    public boolean shouldShowBadge() {
+        return showBadge;
+    }
+
+    public void setShowBadge(boolean showBadge) {
+        this.showBadge = showBadge;
     }
 }
