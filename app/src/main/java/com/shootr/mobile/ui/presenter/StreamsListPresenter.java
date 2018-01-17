@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.exception.ShootrValidationException;
 import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.HideStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
@@ -34,7 +35,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final ShareStreamInteractor shareStreamInteractor;
   private final MuteInteractor muteInteractor;
-  //private final HideStreamInteractor hideStreamInteractor;
+  private final HideStreamInteractor hideStreamInteractor;
   private final UnmuteInteractor unmuteInterator;
   private final StreamResultModelMapper streamResultModelMapper;
   private final StreamModelMapper streamModelMapper;
@@ -49,7 +50,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
       FollowStreamInteractor followStreamInteractor,
       UnfollowStreamInteractor unfollowStreamInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, ShareStreamInteractor shareStreamInteractor,
-      MuteInteractor muteInteractor, UnmuteInteractor unmuteInterator,
+      MuteInteractor muteInteractor, HideStreamInteractor hideStreamInteractor, UnmuteInteractor unmuteInterator,
       StreamResultModelMapper streamResultModelMapper, StreamModelMapper streamModelMapper,
       SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.getLandingStreamsInteractor = getLandingStreamsInteractor;
@@ -58,6 +59,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.shareStreamInteractor = shareStreamInteractor;
     this.muteInteractor = muteInteractor;
+    this.hideStreamInteractor = hideStreamInteractor;
     this.unmuteInterator = unmuteInterator;
     this.streamResultModelMapper = streamResultModelMapper;
     this.streamModelMapper = streamModelMapper;
@@ -208,7 +210,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void hideStreamClicked(final StreamModel stream) {
-    //hideInteractor.hideStream(stream.getIdStream());
+    hideStreamInteractor.hideStream(stream.getIdStream());
   }
 
   public void onUnmuteClicked(final StreamModel stream) {
@@ -216,7 +218,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
       @Override public void onCompleted() {
         stream.setMuted(false);
         streamsListView.renderMute(stream);
-        //loadLandingStreams();
       }
     });
   }
@@ -236,10 +237,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   @Override public void pause() {
     bus.unregister(this);
     hasBeenPaused = true;
-  }
-
-  public void clickMyStreams() {
-    streamsListView.navigateToMyStreams(sessionRepository.getCurrentUserId(), true);
   }
   //endregion
 }

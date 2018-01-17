@@ -160,6 +160,11 @@ public class SyncStreamRepository
     }
   }
 
+  @Override public void hide(String idStream) {
+    landingStreamsCache.invalidate();
+    remoteStreamDataSource.hide(idStream);
+  }
+
   @Override public long getConnectionTimes(String idStream) {
     throw new RuntimeException("Method not implemented yet!");
   }

@@ -103,6 +103,10 @@ public class LocalStreamRepository implements StreamRepository {
         localStreamSearchDataSource.unfollow(idStream);
     }
 
+    @Override public void hide(String idStream) {
+        throw new IllegalArgumentException("this method has no local implementation");
+    }
+
     @Override public long getConnectionTimes(String idStream) {
         return localStreamDataSource.getConnectionTimes(idStream);
     }

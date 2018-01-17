@@ -92,6 +92,10 @@ public class DatabaseStreamDataSource implements StreamDataSource {
     streamManager.unMute(idStream);
   }
 
+  @Override public void hide(String idStream) {
+    throw new IllegalArgumentException("method not implemented in local datasource");
+  }
+
   @Override public void follow(String idStream) {
     streamManager.follow(idStream);
   }

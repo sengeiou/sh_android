@@ -28,6 +28,8 @@ public interface StreamRepository {
 
     void unfollow(String idStream);
 
+    void hide(String idStream);
+
     long getConnectionTimes(String idStream);
 
     void storeConnection(String idStream, long connections);

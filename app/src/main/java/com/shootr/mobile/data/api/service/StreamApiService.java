@@ -68,6 +68,9 @@ public interface StreamApiService {
   @DELETE("/stream/{idStream}/mute") Response unMute(@Path("idStream") String idStream)
       throws IOException, ApiException;
 
+  @DELETE("/stream/{idStream}/hide") Response hide(@Path("idStream") String idStream)
+      throws IOException, ApiException;
+
   @POST("/stream/{idStream}/follow") Response followStream(@Path("idStream") String idStream)
       throws IOException, ApiException;
 
