@@ -63,6 +63,7 @@ public class StreamModelMapper {
             StreamModel streamModel = transform(stream);
             streamModel.setShowRankPosition(false);
             streamModel.setShowBadge(stream.shouldShowBadge());
+            streamModel.setShouldHideStream(true);
             userStreams.add(streamModel);
         }
 
@@ -73,6 +74,7 @@ public class StreamModelMapper {
             int position = landingStreams.getHotStreams().getStreams().indexOf(stream);
             streamModel.setShowRankPosition(true);
             streamModel.setPosition(position + 1);
+            streamModel.setShouldHideStream(false);
             hotStreams.add(streamModel);
         }
 

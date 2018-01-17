@@ -109,16 +109,17 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     streamsList.addItemDecoration(new BottomOffsetDecoration(200));
 
-    adapter = new LandingStreamsAdapter(imageLoader, initialsLoader, new OnLandingStreamClickListener() {
-      @Override public void onStreamClick(StreamModel stream) {
-        presenter.selectStream(stream);
-      }
+    adapter =
+        new LandingStreamsAdapter(imageLoader, initialsLoader, new OnLandingStreamClickListener() {
+          @Override public void onStreamClick(StreamModel stream) {
+            presenter.selectStream(stream);
+          }
 
-      @Override public boolean onStreamLongClick(StreamModel stream) {
-        presenter.onStreamLongClicked(stream);
-        return true;
-      }
-    });
+          @Override public boolean onStreamLongClick(StreamModel stream) {
+            presenter.onStreamLongClicked(stream);
+            return true;
+          }
+        });
 
     adapter.setHasStableIds(true);
 
@@ -179,8 +180,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     });
   }
 
-  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(
-      final StreamModel stream) {
+  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(final StreamModel stream) {
     return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_remove_favorite,
         new Runnable() {
           @Override public void run() {
@@ -262,15 +262,28 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     feedbackMessage.show(getView(), sharedStream);
   }
 
+  public CustomContextMenu.Builder showWithHideMenu(StreamModel stream, CustomContextMenu.Builder builder) {
+    if(stream.shouldHideStream())
+    {
+      return builder.addAction(R.string.hide, new Runnable() {
+        @Override public void run() {
+
+        }
+      });
+    }
+    else return builder;
+  }
+
+
   @Override public void showContextMenuWithMute(final StreamModel stream) {
     if (stream.isFollowing()) {
-      baseContextualMenuWithoutFavorite(stream).addAction(R.string.mute, new Runnable() {
+      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.mute, new Runnable() {
         @Override public void run() {
           presenter.onMuteClicked(stream);
         }
       }).show();
     } else {
-      baseContextualMenuWithFavorite(stream).addAction(R.string.mute, new Runnable() {
+      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.mute, new Runnable() {
         @Override public void run() {
           presenter.onMuteClicked(stream);
         }
@@ -280,13 +293,13 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
   @Override public void showContextMenuWithUnmute(final StreamModel stream) {
     if (stream.isFollowing()) {
-      baseContextualMenuWithoutFavorite(stream).addAction(R.string.unmute, new Runnable() {
+      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.unmute, new Runnable() {
         @Override public void run() {
           presenter.onUnmuteClicked(stream);
         }
       }).show();
     } else {
-      baseContextualMenuWithFavorite(stream).addAction(R.string.unmute, new Runnable() {
+      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.unmute, new Runnable() {
         @Override public void run() {
           presenter.onUnmuteClicked(stream);
         }
