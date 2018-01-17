@@ -83,6 +83,13 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
     }
   }
 
+  public void onHide(StreamModel stream) {
+    if (userStreams.contains(stream)) {
+      userStreams.remove(stream);
+      notifyDataSetChanged();
+    }
+  }
+
   @Override public long getItemId(int position) {
     return position;
   }

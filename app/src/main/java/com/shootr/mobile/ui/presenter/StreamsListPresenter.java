@@ -34,6 +34,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final ShareStreamInteractor shareStreamInteractor;
   private final MuteInteractor muteInteractor;
+  //private final HideStreamInteractor hideStreamInteractor;
   private final UnmuteInteractor unmuteInterator;
   private final StreamResultModelMapper streamResultModelMapper;
   private final StreamModelMapper streamModelMapper;
@@ -80,8 +81,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void selectStream(StreamModel stream) {
-    selectStream(stream.getIdStream(), stream.getTitle(),
-        stream.getAuthorId());
+    selectStream(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
   }
 
   private void selectStream(final String idStream, String streamTag, String authorId) {
@@ -175,16 +175,15 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void shareStream(StreamModel stream) {
-    shareStreamInteractor.shareStream(stream.getIdStream(),
-        new Interactor.CompletedCallback() {
-          @Override public void onCompleted() {
-            streamsListView.showStreamShared();
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            showViewError(error);
-          }
-        });
+    shareStreamInteractor.shareStream(stream.getIdStream(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        streamsListView.showStreamShared();
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        showViewError(error);
+      }
+    });
   }
 
   @Subscribe @Override public void onUnwatchDone(UnwatchDone.Event event) {
@@ -208,15 +207,18 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     });
   }
 
+  public void hideStreamClicked(final StreamModel stream) {
+    //hideInteractor.hideStream(stream.getIdStream());
+  }
+
   public void onUnmuteClicked(final StreamModel stream) {
-    unmuteInterator.unmute(stream.getIdStream(),
-        new Interactor.CompletedCallback() {
-          @Override public void onCompleted() {
-            stream.setMuted(false);
-            streamsListView.renderMute(stream);
-            //loadLandingStreams();
-          }
-        });
+    unmuteInterator.unmute(stream.getIdStream(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        stream.setMuted(false);
+        streamsListView.renderMute(stream);
+        //loadLandingStreams();
+      }
+    });
   }
 
   @Subscribe @Override public void onStreamMuted(StreamMuted.Event event) {

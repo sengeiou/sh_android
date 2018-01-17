@@ -253,7 +253,7 @@
   <string name="multiple_activities_action">GO</string>
   <string name="multiple_activity_notification">%d new Activity notifications</string>
   <string name="mute">Mute notifications</string>
-  <string name="hide">HIDE</string>
+  <string name="hide_stream">HIDE</string>
   <string name="new_activity_notification">New activity</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">New followers</string>

@@ -262,48 +262,53 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     feedbackMessage.show(getView(), sharedStream);
   }
 
-  public CustomContextMenu.Builder showWithHideMenu(StreamModel stream, CustomContextMenu.Builder builder) {
-    if(stream.shouldHideStream())
-    {
-      return builder.addAction(R.string.hide, new Runnable() {
+  public CustomContextMenu.Builder showWithHideMenu(final StreamModel stream,
+      CustomContextMenu.Builder builder) {
+    if (stream.shouldHideStream()) {
+      return builder.addAction(R.string.hide_stream, new Runnable() {
         @Override public void run() {
-
+          presenter.hideStreamClicked(stream);
+          adapter.onHide(stream);
         }
       });
+    } else {
+      return builder;
     }
-    else return builder;
   }
-
 
   @Override public void showContextMenuWithMute(final StreamModel stream) {
     if (stream.isFollowing()) {
-      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.mute, new Runnable() {
-        @Override public void run() {
-          presenter.onMuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.mute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onMuteClicked(stream);
+            }
+          }).show();
     } else {
-      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.mute, new Runnable() {
-        @Override public void run() {
-          presenter.onMuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.mute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onMuteClicked(stream);
+            }
+          }).show();
     }
   }
 
   @Override public void showContextMenuWithUnmute(final StreamModel stream) {
     if (stream.isFollowing()) {
-      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.unmute, new Runnable() {
-        @Override public void run() {
-          presenter.onUnmuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.unmute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onUnmuteClicked(stream);
+            }
+          }).show();
     } else {
-      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.unmute, new Runnable() {
-        @Override public void run() {
-          presenter.onUnmuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.unmute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onUnmuteClicked(stream);
+            }
+          }).show();
     }
   }
 
