@@ -115,7 +115,7 @@ public class StreamTimelinePresenterTest {
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         selectStreamInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, callCtaCheckInInteractor, viewTimelineEventInteractor,
-        reshootInteractor,
+        putLastStreamVisitInteractor, reshootInteractor,
         undoReshootInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,

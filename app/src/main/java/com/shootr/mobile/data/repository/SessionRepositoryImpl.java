@@ -38,6 +38,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
   private final DualCache<LandingStreams> landingStreamsLruCache;
+  private final DualCache<Long> lastStreamVisitCache;
   private User currentUser;
   private int synchroTime;
 
@@ -49,7 +50,8 @@ public class SessionRepositoryImpl implements SessionRepository {
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
       @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
       @ActivityBadgeCount IntPreference badgeCount, CrashReportTool crashReportTool,
-      AnalyticsTool analyticsTool, DualCache<LandingStreams> landingStreamsLruCache) {
+      AnalyticsTool analyticsTool, DualCache<LandingStreams> landingStreamsLruCache,
+      DualCache<Long> lastStreamVisitCache) {
     this.sessionTokenPreference = sessionTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;
@@ -62,6 +64,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
     this.landingStreamsLruCache = landingStreamsLruCache;
+    this.lastStreamVisitCache = lastStreamVisitCache;
     this.synchroTime = REFRESH_INTERVAL_SECONDS;
   }
 
@@ -111,6 +114,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     badgeCount.delete();
     analyticsTool.reset();
     landingStreamsLruCache.invalidate();
+    lastStreamVisitCache.invalidate();
     currentUser = null;
   }
 

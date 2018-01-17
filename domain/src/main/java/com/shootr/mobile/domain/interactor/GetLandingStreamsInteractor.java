@@ -68,6 +68,8 @@ public class GetLandingStreamsInteractor implements Interactor {
         Long lastVisit = localStreamRepository.getLastStreamVisit(stream.getId());
         if (lastVisit != null) {
           stream.setShowBadge(stream.getLastTimeShooted() > lastVisit);
+        } else {
+          localStreamRepository.putLastStreamVisit(stream.getId(), timeUtils.getCurrentTime());
         }
       }
     }

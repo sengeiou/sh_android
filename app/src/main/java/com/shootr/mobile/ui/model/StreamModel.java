@@ -182,6 +182,7 @@ public class StreamModel implements Serializable, SearchableModel {
         StreamModel that = (StreamModel) o;
 
         if (getPosition() != that.getPosition()) return false;
+        if (showBadge != that.showBadge) return false;
         return getIdStream().equals(that.getIdStream());
     }
 

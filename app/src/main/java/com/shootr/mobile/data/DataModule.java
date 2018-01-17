@@ -321,7 +321,7 @@ import static android.content.Context.MODE_PRIVATE;
       Application application) {
     CacheSerializer<Long> jsonSerializer = new JsonSerializer<>(Long.class);
 
-    return new Builder<Long>(LANDING_STREAM, BuildConfig.VERSION_CODE).useSerializerInRam(
+    return new Builder<Long>(LAST_VISIT, BuildConfig.VERSION_CODE).useSerializerInRam(
         LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(LANDING_DISK_CACHE_SIZE, true, jsonSerializer, application)
         .build();
