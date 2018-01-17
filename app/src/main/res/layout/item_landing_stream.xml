@@ -12,16 +12,40 @@
     android:paddingRight="8dp"
     android:focusable="true"
     >
-  <TextView
-      android:id="@+id/stream_rank"
-      android:layout_width="32dp"
-      android:layout_height="16dp"
-      android:textSize="12sp"
-      android:gravity="center"
-      tools:text="4"
+
+  <FrameLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
       android:layout_gravity="center"
+      android:gravity="center"
       android:layout_marginLeft="8dp"
-      />
+      >
+
+    <TextView
+        android:id="@+id/stream_badge"
+        android:layout_width="8sp"
+        android:layout_height="8sp"
+        android:layout_gravity="center"
+        android:background="@drawable/background_unread_messages"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="4sp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        />
+
+    <TextView
+        android:id="@+id/stream_rank"
+        android:layout_width="32dp"
+        android:layout_height="16dp"
+        android:gravity="center"
+        android:textSize="12sp"
+        android:visibility="visible"
+        tools:text="4"
+        />
+  </FrameLayout>
   <ImageView
       android:id="@+id/stream_picture_without_text"
       android:layout_width="@dimen/stream_result_picture_width"
@@ -45,6 +69,8 @@
       android:scaleType="centerCrop"
       android:src="@color/default_photo_background"
       android:visibility="gone"
+      app:border_color="@color/white_bar"
+      app:border_width="1dp"
       tools:background="#660000cc"
       tools:visibility="visible"
       />
