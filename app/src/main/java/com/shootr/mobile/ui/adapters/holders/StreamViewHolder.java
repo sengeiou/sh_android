@@ -26,7 +26,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
 
-  private boolean showsFavoritesText = false;
   private boolean isWatchingStateEnabled = false;
 
   @BindView(R.id.stream_picture) ImageView picture;

@@ -204,7 +204,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
       @Override public void onCompleted() {
         stream.setMuted(true);
         streamsListView.renderMute(stream);
-        //loadLandingStreams();
       }
     });
   }
