@@ -118,4 +118,6 @@
     <string name="analytics_action_open_app">OpenApp</string>
     <string name="analytics_action_historic">Historic</string>
     <string name="analytics_action_my_streams">UserStreams</string>
+    <string name="analytics_action_hide_stream">HideStream</string>
+    <string name="analytics_label_hide_stream">HideStream</string>
 </resources>

@@ -64,6 +64,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_action_my_streams) String analyticsActionMyStreams;
+  @BindString(R.string.analytics_action_hide_stream) String analyticsActionHideStream;
+  @BindString(R.string.analytics_label_hide_stream) String analyticsLabelHideStream;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_streams) String streamsSource;
 
@@ -267,8 +269,9 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     if (stream.shouldHideStream()) {
       return builder.addAction(R.string.hide_stream, new Runnable() {
         @Override public void run() {
-          presenter.hideStreamClicked(stream);
+          presenter.onHideStreamClicked(stream);
           adapter.onHide(stream);
+          sendHideStreamAnalytics();
         }
       });
     } else {
@@ -408,5 +411,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendHideStreamAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setAction(analyticsActionHideStream);
+    builder.setActionId(analyticsActionHideStream);
+    builder.setLabelId(analyticsLabelHideStream);
+    analyticsTool.analyticsSendActionOnlyGoogleAnalythics(builder);
   }
 }

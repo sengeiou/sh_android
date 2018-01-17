@@ -209,7 +209,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     });
   }
 
-  public void hideStreamClicked(final StreamModel stream) {
+  public void onHideStreamClicked(final StreamModel stream) {
     hideStreamInteractor.hideStream(stream.getIdStream());
   }
 
