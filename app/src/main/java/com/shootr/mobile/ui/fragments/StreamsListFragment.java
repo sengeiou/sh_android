@@ -120,6 +120,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
       }
     });
 
+    adapter.setHasStableIds(true);
+
     streamsList.setAdapter(adapter);
 
     swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
