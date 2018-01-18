@@ -174,7 +174,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     String action = builder.getAction();
     String actionId = builder.getActionId();
     String labelId = builder.getLabelId();
-    if(mixpanel) {
+    if (mixpanel) {
       String source = builder.getSource();
       String idTargetUser = builder.getIdTargetUser();
       String targetUsername = builder.getTargetUsername();
@@ -198,7 +198,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     }
 
     sendGoogleAnalytics(context, action, actionId, labelId);
-
   }
 
   private Date getSignUpDatePlusHour(Date date) {
