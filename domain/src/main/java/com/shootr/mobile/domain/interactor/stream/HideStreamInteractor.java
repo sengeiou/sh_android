@@ -1,13 +1,10 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.bus.BusPublisher;
-import com.shootr.mobile.domain.bus.StreamMuted;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
-import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
-import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import javax.inject.Inject;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
