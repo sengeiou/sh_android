@@ -47,7 +47,6 @@ public class ServiceQueueElementDatasource implements QueueElementDataSource {
       sendBackToQueue(idStream, QueueElementType.HIDE);
       throw new ServerCommunicationException(cause);
     } catch (Exception e) {
-      sendBackToQueue(idStream, QueueElementType.HIDE);
       throw new ServerCommunicationException(e);
     }
   }
