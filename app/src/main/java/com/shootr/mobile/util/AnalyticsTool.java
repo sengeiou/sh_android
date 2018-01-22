@@ -18,6 +18,8 @@ public interface AnalyticsTool {
 
   void analyticsSendAction(Builder builder);
 
+  void analyticsSendActionOnlyGoogleAnalythics(Builder builder);
+
   void appsFlyerSendAction(Builder builder);
 
   void reset();

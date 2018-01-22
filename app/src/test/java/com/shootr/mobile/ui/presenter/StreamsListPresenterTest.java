@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.GetLandingStreamsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
+import com.shootr.mobile.domain.interactor.stream.HideStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.MuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
@@ -56,6 +57,7 @@ public class StreamsListPresenterTest {
     @Mock UnfollowStreamInteractor unfollowStreamInteractor;
     @Mock MuteInteractor muteInteractor;
     @Mock UnmuteInteractor unmuteInterator;
+    @Mock HideStreamInteractor hideStreamInteractor;
 
     private StreamsListPresenter presenter;
 
@@ -67,7 +69,7 @@ public class StreamsListPresenterTest {
         presenter = new StreamsListPresenter(streamsListInteractor,
             followStreamInteractor,
             unfollowStreamInteractor, unwatchStreamInteractor,
-            shareStreamInteractor, muteInteractor, unmuteInterator,
+            shareStreamInteractor, muteInteractor, hideStreamInteractor, unmuteInterator,
             streamResultModelMapper, streamModelMapper, sessionRepository, errorMessageFactory, bus);
         presenter.setView(streamsListView);
     }

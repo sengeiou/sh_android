@@ -7,6 +7,7 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.PutLastStreamVisitInteractor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
@@ -55,6 +56,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   private final CallCtaCheckInInteractor callCtaCheckInInteractor;
   private final ViewTimelineEventInteractor viewTimelineEventInteractor;
+  private final PutLastStreamVisitInteractor putLastStreamVisitInteractor;
   private final ReshootInteractor reshootInteractor;
   private final UndoReshootInteractor undoReshootInteractor;
   private final ShotModelMapper shotModelMapper;
@@ -97,7 +99,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       SelectStreamInteractor selectStreamInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor,
-      ViewTimelineEventInteractor viewTimelineEventInteractor, ReshootInteractor reshootInteractor,
+      ViewTimelineEventInteractor viewTimelineEventInteractor,
+      PutLastStreamVisitInteractor putLastStreamVisitInteractor, ReshootInteractor reshootInteractor,
       UndoReshootInteractor undoReshootInteractor, ShotModelMapper shotModelMapper,
       StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
       Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
@@ -111,6 +114,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.viewTimelineEventInteractor = viewTimelineEventInteractor;
+    this.putLastStreamVisitInteractor = putLastStreamVisitInteractor;
     this.reshootInteractor = reshootInteractor;
     this.undoReshootInteractor = undoReshootInteractor;
     this.shotModelMapper = shotModelMapper;
@@ -745,9 +749,18 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
   }
 
   @Override public void pause() {
+    putLastStreamVisit();
     bus.unregister(this);
     stopPollingShots();
     hasBeenPaused = true;
+  }
+
+  private void putLastStreamVisit() {
+    putLastStreamVisitInteractor.storeLastVisit(streamId, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
+      }
+    });
   }
 
   public void onHidePoll() {

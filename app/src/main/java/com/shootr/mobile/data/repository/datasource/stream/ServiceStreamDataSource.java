@@ -44,8 +44,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
     return putStream(streamEntity, false);
   }
 
-  @Override
-  public StreamEntity createStream(StreamEntity streamEntity) {
+  @Override public StreamEntity createStream(StreamEntity streamEntity) {
     try {
       return streamApiService.createStream(streamEntity);
     } catch (IOException | ApiException e) {
@@ -53,8 +52,7 @@ public class ServiceStreamDataSource implements StreamDataSource {
     }
   }
 
-  @Override
-  public StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters) {
+  @Override public StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters) {
     try {
       return streamApiService.updateStream(streamUpdateParameters);
     } catch (IOException | ApiException e) {
@@ -133,6 +131,14 @@ public class ServiceStreamDataSource implements StreamDataSource {
   @Override public void unmute(String idStream) {
     try {
       streamApiService.unMute(idStream);
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public void hide(String idStream) {
+    try {
+      streamApiService.hide(idStream);
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     }

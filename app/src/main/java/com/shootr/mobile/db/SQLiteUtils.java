@@ -358,6 +358,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.VIEWS
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.LAST_TIME_SHOOTED
+      + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -415,6 +417,8 @@ public class SQLiteUtils {
       + DatabaseContract.StreamTable.FOLLOWING
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.VIEWS
+      + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.LAST_TIME_SHOOTED
       + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"

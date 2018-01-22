@@ -9,11 +9,14 @@ import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.MemoryStreamListSynchronizationRepository;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
+import com.shootr.mobile.data.repository.remote.cache.QueueElementCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.QueueElement;
+import com.shootr.mobile.domain.model.QueueElementType;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -22,6 +25,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -32,6 +36,7 @@ public class SyncStreamRepository
   private final LandingStreamsEntityMapper landingStreamsEntityMapper;
   private final StreamDataSource localStreamDataSource;
   private final StreamDataSource remoteStreamDataSource;
+  private final QueueElementCache queueElementCache;
   private final StreamListSynchronizationRepository streamListSynchronizationRepository;
   private final SyncableStreamEntityFactory syncableStreamEntityFactory;
   private final StreamCache streamCache;
@@ -39,8 +44,9 @@ public class SyncStreamRepository
   private final SyncTrigger syncTrigger;
 
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
-      LandingStreamsEntityMapper landingStreamsEntityMapper, @Local StreamDataSource localStreamDataSource,
-      @Remote StreamDataSource remoteStreamDataSource,
+      LandingStreamsEntityMapper landingStreamsEntityMapper,
+      @Local StreamDataSource localStreamDataSource,
+      @Remote StreamDataSource remoteStreamDataSource, QueueElementCache queueElementCache,
       StreamListSynchronizationRepository streamListSynchronizationRepository,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
       LandingStreamsCache landingStreamsCache, SyncTrigger syncTrigger) {
@@ -48,6 +54,7 @@ public class SyncStreamRepository
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
     this.streamEntityMapper = streamEntityMapper;
+    this.queueElementCache = queueElementCache;
     this.streamListSynchronizationRepository = streamListSynchronizationRepository;
     this.syncableStreamEntityFactory = syncableStreamEntityFactory;
     this.streamCache = streamCache;
@@ -160,6 +167,36 @@ public class SyncStreamRepository
     }
   }
 
+  @Override public void hide(String idStream) {
+    try {
+      remoteStreamDataSource.hide(idStream);
+      landingStreamsCache.invalidate();
+    } catch (ServerCommunicationException e) {
+      removeHidingStreamFromCache(idStream);
+      queueElementCache.putQueueElement(createFailedHide(idStream));
+    }
+  }
+
+  private void removeHidingStreamFromCache(String idStream) {
+    LandingStreams landingStreams = landingStreamsCache.getLandingStreams();
+    Iterator<Stream> iterator = landingStreams.getUserStreams().getStreams().iterator();
+    while (iterator.hasNext()) {
+      Stream stream = iterator.next();
+      if (stream.getId().equals(idStream)) {
+        iterator.remove();
+        break;
+      }
+    }
+    landingStreamsCache.putLandingStreams(landingStreams);
+  }
+
+  private QueueElement createFailedHide(String idStream) {
+    QueueElement queueElement = new QueueElement();
+    queueElement.setId(idStream);
+    queueElement.setType(QueueElementType.HIDE);
+    return queueElement;
+  }
+
   @Override public long getConnectionTimes(String idStream) {
     throw new RuntimeException("Method not implemented yet!");
   }
@@ -173,6 +210,14 @@ public class SyncStreamRepository
   }
 
   @Override public void putLandingStreams(LandingStreams landingStreams) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public void putLastStreamVisit(String idStream, long timestamp) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public Long getLastStreamVisit(String idStream) {
     throw new RuntimeException("Method not implemented yet!");
   }
 

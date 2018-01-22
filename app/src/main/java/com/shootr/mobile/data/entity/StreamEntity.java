@@ -32,6 +32,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private Boolean muted;
     private String photoIdMedia;
     private long views;
+    private long lastTimeShooted;
 
     public StreamEntity() {
         setResultType(FollowableType.STREAM);
@@ -275,5 +276,13 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public long getLastTimeShooted() {
+        return lastTimeShooted;
+    }
+
+    public void setLastTimeShooted(long lastTimeShooted) {
+        this.lastTimeShooted = lastTimeShooted;
     }
 }

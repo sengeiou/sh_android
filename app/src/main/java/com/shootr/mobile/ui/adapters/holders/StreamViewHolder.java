@@ -26,7 +26,6 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
 
-  private boolean showsFavoritesText = false;
   private boolean isWatchingStateEnabled = false;
 
   @BindView(R.id.stream_picture) ImageView picture;
@@ -36,6 +35,7 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   @BindView(R.id.favorite_stream_indicator) ShineButton favorite;
   @BindView(R.id.stream_verified) ImageView streamVerified;
   @BindView(R.id.stream_rank) TextView rankNumber;
+  @BindView(R.id.stream_badge) TextView streamBadge;
   @Nullable @BindView(R.id.stream_remove) ImageView removeButton;
   @Nullable @BindView(R.id.stream_subtitle) TextView subtitle;
   @Nullable @BindView(R.id.stream_subtitle_description) TextView subtitleDescription;
@@ -64,6 +64,15 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
     handleShowRankNumber(streamModel);
     handleShowFavorite();
     setupStreamPicture(streamModel);
+    handleBadgeVisibility(streamModel);
+  }
+
+  private void handleBadgeVisibility(StreamModel streamModel) {
+    if (streamModel.shouldShowBadge()) {
+      streamBadge.setVisibility(View.VISIBLE);
+    } else {
+      streamBadge.setVisibility(View.INVISIBLE);
+    }
   }
 
   private void handleShowRankNumber(StreamModel streamModel) {

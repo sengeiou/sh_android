@@ -5,6 +5,7 @@ import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
+import com.shootr.mobile.data.repository.remote.cache.QueueElementCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
@@ -42,15 +43,16 @@ public class SyncStreamRepositoryTest {
   @Mock LandingStreamsEntityMapper landingStreamsEntityMapper;
   @Mock LandingStreamsCache landingStreamsCache;
   @Mock StreamListSynchronizationRepository streamListSynchronizationRepository;
+  @Mock QueueElementCache shootrQueueCache;
 
   private SyncStreamRepository syncStreamRepository;
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    syncStreamRepository =
-        new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
-            localStreamDataSource, remoteStreamDataSource, streamListSynchronizationRepository,
-            syncableStreamEntityFactory, streamCache, landingStreamsCache, syncTrigger);
+    syncStreamRepository = new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
+        localStreamDataSource, remoteStreamDataSource, shootrQueueCache,
+        streamListSynchronizationRepository, syncableStreamEntityFactory, streamCache,
+        landingStreamsCache, syncTrigger);
   }
 
   @Test public void shouldPutStreamInCacheWhenGetStreamByIdAndRemoteStreamIsNotNull()
@@ -126,8 +128,7 @@ public class SyncStreamRepositoryTest {
   }
 
   @Test public void shouldPutStreamInLocalWhenCallPutStream() throws Exception {
-    when(remoteStreamDataSource.createStream(any(StreamEntity.class))).thenReturn(
-        streamEntity());
+    when(remoteStreamDataSource.createStream(any(StreamEntity.class))).thenReturn(streamEntity());
     when(syncableStreamEntityFactory.updatedOrNewEntity(any(Stream.class))).thenReturn(
         streamEntity());
 

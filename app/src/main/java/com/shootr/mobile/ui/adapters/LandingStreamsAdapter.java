@@ -51,6 +51,9 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
 
   public void setStreams(LandingStreamsModel landingStreams) {
     header.clear();
+    hotStreams.clear();
+    userStreams.clear();
+    separator.clear();
 
     hotStreams.set(landingStreams.getHotStreams());
     header.set(Collections.singletonList(new ListElement(ListElement.HEADER)));
@@ -78,5 +81,16 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
     if (userStreams.contains(stream)) {
       userStreams.set(userStreams.indexOf(stream), stream);
     }
+  }
+
+  public void onHide(StreamModel stream) {
+    if (userStreams.contains(stream)) {
+      userStreams.remove(stream);
+      notifyDataSetChanged();
+    }
+  }
+
+  @Override public long getItemId(int position) {
+    return position;
   }
 }

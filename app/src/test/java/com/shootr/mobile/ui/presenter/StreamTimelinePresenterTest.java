@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.facebook.ads.NativeAdsManager;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.PutLastStreamVisitInteractor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.DeleteLocalShotsByStreamInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
@@ -104,6 +105,7 @@ public class StreamTimelinePresenterTest {
   @Mock GetConnectionTimesInteractor getConnectionTimesInteractor;
   @Mock UpdateStreamInteractor updateStreamInteractor;
   @Mock ViewTimelineEventInteractor viewTimelineEventInteractor;
+  @Mock PutLastStreamVisitInteractor putLastStreamVisitInteractor;
   @Mock NativeAdsManager adsManager;
   private StreamTimelinePresenter presenter;
   private ShotSent.Receiver shotSentReceiver;
@@ -115,7 +117,7 @@ public class StreamTimelinePresenterTest {
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         selectStreamInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, callCtaCheckInInteractor, viewTimelineEventInteractor,
-        reshootInteractor,
+        putLastStreamVisitInteractor, reshootInteractor,
         undoReshootInteractor, shotModelMapper,
         streamModelMapper, bus, errorMessageFactory, poller,
         updateWatchNumberInteractor,
