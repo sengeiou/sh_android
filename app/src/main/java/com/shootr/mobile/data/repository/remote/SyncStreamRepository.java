@@ -21,7 +21,6 @@ import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import com.shootr.mobile.domain.repository.Local;
-import com.shootr.mobile.domain.repository.QueueElementRepository;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
@@ -47,8 +46,7 @@ public class SyncStreamRepository
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
       LandingStreamsEntityMapper landingStreamsEntityMapper,
       @Local StreamDataSource localStreamDataSource,
-      @Remote StreamDataSource remoteStreamDataSource,
-      QueueElementRepository remoteQueueElementRepository, QueueElementCache queueElementCache,
+      @Remote StreamDataSource remoteStreamDataSource, QueueElementCache queueElementCache,
       StreamListSynchronizationRepository streamListSynchronizationRepository,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
       LandingStreamsCache landingStreamsCache, SyncTrigger syncTrigger) {

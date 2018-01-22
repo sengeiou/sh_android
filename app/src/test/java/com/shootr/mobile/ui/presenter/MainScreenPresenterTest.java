@@ -5,6 +5,7 @@ import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.SendCacheQueueInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
@@ -65,6 +66,7 @@ public class MainScreenPresenterTest {
     @Mock AnalyticsTool analyticsTool;
     @Mock GetShootrEventsInteractor getShootrEventsInteractor;
     @Mock Context context;
+    @Mock SendCacheQueueInteractor sendEventsOnQueueCacheInteractor;
     private MainScreenPresenter mainScreenPresenter;
 
     @Before public void setUp() throws Exception {
