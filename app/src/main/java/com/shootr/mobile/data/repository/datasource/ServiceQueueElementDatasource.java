@@ -29,6 +29,9 @@ public class ServiceQueueElementDatasource implements QueueElementDataSource {
         case QueueElementType.HIDE:
           sendHide(queueElement.getId());
           break;
+        default:
+          /* do nothing */
+          break;
       }
     }
   }

@@ -334,7 +334,7 @@ import static android.content.Context.MODE_PRIVATE;
   @Provides @Singleton DualCache<List<QueueElement>> provideQueueElementCache(
       Application application) {
     CacheSerializer<List<QueueElement>> jsonSerializer =
-        new JsonSerializer<>((Class<List<QueueElement>>)(Object)List.class);
+        new JsonSerializer<>((Class<List<QueueElement>>) (Object) List.class);
 
     return new Builder<List<QueueElement>>(QUEUE_EVENT, BuildConfig.VERSION_CODE).useSerializerInRam(
         LRU_CACHE_SIZE, jsonSerializer)
