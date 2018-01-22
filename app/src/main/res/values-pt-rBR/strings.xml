@@ -256,6 +256,7 @@
   <string name="multiple_activities_action">VER</string>
   <string name="multiple_activity_notification">%d novas notificações</string>
   <string name="mute">Silenciar notificações</string>
+  <string name="hide_stream">Ocultar</string>
   <string name="new_activity_notification">Nova atividade</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Novos seguidores</string>

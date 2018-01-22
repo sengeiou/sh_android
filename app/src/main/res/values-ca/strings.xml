@@ -256,6 +256,7 @@
   <string name="multiple_activities_action">VEURE</string>
   <string name="multiple_activity_notification">%d notificacions noves</string>
   <string name="mute">Silenciar notificacions</string>
+  <string name="hide_stream">Ocultar</string>
   <string name="new_activity_notification">Nova activitat</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Nous seguidors</string>
