@@ -33,16 +33,12 @@ public class StreamModelMapper {
         streamModel.setRemoved(stream.isRemoved());
         streamModel.setTotalFollowers(stream.getTotalFollowers());
         streamModel.setTotalWatchers(stream.getTotalWatchers());
-        streamModel.setHistoricWatchers(stream.getHistoricWatchers() != null ? stream.getHistoricWatchers() : 0);
-        streamModel.setTotalShots(stream.getTotalShots() != null ? stream.getTotalShots() : 0);
-        streamModel.setUniqueShots(stream.getUniqueShots() != null ? stream.getUniqueShots() : 0);
         streamModel.setReadWriteMode(stream.getReadWriteMode() == null ||
                 stream.getReadWriteMode().equals(StreamMode.PUBLIC) ? 0 : 1);
         streamModel.setContributorCount(stream.getContributorCount());
         streamModel.setCurrentUserContributor(stream.isCurrentUserContributor());
         streamModel.setVerifiedUser(stream.isVerifiedUser());
         streamModel.setFollowing(stream.isFollowing());
-        streamModel.setTotalFollowingWatchers(stream.getTotalFollowingWatchers());
         streamModel.setStrategic(stream.isStrategic());
         streamModel.setMuted(stream.isMuted());
         streamModel.setViews(stream.getViews());

@@ -114,7 +114,7 @@
                       android:singleLine="true"
                       android:textColor="#80ffffff"
                       android:textSize="15sp"
-                      android:visibility="gone"
+                      android:visibility="visible"
                       tools:text="following 3" />
                 </LinearLayout>
             </com.sloydev.collapsingavatartoolbar.CollapsingAvatarToolbar>

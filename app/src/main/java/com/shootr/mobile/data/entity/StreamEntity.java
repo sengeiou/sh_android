@@ -21,9 +21,6 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private List<UserEntity> watchers;
     private Long totalFavorites;
     private Long totalWatchers;
-    private Long historicWatchers;
-    private Long totalShots;
-    private Long uniqueShots;
     private String readWriteMode;
     private Long verifiedUser;
     private Long contributorCount;
@@ -187,30 +184,6 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setTotalWatchers(Long totalWatchers) {
         this.totalWatchers = totalWatchers;
-    }
-
-    public Long getHistoricWatchers() {
-        return historicWatchers;
-    }
-
-    public void setHistoricWatchers(Long historicWatchers) {
-        this.historicWatchers = historicWatchers;
-    }
-
-    public Long getTotalShots() {
-        return totalShots;
-    }
-
-    public void setTotalShots(Long totalShots) {
-        this.totalShots = totalShots;
-    }
-
-    public Long getUniqueShots() {
-        return uniqueShots;
-    }
-
-    public void setUniqueShots(Long uniqueShots) {
-        this.uniqueShots = uniqueShots;
     }
 
     public String getReadWriteMode() {

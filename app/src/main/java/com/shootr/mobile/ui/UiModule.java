@@ -35,7 +35,6 @@ import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
 import com.shootr.mobile.ui.activities.ShareStreamActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
-import com.shootr.mobile.ui.activities.StreamDataInfoActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamMediaActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -100,7 +99,6 @@ import javax.inject.Singleton;
     FindParticipantsActivity.class,
     WelcomePageActivity.class,
     ErrorActivity.class,
-    StreamDataInfoActivity.class,
     MeActivityTimelineFragment.class,
     NicersActivity.class,
     ContributorsActivity.class,

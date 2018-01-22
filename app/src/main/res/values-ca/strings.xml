@@ -479,7 +479,6 @@
   <string name="stream_detail_edit_menu_title">Editar</string>
   <string name="stream_detail_following">Seguint %s</string>
   <string name="stream_detail_media">Arxius</string>
-  <string name="stream_detail_menu_data_info">Nombres</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">
     <item quantity="one">%s connectat</item>

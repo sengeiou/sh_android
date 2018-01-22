@@ -340,12 +340,6 @@ public class SQLiteUtils {
       + " INTEGER NOT NULL,"
       + DatabaseContract.StreamTable.TOTAL_WATCHERS
       + " INTEGER NOT NULL,"
-      + DatabaseContract.StreamTable.HISTORIC_WATCHERS
-      + " INTEGER NULL,"
-      + DatabaseContract.StreamTable.TOTAL_SHOTS
-      + " NUMBER NULL,"
-      + DatabaseContract.StreamTable.UNIQUE_SHOTS
-      + " NUMBER NULL,"
       + DatabaseContract.StreamTable.READ_WRITE_MODE
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.VERIFIED_USER
@@ -406,12 +400,6 @@ public class SQLiteUtils {
       + " INTEGER NOT NULL,"
       + DatabaseContract.StreamTable.TOTAL_WATCHERS
       + " INTEGER NOT NULL,"
-      + DatabaseContract.StreamTable.HISTORIC_WATCHERS
-      + " INTEGER NULL,"
-      + DatabaseContract.StreamTable.TOTAL_SHOTS
-      + " NUMBER NULL,"
-      + DatabaseContract.StreamTable.UNIQUE_SHOTS
-      + " NUMBER NULL,"
       + DatabaseContract.StreamTable.READ_WRITE_MODE
       + " TEXT NULL,"
       + DatabaseContract.StreamTable.VERIFIED_USER

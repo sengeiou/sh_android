@@ -113,7 +113,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
   private StreamDetailAdapter adapter;
   private MenuItemValueHolder editMenuItem = new MenuItemValueHolder();
-  private MenuItemValueHolder dataInfoMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder removeMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder restoreMenuItem = new MenuItemValueHolder();
   private String idStream;
@@ -291,10 +290,8 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Override public boolean onCreateOptionsMenu(Menu menu) {
     getMenuInflater().inflate(R.menu.stream, menu);
     editMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_edit));
-    dataInfoMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_data_info));
     removeMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_remove));
     restoreMenuItem.bindRealMenuItem(menu.findItem(R.id.stream_detail_menu_restore));
-    dataInfoMenuItem.setVisible(true);
     return true;
   }
 
@@ -305,9 +302,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
         return true;
       case R.id.stream_detail_menu_edit:
         streamDetailPresenter.editStreamInfo();
-        return true;
-      case R.id.stream_detail_menu_data_info:
-        streamDetailPresenter.dataInfoClicked();
         return true;
       case R.id.stream_detail_share_shot_via:
         shareVia();
@@ -373,6 +367,16 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
   @Override public void setStreamTitle(String title) {
     streamTitle.setText(title);
     setTitleResultForPreviousActivity(title);
+  }
+
+  @Override public void setStreamSubtitle(Long numViews) {
+    if (numViews == 0L) {
+      streamSubtitle.setVisibility(View.GONE);
+    } else {
+      streamSubtitle.setText(
+          getResources().getQuantityString(R.plurals.view_count_pattern, numViews.intValue(),
+              numberFormatUtil.formatNumbers(numViews)));
+    }
   }
 
   @Override public void setStreamVerified(boolean isVerified) {
@@ -594,12 +598,6 @@ public class StreamDetailActivity extends BaseActivity implements StreamDetailVi
 
   @Override public void setFollowingStream(Boolean isFollowing) {
     adapter.setFollowing(isFollowing);
-  }
-
-  @Override public void goToStreamDataInfo(StreamModel streamModel) {
-    Intent intent = new Intent(this, StreamDataInfoActivity.class);
-    intent.putExtra(StreamDataInfoActivity.EXTRA_STREAM, streamModel);
-    startActivity(intent);
   }
 
   @Override public void goToContributorsActivityAsHolder(String idStream) {
