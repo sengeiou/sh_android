@@ -26,7 +26,8 @@ import javax.inject.Singleton;
         SynchroModule.class,
         PrivateMessageRepositoryModule.class,
         PrivateMessageChannelRepositoryModule.class,
-        SearchRepositoryModule.class
+        SearchRepositoryModule.class,
+        QueueElementRepositoryModule.class
     },
     complete = false,
     library = true) public class RepositoryModule {

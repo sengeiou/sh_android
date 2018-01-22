@@ -17,15 +17,17 @@ import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.QueueElement;
 import com.shootr.mobile.domain.model.QueueElementType;
+import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
-import com.shootr.mobile.domain.repository.QueueRepository;
+import com.shootr.mobile.domain.repository.QueueElementRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
+import java.util.Iterator;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -36,7 +38,7 @@ public class SyncStreamRepository
   private final LandingStreamsEntityMapper landingStreamsEntityMapper;
   private final StreamDataSource localStreamDataSource;
   private final StreamDataSource remoteStreamDataSource;
-  private final QueueRepository remoteQueueRepository;
+  private final QueueElementRepository remoteQueueElementRepository;
   private final QueueElementCache queueElementCache;
   private final StreamListSynchronizationRepository streamListSynchronizationRepository;
   private final SyncableStreamEntityFactory syncableStreamEntityFactory;
@@ -48,7 +50,7 @@ public class SyncStreamRepository
       LandingStreamsEntityMapper landingStreamsEntityMapper,
       @Local StreamDataSource localStreamDataSource,
       @Remote StreamDataSource remoteStreamDataSource,
-      @Remote QueueRepository remoteQueueRepository, QueueElementCache queueElementCache,
+      QueueElementRepository remoteQueueElementRepository, QueueElementCache queueElementCache,
       StreamListSynchronizationRepository streamListSynchronizationRepository,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
       LandingStreamsCache landingStreamsCache, SyncTrigger syncTrigger) {
@@ -56,7 +58,7 @@ public class SyncStreamRepository
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
     this.streamEntityMapper = streamEntityMapper;
-    this.remoteQueueRepository = remoteQueueRepository;
+    this.remoteQueueElementRepository = remoteQueueElementRepository;
     this.queueElementCache = queueElementCache;
     this.streamListSynchronizationRepository = streamListSynchronizationRepository;
     this.syncableStreamEntityFactory = syncableStreamEntityFactory;
@@ -172,11 +174,25 @@ public class SyncStreamRepository
 
   @Override public void hide(String idStream) {
     try {
-      landingStreamsCache.invalidate();
       remoteStreamDataSource.hide(idStream);
+      landingStreamsCache.invalidate();
     } catch (ServerCommunicationException e) {
+      removeHidingStreamFromCache(idStream);
       queueElementCache.putQueueElement(createFailedHide(idStream));
     }
+  }
+
+  private void removeHidingStreamFromCache(String idStream) {
+    LandingStreams landingStreams = landingStreamsCache.getLandingStreams();
+    Iterator<Stream> iterator = landingStreams.getUserStreams().getStreams().iterator();
+    while (iterator.hasNext()) {
+      Stream stream = iterator.next();
+      if (stream.getId().equals(idStream)) {
+        iterator.remove();
+        break;
+      }
+    }
+    landingStreamsCache.putLandingStreams(landingStreams);
   }
 
   private QueueElement createFailedHide(String idStream) {

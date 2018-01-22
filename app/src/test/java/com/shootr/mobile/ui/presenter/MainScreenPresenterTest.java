@@ -73,7 +73,8 @@ public class MainScreenPresenterTest {
             new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
         mainScreenPresenter =
             new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
-                sendShoEventStatsIneteractor, getUserForAnalythicsByIdInteractor,
+                sendShoEventStatsIneteractor, sendEventsOnQueueCacheInteractor,
+                getUserForAnalythicsByIdInteractor,
                 shouldUpdateDeviceInfoInteractor, unwatchStreamInteractor, sessionRepository,
                 userModelMapper, badgeCount, getPrivateMessagesChannelsInteractor,
                 getStreamInteractor, getShootrEventsInteractor, streamModelMapper, bus,

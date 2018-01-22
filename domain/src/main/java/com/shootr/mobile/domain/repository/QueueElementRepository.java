@@ -1,8 +1,6 @@
 package com.shootr.mobile.domain.repository;
 
-public interface QueueRepository {
+public interface QueueElementRepository {
 
-    void getShootrQueue();
-
-    void sendShootQueue();
+    void sendQueue();
 }
