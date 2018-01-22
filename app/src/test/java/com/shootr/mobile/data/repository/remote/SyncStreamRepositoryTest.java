@@ -11,7 +11,6 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.stream.StreamListSynchronizationRepository;
-import com.shootr.mobile.domain.service.QueueRepository;
 import java.util.Collections;
 import org.junit.Before;
 import org.junit.Test;
