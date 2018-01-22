@@ -99,6 +99,7 @@
           android:layout_height="14dp"
           android:layout_gravity="center"
           android:paddingLeft="2dp"
+          android:layout_marginLeft="2dp"
           android:src="@drawable/ic_action_verified_user"
           android:visibility="gone"
           tools:visibility="visible"

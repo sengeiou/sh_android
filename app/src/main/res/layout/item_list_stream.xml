@@ -85,6 +85,7 @@
           android:layout_height="14dp"
           android:layout_gravity="center"
           android:src="@drawable/ic_action_verified_user"
+          android:layout_marginLeft="2dp"
           android:visibility="gone"
           tools:visibility="visible"
           />
