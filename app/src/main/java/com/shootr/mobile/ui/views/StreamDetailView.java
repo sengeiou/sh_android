@@ -9,6 +9,8 @@ public interface StreamDetailView extends DataTransferView {
 
     void setStreamTitle(String title);
 
+    void setStreamSubtitle(Long numViews);
+
     void setStreamVerified(boolean isVerified);
 
     void setStreamAuthor(String author);
@@ -50,8 +52,6 @@ public interface StreamDetailView extends DataTransferView {
     void setMuteStatus(Boolean isChecked);
 
     void setFollowingStream(Boolean isFollowing);
-
-    void goToStreamDataInfo(StreamModel streamModel);
 
     void goToContributorsActivityAsHolder(String idStream);
 

@@ -473,7 +473,6 @@
   <string name="stream_detail_edit_menu_title">Edit stream</string>
   <string name="stream_detail_following">Following %s</string>
   <string name="stream_detail_media">Media</string>
-  <string name="stream_detail_menu_data_info">Stats</string>
   <string name="stream_detail_mute">Mute</string>
   <plurals name="stream_detail_participants">
     <item quantity="one">%s connected</item>

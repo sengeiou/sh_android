@@ -18,15 +18,11 @@ public class StreamModel implements Serializable, SearchableModel {
     private Boolean removed;
     private Integer totalFollowers;
     private Integer totalWatchers;
-    private Long historicWatchers;
-    private Long totalShots;
-    private Long uniqueShots;
     private Integer readWriteMode;
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFollowing;
-    private int totalFollowingWatchers;
     private boolean isStrategic;
     private boolean muted;
     private long views;
@@ -141,39 +137,6 @@ public class StreamModel implements Serializable, SearchableModel {
         this.totalWatchers = totalWatchers;
     }
 
-    public Long getHistoricWatchers() {
-        return historicWatchers;
-    }
-
-    public void setHistoricWatchers(Long historicWatchers) {
-        this.historicWatchers = historicWatchers;
-    }
-
-    public Long getTotalShots() {
-        return totalShots;
-    }
-
-    public void setTotalShots(Long totalShots) {
-        this.totalShots = totalShots;
-    }
-
-    public Long getUniqueShots() {
-        return uniqueShots;
-    }
-
-    public void setUniqueShots(Long uniqueShots) {
-        this.uniqueShots = uniqueShots;
-    }
-
-    /*@Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        StreamModel that = (StreamModel) o;
-
-        return getIdStream().equals(that.getIdStream());
-    }*/
-
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -242,14 +205,6 @@ public class StreamModel implements Serializable, SearchableModel {
 
     @Override public String getSearchableType() {
         return SearchableType.STREAM;
-    }
-
-    public int getTotalFollowingWatchers() {
-        return totalFollowingWatchers;
-    }
-
-    public void setTotalFollowingWatchers(int totalFollowingWatchers) {
-        this.totalFollowingWatchers = totalFollowingWatchers;
     }
 
     public long getViews() {

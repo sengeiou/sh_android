@@ -26,9 +26,6 @@ public class Stream implements Searchable, Followable, Validable {
     private List<User> watchers;
     private Integer totalFollowers;
     private Integer totalWatchers;
-    private Long historicWatchers;
-    private Long totalShots;
-    private Long uniqueShots;
     private String readWriteMode;
     private boolean verifiedUser;
     private Long contributorCount;
@@ -188,30 +185,6 @@ public class Stream implements Searchable, Followable, Validable {
 
     public void setTotalWatchers(Integer totalWatchers) {
         this.totalWatchers = totalWatchers;
-    }
-
-    public Long getHistoricWatchers() {
-        return historicWatchers;
-    }
-
-    public void setHistoricWatchers(Long historicWatchers) {
-        this.historicWatchers = historicWatchers;
-    }
-
-    public Long getTotalShots() {
-        return totalShots;
-    }
-
-    public void setTotalShots(Long totalShots) {
-        this.totalShots = totalShots;
-    }
-
-    public Long getUniqueShots() {
-        return uniqueShots;
-    }
-
-    public void setUniqueShots(Long uniqueShots) {
-        this.uniqueShots = uniqueShots;
     }
 
     public String getReadWriteMode() {
