@@ -14,6 +14,7 @@ import com.shootr.mobile.ui.adapters.recyclerview.SubheaderRecyclerViewAdapter;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import java.util.List;
 
 public class StreamsListAdapter extends
@@ -21,6 +22,7 @@ public class StreamsListAdapter extends
 
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
+  private final NumberFormatUtil numberFormatUtil;
   private boolean hasToShowIsFavorite = true;
   private boolean hasToShowRankNumber = true;
 
@@ -29,10 +31,12 @@ public class StreamsListAdapter extends
   private OnFavoriteClickListener onFavoriteClickListener;
 
   public StreamsListAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
-      OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener,
-      boolean hasToShowIsFavorite, boolean hasToShowRankNumber) {
+      NumberFormatUtil numberFormatUtil, OnStreamClickListener onStreamClickListener,
+      OnFavoriteClickListener onFavoriteClickListener, boolean hasToShowIsFavorite,
+      boolean hasToShowRankNumber) {
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
+    this.numberFormatUtil = numberFormatUtil;
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
     this.hasToShowIsFavorite = hasToShowIsFavorite;
@@ -55,7 +59,7 @@ public class StreamsListAdapter extends
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
     StreamResultViewHolder watchingViewHolder =
         new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-            imageLoader, initialsLoader);
+            imageLoader, initialsLoader, numberFormatUtil);
     watchingViewHolder.enableWatchingState(onUnwatchClickListener);
     return watchingViewHolder;
   }
@@ -72,13 +76,14 @@ public class StreamsListAdapter extends
     View view =
         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_stream_list, parent, false);
     return new StreamResultViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-        imageLoader, initialsLoader);
+        imageLoader, initialsLoader, numberFormatUtil);
   }
 
   @Override
   protected void onBindHeaderViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
     StreamResultModel stream = getHeader();
-    ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite, position, hasToShowRankNumber);
+    ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite, position,
+        hasToShowRankNumber);
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
@@ -87,8 +92,8 @@ public class StreamsListAdapter extends
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
     StreamResultModel stream = getItem(position);
-    ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite,
-        position, hasToShowRankNumber);
+    ((StreamResultViewHolder) viewHolder).render(stream, hasToShowIsFavorite, position,
+        hasToShowRankNumber);
   }
 
   public void setOnUnwatchClickListener(OnUnwatchClickListener onUnwatchClickListener) {

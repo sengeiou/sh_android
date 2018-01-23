@@ -14,6 +14,7 @@ import com.shootr.mobile.ui.adapters.sectionedrecyclerview.SectionedRecyclerView
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class ListingAdapter
   private final OnStreamClickListener onStreamClickListener;
   private final OnFavoriteClickListener onFavoriteClickListener;
   private final InitialsLoader initialsLoader;
+  private final NumberFormatUtil numberFormatUtil;
 
   private List<StreamResultModel> createdStreams = Collections.emptyList();
   private List<StreamResultModel> followingStreams = Collections.emptyList();
@@ -33,12 +35,13 @@ public class ListingAdapter
 
   public ListingAdapter(ImageLoader imageLoader, boolean isCurrentUser,
       OnStreamClickListener onStreamClickListener, OnFavoriteClickListener onFavoriteClickListener,
-      InitialsLoader initialsLoader) {
+      InitialsLoader initialsLoader, NumberFormatUtil numberFormatUtil) {
     this.imageLoader = imageLoader;
     this.isCurrentUser = isCurrentUser;
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
     this.initialsLoader = initialsLoader;
+    this.numberFormatUtil = numberFormatUtil;
   }
 
   @Override protected int getSectionCount() {
@@ -69,7 +72,7 @@ public class ListingAdapter
 
     ListingStreamResultViewHolder listingStreamResultViewHolder =
         new ListingStreamResultViewHolder(view, onStreamClickListener, imageLoader,
-            onFavoriteClickListener, initialsLoader);
+            onFavoriteClickListener, initialsLoader, numberFormatUtil);
 
     if (isCurrentUser) {
       listingStreamResultViewHolder.setShowsFavoritesText(true);

@@ -20,8 +20,8 @@ import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.Truss;
-import java.text.DecimalFormat;
 import java.util.List;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
@@ -35,6 +35,7 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
   private OnUnwatchClickListener unwatchClickListener;
   private boolean showsFavoritesText = false;
   private boolean isWatchingStateEnabled = false;
+  private final NumberFormatUtil numberFormatUtil;
 
   @BindView(R.id.stream_picture) ImageView picture;
   @BindView(R.id.stream_picture_without_text) ImageView pictureWithoutText;
@@ -54,12 +55,13 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
 
   public StreamResultViewHolder(View itemView, OnStreamClickListener onStreamClickListener,
       OnFavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
-      InitialsLoader initialsLoader) {
+      InitialsLoader initialsLoader, NumberFormatUtil numberFormatUtil) {
     super(itemView);
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
+    this.numberFormatUtil = numberFormatUtil;
     ButterKnife.bind(this, itemView);
   }
 
@@ -226,25 +228,24 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
     if (subtitle != null && subtitleDescription != null) {
       subtitle.setText("@" + stream.getAuthorUsername());
       subtitleDescription.setVisibility(View.VISIBLE);
-      DecimalFormat formatter = new DecimalFormat("#,###,###");
-      String favorites = subtitle.getContext()
+      String numViews = subtitle.getContext()
           .getResources()
-          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFollowers(),
-              formatter.format(stream.getTotalFollowers()));
-      subtitleDescription.setText(favorites);
+          .getQuantityString(R.plurals.view_count_pattern,
+              ((int) stream.getViews()),
+              numberFormatUtil.formatNumbers(stream.getViews()));
+      subtitleDescription.setText(numViews);
     }
   }
 
   private void renderHolderOwnSubtitle(StreamResultModel stream) {
     if (subtitle != null) {
       subtitleDescription.setVisibility(View.VISIBLE);
-      DecimalFormat formatter = new DecimalFormat("#,###,###");
-      String favorites = subtitle.getContext()
+      String numViews = subtitle.getContext()
           .getResources()
-          .getQuantityString(R.plurals.listing_favorites,
-              stream.getStreamModel().getTotalFollowers(),
-              formatter.format(stream.getStreamModel().getTotalFollowers()));
-      subtitleDescription.setText(favorites);
+          .getQuantityString(R.plurals.view_count_pattern,
+              ((int) stream.getStreamModel().getViews()),
+              numberFormatUtil.formatNumbers(stream.getStreamModel().getViews()));
+      subtitleDescription.setText(numViews);
     }
   }
 
@@ -253,13 +254,13 @@ public class StreamResultViewHolder extends RecyclerView.ViewHolder {
       if (isWatchingStateEnabled) {
         subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
       } else {
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
-        String favorites = subtitle.getContext()
+        String numViews = subtitle.getContext()
             .getResources()
-            .getQuantityString(R.plurals.listing_favorites,
-                stream.getStreamModel().getTotalFollowers(),
-                formatter.format(stream.getStreamModel().getTotalFollowers()));
-        subtitle.setText(favorites);
+            .getQuantityString(R.plurals.view_count_pattern,
+                ((int) stream.getStreamModel().getViews()),
+                numberFormatUtil.formatNumbers(stream.getStreamModel().getViews()));
+
+        subtitle.setText(numViews);
       }
     }
   }
