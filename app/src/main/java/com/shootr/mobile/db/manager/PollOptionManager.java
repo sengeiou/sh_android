@@ -26,13 +26,8 @@ public class PollOptionManager extends AbstractManager {
     String[] whereArguments = new String[] { idPoll };
 
     Cursor queryResult = getReadableDatabase().query(DatabaseContract.PollOptionTable.TABLE,
-        DatabaseContract.PollOptionTable.PROJECTION,
-        whereSelection,
-        whereArguments,
-        null,
-        null,
-        null,
-        null);
+        DatabaseContract.PollOptionTable.PROJECTION, whereSelection, whereArguments, null, null,
+        null, null);
 
     List<PollOptionEntity> results = new ArrayList<>(queryResult.getCount());
     PollOptionEntity pollOptionEntity;
@@ -47,25 +42,28 @@ public class PollOptionManager extends AbstractManager {
     return results;
   }
 
-  public void putPollOptions(String idPoll, List<PollOptionEntity> pollOptions) {
+  public boolean putPollOptions(String idPoll, List<PollOptionEntity> pollOptions) {
     SQLiteDatabase database = getWritableDatabase();
+    boolean hasOptions = false;
     try {
       database.beginTransaction();
       for (PollOptionEntity pollOption : pollOptions) {
         pollOption.setIdPoll(idPoll);
-        putPollOption(pollOption, database);
+        if (pollOption.getText() != null) {
+          putPollOption(pollOption, database);
+          hasOptions = true;
+        }
       }
       database.setTransactionSuccessful();
     } finally {
       database.endTransaction();
     }
+    return hasOptions;
   }
 
   private void putPollOption(PollOptionEntity pollOption, SQLiteDatabase database) {
     ContentValues contentValues = pollOptionEntityDBMapper.toContentValues(pollOption);
-    database.insertWithOnConflict(DatabaseContract.PollOptionTable.TABLE,
-        null,
-        contentValues,
+    database.insertWithOnConflict(DatabaseContract.PollOptionTable.TABLE, null, contentValues,
         SQLiteDatabase.CONFLICT_REPLACE);
   }
 }
