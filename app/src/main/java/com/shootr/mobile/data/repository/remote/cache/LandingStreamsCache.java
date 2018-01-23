@@ -16,7 +16,11 @@ import javax.inject.Singleton;
   }
 
   public LandingStreams getLandingStreams() {
-    return landingStreamsLruCache.get(LANDING_STREAMS);
+    try {
+      return landingStreamsLruCache.get(LANDING_STREAMS);
+    } catch (IllegalStateException error) {
+      return null;
+    }
   }
 
   public void putLandingStreams(LandingStreams landingStreams) {

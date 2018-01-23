@@ -477,7 +477,7 @@
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
-  <string name="stream_detail_following">Siguiendo %s</string>
+  <string name="stream_detail_following">Siguiendo a %s</string>
   <string name="stream_detail_media">Archivos</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">

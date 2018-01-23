@@ -14,9 +14,9 @@ import com.sackcentury.shinebuttonlib.ShineButton;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.adapters.listeners.OnLandingStreamClickListener;
 import com.shootr.mobile.ui.model.StreamModel;
-import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.Truss;
 import java.text.DecimalFormat;
 
@@ -25,6 +25,7 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   private final OnLandingStreamClickListener onStreamClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
+  private final NumberFormatUtil numberFormatUtil;
 
   private boolean isWatchingStateEnabled = false;
 
@@ -45,9 +46,10 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   @BindString(R.string.watching_stream_connected_muted) String connectedAndMuted;
   DecimalFormat formatter;
 
-  public StreamViewHolder(View itemView, OnLandingStreamClickListener onStreamClickListener, ImageLoader imageLoader,
-      InitialsLoader initialsLoader) {
+  public StreamViewHolder(View itemView, OnLandingStreamClickListener onStreamClickListener,
+      ImageLoader imageLoader, InitialsLoader initialsLoader, NumberFormatUtil numberFormatUtil) {
     super(itemView);
+    this.numberFormatUtil = numberFormatUtil;
     formatter = new DecimalFormat("#,###,###");
     this.onStreamClickListener = onStreamClickListener;
     this.imageLoader = imageLoader;
@@ -168,27 +170,11 @@ public class StreamViewHolder extends BaseViewHolder<StreamModel> {
   private void renderHolderOwnSubtitle(StreamModel stream) {
     if (subtitle != null) {
       subtitleDescription.setVisibility(View.VISIBLE);
-      String favorites = subtitle.getContext()
+      String numViews = subtitle.getContext()
           .getResources()
-          .getQuantityString(R.plurals.listing_favorites,
-              stream.getTotalFollowers(),
-              formatter.format(stream.getTotalFollowers()));
-      subtitleDescription.setText(favorites);
-    }
-  }
-
-  private void renderHolderSubtitle(StreamResultModel stream) {
-    if (subtitle != null) {
-      if (isWatchingStateEnabled) {
-        subtitle.setText(getConnectedSubtitle(stream.getStreamModel()));
-      } else {
-        String favorites = subtitle.getContext()
-            .getResources()
-            .getQuantityString(R.plurals.listing_favorites,
-                stream.getStreamModel().getTotalFollowers(),
-                formatter.format(stream.getStreamModel().getTotalFollowers()));
-        subtitle.setText(favorites);
-      }
+          .getQuantityString(R.plurals.view_count_pattern, ((int) stream.getViews()),
+              numberFormatUtil.formatNumbers(stream.getViews()));
+      subtitleDescription.setText(numViews);
     }
   }
 

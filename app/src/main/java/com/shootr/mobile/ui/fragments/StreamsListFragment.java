@@ -40,6 +40,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
@@ -76,6 +77,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Inject AnalyticsTool analyticsTool;
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
+  @Inject NumberFormatUtil numberFormatUtil;
 
   private LandingStreamsAdapter adapter;
   private Unbinder unbinder;
@@ -121,7 +123,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             presenter.onStreamLongClicked(stream);
             return true;
           }
-        });
+        }, numberFormatUtil);
 
     adapter.setHasStableIds(true);
 
