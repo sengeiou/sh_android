@@ -552,9 +552,9 @@
   <string name="user_not_found_message">Usuario no encontrado.</string>
   <string name="user_unblocked">Desbloqueado</string>
   <plurals name="view_count_pattern">
-    <item quantity="one">%s visualización</item>
-    <item quantity="other">%s visualizaciones</item>
-    <item quantity="zero">%s visualizaciones</item>
+    <item quantity="one">%s visita</item>
+    <item quantity="other">%s visitas</item>
+    <item quantity="zero">%s visitas</item>
   </plurals>
   <string name="voted_in_a_poll">ha votado en</string>
   <string name="voted_poll">" ha votado en (question)"</string>
