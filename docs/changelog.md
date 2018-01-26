@@ -13,22 +13,7 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.53.0] - 2018-01-26
-### Added
-- Literals changed
-- Hide stream on top (on streams screens)
-- Badge on stream (unread content)
-- Kill stats
-- Show views on StreamList and on stream Detail
-- Accept headers on Glide requests
-
-### Changed
-- Lru Disk Caché on Stream List instead of Lru Ram Caché
-
-### Fixed
-- Fix poll options without text
-
-## [1.52.0] - 2018-01-12
+## [1.51.0] - 2018-01-12
 ### Added
 - Added facebook ads
 - Add massive register error control
