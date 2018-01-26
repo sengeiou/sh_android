@@ -18,6 +18,7 @@ import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.SendCacheQueueInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
@@ -51,6 +52,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final GetCurrentUserInteractor getCurrentUserInteractor;
   private final SendDeviceInfoInteractor sendDeviceInfoInteractor;
   private final SendShootrEventStatsInteractor sendShootrEventStatsInteractor;
+  private final SendCacheQueueInteractor sendEventsOnQueueCacheInteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
   private final ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
@@ -78,6 +80,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   @Inject public MainScreenPresenter(GetCurrentUserInteractor getCurrentUserInteractor,
       SendDeviceInfoInteractor sendDeviceInfoInteractor,
       SendShootrEventStatsInteractor sendShootrEventStatsInteractor,
+      SendCacheQueueInteractor sendEventsOnQueueCacheInteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
       ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
@@ -90,6 +93,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShootrEventStatsInteractor = sendShootrEventStatsInteractor;
+    this.sendEventsOnQueueCacheInteractor = sendEventsOnQueueCacheInteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
     this.shouldUpdateDeviceInfoInteractor = getDeviceInfoInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
@@ -116,6 +120,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.getRecentSearch();
     this.setupDeviceInfo();
     this.sendShotEventStats();
+    this.sendEventsOnQueueCache();
     this.updateActivityBadge();
     this.loadConnectedStream();
     this.getChannels(false);
@@ -139,6 +144,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
 
   private void sendShotEventStats() {
     sendShootrEventStatsInteractor.sendShootrEvents();
+  }
+
+  private void sendEventsOnQueueCache() {
+    sendEventsOnQueueCacheInteractor.sendCacheQueue();
   }
 
   private void loadCurrentUser() {
@@ -233,6 +242,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     if (hasBeenPaused) {
       loadCurrentUser();
       sendShotEventStats();
+      sendEventsOnQueueCache();
     }
   }
 

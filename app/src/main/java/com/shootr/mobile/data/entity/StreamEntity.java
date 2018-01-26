@@ -21,9 +21,6 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private List<UserEntity> watchers;
     private Long totalFavorites;
     private Long totalWatchers;
-    private Long historicWatchers;
-    private Long totalShots;
-    private Long uniqueShots;
     private String readWriteMode;
     private Long verifiedUser;
     private Long contributorCount;
@@ -35,6 +32,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private Boolean muted;
     private String photoIdMedia;
     private long views;
+    private long lastTimeShooted;
 
     public StreamEntity() {
         setResultType(FollowableType.STREAM);
@@ -188,30 +186,6 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
         this.totalWatchers = totalWatchers;
     }
 
-    public Long getHistoricWatchers() {
-        return historicWatchers;
-    }
-
-    public void setHistoricWatchers(Long historicWatchers) {
-        this.historicWatchers = historicWatchers;
-    }
-
-    public Long getTotalShots() {
-        return totalShots;
-    }
-
-    public void setTotalShots(Long totalShots) {
-        this.totalShots = totalShots;
-    }
-
-    public Long getUniqueShots() {
-        return uniqueShots;
-    }
-
-    public void setUniqueShots(Long uniqueShots) {
-        this.uniqueShots = uniqueShots;
-    }
-
     public String getReadWriteMode() {
         return readWriteMode;
     }
@@ -302,5 +276,13 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public long getLastTimeShooted() {
+        return lastTimeShooted;
+    }
+
+    public void setLastTimeShooted(long lastTimeShooted) {
+        this.lastTimeShooted = lastTimeShooted;
     }
 }

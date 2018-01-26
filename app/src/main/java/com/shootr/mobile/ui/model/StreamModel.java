@@ -18,20 +18,18 @@ public class StreamModel implements Serializable, SearchableModel {
     private Boolean removed;
     private Integer totalFollowers;
     private Integer totalWatchers;
-    private Long historicWatchers;
-    private Long totalShots;
-    private Long uniqueShots;
     private Integer readWriteMode;
     private boolean verifiedUser;
     private Long contributorCount;
     private boolean isCurrentUserContributor;
     private boolean isFollowing;
-    private int totalFollowingWatchers;
     private boolean isStrategic;
     private boolean muted;
     private long views;
     private int position;
     private boolean showRankPosition;
+    private boolean showBadge;
+    private boolean shouldHideStream;
 
     public Boolean isRemoved() {
         return removed;
@@ -141,39 +139,6 @@ public class StreamModel implements Serializable, SearchableModel {
         this.totalWatchers = totalWatchers;
     }
 
-    public Long getHistoricWatchers() {
-        return historicWatchers;
-    }
-
-    public void setHistoricWatchers(Long historicWatchers) {
-        this.historicWatchers = historicWatchers;
-    }
-
-    public Long getTotalShots() {
-        return totalShots;
-    }
-
-    public void setTotalShots(Long totalShots) {
-        this.totalShots = totalShots;
-    }
-
-    public Long getUniqueShots() {
-        return uniqueShots;
-    }
-
-    public void setUniqueShots(Long uniqueShots) {
-        this.uniqueShots = uniqueShots;
-    }
-
-    /*@Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        StreamModel that = (StreamModel) o;
-
-        return getIdStream().equals(that.getIdStream());
-    }*/
-
     @Override public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -181,6 +146,7 @@ public class StreamModel implements Serializable, SearchableModel {
         StreamModel that = (StreamModel) o;
 
         if (getPosition() != that.getPosition()) return false;
+        if (showBadge != that.showBadge) return false;
         return getIdStream().equals(that.getIdStream());
     }
 
@@ -244,14 +210,6 @@ public class StreamModel implements Serializable, SearchableModel {
         return SearchableType.STREAM;
     }
 
-    public int getTotalFollowingWatchers() {
-        return totalFollowingWatchers;
-    }
-
-    public void setTotalFollowingWatchers(int totalFollowingWatchers) {
-        this.totalFollowingWatchers = totalFollowingWatchers;
-    }
-
     public long getViews() {
         return views;
     }
@@ -274,5 +232,21 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setShowRankPosition(boolean showRankPosition) {
         this.showRankPosition = showRankPosition;
+    }
+
+    public boolean shouldShowBadge() {
+        return showBadge;
+    }
+
+    public void setShowBadge(boolean showBadge) {
+        this.showBadge = showBadge;
+    }
+
+    public boolean shouldHideStream() {
+        return shouldHideStream;
+    }
+
+    public void setShouldHideStream(boolean shouldHideStream) {
+        this.shouldHideStream = shouldHideStream;
     }
 }

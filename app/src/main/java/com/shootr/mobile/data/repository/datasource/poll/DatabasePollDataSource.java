@@ -13,8 +13,8 @@ public class DatabasePollDataSource implements PollDataSource {
   private final PollManager pollManager;
   private final PollOptionManager pollOptionManager;
 
-  @Inject public DatabasePollDataSource(PollManager pollManager,
-      PollOptionManager pollOptionManager) {
+  @Inject
+  public DatabasePollDataSource(PollManager pollManager, PollOptionManager pollOptionManager) {
     this.pollManager = pollManager;
     this.pollOptionManager = pollOptionManager;
   }
@@ -29,8 +29,9 @@ public class DatabasePollDataSource implements PollDataSource {
   }
 
   @Override public void putPoll(PollEntity poll) {
-    pollManager.putPoll(poll);
-    pollOptionManager.putPollOptions(poll.getIdPoll(), poll.getPollOptions());
+    if (pollOptionManager.putPollOptions(poll.getIdPoll(), poll.getPollOptions())) {
+      pollManager.putPoll(poll);
+    }
   }
 
   @Override public PollEntity getPollById(String idPoll) {

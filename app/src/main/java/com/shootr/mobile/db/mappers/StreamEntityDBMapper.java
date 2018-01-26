@@ -39,10 +39,6 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.StreamTable.TOTAL_FOLLOWERS,
         streamEntity.getTotalFavorites());
     contentValues.put(DatabaseContract.StreamTable.TOTAL_WATCHERS, streamEntity.getTotalWatchers());
-    contentValues.put(DatabaseContract.StreamTable.HISTORIC_WATCHERS,
-        streamEntity.getHistoricWatchers());
-    contentValues.put(DatabaseContract.StreamTable.TOTAL_SHOTS, streamEntity.getTotalShots());
-    contentValues.put(DatabaseContract.StreamTable.UNIQUE_SHOTS, streamEntity.getUniqueShots());
     contentValues.put(DatabaseContract.StreamTable.READ_WRITE_MODE,
         streamEntity.getReadWriteMode());
     contentValues.put(DatabaseContract.StreamTable.VERIFIED_USER, streamEntity.getVerifiedUser());
@@ -61,6 +57,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.StreamTable.VIEWS, streamEntity.getViews());
     contentValues.put(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS,
         streamEntity.getTotalFollowingWatchers());
+    contentValues.put(DatabaseContract.StreamTable.LAST_TIME_SHOOTED, streamEntity.getLastTimeShooted());
     setSynchronizedtoContentValues(streamEntity, contentValues);
   }
 
@@ -89,12 +86,6 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FOLLOWERS)));
     streamEntity.setTotalWatchers(
         c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_WATCHERS)));
-    streamEntity.setHistoricWatchers(
-        c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.HISTORIC_WATCHERS)));
-    streamEntity.setTotalShots(
-        c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_SHOTS)));
-    streamEntity.setUniqueShots(
-        c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.UNIQUE_SHOTS)));
     streamEntity.setReadWriteMode(
         c.getString(c.getColumnIndex(DatabaseContract.StreamTable.READ_WRITE_MODE)));
     streamEntity.setVerifiedUser(
@@ -113,6 +104,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         c.getInt(c.getColumnIndex(DatabaseContract.StreamTable.TOTAL_FOLLOWING_WATCHERS)));
     streamEntity.setViews(
         c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.VIEWS)));
+    streamEntity.setLastTimeShooted(
+        c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.LAST_TIME_SHOOTED)));
     setSynchronizedfromCursor(c, streamEntity);
   }
 

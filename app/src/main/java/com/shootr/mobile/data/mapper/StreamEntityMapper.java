@@ -42,14 +42,9 @@ public class StreamEntityMapper {
         streamEntity.getTotalFavorites() != null ? streamEntity.getTotalFavorites().intValue() : 0);
     stream.setTotalWatchers(
         streamEntity.getTotalWatchers() != null ? streamEntity.getTotalWatchers().intValue() : 0);
-    stream.setHistoricWatchers(
-        streamEntity.getHistoricWatchers() != null ? streamEntity.getHistoricWatchers() : 0L);
-    stream.setTotalShots(streamEntity.getTotalShots() != null ? streamEntity.getTotalShots() : 0L);
-    stream.setUniqueShots(
-        streamEntity.getUniqueShots() != null ? streamEntity.getUniqueShots() : 0L);
     stream.setReadWriteMode(streamEntity.getReadWriteMode());
     stream.setVerifiedUser(
-        (streamEntity.getVerifiedUser() != null) ? (streamEntity.getVerifiedUser() == 1) : false);
+        (streamEntity.getVerifiedUser() != null) && (streamEntity.getVerifiedUser() == 1));
     stream.setStrategic(streamEntity.isStrategic());
     stream.setContributorCount(streamEntity.getContributorCount());
     if (streamEntity.getIdUserContributors() != null) {
@@ -68,6 +63,7 @@ public class StreamEntityMapper {
     }
     stream.setPhotoIdMedia(streamEntity.getPhotoIdMedia());
     stream.setViews(streamEntity.getViews());
+    stream.setLastTimeShooted(streamEntity.getLastTimeShooted());
     return stream;
   }
 
@@ -107,9 +103,6 @@ public class StreamEntityMapper {
     entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFollowers()));
     entityTemplate.setTotalWatchers(Long.valueOf(stream.getTotalWatchers()));
-    entityTemplate.setHistoricWatchers(stream.getHistoricWatchers());
-    entityTemplate.setTotalShots(stream.getTotalShots());
-    entityTemplate.setUniqueShots(stream.getUniqueShots());
     entityTemplate.setReadWriteMode(stream.getReadWriteMode());
     entityTemplate.setVerifiedUser((stream.isVerifiedUser()) ? 1L : 0L);
     entityTemplate.setiAmContributor(stream.isCurrentUserContributor() ? 1 : 0);
@@ -119,5 +112,6 @@ public class StreamEntityMapper {
     entityTemplate.setMuted(stream.isMuted());
     entityTemplate.setPhotoIdMedia(stream.getPhotoIdMedia());
     entityTemplate.setViews(stream.getViews());
+    entityTemplate.setLastTimeShooted(stream.getLastTimeShooted());
   }
 }

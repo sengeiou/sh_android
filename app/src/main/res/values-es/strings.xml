@@ -256,6 +256,7 @@
   <string name="multiple_activities_action">VER</string>
   <string name="multiple_activity_notification">%d notificaciones nuevas</string>
   <string name="mute">Silenciar notificaciones</string>
+  <string name="hide_stream">Ocultar</string>
   <string name="new_activity_notification">Nueva actividad</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Nuevos seguidores</string>
@@ -476,9 +477,8 @@
   <string name="stream_data_info_pct" formatted="false">(%s%%)</string>
   <string name="stream_data_info_shots">Shots</string>
   <string name="stream_detail_edit_menu_title">Editar</string>
-  <string name="stream_detail_following">Siguiendo %s</string>
+  <string name="stream_detail_following">Siguiendo a %s</string>
   <string name="stream_detail_media">Archivos</string>
-  <string name="stream_detail_menu_data_info">Estadísticas</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">
     <item quantity="one">%s conectado</item>
@@ -552,9 +552,9 @@
   <string name="user_not_found_message">Usuario no encontrado.</string>
   <string name="user_unblocked">Desbloqueado</string>
   <plurals name="view_count_pattern">
-    <item quantity="one">%s visualización</item>
-    <item quantity="other">%s visualizaciones</item>
-    <item quantity="zero">%s visualizaciones</item>
+    <item quantity="one">%s visita</item>
+    <item quantity="other">%s visitas</item>
+    <item quantity="zero">%s visitas</item>
   </plurals>
   <string name="voted_in_a_poll">ha votado en</string>
   <string name="voted_poll">" ha votado en (question)"</string>

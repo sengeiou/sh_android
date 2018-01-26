@@ -11,6 +11,7 @@ import com.shootr.mobile.ui.model.LandingStreamsModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import java.util.Collections;
 
 public class LandingStreamsAdapter extends RecyclerAdapter {
@@ -18,6 +19,7 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
   private final OnLandingStreamClickListener onStreamClickListener;
+  private NumberFormatUtil numberFormatUtil;
 
   private DataListManager<StreamModel> userStreams;
   private DataListManager<StreamModel> hotStreams;
@@ -25,10 +27,11 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
   private DataListManager<ListElement> header;
 
   public LandingStreamsAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
-      OnLandingStreamClickListener onStreamClickListener) {
+      OnLandingStreamClickListener onStreamClickListener, NumberFormatUtil numberFormatUtil) {
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
     this.onStreamClickListener = onStreamClickListener;
+    this.numberFormatUtil = numberFormatUtil;
 
     setupList();
   }
@@ -44,13 +47,17 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
     addDataManager(header);
     addDataManager(hotStreams);
 
-    registerBinder(new StreamBinder(imageLoader, initialsLoader, onStreamClickListener));
+    registerBinder(new StreamBinder(imageLoader, initialsLoader, onStreamClickListener,
+        numberFormatUtil));
     registerBinder(new SeparatorElementBinder());
     registerBinder(new HotElementBinder());
   }
 
   public void setStreams(LandingStreamsModel landingStreams) {
     header.clear();
+    hotStreams.clear();
+    userStreams.clear();
+    separator.clear();
 
     hotStreams.set(landingStreams.getHotStreams());
     header.set(Collections.singletonList(new ListElement(ListElement.HEADER)));
@@ -78,5 +85,16 @@ public class LandingStreamsAdapter extends RecyclerAdapter {
     if (userStreams.contains(stream)) {
       userStreams.set(userStreams.indexOf(stream), stream);
     }
+  }
+
+  public void onHide(StreamModel stream) {
+    if (userStreams.contains(stream)) {
+      userStreams.remove(stream);
+      notifyDataSetChanged();
+    }
+  }
+
+  @Override public long getItemId(int position) {
+    return position;
   }
 }

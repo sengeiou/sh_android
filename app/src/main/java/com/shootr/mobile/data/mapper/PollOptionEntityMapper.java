@@ -29,7 +29,9 @@ public class PollOptionEntityMapper {
   public List<PollOption> transform(List<PollOptionEntity> pollOptions) {
     List<PollOption> options = new ArrayList<>(pollOptions.size());
     for (PollOptionEntity pollOption : pollOptions) {
-      options.add(transform(pollOption));
+      if (pollOption.getText() != null) {
+        options.add(transform(pollOption));
+      }
     }
     return options;
   }

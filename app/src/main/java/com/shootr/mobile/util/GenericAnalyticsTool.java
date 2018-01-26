@@ -104,8 +104,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     }
   }
 
-  @Override
-  public void sendOpenAppMixPanelAnalytics(String actionId, Context context) {
+  @Override public void sendOpenAppMixPanelAnalytics(String actionId, Context context) {
     try {
       JSONObject props = new JSONObject();
       mixpanel = MixpanelAPI.
@@ -116,8 +115,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     }
   }
 
-  @Override
-  public void sendSignUpEvent(User newUser, String actionId, Context context) {
+  @Override public void sendSignUpEvent(User newUser, String actionId, Context context) {
     try {
       JSONObject props = new JSONObject();
       mixpanel = MixpanelAPI.
@@ -164,32 +162,42 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override public void analyticsSendAction(Builder builder) {
+    analyticsSendAction(builder, true);
+  }
+
+  @Override public void analyticsSendActionOnlyGoogleAnalythics(Builder builder) {
+    analyticsSendAction(builder, false);
+  }
+
+  private void analyticsSendAction(Builder builder, boolean mixpanel) {
     Context context = builder.getContext();
     String action = builder.getAction();
     String actionId = builder.getActionId();
     String labelId = builder.getLabelId();
-    String source = builder.getSource();
-    String idTargetUser = builder.getIdTargetUser();
-    String targetUsername = builder.getTargetUsername();
-    String notificationName = builder.getNotificationName();
-    String pushRedirection = builder.getPushRedirection();
-    String idStream = builder.getIdStream();
-    String stream = builder.getStreamName();
-    String idPoll = builder.getIdPoll();
-    String idShot = builder.getIdShot();
-    String loginType = builder.getLoginType();
-    Boolean isStrategic = builder.getIsStrategic();
-    Boolean newContent = builder.hasNewContent();
-    Boolean firstSession = false;
-    user = builder.getUser();
-    if (user != null) {
-      firstSession = (getSignUpDatePlusHour(user.getSignUpDate()).compareTo(new Date()) > 0);
+    if (mixpanel) {
+      String source = builder.getSource();
+      String idTargetUser = builder.getIdTargetUser();
+      String targetUsername = builder.getTargetUsername();
+      String notificationName = builder.getNotificationName();
+      String pushRedirection = builder.getPushRedirection();
+      String idStream = builder.getIdStream();
+      String stream = builder.getStreamName();
+      String idPoll = builder.getIdPoll();
+      String idShot = builder.getIdShot();
+      String loginType = builder.getLoginType();
+      Boolean isStrategic = builder.getIsStrategic();
+      Boolean newContent = builder.hasNewContent();
+      Boolean firstSession = false;
+      user = builder.getUser();
+      if (user != null) {
+        firstSession = (getSignUpDatePlusHour(user.getSignUpDate()).compareTo(new Date()) > 0);
+      }
+      sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
+          pushRedirection, idStream, stream, idPoll, idShot, loginType, firstSession, isStrategic,
+          newContent, context);
     }
 
     sendGoogleAnalytics(context, action, actionId, labelId);
-    sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
-        pushRedirection, idStream, stream, idPoll, idShot, loginType, firstSession, isStrategic,
-        newContent, context);
   }
 
   private Date getSignUpDatePlusHour(Date date) {

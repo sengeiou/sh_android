@@ -40,6 +40,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
@@ -64,6 +65,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
   @BindString(R.string.analytics_action_inbox) String analyticsActionInbox;
   @BindString(R.string.analytics_action_my_streams) String analyticsActionMyStreams;
+  @BindString(R.string.analytics_action_hide_stream) String analyticsActionHideStream;
+  @BindString(R.string.analytics_label_hide_stream) String analyticsLabelHideStream;
   @BindString(R.string.analytics_label_inbox) String analyticsLabelInbox;
   @BindString(R.string.analytics_source_streams) String streamsSource;
 
@@ -74,6 +77,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Inject AnalyticsTool analyticsTool;
   @Inject InitialsLoader initialsLoader;
   @Inject SessionRepository sessionRepository;
+  @Inject NumberFormatUtil numberFormatUtil;
 
   private LandingStreamsAdapter adapter;
   private Unbinder unbinder;
@@ -109,16 +113,19 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
     streamsList.addItemDecoration(new BottomOffsetDecoration(200));
 
-    adapter = new LandingStreamsAdapter(imageLoader, initialsLoader, new OnLandingStreamClickListener() {
-      @Override public void onStreamClick(StreamModel stream) {
-        presenter.selectStream(stream);
-      }
+    adapter =
+        new LandingStreamsAdapter(imageLoader, initialsLoader, new OnLandingStreamClickListener() {
+          @Override public void onStreamClick(StreamModel stream) {
+            presenter.selectStream(stream);
+          }
 
-      @Override public boolean onStreamLongClick(StreamModel stream) {
-        presenter.onStreamLongClicked(stream);
-        return true;
-      }
-    });
+          @Override public boolean onStreamLongClick(StreamModel stream) {
+            presenter.onStreamLongClicked(stream);
+            return true;
+          }
+        }, numberFormatUtil);
+
+    adapter.setHasStableIds(true);
 
     streamsList.setAdapter(adapter);
 
@@ -177,8 +184,7 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     });
   }
 
-  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(
-      final StreamModel stream) {
+  private CustomContextMenu.Builder baseContextualMenuWithoutFavorite(final StreamModel stream) {
     return new CustomContextMenu.Builder(getActivity()).addAction(R.string.menu_remove_favorite,
         new Runnable() {
           @Override public void run() {
@@ -260,35 +266,54 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     feedbackMessage.show(getView(), sharedStream);
   }
 
+  public CustomContextMenu.Builder showWithHideMenu(final StreamModel stream,
+      CustomContextMenu.Builder builder) {
+    if (stream.shouldHideStream()) {
+      return builder.addAction(R.string.hide_stream, new Runnable() {
+        @Override public void run() {
+          presenter.onHideStreamClicked(stream);
+          adapter.onHide(stream);
+          sendHideStreamAnalytics();
+        }
+      });
+    } else {
+      return builder;
+    }
+  }
+
   @Override public void showContextMenuWithMute(final StreamModel stream) {
     if (stream.isFollowing()) {
-      baseContextualMenuWithoutFavorite(stream).addAction(R.string.mute, new Runnable() {
-        @Override public void run() {
-          presenter.onMuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.mute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onMuteClicked(stream);
+            }
+          }).show();
     } else {
-      baseContextualMenuWithFavorite(stream).addAction(R.string.mute, new Runnable() {
-        @Override public void run() {
-          presenter.onMuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.mute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onMuteClicked(stream);
+            }
+          }).show();
     }
   }
 
   @Override public void showContextMenuWithUnmute(final StreamModel stream) {
     if (stream.isFollowing()) {
-      baseContextualMenuWithoutFavorite(stream).addAction(R.string.unmute, new Runnable() {
-        @Override public void run() {
-          presenter.onUnmuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithoutFavorite(stream)).addAction(R.string.unmute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onUnmuteClicked(stream);
+            }
+          }).show();
     } else {
-      baseContextualMenuWithFavorite(stream).addAction(R.string.unmute, new Runnable() {
-        @Override public void run() {
-          presenter.onUnmuteClicked(stream);
-        }
-      }).show();
+      showWithHideMenu(stream, baseContextualMenuWithFavorite(stream)).addAction(R.string.unmute,
+          new Runnable() {
+            @Override public void run() {
+              presenter.onUnmuteClicked(stream);
+            }
+          }).show();
     }
   }
 
@@ -388,5 +413,14 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     builder.setUser(sessionRepository.getCurrentUser());
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendHideStreamAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setAction(analyticsActionHideStream);
+    builder.setActionId(analyticsActionHideStream);
+    builder.setLabelId(analyticsLabelHideStream);
+    analyticsTool.analyticsSendActionOnlyGoogleAnalythics(builder);
   }
 }

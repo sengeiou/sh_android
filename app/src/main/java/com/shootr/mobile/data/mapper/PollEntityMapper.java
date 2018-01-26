@@ -27,7 +27,8 @@ public class PollEntityMapper {
       poll.setVoteStatus(pollEntity.getVoteStatus());
       poll.setVotePrivacy(pollEntity.getVotePrivacy());
       poll.setExpirationDate(pollEntity.getExpirationDate());
-      poll.setVerifiedPoll(pollEntity.getVerifiedPoll() != null ? pollEntity.getVerifiedPoll() : false);
+      poll.setVerifiedPoll(
+          pollEntity.getVerifiedPoll() != null ? pollEntity.getVerifiedPoll() : false);
       poll.setHideResults(pollEntity.isHideResults());
       poll.setCanVote(pollEntity.canVote());
       poll.setDailyPoll(pollEntity.isDailyPoll());
@@ -57,7 +58,12 @@ public class PollEntityMapper {
   public List<Poll> transform(List<PollEntity> polls) {
     List<Poll> businessObjects = new ArrayList<>(polls.size());
     for (PollEntity poll : polls) {
-      businessObjects.add(transform(poll));
+      if (poll.getPollOptions().size() > 0) {
+        Poll pollTransformed = transform(poll);
+        if (pollTransformed.getPollOptions().size() > 0) {
+          businessObjects.add(pollTransformed);
+        }
+      }
     }
     return businessObjects;
   }

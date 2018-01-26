@@ -43,6 +43,8 @@ public interface StreamDataSource extends SyncableDataSource<FollowEntity> {
 
   void unmute(String idStream);
 
+  void hide(String idStream);
+
   void follow(String idStream);
 
   void unfollow(String idStream);

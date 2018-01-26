@@ -134,13 +134,6 @@ public class StreamDetailPresenterTest {
         any(Interactor.Callback.class), any(Interactor.ErrorCallback.class));
   }
 
-  @Test public void shouldGoToStreamDetailOnToolbarClicked() throws Exception {
-    presenter.setStreamModel(streamModel());
-    presenter.dataInfoClicked();
-
-    verify(streamDetailView).goToStreamDataInfo(any(StreamModel.class));
-  }
-
   @Test public void shouldGoToContributorsActivityAsHolderOncontributorsClicked() throws Exception {
     when(sessionRepository.getCurrentUserId()).thenReturn(STREAM_AUTHOR_ID);
     setupStreamInfoCallback();

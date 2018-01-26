@@ -24,6 +24,7 @@ import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.ShootrEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
+import com.shootr.mobile.domain.model.QueueElement;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -83,10 +84,15 @@ import com.shootr.mobile.util.Version;
 import com.shootr.mobile.util.WritePermissionManager;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
+import com.vincentbrison.openlibraries.android.dualcache.Builder;
+import com.vincentbrison.openlibraries.android.dualcache.CacheSerializer;
+import com.vincentbrison.openlibraries.android.dualcache.DualCache;
+import com.vincentbrison.openlibraries.android.dualcache.JsonSerializer;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import timber.log.Timber;
@@ -140,10 +146,15 @@ import static android.content.Context.MODE_PRIVATE;
     library = true) public class DataModule {
 
   static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
+  static final int LANDING_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5MB
+  static final int QUEUE_DISK_CACHE_SIZE = 1024 * 1024; // 1MB
   private static final long TIMEOUT_SECONDS = 30;
   private static final long TIMEOUT_CONNECT_SECONDS = 15;
   private static final int LRU_CACHE_SIZE = 100;
   private static final int ADS_COUNT = 8;
+  private static final String LANDING_STREAM = "landing_streams";
+  private static final String LAST_VISIT = "last_visit";
+  private static final String QUEUE_EVENT = "queue_event";
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -300,7 +311,34 @@ import static android.content.Context.MODE_PRIVATE;
     return new LruCache(LRU_CACHE_SIZE);
   }
 
-  @Provides @Singleton LruCache<String, LandingStreams> provideLandingStreamsLruCache() {
-    return new LruCache(LRU_CACHE_SIZE);
+  @Provides @Singleton DualCache<LandingStreams> provideLandingStreamsLruCache(
+      Application application) {
+    CacheSerializer<LandingStreams> jsonSerializer = new JsonSerializer<>(LandingStreams.class);
+
+    return new Builder<LandingStreams>(LANDING_STREAM, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(LANDING_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<Long> provideLastStreamVisitCache(
+      Application application) {
+    CacheSerializer<Long> jsonSerializer = new JsonSerializer<>(Long.class);
+
+    return new Builder<Long>(LAST_VISIT, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(LANDING_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<List<QueueElement>> provideQueueElementCache(
+      Application application) {
+    CacheSerializer<List<QueueElement>> jsonSerializer =
+        new JsonSerializer<>((Class<List<QueueElement>>) (Object) List.class);
+
+    return new Builder<List<QueueElement>>(QUEUE_EVENT, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(QUEUE_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
   }
 }

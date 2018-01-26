@@ -148,7 +148,6 @@ public class DatabaseContract {
     public static final String ID_FOLLOWED_ENTITY = "idFollowedEntity";
     public static final String IS_FOLLOWING = "isFollowing";
 
-
     public static final String[] PROJECTION = {
         ID_FOLLOWED_ENTITY, IS_FOLLOWING, TYPE
     };
@@ -212,9 +211,6 @@ public class DatabaseContract {
     public static final String REMOVED = "removed";
     public static final String TOTAL_FOLLOWERS = "totalFollowers";
     public static final String TOTAL_WATCHERS = "totalWatchers";
-    public static final String HISTORIC_WATCHERS = "historicWatchers";
-    public static final String TOTAL_SHOTS = "totalShots";
-    public static final String UNIQUE_SHOTS = "uniqueShots";
     public static final String TOPIC = "topic";
     public static final String READ_WRITE_MODE = "readWriteMode";
     public static final String VERIFIED_USER = "verifiedUser";
@@ -225,13 +221,14 @@ public class DatabaseContract {
     public static final String MUTED = "muted";
     public static final String FOLLOWING = "following";
     public static final String VIEWS = "views";
+    public static final String LAST_TIME_SHOOTED = "lastTimeShooted";
 
     public static final String[] PROJECTION = {
         ID_STREAM, ID_USER, ID_USER_STREAM, USERNAME, TITLE, MEDIA_COUNT, PHOTO, LANDSCAPE_PHOTO,
         DESCRIPTION, TOPIC, BIRTH, MODIFIED, LAST_UPDATED_USER, COUNTRY, TOTAL_FOLLOWERS,
-        TOTAL_WATCHERS, HISTORIC_WATCHERS, TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE,
-        VERIFIED_USER, CONTRIBUTORS_COUNT, I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC,
-        FOLLOWING, VIEWS, MUTED, REMOVED, DELETED, REVISION, SYNCHRONIZED
+        TOTAL_WATCHERS, READ_WRITE_MODE, VERIFIED_USER, CONTRIBUTORS_COUNT, I_AM_CONTRIBUTOR,
+        TOTAL_FOLLOWING_WATCHERS, STRATEGIC, FOLLOWING, VIEWS, MUTED, LAST_TIME_SHOOTED, REMOVED,
+        DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -243,10 +240,9 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         WATCHERS, COUNTRY, ID_STREAM, ID_USER, USERNAME, TITLE, PHOTO, LANDSCAPE_PHOTO, DESCRIPTION,
-        TOPIC, REMOVED, MEDIA_COUNT, TOTAL_FOLLOWERS, TOTAL_WATCHERS, HISTORIC_WATCHERS,
-        TOTAL_SHOTS, UNIQUE_SHOTS, READ_WRITE_MODE, VERIFIED_USER, CONTRIBUTORS_COUNT,
-        I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC, MUTED, FOLLOWING, VIEWS, BIRTH, MODIFIED,
-        DELETED, REVISION, SYNCHRONIZED
+        TOPIC, REMOVED, MEDIA_COUNT, TOTAL_FOLLOWERS, TOTAL_WATCHERS, READ_WRITE_MODE,
+        VERIFIED_USER, CONTRIBUTORS_COUNT, I_AM_CONTRIBUTOR, TOTAL_FOLLOWING_WATCHERS, STRATEGIC,
+        MUTED, LAST_TIME_SHOOTED, FOLLOWING, VIEWS, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -415,8 +411,8 @@ public class DatabaseContract {
     public static final String DAILY_POLL = "dailyPoll";
 
     public static final String[] PROJECTION = {
-        ID_POLL, ID_STREAM, ID_USER, QUESTION, STATUS, VOTE_STATUS, VOTE_PRIVACY,
-        PUBLISHED, EXPIRATION_DATE, VERIFIED_POLL, HIDE_RESULTS, CAN_VOTE, DAILY_POLL
+        ID_POLL, ID_STREAM, ID_USER, QUESTION, STATUS, VOTE_STATUS, VOTE_PRIVACY, PUBLISHED,
+        EXPIRATION_DATE, VERIFIED_POLL, HIDE_RESULTS, CAN_VOTE, DAILY_POLL
     };
   }
 
@@ -583,5 +579,4 @@ public class DatabaseContract {
         ID_STREAM, CONNECTION_TIMES
     };
   }
-
 }

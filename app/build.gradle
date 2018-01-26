@@ -37,12 +37,12 @@ def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim
 def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).text.trim()
 
 def versionMajor = 1
-def versionMinor = 52
+def versionMinor = 53
 def versionRevision = 0
 
 def isSnapshot = false
 def isPreProduction = false
-def databaseVersion = 65
+def databaseVersion = 66
 
 def preDexEnabled = "true".equals(System.getProperty("pre-dex", "true"))
 
@@ -272,6 +272,10 @@ dependencies {
   compile ('com.facebook.android:audience-network-sdk:4.+') {
     exclude group:"com.google.android.gms"
   }
+
+  compile 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
+  compile 'com.vincentbrison.openlibraries.android:dualcache-jsonserializer:3.1.1'
+
 }
 
 /**

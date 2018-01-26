@@ -256,6 +256,7 @@
   <string name="multiple_activities_action">VEURE</string>
   <string name="multiple_activity_notification">%d notificacions noves</string>
   <string name="mute">Silenciar notificacions</string>
+  <string name="hide_stream">Ocultar</string>
   <string name="new_activity_notification">Nova activitat</string>
   <!-- It's the title of the settings that mean receive push on have a new one -->
   <string name="new_followers_push_settings">Nous seguidors</string>
@@ -478,7 +479,6 @@
   <string name="stream_detail_edit_menu_title">Editar</string>
   <string name="stream_detail_following">Seguint %s</string>
   <string name="stream_detail_media">Arxius</string>
-  <string name="stream_detail_menu_data_info">Nombres</string>
   <string name="stream_detail_mute">Silenciar</string>
   <plurals name="stream_detail_participants">
     <item quantity="one">%s connectat</item>
@@ -552,9 +552,9 @@
   <string name="user_not_found_message">Usuari no trobat.</string>
   <string name="user_unblocked">Desbloquejat</string>
   <plurals name="view_count_pattern">
-    <item quantity="one">%s visualització</item>
-    <item quantity="other">%s visualitzacions</item>
-    <item quantity="zero">%s visualitzacions</item>
+    <item quantity="one">%s visita</item>
+    <item quantity="other">%s visites</item>
+    <item quantity="zero">%s visites</item>
   </plurals>
   <string name="voted_in_a_poll">ha votat a</string>
   <string name="voted_poll">" ha votat a (question)"</string>
