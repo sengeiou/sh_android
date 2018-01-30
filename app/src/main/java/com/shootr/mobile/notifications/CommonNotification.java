@@ -38,6 +38,7 @@ public abstract class CommonNotification {
         builder.setAutoCancel(true);
         builder.setTicker(getTickerText());
         builder.setColor(primaryColor);
+        builder.setPriority(Notification.PRIORITY_HIGH);
         builder.setCategory(NotificationCompat.CATEGORY_SOCIAL);
         builder.setLights(primaryColor, 1000, 3000);
         Bitmap largeIcon = getLargeIcon();

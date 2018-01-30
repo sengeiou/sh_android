@@ -1,5 +1,6 @@
 package com.shootr.mobile.notifications.activity;
 
+import android.app.Notification;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -26,7 +27,7 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
     private final ImageLoader imageLoader;
 
     public MultipleActivityNotification(Context context, ImageLoader imageLoader,
-      NotificationBuilderFactory builderFactory, List<SingleActivityNotification> individualNotifications) {
+        NotificationBuilderFactory builderFactory, List<SingleActivityNotification> individualNotifications) {
         super(context, builderFactory);
         this.imageLoader = imageLoader;
         this.individualNotifications = individualNotifications;
@@ -37,25 +38,17 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
         super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentTitle(getTitle());
         builder.setContentText(getCollapsedContent());
-        builder.setStyle(getInboxStyleFromActivities());
+        builder.setStyle(getMessageStyleFromActivities());
+        builder.setPriority(Notification.PRIORITY_HIGH);
         builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     }
 
-    private NotificationCompat.Style getInboxStyleFromActivities() {
-        NotificationCompat.InboxStyle inbox = new NotificationCompat.InboxStyle();
+    private NotificationCompat.Style getMessageStyleFromActivities() {
+        NotificationCompat.MessagingStyle inbox = new NotificationCompat.MessagingStyle("me");
         for (SingleActivityNotification notification : individualNotifications) {
-            Spannable styledLine =
-              getSpannableLineFromTitleAndText(notification.getTitle(), notification.getContentText());
-            inbox.addLine(styledLine);
+            inbox.addMessage(notification.getContentText(), 0, notification.getTitle());
         }
         return inbox;
-    }
-
-    private Spannable getSpannableLineFromTitleAndText(String title, String contentText) {
-        Spannable styledLine = new SpannableString(String.format("%s %s", title, contentText));
-        int nameEndIndex = title.length();
-        styledLine.setSpan(new StyleSpan(Typeface.BOLD), 0, nameEndIndex, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return styledLine;
     }
 
     private CharSequence getCollapsedContent() {
@@ -96,7 +89,7 @@ public class MultipleActivityNotification extends AbstractActivityNotification {
         while (notificationsIterator.hasNext()) {
             String nextIcon = notificationsIterator.next().getNotificationValues().getIcon();
             boolean areIconsDifferent =
-              (firstIcon != null && !firstIcon.equals(nextIcon)) || firstIcon == null && nextIcon != null;
+                (firstIcon != null && !firstIcon.equals(nextIcon)) || firstIcon == null && nextIcon != null;
             if (areIconsDifferent) {
                 hasMoreThanOneIcon = true;
             }
