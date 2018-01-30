@@ -73,9 +73,6 @@ public class GCMIntentService extends IntentService {
 
       switch (push.getParameters().getPushType()) {
         case PushNotification.Parameters.PUSH_TYPE_SHOT:
-          if (appIsRunning()) {
-            break;
-          }
           receivedShot(push);
           break;
         case PushNotification.Parameters.PUSH_TYPE_ACTIVITY:
@@ -116,10 +113,11 @@ public class GCMIntentService extends IntentService {
   }
 
   private void receivedStream(PushNotification pushNotification) throws JSONException, IOException {
-    setupGoToStreamTimelineNotification(pushNotification);
+    setupGoToStreamTimelineNotification(pushNotification, "PUSH_TYPE_STREAM");
   }
 
-  private void receivedPrivateMessage(PushNotification pushNotification) throws JSONException, IOException {
+  private void receivedPrivateMessage(PushNotification pushNotification)
+      throws JSONException, IOException {
     setupGoToPrivateMessageNotification(pushNotification);
   }
 
@@ -163,14 +161,14 @@ public class GCMIntentService extends IntentService {
       case ActivityType.SHARE_STREAM:
       case ActivityType.OPENED_STREAM:
       case ActivityType.WAKE_UP_SHOT:
-        setupGoToStreamTimelineNotification(push);
+        setupGoToStreamTimelineNotification(push, activityType);
         break;
       case ActivityType.NICE_SHOT:
       case ActivityType.SHARE_SHOT:
       case ActivityType.MENTION:
       case ActivityType.REPLY_SHOT:
       case ActivityType.STARTED_SHOOTING:
-        setupGoToShotDetailNotification(push);
+        setupGoToShotDetailNotification(push, activityType);
         break;
       case ActivityType.POLL_PUBLISHED:
       case ActivityType.VOTED_IN_POLL:
@@ -201,14 +199,15 @@ public class GCMIntentService extends IntentService {
         checkNotNull(idTargetUser), push.getNotificationValues().getContentText());
   }
 
-  private void setupGoToStreamTimelineNotification(PushNotification push) {
+  private void setupGoToStreamTimelineNotification(PushNotification push, String activityType) {
     String idStream = push.getParameters().getIdStream();
     String title = push.getParameters().getTitle();
     String idStreamHolder = push.getParameters().getIdStreamHolder();
     String readWriteMode = push.getParameters().getStreamReadWriteMode();
     activityNotificationManager.sendOpenStreamNotification(push.getNotificationValues(),
         checkNotNull(idStream), checkNotNull(idStreamHolder), checkNotNull(title),
-        checkNotNull(readWriteMode), !isStreamPushTypeKnown(push));
+        checkNotNull(readWriteMode), !isStreamPushTypeKnown(push),
+        isInAppNotification(activityType));
   }
 
   private boolean isStreamPushTypeKnown(PushNotification pushNotification) {
@@ -217,11 +216,35 @@ public class GCMIntentService extends IntentService {
     return streamTypes.contains(streamType);
   }
 
-  private void setupGoToShotDetailNotification(PushNotification push) {
+  private void setupGoToShotDetailNotification(PushNotification push, String activityType) {
     String idShot = push.getParameters().getIdShot();
     boolean shouldUpdate = !areShotPushTypesKnown(push);
     activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(),
-        buildShotFromParameters(push), checkNotNull(idShot), shouldUpdate);
+        buildShotFromParameters(push), checkNotNull(idShot), shouldUpdate,
+        isInAppNotification(activityType));
+  }
+
+  private Boolean isInAppNotification(String activityType) {
+    switch (activityType) {
+      case ActivityType.START_FOLLOW:
+      case ActivityType.STREAM_FAVORITED:
+      case ActivityType.NICE_SHOT:
+      case ActivityType.MENTION:
+      case ActivityType.REPLY_SHOT:
+        return true;
+      case ActivityType.CHECKIN:
+      case ActivityType.SHARE_STREAM:
+      case ActivityType.OPENED_STREAM:
+      case ActivityType.WAKE_UP_SHOT:
+      case ActivityType.SHARE_SHOT:
+      case ActivityType.STARTED_SHOOTING:
+      case ActivityType.POLL_PUBLISHED:
+      case ActivityType.VOTED_IN_POLL:
+      case ActivityType.FINISHED_POLL:
+        return false;
+      default:
+        return false;
+    }
   }
 
   private void receivedUnknown(PushNotification pushNotification) {
