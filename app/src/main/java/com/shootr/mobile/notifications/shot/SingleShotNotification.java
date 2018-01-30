@@ -1,5 +1,6 @@
 package com.shootr.mobile.notifications.shot;
 
+import android.app.Notification;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.NotificationCompat;
@@ -13,16 +14,19 @@ import timber.log.Timber;
 public class SingleShotNotification extends AbstractSingleShotNotification {
 
     private final Boolean areShotTypesKnown;
+    private final Boolean isInApp;
     private ShotNotification shot;
     private ImageLoader imageLoader;
     private Bitmap largeIcon;
 
+
     public SingleShotNotification(Context context, NotificationBuilderFactory builderFactory,
-        ImageLoader imageLoader, ShotNotification shot, Boolean areShotTypesKnown) {
+        ImageLoader imageLoader, ShotNotification shot, Boolean areShotTypesKnown, Boolean isInApp) {
         super(context, builderFactory, shot);
         this.shot = shot;
         this.imageLoader = imageLoader;
         this.areShotTypesKnown = areShotTypesKnown;
+        this.isInApp = isInApp;
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder,
@@ -35,6 +39,9 @@ public class SingleShotNotification extends AbstractSingleShotNotification {
             builder.setStyle(new NotificationCompat.BigTextStyle().bigText(getContent()));
         } else {
             builder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(getImageBitmap()));
+        }
+        if (isInApp) {
+            builder.setPriority(Notification.PRIORITY_HIGH);
         }
     }
 

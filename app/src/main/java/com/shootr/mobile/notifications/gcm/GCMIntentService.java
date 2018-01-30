@@ -124,7 +124,7 @@ public class GCMIntentService extends IntentService {
   private void receivedShot(PushNotification pushNotification) throws JSONException, IOException {
     boolean areShotTypesKnown = areShotPushTypesKnown(pushNotification);
     ShotNotification shot = buildShotFromParameters(pushNotification);
-    setupShotNotification(shot, areShotTypesKnown);
+    setupShotNotification(shot, areShotTypesKnown, pushNotification.getParameters().getShotType());
   }
 
   @NonNull private ShotNotification buildShotFromParameters(PushNotification pushNotification) {
@@ -138,8 +138,10 @@ public class GCMIntentService extends IntentService {
     return shot;
   }
 
-  private void setupShotNotification(ShotNotification shot, boolean areShotTypesKnown) {
-    shotNotificationManager.sendNewShotNotification(shot, areShotTypesKnown);
+  private void setupShotNotification(ShotNotification shot, boolean areShotTypesKnown,
+      String shotType) {
+    shotNotificationManager.sendNewShotNotification(shot, areShotTypesKnown,
+        isInAppNotification(shotType));
   }
 
   private boolean areShotPushTypesKnown(PushNotification pushNotification) {
@@ -231,6 +233,7 @@ public class GCMIntentService extends IntentService {
       case ActivityType.NICE_SHOT:
       case ActivityType.MENTION:
       case ActivityType.REPLY_SHOT:
+      case ShotType.COMMENT:
         return true;
       case ActivityType.CHECKIN:
       case ActivityType.SHARE_STREAM:
