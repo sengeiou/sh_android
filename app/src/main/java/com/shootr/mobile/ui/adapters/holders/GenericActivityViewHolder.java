@@ -59,7 +59,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     renderTitle(activity);
     renderText(activity);
     renderAvatar(activity);
-    rendetTargetAvatar(activity);
+    renderTargetAvatar(activity);
     renderImage(activity);
   }
 
@@ -77,7 +77,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  protected void rendetTargetAvatar(final ActivityModel activity) {
+  protected void renderTargetAvatar(final ActivityModel activity) {
     if (activity.getTargetName() != null) {
       imageLoader.loadProfilePhoto(activity.getTargetUserPhoto(), targetAvatar,
           activity.getTargetName());

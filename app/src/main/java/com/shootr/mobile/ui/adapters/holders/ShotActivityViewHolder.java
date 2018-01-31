@@ -76,7 +76,7 @@ public abstract class ShotActivityViewHolder extends GenericActivityViewHolder {
     });
   }
 
-  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+  @Override protected void renderTargetAvatar(ActivityModel activity) {
     targetAvatar.setVisibility(View.GONE);
   }
 

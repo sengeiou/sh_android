@@ -96,7 +96,7 @@ public class PollSharedViewHolder extends GenericActivityViewHolder {
         .build();
   }
 
-  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+  @Override protected void renderTargetAvatar(ActivityModel activity) {
     /* no-op */
   }
 

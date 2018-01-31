@@ -37,7 +37,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
     text.setVisibility(View.GONE);
   }
 
-  @Override protected void rendetTargetAvatar(final ActivityModel activity) {
+  @Override protected void renderTargetAvatar(final ActivityModel activity) {
     if (activity.getStreamTitle() != null) {
       imageLoader.loadProfilePhoto(activity.getStreamPhoto(), targetAvatar,
           activity.getStreamTitle());
