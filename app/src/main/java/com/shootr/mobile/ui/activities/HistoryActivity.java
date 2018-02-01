@@ -1,7 +1,5 @@
 package com.shootr.mobile.ui.activities;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -14,13 +12,11 @@ import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
-import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -59,7 +55,6 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
 
   private ActivityTimelineAdapter adapter;
   private LinearLayoutManager layoutManager;
-  private Unbinder unbinder;
   @Inject FeedbackMessage feedbackMessage;
 
   public static HistoryActivity newInstance() {
@@ -154,54 +149,18 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
       @Override public void onPollQuestionClick(String idPoll, String streamTitle) {
         openPollVote(idPoll, streamTitle);
       }
-    }, new ActivityFollowUnfollowListener() {
-      @Override public void onFollow(String idUser, String username, Boolean isStrategic) {
-        timelinePresenter.followUser(idUser);
-        sendFollowAnalytics(idUser, username, isStrategic);
-      }
-
-      @Override public void onUnfollow(String idUser, String username) {
-        setupUnFollowDialog(idUser, username);
-      }
     }, new ActivityFavoriteClickListener() {
       @Override
       public void onFavoriteClick(String idStream, String streamTitle, boolean isStrategic) {
         sendFavoriteAnalytics(idStream, streamTitle, isStrategic);
+        timelinePresenter.followStream(idStream);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
-        /* no-op */
+        timelinePresenter.unFollowStream(idStream);
       }
     });
     activityList.setAdapter(adapter);
-  }
-
-  private void setupUnFollowDialog(final String idUser, String username) {
-    new AlertDialog.Builder(this).setMessage(
-        String.format(getString(R.string.unfollow_dialog_message), username))
-        .setPositiveButton(getString(R.string.unfollow_dialog_yes),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                /* no-op */
-              }
-            })
-        .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
-        .create()
-        .show();
-  }
-
-  private void sendFollowAnalytics(String idTargetUser, String targetUsername,
-      Boolean isStrategic) {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(this);
-    builder.setActionId(analyticsActionFollow);
-    builder.setSource(activitySource);
-    builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(idTargetUser);
-    builder.setTargetUsername(targetUsername);
-    builder.setIsStrategic(isStrategic);
-    analyticsTool.analyticsSendAction(builder);
-    analyticsTool.appsFlyerSendAction(builder);
   }
 
   private void sendFavoriteAnalytics(String idStream, String streamTitle, boolean isStrategic) {
