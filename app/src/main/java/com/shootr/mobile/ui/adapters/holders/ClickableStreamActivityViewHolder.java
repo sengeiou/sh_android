@@ -7,10 +7,13 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
+import butterknife.BindView;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.ui.widgets.StreamTitleBoldSpan;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -20,6 +23,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
 
   private final OnStreamTitleClickListener onStreamTitleClickListener;
   private final AndroidTimeUtils androidTimeUtils;
+  @BindView(R.id.follow_button) FollowButton followButton;
   @BindColor(R.color.gray_60) int gray_60;
 
 
@@ -42,6 +46,12 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
       imageLoader.loadProfilePhoto(activity.getStreamPhoto(), targetAvatar,
           activity.getStreamTitle());
       targetAvatar.setVisibility(View.VISIBLE);
+      if(!activity.getType().equals(ActivityType.CHECKIN)) {
+        if(!activity.isFavorite()) {
+          followButton.setVisibility(View.VISIBLE);
+          followButton.setFollowing(false);
+        }
+      }
       targetAvatar.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           onStreamTitleClickListener.onStreamTitleClick(activity.getIdStream(),

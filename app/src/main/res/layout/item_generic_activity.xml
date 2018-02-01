@@ -66,7 +66,7 @@
         />
 
       <LinearLayout
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal"
           android:visibility="visible"
@@ -76,20 +76,20 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:visibility="gone"
         tools:background="@color/refresh_1"
         tools:visibility="visible"
         />
-        <com.shootr.mobile.ui.widgets.FollowButton
+
+      <com.shootr.mobile.ui.widgets.FollowButton
             android:id="@+id/follow_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_vertical"
             android:layout_marginTop="4dp"
             android:layout_marginRight="4dp"
-            android:visibility="visible"
+            android:visibility="gone"
             tools:visibility="visible"/>
     </LinearLayout>
 
