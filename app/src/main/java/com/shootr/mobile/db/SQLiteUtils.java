@@ -466,6 +466,8 @@ public class SQLiteUtils {
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.IS_VERIFIED
       + " INT NULL,"
+      + DatabaseContract.ActivityTable.IS_FOLLOWING
+      + " INT NULL,"
       + DatabaseContract.ActivityTable.NAME
       + " TEXT NULL,"
       + DatabaseContract.ActivityTable.TARGET_NAME
@@ -519,6 +521,8 @@ public class SQLiteUtils {
         + DatabaseContract.MeActivityTable.POLL_OPTION_TEXT
         + " TEXT NULL,"
         + DatabaseContract.MeActivityTable.IS_VERIFIED
+        + " INT NULL,"
+        + DatabaseContract.MeActivityTable.IS_FOLLOWING
         + " INT NULL,"
         + DatabaseContract.MeActivityTable.NAME
         + " TEXT NULL,"

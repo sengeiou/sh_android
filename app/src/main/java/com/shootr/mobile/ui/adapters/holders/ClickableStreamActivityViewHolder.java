@@ -48,19 +48,19 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
     if (!activity.getType().equals(ActivityType.CHECKIN)) {
       followButton.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View view) {
-          if (activity.isFavorite()) {
+          if (activity.isFollowing()) {
             activityFavoriteClickListener.onRemoveFavoriteClick(activity.getIdStream());
-            activity.setFavorite(false);
+            activity.setFollowing(false);
             followButton.setFollowing(false);
           } else {
             activityFavoriteClickListener.onFavoriteClick(activity.getIdStream(),
                 activity.getStreamTitle(), activity.isStrategic());
-            activity.setFavorite(true);
+            activity.setFollowing(true);
             followButton.setFollowing(true);
           }
         }
       });
-      if (!activity.isFavorite()) {
+      if (!activity.isFollowing()) {
         followButton.setVisibility(View.VISIBLE);
         followButton.setFollowing(false);
       }

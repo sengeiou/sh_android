@@ -35,6 +35,7 @@ public class ActivityModelMapper extends Mapper<Activity, ActivityModel> {
             activityModel.setStreamTitle(streamInfo.getStreamTitle());
             activityModel.setStrategic(streamInfo.isStrategic());
             activityModel.setVerified(streamInfo.isVerified());
+            activityModel.setFollowing(streamInfo.isFollowing());
             activityModel.setStreamPhoto(activity.getStreamPhoto());
         }
 

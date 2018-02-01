@@ -105,4 +105,14 @@ public class MeActivityManager extends AbstractManager {
     }
     c.close();
   }
+
+  public void updateFollowOnStreamActivities(boolean isFollow, String idStream)
+  {
+    String whereClause = DatabaseContract.MeActivityTable.ID_STREAM + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.MeActivityTable.IS_FOLLOWING, isFollow ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.MeActivityTable.TABLE, values, whereClause,
+        whereArguments);
+  }
 }
