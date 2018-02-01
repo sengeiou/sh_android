@@ -30,7 +30,7 @@ public class FollowStreamInteractor implements Interactor {
   @Inject public FollowStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
       ExternalStreamRepository remoteStreamRepository, BusPublisher busPublisher,
-      ActivityRepository localActivityRepository) {
+      @Local ActivityRepository localActivityRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;
