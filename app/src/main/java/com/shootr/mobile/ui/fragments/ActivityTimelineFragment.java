@@ -100,7 +100,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
   private boolean hasNewContent = false;
-  private ViewPropertyAnimator onBoardingAnimator;
   //endregion
 
   public static ActivityTimelineFragment newInstance() {

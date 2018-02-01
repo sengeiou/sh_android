@@ -48,13 +48,11 @@ import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
 import com.shootr.mobile.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.mobile.ui.base.BaseToolbarActivity;
-import com.shootr.mobile.ui.fragments.ActivityTimelineContainerFragment;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
 import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.GenericSearchFragment;
-import com.shootr.mobile.ui.fragments.MeActivityTimelineFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.widgets.MessageBox;
@@ -99,12 +97,10 @@ import javax.inject.Singleton;
     FindParticipantsActivity.class,
     WelcomePageActivity.class,
     ErrorActivity.class,
-    MeActivityTimelineFragment.class,
     NicersActivity.class,
     ContributorsActivity.class,
     FindContributorsActivity.class,
     PollVoteActivity.class, PollResultsActivity.class,
-    ActivityTimelineContainerFragment.class,
     SettingsActivity.class,
     SearchActivity.class,
     FindFriendsFragment.class,

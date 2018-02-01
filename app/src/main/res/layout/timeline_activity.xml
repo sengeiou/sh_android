@@ -16,7 +16,7 @@
           android:paddingBottom="8dp"
           android:paddingTop="8dp"
           android:scrollbars="vertical"
-          tools:listitem="@layout/item_list_activity" />
+          tools:listitem="@layout/item_generic_activity" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
