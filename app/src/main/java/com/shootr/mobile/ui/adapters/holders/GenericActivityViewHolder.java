@@ -23,7 +23,6 @@ import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
-import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
@@ -94,7 +93,9 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  protected void renderFollowButton(ActivityModel activity) {/* no-op */}
+  protected void renderFollowButton(ActivityModel activity) {
+    /* no-op */
+  }
 
   protected void renderText(ActivityModel activity) {
     /* no-op */

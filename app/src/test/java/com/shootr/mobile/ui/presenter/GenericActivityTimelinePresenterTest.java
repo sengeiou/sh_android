@@ -1,12 +1,9 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.prefs.IntPreference;
-import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
-import com.shootr.mobile.domain.interactor.user.FollowInteractor;
-import com.shootr.mobile.domain.interactor.user.UnfollowInteractor;
 import com.shootr.mobile.domain.model.activity.Activity;
 import com.shootr.mobile.domain.model.activity.ActivityTimeline;
 import com.shootr.mobile.domain.model.activity.ActivityType;

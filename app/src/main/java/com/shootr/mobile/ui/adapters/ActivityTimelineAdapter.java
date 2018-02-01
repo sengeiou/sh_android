@@ -24,7 +24,6 @@ import com.shootr.mobile.ui.adapters.holders.StreamCheckInViewHolder;
 import com.shootr.mobile.ui.adapters.holders.StreamFavoritedViewHolder;
 import com.shootr.mobile.ui.adapters.holders.WakeUpShotActivityViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
-import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;

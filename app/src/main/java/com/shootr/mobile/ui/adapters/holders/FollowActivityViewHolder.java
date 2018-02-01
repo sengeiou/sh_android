@@ -8,7 +8,6 @@ import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
