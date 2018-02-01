@@ -13,7 +13,8 @@ public class OpenedViewHolder extends ClickableStreamActivityViewHolder {
     public OpenedViewHolder(View view, ImageLoader imageLoader, AndroidTimeUtils androidTimeUtils,
         OnAvatarClickListener onAvatarClickListener,
         OnStreamTitleClickListener onStreamTitleClickListener) {
-        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
+        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener,
+            onFollowUnfollowListener);
     }
 
     @NonNull protected String getCommentPattern() {

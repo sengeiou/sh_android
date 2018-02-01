@@ -14,7 +14,8 @@ public class SharedStreamViewHolder extends ClickableStreamActivityViewHolder {
         AndroidTimeUtils androidTimeUtils,
         OnAvatarClickListener onAvatarClickListener,
         OnStreamTitleClickListener onStreamTitleClickListener) {
-        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener);
+        super(view, imageLoader, androidTimeUtils, onAvatarClickListener, onStreamTitleClickListener,
+            onFollowUnfollowListener);
     }
 
     @NonNull protected String getCommentPattern() {
