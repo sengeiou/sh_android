@@ -4,7 +4,6 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BusPublisher;
-import com.shootr.mobile.domain.bus.FollowUnfollow;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.stream.FollowStreamInteractor;
@@ -32,14 +31,11 @@ public class GenericActivityTimelinePresenter implements Presenter {
   private final ActivityModelMapper activityModelMapper;
   private final FollowStreamInteractor followStreamInteractor;
   private final UnfollowStreamInteractor unfollowStreamInteractor;
-  private final FollowInteractor followInteractor;
-  private final UnfollowInteractor unfollowInteractor;
   private final Bus bus;
   private final ErrorMessageFactory errorMessageFactory;
   private final Poller poller;
   private final IntPreference badgeCount;
   private final SessionRepository sessionRepository;
-  private final BusPublisher busPublisher;
 
   private GenericActivityTimelineView timelineView;
   private boolean isLoadingOlderActivities;
@@ -47,28 +43,22 @@ public class GenericActivityTimelinePresenter implements Presenter {
   private boolean isEmpty;
   private Boolean isHistoryActivity;
 
-
   @Inject public GenericActivityTimelinePresenter(
       ActivityTimelineInteractorsWrapper activityTimelineInteractorWrapper,
       ActivityModelMapper activityModelMapper, FollowStreamInteractor followStreamInteractor,
-      UnfollowStreamInteractor unfollowStreamInteractor,
-      FollowInteractor followInteractor,
-      UnfollowInteractor unfollowInteractor, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      Poller poller, @ActivityBadgeCount IntPreference badgeCount,
-      SessionRepository sessionRepository, BusPublisher busPublisher) {
+      UnfollowStreamInteractor unfollowStreamInteractor, @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory, Poller poller,
+      @ActivityBadgeCount IntPreference badgeCount, SessionRepository sessionRepository) {
 
     this.activityTimelineInteractorWrapper = activityTimelineInteractorWrapper;
     this.activityModelMapper = activityModelMapper;
     this.followStreamInteractor = followStreamInteractor;
     this.unfollowStreamInteractor = unfollowStreamInteractor;
-    this.followInteractor = followInteractor;
-    this.unfollowInteractor = unfollowInteractor;
     this.bus = bus;
     this.errorMessageFactory = errorMessageFactory;
     this.poller = poller;
     this.badgeCount = badgeCount;
     this.sessionRepository = sessionRepository;
-    this.busPublisher = busPublisher;
   }
 
   public void setView(GenericActivityTimelineView timelineView) {
@@ -234,14 +224,22 @@ public class GenericActivityTimelinePresenter implements Presenter {
     stopPollingActivities();
   }
 
-  public void followUser(final String idUser) {
-    followInteractor.follow(idUser, new Interactor.CompletedCallback() {
+  public void followStream(String idStream) {
+    followStreamInteractor.follow(idStream, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        busPublisher.post(new FollowUnfollow.Event(idUser, true));
+        /* no-op */
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        timelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+        /* no-op */
+      }
+    });
+  }
+
+  public void unFollowStream(String idStream) {
+    unfollowStreamInteractor.unfollow(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
       }
     });
   }

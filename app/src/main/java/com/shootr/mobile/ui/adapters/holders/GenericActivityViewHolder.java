@@ -61,6 +61,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     renderText(activity);
     renderAvatar(activity);
     renderTargetAvatar(activity);
+    renderFollowButton(activity);
     renderImage(activity);
   }
 
@@ -93,6 +94,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
+  protected void renderFollowButton(ActivityModel activity) {/* no-op */}
+
   protected void renderText(ActivityModel activity) {
     /* no-op */
   }
@@ -115,7 +118,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
       SpannableString ss = new SpannableString(streamTitle + "  ");
       d.setBounds(0, 2, d.getIntrinsicWidth(), d.getIntrinsicHeight());
       ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-      ss.setSpan(span, streamTitle.length() + 1, streamTitle.length() + 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+      ss.setSpan(span, streamTitle.length() + 1, streamTitle.length() + 2,
+          Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
       return ss;
     } else {
       return new SpannableString(streamTitle);

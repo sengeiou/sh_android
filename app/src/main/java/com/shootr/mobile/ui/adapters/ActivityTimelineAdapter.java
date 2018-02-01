@@ -70,7 +70,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
   private final PollQuestionSpannableBuilder pollQuestionSpannableBuilder;
   private final PollVotedSpannableBuilder pollVotedSpannableBuilder;
   private final OnPollQuestionClickListener onPollQuestionClickListener;
-  private final ActivityFollowUnfollowListener followUnfollowListener;
   private final ActivityFavoriteClickListener activityFavoriteClickListener;
 
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
@@ -82,7 +81,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
       OnAvatarClickListener avatarClickListener, OnUsernameClickListener onUsernameClickListener,
       OnStreamTitleClickListener streamTitleClickListener, OnShotClick onShotClick,
       OnPollQuestionClickListener onPollQuestionClickListener,
-      ActivityFollowUnfollowListener followUnfollowListener,
       ActivityFavoriteClickListener activityFavoriteClickListener) {
     this.imageLoader = imageLoader;
     this.avatarClickListener = avatarClickListener;
@@ -91,7 +89,6 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     this.streamTitleClickListener = streamTitleClickListener;
     this.onShotClick = onShotClick;
     this.onPollQuestionClickListener = onPollQuestionClickListener;
-    this.followUnfollowListener = followUnfollowListener;
     this.activityFavoriteClickListener = activityFavoriteClickListener;
     this.pollQuestionSpannableBuilder = new PollQuestionSpannableBuilder();
     this.pollVotedSpannableBuilder = new PollVotedSpannableBuilder();
@@ -202,7 +199,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private OpenedViewHolder onCreateOpenedViewHolder(ViewGroup parent) {
     return new OpenedViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, streamTitleClickListener);
+        avatarClickListener, streamTitleClickListener, activityFavoriteClickListener);
   }
 
   private WakeUpShotActivityViewHolder onCreateWakeUpViewHolder(ViewGroup parent) {
@@ -212,17 +209,17 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
 
   private StreamFavoritedViewHolder onCreateStreamFavoritedViewHolder(ViewGroup parent) {
     return new StreamFavoritedViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, streamTitleClickListener);
+        avatarClickListener, streamTitleClickListener, activityFavoriteClickListener);
   }
 
   private StreamCheckInViewHolder onCreateStreamCheckInViewHolder(ViewGroup parent) {
     return new StreamCheckInViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, streamTitleClickListener);
+        avatarClickListener, streamTitleClickListener, activityFavoriteClickListener);
   }
 
   private SharedStreamViewHolder onCreateSharedStreamViewHolder(ViewGroup parent) {
     return new SharedStreamViewHolder(createActivityView(parent), imageLoader, timeUtils,
-        avatarClickListener, streamTitleClickListener);
+        avatarClickListener, streamTitleClickListener, activityFavoriteClickListener);
   }
 
   private StartedShootingViewHolder onCreateStartedShootingViewHolder(ViewGroup parent) {
@@ -260,7 +257,7 @@ public class ActivityTimelineAdapter extends RecyclerView.Adapter<RecyclerView.V
     View view = createActivityView(parent);
     FollowActivityViewHolder viewHolder =
         new FollowActivityViewHolder(view, imageLoader, timeUtils, shotTextSpannableBuilder,
-            avatarClickListener, onUsernameClickListener, followUnfollowListener);
+            avatarClickListener, onUsernameClickListener);
     viewHolder.setCurrentUserId(currentUserId);
     return viewHolder;
   }
