@@ -45,6 +45,14 @@ public class LocalActivityRepository implements ActivityRepository {
     localActivityDataSource.deleteActivitiesWithShot(idShot);
   }
 
+  @Override public void updateFollowStreamOnActivity(String idStream) {
+    localActivityDataSource.updateFollowStreamOnActivity(idStream);
+  }
+
+  @Override public void updateUnFollowStreamOnActivity(String idStream) {
+    localActivityDataSource.updateUnFollowStreamOnActivity(idStream);
+  }
+
   private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activities,
       ActivityTimelineParameters parameters) {
     List<ActivityEntity> activityEntities = new ArrayList<>();

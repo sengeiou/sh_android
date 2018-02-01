@@ -13,4 +13,8 @@ public interface ActivityDataSource {
     void putActivities(ActivityTimelineParameters parameters, List<ActivityEntity> activityEntities);
 
     void deleteActivitiesWithShot(String idShot);
+
+    void updateFollowStreamOnActivity(String idStream);
+
+    void updateUnFollowStreamOnActivity(String idStream);
 }
