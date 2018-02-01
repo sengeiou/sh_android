@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.BaseMessageTextView;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Truss;
@@ -36,6 +37,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
 
   @BindView(R.id.activity_avatar) AvatarView avatar;
   @BindView(R.id.activity_target_avatar) AvatarView targetAvatar;
+  @BindView(R.id.follow_button) FollowButton followButton;
   @BindView(R.id.activity_text) BaseMessageTextView text;
   @BindView(R.id.activity_title) TextView title;
   @BindView(R.id.shot_image) ImageView image;
@@ -82,6 +84,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
       imageLoader.loadProfilePhoto(activity.getTargetUserPhoto(), targetAvatar,
           activity.getTargetName());
       targetAvatar.setVisibility(View.VISIBLE);
+      followButton.setVisibility(View.VISIBLE);
       targetAvatar.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           onAvatarClickListener.onAvatarClick(activity.getIdTargetUser(), targetAvatar);
