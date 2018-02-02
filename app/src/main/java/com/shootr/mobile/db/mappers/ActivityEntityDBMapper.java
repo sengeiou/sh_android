@@ -28,6 +28,8 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         activity.setPollQuestion(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.POLL_QUESTION)));
         activity.setPollOptionText(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.POLL_OPTION_TEXT)));
         activity.setVerified(c.getInt(c.getColumnIndex(DatabaseContract.ActivityTable.IS_VERIFIED)) == 1);
+        activity.setFollowing(
+            c.getInt(c.getColumnIndex(DatabaseContract.ActivityTable.IS_FOLLOWING)) == 1);
         activity.setName(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.NAME)));
         activity.setTargetName(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.TARGET_NAME)));
         activity.setStreamPhoto(c.getString(c.getColumnIndex(DatabaseContract.ActivityTable.STREAM_PHOTO)));
@@ -54,6 +56,7 @@ public class ActivityEntityDBMapper extends GenericDBMapper {
         cv.put(DatabaseContract.ActivityTable.ID_POLL, activity.getIdPoll());
         cv.put(DatabaseContract.ActivityTable.POLL_OPTION_TEXT, activity.getPollOptionText());
         cv.put(DatabaseContract.ActivityTable.IS_VERIFIED, activity.isVerified());
+        cv.put(DatabaseContract.ActivityTable.IS_FOLLOWING, activity.isFollowing());
         cv.put(DatabaseContract.ActivityTable.NAME, activity.getName());
         cv.put(DatabaseContract.ActivityTable.TARGET_NAME, activity.getTargetName());
         cv.put(DatabaseContract.ActivityTable.STREAM_PHOTO, activity.getStreamPhoto());

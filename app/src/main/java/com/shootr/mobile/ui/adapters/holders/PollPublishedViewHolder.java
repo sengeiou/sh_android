@@ -105,7 +105,7 @@ public class PollPublishedViewHolder extends GenericActivityViewHolder {
     }
   }
 
-  @Override protected void rendetTargetAvatar(ActivityModel activity) {
+  @Override protected void renderTargetAvatar(ActivityModel activity) {
     /* no-op */
   }
 

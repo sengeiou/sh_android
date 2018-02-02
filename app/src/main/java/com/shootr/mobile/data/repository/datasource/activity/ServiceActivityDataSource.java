@@ -82,6 +82,14 @@ public class ServiceActivityDataSource implements ActivityDataSource {
     throw new IllegalArgumentException("No remote implementation");
   }
 
+  @Override public void updateFollowStreamOnActivity(String idStream) {
+    throw new IllegalArgumentException("No remote implementation");
+  }
+
+  @Override public void updateUnFollowStreamOnActivity(String idStream) {
+    throw new IllegalArgumentException("No remote implementation");
+  }
+
   private void storeEmbedStreams(List<ActivityApiEntity> activities) {
     for (ActivityApiEntity activity : activities) {
       StreamEntity stream = activity.getStream();

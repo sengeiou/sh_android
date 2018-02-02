@@ -27,8 +27,8 @@ public class MeActivityManager extends AbstractManager {
 
     Cursor queryResult =
         getReadableDatabase().query(ACTIVITY_TABLE, DatabaseContract.MeActivityTable.PROJECTION,
-            null, null, null, null,
-            DatabaseContract.MeActivityTable.BIRTH + " DESC", parameters.getLimit().toString());
+            null, null, null, null, DatabaseContract.MeActivityTable.BIRTH + " DESC",
+            parameters.getLimit().toString());
 
     List<ActivityEntity> resultActivities = new ArrayList<>(queryResult.getCount());
     ActivityEntity activityEntity;
@@ -104,5 +104,22 @@ public class MeActivityManager extends AbstractManager {
       } while (c.moveToNext());
     }
     c.close();
+  }
+
+  public void updateFollowStream(String idStream) {
+    updateFollowOnStreamActivities(true, idStream);
+  }
+
+  public void updateUnFollowStream(String idStream) {
+    updateFollowOnStreamActivities(false, idStream);
+  }
+
+  private void updateFollowOnStreamActivities(boolean isFollow, String idStream) {
+    String whereClause = DatabaseContract.MeActivityTable.ID_STREAM + " = ?";
+    String[] whereArguments = new String[] { String.valueOf(idStream) };
+    ContentValues values = new ContentValues(1);
+    values.put(DatabaseContract.MeActivityTable.IS_FOLLOWING, isFollow ? 1 : 0);
+    getWritableDatabase().update(DatabaseContract.MeActivityTable.TABLE, values, whereClause,
+        whereArguments);
   }
 }

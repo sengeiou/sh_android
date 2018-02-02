@@ -6,6 +6,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.repository.ActivityRepository;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
@@ -19,6 +20,7 @@ public class FollowStreamInteractor implements Interactor {
   private final StreamRepository localStreamRepository;
   private final ExternalStreamRepository remoteStreamRepository;
   private final BusPublisher busPublisher;
+  private final ActivityRepository localActivityRepository;
 
   private Interactor.CompletedCallback callback;
   private ErrorCallback errorCallback;
@@ -27,12 +29,14 @@ public class FollowStreamInteractor implements Interactor {
 
   @Inject public FollowStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Local StreamRepository localStreamRepository,
-      ExternalStreamRepository remoteStreamRepository, BusPublisher busPublisher) {
+      ExternalStreamRepository remoteStreamRepository, BusPublisher busPublisher,
+      @Local ActivityRepository localActivityRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.localStreamRepository = localStreamRepository;
     this.remoteStreamRepository = remoteStreamRepository;
     this.busPublisher = busPublisher;
+    this.localActivityRepository = localActivityRepository;
   }
 
   public void follow(String idStream, CompletedCallback callback,
@@ -47,6 +51,7 @@ public class FollowStreamInteractor implements Interactor {
     localStreamRepository.follow(idStream);
     notifyAdditionToBus();
     try {
+      localActivityRepository.updateFollowStreamOnActivity(idStream);
       remoteStreamRepository.follow(idStream);
       notifyLoaded();
     } catch (Exception error) {

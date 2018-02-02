@@ -26,6 +26,7 @@ public class ActivityEntity extends Synchronized {
     private String pollOptionText;
     private boolean strategic;
     private boolean isVerified;
+    private boolean isFollowing;
     private String targetUsername;
 
     public String getUserPhoto() {
@@ -164,6 +165,14 @@ public class ActivityEntity extends Synchronized {
 
     public void setVerified(boolean verified) {
         isVerified = verified;
+    }
+
+    public boolean isFollowing() {
+        return isFollowing;
+    }
+
+    public void setFollowing(boolean following) {
+        isFollowing = following;
     }
 
     public String getName() {

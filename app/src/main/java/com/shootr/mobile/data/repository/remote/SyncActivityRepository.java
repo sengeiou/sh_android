@@ -51,6 +51,14 @@ public class SyncActivityRepository implements ActivityRepository {
     throw new IllegalArgumentException("not implemented");
   }
 
+  @Override public void updateFollowStreamOnActivity(String idStream) {
+    throw new IllegalArgumentException("not implemented");
+  }
+
+  @Override public void updateUnFollowStreamOnActivity(String idStream) {
+    throw new IllegalArgumentException("not implemented");
+  }
+
   private List<ActivityEntity> bindActivityShots(List<ActivityEntity> activityEntities,
       ActivityTimelineParameters parameters) {
     List<ActivityEntity> activities = new ArrayList<>();

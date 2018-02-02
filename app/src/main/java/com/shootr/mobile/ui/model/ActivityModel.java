@@ -18,8 +18,7 @@ public class ActivityModel {
     private String idStreamAuthor;
     private String idPoll;
     private String pollQuestion;
-    private boolean amIFollowing;
-    private boolean isFavorite;
+    private boolean isFollowing;
     private boolean strategic;
     private String pollOptionText;
     private boolean isVerified;
@@ -141,12 +140,12 @@ public class ActivityModel {
         this.pollQuestion = pollQuestion;
     }
 
-    public boolean isFavorite() {
-        return isFavorite;
+    public boolean isFollowing() {
+        return isFollowing;
     }
 
-    public void setFavorite(boolean favorite) {
-        isFavorite = favorite;
+    public void setFollowing(boolean following) {
+        isFollowing = following;
     }
 
     public boolean isStrategic() {
