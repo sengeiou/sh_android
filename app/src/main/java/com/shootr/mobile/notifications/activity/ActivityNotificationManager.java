@@ -37,14 +37,14 @@ import javax.inject.Singleton;
     this.shotModelMapper = shotModelMapper;
   }
 
-  private void showNotification(SingleActivityNotification singleActivityNotification) {
+  private void showNotification(SingleActivityNotification singleActivityNotification, boolean isInApp) {
     if (!activeNotifications.contains(singleActivityNotification)) {
       activeNotifications.add(singleActivityNotification);
       CommonNotification finalNotification;
       if (activeNotifications.size() > 1) {
         finalNotification =
             new MultipleActivityNotification(context, imageLoader, notificationBuilderFactory,
-                activeNotifications);
+                activeNotifications, isInApp);
       } else {
         finalNotification = singleActivityNotification;
       }
@@ -53,26 +53,21 @@ import javax.inject.Singleton;
     }
   }
 
-  public void sendGenericActivityNotification(PushNotification.NotificationValues values) {
-    SingleActivityNotification notification =
-        new SingleActivityNotification(context, notificationBuilderFactory, imageLoader, values);
-    showNotification(notification);
-  }
-
   public void sendFollowNotification(PushNotification.NotificationValues values, String idUser) {
     FollowActivityNotification notification =
         new FollowActivityNotification(context, notificationBuilderFactory, imageLoader, values,
             idUser);
-    showNotification(notification);
+    showNotification(notification, true);
   }
 
   public void sendOpenStreamNotification(PushNotification.NotificationValues notificationValues,
       String idStream, String idStreamHolder, String title, String readWriteMode,
-      Boolean updateNeeded) {
+      Boolean updateNeeded, Boolean isInApp) {
     StreamActivityNotification notification =
         new StreamActivityNotification(context, notificationBuilderFactory, imageLoader,
-            notificationValues, idStream, idStreamHolder, title, readWriteMode, updateNeeded);
-    showNotification(notification);
+            notificationValues, idStream, idStreamHolder, title, readWriteMode, updateNeeded,
+            isInApp);
+    showNotification(notification, isInApp);
   }
 
   public void sendOpenPollVoteNotification(PushNotification.NotificationValues notificationValues,
@@ -80,16 +75,16 @@ import javax.inject.Singleton;
     PollActivityNotification notification =
         new PollActivityNotification(context, idPoll, streamTitle, notificationBuilderFactory,
             imageLoader, notificationValues, updateNeeded);
-    showNotification(notification);
+    showNotification(notification, false);
   }
 
   public void sendOpenShotDetailNotification(final PushNotification.NotificationValues values,
       final ShotNotification shotNotification, String idShot,
-      Boolean updateNeeded) {
+      Boolean updateNeeded, Boolean isInApp) {
     ShotActivityNotification notification =
         new ShotActivityNotification(context, notificationBuilderFactory, imageLoader, values,
-            idShot, updateNeeded, shotNotification);
-    showNotification(notification);
+            idShot, updateNeeded, shotNotification, isInApp);
+    showNotification(notification, isInApp);
   }
 
   public void clearActivityNotifications() {

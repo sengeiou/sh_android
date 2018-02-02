@@ -1,5 +1,6 @@
 package com.shootr.mobile.notifications.activity;
 
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ public class FollowActivityNotification extends SingleActivityNotification {
         super.setNotificationValues(builder, areShotTypesKnown);
         builder.setContentIntent(getOpenProfileNotificationPendingIntent());
         builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
+        builder.setPriority(Notification.PRIORITY_HIGH);
     }
 
     protected PendingIntent getOpenProfileNotificationPendingIntent() {
