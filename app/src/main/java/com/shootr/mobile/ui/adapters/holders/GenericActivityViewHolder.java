@@ -59,7 +59,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     renderTitle(activity);
     renderText(activity);
     renderAvatar(activity);
-    rendetTargetAvatar(activity);
+    renderTargetAvatar(activity);
+    renderFollowButton(activity);
     renderImage(activity);
   }
 
@@ -77,7 +78,7 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     }
   }
 
-  protected void rendetTargetAvatar(final ActivityModel activity) {
+  protected void renderTargetAvatar(final ActivityModel activity) {
     if (activity.getTargetName() != null) {
       imageLoader.loadProfilePhoto(activity.getTargetUserPhoto(), targetAvatar,
           activity.getTargetName());
@@ -90,6 +91,10 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
     } else {
       targetAvatar.setVisibility(View.GONE);
     }
+  }
+
+  protected void renderFollowButton(ActivityModel activity) {
+    /* no-op */
   }
 
   protected void renderText(ActivityModel activity) {
@@ -114,7 +119,8 @@ public class GenericActivityViewHolder extends RecyclerView.ViewHolder {
       SpannableString ss = new SpannableString(streamTitle + "  ");
       d.setBounds(0, 2, d.getIntrinsicWidth(), d.getIntrinsicHeight());
       ImageSpan span = new ImageSpan(d, ImageSpan.ALIGN_BASELINE);
-      ss.setSpan(span, streamTitle.length() + 1, streamTitle.length() + 2, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+      ss.setSpan(span, streamTitle.length() + 1, streamTitle.length() + 2,
+          Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
       return ss;
     } else {
       return new SpannableString(streamTitle);

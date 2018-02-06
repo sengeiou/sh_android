@@ -13,6 +13,11 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.54.0] - 2018-02-06
+### Added
+- Follow streams on activities
+- In-App notifications on nice, response, reshot, mention o follow
+
 ## [1.53.0] - 2018-01-26
 ### Added
 - Literals changed

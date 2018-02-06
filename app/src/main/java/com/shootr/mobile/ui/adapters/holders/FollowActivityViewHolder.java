@@ -8,7 +8,6 @@ import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
@@ -21,7 +20,6 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
 
   private final ShotTextSpannableBuilder shotTextSpannableBuilder;
   private final OnUsernameClickListener onUsernameClickListener;
-  private final ActivityFollowUnfollowListener onFollowUnfollowListener;
   private final AndroidTimeUtils androidTimeUtils;
   @BindColor(R.color.gray_60) int gray_60;
 
@@ -29,12 +27,10 @@ public class FollowActivityViewHolder extends GenericActivityViewHolder {
 
   public FollowActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, ShotTextSpannableBuilder shotTextSpannableBuilder,
-      OnAvatarClickListener onAvatarClickListener, OnUsernameClickListener onUsernameClickListener,
-      ActivityFollowUnfollowListener onFollowUnfollowListener) {
+      OnAvatarClickListener onAvatarClickListener, OnUsernameClickListener onUsernameClickListener) {
     super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
     this.shotTextSpannableBuilder = shotTextSpannableBuilder;
     this.onUsernameClickListener = onUsernameClickListener;
-    this.onFollowUnfollowListener = onFollowUnfollowListener;
     this.androidTimeUtils = androidTimeUtils;
   }
 

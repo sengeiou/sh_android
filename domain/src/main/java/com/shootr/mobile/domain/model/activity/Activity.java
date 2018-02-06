@@ -332,6 +332,7 @@ public class Activity {
     private String idUser;
     private boolean strategic;
     private boolean isVerified;
+    private boolean isFollowing;
 
     public String getStreamTitle() {
       return streamTitle;
@@ -363,6 +364,14 @@ public class Activity {
 
     public void setVerified(boolean verified) {
       isVerified = verified;
+    }
+
+    public boolean isFollowing() {
+      return isFollowing;
+    }
+
+    public void setFollowing(boolean following) {
+      isFollowing = following;
     }
 
     @Override public boolean equals(Object o) {

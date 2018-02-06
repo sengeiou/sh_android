@@ -2,8 +2,6 @@ package com.shootr.mobile.ui.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -44,7 +41,6 @@ import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
-import com.shootr.mobile.ui.adapters.listeners.ActivityFollowUnfollowListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnPollQuestionClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnShotClick;
@@ -100,7 +96,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   private LinearLayoutManager layoutManager;
   private Unbinder unbinder;
   private boolean hasNewContent = false;
-  private ViewPropertyAnimator onBoardingAnimator;
   //endregion
 
   public static ActivityTimelineFragment newInstance() {
@@ -190,40 +185,18 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
       @Override public void onPollQuestionClick(String idPoll, String streamTitle) {
         openPollVote(idPoll, streamTitle);
       }
-    }, new ActivityFollowUnfollowListener() {
-      @Override public void onFollow(String idUser, String username, Boolean isStrategic) {
-        timelinePresenter.followUser(idUser);
-        sendFollowAnalytics(idUser, username, isStrategic);
-      }
-
-      @Override public void onUnfollow(String idUser, String username) {
-        setupUnFollowDialog(idUser, username);
-      }
     }, new ActivityFavoriteClickListener() {
       @Override
       public void onFavoriteClick(String idStream, String streamTitle, boolean isStrategic) {
         sendFavoriteAnalytics(idStream, streamTitle, isStrategic);
+        timelinePresenter.followStream(idStream);
       }
 
       @Override public void onRemoveFavoriteClick(String idStream) {
-        /* no-op */
+        timelinePresenter.unFollowStream(idStream);
       }
     });
     activityList.setAdapter(adapter);
-  }
-
-  private void setupUnFollowDialog(final String idUser, String username) {
-    new AlertDialog.Builder(getContext()).setMessage(
-        String.format(getString(R.string.unfollow_dialog_message), username))
-        .setPositiveButton(getString(R.string.unfollow_dialog_yes),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                /* no-op */
-              }
-            })
-        .setNegativeButton(getString(R.string.unfollow_dialog_no), null)
-        .create()
-        .show();
   }
 
   private void sendHomeAnalythics() {
@@ -244,20 +217,6 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     builder.setSource(activitySource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setNewContent(hasNewContent);
-    analyticsTool.analyticsSendAction(builder);
-    analyticsTool.appsFlyerSendAction(builder);
-  }
-
-  private void sendFollowAnalytics(String idTargetUser, String targetUsername,
-      Boolean isStrategic) {
-    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
-    builder.setContext(getContext());
-    builder.setActionId(analyticsActionFollow);
-    builder.setSource(activitySource);
-    builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(idTargetUser);
-    builder.setTargetUsername(targetUsername);
-    builder.setIsStrategic(isStrategic);
     analyticsTool.analyticsSendAction(builder);
     analyticsTool.appsFlyerSendAction(builder);
   }

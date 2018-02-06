@@ -9,4 +9,8 @@ public interface ActivityRepository {
     List<Activity> getActivityTimeline(ActivityTimelineParameters parameters, String language);
 
     void deleteActivitiesWithShot(String idShot);
+
+    void updateFollowStreamOnActivity(String idStream);
+
+    void updateUnFollowStreamOnActivity(String idStream);
 }

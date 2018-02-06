@@ -1,5 +1,6 @@
 package com.shootr.mobile.notifications.shot;
 
+import android.app.Notification;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
@@ -20,11 +21,13 @@ import java.util.TreeSet;
 public class MultipleShotNotification extends AbstractShotNotification {
 
     private List<ShotNotification> shots;
+    private final Boolean isInApp;
 
     public MultipleShotNotification(Context context, NotificationBuilderFactory builderFactory,
-        List<ShotNotification> shots) {
+        List<ShotNotification> shots, Boolean isInApp) {
         super(context, builderFactory);
         this.shots = shots;
+        this.isInApp = isInApp;
     }
 
     @Override public void setNotificationValues(NotificationCompat.Builder builder,
@@ -34,6 +37,9 @@ public class MultipleShotNotification extends AbstractShotNotification {
         builder.setContentText(getCollapsedContent());
         builder.setStyle(getInboxStyleFromShots());
         builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
+        if (isInApp) {
+            builder.setPriority(Notification.PRIORITY_HIGH);
+        }
     }
 
     private String getCollapsedContent() {

@@ -7,10 +7,14 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.view.View;
 import butterknife.BindColor;
+import butterknife.BindView;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.model.activity.ActivityType;
+import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnStreamTitleClickListener;
 import com.shootr.mobile.ui.model.ActivityModel;
+import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.ui.widgets.StreamTitleBoldSpan;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -19,16 +23,19 @@ import com.shootr.mobile.util.Truss;
 public abstract class ClickableStreamActivityViewHolder extends GenericActivityViewHolder {
 
   private final OnStreamTitleClickListener onStreamTitleClickListener;
+  private final ActivityFavoriteClickListener activityFavoriteClickListener;
   private final AndroidTimeUtils androidTimeUtils;
+  @BindView(R.id.follow_button) FollowButton followButton;
   @BindColor(R.color.gray_60) int gray_60;
-
 
   public ClickableStreamActivityViewHolder(View view, ImageLoader imageLoader,
       AndroidTimeUtils androidTimeUtils, OnAvatarClickListener onAvatarClickListener,
-      OnStreamTitleClickListener onStreamTitleClickListener) {
+      OnStreamTitleClickListener onStreamTitleClickListener,
+      ActivityFavoriteClickListener activityFavoriteClickListener) {
     super(view, imageLoader, androidTimeUtils, onAvatarClickListener);
     this.onStreamTitleClickListener = onStreamTitleClickListener;
     this.androidTimeUtils = androidTimeUtils;
+    this.activityFavoriteClickListener = activityFavoriteClickListener;
   }
 
   @Override protected void renderText(ActivityModel activity) {
@@ -37,7 +44,30 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
     text.setVisibility(View.GONE);
   }
 
-  @Override protected void rendetTargetAvatar(final ActivityModel activity) {
+  @Override protected void renderFollowButton(final ActivityModel activity) {
+    if (!activity.getType().equals(ActivityType.CHECKIN)) {
+      followButton.setOnClickListener(new View.OnClickListener() {
+        @Override public void onClick(View view) {
+          if (activity.isFollowing()) {
+            activityFavoriteClickListener.onRemoveFavoriteClick(activity.getIdStream());
+            activity.setFollowing(false);
+            followButton.setFollowing(false);
+          } else {
+            activityFavoriteClickListener.onFavoriteClick(activity.getIdStream(),
+                activity.getStreamTitle(), activity.isStrategic());
+            activity.setFollowing(true);
+            followButton.setFollowing(true);
+          }
+        }
+      });
+      if (!activity.isFollowing()) {
+        followButton.setVisibility(View.VISIBLE);
+        followButton.setFollowing(false);
+      }
+    }
+  }
+
+  @Override protected void renderTargetAvatar(final ActivityModel activity) {
     if (activity.getStreamTitle() != null) {
       imageLoader.loadProfilePhoto(activity.getStreamPhoto(), targetAvatar,
           activity.getStreamTitle());
