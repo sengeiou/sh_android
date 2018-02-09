@@ -51,6 +51,9 @@ public class ActivityApiEntityMapper {
             activityEntity.setIdStreamAuthor(activityApiEntity.getStream().getIdUser());
             activityEntity.setVerified(activityApiEntity.getStream().getVerifiedUser() == 1L);
             activityEntity.setStreamPhoto(activityApiEntity.getStream().getPhoto());
+            if (activityApiEntity.getStream().isFollowing() != null) {
+                activityEntity.setFollowing(activityApiEntity.getStream().isFollowing());
+            }
         }
 
         if (activityApiEntity.getPollVote() != null) {
