@@ -42,8 +42,6 @@ public abstract class BaseActivity extends ActionBarActivity {
     private ObjectGraph activityGraph;
     private View activityView;
 
-    private boolean show = false;
-
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -170,6 +168,7 @@ public abstract class BaseActivity extends ActionBarActivity {
                 .setTitle(event.getInAppNotification().getTitle())
                 .setMessage((event.getInAppNotification().getComment()))
                 .setAvatar(event.getInAppNotification().getAvatar())
+                .setInAppId(event.getInAppNotification().getIdShot())
                 .setImageLoader(imageLoader)
                 .setDuration(4000) // Time duration to show
                 .setHeight(ViewGroup.LayoutParams.WRAP_CONTENT).show();

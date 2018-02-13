@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import com.irozon.sneaker.Sneaker;
 import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
@@ -39,7 +38,7 @@ public class ShotActivityNotification extends SingleActivityNotification {
     builder.setContentIntent(getShotNotificationPendingIntent());
     builder.setColor(ContextCompat.getColor(getContext(), R.color.shootr_orange));
     if (isInApp) {
-     // builder.setPriority(Notification.PRIORITY_HIGH);
+      builder.setPriority(Notification.PRIORITY_HIGH);
     }
   }
 

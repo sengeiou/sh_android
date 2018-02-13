@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.shootr.mobile.R;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.util.ImageLoader;
 import java.lang.ref.WeakReference;
 
@@ -23,11 +24,11 @@ public class InAppNotificationView implements View.OnClickListener {
   private static String title = "";
   private static String message = "";
   private static String avatar = "";
+  private static String inAppId = "";
   private static boolean autoHide = true;
   private static int duration = 3000;
   private static WeakReference<View> layoutWeakReference;
   private static WeakReference<Activity> contextWeakReference;
-  private static InAppClickListener listener = null;
   private static ImageLoader imageLoader;
   private static boolean showing = false;
 
@@ -45,7 +46,7 @@ public class InAppNotificationView implements View.OnClickListener {
   public static void hide() {
     if (getLayout() != null) {
       getLayout().startAnimation(
-          AnimationUtils.loadAnimation(getContext(), com.irozon.sneaker.R.anim.popup_hide));
+          AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
       getActivityDecorView().removeView(getLayout());
     }
   }
@@ -62,7 +63,6 @@ public class InAppNotificationView implements View.OnClickListener {
     title = "";
     autoHide = true;
     height = DEFAULT_VALUE;
-    listener = null;
   }
 
   private static Context getContext() {
@@ -98,13 +98,13 @@ public class InAppNotificationView implements View.OnClickListener {
     return this;
   }
 
-  public InAppNotificationView setDuration(int duration) {
-    InAppNotificationView.duration = duration;
+  public InAppNotificationView setInAppId(String id) {
+    InAppNotificationView.inAppId = id;
     return this;
   }
 
-  public InAppNotificationView setOnSneakerClickListener(InAppClickListener listener) {
-    InAppNotificationView.listener = listener;
+  public InAppNotificationView setDuration(int duration) {
+    InAppNotificationView.duration = duration;
     return this;
   }
 
@@ -151,15 +151,17 @@ public class InAppNotificationView implements View.OnClickListener {
     view.setOnClickListener(this);
     viewGroup.addView(view);
 
-    view.startAnimation(AnimationUtils.loadAnimation(getContext(), com.irozon.sneaker.R.anim.popup_show));
+    view.startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.show_in_app));
     if (autoHide) {
       Handler handler = new Handler();
       handler.removeCallbacks(null);
       handler.postDelayed(new Runnable() {
         @Override
         public void run() {
-          getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), com.irozon.sneaker.R.anim.popup_hide));
-          viewGroup.removeView(getLayout());
+          if (getLayout() != null) {
+            getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
+            viewGroup.removeView(getLayout());
+          }
           showing = false;
         }
       }, duration);
@@ -198,14 +200,8 @@ public class InAppNotificationView implements View.OnClickListener {
 
   @Override
   public void onClick(View view) {
-    if (listener != null) {
-      listener.onClick(view);
-    }
-    getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), com.irozon.sneaker.R.anim.popup_hide));
+    getContext().startActivity(ShotDetailActivity.getIntentForActivity(getContext(), inAppId));
+    getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
     getActivityDecorView().removeView(getLayout());
-  }
-
-  public interface InAppClickListener {
-    void onClick(View view);
   }
 }
