@@ -32,7 +32,6 @@ public class InAppNotificationView implements View.OnClickListener {
   private static ImageLoader imageLoader;
   private static boolean showing = false;
 
-
   private InAppNotificationView(Activity activity) {
     contextWeakReference = new WeakReference<>(activity);
   }
@@ -45,8 +44,7 @@ public class InAppNotificationView implements View.OnClickListener {
 
   public static void hide() {
     if (getLayout() != null) {
-      getLayout().startAnimation(
-          AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
+      getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
       getActivityDecorView().removeView(getLayout());
     }
   }
@@ -119,15 +117,17 @@ public class InAppNotificationView implements View.OnClickListener {
 
   private void sneakView() {
 
-    LayoutInflater layoutInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    LayoutInflater layoutInflater =
+        (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     View view = layoutInflater.inflate(R.layout.app_notification, null);
 
     layoutWeakReference = new WeakReference<>(view);
-    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height
-        == DEFAULT_VALUE ? (getStatusBarHeight() + convertToDp(56)) : convertToDp(height));
+    LinearLayout.LayoutParams layoutParams =
+        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+            height == DEFAULT_VALUE ? (getStatusBarHeight() + convertToDp(56))
+                : convertToDp(height));
     view.setLayoutParams(layoutParams);
-
 
     LinearLayout layout = (LinearLayout) view.findViewById(R.id.in_app_container);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -144,7 +144,6 @@ public class InAppNotificationView implements View.OnClickListener {
 
     imageLoader.loadProfilePhoto(avatar, image, title);
 
-
     final ViewGroup viewGroup = getActivityDecorView();
     getExistingOverlayInViewAndRemove(viewGroup);
 
@@ -156,10 +155,10 @@ public class InAppNotificationView implements View.OnClickListener {
       Handler handler = new Handler();
       handler.removeCallbacks(null);
       handler.postDelayed(new Runnable() {
-        @Override
-        public void run() {
+        @Override public void run() {
           if (getLayout() != null) {
-            getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
+            getLayout().startAnimation(
+                AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
             viewGroup.removeView(getLayout());
           }
           showing = false;
@@ -198,8 +197,7 @@ public class InAppNotificationView implements View.OnClickListener {
     return (int) (sizeInDp * scale + 0.5f);
   }
 
-  @Override
-  public void onClick(View view) {
+  @Override public void onClick(View view) {
     getContext().startActivity(ShotDetailActivity.getIntentForActivity(getContext(), inAppId));
     getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
     getActivityDecorView().removeView(getLayout());
