@@ -13,11 +13,14 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.bus.ServerDown;
 import com.shootr.mobile.data.bus.Unauthorized;
 import com.shootr.mobile.data.bus.VersionOutdatedError;
+import com.shootr.mobile.domain.bus.InAppNotificationEvent;
 import com.shootr.mobile.domain.service.SessionHandler;
 import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.UpdateWarningActivity;
 import com.shootr.mobile.ui.activities.WhaleActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
+import com.shootr.mobile.ui.widgets.InAppNotificationView;
+import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.VersionUpdater;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -30,12 +33,16 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Inject @Main Bus bus;
     @Inject VersionUpdater versionUpdater;
     @Inject SessionHandler sessionHandler;
+    @Inject ImageLoader imageLoader;
 
     private ServerDown.Receiver serverDownReceiver;
     private VersionOutdatedError.Receiver preconditionFailedReceiver;
     private Unauthorized.Receiver unauthorizedReceiver;
+    InAppNotificationEvent.Receiver inAppNotificationReceiver;
     private ObjectGraph activityGraph;
     private View activityView;
+
+    private boolean show = false;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -47,6 +54,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         setupWhalePage();
         setupUpdateWarningPage();
         setupUnauthorizedRedirection();
+        setupInAppNotification();
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
             initializeViews(savedInstanceState);
@@ -79,6 +87,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         bus.register(serverDownReceiver);
         bus.register(unauthorizedReceiver);
         bus.register(preconditionFailedReceiver);
+        bus.register(inAppNotificationReceiver);
     }
 
     @Override protected void onPause() {
@@ -87,6 +96,7 @@ public abstract class BaseActivity extends ActionBarActivity {
             bus.unregister(serverDownReceiver);
             bus.unregister(unauthorizedReceiver);
             bus.unregister(preconditionFailedReceiver);
+            bus.unregister(inAppNotificationReceiver);
         } catch (RuntimeException error) {
             /* no-op */
         }
@@ -146,6 +156,26 @@ public abstract class BaseActivity extends ActionBarActivity {
         };
     }
 
+    private void setupInAppNotification() {
+        inAppNotificationReceiver = new InAppNotificationEvent.Receiver() {
+           @Subscribe @Override public void onNotification(InAppNotificationEvent.Event event) {
+                showInApp(event);
+            }
+        };
+    }
+
+    private void showInApp(InAppNotificationEvent.Event event) {
+
+            InAppNotificationView.with(this)
+                .setTitle(event.getInAppNotification().getTitle())
+                .setMessage((event.getInAppNotification().getComment()))
+                .setAvatar(event.getInAppNotification().getAvatar())
+                .setImageLoader(imageLoader)
+                .setDuration(4000) // Time duration to show
+                .setHeight(ViewGroup.LayoutParams.WRAP_CONTENT).show();
+    }
+
+
     private void openWhalePage() {
         startActivity(WhaleActivity.newIntent(this));
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
@@ -168,4 +198,5 @@ public abstract class BaseActivity extends ActionBarActivity {
     public SessionHandler getSessionHandler() {
         return sessionHandler;
     }
+
 }

@@ -29,6 +29,7 @@ public class InAppNotificationView implements View.OnClickListener {
   private static WeakReference<Activity> contextWeakReference;
   private static InAppClickListener listener = null;
   private static ImageLoader imageLoader;
+  private static boolean showing = false;
 
 
   private InAppNotificationView(Activity activity) {
@@ -108,8 +109,11 @@ public class InAppNotificationView implements View.OnClickListener {
   }
 
   public void show() {
-    if (getContext() != null) {
-      sneakView();
+    if (!showing) {
+      showing = true;
+      if (getContext() != null) {
+        sneakView();
+      }
     }
   }
 
@@ -156,6 +160,7 @@ public class InAppNotificationView implements View.OnClickListener {
         public void run() {
           getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), com.irozon.sneaker.R.anim.popup_hide));
           viewGroup.removeView(getLayout());
+          showing = false;
         }
       }, duration);
     }
