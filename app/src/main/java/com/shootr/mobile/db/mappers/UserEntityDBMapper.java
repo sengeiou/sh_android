@@ -59,8 +59,8 @@ public class UserEntityDBMapper extends GenericDBMapper {
         (entity.isFirstSessionActivation() == null ? false : entity.isFirstSessionActivation()));
     contentValues.put(UserTable.STRATEGIC, entity.isStrategic());
     contentValues.put(UserTable.FOLLOWING, (entity.isFollowing()));
-    contentValues.put(UserTable.MUTED,
-        (entity.isMuted() == null ? false : entity.isMuted()));
+    contentValues.put(UserTable.MUTED, (entity.isMuted() == null ? false : entity.isMuted()));
+    contentValues.put(UserTable.SHARE_LINK, entity.getShareLink());
     setSynchronizedtoContentValues(entity, contentValues);
   }
 
@@ -90,8 +90,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
         cursor.getLong(cursor.getColumnIndex(UserTable.CREATED_STREAMS_COUNT)));
     entity.setFavoritedStreamsCount(
         cursor.getLong(cursor.getColumnIndex(UserTable.FAVORITED_STREAMS_COUNT)));
-    entity.setSocialLogin(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.SOCIAL_LOGIN)) == 1));
+    entity.setSocialLogin((cursor.getInt(cursor.getColumnIndex(UserTable.SOCIAL_LOGIN)) == 1));
     entity.setAnalyticsUserType(
         cursor.getString(cursor.getColumnIndex(UserTable.ANALYTICS_USER_TYPE)));
     entity.setReceivedReactions(
@@ -99,12 +98,10 @@ public class UserEntityDBMapper extends GenericDBMapper {
     entity.setNumMutuals(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_MUTUALS)));
     entity.setFirstSessionActivation(
         (cursor.getInt(cursor.getColumnIndex(UserTable.FIRST_SESSION_ACTIVATION)) == 1));
-    entity.setStrategic(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.STRATEGIC)) == 1));
-    entity.setFollowing(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.FOLLOWING)) == 1));
-    entity.setMuted(
-        (cursor.getInt(cursor.getColumnIndex(UserTable.MUTED)) == 1));
+    entity.setStrategic((cursor.getInt(cursor.getColumnIndex(UserTable.STRATEGIC)) == 1));
+    entity.setFollowing((cursor.getInt(cursor.getColumnIndex(UserTable.FOLLOWING)) == 1));
+    entity.setMuted((cursor.getInt(cursor.getColumnIndex(UserTable.MUTED)) == 1));
+    entity.setShareLink(cursor.getString(cursor.getColumnIndex(UserTable.SHARE_LINK)));
     setSynchronizedfromCursor(cursor, entity);
   }
 
