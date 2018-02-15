@@ -439,6 +439,8 @@
   <string name="shared_shot_activity">" reshot de %s"</string>
   <string name="shared_shot_activity_with_comment">" fez um reshot em"</string>
   <string name="shared_stream_notification">Stream compartilhado</string>
+  <string name="share_user_profile_subject">I recommend %1$s</string>
+  <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll">Compartilhar voto</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Questionário %s</string>

@@ -435,6 +435,8 @@
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll">Share vote</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_user_profile_subject">I recommend %1$s</string>
+  <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll_subject">Poll %s</string>
   <string name="share_poll_voted_comment">You voted  \"%s\"</string>
   <string name="share_poll_voted_subject">I voted \"%1$s\" in %2$s</string>
