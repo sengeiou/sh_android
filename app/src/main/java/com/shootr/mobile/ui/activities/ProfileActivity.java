@@ -656,8 +656,7 @@ public class ProfileActivity extends BaseActivity
     allShotContainer.setVisibility(View.GONE);
   }
 
-  @Override public void shareProfileVia(UserModel user)
-  {
+  @Override public void shareProfileVia(UserModel user) {
     Intent shareIntent = shareManager.shareProfileIntent(this, user);
     Intents.maybeStartActivity(this, shareIntent);
   }
