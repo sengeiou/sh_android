@@ -7,6 +7,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.UserModel;
 
 public interface ShareManager {
   Intent shareShotIntent(Activity activity, ShotModel shotModel);
@@ -16,4 +17,6 @@ public interface ShareManager {
   Intent sharePollIntent(Activity activity, PollModel pollModel);
 
   Intent sharePollVotedIntent(Activity activity, PollModel pollModel, PollOptionModel pollOptionModel);
+
+  Intent shareProfileIntent(Activity activity, UserModel userModel);
 }

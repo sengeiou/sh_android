@@ -10,6 +10,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.UserModel;
 
 /** Creates {@link Intent}s for launching into external applications. */
 public interface IntentFactory {
@@ -28,6 +29,8 @@ public interface IntentFactory {
 
   Intent sharePollVotedIntent(Activity activity, PollModel pollModel,
       PollOptionModel pollOptionModel, String locale);
+
+  Intent shareProfileIntent(Activity activity, UserModel userModel);
 
   IntentFactory REAL = new IntentFactory() {
     @Override public Intent openUrlIntent(String url) {
@@ -71,7 +74,7 @@ public interface IntentFactory {
 
       String subject = String.format(subjectPattern, streamModel.getTitle());
       String sharedText =
-          String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream(), locale);
+          String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream());
 
       return ShareCompat.IntentBuilder.from(launchActivity)
           .setType("text/plain")
@@ -128,6 +131,23 @@ public interface IntentFactory {
 
       String subject =
           String.format(subjectPattern, pollOptionModel.getText(), pollModel.getQuestion());
+
+      return ShareCompat.IntentBuilder.from(activity)
+          .setType("text/plain")
+          .setSubject(subject)
+          .setText(sharedText)
+          .setChooserTitle(R.string.share_via)
+          .createChooserIntent();
+    }
+
+    @Override
+    public Intent shareProfileIntent(Activity activity, UserModel userModel) {
+      String subjectPattern = activity.getString(R.string.share_user_profile_subject);
+      String messagePattern = activity.getString(R.string.share_user_profile);
+
+      String subject = String.format(subjectPattern, userModel.getName());
+      String sharedText =
+          String.format(messagePattern, userModel.getName(), userModel.getIdUser());
 
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")

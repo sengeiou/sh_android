@@ -8,6 +8,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.UserModel;
 
 /**
  * An {@link IntentFactory} implementation that wraps all {@code Intent}s with a debug action, which
@@ -57,6 +58,11 @@ public final class DebugIntentFactory implements IntentFactory {
   @Override public Intent sharePollVotedIntent(Activity activity, PollModel pollModel,
       PollOptionModel pollOptionModel, String locale) {
     Intent baseIntent = realIntentFactory.sharePollVotedIntent(activity, pollModel, pollOptionModel, locale);
+    return createCaptureIntent(baseIntent);
+  }
+
+  @Override public Intent shareProfileIntent(Activity activity, UserModel userModel) {
+    Intent baseIntent = realIntentFactory.shareProfileIntent(activity, userModel);
     return createCaptureIntent(baseIntent);
   }
 
