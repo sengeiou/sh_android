@@ -68,6 +68,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.MUTED
       + " INTEGER NULL,"
+      + DatabaseContract.UserTable.SHARE_LINK
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
