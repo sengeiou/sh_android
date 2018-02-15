@@ -30,6 +30,7 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private boolean muted;
   private boolean isFollowing;
   private boolean isMe;
+  private String shareLink;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -181,6 +182,14 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   public void setMe(boolean me) {
     isMe = me;
+  }
+
+  public String getShareLink() {
+    return shareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    this.shareLink = shareLink;
   }
 
   @Override public UserModel clone() {

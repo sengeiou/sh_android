@@ -23,18 +23,13 @@ public class User implements Searchable, Followable {
   private String bio;
   private Long points;
   private Long joinStreamDate;
-
   private String idWatchingStream;
   private String watchingStreamTitle;
-
   private boolean isFollowing;
   private boolean isMe;
-
   private EntityMetadata metadata;
-
   private Long createdStreamsCount;
   private Long favoritedStreamsCount;
-
   private boolean socialLogin;
   private String analyticsUserType;
   private Long receivedReactions;
@@ -42,6 +37,7 @@ public class User implements Searchable, Followable {
   private Boolean firstSessionActivation;
   private boolean isStrategic;
   private boolean muted;
+  private String shareLink;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -288,6 +284,14 @@ public class User implements Searchable, Followable {
 
   public void setFirstSessionActivation(Boolean firstSessionActivation) {
     this.firstSessionActivation = firstSessionActivation;
+  }
+
+  public String getShareLink() {
+    return shareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    this.shareLink = shareLink;
   }
 
   @Override public boolean equals(Object o) {
