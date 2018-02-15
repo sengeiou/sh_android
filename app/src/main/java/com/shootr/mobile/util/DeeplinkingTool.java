@@ -5,6 +5,7 @@ import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
+import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import java.util.regex.Matcher;
@@ -19,6 +20,8 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
   public static final String SHARE_POLL_PATTERN_HTTP = "http://web.shootr.com/poll/";
   public static final String SHARE_SHOT_PATTERN_HTTPS = "https://web.shootr.com/s/";
   public static final String SHARE_SHOT_PATTERN_HTTP = "http://web.shootr.com/s/";
+  public static final String SHARE_USER_PATTERN_HTTP = "http://web.shootr.com/user/";
+  public static final String SHARE_USER_PATTERN_HTTPS = "https://web.shootr.com/user/";
   public static final String SHARE_SHOT_PATTERN_SHOOTR = "shootr://s/";
   public static final String SHARE_STREAM_PATTERN_SHOOTR = "shootr://st/";
 
@@ -27,6 +30,7 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
 
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+
   @Inject public DeeplinkingTool() {
   }
 
@@ -41,6 +45,12 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
 
     Pattern shareShotPatternWithHttp = Pattern.compile(SHARE_SHOT_PATTERN_HTTP);
     Matcher matcherShareShotHttp = shareShotPatternWithHttp.matcher(address);
+
+    Pattern shareUserPatternWithHttp = Pattern.compile(SHARE_USER_PATTERN_HTTP);
+    Matcher matcherShareUserHttp = shareUserPatternWithHttp.matcher(address);
+
+    Pattern shareUserPatternWithHttps = Pattern.compile(SHARE_USER_PATTERN_HTTPS);
+    Matcher matcherShareUserHttps = shareUserPatternWithHttps.matcher(address);
 
     Pattern shareShotPatternWithHttps = Pattern.compile(SHARE_SHOT_PATTERN_HTTPS);
     Matcher matcherShareShotHttps = shareShotPatternWithHttps.matcher(address);
@@ -77,10 +87,20 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
       context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherSharePollHttps.find()) {
       String idPoll = address.substring(matcherSharePollHttps.end());
-      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll), null));
+      context.startActivity(
+          PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll), null));
     } else if (matcherSharePollHttp.find()) {
       String idPoll = address.substring(matcherSharePollHttp.end());
-      context.startActivity(PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll), null));
+      context.startActivity(
+          PollVoteActivity.newIntentWithIdPoll(context, removeLocale(idPoll), null));
+    } else if (matcherShareUserHttp.find()) {
+      String idUser = address.substring(matcherShareUserHttp.end());
+      context.startActivity(
+          ProfileActivity.getIntent(context, removeLocale(idUser)));
+    } else if (matcherShareUserHttps.find()) {
+      String idUser = address.substring(matcherShareUserHttps.end());
+      context.startActivity(
+          ProfileActivity.getIntent(context, removeLocale(idUser)));
     }
   }
 
@@ -103,5 +123,5 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
     } else {
       return anyIdPlusLocale;
     }
-    }
+  }
 }
