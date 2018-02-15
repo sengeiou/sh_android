@@ -74,6 +74,8 @@ public interface ProfileView {
 
     void hideLoading();
 
+    void shareProfileVia(UserModel user);
+
     void showRemovePhotoConfirmation();
 
     void setupAnalytics(boolean isCurrentUser);

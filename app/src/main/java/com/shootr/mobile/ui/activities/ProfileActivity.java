@@ -170,6 +170,7 @@ public class ProfileActivity extends BaseActivity
   private ProgressDialog progress;
   private MenuItemValueHolder logoutMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder supportMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder shareProfileMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder changePasswordMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder blockUserMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder reportUserMenuItem = new MenuItemValueHolder();
@@ -364,6 +365,7 @@ public class ProfileActivity extends BaseActivity
     getMenuInflater().inflate(R.menu.menu_profile, menu);
     logoutMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_logout));
     supportMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_support));
+    shareProfileMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_share));
     changePasswordMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_change_password));
     blockUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_block_user));
     muteUserMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_profile_mute_user));
@@ -398,6 +400,9 @@ public class ProfileActivity extends BaseActivity
         return true;
       case R.id.menu_profile_mute_user:
         profilePresenter.muteMenuClicked();
+        return true;
+      case R.id.menu_profile_share:
+        profilePresenter.shareProfileMenuClicked();
         return true;
       default:
         return super.onOptionsItemSelected(item);
@@ -649,6 +654,12 @@ public class ProfileActivity extends BaseActivity
 
   @Override public void hideAllShotsButton() {
     allShotContainer.setVisibility(View.GONE);
+  }
+
+  @Override public void shareProfileVia(UserModel user)
+  {
+    Intent shareIntent = shareManager.shareProfileIntent(this, user);
+    Intents.maybeStartActivity(this, shareIntent);
   }
 
   @Override public void setUserInfo(UserModel userModel) {
