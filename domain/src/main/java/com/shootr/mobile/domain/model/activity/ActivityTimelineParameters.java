@@ -53,7 +53,7 @@ public class ActivityTimelineParameters extends TimelineParameters {
         }
 
         private void setDefaults() {
-            parameters.limit = DEFAULT_LIMIT;
+            parameters.limit = DEFAULT_ACTIVITY_LIMIT;
             parameters.sinceDate = DEFAULT_SINCE_DATE;
             parameters.includedTypes = allKnownActivityTypes();
             parameters.streamTypes = allKnownStreamTypes();
