@@ -37,6 +37,7 @@ public class UserModelMapper {
         userModel.setCreatedStreamsCount(user.getCreatedStreamsCount());
         userModel.setStrategic(user.isStrategic());
         userModel.setMuted(user.isMuted());
+        userModel.setShareLink(user.getShareLink());
         userModel.setFollowing(user.isFollowing());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {

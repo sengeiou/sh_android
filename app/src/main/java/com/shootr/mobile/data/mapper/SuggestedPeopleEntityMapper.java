@@ -26,6 +26,7 @@ public class SuggestedPeopleEntityMapper {
         user.setNumFollowings(suggestedPeopleEntity.getNumFollowings());
         user.setNumFollowers(suggestedPeopleEntity.getNumFollowers());
         user.setWebsite(suggestedPeopleEntity.getWebsite());
+        user.setShareLink(suggestedPeopleEntity.getShareLink());
         user.setBio(suggestedPeopleEntity.getBio());
         user.setPoints(suggestedPeopleEntity.getPoints());
         user.setVerifiedUser(suggestedPeopleEntity.getVerifiedUser() == 1);
@@ -58,6 +59,7 @@ public class SuggestedPeopleEntityMapper {
         suggestedPeopleEntity.setNumFollowings(suggestedPeople.getUser().getNumFollowings());
         suggestedPeopleEntity.setNumFollowers(suggestedPeople.getUser().getNumFollowers());
         suggestedPeopleEntity.setWebsite(suggestedPeople.getUser().getWebsite());
+        suggestedPeopleEntity.setShareLink(suggestedPeople.getUser().getShareLink());
         suggestedPeopleEntity.setBio(suggestedPeople.getUser().getBio());
         suggestedPeopleEntity.setCreatedStreamsCount(suggestedPeople.getUser().getCreatedStreamsCount());
         suggestedPeopleEntity.setFavoritedStreamsCount(suggestedPeople.getUser().getFavoritedStreamsCount());

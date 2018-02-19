@@ -28,7 +28,7 @@ public class UserEntityMapper {
     user.setWebsite(userEntity.getWebsite());
     user.setBio(userEntity.getBio());
     user.setPoints(userEntity.getPoints());
-
+    user.setShareLink(userEntity.getShareLink());
     user.setIdWatchingStream(userEntity.getIdWatchingStream());
     user.setWatchingStreamTitle(userEntity.getWatchingStreamTitle());
 
@@ -82,7 +82,7 @@ public class UserEntityMapper {
     userEntity.setNumFollowers(user.getNumFollowers());
     userEntity.setWebsite(user.getWebsite());
     userEntity.setBio(user.getBio());
-
+    userEntity.setShareLink(user.getShareLink());
     userEntity.setIdWatchingStream(user.getIdWatchingStream());
 
     userEntity.setWatchingStreamTitle(user.getWatchingStreamTitle());

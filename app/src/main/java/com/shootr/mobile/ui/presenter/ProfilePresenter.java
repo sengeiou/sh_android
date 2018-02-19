@@ -601,6 +601,10 @@ public class ProfilePresenter implements Presenter {
     handleMuteMenu(isMuted);
   }
 
+  public void shareProfileMenuClicked() {
+    profileView.shareProfileVia(userModel);
+  }
+
   private void handleBlockMenu(Boolean isBlocked) {
     if (!isBlocked) {
       profileView.blockUser(userModel);

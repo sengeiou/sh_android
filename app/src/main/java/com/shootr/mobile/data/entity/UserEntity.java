@@ -36,6 +36,7 @@ public class UserEntity extends FollowableEntity
     private Boolean strategic;
     private boolean following;
     private Boolean muted;
+    private String shareLink;
 
     public UserEntity() {
         setResultType(FollowableType.USER);
@@ -300,5 +301,13 @@ public class UserEntity extends FollowableEntity
 
     public void setMuted(Boolean muted) {
         this.muted = muted;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 }

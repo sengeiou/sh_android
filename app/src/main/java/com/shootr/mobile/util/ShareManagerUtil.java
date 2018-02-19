@@ -8,6 +8,7 @@ import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PollOptionModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.UserModel;
 import javax.inject.Inject;
 
 public class ShareManagerUtil implements ShareManager {
@@ -36,5 +37,9 @@ public class ShareManagerUtil implements ShareManager {
       PollOptionModel pollOptionModel) {
     return intentFactory.sharePollVotedIntent(activity, pollModel, pollOptionModel,
         localeProvider.getLocale());
+  }
+
+  @Override public Intent shareProfileIntent(Activity activity, UserModel userModel) {
+    return intentFactory.shareProfileIntent(activity, userModel);
   }
 }

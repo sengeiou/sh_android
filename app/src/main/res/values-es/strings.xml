@@ -373,6 +373,7 @@
   <string name="profile_push_notifications">Notificaciones</string>
   <string name="profile_settings">Notificaciones</string>
   <string name="profile_support">Soporte</string>
+  <string name="profile_share">Compartir perfil</string>
   <string name="profile_updated">Perfil actualizado</string>
   <string name="promoted">Promocionado</string>
   <string name="public_vote">Voto Público</string>
@@ -438,6 +439,8 @@
   <string name="shared_shot_activity">" reshot de %s"</string>
   <string name="shared_shot_activity_with_comment">" ha hecho un reshot en"</string>
   <string name="shared_stream_notification">Stream compartido</string>
+  <string name="share_user_profile_subject">I recommend %1$s</string>
+  <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll">Compartir voto</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
   <string name="share_poll_subject">Encuesta %s</string>

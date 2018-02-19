@@ -369,6 +369,7 @@
   <string name="profile_push_notifications">Push notifications</string>
   <string name="profile_settings">Push notifications</string>
   <string name="profile_support">Support</string>
+  <string name="profile_share">Share profile</string>
   <string name="profile_updated">Profile updated</string>
   <string name="promoted">Promoted</string>
   <string name="public_vote">Public Vote</string>
@@ -434,6 +435,8 @@
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll">Share vote</string>
   <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_user_profile_subject">I recommend %1$s</string>
+  <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll_subject">Poll %s</string>
   <string name="share_poll_voted_comment">You voted  \"%s\"</string>
   <string name="share_poll_voted_subject">I voted \"%1$s\" in %2$s</string>
