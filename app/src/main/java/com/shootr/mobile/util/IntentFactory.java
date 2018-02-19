@@ -142,16 +142,13 @@ public interface IntentFactory {
 
     @Override
     public Intent shareProfileIntent(Activity activity, UserModel userModel) {
-      String subjectPattern = activity.getString(R.string.share_user_profile_subject);
-      String messagePattern = activity.getString(R.string.share_user_profile);
+      String messagePattern = userModel.getShareLink();
 
-      String subject = String.format(subjectPattern, userModel.getName());
       String sharedText =
           String.format(messagePattern, userModel.getName(), userModel.getIdUser());
 
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
-          .setSubject(subject)
           .setText(sharedText)
           .setChooserTitle(R.string.share_via)
           .createChooserIntent();
