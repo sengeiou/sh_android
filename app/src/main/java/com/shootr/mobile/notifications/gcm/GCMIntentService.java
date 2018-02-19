@@ -12,6 +12,8 @@ import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.InAppNotificationEvent;
+import com.shootr.mobile.domain.model.InAppNotification;
 import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
@@ -125,6 +127,7 @@ public class GCMIntentService extends IntentService {
     boolean areShotTypesKnown = areShotPushTypesKnown(pushNotification);
     ShotNotification shot = buildShotFromParameters(pushNotification);
     setupShotNotification(shot, areShotTypesKnown, pushNotification.getParameters().getShotType());
+    setupInAppNotification(pushNotification);
   }
 
   @NonNull private ShotNotification buildShotFromParameters(PushNotification pushNotification) {
@@ -224,6 +227,18 @@ public class GCMIntentService extends IntentService {
     activityNotificationManager.sendOpenShotDetailNotification(push.getNotificationValues(),
         buildShotFromParameters(push), checkNotNull(idShot), shouldUpdate,
         isInAppNotification(activityType));
+    setupInAppNotification(push);
+  }
+
+  private void setupInAppNotification(PushNotification push) {
+    InAppNotification inAppNotification = new InAppNotification();
+
+    inAppNotification.setTitle(push.getNotificationValues().getTitle());
+    inAppNotification.setComment(push.getNotificationValues().getContentText());
+    inAppNotification.setAvatar(push.getNotificationValues().getIcon());
+    inAppNotification.setIdShot(push.getParameters().getIdShot());
+
+    busPublisher.post(new InAppNotificationEvent.Event(inAppNotification));
   }
 
   private Boolean isInAppNotification(String activityType) {
@@ -234,7 +249,7 @@ public class GCMIntentService extends IntentService {
       case ActivityType.MENTION:
       case ActivityType.REPLY_SHOT:
       case ShotType.COMMENT:
-        return true;
+        return false;
       case ActivityType.CHECKIN:
       case ActivityType.SHARE_STREAM:
       case ActivityType.OPENED_STREAM:
