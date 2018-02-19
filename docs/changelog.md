@@ -13,6 +13,16 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.0] - 2018-02-19
+### Added
+- Follow streams on activities
+- Custom Shootr In-App notifications on nice, response, reshot, mention o follow
+- Share User profile and deep linking
+
+### Changed
+- Smaller verified verified icon
+- More activities loaded (100)
+
 ## [1.54.0] - 2018-02-06
 ### Added
 - Follow streams on activities
