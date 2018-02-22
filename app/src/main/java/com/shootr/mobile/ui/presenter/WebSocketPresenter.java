@@ -26,6 +26,8 @@ public class WebSocketPresenter {
   private final Context context;
   private final String SOCKET_CONNECTED = "Socket connected succesful";
   private final String SOCKET_CONNECTION = "SOCKET_CONNECTION";
+  private final String SOCKET_CONNECTION_ERROR = "SOCKET_CONNECTION_ERROR: ";
+  private final String SOCKET_SUBSCRIPTION_ERROR = "SOCKET_SUBSCRIPTION_ERROR: ";
   private final String TIMELINE = "TIMELINE";
   private final String NONE = "NONE";
   private final String BOOTSTRAP_RECEIVED = "Bootstrap received. Feature Flags: ";
@@ -61,7 +63,7 @@ public class WebSocketPresenter {
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        logsCache.putNewLog(error.getMessage(), context);
+        logsCache.putNewLog(SOCKET_CONNECTION_ERROR + error.getMessage(), context);
       }
     });
   }
@@ -110,7 +112,7 @@ public class WebSocketPresenter {
     }
 
     @Override public void onError(Throwable e) {
-      logsCache.putNewLog(e.getMessage(), context);
+      logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + e.getMessage(), context);
     }
 
     @Override public void onComplete() {
