@@ -10,13 +10,20 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.shootr.mobile.BuildConfig;
+import com.shootr.mobile.data.api.SocketApi;
+import com.shootr.mobile.data.api.SocketApiImpl;
+import com.shootr.mobile.data.api.entity.BaseMessageApiEntity;
+import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
+import com.shootr.mobile.data.api.entity.ShotApiEntity;
+import com.shootr.mobile.data.api.entity.TopicApiEntity;
 import com.shootr.mobile.data.api.service.ActivityApiService;
 import com.shootr.mobile.data.api.service.AuthApiService;
 import com.shootr.mobile.data.api.service.ChangePasswordApiService;
 import com.shootr.mobile.data.api.service.ContributorApiService;
 import com.shootr.mobile.data.api.service.DeviceApiService;
-import com.shootr.mobile.data.api.service.OnBoardingApiService;
+import com.shootr.mobile.data.api.service.LogsApiService;
 import com.shootr.mobile.data.api.service.NicerApiService;
+import com.shootr.mobile.data.api.service.OnBoardingApiService;
 import com.shootr.mobile.data.api.service.PollApiService;
 import com.shootr.mobile.data.api.service.PrivateMessagesApiService;
 import com.shootr.mobile.data.api.service.ResetPasswordApiService;
@@ -24,10 +31,13 @@ import com.shootr.mobile.data.api.service.SearchApiService;
 import com.shootr.mobile.data.api.service.ShootrEventApiService;
 import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.data.api.service.StreamApiService;
+import com.shootr.mobile.data.api.service.TimelineApiService;
 import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.api.service.UserSettingsApiService;
+import com.shootr.mobile.data.api.service.UtilsApiService;
 import com.shootr.mobile.data.api.service.VideoApiService;
 import com.shootr.mobile.data.entity.FollowableEntity;
+import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.repository.PhotoService;
@@ -38,18 +48,16 @@ import dagger.Module;
 import dagger.Provides;
 import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 import retrofit.RestAdapter;
 import retrofit.client.OkClient;
 import retrofit.converter.GsonConverter;
 import timber.log.Timber;
 
-@Module(
-    injects = {
-        ShootrPhotoService.class, PhotoService.class,
-    },
-    complete = false,
-    library = true) public final class ApiModule {
+@Module(injects = {
+    ShootrPhotoService.class, PhotoService.class,
+}, complete = false, library = true) public final class ApiModule {
 
   public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
   public static final String PRE_PRODUCTION_ENDPOINT_URL = "https://pre-api2.shootr.com/v1";
@@ -88,8 +96,16 @@ import timber.log.Timber;
     return restAdapter.create(StreamApiService.class);
   }
 
+  @Provides UtilsApiService provideUtilsApiService(RestAdapter restAdapter) {
+    return restAdapter.create(UtilsApiService.class);
+  }
+
   @Provides UserApiService provideUserApiService(RestAdapter restAdapter) {
     return restAdapter.create(UserApiService.class);
+  }
+
+  @Provides TimelineApiService provideTimelineApiService(RestAdapter restAdapter) {
+    return restAdapter.create(TimelineApiService.class);
   }
 
   @Provides UserSettingsApiService provideUserSettingsApiService(RestAdapter restAdapter) {
@@ -120,12 +136,24 @@ import timber.log.Timber;
     return restAdapter.create(DeviceApiService.class);
   }
 
+  @Provides LogsApiService provideLogApiService(ShootrLogsService shootrLogsService) {
+    return shootrLogsService;
+  }
+
   @Provides @Singleton Gson provideGson() {
 
-    final RuntimeTypeAdapterFactory<FollowableEntity> typeFactory = RuntimeTypeAdapterFactory
-        .of(FollowableEntity.class, "resultType")
-        .registerSubtype(StreamEntity.class, "STREAM")
-        .registerSubtype(UserEntity.class, "USER");
+    final RuntimeTypeAdapterFactory<FollowableEntity> typeFactory =
+        RuntimeTypeAdapterFactory.of(FollowableEntity.class, "resultType")
+            .registerSubtype(StreamEntity.class, "STREAM")
+            .registerSubtype(UserEntity.class, "USER");
+
+    final RuntimeTypeAdapterFactory<PrintableItemApiEntity>
+        printableItemApiEntityRuntimeTypeAdapterFactory =
+        RuntimeTypeAdapterFactory.of(PrintableItemApiEntity.class, "resultType")
+            .registerSubtype(ShotApiEntity.class, "SHOT")
+            .registerSubtype(BaseMessageApiEntity.class, "BASE_MESSAGE")
+            .registerSubtype(TopicApiEntity.class, "TOPIC")
+            .registerSubtype(PollEntity.class, "POLL");
 
     return new GsonBuilder() //
         .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
@@ -133,12 +161,16 @@ import timber.log.Timber;
               JsonDeserializationContext context) throws JsonParseException {
             return new Date(json.getAsJsonPrimitive().getAsLong());
           }
-        }).registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
+        })
+        .registerTypeAdapter(Date.class, new JsonSerializer<Date>() {
           @Override
           public JsonElement serialize(Date src, Type typeOfSrc, JsonSerializationContext context) {
             return new JsonPrimitive(src.getTime());
           }
-        }).registerTypeAdapterFactory(typeFactory).create();
+        })
+        .registerTypeAdapterFactory(typeFactory)
+        .registerTypeAdapterFactory(printableItemApiEntityRuntimeTypeAdapterFactory)
+        .create();
   }
 
   @Provides @Singleton JsonAdapter provideJsonAdapter(Gson gson) {
@@ -181,4 +213,18 @@ import timber.log.Timber;
   @Provides SearchApiService provideSearchAPiService(RestAdapter restAdapter) {
     return restAdapter.create(SearchApiService.class);
   }
+
+  @Provides @Singleton SocketApi provideSocketApi(SocketApiImpl socketApi) {
+    return socketApi;
+  }
+
+  @Provides @Singleton okhttp3.OkHttpClient provideSocketClient() {
+    return new okhttp3.OkHttpClient.Builder().pingInterval(10, TimeUnit.SECONDS)
+        .retryOnConnectionFailure(false)
+        .readTimeout(5, TimeUnit.SECONDS)
+        .writeTimeout(5, TimeUnit.SECONDS)
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .build();
+  }
+
 }

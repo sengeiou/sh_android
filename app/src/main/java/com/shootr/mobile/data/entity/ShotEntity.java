@@ -1,6 +1,8 @@
 package com.shootr.mobile.data.entity;
 
-public class ShotEntity extends BaseMessageEntity {
+import com.shootr.mobile.domain.model.PrintableType;
+
+public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity {
 
     private String idShot;
 
@@ -235,5 +237,9 @@ public class ShotEntity extends BaseMessageEntity {
 
     public void setReshootedTime(Long reshootedTime) {
         this.reshootedTime = reshootedTime;
+    }
+
+    @Override public String getResultType() {
+        return PrintableType.SHOT;
     }
 }

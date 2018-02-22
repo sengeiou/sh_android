@@ -26,6 +26,7 @@ import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.model.QueueElement;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
+import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DeviceFactory;
@@ -66,9 +67,11 @@ import com.shootr.mobile.util.GlideImageLoader;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.InitialsLoaderTool;
+import com.shootr.mobile.util.LogShootr;
 import com.shootr.mobile.util.LogTreeFactory;
 import com.shootr.mobile.util.LogTreeFactoryImpl;
 import com.shootr.mobile.util.LoginTypeUtils;
+import com.shootr.mobile.util.LogsTool;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.PercentageUtils;
 import com.shootr.mobile.util.RandomUtils;
@@ -99,62 +102,64 @@ import timber.log.Timber;
 
 import static android.content.Context.MODE_PRIVATE;
 
-@Module(
-    injects = {
+@Module(injects = {
 
-        AbstractManager.class,
+    AbstractManager.class,
 
-        BaseSignedInActivity.class,
+    BaseSignedInActivity.class,
 
-        FollowManager.class, UserFollowsContainerActivity.class,
+    FollowManager.class, UserFollowsContainerActivity.class,
 
-        ShotManager.class,
+    ShotManager.class,
 
-        UserManager.class, DeviceManager.class,
+    UserManager.class, DeviceManager.class,
 
-        GCMIntentService.class,
+    GCMIntentService.class,
 
-        LogTreeFactory.class,
+    LogTreeFactory.class,
 
-        ProfileEditPresenter.class,
+    ProfileEditPresenter.class,
 
-        PostNewShotPresenter.class,
+    PostNewShotPresenter.class,
 
-        ShotDetailPresenter.class,
+    ShotDetailPresenter.class,
 
-        WatchNumberPresenter.class,
+    WatchNumberPresenter.class,
 
-        StreamDetailPresenter.class,
+    StreamDetailPresenter.class,
 
-        StreamsListPresenter.class,
+    StreamsListPresenter.class,
 
-        TimeFormatter.class,
+    TimeFormatter.class,
 
-        BitmapImageResizer.class,
+    BitmapImageResizer.class,
 
-        WritePermissionManager.class,
+    WritePermissionManager.class,
 
-        ContributorManager.class,
+    ContributorManager.class,
 
-        ShootrEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class,
-        FollowFragment.class, StreamFollowersFragment.class, LruCache.class
-    }, includes = {
+    ShootrEventManager.class, NewMessageBarPresenter.class, MessageBoxPresenter.class,
+    FollowFragment.class, StreamFollowersFragment.class, LruCache.class
+}, includes = {
     ApiModule.class, PreferenceModule.class, MapperModule.class, ManagerModule.class,
     InteractorModule.class, RepositoryModule.class, ServiceModule.class,
-},
-    complete = false,
-    library = true) public class DataModule {
+}, complete = false, library = true) public class DataModule {
 
-  static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50MB
-  static final int LANDING_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5MB
-  static final int QUEUE_DISK_CACHE_SIZE = 1024 * 1024; // 1MB
+  static final int DISK_CACHE_SIZE = 50 * 1024 * 1024; // 50 MB
+  static final int QUEUE_DISK_CACHE_SIZE = 1024 * 1024; // 1 MB
+  static final int LOGS_CACHE_SIZE = 2 * 1024 * 1024; // 2 MB
   private static final long TIMEOUT_SECONDS = 30;
+  static final int LANDING_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5 MB
+  static final int LOGS_DISK_CACHE_SIZE = 5 * 1024 * 1024; // 5 MB
   private static final long TIMEOUT_CONNECT_SECONDS = 15;
   private static final int LRU_CACHE_SIZE = 100;
+  private static final int TIMELINE_CACHE_SIZE = 150 * 1024 * 1024; // 150 MB;
+  private static final String TIMELINE_CACHE = "timeline_cache";
   private static final int ADS_COUNT = 8;
   private static final String LANDING_STREAM = "landing_streams";
   private static final String LAST_VISIT = "last_visit";
   private static final String QUEUE_EVENT = "queue_event";
+  private static final String LOGS = "logs";
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -246,6 +251,10 @@ import static android.content.Context.MODE_PRIVATE;
     return new GenericAnalyticsTool();
   }
 
+  @Provides @Singleton LogsTool provideLogsTool() {
+    return new LogsTool();
+  }
+
   @Provides @Singleton CacheUtils provideCacheUtils(CrashReportTool crashReportTool) {
     return new CacheDataUtils(crashReportTool);
   }
@@ -280,8 +289,7 @@ import static android.content.Context.MODE_PRIVATE;
     return streamPercentageUtils;
   }
 
-  @Provides @Singleton ShareManager provideShareManagerUtil(
-      ShareManagerUtil shareManagerUtil) {
+  @Provides @Singleton ShareManager provideShareManagerUtil(ShareManagerUtil shareManagerUtil) {
     return shareManagerUtil;
   }
 
@@ -298,8 +306,7 @@ import static android.content.Context.MODE_PRIVATE;
     return deeplinkingTool;
   }
 
-  @Provides @Singleton StringHashUtils provideStringHashUtils(
-      DefaultTabUtils defaultTabUtils) {
+  @Provides @Singleton StringHashUtils provideStringHashUtils(DefaultTabUtils defaultTabUtils) {
     return defaultTabUtils;
   }
 
@@ -321,8 +328,17 @@ import static android.content.Context.MODE_PRIVATE;
         .build();
   }
 
-  @Provides @Singleton DualCache<Long> provideLastStreamVisitCache(
+  @Provides @Singleton DualCache<StreamTimeline> provideStreamTimelineLruCache(
       Application application) {
+    CacheSerializer<StreamTimeline> jsonSerializer = new JsonSerializer<>(StreamTimeline.class);
+
+    return new Builder<StreamTimeline>(TIMELINE_CACHE, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<Long> provideLastStreamVisitCache(Application application) {
     CacheSerializer<Long> jsonSerializer = new JsonSerializer<>(Long.class);
 
     return new Builder<Long>(LAST_VISIT, BuildConfig.VERSION_CODE).useSerializerInRam(
@@ -336,9 +352,19 @@ import static android.content.Context.MODE_PRIVATE;
     CacheSerializer<List<QueueElement>> jsonSerializer =
         new JsonSerializer<>((Class<List<QueueElement>>) (Object) List.class);
 
-    return new Builder<List<QueueElement>>(QUEUE_EVENT, BuildConfig.VERSION_CODE).useSerializerInRam(
-        LRU_CACHE_SIZE, jsonSerializer)
+    return new Builder<List<QueueElement>>(QUEUE_EVENT,
+        BuildConfig.VERSION_CODE).useSerializerInRam(LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(QUEUE_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<List<LogShootr>> provideLogsCache(Application application) {
+    CacheSerializer<List<LogShootr>> jsonSerializer =
+        new JsonSerializer<>((Class<List<LogShootr>>) (Object) List.class);
+
+    return new Builder<List<LogShootr>>(LOGS, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LOGS_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(LOGS_DISK_CACHE_SIZE, true, jsonSerializer, application)
         .build();
   }
 }

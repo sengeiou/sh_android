@@ -34,7 +34,7 @@ public class StreamModelMapper {
         streamModel.setTotalFollowers(stream.getTotalFollowers());
         streamModel.setTotalWatchers(stream.getTotalWatchers());
         streamModel.setReadWriteMode(stream.getReadWriteMode() == null ||
-                stream.getReadWriteMode().equals(StreamMode.PUBLIC) ? 0 : 1);
+            stream.getReadWriteMode().equals(StreamMode.PUBLIC) ? 0 : 1);
         streamModel.setContributorCount(stream.getContributorCount());
         streamModel.setCurrentUserContributor(stream.isCurrentUserContributor());
         streamModel.setVerifiedUser(stream.isVerifiedUser());
@@ -42,6 +42,10 @@ public class StreamModelMapper {
         streamModel.setStrategic(stream.isStrategic());
         streamModel.setMuted(stream.isMuted());
         streamModel.setViews(stream.getViews());
+        streamModel.setCanFixItem((stream.canFixItem()));
+        streamModel.setCanPinItem((stream.canPinItem()));
+        streamModel.setCanWrite((stream.canWrite()));
+        streamModel.setCanReply((stream.canReply()));
         return streamModel;
     }
 

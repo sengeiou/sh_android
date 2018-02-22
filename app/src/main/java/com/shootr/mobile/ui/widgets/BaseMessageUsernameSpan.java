@@ -6,10 +6,10 @@ import android.view.View;
 
 public abstract class BaseMessageUsernameSpan extends ClickableSpan
     implements BaseMessagePressableSpan {
-  private String username;
+  private String idUser;
 
-  public BaseMessageUsernameSpan(String username) {
-    this.username = username;
+  public BaseMessageUsernameSpan(String idUser) {
+    this.idUser = idUser;
   }
 
   private boolean isPressed = false;
@@ -19,10 +19,10 @@ public abstract class BaseMessageUsernameSpan extends ClickableSpan
   }
 
   @Override public void onClick(View widget) {
-    onUsernameClick(username);
+    onUsernameClick(idUser);
   }
 
-  public abstract void onUsernameClick(String username);
+  public abstract void onUsernameClick(String idUser);
 
   @Override public void updateDrawState(TextPaint ds) {
     super.updateDrawState(ds);

@@ -117,6 +117,14 @@ public class PrivateMessage extends BaseMessage {
         '}';
   }
 
+  @Override public String getResultType() {
+    return "PRIVATE_MESSAGE";
+  }
+
+  @Override public String getMessageType() {
+    return null;
+  }
+
   public static class NewerAboveComparator implements Comparator<PrivateMessage> {
 
     @Override public int compare(PrivateMessage s1, PrivateMessage s2) {

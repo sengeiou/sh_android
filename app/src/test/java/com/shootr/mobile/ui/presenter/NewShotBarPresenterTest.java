@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.presenter;
 import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
 import com.shootr.mobile.domain.interactor.user.GetUserCanPinMessageInteractor;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
@@ -40,6 +41,7 @@ public class NewShotBarPresenterTest {
   @Mock GetStreamIsReadOnlyInteractor getStreamIsRemovedInteractor;
   @Mock GetDraftsInteractor getDraftsInteractor;
   @Mock NewShotBarView newShotBarView;
+  @Mock GetLocalStreamInteractor getLocalStreamInteractor;
   @Mock Bus bus;
   @Mock ErrorMessageFactory errorMessageFactory;
   @Mock GetUserCanPinMessageInteractor getUserCanPinMessageInteractor;
@@ -50,8 +52,8 @@ public class NewShotBarPresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     presenter =
-        new NewShotBarPresenter(getStreamIsRemovedInteractor, getUserCanPinMessageInteractor,
-            getDraftsInteractor, errorMessageFactory, bus);
+        new NewShotBarPresenter(getStreamIsRemovedInteractor,
+            getLocalStreamInteractor, getDraftsInteractor, errorMessageFactory, bus);
     presenter.setView(newShotBarView);
     shotFailedReceiver = presenter;
   }
@@ -113,17 +115,6 @@ public class NewShotBarPresenterTest {
     assertThat(annotationPresent).isTrue();
   }
 
-  @Test public void shouldShowHolderOptionsWhenIsInStreamTimelineAndIsStreamHolder()
-      throws Exception {
-    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID,
-        IS_IN_STREAMTIMELINE);
-    setupUserCanViewHolderOptions();
-
-    presenter.newShotFromImage();
-
-    verify(newShotBarView).showHolderOptions();
-  }
-
   @Test public void shouldNotShowHolderOptionsWhenIsNotInStreamTimelineAndIsStreamHolder()
       throws Exception {
     presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID,
@@ -155,17 +146,6 @@ public class NewShotBarPresenterTest {
     presenter.newShotFromImage();
 
     verify(newShotBarView, never()).showHolderOptions();
-  }
-
-  @Test public void shouldOpenEditTopicDialogWhenUserCanPinMessageInteractorIsTrue()
-      throws Exception {
-    presenter.initializeWithIdStreamAuthor(newShotBarView, STREAM_ID, AUTHOR_ID,
-        IS_IN_STREAMTIMELINE);
-    setupUserCanViewHolderOptions();
-
-    presenter.editTopicPressed();
-
-    verify(newShotBarView).openEditTopicDialog();
   }
 
   @Test public void shouldNotOpenEditTopicDialogWhenUserCanPinMessageInteractorIsFalse()

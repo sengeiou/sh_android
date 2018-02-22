@@ -1,6 +1,8 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.support.annotation.NonNull;
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.CloseSocketEvent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetProfileShotTimelineInteractor;
@@ -60,6 +62,7 @@ public class ProfilePresenter implements Presenter {
   private final ErrorMessageFactory errorMessageFactory;
   private final UserModelMapper userModelMapper;
   private final ShotModelMapper shotModelMapper;
+  private final BusPublisher busPublisher;
   private ProfileView profileView;
   private String profileIdUser;
   private boolean isCurrentUser;
@@ -85,7 +88,7 @@ public class ProfilePresenter implements Presenter {
       GetBlockedIdUsersInteractor getBlockedIdUsersInteractor,
       MuteUserInteractor muteUserInteractor, UnMuteUserInteractor unMuteUserInteractor,
       SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory,
-      UserModelMapper userModelMapper, ShotModelMapper shotModelMapper) {
+      UserModelMapper userModelMapper, ShotModelMapper shotModelMapper, BusPublisher busPublisher) {
     this.putRecentUserInteractor = putRecentUserInteractor;
     this.getUserByIdInteractor = getUserByIdInteractor;
     this.getUserByUsernameInteractor = getUserByUsernameInteractor;
@@ -106,6 +109,7 @@ public class ProfilePresenter implements Presenter {
     this.errorMessageFactory = errorMessageFactory;
     this.userModelMapper = userModelMapper;
     this.shotModelMapper = shotModelMapper;
+    this.busPublisher = busPublisher;
   }
 
   protected void setView(ProfileView profileView) {
@@ -227,6 +231,7 @@ public class ProfilePresenter implements Presenter {
     profileView.showLogoutInProgress();
     logoutInteractor.attempLogout(new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
+        busPublisher.post(new CloseSocketEvent.Event());
         profileView.navigateToWelcomeScreen();
       }
     }, new Interactor.ErrorCallback() {

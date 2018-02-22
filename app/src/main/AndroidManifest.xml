@@ -342,9 +342,12 @@
     </activity>
     <activity android:name=".ui.activities.PollOptionVotedActivity">
     </activity>
-    <activity android:name=".ui.activities.HistoryActivity"
+    <activity
+        android:name=".ui.activities.HistoryActivity"
         android:label="@string/title_activity_history">
     </activity>
+
+    <service android:name=".data.background.sockets.WebSocketService"/>
   </application>
 
 </manifest>

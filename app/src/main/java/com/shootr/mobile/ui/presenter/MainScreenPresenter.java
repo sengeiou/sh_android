@@ -11,12 +11,14 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
+import com.shootr.mobile.domain.interactor.GetSocketInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SendCacheQueueInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
@@ -55,6 +57,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final SendCacheQueueInteractor sendEventsOnQueueCacheInteractor;
   private final GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
   private final ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
+  private final GetSocketInteractor getSocketInteractor;
   private final UnwatchStreamInteractor unwatchStreamInteractor;
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
@@ -66,6 +69,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final Bus bus;
   private final BusPublisher busPublisher;
   private final Context context;
+  private final LogsCache logsCache;
   private AnalyticsTool analyticsTool;
 
   private MainScreenView mainScreenView;
@@ -83,19 +87,21 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       SendCacheQueueInteractor sendEventsOnQueueCacheInteractor,
       GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor,
       ShouldUpdateDeviceInfoInteractor getDeviceInfoInteractor,
-      UnwatchStreamInteractor unwatchStreamInteractor, SessionRepository sessionRepository,
-      UserModelMapper userModelMapper, @ActivityBadgeCount IntPreference badgeCount,
+      GetSocketInteractor getSocketInteractor, UnwatchStreamInteractor unwatchStreamInteractor,
+      SessionRepository sessionRepository, UserModelMapper userModelMapper,
+      @ActivityBadgeCount IntPreference badgeCount,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
       GetLocalStreamInteractor getStreamInteractor,
       GetShootrEventsInteractor getShootrEventsInteractor, StreamModelMapper streamModelMapper,
       @Main Bus bus, BusPublisher busPublisher, @ApplicationContext Context context,
-      AnalyticsTool analyticsTool) {
+      LogsCache logsCache, AnalyticsTool analyticsTool) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShootrEventStatsInteractor = sendShootrEventStatsInteractor;
     this.sendEventsOnQueueCacheInteractor = sendEventsOnQueueCacheInteractor;
     this.getUserForAnalythicsByIdInteractor = getUserForAnalythicsByIdInteractor;
     this.shouldUpdateDeviceInfoInteractor = getDeviceInfoInteractor;
+    this.getSocketInteractor = getSocketInteractor;
     this.unwatchStreamInteractor = unwatchStreamInteractor;
     this.sessionRepository = sessionRepository;
     this.userModelMapper = userModelMapper;
@@ -107,6 +113,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.bus = bus;
     this.busPublisher = busPublisher;
     this.context = context;
+    this.logsCache = logsCache;
     this.analyticsTool = analyticsTool;
   }
 
@@ -124,6 +131,8 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.updateActivityBadge();
     this.loadConnectedStream();
     this.getChannels(false);
+    //TODO ELIMINAR DE AQUI
+    this.setupSocketConnection();
   }
 
   private void setupDeviceInfo() {
@@ -136,6 +145,10 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
         }
       }
     });
+  }
+
+  private void setupSocketConnection() {
+
   }
 
   private void getRecentSearch() {

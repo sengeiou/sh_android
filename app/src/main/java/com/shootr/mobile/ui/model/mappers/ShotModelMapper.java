@@ -1,17 +1,11 @@
 package com.shootr.mobile.ui.model.mappers;
 
+import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
-import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.StreamIndex;
-import com.shootr.mobile.domain.model.shot.Url;
 import com.shootr.mobile.domain.repository.SessionRepository;
-import com.shootr.mobile.ui.model.BaseMessagePollModel;
-import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.ShotImageModel;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.model.StreamIndexModel;
-import com.shootr.mobile.ui.model.UrlModel;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -19,9 +13,12 @@ import javax.inject.Inject;
 public class ShotModelMapper {
 
   private final SessionRepository sessionRepository;
+  private final EntitiesModelMapper entitiesModelMapper;
 
-  @Inject public ShotModelMapper(SessionRepository sessionRepository) {
+  @Inject public ShotModelMapper(SessionRepository sessionRepository,
+      EntitiesModelMapper entitiesModelMapper) {
     this.sessionRepository = sessionRepository;
+    this.entitiesModelMapper = entitiesModelMapper;
   }
 
   public ShotModel transform(Shot shot) {
@@ -75,58 +72,15 @@ public class ShotModelMapper {
     if (userInfo.getVerifiedUser() != null) {
       shotModel.setVerifiedUser(userInfo.getVerifiedUser() == 1);
     }
-    setupEntities(shot, shotModel);
+    shotModel.setEntitiesModel(entitiesModelMapper.setupEntities(shot.getEntities()));
+    shotModel.setTimelineFlags(shot.getTimelineFlags());
+    shotModel.setDetailFlags(shot.getDetailFlags());
+    if (shot.getMetadata() != null) {
+      shotModel.setDeleted(shot.getMetadata().getDeleted() != null);
+    }
+    entitiesModelMapper.setupEntities(shot.getEntities());
 
     return shotModel;
-  }
-
-  private void setupEntities(Shot shot, ShotModel shotModel) {
-    if (shot.getEntities() != null) {
-      EntitiesModel entitiesModel = new EntitiesModel();
-      setupUrls(shot, entitiesModel);
-      setupPolls(shot, entitiesModel);
-      setupStreams(shot, entitiesModel);
-      shotModel.setEntitiesModel(entitiesModel);
-    }
-  }
-
-  private void setupStreams(Shot shot, EntitiesModel entitiesModel) {
-    ArrayList<StreamIndexModel> streamsIndexModels = new ArrayList<>();
-    for (StreamIndex stream : shot.getEntities().getStreams()) {
-      StreamIndexModel streamIndexModel = new StreamIndexModel();
-      streamIndexModel.setStreamTitle(stream.getStreamTitle());
-      streamIndexModel.setIdStream(stream.getIdStream());
-      streamIndexModel.setIndices(stream.getIndices());
-      streamsIndexModels.add(streamIndexModel);
-    }
-
-    entitiesModel.setStreams(streamsIndexModels);
-  }
-
-  private void setupPolls(Shot shot, EntitiesModel entitiesModel) {
-    ArrayList<BaseMessagePollModel> baseMessagePollModels = new ArrayList<>();
-    for (Poll poll : shot.getEntities().getPolls()) {
-      BaseMessagePollModel baseMessagePollModel = new BaseMessagePollModel();
-      baseMessagePollModel.setPollQuestion(poll.getPollQuestion());
-      baseMessagePollModel.setIdPoll(poll.getIdPoll());
-      baseMessagePollModel.setIndices(poll.getIndices());
-      baseMessagePollModels.add(baseMessagePollModel);
-    }
-
-    entitiesModel.setPolls(baseMessagePollModels);
-  }
-
-  private void setupUrls(Shot shot, EntitiesModel entitiesModel) {
-    ArrayList<UrlModel> urlModels = new ArrayList<>();
-    for (Url url : shot.getEntities().getUrls()) {
-      UrlModel urlModel = new UrlModel();
-      urlModel.setDisplayUrl(url.getDisplayUrl());
-      urlModel.setUrl(url.getUrl());
-      urlModel.setIndices(url.getIndices());
-      urlModels.add(urlModel);
-    }
-
-    entitiesModel.setUrls(urlModels);
   }
 
   private String durationToText(Long durationInSeconds) {
@@ -144,6 +98,14 @@ public class ShotModelMapper {
     List<ShotModel> shotModels = new ArrayList<>();
     for (Shot shot : shots) {
       shotModels.add(transform(shot));
+    }
+    return shotModels;
+  }
+
+  public List<ShotModel> transformPrintableItem(List<PrintableItem> shots) {
+    List<ShotModel> shotModels = new ArrayList<>();
+    for (PrintableItem shot : shots) {
+      shotModels.add(transform((Shot) shot));
     }
     return shotModels;
   }

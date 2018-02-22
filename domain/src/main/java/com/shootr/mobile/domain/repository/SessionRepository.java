@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.repository;
 
+import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.model.user.User;
 
@@ -36,4 +37,10 @@ public interface SessionRepository {
     void setDevice(Device device);
 
     Device getDevice();
+
+    void setBootstrapping(Bootstrapping bootstrapping);
+
+    Bootstrapping getBootstrapping();
+
+    String getLogAddress();
 }

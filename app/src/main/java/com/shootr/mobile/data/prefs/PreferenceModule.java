@@ -74,4 +74,13 @@ import javax.inject.Singleton;
         SharedPreferences preferences) {
         return new LongPreference(preferences, "cache_TimeKeep_Alive", 0);
     }
+
+    @Provides @Singleton @SocketAddress StringPreference provideSocketAddress(SharedPreferences preferences) {
+        return new StringPreference(preferences, "socket_address", null);
+    }
+
+    @Provides @Singleton @BootstrappingPref BootstrappingPreferences provideBootrstappingPreferences(
+        SharedPreferences preferences) {
+        return new BootstrappingPreferences(preferences, "bootstrapping_preference", null);
+    }
 }

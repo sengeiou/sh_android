@@ -1,6 +1,8 @@
 package com.shootr.mobile.data.api.entity;
 
 import com.google.gson.annotations.SerializedName;
+import com.shootr.mobile.domain.model.PrintableType;
+import java.util.Date;
 import java.util.List;
 
 public class ShotApiEntity extends BaseMessageApiEntity {
@@ -46,6 +48,11 @@ public class ShotApiEntity extends BaseMessageApiEntity {
     private boolean reshooted;
     private Long nicedTime;
     private Long reshootedTime;
+    private Date deleted;
+
+    public ShotApiEntity() {
+        setResultType(PrintableType.SHOT);
+    }
 
     public String getIdShot() {
         return idShot;
@@ -301,5 +308,13 @@ public class ShotApiEntity extends BaseMessageApiEntity {
 
     public void setReshootedTime(Long reshootedTime) {
         this.reshootedTime = reshootedTime;
+    }
+
+    public Date getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Date deleted) {
+        this.deleted = deleted;
     }
 }

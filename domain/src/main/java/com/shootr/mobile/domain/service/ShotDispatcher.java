@@ -65,7 +65,7 @@ public class ShotDispatcher implements MessageSender {
 
   @Override public void sendMessage(Sendable shot, File shotImage) {
     if (shot == null) {
-      throw new IllegalArgumentException("Can't send a null shot. You crazy person.");
+      throw new IllegalArgumentException("Can't closeSocket a null shot. You crazy person.");
     }
     QueuedShot queuedShot = queuedFrom((BaseMessage) shot, shotImage);
     addToQueueAndDispatch(queuedShot);

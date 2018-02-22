@@ -1,8 +1,10 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
+import com.shootr.mobile.domain.model.PrintableType;
 import java.util.List;
 
-public class PollEntity {
+public class PollEntity extends PrintableItemApiEntity implements PrintableItemEntity {
 
   private String idPoll;
   private String idStream;
@@ -18,6 +20,10 @@ public class PollEntity {
   private boolean hideResults;
   private boolean canVote;
   private boolean dailyPoll;
+
+  public PollEntity() {
+    setResultType(PrintableType.POLL);
+  }
 
   public String getIdPoll() {
     return idPoll;

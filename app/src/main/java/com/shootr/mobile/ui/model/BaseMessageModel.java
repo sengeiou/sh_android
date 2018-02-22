@@ -1,9 +1,10 @@
 package com.shootr.mobile.ui.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class BaseMessageModel implements Serializable {
+public class BaseMessageModel implements Serializable, PrintableModel, EntityContainable {
 
   private String idUser;
   private String username;
@@ -16,6 +17,9 @@ public class BaseMessageModel implements Serializable {
   private String videoTitle;
   private String videoDuration;
   private EntitiesModel entitiesModel;
+  private String timelineGroup;
+  private ArrayList<String> timelineFlags;
+  private ArrayList<String> detailFlags;
 
   public String getComment() {
     return comment;
@@ -101,11 +105,35 @@ public class BaseMessageModel implements Serializable {
     this.birth = birth;
   }
 
-  public EntitiesModel getEntitiesModel() {
+  @Override public EntitiesModel getEntitiesModel() {
     return entitiesModel;
   }
 
   public void setEntitiesModel(EntitiesModel entitiesModel) {
     this.entitiesModel = entitiesModel;
+  }
+
+  @Override public String getTimelineGroup() {
+    return timelineGroup;
+  }
+
+  @Override public void setTimelineGroup(String timelineGroup) {
+    this.timelineGroup = timelineGroup;
+  }
+
+  public ArrayList<String> getTimelineFlags() {
+    return timelineFlags;
+  }
+
+  public void setTimelineFlags(ArrayList<String> timelineFlags) {
+    this.timelineFlags = timelineFlags;
+  }
+
+  public ArrayList<String> getDetailFlags() {
+    return detailFlags;
+  }
+
+  public void setDetailFlags(ArrayList<String> detailFlags) {
+    this.detailFlags = detailFlags;
   }
 }

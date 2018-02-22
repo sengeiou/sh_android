@@ -28,6 +28,10 @@ public class StreamModel implements Serializable, SearchableModel {
     private long views;
     private int position;
     private boolean showRankPosition;
+    private boolean canWrite;
+    private boolean canReply;
+    private boolean canPinItem;
+    private boolean canFixItem;
     private boolean showBadge;
     private boolean shouldHideStream;
 
@@ -232,6 +236,38 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setShowRankPosition(boolean showRankPosition) {
         this.showRankPosition = showRankPosition;
+    }
+
+    public boolean canWrite() {
+        return canWrite;
+    }
+
+    public void setCanWrite(boolean canWrite) {
+        this.canWrite = canWrite;
+    }
+
+    public boolean canReply() {
+        return canReply;
+    }
+
+    public void setCanReply(boolean canReply) {
+        this.canReply = canReply;
+    }
+
+    public boolean canPinItem() {
+        return canPinItem;
+    }
+
+    public void setCanPinItem(boolean canPinItem) {
+        this.canPinItem = canPinItem;
+    }
+
+    public boolean canFixItem() {
+        return canFixItem;
+    }
+
+    public void setCanFixItem(boolean canFixItem) {
+        this.canFixItem = canFixItem;
     }
 
     public boolean shouldShowBadge() {

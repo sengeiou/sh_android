@@ -25,8 +25,9 @@ import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
-import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
+import com.shootr.mobile.ui.model.EntityContainable;
+import com.shootr.mobile.ui.model.MentionModel;
 import com.shootr.mobile.ui.model.StreamIndexModel;
 import com.shootr.mobile.ui.model.UrlModel;
 import java.util.regex.Matcher;
@@ -44,7 +45,7 @@ public class CustomBaseMessageTextView extends View  {
   public static final String DEFAULT_SCHEMA = "http://";
   private static final String USERNAME_REGEX = "@[-_A-Za-z0-9]{3,25}";
 
-  private BaseMessageModel baseMessageModel;
+  private EntityContainable baseMessageModel;
   private BaseMessagePressableSpan alreadyPressedSpan;
   private OnUrlClickListener onUrlClickListener;
 
@@ -151,7 +152,7 @@ public class CustomBaseMessageTextView extends View  {
     this.onUrlClickListener = onUrlClickListener;
   }
 
-  public void setBaseMessageModel(BaseMessageModel baseMessageModel) {
+  public void setBaseMessageModel(EntityContainable baseMessageModel) {
     this.baseMessageModel = baseMessageModel;
   }
 
@@ -212,19 +213,34 @@ public class CustomBaseMessageTextView extends View  {
   }
 
   private void spanMentions(SpannableStringBuilder stringBuilder) {
-    Pattern pattern = Pattern.compile(USERNAME_REGEX);
-    Matcher matcher = pattern.matcher(stringBuilder);
-    while (matcher.find()) {
-      String username = stringBuilder.subSequence(matcher.start() + 1, matcher.end()).toString();
-      BaseMessageUsernameSpan usernameClickSpan = new BaseMessageUsernameSpan(username) {
-        @Override public void onUsernameClick(String username) {
-          goToUserProfile(username);
+    int lastUrlindex = 0;
+    if (baseMessageModel.getEntitiesModel() != null) {
+      for (MentionModel mentionModel : baseMessageModel.getEntitiesModel().getMentions()) {
+        try {
+          int start = mentionModel.getIndices().get(0) + lastUrlindex;
+          int end = mentionModel.getIndices().get(1) + lastUrlindex;
+
+          String textToReplace = stringBuilder.toString().substring(start, end);
+
+          BaseMessageUsernameSpan usernameClickSpan = new BaseMessageUsernameSpan(mentionModel.getIdUser()) {
+            @Override public void onUsernameClick(String idUser) {
+              goToUserProfile(idUser);
+            }
+          };
+
+          stringBuilder.setSpan(usernameClickSpan, start,
+              end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+          stringBuilder.replace(start, end, mentionModel.getUsername());
+
+          lastUrlindex += mentionModel.getUsername().length() - textToReplace.length();
+        } catch (IndexOutOfBoundsException error) {
+          /* no-op */
         }
-      };
-      stringBuilder.setSpan(usernameClickSpan, matcher.start(), matcher.end(),
-          Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+      }
     }
   }
+
 
   private void spanUrls(SpannableStringBuilder stringBuilder) {
     int lastUrlindex = 0;
@@ -279,9 +295,9 @@ public class CustomBaseMessageTextView extends View  {
     }
   }
 
-  private void goToUserProfile(String username) {
+  private void goToUserProfile(String idUser) {
     Context context = getContext();
-    Intent intentForUser = ProfileActivity.getIntentWithUsername(context, username);
+    Intent intentForUser = ProfileActivity.getIntent(context, idUser);
     context.startActivity(intentForUser);
   }
 

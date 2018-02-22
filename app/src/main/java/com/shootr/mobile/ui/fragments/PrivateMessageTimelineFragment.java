@@ -423,6 +423,8 @@ public class PrivateMessageTimelineFragment extends BaseFragment
             /* no-op */
           }
         }, true, idTargetUser);
+
+    newShotBar.showMessageBox();
   }
 
   private void sendPrivateMessageToMixPanel() {

@@ -11,6 +11,7 @@ import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.DraftModel;
 import com.shootr.mobile.ui.model.mappers.DraftModelMapper;
+import com.shootr.mobile.ui.model.mappers.EntitiesModelMapper;
 import com.shootr.mobile.ui.model.mappers.PrivateMessageModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.DraftsView;
@@ -48,7 +49,7 @@ public class DraftsPresenterTest {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         when(sessionRepository.getCurrentUserId()).thenReturn("userId");
         DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper(
-            sessionRepository),
+            sessionRepository, new EntitiesModelMapper()),
             new PrivateMessageModelMapper(sessionRepository));
         presenter = new DraftsPresenter(interactor, sendDraftInteractor,
             sendPrivateMessageDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);

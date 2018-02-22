@@ -4,7 +4,7 @@ import com.shootr.mobile.domain.model.poll.PollStatus;
 import java.io.Serializable;
 import java.util.List;
 
-public class PollModel implements Serializable {
+public class PollModel implements PrintableModel, Serializable {
 
   private final long ONE_HOUR_MILISECONDS = 3600000;
   private String idPoll;
@@ -22,6 +22,7 @@ public class PollModel implements Serializable {
   private boolean hideResults;
   private boolean canVote;
   private boolean dailyPoll;
+  private String timelineGroup;
 
   public String getIdPoll() {
     return idPoll;
@@ -160,5 +161,37 @@ public class PollModel implements Serializable {
 
   public void setDailyPoll(boolean dailyPoll) {
     this.dailyPoll = dailyPoll;
+  }
+
+  @Override public String getTimelineGroup() {
+    return timelineGroup;
+  }
+
+  @Override public void setTimelineGroup(String timelineGroup) {
+    this.timelineGroup = timelineGroup;
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    PollModel pollModel = (PollModel) o;
+
+    if (canVote != pollModel.canVote) return false;
+    if (!getIdPoll().equals(pollModel.getIdPoll())) return false;
+    if (getIdStream() != null ? !getIdStream().equals(pollModel.getIdStream())
+        : pollModel.getIdStream() != null) {
+      return false;
+    }
+    return getStatus() != null ? getStatus().equals(pollModel.getStatus())
+        : pollModel.getStatus() == null;
+  }
+
+  @Override public int hashCode() {
+    int result = getIdPoll().hashCode();
+    result = 31 * result + (getIdStream() != null ? getIdStream().hashCode() : 0);
+    result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
+    result = 31 * result + (canVote ? 1 : 0);
+    return result;
   }
 }

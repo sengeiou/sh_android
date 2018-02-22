@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.entity;
 
 import com.google.gson.annotations.SerializedName;
+import java.util.ArrayList;
 
 public class BaseMessageEntity extends Synchronized {
 
@@ -20,6 +21,8 @@ public class BaseMessageEntity extends Synchronized {
   private Long videoDuration;
   private EntitiesEntity entities;
   private String imageIdMedia;
+  private ArrayList<String> timelineFlags;
+  private ArrayList<String> detailFlags;
 
 
   public String getIdUser() {
@@ -116,5 +119,21 @@ public class BaseMessageEntity extends Synchronized {
 
   public void setImageIdMedia(String imageIdMedia) {
     this.imageIdMedia = imageIdMedia;
+  }
+
+  public ArrayList<String> getTimelineFlags() {
+    return timelineFlags;
+  }
+
+  public void setTimelineFlags(ArrayList<String> timelineFlags) {
+    this.timelineFlags = timelineFlags;
+  }
+
+  public ArrayList<String> getDetailFlags() {
+    return detailFlags;
+  }
+
+  public void setDetailFlags(ArrayList<String> detailFlags) {
+    this.detailFlags = detailFlags;
   }
 }

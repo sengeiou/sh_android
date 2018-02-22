@@ -2,10 +2,10 @@ package com.shootr.mobile.db;
 
 public class SQLiteUtils {
 
-    private SQLiteUtils() {
-    }
+  private SQLiteUtils() {
+  }
 
-    public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_USER = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.UserTable.TABLE
       + " ("
       + DatabaseContract.UserTable.ID
@@ -81,7 +81,7 @@ public class SQLiteUtils {
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1));";
 
-    public static final String CREATE_TABLE_SHOT = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_SHOT = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ShotTable.TABLE
       + " ("
       + DatabaseContract.ShotTable.ID_SHOT
@@ -156,6 +156,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.RESHOOTED_TIME
       + " DATETIME NULL,"
+      + DatabaseContract.ShotTable.FLAGS
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -167,7 +169,7 @@ public class SQLiteUtils {
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_SHOT_QUEUE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ShotQueueTable.TABLE
       + " ("
       + DatabaseContract.ShotQueueTable.ID_QUEUE
@@ -219,51 +221,51 @@ public class SQLiteUtils {
       +
       ")";
 
-    public static final String CREATE_TABLE_MESSAGE_QUEUE = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.MessageQueueTable.TABLE
-        + " ("
-        + DatabaseContract.MessageQueueTable.ID_QUEUE
-        + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-        + DatabaseContract.MessageQueueTable.FAILED
-        + " INT NOT NULL,"
-        + DatabaseContract.MessageQueueTable.IMAGE_FILE
-        + " TEXT NULL,"
-        + DatabaseContract.MessageQueueTable.ID_PRIVATE_MESSAGE
-        + " TEXT NULL,"
-        + DatabaseContract.MessageQueueTable.ID_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.MessageQueueTable.ID_TARGET_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.MessageQueueTable.USERNAME
-        + " TEXT NOT NULL,"
-        + DatabaseContract.MessageQueueTable.COMMENT
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.MessageQueueTable.IMAGE
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.MessageQueueTable.ID_PRIVATE_MESSAGE_CHANNEL
-        + " TEXT NULL,"
-        + DatabaseContract.MessageQueueTable.TITLE
-        + " TEXT NULL,"
-        + DatabaseContract.MessageQueueTable.VIDEO_URL
-        + " TEXT NULL,"
-        + DatabaseContract.MessageQueueTable.VIDEO_TITLE
-        + " TEXT NULL,"
-        + DatabaseContract.MessageQueueTable.VIDEO_DURATION
-        + " NUMBER NULL,"
-        + DatabaseContract.SyncColumns.BIRTH
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.MODIFIED
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.DELETED
-        + " DATETIME NULL,"
-        + DatabaseContract.SyncColumns.REVISION
-        + " INT NOT NULL,"
-        + DatabaseContract.SyncColumns.SYNCHRONIZED
-        + " CHAR(1) NULL"
-        +
-        ")";
+  public static final String CREATE_TABLE_MESSAGE_QUEUE = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.MessageQueueTable.TABLE
+      + " ("
+      + DatabaseContract.MessageQueueTable.ID_QUEUE
+      + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+      + DatabaseContract.MessageQueueTable.FAILED
+      + " INT NOT NULL,"
+      + DatabaseContract.MessageQueueTable.IMAGE_FILE
+      + " TEXT NULL,"
+      + DatabaseContract.MessageQueueTable.ID_PRIVATE_MESSAGE
+      + " TEXT NULL,"
+      + DatabaseContract.MessageQueueTable.ID_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.MessageQueueTable.ID_TARGET_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.MessageQueueTable.USERNAME
+      + " TEXT NOT NULL,"
+      + DatabaseContract.MessageQueueTable.COMMENT
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.MessageQueueTable.IMAGE
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.MessageQueueTable.ID_PRIVATE_MESSAGE_CHANNEL
+      + " TEXT NULL,"
+      + DatabaseContract.MessageQueueTable.TITLE
+      + " TEXT NULL,"
+      + DatabaseContract.MessageQueueTable.VIDEO_URL
+      + " TEXT NULL,"
+      + DatabaseContract.MessageQueueTable.VIDEO_TITLE
+      + " TEXT NULL,"
+      + DatabaseContract.MessageQueueTable.VIDEO_DURATION
+      + " NUMBER NULL,"
+      + DatabaseContract.SyncColumns.BIRTH
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.MODIFIED
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.DELETED
+      + " DATETIME NULL,"
+      + DatabaseContract.SyncColumns.REVISION
+      + " INT NOT NULL,"
+      + DatabaseContract.SyncColumns.SYNCHRONIZED
+      + " CHAR(1) NULL"
+      +
+      ")";
 
-    public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_FOLLOW = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.FollowTable.TABLE
       + " ("
       + DatabaseContract.FollowTable.TYPE
@@ -276,7 +278,7 @@ public class SQLiteUtils {
       + DatabaseContract.FollowTable.ID_FOLLOWED_ENTITY
       + "))";
 
-    public static final String CREATE_TABLE_BLOCK = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_BLOCK = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.BlockTable.TABLE
       + " ("
       + DatabaseContract.BlockTable.ID_USER
@@ -289,7 +291,7 @@ public class SQLiteUtils {
       + DatabaseContract.BlockTable.ID_BLOCKED_USER
       + "))";
 
-    public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_DEVICE = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.DeviceTable.TABLE
       + " ("
       + DatabaseContract.DeviceTable.ID_DEVICE
@@ -309,7 +311,7 @@ public class SQLiteUtils {
       + DatabaseContract.DeviceTable.LOCALE
       + " VARCHAR(255))";
 
-    public static final String CREATE_TABLE_STREAM = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_STREAM = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.StreamTable.TABLE
       + " ("
       + DatabaseContract.StreamTable.ID_STREAM
@@ -360,6 +362,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.VIEWS
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.PERMISSIONS
+      + " INTEGER NULL,"
       + DatabaseContract.StreamTable.LAST_TIME_SHOOTED
       + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
@@ -373,7 +377,7 @@ public class SQLiteUtils {
       + DatabaseContract.SyncColumns.SYNCHRONIZED
       + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_STREAM_SEARCH = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_STREAM_SEARCH = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.StreamSearchTable.TABLE
       + " ("
       + DatabaseContract.StreamTable.ID_STREAM
@@ -420,6 +424,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.VIEWS
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.PERMISSIONS
+      + " INTEGER NULL,"
       + DatabaseContract.StreamTable.LAST_TIME_SHOOTED
       + " NUMBER NULL,"
       + DatabaseContract.SyncColumns.BIRTH
@@ -435,7 +441,7 @@ public class SQLiteUtils {
       + DatabaseContract.StreamSearchTable.WATCHERS
       + " INT NOT NULL)";
 
-    public static final String CREATE_TABLE_ACTIVITY = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_ACTIVITY = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.ActivityTable.TABLE
       + " ("
       + DatabaseContract.ActivityTable.ID_ACTIVITY
@@ -547,18 +553,19 @@ public class SQLiteUtils {
         + DatabaseContract.SyncColumns.SYNCHRONIZED
         + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_CONTRIBUTOR = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.ContributorTable.TABLE
-        + " ("
-        + DatabaseContract.ContributorTable.ID_STREAM
-        + " TEXT NOT NULL,"
-        + DatabaseContract.ContributorTable.ID_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.ContributorTable.ID_CONTRIBUTOR
-        + " TEXT NOT NULL PRIMARY KEY)";
+
+  public static final String CREATE_TABLE_CONTRIBUTOR = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.ContributorTable.TABLE
+      + " ("
+      + DatabaseContract.ContributorTable.ID_STREAM
+      + " TEXT NOT NULL,"
+      + DatabaseContract.ContributorTable.ID_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.ContributorTable.ID_CONTRIBUTOR
+      + " TEXT NOT NULL PRIMARY KEY)";
 
 
-    public static final String CREATE_TABLE_TIMELINE_SYNC = "CREATE TABLE IF NOT EXISTS "
+  public static final String CREATE_TABLE_TIMELINE_SYNC = "CREATE TABLE IF NOT EXISTS "
       + DatabaseContract.TimelineSyncTable.TABLE
       + " ("
       + DatabaseContract.TimelineSyncTable.STREAM_ID
@@ -566,253 +573,253 @@ public class SQLiteUtils {
       + DatabaseContract.TimelineSyncTable.DATE
       + " DATETIME NOT NULL);";
 
-    public static final String CREATE_TABLE_POLL = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.PollTable.TABLE
-        + " ("
-        + DatabaseContract.PollTable.ID_POLL
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.PollTable.ID_STREAM
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.ID_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.QUESTION
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.STATUS
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.VOTE_STATUS
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.VOTE_PRIVACY
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollTable.EXPIRATION_DATE
-        + " NUMBER NULL,"
-        + DatabaseContract.PollTable.VERIFIED_POLL
-        + " NUMBER NULL,"
-        + DatabaseContract.PollTable.HIDE_RESULTS
-        + " NUMBER NULL,"
-        + DatabaseContract.PollTable.CAN_VOTE
-        + " NUMBER NULL,"
-        + DatabaseContract.PollTable.DAILY_POLL
-        + " NUMBER NULL,"
-        + DatabaseContract.PollTable.PUBLISHED
-        + " NUMBER NOT NULL)";
+  public static final String CREATE_TABLE_POLL = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.PollTable.TABLE
+      + " ("
+      + DatabaseContract.PollTable.ID_POLL
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.PollTable.ID_STREAM
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollTable.ID_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollTable.QUESTION
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollTable.STATUS
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollTable.VOTE_STATUS
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollTable.VOTE_PRIVACY
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollTable.EXPIRATION_DATE
+      + " NUMBER NULL,"
+      + DatabaseContract.PollTable.VERIFIED_POLL
+      + " NUMBER NULL,"
+      + DatabaseContract.PollTable.HIDE_RESULTS
+      + " NUMBER NULL,"
+      + DatabaseContract.PollTable.CAN_VOTE
+      + " NUMBER NULL,"
+      + DatabaseContract.PollTable.DAILY_POLL
+      + " NUMBER NULL,"
+      + DatabaseContract.PollTable.PUBLISHED
+      + " NUMBER NOT NULL)";
 
-    public static final String CREATE_TABLE_POLL_OPTION = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.PollOptionTable.TABLE
-        + " ("
-        + DatabaseContract.PollOptionTable.ID_POLL_OPTION
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.PollOptionTable.ID_POLL
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollOptionTable.OPTION_IMAGE
-        + " TEXT NULL,"
-        + DatabaseContract.PollOptionTable.TEXT
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PollOptionTable.ORDER
-        + " INT NOT NULL,"
-        + DatabaseContract.PollOptionTable.VOTED
-        + " INT NULL,"
-        + DatabaseContract.PollOptionTable.VOTES
-        + " NUMBER NULL)";
+  public static final String CREATE_TABLE_POLL_OPTION = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.PollOptionTable.TABLE
+      + " ("
+      + DatabaseContract.PollOptionTable.ID_POLL_OPTION
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.PollOptionTable.ID_POLL
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollOptionTable.OPTION_IMAGE
+      + " TEXT NULL,"
+      + DatabaseContract.PollOptionTable.TEXT
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PollOptionTable.ORDER
+      + " INT NOT NULL,"
+      + DatabaseContract.PollOptionTable.VOTED
+      + " INT NULL,"
+      + DatabaseContract.PollOptionTable.VOTES
+      + " NUMBER NULL)";
 
-    public static final String CREATE_TABLE_HIGHTLIGHTED_SHOT = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.HighlightedShotTable.TABLE
-        + " ("
-        + DatabaseContract.HighlightedShotTable.ID_HIGHLIGHTED_SHOT
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.HighlightedShotTable.ACTIVE
-        + " LONG NOT NULL,"
-        + DatabaseContract.HighlightedShotTable.VISIBLE
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.ID_SHOT
-        + " TEXT NOT NULL,"
-        + DatabaseContract.HighlightedShotTable.ID_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.HighlightedShotTable.USERNAME
-        + " TEXT NOT NULL,"
-        + DatabaseContract.HighlightedShotTable.USER_PHOTO
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.COMMENT
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.HighlightedShotTable.IMAGE
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.HighlightedShotTable.IMAGE_WIDTH
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.HighlightedShotTable.IMAGE_HEIGHT
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.HighlightedShotTable.ID_STREAM
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.STREAM_TITLE
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.NICE_COUNT
-        + " NUMBER NOT NULL,"
-        + DatabaseContract.HighlightedShotTable.TYPE
-        + " TEXT NOT NULL,"
-        + DatabaseContract.HighlightedShotTable.ID_SHOT_PARENT
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.ID_USER_PARENT
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.USERNAME_PARENT
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.VIDEO_URL
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.VIDEO_TITLE
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.VIDEO_DURATION
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.PROFILE_HIDDEN
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.REPLY_COUNT
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.VIEWS
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.LINK_CLICKS
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.RESHOOT_COUNT
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.CTA_CAPTION
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.CTA_BUTTON_LINK
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT
-        + " TEXT NULL,"
-        + DatabaseContract.HighlightedShotTable.PROMOTED
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.VERIFIED_USER
-        + " NUMBER NULL,"
-        + DatabaseContract.HighlightedShotTable.IS_PADDING
-        + " NUMBER NULL,"
-        + DatabaseContract.ShotTable.FROM_HOLDER
-        + " NUMBER NULL,"
-        + DatabaseContract.ShotTable.FROM_CONTRIBUTOR
-        + " NUMBER NULL,"
-        + DatabaseContract.SyncColumns.BIRTH
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.MODIFIED
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.DELETED
-        + " DATETIME NULL,"
-        + DatabaseContract.SyncColumns.REVISION
-        + " INT NOT NULL,"
-        + DatabaseContract.SyncColumns.SYNCHRONIZED
-        + " CHAR(1) NULL)";
+  public static final String CREATE_TABLE_HIGHTLIGHTED_SHOT = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.HighlightedShotTable.TABLE
+      + " ("
+      + DatabaseContract.HighlightedShotTable.ID_HIGHLIGHTED_SHOT
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.HighlightedShotTable.ACTIVE
+      + " LONG NOT NULL,"
+      + DatabaseContract.HighlightedShotTable.VISIBLE
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.ID_SHOT
+      + " TEXT NOT NULL,"
+      + DatabaseContract.HighlightedShotTable.ID_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.HighlightedShotTable.USERNAME
+      + " TEXT NOT NULL,"
+      + DatabaseContract.HighlightedShotTable.USER_PHOTO
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.COMMENT
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.HighlightedShotTable.IMAGE
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.HighlightedShotTable.IMAGE_WIDTH
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.HighlightedShotTable.IMAGE_HEIGHT
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.HighlightedShotTable.ID_STREAM
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.STREAM_TITLE
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.NICE_COUNT
+      + " NUMBER NOT NULL,"
+      + DatabaseContract.HighlightedShotTable.TYPE
+      + " TEXT NOT NULL,"
+      + DatabaseContract.HighlightedShotTable.ID_SHOT_PARENT
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.ID_USER_PARENT
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.USERNAME_PARENT
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.VIDEO_URL
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.VIDEO_TITLE
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.VIDEO_DURATION
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.PROFILE_HIDDEN
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.REPLY_COUNT
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.VIEWS
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.LINK_CLICKS
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.RESHOOT_COUNT
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.CTA_CAPTION
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.CTA_BUTTON_LINK
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.CTA_BUTTON_TEXT
+      + " TEXT NULL,"
+      + DatabaseContract.HighlightedShotTable.PROMOTED
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.VERIFIED_USER
+      + " NUMBER NULL,"
+      + DatabaseContract.HighlightedShotTable.IS_PADDING
+      + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.FROM_HOLDER
+      + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.FROM_CONTRIBUTOR
+      + " NUMBER NULL,"
+      + DatabaseContract.SyncColumns.BIRTH
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.MODIFIED
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.DELETED
+      + " DATETIME NULL,"
+      + DatabaseContract.SyncColumns.REVISION
+      + " INT NOT NULL,"
+      + DatabaseContract.SyncColumns.SYNCHRONIZED
+      + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_RECENT_SEARCH = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.RecentSearchTable.TABLE
-        + " ("
-        + DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM
-        + " TEXT NOT NULL,"
-        + DatabaseContract.RecentSearchTable.VISIT_DATE
-        + " INTEGER NULL,"
-        + DatabaseContract.RecentSearchTable.ITEM_TYPE
-        + " INTEGER NOT NULL,"
-        + " PRIMARY KEY("
-        + DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM
-        + ","
-        + DatabaseContract.RecentSearchTable.ITEM_TYPE
-        + "))";
+  public static final String CREATE_TABLE_RECENT_SEARCH = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.RecentSearchTable.TABLE
+      + " ("
+      + DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM
+      + " TEXT NOT NULL,"
+      + DatabaseContract.RecentSearchTable.VISIT_DATE
+      + " INTEGER NULL,"
+      + DatabaseContract.RecentSearchTable.ITEM_TYPE
+      + " INTEGER NOT NULL,"
+      + " PRIMARY KEY("
+      + DatabaseContract.RecentSearchTable.ID_SEARCH_ITEM
+      + ","
+      + DatabaseContract.RecentSearchTable.ITEM_TYPE
+      + "))";
 
-    public static final String CREATE_TABLE_SHOOTR_EVENT = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.ShootrEventTable.TABLE
-        + " ("
-        + DatabaseContract.ShootrEventTable.ID_KEY
-        + " TEXT NOT NULL,"
-        + DatabaseContract.ShootrEventTable.TYPE
-        + " TEXT NULL,"
-        + DatabaseContract.ShootrEventTable.TIMESTAMP
-        + " INTEGER NULL)";
+  public static final String CREATE_TABLE_SHOOTR_EVENT = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.ShootrEventTable.TABLE
+      + " ("
+      + DatabaseContract.ShootrEventTable.ID_KEY
+      + " TEXT NOT NULL,"
+      + DatabaseContract.ShootrEventTable.TYPE
+      + " TEXT NULL,"
+      + DatabaseContract.ShootrEventTable.TIMESTAMP
+      + " INTEGER NULL)";
 
-    public static final String CREATE_TABLE_SYNCHRO = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.SynchroTable.TABLE
-        + " ("
-        + DatabaseContract.SynchroTable.ENTITY
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.SynchroTable.TIMESTAMP
-        + " INTEGER NULL)";
+  public static final String CREATE_TABLE_SYNCHRO = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.SynchroTable.TABLE
+      + " ("
+      + DatabaseContract.SynchroTable.ENTITY
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.SynchroTable.TIMESTAMP
+      + " INTEGER NULL)";
 
-    public static final String CREATE_TABLE_PRIVATE_MESSAGE_CHANNEL = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.PrivateMessageChannelTable.TABLE
-        + " ("
-        + DatabaseContract.PrivateMessageChannelTable.ID_PRIVATE_MESSAGE_CHANNEL
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.PrivateMessageChannelTable.ID_TARGET_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PrivateMessageChannelTable.TITLE
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PrivateMessageChannelTable.IMAGE
-        + " TEXT NULL,"
-        + DatabaseContract.PrivateMessageChannelTable.READ
-        + " NUMBER NULL,"
-        + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME
-        + " INTEGER NULL,"
-        + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT
-        + " TEXT NULL,"
-        + DatabaseContract.PrivateMessageChannelTable.MUTED
-        + " INTEGER NULL,"
-        + DatabaseContract.SyncColumns.BIRTH
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.MODIFIED
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.DELETED
-        + " DATETIME NULL,"
-        + DatabaseContract.SyncColumns.REVISION
-        + " INT NOT NULL,"
-        + DatabaseContract.SyncColumns.SYNCHRONIZED
-        + " CHAR(1) NULL)";
+  public static final String CREATE_TABLE_PRIVATE_MESSAGE_CHANNEL = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.PrivateMessageChannelTable.TABLE
+      + " ("
+      + DatabaseContract.PrivateMessageChannelTable.ID_PRIVATE_MESSAGE_CHANNEL
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.PrivateMessageChannelTable.ID_TARGET_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PrivateMessageChannelTable.TITLE
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PrivateMessageChannelTable.IMAGE
+      + " TEXT NULL,"
+      + DatabaseContract.PrivateMessageChannelTable.READ
+      + " NUMBER NULL,"
+      + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_TIME
+      + " INTEGER NULL,"
+      + DatabaseContract.PrivateMessageChannelTable.LAST_MESSAGE_COMMENT
+      + " TEXT NULL,"
+      + DatabaseContract.PrivateMessageChannelTable.MUTED
+      + " INTEGER NULL,"
+      + DatabaseContract.SyncColumns.BIRTH
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.MODIFIED
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.DELETED
+      + " DATETIME NULL,"
+      + DatabaseContract.SyncColumns.REVISION
+      + " INT NOT NULL,"
+      + DatabaseContract.SyncColumns.SYNCHRONIZED
+      + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_PRIVATE_MESSAGE = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.PrivateMessageTable.TABLE
-        + " ("
-        + DatabaseContract.PrivateMessageTable.ID_PRIVATE_MESSAGE
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.PrivateMessageTable.ID_PRIVATE_MESSAGE_CHANNEL
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PrivateMessageTable.ID_USER
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PrivateMessageTable.USERNAME
-        + " TEXT NOT NULL,"
-        + DatabaseContract.PrivateMessageTable.COMMENT
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.PrivateMessageTable.IMAGE
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.PrivateMessageTable.IMAGE_WIDTH
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.PrivateMessageTable.IMAGE_HEIGHT
-        + " VARCHAR(255) NULL,"
-        + DatabaseContract.PrivateMessageTable.VIDEO_URL
-        + " TEXT NULL,"
-        + DatabaseContract.PrivateMessageTable.VIDEO_TITLE
-        + " TEXT NULL,"
-        + DatabaseContract.PrivateMessageTable.VIDEO_DURATION
-        + " NUMBER NULL,"
-        + DatabaseContract.PrivateMessageTable.VERIFIED_USER
-        + " NUMBER NULL,"
-        + DatabaseContract.PrivateMessageTable.ENTITIES
-        + " text NULL,"
-        + DatabaseContract.SyncColumns.BIRTH
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.MODIFIED
-        + " DATETIME NOT NULL,"
-        + DatabaseContract.SyncColumns.DELETED
-        + " DATETIME NULL,"
-        + DatabaseContract.SyncColumns.REVISION
-        + " INT NOT NULL,"
-        + DatabaseContract.SyncColumns.SYNCHRONIZED
-        + " CHAR(1) NULL)";
+  public static final String CREATE_TABLE_PRIVATE_MESSAGE = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.PrivateMessageTable.TABLE
+      + " ("
+      + DatabaseContract.PrivateMessageTable.ID_PRIVATE_MESSAGE
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.PrivateMessageTable.ID_PRIVATE_MESSAGE_CHANNEL
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PrivateMessageTable.ID_USER
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PrivateMessageTable.USERNAME
+      + " TEXT NOT NULL,"
+      + DatabaseContract.PrivateMessageTable.COMMENT
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.PrivateMessageTable.IMAGE
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.PrivateMessageTable.IMAGE_WIDTH
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.PrivateMessageTable.IMAGE_HEIGHT
+      + " VARCHAR(255) NULL,"
+      + DatabaseContract.PrivateMessageTable.VIDEO_URL
+      + " TEXT NULL,"
+      + DatabaseContract.PrivateMessageTable.VIDEO_TITLE
+      + " TEXT NULL,"
+      + DatabaseContract.PrivateMessageTable.VIDEO_DURATION
+      + " NUMBER NULL,"
+      + DatabaseContract.PrivateMessageTable.VERIFIED_USER
+      + " NUMBER NULL,"
+      + DatabaseContract.PrivateMessageTable.ENTITIES
+      + " text NULL,"
+      + DatabaseContract.SyncColumns.BIRTH
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.MODIFIED
+      + " DATETIME NOT NULL,"
+      + DatabaseContract.SyncColumns.DELETED
+      + " DATETIME NULL,"
+      + DatabaseContract.SyncColumns.REVISION
+      + " INT NOT NULL,"
+      + DatabaseContract.SyncColumns.SYNCHRONIZED
+      + " CHAR(1) NULL)";
 
-    public static final String CREATE_TABLE_STREAM_FILTER = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.StreamFilterTable.TABLE
-        + " ("
-        + DatabaseContract.StreamFilterTable.ID_STREAM
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.StreamFilterTable.LAST_TIME_FILTERED
-        + " INTEGER NULL)";
+  public static final String CREATE_TABLE_STREAM_FILTER = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.StreamFilterTable.TABLE
+      + " ("
+      + DatabaseContract.StreamFilterTable.ID_STREAM
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.StreamFilterTable.LAST_TIME_FILTERED
+      + " INTEGER NULL)";
 
-    public static final String CREATE_TABLE_STREAM_CONNECTIONS = "CREATE TABLE IF NOT EXISTS "
-        + DatabaseContract.StreamConnectionsTable.TABLE
-        + " ("
-        + DatabaseContract.StreamConnectionsTable.ID_STREAM
-        + " TEXT NOT NULL PRIMARY KEY,"
-        + DatabaseContract.StreamConnectionsTable.CONNECTION_TIMES
-        + " INTEGER NULL)";
+  public static final String CREATE_TABLE_STREAM_CONNECTIONS = "CREATE TABLE IF NOT EXISTS "
+      + DatabaseContract.StreamConnectionsTable.TABLE
+      + " ("
+      + DatabaseContract.StreamConnectionsTable.ID_STREAM
+      + " TEXT NOT NULL PRIMARY KEY,"
+      + DatabaseContract.StreamConnectionsTable.CONNECTION_TIMES
+      + " INTEGER NULL)";
 
 }

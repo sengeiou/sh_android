@@ -23,6 +23,7 @@ import com.roughike.bottombar.BottomBarTab;
 import com.roughike.bottombar.OnTabReselectListener;
 import com.roughike.bottombar.OnTabSelectListener;
 import com.shootr.mobile.R;
+import com.shootr.mobile.data.background.sockets.WebSocketService;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
@@ -98,6 +99,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     loadIntentData();
     handleUpdateVersion();
     handleMultipleActivitiesIntent();
+    initSocket();
   }
 
   private void sendOpenToMixpanel() {
@@ -307,6 +309,10 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
 
   @Override public void updateChannelBadge(int unreadChannels, boolean isFollowingChannels) {
     setupChannelBadge(unreadChannels);
+  }
+
+  @Override public void initSocket() {
+    WebSocketService.startService(this);
   }
 
   private void setupChannelBadge(int count) {

@@ -2,7 +2,6 @@ package com.shootr.mobile.data.repository.datasource.user;
 
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
-import com.shootr.mobile.db.manager.FollowManager;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.db.manager.UserManager;
 import java.io.IOException;
@@ -11,13 +10,11 @@ import javax.inject.Inject;
 
 public class DatabaseUserDataSource implements UserDataSource {
 
-    private final FollowManager followManager;
     private final UserManager userManager;
     private final StreamManager streamManager;
 
-    @Inject public DatabaseUserDataSource(FollowManager followManager, UserManager userManager,
+    @Inject public DatabaseUserDataSource(UserManager userManager,
         StreamManager streamManager) {
-        this.followManager = followManager;
         this.userManager = userManager;
         this.streamManager = streamManager;
     }

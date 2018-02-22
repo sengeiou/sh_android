@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.EntitiesModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.StreamMediaView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -46,7 +47,7 @@ public class StreamMediaPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper());
     presenter = new StreamMediaPresenter(getStreamMediaInteractor, getOlderStreamMediaInteractor,
         shotModelMapper, errorMessageFactory);
     presenter.setView(streamMediaView);

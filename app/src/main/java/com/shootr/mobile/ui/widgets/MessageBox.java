@@ -14,6 +14,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import butterknife.BindView;
@@ -63,6 +64,7 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
   @BindView(R.id.new_shot_mentions) NestedListView mentionsListView;
   @BindView(R.id.new_shot_char_counter)
   TextView charCounter;
+  @BindView(R.id.container) LinearLayout container;
 
   @Inject MessageBoxPresenter presenter;
   @Inject
@@ -176,6 +178,14 @@ public class MessageBox extends RelativeLayout implements MessageBoxView {
         checkIfWritingMention(onTextChangeEvent);
       }
     };
+  }
+
+  public void showMessageBox() {
+    container.setVisibility(VISIBLE);
+  }
+
+  public void hideMessageBox() {
+    container.setVisibility(GONE);
   }
 
   public void checkIfWritingMention(TextViewTextChangeEvent onTextChangeEvent) {

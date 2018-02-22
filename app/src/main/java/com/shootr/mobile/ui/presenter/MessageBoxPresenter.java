@@ -78,7 +78,7 @@ public class MessageBoxPresenter {
     if (canSendShot(shotCommentToSend)) {
       postStreamShot();
     } else {
-      Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
+      Timber.w("Tried to closeSocket shot empty or too big: %s", shotCommentToSend);
     }
   }
 
@@ -91,7 +91,7 @@ public class MessageBoxPresenter {
         postMessage(idTargetUser);
       }
     } else {
-      Timber.w("Tried to send shot empty or too big: %s", shotCommentToSend);
+      Timber.w("Tried to closeSocket shot empty or too big: %s", shotCommentToSend);
     }
   }
 

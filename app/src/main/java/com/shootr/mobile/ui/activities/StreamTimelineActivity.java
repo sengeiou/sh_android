@@ -8,8 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 import com.shootr.mobile.R;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
+import com.shootr.mobile.ui.fragments.streamtimeline.TimelineFragment;
 import com.shootr.mobile.util.BackStackHandler;
 import dagger.ObjectGraph;
 import javax.inject.Inject;
@@ -17,6 +20,7 @@ import javax.inject.Inject;
 public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
 
     @Inject BackStackHandler backStackHandler;
+    @Inject SessionRepository sessionRepository;
     private Fragment currentFragment;
 
     public static Intent newIntent(Context context, String streamId, String streamTitle, String authorId) {
@@ -59,13 +63,32 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     private void setupAndAddFragment(Bundle savedInstanceState) {
         boolean fragmentAlreadyAddedBySystem = savedInstanceState != null;
 
-        if (!fragmentAlreadyAddedBySystem) {
-            Bundle fragmentArguments = getIntent().getExtras();
-            StreamTimelineFragment streamTimelineFragment = StreamTimelineFragment.newInstance(fragmentArguments);
-            currentFragment = streamTimelineFragment;
+        if (sessionRepository.getBootstrapping() != null) {
+            if (sessionRepository.getBootstrapping().isTimelineConnection()) {
 
+                Bundle fragmentArguments = getIntent().getExtras();
+                TimelineFragment streamTimelineFragment =
+                    TimelineFragment.newInstance(fragmentArguments);
+                setupTimelineFragment(fragmentAlreadyAddedBySystem, streamTimelineFragment);
+            } else {
+                Bundle fragmentArguments = getIntent().getExtras();
+                StreamTimelineFragment streamTimelineFragment =
+                    StreamTimelineFragment.newInstance(fragmentArguments);
+                setupTimelineFragment(fragmentAlreadyAddedBySystem, streamTimelineFragment);
+            }
+        } else {
+            Bundle fragmentArguments = getIntent().getExtras();
+            StreamTimelineFragment streamTimelineFragment =
+                StreamTimelineFragment.newInstance(fragmentArguments);
+            setupTimelineFragment(fragmentAlreadyAddedBySystem, streamTimelineFragment);
+        }
+    }
+
+    private void setupTimelineFragment(boolean fragmentAlreadyAddedBySystem, BaseFragment baseFragment) {
+        if (!fragmentAlreadyAddedBySystem) {
+            currentFragment = baseFragment;
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.container, streamTimelineFragment, StreamTimelineFragment.TAG);
+            transaction.add(R.id.container, baseFragment, StreamTimelineFragment.TAG);
             transaction.commit();
         }
     }

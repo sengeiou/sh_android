@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:id="@+id/container"
+    style="@style/TimelineIndicator"
+    >
+
+  <com.shootr.mobile.ui.widgets.BaseMessageTextView
+      android:id="@+id/timeline_message"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:clickable="false"
+      android:gravity="center"
+      android:paddingLeft="24dp"
+      android:singleLine="true"
+      android:textColor="@color/material_black"
+      android:textSize="15sp"
+      android:visibility="visible"
+      tools:text="Hola que haces?"
+      />
+</RelativeLayout>

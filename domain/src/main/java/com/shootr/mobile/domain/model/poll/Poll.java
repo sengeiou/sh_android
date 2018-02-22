@@ -1,8 +1,10 @@
 package com.shootr.mobile.domain.model.poll;
 
+import com.shootr.mobile.domain.model.PrintableItem;
+import com.shootr.mobile.domain.model.PrintableType;
 import java.util.List;
 
-public class Poll {
+public class Poll implements PrintableItem {
 
   private String idPoll;
   private String idStream;
@@ -147,5 +149,13 @@ public class Poll {
 
   public void setDailyPoll(boolean dailyPoll) {
     this.dailyPoll = dailyPoll;
+  }
+
+  @Override public String getResultType() {
+    return PrintableType.POLL;
+  }
+
+  @Override public String getMessageType() {
+    return PrintableType.POLL;
   }
 }

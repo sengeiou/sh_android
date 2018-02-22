@@ -2,6 +2,7 @@ package com.shootr.mobile.data.background.dagger;
 
 import com.shootr.mobile.data.background.BackgroundShotSender;
 import com.shootr.mobile.data.background.ShotDispatcherBackgroundService;
+import com.shootr.mobile.data.background.sockets.WebSocketService;
 import com.shootr.mobile.domain.service.ShotDispatcher;
 import com.shootr.mobile.domain.service.MessageSender;
 import com.shootr.mobile.domain.service.dagger.Background;
@@ -11,7 +12,7 @@ import dagger.Provides;
 
 @Module(
   injects = {
-    ShotDispatcherBackgroundService.class, BackgroundShotSender.class,
+    ShotDispatcherBackgroundService.class, BackgroundShotSender.class, WebSocketService.class
   },
   complete = false,
   library = true) public class BackgroundModule {

@@ -2,8 +2,10 @@ package com.shootr.mobile.ui.presenter;
 
 import android.content.Context;
 import com.shootr.mobile.data.prefs.IntPreference;
+import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
+import com.shootr.mobile.domain.interactor.GetSocketInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SendCacheQueueInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
@@ -42,126 +44,131 @@ import static org.mockito.Mockito.when;
 
 public class MainScreenPresenterTest {
 
-    public static final int TWO_ACTIVITIES = 2;
-    private static final int ONE_ACTIVITY = 1;
-    private static final int ZERO_ACTIVITY = 0;
-    public static final String ID_USER = "idUser";
-    private static final String ID_STREAM = "streamId";
-    @Mock DateRangeTextProvider dateRangeTextProvider;
-    @Mock TimeUtils timeUtils;
-    @Mock GetCurrentUserInteractor getCurrentUserInteractor;
-    @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
-    @Mock SendShootrEventStatsInteractor sendShoEventStatsIneteractor;
-    @Mock GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
-    @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
-    @Mock SessionRepository sessionRepository;
-    @Mock IntPreference badgeCount;
-    @Mock Bus bus;
-    @Mock BusPublisher busPublisher;
-    @Mock MainScreenView view;
-    @Mock UnwatchStreamInteractor unwatchStreamInteractor;
-    @Mock GetLocalStreamInteractor getStreamInteractor;
-    @Mock ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
-    @Mock StreamModelMapper streamModelMapper;
-    @Mock AnalyticsTool analyticsTool;
-    @Mock GetShootrEventsInteractor getShootrEventsInteractor;
-    @Mock Context context;
-    @Mock SendCacheQueueInteractor sendEventsOnQueueCacheInteractor;
-    private MainScreenPresenter mainScreenPresenter;
+  public static final int TWO_ACTIVITIES = 2;
+  private static final int ONE_ACTIVITY = 1;
+  private static final int ZERO_ACTIVITY = 0;
+  public static final String ID_USER = "idUser";
+  private static final String ID_STREAM = "streamId";
+  @Mock DateRangeTextProvider dateRangeTextProvider;
+  @Mock TimeUtils timeUtils;
+  @Mock GetCurrentUserInteractor getCurrentUserInteractor;
+  @Mock SendDeviceInfoInteractor sendDeviceInfoInteractor;
+  @Mock SendShootrEventStatsInteractor sendShoEventStatsIneteractor;
+  @Mock GetUserForAnalythicsByIdInteractor getUserForAnalythicsByIdInteractor;
+  @Mock GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
 
-    @Before public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        UserModelMapper userModelMapper =
-            new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
-        mainScreenPresenter =
-            new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
-                sendShoEventStatsIneteractor, sendEventsOnQueueCacheInteractor,
-                getUserForAnalythicsByIdInteractor,
-                shouldUpdateDeviceInfoInteractor, unwatchStreamInteractor, sessionRepository,
-                userModelMapper, badgeCount, getPrivateMessagesChannelsInteractor,
-                getStreamInteractor, getShootrEventsInteractor, streamModelMapper, bus,
-                busPublisher, context, analyticsTool);
-        mainScreenPresenter.setView(view);
-        User user = new User();
-        user.setIdWatchingStream(ID_STREAM);
-        when(sessionRepository.getCurrentUser()).thenReturn(user);
-    }
+  @Mock SessionRepository sessionRepository;
+  @Mock IntPreference badgeCount;
+  @Mock Bus bus;
+  @Mock BusPublisher busPublisher;
+  @Mock MainScreenView view;
+  @Mock UnwatchStreamInteractor unwatchStreamInteractor;
+  @Mock GetLocalStreamInteractor getStreamInteractor;
+  @Mock ShouldUpdateDeviceInfoInteractor shouldUpdateDeviceInfoInteractor;
+  @Mock GetSocketInteractor getSocketInteractor;
+  @Mock StreamModelMapper streamModelMapper;
+  @Mock AnalyticsTool analyticsTool;
+  @Mock GetShootrEventsInteractor getShootrEventsInteractor;
+  @Mock Context context;
+  @Mock SendCacheQueueInteractor sendEventsOnQueueCacheInteractor;
+  @Mock LogsCache logsCache;
+  private MainScreenPresenter mainScreenPresenter;
 
-    @Test public void shouldSetUserDataWhenLoadCurrentUserOnInitialize() throws Exception {
-        setupCurrentUserCallback();
+  @Before public void setUp() throws Exception {
+    MockitoAnnotations.initMocks(this);
+    UserModelMapper userModelMapper =
+        new UserModelMapper(new StreamJoinDateFormatter(dateRangeTextProvider, timeUtils));
+    mainScreenPresenter =
+        new MainScreenPresenter(getCurrentUserInteractor, sendDeviceInfoInteractor,
+            sendShoEventStatsIneteractor, sendEventsOnQueueCacheInteractor,
+            getUserForAnalythicsByIdInteractor, shouldUpdateDeviceInfoInteractor,
+            getSocketInteractor, unwatchStreamInteractor, sessionRepository, userModelMapper,
+            badgeCount, getPrivateMessagesChannelsInteractor, getStreamInteractor,
+            getShootrEventsInteractor, streamModelMapper, bus, busPublisher, context, logsCache,
+            analyticsTool);
+    mainScreenPresenter.setView(view);
+    User user = new User();
+    user.setIdWatchingStream(ID_STREAM);
+    when(sessionRepository.getCurrentUser()).thenReturn(user);
+  }
 
-        mainScreenPresenter.initialize(view);
+  @Test public void shouldSetUserDataWhenLoadCurrentUserOnInitialize() throws Exception {
+    setupCurrentUserCallback();
 
-        verify(view).setUserData(any(UserModel.class));
-    }
+    mainScreenPresenter.initialize(view);
 
-    @Test public void shouldSetUserDataWhenLoadCurrentUserOnResume() throws Exception {
-        setupCurrentUserCallback();
+    verify(view).setUserData(any(UserModel.class));
+  }
 
-        mainScreenPresenter.pause();
-        mainScreenPresenter.resume();
+  @Test public void shouldSetUserDataWhenLoadCurrentUserOnResume() throws Exception {
+    setupCurrentUserCallback();
 
-        verify(view).setUserData(any(UserModel.class));
-    }
+    mainScreenPresenter.pause();
+    mainScreenPresenter.resume();
 
-    @Test public void shouldSendDeviceInfo() throws Exception {
-        setupShouldUpdateDeviceCallback();
-        mainScreenPresenter.initialize(view);
+    verify(view).setUserData(any(UserModel.class));
+  }
 
-        verify(sendDeviceInfoInteractor, never()).sendDeviceInfo(anyString());
-    }
+  @Test public void shouldSendDeviceInfo() throws Exception {
+    setupShouldUpdateDeviceCallback();
+    mainScreenPresenter.initialize(view);
 
-    @Test public void shouldUpdateActivityBadge() throws Exception {
-        setupNumberOfNewActivities(1);
+    verify(sendDeviceInfoInteractor, never()).sendDeviceInfo(anyString());
+  }
 
-        mainScreenPresenter.initialize(view);
+  @Test public void shouldUpdateActivityBadge() throws Exception {
+    setupNumberOfNewActivities(1);
 
-        verify(view).showActivityBadge(anyInt());
-    }
+    mainScreenPresenter.initialize(view);
 
-    @Test public void shouldNotUpdateActivityBadgeWhenNegativeValue() throws Exception {
-        setupNumberOfNewActivities(-1);
+    verify(view).showActivityBadge(anyInt());
+  }
 
-        mainScreenPresenter.initialize(view);
+  @Test public void shouldNotUpdateActivityBadgeWhenNegativeValue() throws Exception {
+    setupNumberOfNewActivities(-1);
 
-        verify(view, never()).showActivityBadge(anyInt());
-    }
+    mainScreenPresenter.initialize(view);
 
-    @Test public void shouldNotUpdateActivityBadgeWhenZeroValue() throws Exception {
-        setupNumberOfNewActivities(ZERO_ACTIVITY);
+    verify(view, never()).showActivityBadge(anyInt());
+  }
 
-        mainScreenPresenter.initialize(view);
+  @Test public void shouldNotUpdateActivityBadgeWhenZeroValue() throws Exception {
+    setupNumberOfNewActivities(ZERO_ACTIVITY);
 
-        verify(view, never()).showActivityBadge(anyInt());
-    }
+    mainScreenPresenter.initialize(view);
 
-    private void setupCurrentUserCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<User> callback = (Interactor.Callback<User>) invocation.getArguments()[0];
-                callback.onLoaded(user());
-                return null;
-            }
-        }).when(getCurrentUserInteractor).getCurrentUser(any(Interactor.Callback.class));
-    }
+    verify(view, never()).showActivityBadge(anyInt());
+  }
 
-    private void setupShouldUpdateDeviceCallback() {
-        doAnswer(new Answer() {
-            @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                Interactor.Callback<Boolean> callback = (Interactor.Callback<Boolean>) invocation.getArguments()[0];
-                callback.onLoaded(false);
-                return null;
-            }
-        }).when(shouldUpdateDeviceInfoInteractor).getDeviceInfo(any(Interactor.Callback.class));
-    }
+  private void setupCurrentUserCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<User> callback =
+            (Interactor.Callback<User>) invocation.getArguments()[0];
+        callback.onLoaded(user());
+        return null;
+      }
+    }).when(getCurrentUserInteractor).getCurrentUser(any(Interactor.Callback.class));
+  }
 
-    private User user() {
-        User user = new User();
-        user.setIdUser(ID_USER);
-        return user;
-    }
+  private void setupShouldUpdateDeviceCallback() {
+    doAnswer(new Answer() {
+      @Override public Object answer(InvocationOnMock invocation) throws Throwable {
+        Interactor.Callback<Boolean> callback =
+            (Interactor.Callback<Boolean>) invocation.getArguments()[0];
+        callback.onLoaded(false);
+        return null;
+      }
+    }).when(shouldUpdateDeviceInfoInteractor).getDeviceInfo(any(Interactor.Callback.class));
+  }
 
-    private void setupNumberOfNewActivities(Integer numberOfActivities) {
-        when(badgeCount.get()).thenReturn(numberOfActivities);
-    }
+  private User user() {
+    User user = new User();
+    user.setIdUser(ID_USER);
+    return user;
+  }
+
+  private void setupNumberOfNewActivities(Integer numberOfActivities) {
+    when(badgeCount.get()).thenReturn(numberOfActivities);
+  }
 }

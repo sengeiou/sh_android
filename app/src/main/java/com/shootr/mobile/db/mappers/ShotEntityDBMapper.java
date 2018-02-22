@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.DatabaseContract;
+import java.util.ArrayList;
 import javax.inject.Inject;
 
 public class ShotEntityDBMapper extends GenericDBMapper {
@@ -57,8 +58,17 @@ public class ShotEntityDBMapper extends GenericDBMapper {
     setSynchronizedfromCursor(c, shot);
 
     retrieveEntities(c, shot);
+    retrieveFlags(c, shot);
 
     return shot;
+  }
+
+  private void retrieveFlags(Cursor c, ShotEntity shot) {
+    Gson gson = new Gson();
+    String json = c.getString(c.getColumnIndex(DatabaseContract.ShotTable.ENTITIES));
+    ShotFlags shotFlags = gson.fromJson(json, ShotFlags.class);
+    shot.setTimelineFlags(shotFlags.getTimelineFlags());
+    shot.setDetailFlags(shotFlags.getDetailFlags());
   }
 
   private void retrieveEntities(Cursor c, ShotEntity shot) {
@@ -105,14 +115,47 @@ public class ShotEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.ShotTable.NICED_TIME, shot.getNicedTime());
     cv.put(DatabaseContract.ShotTable.RESHOOTED_TIME, shot.getReshootedTime());
     storeEntities(shot, cv);
+    storeFlags(shot, cv);
     setSynchronizedtoContentValues(shot, cv);
     return cv;
+  }
+
+  private void storeFlags(ShotEntity shot, ContentValues cv) {
+    Gson gson = new Gson();
+
+    ShotFlags shotFlags = new ShotFlags();
+    shotFlags.setTimelineFlags(shot.getTimelineFlags());
+    shotFlags.setDetailFlags(shot.getDetailFlags());
+
+    String json = gson.toJson(shotFlags);
+    cv.put(DatabaseContract.ShotTable.FLAGS, json);
   }
 
   private void storeEntities(ShotEntity shot, ContentValues cv) {
     Gson gson = new Gson();
     String json = gson.toJson(shot.getEntities());
     cv.put(DatabaseContract.ShotTable.ENTITIES, json);
+  }
+
+  private class ShotFlags {
+    private ArrayList<String> timelineFlags;
+    private ArrayList<String> detailFlags;
+
+    public ArrayList<String> getTimelineFlags() {
+      return timelineFlags;
+    }
+
+    public void setTimelineFlags(ArrayList<String> timelineFlags) {
+      this.timelineFlags = timelineFlags;
+    }
+
+    public ArrayList<String> getDetailFlags() {
+      return detailFlags;
+    }
+
+    public void setDetailFlags(ArrayList<String> detailFlags) {
+      this.detailFlags = detailFlags;
+    }
   }
 }
 

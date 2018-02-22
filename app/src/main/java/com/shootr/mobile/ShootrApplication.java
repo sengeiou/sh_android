@@ -7,6 +7,10 @@ import android.view.Display;
 import android.view.WindowManager;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import com.crashlytics.android.answers.Answers;
+import com.shootr.mobile.data.background.sockets.WebSocketService;
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.CloseSocketEvent;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.ErrorActivity;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
@@ -24,6 +28,8 @@ public class ShootrApplication extends MultiDexApplication {
     @Inject DatabaseVersionUtils databaseVersionUtils;
     @Inject CrashReportTool crashReportTool;
     @Inject AnalyticsTool analyticsTool;
+    @Inject SessionRepository sessionRepository;
+    @Inject BusPublisher busPublisher;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -40,6 +46,8 @@ public class ShootrApplication extends MultiDexApplication {
             Display display = manager.getDefaultDisplay();
             display.getSize(SCREEN_SIZE);
         }
+
+        BackgroundManager.get(this).registerListener(appActivityListener);
     }
 
     public void plantLoggerTrees() {
@@ -72,4 +80,17 @@ public class ShootrApplication extends MultiDexApplication {
     public static ShootrApplication get(Context context) {
         return (ShootrApplication) context.getApplicationContext();
     }
+
+    private BackgroundManager.Listener appActivityListener = new BackgroundManager.Listener() {
+        public void onBecameForeground() {
+            if (sessionRepository.getCurrentUserId() != null
+                && !sessionRepository.getCurrentUserId().isEmpty()) {
+                WebSocketService.startService(getApplicationContext());
+            }
+        }
+
+        public void onBecameBackground() {
+            busPublisher.post(new CloseSocketEvent.Event());
+        }
+    };
 }

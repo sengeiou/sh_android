@@ -29,6 +29,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private boolean reshooted;
     private boolean isMyshot;
     private boolean hasMedia;
+    private boolean deleted;
 
     public String getIdShot() {
         return idShot;
@@ -244,28 +245,19 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
         ShotModel shotModel = (ShotModel) o;
 
-        if (isNiced() != shotModel.isNiced()) return false;
-        if (isReshooted() != shotModel.isReshooted()) return false;
-        if (!getIdShot().equals(shotModel.getIdShot())) return false;
-        if (getNicers() != null ? !getNicers().equals(shotModel.getNicers())
-            : shotModel.getNicers() != null) {
-            return false;
-        }
-        if (getNiceCount() != null ? !getNiceCount().equals(shotModel.getNiceCount())
-            : shotModel.getNiceCount() != null) {
-            return false;
-        }
-        return getReplyCount() != null ? getReplyCount().equals(shotModel.getReplyCount())
-            : shotModel.getReplyCount() == null;
+        return getIdShot() != null ? getIdShot().equals(shotModel.getIdShot())
+            : shotModel.getIdShot() == null;
     }
 
     @Override public int hashCode() {
-        int result = getIdShot().hashCode();
-        result = 31 * result + (getNicers() != null ? getNicers().hashCode() : 0);
-        result = 31 * result + (getNiceCount() != null ? getNiceCount().hashCode() : 0);
-        result = 31 * result + (getReplyCount() != null ? getReplyCount().hashCode() : 0);
-        result = 31 * result + (isNiced() ? 1 : 0);
-        result = 31 * result + (isReshooted() ? 1 : 0);
-        return result;
+        return getIdShot() != null ? getIdShot().hashCode() : 0;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

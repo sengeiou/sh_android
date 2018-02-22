@@ -16,4 +16,6 @@ public interface MainScreenView {
     void goToTimeline(StreamModel streamModel);
 
     void updateChannelBadge(int unreadFollowChannels, boolean isFollowing);
+
+    void initSocket();
 }

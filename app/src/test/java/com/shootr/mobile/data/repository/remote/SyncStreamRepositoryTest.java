@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.mapper.BootstrappingEntityMapper;
 import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
@@ -35,6 +36,7 @@ public class SyncStreamRepositoryTest {
       "PUBLIC", "VIEWONLY"
   };
   @Mock StreamEntityMapper streamEntityMapper;
+  @Mock BootstrappingEntityMapper socketEntityMapper;
   @Mock StreamDataSource localStreamDataSource;
   @Mock StreamDataSource remoteStreamDataSource;
   @Mock SyncableStreamEntityFactory syncableStreamEntityFactory;
@@ -52,7 +54,8 @@ public class SyncStreamRepositoryTest {
     syncStreamRepository = new SyncStreamRepository(streamEntityMapper, landingStreamsEntityMapper,
         localStreamDataSource, remoteStreamDataSource, shootrQueueCache,
         streamListSynchronizationRepository, syncableStreamEntityFactory, streamCache,
-        landingStreamsCache, syncTrigger);
+        landingStreamsCache, syncTrigger, socketEntityMapper);
+
   }
 
   @Test public void shouldPutStreamInCacheWhenGetStreamByIdAndRemoteStreamIsNotNull()

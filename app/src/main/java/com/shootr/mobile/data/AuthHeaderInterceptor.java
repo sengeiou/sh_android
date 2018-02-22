@@ -9,20 +9,21 @@ import javax.inject.Inject;
 
 class AuthHeaderInterceptor implements Interceptor {
 
-    private final SessionRepository sessionRepository;
+  private final SessionRepository sessionRepository;
 
-    @Inject AuthHeaderInterceptor(SessionRepository sessionRepository) {
-        this.sessionRepository = sessionRepository;
-    }
+  @Inject AuthHeaderInterceptor(SessionRepository sessionRepository) {
+    this.sessionRepository = sessionRepository;
+  }
 
-    @Override public Response intercept(Chain chain) throws IOException {
-        String sessionToken = sessionRepository.getSessionToken();
-        if (sessionToken != null) {
-            Request originalRequest = chain.request();
-            Request authenticatedRequest = originalRequest.newBuilder().header("X-Auth-Token", sessionToken).build();
-            return chain.proceed(authenticatedRequest);
-        } else {
-            return chain.proceed(chain.request());
-        }
+  @Override public Response intercept(Chain chain) throws IOException {
+    String sessionToken = sessionRepository.getSessionToken();
+    if (sessionToken != null) {
+      Request originalRequest = chain.request();
+      Request authenticatedRequest =
+          originalRequest.newBuilder().header("X-Auth-Token", sessionToken).build();
+      return chain.proceed(authenticatedRequest);
+    } else {
+      return chain.proceed(chain.request());
     }
+  }
 }

@@ -27,11 +27,12 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private List<String> idUserContributors;
     private int iAmContributor;
     private int totalFollowingWatchers;
-    private Boolean strategic;
+    private boolean strategic;
     private Boolean following;
     private Boolean muted;
     private String photoIdMedia;
     private long views;
+    private int permissions;
     private long lastTimeShooted;
 
     public StreamEntity() {
@@ -276,6 +277,14 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public int getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(int permissions) {
+        this.permissions = permissions;
     }
 
     public long getLastTimeShooted() {

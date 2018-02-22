@@ -5,9 +5,10 @@ import com.shootr.mobile.domain.bus.ShotFailed;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetDraftsInteractor;
+import com.shootr.mobile.domain.interactor.stream.GetLocalStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.GetStreamIsReadOnlyInteractor;
-import com.shootr.mobile.domain.interactor.user.GetUserCanPinMessageInteractor;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.service.NetworkNotAvailableException;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.util.ErrorMessageFactory;
@@ -20,7 +21,7 @@ import javax.inject.Inject;
 public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
 
   private final GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor;
-  private final GetUserCanPinMessageInteractor getUserCanPinMessageInteractor;
+  private final GetLocalStreamInteractor getLocalStreamInteractor;
   private final GetDraftsInteractor getDraftsInteractor;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
@@ -33,11 +34,10 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
   private Boolean isInStreamTimeline;
 
   @Inject public NewShotBarPresenter(GetStreamIsReadOnlyInteractor getStreamIsReadOnlyInteractor,
-      GetUserCanPinMessageInteractor getUserCanPinMessageInteractor,
-      GetDraftsInteractor getDraftsInteractor, ErrorMessageFactory errorMessageFactory,
-      @Main Bus bus) {
+      GetLocalStreamInteractor getLocalStreamInteractor, GetDraftsInteractor getDraftsInteractor,
+      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.getStreamIsReadOnlyInteractor = getStreamIsReadOnlyInteractor;
-    this.getUserCanPinMessageInteractor = getUserCanPinMessageInteractor;
+    this.getLocalStreamInteractor = getLocalStreamInteractor;
     this.getDraftsInteractor = getDraftsInteractor;
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
@@ -101,16 +101,15 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
   }
 
   private void handleMenuPicker() {
-    getUserCanPinMessageInteractor.canUserPinMessage(idStreamForShot, idStreamAuthor,
-        new Interactor.Callback<Boolean>() {
-          @Override public void onLoaded(Boolean flag) {
-            if (isInStreamTimeline && flag) {
-              newShotBarView.showHolderOptions();
-            } else {
-              newShotBarView.pickImage();
-            }
-          }
-        });
+    getLocalStreamInteractor.loadStream(idStreamForShot, new GetLocalStreamInteractor.Callback() {
+      @Override public void onLoaded(Stream stream) {
+        if (isInStreamTimeline && stream.canPinItem()) {
+          newShotBarView.showHolderOptions();
+        } else {
+          newShotBarView.pickImage();
+        }
+      }
+    });
   }
 
   public void newShotImagePicked(File image) {
@@ -156,13 +155,12 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
   }
 
   public void editTopicPressed() {
-    getUserCanPinMessageInteractor.canUserPinMessage(idStreamForShot, idStreamAuthor,
-        new Interactor.Callback<Boolean>() {
-          @Override public void onLoaded(Boolean flag) {
-            if (isInStreamTimeline && flag) {
-              newShotBarView.openEditTopicDialog();
-            }
-          }
-        });
+    getLocalStreamInteractor.loadStream(idStreamForShot, new GetLocalStreamInteractor.Callback() {
+      @Override public void onLoaded(Stream stream) {
+        if (isInStreamTimeline && stream.canPinItem()) {
+          newShotBarView.openEditTopicDialog();
+        }
+      }
+    });
   }
 }

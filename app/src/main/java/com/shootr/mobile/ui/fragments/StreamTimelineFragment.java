@@ -1270,13 +1270,18 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   @Override public void hideStreamViewOnlyIndicator() {
-    timelineViewOnlyStreamIndicator.setVisibility(View.GONE);
-    newShotBarContainer.setVisibility(View.VISIBLE);
+    if (timelineViewOnlyStreamIndicator != null) {
+      timelineViewOnlyStreamIndicator.setVisibility(View.GONE);
+      newShotBarContainer.setVisibility(View.VISIBLE);
+      newShotBarContainer.showMessageBox();
+    }
   }
 
   @Override public void showStreamViewOnlyIndicator() {
-    timelineViewOnlyStreamIndicator.setVisibility(View.VISIBLE);
-    newShotBarContainer.setVisibility(View.INVISIBLE);
+    if (timelineIndicatorContainer != null) {
+      timelineViewOnlyStreamIndicator.setVisibility(View.VISIBLE);
+      newShotBarContainer.hideMessageBox();
+    }
   }
 
   @Override public void showEmpty(boolean isFilterActivated) {

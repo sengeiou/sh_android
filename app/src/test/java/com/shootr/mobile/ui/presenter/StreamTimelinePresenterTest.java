@@ -27,6 +27,7 @@ import com.shootr.mobile.domain.model.user.Contributor;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.EntitiesModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.presenter.interactorwrapper.StreamTimelineInteractorsWrapper;
@@ -112,7 +113,7 @@ public class StreamTimelinePresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper());
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         selectStreamInteractor, markNiceShotInteractor,

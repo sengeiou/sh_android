@@ -2,22 +2,22 @@ package com.shootr.mobile.domain.model;
 
 public class Pagination {
 
-  private long maxTimestamp;
-  private long sinceTimestamp;
+  private Long maxTimestamp;
+  private Long sinceTimestamp;
 
-  public long getMaxTimestamp() {
+  public Long getMaxTimestamp() {
     return maxTimestamp;
   }
 
-  public void setMaxTimestamp(long maxTimestamp) {
+  public void setMaxTimestamp(Long maxTimestamp) {
     this.maxTimestamp = maxTimestamp;
   }
 
-  public long getSinceTimestamp() {
+  public Long getSinceTimestamp() {
     return sinceTimestamp;
   }
 
-  public void setSinceTimestamp(long sinceTimestamp) {
+  public void setSinceTimestamp(Long sinceTimestamp) {
     this.sinceTimestamp = sinceTimestamp;
   }
 }

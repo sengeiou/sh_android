@@ -160,13 +160,12 @@
             android:id="@+id/shot_promoted"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/shot_user_name"
             android:layout_marginLeft="8dp"
-            android:layout_toEndOf="@+id/verified_user_container"
             android:maxLines="1"
             android:text="@string/promoted"
-            android:textColor="@color/gray_80"
-            android:textSize="13sp"
+            android:layout_toEndOf="@+id/verified_user_container"
+            android:layout_alignBottom="@id/shot_user_name"
+            android:visibility="gone"
             />
 
       </RelativeLayout>

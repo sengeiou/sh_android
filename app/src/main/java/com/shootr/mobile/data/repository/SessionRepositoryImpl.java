@@ -2,6 +2,8 @@ package com.shootr.mobile.data.repository;
 
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.BooleanPreference;
+import com.shootr.mobile.data.prefs.BootstrappingPref;
+import com.shootr.mobile.data.prefs.BootstrappingPreferences;
 import com.shootr.mobile.data.prefs.CacheTimeKeepAlive;
 import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.DeviceId;
@@ -14,6 +16,7 @@ import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
+import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.Device;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.User;
@@ -34,6 +37,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final BooleanPreference publicVoteAlertPreference;
   private final StringPreference deviceIdPreference;
   private final DevicePreferences devicePreference;
+  private final BootstrappingPreferences bootstrappingPreferences;
   private final IntPreference badgeCount;
   private final CrashReportTool crashReportTool;
   private final AnalyticsTool analyticsTool;
@@ -48,7 +52,9 @@ public class SessionRepositoryImpl implements SessionRepository {
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
-      @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
+      @DeviceId StringPreference deviceIdPreference,
+      @DevicePref DevicePreferences devicePreference,
+      @BootstrappingPref BootstrappingPreferences bootstrappingPreferences,
       @ActivityBadgeCount IntPreference badgeCount, CrashReportTool crashReportTool,
       AnalyticsTool analyticsTool, DualCache<LandingStreams> landingStreamsLruCache,
       DualCache<Long> lastStreamVisitCache) {
@@ -60,6 +66,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.publicVoteAlertPreference = publicVoteAlertPreference;
     this.deviceIdPreference = deviceIdPreference;
     this.devicePreference = devicePreference;
+    this.bootstrappingPreferences = bootstrappingPreferences;
     this.badgeCount = badgeCount;
     this.crashReportTool = crashReportTool;
     this.analyticsTool = analyticsTool;
@@ -114,6 +121,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     badgeCount.delete();
     analyticsTool.reset();
     landingStreamsLruCache.invalidate();
+    bootstrappingPreferences.delete();
     lastStreamVisitCache.invalidate();
     currentUser = null;
   }
@@ -156,5 +164,17 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Override public Device getDevice() {
     return devicePreference.get();
+  }
+
+  @Override public void setBootstrapping(Bootstrapping bootstrapping) {
+    bootstrappingPreferences.set(bootstrapping);
+  }
+
+  @Override public Bootstrapping getBootstrapping() {
+    return bootstrappingPreferences.get();
+  }
+
+  @Override public String getLogAddress() {
+    return bootstrappingPreferences.get().getLogsUrl();
   }
 }

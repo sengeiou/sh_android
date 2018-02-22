@@ -1,7 +1,8 @@
 package com.shootr.mobile.data.api.entity;
 
+import java.util.ArrayList;
 
-public class BaseMessageApiEntity {
+public class BaseMessageApiEntity extends PrintableItemApiEntity {
 
   private String comment;
   private String image;
@@ -12,6 +13,8 @@ public class BaseMessageApiEntity {
   private Long videoDuration;
   private BaseMessageEntitiesApiEntity entities;
   private String imageIdMedia;
+  private ArrayList<String> timelineFlags;
+  private ArrayList<String> detailFlags;
 
   public String getComment() {
     return comment;
@@ -83,5 +86,21 @@ public class BaseMessageApiEntity {
 
   public void setImageIdMedia(String imageIdMedia) {
     this.imageIdMedia = imageIdMedia;
+  }
+
+  public ArrayList<String> getTimelineFlags() {
+    return timelineFlags;
+  }
+
+  public void setTimelineFlags(ArrayList<String> timelineFlags) {
+    this.timelineFlags = timelineFlags;
+  }
+
+  public ArrayList<String> getDetailFlags() {
+    return detailFlags;
+  }
+
+  public void setDetailFlags(ArrayList<String> detailFlags) {
+    this.detailFlags = detailFlags;
   }
 }

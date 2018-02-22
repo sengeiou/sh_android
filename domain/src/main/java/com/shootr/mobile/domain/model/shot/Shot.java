@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.model.shot;
 
+import com.shootr.mobile.domain.messages.Message;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -210,6 +211,14 @@ public class Shot extends BaseMessage {
 
     public void setIdQueue(Long idQueue) {
         this.idQueue = idQueue;
+    }
+
+    @Override public String getResultType() {
+        return "SHOT";
+    }
+
+    @Override public String getMessageType() {
+        return Message.SHOT;
     }
 
     public static class ShotStreamInfo {

@@ -2,6 +2,8 @@ package com.shootr.mobile.interactor;
 
 import com.shootr.mobile.domain.dagger.ServiceModule;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.executor.RxPostExecutionThread;
+import com.shootr.mobile.domain.executor.ThreadExecutor;
 import com.shootr.mobile.domain.interactor.Fast;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
 import dagger.Module;
@@ -27,4 +29,12 @@ import javax.inject.Singleton;
     @Provides @Singleton PostExecutionThread providePostExecutionThread() {
         return new UIThread();
     }
+
+  @Provides @Singleton ThreadExecutor provideThreadExecutor(JobExecutor jobExecutor) {
+    return jobExecutor;
+  }
+
+  @Provides @Singleton RxPostExecutionThread providePostExecutionThread(RxUiThread uiThread) {
+    return uiThread;
+  }
 }

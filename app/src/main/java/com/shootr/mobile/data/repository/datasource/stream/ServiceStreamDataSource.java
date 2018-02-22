@@ -2,8 +2,10 @@ package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.service.StreamApiService;
+import com.shootr.mobile.data.api.service.UtilsApiService;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LandingStreamsEntity;
+import com.shootr.mobile.data.entity.BootstrapingEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -15,9 +17,12 @@ public class ServiceStreamDataSource implements StreamDataSource {
 
   public static final int MAX_NUMBER_OF_LISTING_STREAMS = 100;
   private final StreamApiService streamApiService;
+  private final UtilsApiService utilsApiService;
 
-  @Inject public ServiceStreamDataSource(StreamApiService streamApiService) {
+  @Inject public ServiceStreamDataSource(StreamApiService streamApiService,
+      UtilsApiService utilsApiService) {
     this.streamApiService = streamApiService;
+    this.utilsApiService = utilsApiService;
   }
 
   @Override public StreamEntity getStreamById(String idStream, String[] types) {
@@ -179,6 +184,15 @@ public class ServiceStreamDataSource implements StreamDataSource {
   @Override public LandingStreamsEntity getLandingStreams() {
     try {
       return streamApiService.getLandingStreams();
+    } catch (IOException | ApiException e) {
+      throw new ServerCommunicationException(e);
+    }
+  }
+
+  @Override public BootstrapingEntity getSocket() {
+    try {
+      BootstrapingEntity socketEntity = utilsApiService.getBootSocket();
+      return socketEntity;
     } catch (IOException | ApiException e) {
       throw new ServerCommunicationException(e);
     }

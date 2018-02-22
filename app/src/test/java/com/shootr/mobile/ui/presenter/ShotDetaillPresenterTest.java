@@ -14,6 +14,7 @@ import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.mappers.EntitiesModelMapper;
 import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
@@ -64,7 +65,8 @@ public class ShotDetaillPresenterTest {
 
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
+        ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository,
+            new EntitiesModelMapper());
         NicerModelMapper nicerModelMapper = new NicerModelMapper();
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,

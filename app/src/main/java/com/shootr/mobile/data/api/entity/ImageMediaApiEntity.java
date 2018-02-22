@@ -21,4 +21,3 @@ public class ImageMediaApiEntity {
     this.sizes = sizes;
   }
 }
-

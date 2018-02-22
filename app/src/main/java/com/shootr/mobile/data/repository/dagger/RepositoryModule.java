@@ -23,10 +23,11 @@ import javax.inject.Singleton;
         UserSettingsRepositoryModule.class,
         RecentStreamRepositoryModule.class,
         ShootrEventRepositoryModule.class,
+        LogRepositoryModule.class,
         SynchroModule.class,
         PrivateMessageRepositoryModule.class,
         PrivateMessageChannelRepositoryModule.class,
-        SearchRepositoryModule.class,
+        SearchRepositoryModule.class, TimelineRepositoryModule.class, SocketRepositoryModule.class,
         QueueElementRepositoryModule.class
     },
     complete = false,

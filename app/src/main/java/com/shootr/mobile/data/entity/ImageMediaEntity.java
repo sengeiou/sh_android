@@ -24,5 +24,4 @@ public class ImageMediaEntity {
   @Override public String toString() {
     return "ImageMediaEntity{" + "type='" + type + '\'' + ", sizes=" + sizes + '}';
   }
-
 }

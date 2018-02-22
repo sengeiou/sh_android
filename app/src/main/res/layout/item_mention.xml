@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="40dp"
     android:gravity="center_vertical"
+    android:background="@color/gray_90"
     android:padding="4dp">
 
     <com.shootr.mobile.ui.widgets.AvatarView android:id="@+id/user_avatar"

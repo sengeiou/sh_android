@@ -63,6 +63,9 @@ public class StreamEntityMapper {
     }
     stream.setPhotoIdMedia(streamEntity.getPhotoIdMedia());
     stream.setViews(streamEntity.getViews());
+
+    setPermissionsInBoolean(streamEntity.getPermissions(), stream);
+
     stream.setLastTimeShooted(streamEntity.getLastTimeShooted());
     return stream;
   }
@@ -113,5 +116,30 @@ public class StreamEntityMapper {
     entityTemplate.setPhotoIdMedia(stream.getPhotoIdMedia());
     entityTemplate.setViews(stream.getViews());
     entityTemplate.setLastTimeShooted(stream.getLastTimeShooted());
+    setPermissionsToBinary(stream, entityTemplate);
+  }
+
+  private void setPermissionsInBoolean(int permissionsInDecimal, Stream stream) {
+
+    String numberAsString = Integer.toBinaryString(permissionsInDecimal);
+
+    String binaryPermissions = String.format("%04d", Integer.valueOf(numberAsString));
+
+    stream.setCanWrite(binaryPermissions.charAt(3) == '1');
+    stream.setCanReply(binaryPermissions.charAt(2) == '1');
+    stream.setCanPinItem(binaryPermissions.charAt(1) == '1');
+    stream.setCanFixItem(binaryPermissions.charAt(0) == '1');
+  }
+
+  private void setPermissionsToBinary(Stream stream, StreamEntity streamEntity) {
+
+    String permissions = "";
+
+    permissions = permissions + (stream.canFixItem() ? "1" : "0");
+    permissions = permissions + (stream.canPinItem() ? "1" : "0");
+    permissions = permissions + (stream.canReply() ? "1" : "0");
+    permissions = permissions + (stream.canWrite() ? "1" : "0");
+
+    streamEntity.setPermissions(Integer.parseInt(permissions, 2));
   }
 }

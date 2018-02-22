@@ -1,19 +1,11 @@
 package com.shootr.mobile.data.mapper;
 
-import com.shootr.mobile.data.entity.BaseMessagePollEntity;
-import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
-import com.shootr.mobile.data.entity.StreamIndexEntity;
-import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
-import com.shootr.mobile.domain.model.shot.Entities;
-import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
-import com.shootr.mobile.domain.model.shot.StreamIndex;
-import com.shootr.mobile.domain.model.shot.Url;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -23,9 +15,12 @@ import javax.inject.Inject;
 public class ShotEntityMapper {
 
   private final MetadataMapper metadataMapper;
+  private final EntitiesEntityMapper entitiesEntityMapper;
 
-  @Inject public ShotEntityMapper(MetadataMapper metadataMapper) {
+  @Inject public ShotEntityMapper(MetadataMapper metadataMapper,
+      EntitiesEntityMapper entitiesEntityMapper) {
     this.metadataMapper = metadataMapper;
+    this.entitiesEntityMapper = entitiesEntityMapper;
   }
 
   public Shot transform(ShotEntity shotEntity) {
@@ -82,58 +77,12 @@ public class ShotEntityMapper {
     shot.setReshooted(shotEntity.getReshooted());
     shot.setReshootedTime(
         shotEntity.getReshootedTime() != null ? new Date(shotEntity.getReshootedTime()) : null);
-
-    setupEntities(shot, shotEntity);
+    shot.setEntities(entitiesEntityMapper.setupEntities(shotEntity.getEntities()));
+    shot.setTimelineFlags(shotEntity.getTimelineFlags());
+    shot.setDetailFlags(shotEntity.getDetailFlags());
     shot.setImageIdMedia(shotEntity.getImageIdMedia());
 
     return shot;
-  }
-
-  private void setupEntityUrls(ShotEntity shotEntity, Shot shot) {
-    if (shot.getEntities() != null) {
-      EntitiesEntity entitiesEntity = new EntitiesEntity();
-      setupUrls(shot, entitiesEntity);
-      setupPolls(shot, entitiesEntity);
-      setupStreams(shot, entitiesEntity);
-      shotEntity.setEntities(entitiesEntity);
-    }
-  }
-
-  private void setupPolls(Shot shot, EntitiesEntity entitiesEntity) {
-    ArrayList<BaseMessagePollEntity> baseMessagePollEntities = new ArrayList<>();
-    for (Poll poll : shot.getEntities().getPolls()) {
-      BaseMessagePollEntity baseMessagePollEntity = new BaseMessagePollEntity();
-      baseMessagePollEntity.setIndices(poll.getIndices());
-      baseMessagePollEntity.setIdPoll(poll.getIdPoll());
-      baseMessagePollEntity.setPollQuestion(poll.getPollQuestion());
-      baseMessagePollEntities.add(baseMessagePollEntity);
-    }
-    entitiesEntity.setPolls(baseMessagePollEntities);
-  }
-
-  private void setupStreams(Shot shot, EntitiesEntity entitiesEntity) {
-    ArrayList<StreamIndexEntity> streamIndexEntities = new ArrayList<>();
-    for (StreamIndex stream : shot.getEntities().getStreams()) {
-      StreamIndexEntity streamIndexEntity = new StreamIndexEntity();
-      streamIndexEntity.setIndices(stream.getIndices());
-      streamIndexEntity.setIdStream(stream.getIdStream());
-      streamIndexEntity.setStreamTitle(stream.getStreamTitle());
-      streamIndexEntities.add(streamIndexEntity);
-    }
-    entitiesEntity.setStreams(streamIndexEntities);
-  }
-
-  private void setupUrls(Shot shot, EntitiesEntity entitiesEntity) {
-    ArrayList<UrlEntity> urlEntities = new ArrayList<>();
-    for (Url urlApiEntity : shot.getEntities().getUrls()) {
-      UrlEntity urlEntity = new UrlEntity();
-      urlEntity.setDisplayUrl(urlApiEntity.getDisplayUrl());
-      urlEntity.setUrl(urlApiEntity.getUrl());
-      urlEntity.setIndices(urlApiEntity.getIndices());
-      urlEntities.add(urlEntity);
-    }
-
-    entitiesEntity.setUrls(urlEntities);
   }
 
   public List<Shot> transform(List<ShotEntity> shotEntities) {
@@ -203,58 +152,11 @@ public class ShotEntityMapper {
         shot.getReshootedTime() != null ? shot.getReshootedTime().getTime() : 0L);
     shotEntity.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     metadataMapper.fillEntityWithMetadata(shotEntity, shot.getMetadata());
-    setupEntityUrls(shotEntity, shot);
+    shotEntity.setEntities(entitiesEntityMapper.setupEntitiesEntity(shot.getEntities()));
+    shotEntity.setTimelineFlags(shot.getTimelineFlags());
+    shotEntity.setDetailFlags(shot.getDetailFlags());
     shotEntity.setImageIdMedia(shot.getImageIdMedia());
     return shotEntity;
-  }
-
-  private void setupEntities(Shot shot, ShotEntity shotEntity) {
-    if (shotEntity.getEntities() != null) {
-      Entities entities = new Entities();
-      setupUrls(shotEntity, entities);
-      setupPolls(shotEntity, entities);
-      setupStreams(shotEntity, entities);
-      shot.setEntities(entities);
-    }
-  }
-
-  private void setupStreams(ShotEntity shotEntity, Entities entities) {
-    ArrayList<StreamIndex> streams = new ArrayList<>();
-    for (StreamIndexEntity streamApiEntity : shotEntity.getEntities().getStreams()) {
-      StreamIndex streamIndex = new StreamIndex();
-      streamIndex.setIdStream(streamApiEntity.getIdStream());
-      streamIndex.setStreamTitle(streamApiEntity.getStreamTitle());
-      streamIndex.setIndices(streamApiEntity.getIndices());
-      streams.add(streamIndex);
-    }
-
-    entities.setStreams(streams);
-  }
-
-  private void setupPolls(ShotEntity shotEntity, Entities entities) {
-    ArrayList<Poll> polls = new ArrayList<>();
-
-    for (BaseMessagePollEntity baseMessagePollEntity : shotEntity.getEntities().getPolls()) {
-      Poll poll = new Poll();
-      poll.setIdPoll(baseMessagePollEntity.getIdPoll());
-      poll.setIndices(baseMessagePollEntity.getIndices());
-      poll.setPollQuestion(baseMessagePollEntity.getPollQuestion());
-      polls.add(poll);
-    }
-    entities.setPolls(polls);
-  }
-
-  private void setupUrls(ShotEntity shotEntity, Entities entities) {
-    ArrayList<Url> urls = new ArrayList<>();
-    for (UrlEntity urlApiEntity : shotEntity.getEntities().getUrls()) {
-      Url url = new Url();
-      url.setDisplayUrl(urlApiEntity.getDisplayUrl());
-      url.setUrl(urlApiEntity.getUrl());
-      url.setIndices(urlApiEntity.getIndices());
-      urls.add(url);
-    }
-
-    entities.setUrls(urls);
   }
 
   public ShotDetail transform(ShotDetailEntity shotDetailEntity) {

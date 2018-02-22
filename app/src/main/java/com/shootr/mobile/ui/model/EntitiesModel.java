@@ -8,6 +8,8 @@ public class EntitiesModel implements Serializable {
   private ArrayList<UrlModel> urls;
   private ArrayList<BaseMessagePollModel> polls;
   private ArrayList<StreamIndexModel> streams;
+  private ArrayList<ImageMediaModel> images;
+  private ArrayList<MentionModel> mentions;
 
   public ArrayList<UrlModel> getUrls() {
     return urls;
@@ -31,5 +33,21 @@ public class EntitiesModel implements Serializable {
 
   public void setStreams(ArrayList<StreamIndexModel> streams) {
     this.streams = streams;
+  }
+
+  public ArrayList<ImageMediaModel> getImages() {
+    return images;
+  }
+
+  public void setImages(ArrayList<ImageMediaModel> images) {
+    this.images = images;
+  }
+
+  public ArrayList<MentionModel> getMentions() {
+    return mentions;
+  }
+
+  public void setMentions(ArrayList<MentionModel> mentions) {
+    this.mentions = mentions;
   }
 }

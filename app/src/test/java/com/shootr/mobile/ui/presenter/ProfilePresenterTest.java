@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.presenter;
 
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.shot.GetProfileShotTimelineInteractor;
@@ -27,6 +28,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.StreamJoinDateFormatter;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.UserModel;
+import com.shootr.mobile.ui.model.mappers.EntitiesModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.ProfileView;
@@ -88,6 +90,7 @@ public class ProfilePresenterTest {
   @Mock UndoReshootInteractor undoReshootInteractor;
   @Mock MuteUserInteractor muteUserInteractor;
   @Mock UnMuteUserInteractor unMuteUserInteractor;
+  @Mock BusPublisher busPublisher;
 
   @Captor ArgumentCaptor<List<ShotModel>> shotModelListCaptor;
 
@@ -97,14 +100,14 @@ public class ProfilePresenterTest {
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
     userModelMapper = new UserModelMapper(streamJoinDateFormatter);
-    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository);
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper());
     profilePresenter = new ProfilePresenter(putRecentUserInteractor, getUserByIdInteractor,
         getUserByUsernameInteractor, logoutInteractor, markNiceShotInteractor,
         unmarkNiceShotInteractor, reshootInteractor, undoReshootInteractor, followInteractor,
         unfollowInteractor, getProfileShotTimelineInteractor, uploadUserPhotoInteractor,
         removeUserPhotoInteractor, getBlockedIdUsersInteractor, muteUserInteractor,
         unMuteUserInteractor, sessionRepository,
-        errorMessageFactory, userModelMapper, shotModelMapper);
+        errorMessageFactory, userModelMapper, shotModelMapper, busPublisher);
     profilePresenter.setView(profileView);
   }
 

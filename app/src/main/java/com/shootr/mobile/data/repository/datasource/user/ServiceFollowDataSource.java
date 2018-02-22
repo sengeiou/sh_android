@@ -8,7 +8,6 @@ import com.shootr.mobile.data.entity.BlockEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.domain.exception.FollowingBlockedUserException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
-import com.shootr.mobile.domain.repository.SessionRepository;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
@@ -16,11 +15,9 @@ import javax.inject.Inject;
 public class ServiceFollowDataSource implements FollowDataSource {
 
     public static final String METHOD_NOT_VALID_FOR_SERVICE = "Method not valid for service";
-    private final SessionRepository sessionRepository;
     private final UserApiService userApiService;
 
-    @Inject public ServiceFollowDataSource(SessionRepository sessionRepository, UserApiService userApiService) {
-        this.sessionRepository = sessionRepository;
+    @Inject public ServiceFollowDataSource(UserApiService userApiService) {
         this.userApiService = userApiService;
     }
 

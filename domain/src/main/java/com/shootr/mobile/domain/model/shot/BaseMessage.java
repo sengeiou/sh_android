@@ -1,8 +1,10 @@
 package com.shootr.mobile.domain.model.shot;
 
 import com.shootr.mobile.domain.model.EntityMetadata;
+import com.shootr.mobile.domain.model.PrintableItem;
+import java.util.ArrayList;
 
-public abstract class BaseMessage implements Sendable {
+public abstract class BaseMessage implements Sendable, PrintableItem {
 
   private String comment;
   private String image;
@@ -15,6 +17,8 @@ public abstract class BaseMessage implements Sendable {
   private EntityMetadata metadata;
   private Entities entities;
   private String imageIdMedia;
+  private ArrayList<String> timelineFlags;
+  private ArrayList<String> detailFlags;
 
   public String getComment() {
     return comment;
@@ -168,5 +172,21 @@ public abstract class BaseMessage implements Sendable {
 
   public void setImageIdMedia(String imageIdMedia) {
     this.imageIdMedia = imageIdMedia;
+  }
+
+  public ArrayList<String> getTimelineFlags() {
+    return timelineFlags;
+  }
+
+  public void setTimelineFlags(ArrayList<String> timelineFlags) {
+    this.timelineFlags = timelineFlags;
+  }
+
+  public ArrayList<String> getDetailFlags() {
+    return detailFlags;
+  }
+
+  public void setDetailFlags(ArrayList<String> detailFlags) {
+    this.detailFlags = detailFlags;
   }
 }

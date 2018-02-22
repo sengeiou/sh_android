@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LocalSynchronized;
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.mapper.BootstrappingEntityMapper;
 import com.shootr.mobile.data.mapper.LandingStreamsEntityMapper;
 import com.shootr.mobile.data.mapper.StreamEntityMapper;
 import com.shootr.mobile.data.repository.MemoryStreamListSynchronizationRepository;
@@ -15,8 +16,10 @@ import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.QueueElement;
 import com.shootr.mobile.domain.model.QueueElementType;
+import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -42,6 +45,7 @@ public class SyncStreamRepository
   private final StreamCache streamCache;
   private final LandingStreamsCache landingStreamsCache;
   private final SyncTrigger syncTrigger;
+  private final BootstrappingEntityMapper socketEntityMapper;
 
   @Inject public SyncStreamRepository(StreamEntityMapper streamEntityMapper,
       LandingStreamsEntityMapper landingStreamsEntityMapper,
@@ -49,7 +53,8 @@ public class SyncStreamRepository
       @Remote StreamDataSource remoteStreamDataSource, QueueElementCache queueElementCache,
       StreamListSynchronizationRepository streamListSynchronizationRepository,
       SyncableStreamEntityFactory syncableStreamEntityFactory, StreamCache streamCache,
-      LandingStreamsCache landingStreamsCache, SyncTrigger syncTrigger) {
+      LandingStreamsCache landingStreamsCache, SyncTrigger syncTrigger,
+      BootstrappingEntityMapper socketEntityMapper) {
     this.landingStreamsEntityMapper = landingStreamsEntityMapper;
     this.localStreamDataSource = localStreamDataSource;
     this.remoteStreamDataSource = remoteStreamDataSource;
@@ -60,6 +65,7 @@ public class SyncStreamRepository
     this.streamCache = streamCache;
     this.landingStreamsCache = landingStreamsCache;
     this.syncTrigger = syncTrigger;
+    this.socketEntityMapper = socketEntityMapper;
   }
 
   @Override public Stream getStreamById(String idStream, String[] types) {
@@ -107,6 +113,10 @@ public class SyncStreamRepository
     streamListSynchronizationRepository.setStreamsRefreshDate(
         MemoryStreamListSynchronizationRepository.DEFAULT_REFRESH_DATE);
     return streamEntityMapper.transform(streamEntity);
+  }
+
+  @Override public Bootstrapping getSocket() {
+    return socketEntityMapper.transform(remoteStreamDataSource.getSocket());
   }
 
   @Override public void shareStream(String idStream) {
@@ -218,6 +228,10 @@ public class SyncStreamRepository
   }
 
   @Override public Long getLastStreamVisit(String idStream) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public StreamTimeline getCachedTimeline(String idStream, String filter) {
     throw new RuntimeException("Method not implemented yet!");
   }
 

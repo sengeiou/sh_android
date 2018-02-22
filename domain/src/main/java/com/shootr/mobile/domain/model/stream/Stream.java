@@ -36,6 +36,10 @@ public class Stream implements Searchable, Followable, Validable {
     private String photoIdMedia;
     private boolean muted;
     private long views;
+    private boolean canWrite;
+    private boolean canReply;
+    private boolean canPinItem;
+    private boolean canFixItem;
     private long lastTimeShooted;
     private boolean showBadge;
 
@@ -315,6 +319,38 @@ public class Stream implements Searchable, Followable, Validable {
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public boolean canWrite() {
+        return canWrite;
+    }
+
+    public void setCanWrite(boolean canWrite) {
+        this.canWrite = canWrite;
+    }
+
+    public boolean canReply() {
+        return canReply;
+    }
+
+    public void setCanReply(boolean canReply) {
+        this.canReply = canReply;
+    }
+
+    public boolean canPinItem() {
+        return canPinItem;
+    }
+
+    public void setCanPinItem(boolean canPinItem) {
+        this.canPinItem = canPinItem;
+    }
+
+    public boolean canFixItem() {
+        return canFixItem;
+    }
+
+    public void setCanFixItem(boolean canFixItem) {
+        this.canFixItem = canFixItem;
     }
 
     public long getLastTimeShooted() {
