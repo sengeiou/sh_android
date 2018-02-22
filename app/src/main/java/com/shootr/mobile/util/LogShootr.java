@@ -13,6 +13,7 @@ public class LogShootr {
   private String networkType;
   private String networkStatus;
   private String model;
+  private String androidVersion;
 
   public String getMessage() {
     return message;
@@ -84,6 +85,14 @@ public class LogShootr {
 
   public void setModel(String model) {
     this.model = model;
+  }
+
+  public String getAndroidVersion() {
+    return androidVersion;
+  }
+
+  public void setAndroidVersion(String androidVersion) {
+    this.androidVersion = androidVersion;
   }
 
   public String toJson() {

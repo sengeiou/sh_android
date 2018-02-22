@@ -59,12 +59,17 @@ import javax.inject.Singleton;
     }
     logShootr.setApp(context.getPackageName());
     logShootr.setMessage(message);
-    logShootr.setUserName(sessionRepository.getCurrentUser().getUsername());
+    if (sessionRepository != null
+        && sessionRepository.getCurrentUser() != null
+        && sessionRepository.getCurrentUser().getUsername() != null) {
+      logShootr.setUserName(sessionRepository.getCurrentUser().getUsername());
+    }
     ConnectivityManager cm =
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     logShootr.setNetworkType(cm.getActiveNetworkInfo().getTypeName());
     logShootr.setNetworkStatus(cm.getActiveNetworkInfo().getState().name());
     logShootr.setModel(Build.MANUFACTURER + " " + Build.MODEL);
+    logShootr.setAndroidVersion(Build.VERSION.RELEASE);
     return logShootr;
   }
 
