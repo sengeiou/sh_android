@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.1] - 2018-02-23
+### Added
+- Feature Flags Bootstraping
+- Send new logs to server
+- New timeline: Image goes media
+- New timeline: Data Model Update
+- New timeline: Modelo datos Networking
+- New timeline: Model de datos interno apps
+- New timeline: Interacciones del timelin
+- New timeline: Creación del header (1..n)
+- New timeline: Topic Entities
+- New timeline: Mentions
+- New timeline: Caché Invalition
+- New timeline: Item list Timeline
+- New timeline: Devices Caché Basic Implementation
+
 ## [1.55.0] - 2018-02-19
 ### Added
 - Follow streams on activities
