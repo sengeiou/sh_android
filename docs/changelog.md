@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.2] - 2018-02-26
+### Fixed
+- Fix crash on LogCaché on some devices Fabric #1020
+
 ## [1.55.1] - 2018-02-23
 ### Added
 - Feature Flags Bootstraping
