@@ -18,6 +18,7 @@ import javax.inject.Singleton;
 
   private static final String LOGS = "logs";
   private static final String ANDROID = "android";
+  private static final String NOT_DEFINED = "not defined";
   private final DualCache<List<LogShootr>> logShootrDualCache;
   private final SessionRepository sessionRepository;
 
@@ -66,8 +67,21 @@ import javax.inject.Singleton;
     }
     ConnectivityManager cm =
         (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-    logShootr.setNetworkType(cm.getActiveNetworkInfo().getTypeName());
-    logShootr.setNetworkStatus(cm.getActiveNetworkInfo().getState().name());
+    if (cm != null && cm.getActiveNetworkInfo() != null) {
+      try {
+        logShootr.setNetworkType(cm.getActiveNetworkInfo().getTypeName());
+      } catch (NullPointerException error) {
+        logShootr.setNetworkType(NOT_DEFINED);
+      }
+      try {
+        logShootr.setNetworkStatus(cm.getActiveNetworkInfo().getState().name());
+      } catch (NullPointerException error) {
+        logShootr.setNetworkStatus(NOT_DEFINED);
+      }
+    } else {
+      logShootr.setNetworkType(NOT_DEFINED);
+      logShootr.setNetworkStatus(NOT_DEFINED);
+    }
     logShootr.setModel(Build.MANUFACTURER + " " + Build.MODEL);
     logShootr.setAndroidVersion(Build.VERSION.RELEASE);
     return logShootr;
