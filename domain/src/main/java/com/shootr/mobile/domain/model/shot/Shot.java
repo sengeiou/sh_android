@@ -10,20 +10,16 @@ public class Shot extends BaseMessage {
     private ShotStreamInfo streamInfo;
     private Date publishDate;
     private Long idQueue;
-
     private String parentShotId;
     private String parentShotUserId;
     private String parentShotUsername;
-
     private String type;
     private Integer niceCount;
     private Long profileHidden;
     private Long replyCount;
-
     private Long linkClicks;
     private Long views;
     private Long reshootCount;
-
     private String ctaCaption;
     private String ctaButtonLink;
     private String ctaButtonText;
@@ -35,6 +31,7 @@ public class Shot extends BaseMessage {
     private boolean reshooted;
     private Date nicedTime;
     private Date reshootedTime;
+    private String shareLink;
 
     public String getIdShot() {
         return idShot;
@@ -389,5 +386,13 @@ public class Shot extends BaseMessage {
 
     public void setReshootedTime(Date reshootedTime) {
         this.reshootedTime = reshootedTime;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 }

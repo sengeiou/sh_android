@@ -81,6 +81,7 @@ public class ShotEntityMapper {
     shot.setTimelineFlags(shotEntity.getTimelineFlags());
     shot.setDetailFlags(shotEntity.getDetailFlags());
     shot.setImageIdMedia(shotEntity.getImageIdMedia());
+    shot.setShareLink(shotEntity.getShareLink());
 
     return shot;
   }
@@ -156,6 +157,7 @@ public class ShotEntityMapper {
     shotEntity.setTimelineFlags(shot.getTimelineFlags());
     shotEntity.setDetailFlags(shot.getDetailFlags());
     shotEntity.setImageIdMedia(shot.getImageIdMedia());
+    shotEntity.setShareLink(shot.getShareLink());
     return shotEntity;
   }
 

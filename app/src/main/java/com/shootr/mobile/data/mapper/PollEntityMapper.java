@@ -32,6 +32,7 @@ public class PollEntityMapper {
       poll.setHideResults(pollEntity.isHideResults());
       poll.setCanVote(pollEntity.canVote());
       poll.setDailyPoll(pollEntity.isDailyPoll());
+      poll.setShareLink(pollEntity.getShareLink());
     }
     return poll;
   }
@@ -52,6 +53,7 @@ public class PollEntityMapper {
     pollEntity.setHideResults(poll.isHideResults());
     pollEntity.setCanVote(poll.canVote());
     pollEntity.setDailyPoll(poll.isDailyPoll());
+    pollEntity.setShareLink(poll.getShareLink());
     return pollEntity;
   }
 

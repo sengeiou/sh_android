@@ -22,6 +22,7 @@ public class Poll implements PrintableItem {
   private boolean hideResults;
   private boolean canVote;
   private boolean dailyPoll;
+  private String shareLink;
 
   public String getIdPoll() {
     return idPoll;
@@ -145,6 +146,14 @@ public class Poll implements PrintableItem {
 
   public boolean isDailyPoll() {
     return dailyPoll;
+  }
+
+  public String getShareLink() {
+    return shareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    this.shareLink = shareLink;
   }
 
   public void setDailyPoll(boolean dailyPoll) {
