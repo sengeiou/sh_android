@@ -23,6 +23,7 @@ public class PollModel implements PrintableModel, Serializable {
   private boolean canVote;
   private boolean dailyPoll;
   private String timelineGroup;
+  private String shareLink;
 
   public String getIdPoll() {
     return idPoll;
@@ -161,6 +162,14 @@ public class PollModel implements PrintableModel, Serializable {
 
   public void setDailyPoll(boolean dailyPoll) {
     this.dailyPoll = dailyPoll;
+  }
+
+  public String getShareLink() {
+    return shareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    this.shareLink = shareLink;
   }
 
   @Override public String getTimelineGroup() {
