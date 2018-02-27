@@ -37,6 +37,7 @@ public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity
     private boolean reshooted;
     private Long nicedTime;
     private Long reshootedTime;
+    private String shareLink;
 
 
     public String getIdShot() {
@@ -241,5 +242,13 @@ public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity
 
     @Override public String getResultType() {
         return PrintableType.SHOT;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 }

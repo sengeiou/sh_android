@@ -52,6 +52,8 @@ public class ShotEntityDBMapper extends GenericDBMapper {
     shot.setNicedTime(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.NICED_TIME)));
     shot.setReshootedTime(c.getLong(c.getColumnIndex(DatabaseContract.ShotTable.RESHOOTED_TIME)));
     shot.setPadding(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.IS_PADDING)));
+    shot.setShareLink(
+        c.getString(c.getColumnIndex(DatabaseContract.ShotTable.SHARE_LINK)));
     shot.setFromHolder(c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.FROM_HOLDER)));
     shot.setFromContributor(
         c.getInt(c.getColumnIndex(DatabaseContract.ShotTable.FROM_CONTRIBUTOR)));
@@ -114,6 +116,7 @@ public class ShotEntityDBMapper extends GenericDBMapper {
     cv.put(DatabaseContract.ShotTable.RESHOOTED, shot.getReshooted() ? 1 : 0);
     cv.put(DatabaseContract.ShotTable.NICED_TIME, shot.getNicedTime());
     cv.put(DatabaseContract.ShotTable.RESHOOTED_TIME, shot.getReshootedTime());
+    cv.put(DatabaseContract.ShotTable.SHARE_LINK, shot.getShareLink());
     storeEntities(shot, cv);
     storeFlags(shot, cv);
     setSynchronizedtoContentValues(shot, cv);
