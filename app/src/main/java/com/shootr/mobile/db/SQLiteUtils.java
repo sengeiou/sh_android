@@ -158,6 +158,8 @@ public class SQLiteUtils {
       + " DATETIME NULL,"
       + DatabaseContract.ShotTable.FLAGS
       + " TEXT NULL,"
+      + DatabaseContract.ShotTable.SHARE_LINK
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -366,6 +368,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.LAST_TIME_SHOOTED
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.SHARE_LINK
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -428,6 +432,8 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.StreamTable.LAST_TIME_SHOOTED
       + " NUMBER NULL,"
+      + DatabaseContract.StreamTable.SHARE_LINK
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
@@ -592,6 +598,8 @@ public class SQLiteUtils {
       + " TEXT NOT NULL,"
       + DatabaseContract.PollTable.EXPIRATION_DATE
       + " NUMBER NULL,"
+      + DatabaseContract.PollTable.SHARE_LINK
+      + " TEXT NULL,"
       + DatabaseContract.PollTable.VERIFIED_POLL
       + " NUMBER NULL,"
       + DatabaseContract.PollTable.HIDE_RESULTS
@@ -692,6 +700,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.ShotTable.FROM_CONTRIBUTOR
       + " NUMBER NULL,"
+      + DatabaseContract.ShotTable.SHARE_LINK
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
