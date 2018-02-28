@@ -434,7 +434,7 @@
   <string name="shared_shot_activity_with_comment">" reshot this in"</string>
   <string name="shared_stream_notification">Stream shared</string>
   <string name="share_poll">Share vote</string>
-  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_message">%s</string>
   <string name="share_user_profile_subject">I recommend %1$s</string>
   <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll_subject">Poll %s</string>
@@ -446,7 +446,7 @@
   <string name="share_stream_activity_text_pattern">" shared"</string>
   <string name="share_stream_button">Share now</string>
   <string name="share_stream_description">Surely you have lots of people out there who would like your stream. Share it now through your social media or website, bring in people and start having fun.</string>
-  <string name="share_stream_message">Check out %1$s on Shootr: https://web.shootr.com/st/%2$s</string>
+  <string name="share_stream_message">Check out %1$s on Shootr: %2$s</string>
   <string name="share_stream_subject">Check out %s on Shootr</string>
   <string name="share_stream_title">Share your stream</string>
   <string name="share_stream_via_shootr">Share via Shootr</string>

@@ -75,6 +75,7 @@ public class ShotModelMapper {
     shotModel.setEntitiesModel(entitiesModelMapper.setupEntities(shot.getEntities()));
     shotModel.setTimelineFlags(shot.getTimelineFlags());
     shotModel.setDetailFlags(shot.getDetailFlags());
+    shotModel.setShareLink(shot.getShareLink());
     if (shot.getMetadata() != null) {
       shotModel.setDeleted(shot.getMetadata().getDeleted() != null);
     }

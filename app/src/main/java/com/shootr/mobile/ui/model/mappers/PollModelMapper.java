@@ -41,6 +41,7 @@ public class PollModelMapper {
     pollModel.setHideResults(poll.isHideResults());
     pollModel.setCanVote(poll.canVote());
     pollModel.setDailyPoll(poll.isDailyPoll());
+    pollModel.setShareLink(poll.getShareLink());
     return pollModel;
   }
 

@@ -6,6 +6,7 @@ public class Poll {
 
   private String idPoll;
   private String pollQuestion;
+  private String shareLink;
   private ArrayList<Integer> indices;
 
   public String getIdPoll() {
@@ -30,5 +31,13 @@ public class Poll {
 
   public void setIndices(ArrayList<Integer> indices) {
     this.indices = indices;
+  }
+
+  public String getShareLink() {
+    return shareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    this.shareLink = shareLink;
   }
 }

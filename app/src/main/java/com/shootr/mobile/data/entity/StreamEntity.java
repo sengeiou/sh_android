@@ -34,6 +34,7 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
     private long views;
     private int permissions;
     private long lastTimeShooted;
+    private String shareLink;
 
     public StreamEntity() {
         setResultType(FollowableType.STREAM);
@@ -293,5 +294,13 @@ public class StreamEntity extends FollowableEntity implements Comparable<StreamE
 
     public void setLastTimeShooted(long lastTimeShooted) {
         this.lastTimeShooted = lastTimeShooted;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 }

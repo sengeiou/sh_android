@@ -442,7 +442,7 @@
   <string name="share_user_profile_subject">I recommend %1$s</string>
   <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll">Compartilhar voto</string>
-  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_message">%s</string>
   <string name="share_poll_subject">Questionário %s</string>
   <string name="share_poll_voted_comment">Você votou \"%s\"</string>
   <string name="share_poll_voted_subject">Eu votei \"%1$s\" em %2$s</string>
@@ -452,7 +452,7 @@
   <string name="share_stream_activity_text_pattern">" compartilhou"</string>
   <string name="share_stream_button">Compartilhar agora</string>
   <string name="share_stream_description">Certeza que você conhece muita gente que gostará do seu stream. Compartilhe agora em suas redes sociais ou site, traga o pessoal e divirta-se.</string>
-  <string name="share_stream_message">Confira %1$s em Shootr: https://web.shootr.com/st/%2$s</string>
+  <string name="share_stream_message">%2$s</string>
   <string name="share_stream_subject">Confira a %s em Shootr</string>
   <string name="share_stream_title">Compartilhe seu stream</string>
   <string name="share_stream_via_shootr">Compartilhar via Shootr</string>

@@ -63,10 +63,9 @@ public class StreamEntityMapper {
     }
     stream.setPhotoIdMedia(streamEntity.getPhotoIdMedia());
     stream.setViews(streamEntity.getViews());
-
     setPermissionsInBoolean(streamEntity.getPermissions(), stream);
-
     stream.setLastTimeShooted(streamEntity.getLastTimeShooted());
+    stream.setShareLink(streamEntity.getShareLink());
     return stream;
   }
 
@@ -101,7 +100,6 @@ public class StreamEntityMapper {
     entityTemplate.setDescription(stream.getDescription());
     entityTemplate.setTopic(stream.getTopic());
     entityTemplate.setMediaCountByRelatedUsers(stream.getMediaCount());
-
     entityTemplate.setRemoved(stream.isRemoved() ? 1 : 0);
     entityTemplate.setSynchronizedStatus(LocalSynchronized.SYNC_NEW);
     entityTemplate.setTotalFavorites(Long.valueOf(stream.getTotalFollowers()));
@@ -116,6 +114,7 @@ public class StreamEntityMapper {
     entityTemplate.setPhotoIdMedia(stream.getPhotoIdMedia());
     entityTemplate.setViews(stream.getViews());
     entityTemplate.setLastTimeShooted(stream.getLastTimeShooted());
+    entityTemplate.setShareLink(stream.getShareLink());
     setPermissionsToBinary(stream, entityTemplate);
   }
 

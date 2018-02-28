@@ -42,6 +42,7 @@ public class Stream implements Searchable, Followable, Validable {
     private boolean canFixItem;
     private long lastTimeShooted;
     private boolean showBadge;
+    private String shareLink;
 
     public Boolean isRemoved() {
         return removed;
@@ -367,5 +368,13 @@ public class Stream implements Searchable, Followable, Validable {
 
     public void setShowBadge(boolean showBadge) {
         this.showBadge = showBadge;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 }

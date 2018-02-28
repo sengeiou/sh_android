@@ -52,9 +52,8 @@ public interface IntentFactory {
     public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel, String locale) {
       String subjectPattern = launchActivity.getString(R.string.share_shot_subject);
       String messagePattern = launchActivity.getString(R.string.share_shot_message);
-      String urlPattern = launchActivity.getString(R.string.share_shot_base_url);
 
-      String shotUrl = String.format(urlPattern, shotModel.getIdShot(), locale);
+      String shotUrl = shotModel.getShareLink();
       String subject =
           String.format(subjectPattern, shotModel.getUsername(), shotModel.getStreamTitle());
       String sharedText = String.format(messagePattern, shotUrl);
@@ -72,9 +71,9 @@ public interface IntentFactory {
       String subjectPattern = launchActivity.getString(R.string.share_stream_subject);
       String messagePattern = launchActivity.getString(R.string.share_stream_message);
 
+      String streamUrl = streamModel.getShareLink();
       String subject = String.format(subjectPattern, streamModel.getTitle());
-      String sharedText =
-          String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream());
+      String sharedText = String.format(messagePattern, streamModel.getTitle(), streamUrl);
 
       return ShareCompat.IntentBuilder.from(launchActivity)
           .setType("text/plain")
@@ -93,9 +92,12 @@ public interface IntentFactory {
 
       Intent intent = new Intent(Intent.ACTION_SENDTO);
       intent.setType("text/plain");
-      String uriText = "mailto:" + Uri.encode(adress) +
-          "?subject=" + Uri.encode(subject) +
-          "&body=" + Uri.encode(defaultMessage);
+      String uriText = "mailto:"
+          + Uri.encode(adress)
+          + "?subject="
+          + Uri.encode(subject)
+          + "&body="
+          + Uri.encode(defaultMessage);
       Uri uri = Uri.parse(uriText);
       intent.setData(uri);
       Intent.createChooser(intent, launchActivity.getString(R.string.report_context_menu_report));
@@ -106,17 +108,14 @@ public interface IntentFactory {
     @Override public Intent sharePollIntent(Activity activity, PollModel pollModel, String locale) {
       String messagePattern = activity.getString(R.string.share_poll_message);
       String subjectPattern = activity.getString(R.string.share_poll_subject);
+      String pollUrl = pollModel.getShareLink();
 
-      String sharedText =
-          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
-
-      String subject =
-          String.format(subjectPattern, pollModel.getQuestion());
+      String subject = String.format(subjectPattern, pollModel.getQuestion());
 
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
           .setSubject(subject)
-          .setText(sharedText)
+          .setText(pollUrl)
           .setChooserTitle(R.string.share_via)
           .createChooserIntent();
     }
@@ -126,8 +125,7 @@ public interface IntentFactory {
       String messagePattern = activity.getString(R.string.share_poll_message);
       String subjectPattern = activity.getString(R.string.share_poll_voted_subject);
 
-      String sharedText =
-          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
+      String sharedText = String.format(messagePattern, pollModel.getShareLink());
 
       String subject =
           String.format(subjectPattern, pollOptionModel.getText(), pollModel.getQuestion());
@@ -140,16 +138,15 @@ public interface IntentFactory {
           .createChooserIntent();
     }
 
-    @Override
-    public Intent shareProfileIntent(Activity activity, UserModel userModel) {
+    @Override public Intent shareProfileIntent(Activity activity, UserModel userModel) {
       String messagePattern = userModel.getShareLink();
-
-      String sharedText =
-          String.format(messagePattern, userModel.getName(), userModel.getIdUser());
+      String subjectPattern = activity.getString(R.string.share_user_profile_subject);
+      String sharedText = String.format(subjectPattern, userModel.getName());
 
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
-          .setText(sharedText)
+          .setSubject(sharedText)
+          .setText(messagePattern)
           .setChooserTitle(R.string.share_via)
           .createChooserIntent();
     }

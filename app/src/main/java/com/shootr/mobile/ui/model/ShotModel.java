@@ -30,6 +30,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     private boolean isMyshot;
     private boolean hasMedia;
     private boolean deleted;
+    private String shareLink;
 
     public String getIdShot() {
         return idShot;
@@ -233,6 +234,14 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
 
     public void setHasMedia(boolean hasMedia) {
         this.hasMedia = hasMedia;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 
     @Override public int compareTo(ShotModel shotModel) {

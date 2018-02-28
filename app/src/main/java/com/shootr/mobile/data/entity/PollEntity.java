@@ -20,6 +20,7 @@ public class PollEntity extends PrintableItemApiEntity implements PrintableItemE
   private boolean hideResults;
   private boolean canVote;
   private boolean dailyPoll;
+  private String shareLink;
 
   public PollEntity() {
     setResultType(PrintableType.POLL);
@@ -135,5 +136,13 @@ public class PollEntity extends PrintableItemApiEntity implements PrintableItemE
 
   public void setDailyPoll(boolean dailyPoll) {
     this.dailyPoll = dailyPoll;
+  }
+
+  public String getShareLink() {
+    return shareLink;
+  }
+
+  public void setShareLink(String shareLink) {
+    this.shareLink = shareLink;
   }
 }

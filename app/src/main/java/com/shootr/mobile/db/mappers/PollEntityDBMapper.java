@@ -28,6 +28,8 @@ public class PollEntityDBMapper extends GenericDBMapper {
         c.getLong(c.getColumnIndex(DatabaseContract.PollTable.VERIFIED_POLL)) == 1L);
     pollEntity.setCanVote(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.CAN_VOTE)) == 1L);
     pollEntity.setDailyPoll(c.getLong(c.getColumnIndex(DatabaseContract.PollTable.DAILY_POLL)) == 1L);
+    pollEntity.setShareLink(
+        c.getString(c.getColumnIndex(DatabaseContract.PollTable.SHARE_LINK)));
     return pollEntity;
   }
 
@@ -51,6 +53,7 @@ public class PollEntityDBMapper extends GenericDBMapper {
         pollEntity.canVote() ? 1L : 0L);
     cv.put(DatabaseContract.PollTable.DAILY_POLL,
         pollEntity.isDailyPoll() ? 1L : 0L);
+    cv.put(DatabaseContract.PollTable.SHARE_LINK, pollEntity.getShareLink());
     return cv;
   }
 }

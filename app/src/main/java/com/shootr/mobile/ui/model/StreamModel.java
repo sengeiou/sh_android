@@ -34,6 +34,7 @@ public class StreamModel implements Serializable, SearchableModel {
     private boolean canFixItem;
     private boolean showBadge;
     private boolean shouldHideStream;
+    private String shareLink;
 
     public Boolean isRemoved() {
         return removed;
@@ -284,5 +285,13 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setShouldHideStream(boolean shouldHideStream) {
         this.shouldHideStream = shouldHideStream;
+    }
+
+    public String getShareLink() {
+        return shareLink;
+    }
+
+    public void setShareLink(String shareLink) {
+        this.shareLink = shareLink;
     }
 }
