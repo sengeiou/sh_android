@@ -442,7 +442,7 @@
   <string name="share_user_profile_subject">I recommend %1$s</string>
   <string name="share_user_profile">https://web.shootr.com/user/%2$s</string>
   <string name="share_poll">Compartir voto</string>
-  <string name="share_poll_message">https://web.shootr.com/poll/%2$s?%3$s</string>
+  <string name="share_poll_message">%s</string>
   <string name="share_poll_subject">Encuesta %s</string>
   <string name="share_poll_voted_comment">Has votado \"%s\"</string>
   <string name="share_poll_voted_subject">He votado \"%1$s\" en %2$s</string>

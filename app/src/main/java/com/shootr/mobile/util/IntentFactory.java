@@ -52,9 +52,8 @@ public interface IntentFactory {
     public Intent shareShotIntent(Activity launchActivity, ShotModel shotModel, String locale) {
       String subjectPattern = launchActivity.getString(R.string.share_shot_subject);
       String messagePattern = launchActivity.getString(R.string.share_shot_message);
-      String urlPattern = launchActivity.getString(R.string.share_shot_base_url);
 
-      String shotUrl = String.format(urlPattern, shotModel.getIdShot(), locale);
+      String shotUrl = shotModel.getShareLink();
       String subject =
           String.format(subjectPattern, shotModel.getUsername(), shotModel.getStreamTitle());
       String sharedText = String.format(messagePattern, shotUrl);
@@ -72,9 +71,10 @@ public interface IntentFactory {
       String subjectPattern = launchActivity.getString(R.string.share_stream_subject);
       String messagePattern = launchActivity.getString(R.string.share_stream_message);
 
+      String streamUrl = streamModel.getShareLink();
       String subject = String.format(subjectPattern, streamModel.getTitle());
       String sharedText =
-          String.format(messagePattern, streamModel.getTitle(), streamModel.getIdStream());
+          String.format(messagePattern, streamModel.getTitle(), streamUrl);
 
       return ShareCompat.IntentBuilder.from(launchActivity)
           .setType("text/plain")
@@ -106,9 +106,7 @@ public interface IntentFactory {
     @Override public Intent sharePollIntent(Activity activity, PollModel pollModel, String locale) {
       String messagePattern = activity.getString(R.string.share_poll_message);
       String subjectPattern = activity.getString(R.string.share_poll_subject);
-
-      String sharedText =
-          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
+      String pollUrl = pollModel.getShareLink();
 
       String subject =
           String.format(subjectPattern, pollModel.getQuestion());
@@ -116,7 +114,7 @@ public interface IntentFactory {
       return ShareCompat.IntentBuilder.from(activity)
           .setType("text/plain")
           .setSubject(subject)
-          .setText(sharedText)
+          .setText(pollUrl)
           .setChooserTitle(R.string.share_via)
           .createChooserIntent();
     }
@@ -127,7 +125,7 @@ public interface IntentFactory {
       String subjectPattern = activity.getString(R.string.share_poll_voted_subject);
 
       String sharedText =
-          String.format(messagePattern, pollModel.getQuestion(), pollModel.getIdPoll(), locale);
+          String.format(messagePattern, pollModel.getShareLink());
 
       String subject =
           String.format(subjectPattern, pollOptionModel.getText(), pollModel.getQuestion());
