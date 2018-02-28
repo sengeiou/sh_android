@@ -79,6 +79,7 @@ public class ShotApiEntityMapper {
     shotEntity.setEntities(entitiesApiEntityMapper.setupEntities(shotApiEntity.getEntities()));
     shotEntity.setTimelineFlags(shotApiEntity.getTimelineFlags());
     shotEntity.setDetailFlags(shotApiEntity.getDetailFlags());
+    shotEntity.setShareLink(shotApiEntity.getShareLink());
     entitiesApiEntityMapper.setupEntities(shotApiEntity.getEntities());
     shotEntity.setDeleted(shotApiEntity.getDeleted());
     return shotEntity;

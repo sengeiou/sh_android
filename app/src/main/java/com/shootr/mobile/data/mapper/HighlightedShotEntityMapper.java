@@ -83,6 +83,7 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setCtaButtonText(shotApiEntity.getCtaButtonText());
     highlightedShot.setCtaCaption(shotApiEntity.getCtaCaption());
     highlightedShot.setVerifiedUser(shotApiEntity.getVerifiedUser());
+    highlightedShot.setShareLink(shotApiEntity.getShareLink());
 
     highlightedShot.setNiced(shotApiEntity.getNiced());
     highlightedShot.setNicedTime(shotApiEntity.getNicedTime());
@@ -209,6 +210,7 @@ public class HighlightedShotEntityMapper {
         value.getReshootedTime() != null ? new Date(value.getReshootedTime()) : new Date());
     shot.setNicedTime(value.getNicedTime() != null ? new Date(value.getNicedTime()) : new Date());
     shot.setNiced(value.getNiced());
+    shot.setShareLink(value.getShareLink());
     setupEntities(shot, value);
 
     highlightedShot.setShot(shot);
