@@ -452,7 +452,7 @@
   <string name="share_stream_activity_text_pattern">" ha compartit"</string>
   <string name="share_stream_button">Compartir ara</string>
   <string name="share_stream_description">Segurament coneixes a molta gent a qui li agradarà el teu stream. Comparteix-lo ara a les teves xarxes socials o web, porta gent i comença a gaudir.</string>
-  <string name="share_stream_message">Fes una ullada a %1$s a Shootr: https://web.shootr.com/st/%2$s</string>
+  <string name="share_stream_message">Fes una ullada a %1$s a Shootr: %2$s</string>
   <string name="share_stream_subject">Fes una ullada a %s a Shootr</string>
   <string name="share_stream_title">Comparteix l\'stream</string>
   <string name="share_stream_via_shootr">Compartir via Shootr</string>
