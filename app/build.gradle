@@ -278,6 +278,9 @@ dependencies {
   compile 'com.vincentbrison.openlibraries.android:dualcache-jsonserializer:3.1.1'
 
   compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
+  compile 'com.neovisionaries:nv-websocket-client:2.3'
+
 }
 
 /**
