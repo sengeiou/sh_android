@@ -112,7 +112,9 @@ public class WebSocketListenerImpl implements WebSocketListener {
   }
 
   @Override public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-
+    log("He tenido un fallo " + cause);
+    log("Response del fallo: " + cause);
+    webSocketConnection.onFailure(cause);
   }
 
   @Override
