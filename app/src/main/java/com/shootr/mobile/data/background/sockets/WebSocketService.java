@@ -99,6 +99,7 @@ public class WebSocketService extends Service
   }
 
   @Override public void stopService() {
+    isRunning = false;
     stopSelf();
   }
 

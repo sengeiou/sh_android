@@ -159,30 +159,34 @@ public class WebSocketApiImpl implements SocketApi {
     return UUID.randomUUID().toString();
   }
 
-  private void setupSocketConnection(final ObservableEmitter<SocketMessageApiEntity> emitter, String address)
-      throws Exception {
-    webSocket = new WebSocketFactory().setConnectionTimeout(10000).createSocket(address).addExtension(
-        WebSocketExtension.PERMESSAGE_DEFLATE).addListener(new WebSocketListenerImpl(new SocketListener.WebSocketConnection() {
-      @Override public void onFailure(Throwable t) {
-        handleOnFailure(t, emitter);
-      }
+  private void setupSocketConnection(final ObservableEmitter<SocketMessageApiEntity> emitter,
+      String address) throws Exception {
+    webSocket = new WebSocketFactory().setConnectionTimeout(10000)
+        .createSocket(address)
+        .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
+        .addListener(new WebSocketListenerImpl(new SocketListener.WebSocketConnection() {
+          @Override public void onFailure(Throwable t) {
+            handleOnFailure(t, emitter);
+          }
 
-      @Override public void onMessage(String message) {
-        SocketMessageApiEntity socketMessage =
-            socketMessageWrapper.transformSocketMessage(message);
-        if (socketMessage != null) {
-          handleNewMessage(socketMessage, emitter);
-        }
-      }
+          @Override public void onMessage(String message) {
+            SocketMessageApiEntity socketMessage =
+                socketMessageWrapper.transformSocketMessage(message);
+            if (socketMessage != null) {
+              handleNewMessage(socketMessage, emitter);
+            }
+          }
 
-      @Override public void onConnected() {
-        sendLastEvents();
-      }
+          @Override public void onConnected() {
+            sendLastEvents();
+          }
 
-      @Override public void onClosed() {
-        emitter.onComplete();
-      }
-    })).connect().setPingInterval(10000);
+          @Override public void onClosed() {
+            emitter.onComplete();
+          }
+        }))
+        .connect()
+        .setPingInterval(10000);
   }
 
   private void handleOnFailure(Throwable t, ObservableEmitter<SocketMessageApiEntity> emitter) {
@@ -240,7 +244,6 @@ public class WebSocketApiImpl implements SocketApi {
               socketMessage.setEventParams(eventParams);
             }
           }
-
         }
         emitter.onNext(socketMessage);
         break;
@@ -258,6 +261,4 @@ public class WebSocketApiImpl implements SocketApi {
       }
     }
   }
-
-
 }
