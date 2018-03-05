@@ -812,7 +812,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void sendAnalythicsEnterTimeline() {
-
+    sendTimelineAnalytics();
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
@@ -949,12 +949,11 @@ public class TimelineFragment extends BaseFragment
     }
 
     if (menus.get(LongPressShotPresenter.REPORT)) {
-      customContextMenu.addAction(R.string.report_context_menu_report,
-          new Runnable() {
-            @Override public void run() {
-              longPressShotPresenter.report(shotModel);
-            }
-          });
+      customContextMenu.addAction(R.string.report_context_menu_report, new Runnable() {
+        @Override public void run() {
+          longPressShotPresenter.report(shotModel);
+        }
+      });
     }
 
     customContextMenu.show();
