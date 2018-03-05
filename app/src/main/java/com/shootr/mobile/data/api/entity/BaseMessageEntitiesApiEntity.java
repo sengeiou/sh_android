@@ -9,6 +9,7 @@ public class BaseMessageEntitiesApiEntity {
   private ArrayList<StreamIndexApiEntity> streams;
   private ArrayList<ImageMediaApiEntity> images;
   private ArrayList<MentionsApiEntity> mentions;
+  private ArrayList<CardApiEntity> cards;
 
   public ArrayList<UrlApiEntity> getUrls() {
     return urls;
@@ -48,5 +49,13 @@ public class BaseMessageEntitiesApiEntity {
 
   public void setMentions(ArrayList<MentionsApiEntity> mentions) {
     this.mentions = mentions;
+  }
+
+  public ArrayList<CardApiEntity> getCards() {
+    return cards;
+  }
+
+  public void setCards(ArrayList<CardApiEntity> cards) {
+    this.cards = cards;
   }
 }

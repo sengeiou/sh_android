@@ -113,6 +113,8 @@ public class WebSocketPresenter {
 
     @Override public void onError(Throwable e) {
       logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + e.getMessage(), context);
+      Log.d("socket error", e.getLocalizedMessage());
+      e.printStackTrace();
     }
 
     @Override public void onComplete() {

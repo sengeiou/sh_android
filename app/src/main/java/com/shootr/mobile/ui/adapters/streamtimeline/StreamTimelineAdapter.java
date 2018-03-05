@@ -4,6 +4,7 @@ import android.view.View;
 import com.ahamed.multiviewadapter.DataItemManager;
 import com.ahamed.multiviewadapter.DataListManager;
 import com.ahamed.multiviewadapter.RecyclerAdapter;
+import com.ahamed.multiviewadapter.util.PayloadProvider;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnCtaClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnDeleteHighlightedItemClick;
@@ -107,8 +108,40 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
   }
 
   private void setupList() {
-    shotsListManager = new DataListManager<>(this);
-    fixedItemsListManager = new DataListManager<>(this);
+    shotsListManager = new DataListManager<>(this, new PayloadProvider<PrintableModel>() {
+      @Override public boolean areContentsTheSame(PrintableModel oldItem, PrintableModel newItem) {
+        if (oldItem instanceof ShotModel && newItem instanceof ShotModel) {
+          return ((ShotModel) oldItem).getIdShot().equals(((ShotModel) newItem).getIdShot())
+              && ((ShotModel) oldItem).getNiceCount().equals(((ShotModel) newItem).getNiceCount())
+              && ((ShotModel) oldItem).getReplyCount().equals(((ShotModel) newItem).getReplyCount())
+              && ((ShotModel) newItem).isReshooted() == ((ShotModel) oldItem).isReshooted()
+              && ((ShotModel) oldItem).isNiced()
+              && ((ShotModel) newItem).isNiced();
+        }
+        return false;
+      }
+
+      @Override public Object getChangePayload(PrintableModel oldItem, PrintableModel newItem) {
+        return null;
+      }
+    });
+    fixedItemsListManager = new DataListManager<>(this, new PayloadProvider<PrintableModel>() {
+      @Override public boolean areContentsTheSame(PrintableModel oldItem, PrintableModel newItem) {
+        if (oldItem instanceof ShotModel && newItem instanceof ShotModel) {
+          return ((ShotModel) oldItem).getIdShot().equals(((ShotModel) newItem).getIdShot())
+              && ((ShotModel) oldItem).getNiceCount().equals(((ShotModel) newItem).getNiceCount())
+              && ((ShotModel) oldItem).getReplyCount().equals(((ShotModel) newItem).getReplyCount())
+              && ((ShotModel) newItem).isReshooted() == ((ShotModel) oldItem).isReshooted()
+              && ((ShotModel) oldItem).isNiced()
+              && ((ShotModel) newItem).isNiced();
+        }
+        return false;
+      }
+
+      @Override public Object getChangePayload(PrintableModel oldItem, PrintableModel newItem) {
+        return null;
+      }
+    });
     pinnedItemsListManager = new DataListManager<>(this);
 
     addDataManager(pinnedItemsListManager);
@@ -211,5 +244,24 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
 
   public void removeHighlightedItems() {
     fixedItemsListManager.clear();
+  }
+
+  public void updateFixedItem(PrintableModel item) {
+    int index = fixedItemsListManager.indexOf(item);
+    if (index != -1) {
+      if (((ShotModel) item).isDeleted()) {
+        fixedItemsListManager.remove(index);
+      } else {
+        fixedItemsListManager.set(index, item);
+      }
+    }
+  }
+
+  public PrintableModel itemForIndex(int index) {
+    return shotsListManager.get(index);
+  }
+
+  public int indexOf(PrintableModel printableModel) {
+    return shotsListManager.lastIndexOf(printableModel);
   }
 }

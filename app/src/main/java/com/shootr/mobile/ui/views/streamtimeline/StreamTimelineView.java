@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface StreamTimelineView {
 
-  void renderItems(List<PrintableModel> items);
+  void renderItems(List<PrintableModel> items, PrintableModel itemForReposition, int offset);
 
   void renderFixedItems(List<PrintableModel> items);
 
@@ -89,4 +89,6 @@ public interface StreamTimelineView {
   void hideWatchingPeopleCount();
 
   void hideEmpty();
+
+  void updateFixedItem(List<PrintableModel> printableModels);
 }

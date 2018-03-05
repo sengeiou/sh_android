@@ -25,8 +25,9 @@ import com.shootr.mobile.db.manager.ShootrEventManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.model.QueueElement;
-import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.StreamTimeline;
+import com.shootr.mobile.domain.model.TimelineReposition;
+import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DeviceFactory;
@@ -160,6 +161,7 @@ import static android.content.Context.MODE_PRIVATE;
   private static final String LAST_VISIT = "last_visit";
   private static final String QUEUE_EVENT = "queue_event";
   private static final String LOGS = "logs";
+  private static final String TIMELINE_REPOSITION_CACHE = "timeline_reposition_cache";
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -365,6 +367,17 @@ import static android.content.Context.MODE_PRIVATE;
     return new Builder<List<LogShootr>>(LOGS, BuildConfig.VERSION_CODE).useSerializerInRam(
         LOGS_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(LOGS_DISK_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<TimelineReposition> provideStreamTimelineRepositionLruCache(
+      Application application) {
+    CacheSerializer<TimelineReposition> jsonSerializer =
+        new JsonSerializer<>(TimelineReposition.class);
+
+    return new Builder<TimelineReposition>(TIMELINE_REPOSITION_CACHE,
+        BuildConfig.VERSION_CODE).useSerializerInRam(LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
         .build();
   }
 }

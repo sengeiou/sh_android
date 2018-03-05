@@ -60,7 +60,7 @@ public class PollEntityMapper {
   public List<Poll> transform(List<PollEntity> polls) {
     List<Poll> businessObjects = new ArrayList<>(polls.size());
     for (PollEntity poll : polls) {
-      if (poll.getPollOptions().size() > 0) {
+      if (poll != null && poll.getPollOptions().size() > 0) {
         Poll pollTransformed = transform(poll);
         if (pollTransformed.getPollOptions().size() > 0) {
           businessObjects.add(pollTransformed);

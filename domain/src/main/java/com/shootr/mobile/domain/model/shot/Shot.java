@@ -99,91 +99,16 @@ public class Shot extends BaseMessage {
 
     @Override public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Shot)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Shot shot = (Shot) o;
 
-        if (idShot != null ? !idShot.equals(shot.idShot) : shot.idShot != null) return false;
-        if (getComment() != null ? !getComment().equals(shot.getComment())
-            : shot.getComment() != null) {
-            return false;
-        }
-        if (getImage() != null ? !getImage().equals(shot.getImage()) : shot.getImage() != null) {
-            return false;
-        }
-        if (getUserInfo() != null ? !getUserInfo().equals(shot.getUserInfo())
-            : shot.getUserInfo() != null) {
-            return false;
-        }
-        if (streamInfo != null ? !streamInfo.equals(shot.streamInfo) : shot.streamInfo != null) {
-            return false;
-        }
-        if (publishDate != null ? !publishDate.equals(shot.publishDate)
-            : shot.publishDate != null) {
-            return false;
-        }
-        if (getIdQueue() != null ? !getIdQueue().equals(shot.getIdQueue())
-            : shot.getIdQueue() != null) {
-            return false;
-        }
-        if (parentShotId != null ? !parentShotId.equals(shot.parentShotId)
-            : shot.parentShotId != null) {
-            return false;
-        }
-        if (parentShotUserId != null ? !parentShotUserId.equals(shot.parentShotUserId)
-          : shot.parentShotUserId != null) {
-            return false;
-        }
-        if (parentShotUsername != null ? !parentShotUsername.equals(shot.parentShotUsername)
-          : shot.parentShotUsername != null) {
-            return false;
-        }
-        if (getVideoUrl() != null ? !getVideoUrl().equals(shot.getVideoUrl())
-            : shot.getVideoUrl() != null) {
-            return false;
-        }
-        if (getVideoTitle() != null ? !getVideoTitle().equals(shot.getVideoTitle())
-            : shot.getVideoTitle() != null) {
-            return false;
-        }
-        if (getVideoDuration() != null ? !getVideoDuration().equals(shot.getVideoDuration())
-            : shot.getVideoDuration() != null) {
-            return false;
-        }
-        if (type != null ? !type.equals(shot.type) : shot.type != null) return false;
-        if (niceCount != null ? !niceCount.equals(shot.niceCount) : shot.niceCount != null) return false;
-
-        return !(getMetadata() != null ? !getMetadata().equals(shot.getMetadata()) : shot.getMetadata() != null);
+        return getIdShot() != null ? getIdShot().equals(shot.getIdShot())
+            : shot.getIdShot() == null;
     }
 
     @Override public int hashCode() {
-        int result = idShot != null ? idShot.hashCode() : 0;
-        result = 31 * result + (getComment() != null ? getComment().hashCode() : 0);
-        result = 31 * result + (getImage() != null ? getImage().hashCode() : 0);
-        result = 31 * result + (getUserInfo() != null ? getUserInfo().hashCode() : 0);
-        result = 31 * result + (streamInfo != null ? streamInfo.hashCode() : 0);
-        result = 31 * result + (publishDate != null ? publishDate.hashCode() : 0);
-        result = 31 * result + (getIdQueue() != null ? getIdQueue().hashCode() : 0);
-        result = 31 * result + (parentShotId != null ? parentShotId.hashCode() : 0);
-        result = 31 * result + (parentShotUserId != null ? parentShotUserId.hashCode() : 0);
-        result = 31 * result + (parentShotUsername != null ? parentShotUsername.hashCode() : 0);
-        result = 31 * result + (getVideoUrl() != null ? getVideoUrl().hashCode() : 0);
-        result = 31 * result + (getVideoTitle() != null ? getVideoTitle().hashCode() : 0);
-        result = 31 * result + (getVideoDuration() != null ? getVideoDuration().hashCode() : 0);
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (niceCount != null ? niceCount.hashCode() : 0);
-        result = 31 * result + (getMetadata() != null ? getMetadata().hashCode() : 0);
-        return result;
-    }
-
-    @Override public String toString() {
-        return "Shot{" +
-          "idShot=" + idShot +
-          ", comment='" + getComment() + '\'' +
-          ", image='" + getImage() + '\'' +
-          ", niceCount='" + niceCount + '\'' +
-          ", publishDate=" + publishDate +
-          '}';
+        return getIdShot() != null ? getIdShot().hashCode() : 0;
     }
 
     public Long getProfileHidden() {

@@ -18,6 +18,7 @@
       android:layout_margin="8dp"
       android:textColor="@color/white"
       android:elevation="8dp"
+      android:text="Arriba  ↑"
       android:background="@drawable/new_shots_notificator"
       android:visibility="gone"
       />

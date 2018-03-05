@@ -80,12 +80,25 @@ public class SocketApiImpl implements SocketApi {
 
           @Override public void onConnected() {
             sendLastEvents();
+            restoreLastSubscription();
           }
 
           @Override public void onClosed() {
             emitter.onComplete();
           }
         }));
+  }
+
+  private void restoreLastSubscription() {
+    if (!subscriptions.isEmpty()) {
+      SubscribeSocketMessageApiEntity aux = subscriptions.get(0);
+      subscriptions.clear();
+      subscribeToTimeline(aux.getData().getSubscriptionType(),
+          aux.getData().getIdStream(), aux.getData().getFilter());
+      PaginationEntity paginationEntity = new PaginationEntity();
+      paginationEntity.setSinceTimestamp(0L);
+      getTimeline(aux.getData().getIdStream(), aux.getData().getFilter(), paginationEntity);
+    }
   }
 
   private void handleNewMessage(SocketMessageApiEntity socketMessage,
@@ -97,10 +110,7 @@ public class SocketApiImpl implements SocketApi {
         SocketMessageApiEntity event = lastEvents.get(socketMessage.getRequestId());
 
         if (event != null && event.getEventType().equals(SocketMessageApiEntity.SUBSCRIBE)) {
-          for (SubscribeSocketMessageApiEntity timelineSubscription : subscriptions) {
-            timelineSubscription.setActiveSubscription(false);
-          }
-
+          desactiveSubscriptions();
           ((SubscribeSocketMessageApiEntity) event).setActiveSubscription(true);
           subscriptions.add(0, (SubscribeSocketMessageApiEntity) event);
           if (subscriptions.size() >= MAX_SUBSCRIPTIONS) {
@@ -129,6 +139,7 @@ public class SocketApiImpl implements SocketApi {
             EventParams eventParams = new EventParams();
             if (subscription.getRequestId().equals(socketMessage.getRequestId())) {
               eventParams.setFilter(subscription.getData().getFilter());
+              eventParams.setIdStream(subscription.getData().getIdStream());
               socketMessage.setEventParams(eventParams);
             }
           }
@@ -181,6 +192,7 @@ public class SocketApiImpl implements SocketApi {
       if (subscriptions.contains(socketMessageApiEntity)) {
         SubscribeSocketMessageApiEntity aux =
             subscriptions.remove(subscriptions.indexOf(socketMessageApiEntity));
+        desactiveSubscriptions();
         aux.setActiveSubscription(true);
         subscriptions.add(0, aux);
         return false;
@@ -192,6 +204,12 @@ public class SocketApiImpl implements SocketApi {
       }
     }
     return false;
+  }
+
+  private void desactiveSubscriptions() {
+    for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
+      subscription.setActiveSubscription(false);
+    }
   }
 
   private void unsubscribeFirstSubscription() {

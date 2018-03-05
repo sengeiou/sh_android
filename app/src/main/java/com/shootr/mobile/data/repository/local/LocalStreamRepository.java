@@ -8,7 +8,9 @@ import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
 import com.shootr.mobile.data.repository.remote.cache.LastStreamVisitCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.remote.cache.TimelineCache;
+import com.shootr.mobile.data.repository.remote.cache.TimelineRepositionCache;
 import com.shootr.mobile.domain.model.StreamTimeline;
+import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Local;
@@ -25,11 +27,12 @@ public class LocalStreamRepository implements StreamRepository {
     private final LandingStreamsCache landingStreamsCache;
     private final LastStreamVisitCache lastStreamVisitCache;
     private final TimelineCache timelineCache;
+    private final TimelineRepositionCache timelineRepositionCache;
 
     @Inject public LocalStreamRepository(@Local StreamDataSource localStreamDataSource,
         @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper,
-        StreamCache streamCache, LandingStreamsCache landingStreamsCache,
-        LastStreamVisitCache lastStreamVisitCache, TimelineCache timelineCache) {
+        StreamCache streamCache, LandingStreamsCache landingStreamsCache, LastStreamVisitCache lastStreamVisitCache,
+        TimelineCache timelineCache, TimelineRepositionCache timelineRepositionCache) {
         this.localStreamDataSource = localStreamDataSource;
         this.localStreamSearchDataSource = localStreamSearchDataSource;
         this.streamEntityMapper = streamEntityMapper;
@@ -37,6 +40,7 @@ public class LocalStreamRepository implements StreamRepository {
         this.landingStreamsCache = landingStreamsCache;
         this.lastStreamVisitCache = lastStreamVisitCache;
         this.timelineCache = timelineCache;
+        this.timelineRepositionCache = timelineRepositionCache;
     }
 
     @Override public Stream getStreamById(String idStream, String[] types) {
@@ -137,5 +141,15 @@ public class LocalStreamRepository implements StreamRepository {
 
     @Override public StreamTimeline getCachedTimeline(String idStream, String filter) {
         return timelineCache.getTimeline(idStream, filter);
+    }
+
+    @Override
+    public void putTimelineReposition(TimelineReposition timelineReposition, String idStrea,
+        String filter) {
+        timelineRepositionCache.putTimelineReposition(timelineReposition, idStrea, filter);
+    }
+
+    @Override public TimelineReposition getTimelineReposition(String idStream, String filter) {
+        return timelineRepositionCache.getTimelineReposition(idStream, filter);
     }
 }

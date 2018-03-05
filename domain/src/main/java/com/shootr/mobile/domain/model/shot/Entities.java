@@ -10,6 +10,7 @@ public class Entities {
   private ArrayList<StreamIndex> streams;
   private ArrayList<ImageMedia> images;
   private ArrayList<Mention> mentions;
+  private ArrayList<Card> cards;
 
   public ArrayList<Url> getUrls() {
     return urls;
@@ -49,5 +50,13 @@ public class Entities {
 
   public void setMentions(ArrayList<Mention> mentions) {
     this.mentions = mentions;
+  }
+
+  public ArrayList<Card> getCards() {
+    return cards;
+  }
+
+  public void setCards(ArrayList<Card> cards) {
+    this.cards = cards;
   }
 }

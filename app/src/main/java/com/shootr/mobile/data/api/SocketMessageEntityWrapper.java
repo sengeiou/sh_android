@@ -50,7 +50,9 @@ public class SocketMessageEntityWrapper {
   }
 
   public String transformEvent(SocketMessageApiEntity socketMessageEntity) {
-    return gson.toJson(socketMessageEntity);
+    String event = gson.toJson(socketMessageEntity);
+    Log.d("socket", "envio a sever: " + event);
+    return event;
   }
 
   private Gson setupGson() {

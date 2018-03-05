@@ -13,6 +13,7 @@ public class StreamTimeline implements Message {
   private TimelineItem items;
   private String filter;
   private boolean newBadgeContent;
+  private TimelineReposition timelineReposition;
 
 
   public Stream getStream() {
@@ -83,4 +84,11 @@ public class StreamTimeline implements Message {
     this.newBadgeContent = newBadgeContent;
   }
 
+  public TimelineReposition getTimelineReposition() {
+    return timelineReposition;
+  }
+
+  public void setTimelineReposition(TimelineReposition timelineReposition) {
+    this.timelineReposition = timelineReposition;
+  }
 }

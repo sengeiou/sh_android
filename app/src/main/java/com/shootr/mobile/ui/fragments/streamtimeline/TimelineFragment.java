@@ -37,8 +37,10 @@ import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
+import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
+import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
@@ -221,6 +223,9 @@ public class TimelineFragment extends BaseFragment
 
   private Integer[] watchNumberCount;
 
+  private PrintableModel shotStored;
+  private int offset;
+
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
     TimelineFragment fragment = new TimelineFragment();
     fragment.setArguments(fragmentArguments);
@@ -289,6 +294,10 @@ public class TimelineFragment extends BaseFragment
 
         if (itemsList != null) {
 
+          if (preCachingLayoutManager.findFirstVisibleItemPosition() > 3) {
+            showNewShotsIndicator();
+          }
+
           timelinePresenter.setIsFirstShotPosition(
               preCachingLayoutManager.findFirstCompletelyVisibleItemPosition() == 0);
           checkIfEndOfListVisible();
@@ -298,6 +307,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
+    newShotsNotificatorText.setText("Arriba  ↑");
     itemsList.scrollToPosition(0);
   }
 
@@ -648,10 +658,17 @@ public class TimelineFragment extends BaseFragment
   }
   //endregion
 
-  @Override public void renderItems(List<PrintableModel> items) {
+  @Override public void renderItems(List<PrintableModel> items, PrintableModel itemForReposition,
+      int offset) {
     checkingForShotsView.setVisibility(View.GONE);
     itemsList.scrollToPosition(0);
     adapter.setShotList(items);
+    if (itemForReposition != null && adapter.indexOf(itemForReposition) != -1) {
+      preCachingLayoutManager.scrollToPositionWithOffset(adapter.indexOf(itemForReposition),
+          offset);
+    } else {
+      itemsList.scrollToPosition(0);
+    }
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
@@ -812,7 +829,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void sendAnalythicsEnterTimeline() {
-
+    sendTimelineAnalytics();
   }
 
   @Override public void showNewShotsIndicator(Integer numberNewShots) {
@@ -822,6 +839,14 @@ public class TimelineFragment extends BaseFragment
           getResources().getQuantityString(R.plurals.new_shots_indicator, numberNewShots,
               numberNewShots);
       newShotsNotificatorText.setText(indicatorText);
+    } catch (NullPointerException error) {
+      crashReportTool.logException(error);
+    }
+  }
+
+  public void showNewShotsIndicator() {
+    try {
+      newShotsNotificatorText.setVisibility(View.VISIBLE);
     } catch (NullPointerException error) {
       crashReportTool.logException(error);
     }
@@ -949,12 +974,11 @@ public class TimelineFragment extends BaseFragment
     }
 
     if (menus.get(LongPressShotPresenter.REPORT)) {
-      customContextMenu.addAction(R.string.report_context_menu_report,
-          new Runnable() {
-            @Override public void run() {
-              longPressShotPresenter.report(shotModel);
-            }
-          });
+      customContextMenu.addAction(R.string.report_context_menu_report, new Runnable() {
+        @Override public void run() {
+          longPressShotPresenter.report(shotModel);
+        }
+      });
     }
 
     customContextMenu.show();
@@ -1010,6 +1034,21 @@ public class TimelineFragment extends BaseFragment
   @Override public void onPause() {
     super.onPause();
     timelinePresenter.pause();
+    calculateItemForReposition();
+  }
+
+  private void calculateItemForReposition() {
+    try {
+      int firstVisiblePosition = preCachingLayoutManager.findFirstCompletelyVisibleItemPosition();
+      View v = preCachingLayoutManager.findViewByPosition(firstVisiblePosition);
+
+      shotStored = adapter.itemForIndex(firstVisiblePosition > 0 ? firstVisiblePosition : 0);
+      offset = v == null ? 0 : v.getTop();
+
+      timelinePresenter.putItemForReposition(shotStored, offset);
+    } catch (IndexOutOfBoundsException exception) {
+      /* no-op */
+    }
   }
 
   @Override public void onResume() {
@@ -1117,6 +1156,16 @@ public class TimelineFragment extends BaseFragment
     startActivity(intent);
   }
 
+  @Override public void goToOptionVoted(PollModel pollModel) {
+    Intent intent = PollOptionVotedActivity.getIntentForActivity(getContext(), pollModel);
+    startActivity(intent);
+  }
+
+  @Override public void goToHiddenResults(String question) {
+    Intent intent = HiddenPollResultsActivity.newResultsIntent(getContext(), question);
+    startActivity(intent);
+  }
+
   @Override public void goToPollResults(String idPoll, String idStream) {
     Intent intent =
         PollResultsActivity.newResultsIntent(getContext(), idPoll, streamTitle, idStream);
@@ -1165,6 +1214,10 @@ public class TimelineFragment extends BaseFragment
     if (emptyView != null) {
       emptyView.setVisibility(View.GONE);
     }
+  }
+
+  @Override public void updateFixedItem(List<PrintableModel> printableModels) {
+    adapter.updateFixedItem(printableModels.get(0));
   }
 
   private void updateWatchNumberIcon() {

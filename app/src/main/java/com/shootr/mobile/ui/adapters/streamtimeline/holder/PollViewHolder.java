@@ -31,7 +31,7 @@ public class PollViewHolder extends BaseViewHolder<PollModel> {
   public void render(final PollModel pollModel) {
     pollQuestionTextView.setText(pollModel.getQuestion());
     setupPollAction(pollModel);
-    itemView.setOnClickListener(new View.OnClickListener() {
+    pollActionTextView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         onPollActionClickListener.onPollClick(pollModel);
       }
@@ -40,18 +40,27 @@ public class PollViewHolder extends BaseViewHolder<PollModel> {
 
   private void setupPollAction(PollModel pollModel) {
     if (pollModel.getStatus().equals(PollStatus.CLOSED)) {
-      pollActionTextView.setText(pollResultsString.toUpperCase());
+      pollModel.setAction(PollModel.RESULTS);
+      if (pollModel.isHideResults()) {
+        pollModel.setAction(PollModel.VIEW);
+        pollActionTextView.setText(pollViewString.toUpperCase());
+      } else {
+        pollActionTextView.setText(pollResultsString.toUpperCase());
+      }
       return;
     }
     handleVoteStatus(pollModel);
   }
 
   private void handleVoteStatus(PollModel pollModel) {
-    if (pollModel.getVoteStatus().equals(PollStatus.VOTED) || pollModel.getVoteStatus()
-        .equals(PollStatus.HASSEENRESULTS)) {
+    if (!pollModel.canVote() ||
+        pollModel.getVoteStatus().equals(PollStatus.HASSEENRESULTS)) {
+      pollModel.setAction(PollModel.VIEW);
       pollActionTextView.setText(pollViewString.toUpperCase());
     } else {
+      pollModel.setAction(PollModel.VOTE);
       pollActionTextView.setText(pollVoteString.toUpperCase());
     }
   }
+
 }

@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.repository.stream;
 
 import com.shootr.mobile.domain.model.StreamTimeline;
+import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import java.util.List;
@@ -44,4 +45,8 @@ public interface StreamRepository {
     Long getLastStreamVisit(String idStream);
 
     StreamTimeline getCachedTimeline(String idStream, String filter);
+
+    void putTimelineReposition(TimelineReposition timelineReposition, String idStrea, String filter);
+
+    TimelineReposition getTimelineReposition(String idStream, String filter);
 }

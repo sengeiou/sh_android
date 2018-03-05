@@ -20,6 +20,7 @@ import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.QueueElement;
 import com.shootr.mobile.domain.model.QueueElementType;
 import com.shootr.mobile.domain.model.StreamTimeline;
+import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
@@ -232,6 +233,15 @@ public class SyncStreamRepository
   }
 
   @Override public StreamTimeline getCachedTimeline(String idStream, String filter) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public void putTimelineReposition(TimelineReposition timelineReposition, String idStrea,
+      String filter) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public TimelineReposition getTimelineReposition(String idStrea, String filter) {
     throw new RuntimeException("Method not implemented yet!");
   }
 

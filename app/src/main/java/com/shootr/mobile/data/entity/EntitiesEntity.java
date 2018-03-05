@@ -9,6 +9,7 @@ public class EntitiesEntity {
   private ArrayList<StreamIndexEntity> streams;
   private ArrayList<ImageMediaEntity> images;
   private ArrayList<MentionsEntity> mentions;
+  private ArrayList<CardEntity> cards;
 
   public ArrayList<UrlEntity> getUrls() {
     return urls;
@@ -50,6 +51,14 @@ public class EntitiesEntity {
     this.mentions = mentions;
   }
 
+  public ArrayList<CardEntity> getCards() {
+    return cards;
+  }
+
+  public void setCards(ArrayList<CardEntity> cards) {
+    this.cards = cards;
+  }
+
   @Override public String toString() {
     return "EntitiesEntity{"
         + "urls="
@@ -62,6 +71,8 @@ public class EntitiesEntity {
         + images
         + ", mentions="
         + mentions
+        + ", cards="
+        + cards
         + '}';
   }
 }

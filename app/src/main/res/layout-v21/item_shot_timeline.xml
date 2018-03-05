@@ -142,7 +142,7 @@
       <FrameLayout
           android:id="@+id/shot_video_frame"
           android:layout_width="match_parent"
-          android:layout_height="165dp"
+          android:layout_height="match_parent"
           android:layout_gravity="left|bottom"
           android:background="@drawable/round_corner"
           android:foreground="?selectableItemBackground"

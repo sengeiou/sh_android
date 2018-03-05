@@ -10,6 +10,7 @@ public class EntitiesModel implements Serializable {
   private ArrayList<StreamIndexModel> streams;
   private ArrayList<ImageMediaModel> images;
   private ArrayList<MentionModel> mentions;
+  private ArrayList<CardModel> cards;
 
   public ArrayList<UrlModel> getUrls() {
     return urls;
@@ -49,5 +50,13 @@ public class EntitiesModel implements Serializable {
 
   public void setMentions(ArrayList<MentionModel> mentions) {
     this.mentions = mentions;
+  }
+
+  public ArrayList<CardModel> getCards() {
+    return cards;
+  }
+
+  public void setCards(ArrayList<CardModel> cards) {
+    this.cards = cards;
   }
 }

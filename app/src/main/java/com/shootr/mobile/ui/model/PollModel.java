@@ -6,6 +6,10 @@ import java.util.List;
 
 public class PollModel implements PrintableModel, Serializable {
 
+  public static final String RESULTS = "RESULTS";
+  public static final String VOTE = "VOTE";
+  public static final String VIEW = "VIEW";
+
   private final long ONE_HOUR_MILISECONDS = 3600000;
   private String idPoll;
   private String idStream;
@@ -24,6 +28,7 @@ public class PollModel implements PrintableModel, Serializable {
   private boolean dailyPoll;
   private String timelineGroup;
   private String shareLink;
+  private String action;
 
   public String getIdPoll() {
     return idPoll;
@@ -202,5 +207,13 @@ public class PollModel implements PrintableModel, Serializable {
     result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
     result = 31 * result + (canVote ? 1 : 0);
     return result;
+  }
+
+  public String getAction() {
+    return action;
+  }
+
+  public void setAction(String action) {
+    this.action = action;
   }
 }

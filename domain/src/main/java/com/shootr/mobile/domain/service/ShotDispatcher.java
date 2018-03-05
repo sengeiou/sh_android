@@ -162,7 +162,6 @@ public class ShotDispatcher implements MessageSender {
     try {
       notifySendingShot(queuedShot);
       fillImageUrlFromQueuedShot(queuedShot);
-      embedVideoFromLinksInComment(queuedShot);
       BaseMessage shotSent;
       if (queuedShot.getBaseMessage() instanceof Shot) {
         shotSent = shootrShotService.sendShot((Shot) queuedShot.getBaseMessage());

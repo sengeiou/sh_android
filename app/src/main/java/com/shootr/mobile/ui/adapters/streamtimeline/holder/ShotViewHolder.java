@@ -23,6 +23,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
+import com.shootr.mobile.ui.model.CardModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.CustomBaseMessageTextView;
@@ -262,7 +263,8 @@ public class ShotViewHolder  extends BaseViewHolder<ShotModel> {
   }
 
   private void setupIsHolderOrContributor(ShotModel shot) {
-    if (shot.getTimelineFlags().contains(FlagsType.IMPORTANT)) {
+    if (shot.getTimelineFlags().contains(FlagsType.IMPORTANT) &&
+        !shot.getTimelineFlags().contains(FlagsType.VERIFIED)) {
       holderOrContributor.setVisibility(View.VISIBLE);
     } else {
       holderOrContributor.setVisibility(View.GONE);
@@ -371,15 +373,25 @@ public class ShotViewHolder  extends BaseViewHolder<ShotModel> {
   }
 
   private void bindVideoInfo(final ShotModel shot) {
-    if (shot.hasVideo()) {
+
+    if (!shot.getEntitiesModel().getCards().isEmpty()) {
+      final CardModel cardModel = shot.getEntitiesModel().getCards().get(0);
       videoFrame.setVisibility(View.VISIBLE);
-      videoTitle.setText(shot.getVideoTitle());
-      videoDuration.setText(shot.getVideoDuration());
+      videoTitle.setText(cardModel.getTitle());
+      videoDuration.setText(cardModel.getDuration());
       videoFrame.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
-          videoClickListener.onVideoClick(shot.getVideoUrl());
+          videoClickListener.onVideoClick(cardModel.getLink().getUrl());
         }
       });
+
+      proportionalImageView.setInitialHeight(Integer.valueOf(cardModel.getImage().getSizes().getMedium().getHeight()));
+      proportionalImageView.setInitialWidth(Integer.valueOf(cardModel.getImage().getSizes().getMedium().getWidth()));
+
+      proportionalImageView.setVisibility(View.VISIBLE);
+      imageLoader.loadTimelineImage(cardModel.getImage().getSizes().getMedium().getUrl(), proportionalImageView);
+      shotMediaContent.setVisibility(View.VISIBLE);
+
     } else {
       videoFrame.setVisibility(View.GONE);
       videoFrame.setOnClickListener(null);
