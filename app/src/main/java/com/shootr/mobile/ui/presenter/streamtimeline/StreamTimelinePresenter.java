@@ -369,7 +369,6 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
   private void setupStreamInfo(StreamModel streamModel) {
     this.canFixItem = streamModel.canFixItem();
     view.setTitle(streamModel.getTitle());
-    view.sendAnalythicsEnterTimeline();
     setupNewShotTextBox(streamModel);
   }
 
