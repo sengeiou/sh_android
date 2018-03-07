@@ -119,6 +119,7 @@ public class WebSocketPresenter {
 
     @Override public void onComplete() {
       Log.d("SOCKETSPRESENTER", "he completado");
+      socketView.stopService();
     }
   }
 

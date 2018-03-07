@@ -11,7 +11,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.data.api.SocketApi;
-import com.shootr.mobile.data.api.SocketApiImpl;
+import com.shootr.mobile.data.api.WebSocketApiImpl;
 import com.shootr.mobile.data.api.entity.BaseMessageApiEntity;
 import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
@@ -214,7 +214,7 @@ import timber.log.Timber;
     return restAdapter.create(SearchApiService.class);
   }
 
-  @Provides @Singleton SocketApi provideSocketApi(SocketApiImpl socketApi) {
+  @Provides @Singleton SocketApi provideSocketApi(WebSocketApiImpl socketApi) {
     return socketApi;
   }
 
