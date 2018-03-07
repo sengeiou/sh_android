@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.5] - 2018-03-07
+### Fixed
+- Not verify hostname on socket connection
+
 ## [1.55.4] - 2018-03-07
 ### Added
 - Share Links of shot, stream and polls
