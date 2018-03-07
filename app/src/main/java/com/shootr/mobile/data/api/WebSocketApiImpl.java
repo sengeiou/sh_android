@@ -161,7 +161,7 @@ public class WebSocketApiImpl implements SocketApi {
 
   private void setupSocketConnection(final ObservableEmitter<SocketMessageApiEntity> emitter,
       String address) throws Exception {
-    webSocket = new WebSocketFactory().setConnectionTimeout(10000)
+    webSocket = new WebSocketFactory().setVerifyHostname(false).setConnectionTimeout(10000)
         .createSocket(address)
         .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
         .addListener(new WebSocketListenerImpl(new SocketListener.WebSocketConnection() {
