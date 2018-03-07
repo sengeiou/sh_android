@@ -13,6 +13,13 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.4] - 2018-03-07
+### Added
+- Share Links of shot, stream and polls
+
+### Fixed
+- New timeline: Bug and improvements
+
 ## [1.55.2] - 2018-02-26
 ### Fixed
 - Fix crash on LogCaché on some devices Fabric #1020
