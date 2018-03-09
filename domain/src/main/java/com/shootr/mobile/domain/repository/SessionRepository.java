@@ -43,4 +43,6 @@ public interface SessionRepository {
     Bootstrapping getBootstrapping();
 
     String getLogAddress();
+
+    void resetFilter(String idStream);
 }

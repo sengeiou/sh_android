@@ -252,6 +252,7 @@ public class TimelineFragment extends BaseFragment
     setHasOptionsMenu(true);
     streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     idStream = getArguments().getString(EXTRA_STREAM_ID);
+    sessionRepository.resetFilter(idStream);
     initializePresenters();
     initializeViews();
   }
