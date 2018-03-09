@@ -178,11 +178,6 @@ public class SyncUserRepository
     return streamEntityMapper.transform(watchingStream);
   }
 
-  @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
-    return userEntityMapper.transformEntities(
-        remoteUserDataSource.getFollowers(idUser, page, pageSize));
-  }
-
   @Override public List<User> getLocalPeople(String idUser) {
     throw new IllegalArgumentException("No remote implementation");
   }

@@ -89,10 +89,6 @@ public class LocalUserRepository implements UserRepository {
     return streamEntityMapper.transform(localUserDataSource.updateWatch(entity));
   }
 
-  @Override public List<User> getFollowers(String idUser, Integer page, Integer pageSize) {
-    throw new IllegalArgumentException("this method has no local implementation");
-  }
-
   @Override public List<User> getLocalPeople(String idUser) {
     return transformUserEntitiesForPeople(localUserDataSource.getRelatedUsers(idUser, 0L));
   }
