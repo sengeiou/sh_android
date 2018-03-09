@@ -36,14 +36,6 @@ public class ServiceUserDataSource implements UserDataSource {
         }
     }
 
-    @Override public List<UserEntity> putUsers(List<UserEntity> userEntities) {
-        throw new RuntimeException("Method not implemented");
-    }
-
-    @Override public List<UserEntity> getRelatedUsersByIdStream(String idStream, String idUser) {
-        throw new RuntimeException("Method not implemented");
-    }
-
     @Override public UserEntity getUser(String id) {
         try {
             if (id.equals(sessionRepository.getCurrentUserId())) {
@@ -94,14 +86,6 @@ public class ServiceUserDataSource implements UserDataSource {
                 userApiService.unwatch();
                 return null;
             }
-        } catch (IOException | ApiException e) {
-            throw new ServerCommunicationException(e);
-        }
-    }
-
-    @Override public List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize) {
-        try {
-            return userApiService.getFollowers(idUser, page, pageSize);
         } catch (IOException | ApiException e) {
             throw new ServerCommunicationException(e);
         }

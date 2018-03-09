@@ -34,10 +34,6 @@ public interface UserApiService {
   List<UserEntity> getFollowing(@Path("idUser") String idUser, @Query("page") Integer page,
       @Query("pageSize") Integer pageSize) throws IOException, ApiException;
 
-  @GET("/user/{idUser}/followers?includeLinks=false&includeEmbed=false")
-  List<UserEntity> getFollowers(@Path("idUser") String idUser, @Query("page") Integer page,
-      @Query("pageSize") Integer pageSize) throws IOException, ApiException;
-
   @GET("/user/streamParticipants/{idStream}") List<UserEntity> getAllParticipants(
       @Path("idStream") String idStream, @Query("maxJoinDate") Long maxJoinDate)
       throws IOException, ApiException;

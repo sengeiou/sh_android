@@ -12,8 +12,6 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
 
     UserEntity putUser(UserEntity userEntity);
 
-    List<UserEntity> putUsers(List<UserEntity> userEntities);
-
     UserEntity getUser(String id);
 
     UserEntity getUserByUsername(String username);
@@ -24,11 +22,7 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
 
     StreamEntity updateWatch(UserEntity userEntity);
 
-    List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize);
-
     List<UserEntity> getRelatedUsers(String idUser, Long timestamp);
-
-    List<UserEntity> getRelatedUsersByIdStream(String idStream, String idUser);
 
     UserEntity updateUser(UserEntity currentOrNewUserEntity)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException;
