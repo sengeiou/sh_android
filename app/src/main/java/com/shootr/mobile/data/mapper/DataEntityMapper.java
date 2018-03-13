@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.DataEntity;
+import com.shootr.mobile.data.entity.ExternalVideoEntity;
 import com.shootr.mobile.data.entity.ItemsEntity;
 import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.entity.PrintableItemEntity;
@@ -19,12 +20,15 @@ public class DataEntityMapper {
   private final ShotEntityMapper shotEntityMapper;
   private final TopicEntityMapper topicEntityMapper;
   private final PollEntityMapper pollEntityMapper;
+  private final ExternalVideoEntityMapper externalVideoEntityMapper;
 
   @Inject public DataEntityMapper(ShotEntityMapper shotEntityMapper,
-      TopicEntityMapper topicEntityMapper, PollEntityMapper pollEntityMapper) {
+      TopicEntityMapper topicEntityMapper, PollEntityMapper pollEntityMapper,
+      ExternalVideoEntityMapper externalVideoEntityMapper) {
     this.shotEntityMapper = shotEntityMapper;
     this.topicEntityMapper = topicEntityMapper;
     this.pollEntityMapper = pollEntityMapper;
+    this.externalVideoEntityMapper = externalVideoEntityMapper;
   }
 
   public DataItem map(DataEntity entity) {
@@ -55,6 +59,9 @@ public class DataEntityMapper {
         printableItems.add(topicEntityMapper.map((TopicEntity) printableItem));
       } else if (printableItem.getResultType().equals(PrintableType.POLL)) {
         printableItems.add(pollEntityMapper.transform((PollEntity) printableItem));
+      } else if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
+        printableItems.add(
+            externalVideoEntityMapper.transform((ExternalVideoEntity) printableItem));
       }
     }
     return printableItems;
