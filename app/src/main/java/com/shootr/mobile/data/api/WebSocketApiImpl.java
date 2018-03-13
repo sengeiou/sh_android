@@ -260,5 +260,18 @@ public class WebSocketApiImpl implements SocketApi {
             socketMessageWrapper.transformEvent((SocketMessageApiEntity) pair.getValue()));
       }
     }
+
+    subscribeToLastSubscription();
+  }
+
+  private void subscribeToLastSubscription() {
+    if (!subscriptions.isEmpty()) {
+      SubscribeSocketMessageApiEntity lastSubscription = subscriptions.get(0);
+      subscriptions.clear();
+      getTimeline(lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
+          null);
+      subscribeToTimeline(lastSubscription.getData().getSubscriptionType(),
+          lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter());
+    }
   }
 }
