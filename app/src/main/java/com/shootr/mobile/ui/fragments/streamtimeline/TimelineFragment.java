@@ -239,6 +239,8 @@ public class TimelineFragment extends BaseFragment
   private PrintableModel shotStored;
   private int offset;
 
+  private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
+
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
     TimelineFragment fragment = new TimelineFragment();
     fragment.setArguments(fragmentArguments);
@@ -263,27 +265,6 @@ public class TimelineFragment extends BaseFragment
       public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
           @NonNull List<Object> payloads) {
         return true;
-      }
-    });
-
-
-    YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
-    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-    transaction.add(R.id.player, youTubePlayerFragment).commit();
-
-    youTubePlayerFragment.initialize(API, new YouTubePlayer.OnInitializedListener() {
-      @Override public void onInitializationSuccess(YouTubePlayer.Provider provider,
-          YouTubePlayer youTubePlayer, boolean b) {
-        youTubePlayer.cueVideo("oboVPF7VIZo");
-
-        youTubePlayer.setManageAudioFocus(true);
-        
-      }
-
-      @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
-          YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(getContext(), "fallo", Toast.LENGTH_LONG).show();
-        Log.d("youtube", "fallo " + youTubeInitializationResult);
       }
     });
 
@@ -704,10 +685,34 @@ public class TimelineFragment extends BaseFragment
     } else {
       itemsList.scrollToPosition(0);
     }
+
+    //TODO remover, esto es sólo de pruebas
+    renderExternalVideo(null);
+
   }
 
   @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
-    //TODO
+    if (youTubePlayerSupportFragment == null) {
+      youTubePlayerSupportFragment = YouTubePlayerSupportFragment.newInstance();
+      FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+      transaction.add(R.id.player, youTubePlayerSupportFragment).commit();
+    }
+
+    youTubePlayerSupportFragment.initialize(API, new YouTubePlayer.OnInitializedListener() {
+      @Override public void onInitializationSuccess(YouTubePlayer.Provider provider,
+          YouTubePlayer youTubePlayer, boolean b) {
+        youTubePlayer.cueVideo("oboVPF7VIZo");
+
+        youTubePlayer.setManageAudioFocus(true);
+
+      }
+
+      @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
+          YouTubeInitializationResult youTubeInitializationResult) {
+        Toast.makeText(getContext(), "fallo", Toast.LENGTH_LONG).show();
+        Log.d("youtube", "fallo " + youTubeInitializationResult);
+      }
+    });
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
