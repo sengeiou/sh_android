@@ -8,7 +8,9 @@ public interface PrintableType {
 
   String POLL = "POLL";
 
+  String EXTERNAL_VIDEO = "EXTERNAL_VIDEO";
+
   String[] PRINTABLE_TYPES = {
-      SHOT, TOPIC, POLL,
+      SHOT, TOPIC, POLL, EXTERNAL_VIDEO
   };
 }

@@ -2,6 +2,7 @@ package com.shootr.mobile.data.api.entity.mapper;
 
 import android.support.annotation.NonNull;
 import com.shootr.mobile.data.api.entity.DataApiEntity;
+import com.shootr.mobile.data.api.entity.ExternalVideoApiEntity;
 import com.shootr.mobile.data.api.entity.ItemsApiEntity;
 import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
@@ -18,11 +19,14 @@ public class DataApiEntityMapper {
 
   private final ShotApiEntityMapper shotApiEntityMapper;
   private final TopicApiEntityMapper topicApiEntityMapper;
+  private final ExternalVideoApiEntityMapper externalVideoApiEntityMapper;
 
   @Inject public DataApiEntityMapper(ShotApiEntityMapper shotApiEntityMapper,
-      TopicApiEntityMapper topicApiEntityMapper) {
+      TopicApiEntityMapper topicApiEntityMapper,
+      ExternalVideoApiEntityMapper externalVideoApiEntityMapper) {
     this.shotApiEntityMapper = shotApiEntityMapper;
     this.topicApiEntityMapper = topicApiEntityMapper;
+    this.externalVideoApiEntityMapper = externalVideoApiEntityMapper;
   }
 
   public DataEntity map(DataApiEntity apiEntity) {
@@ -46,6 +50,8 @@ public class DataApiEntityMapper {
         printableItemEntities.add(topicApiEntityMapper.map((TopicApiEntity) printableItemApiEntity));
       } else if (printableItemApiEntity != null && printableItemApiEntity.getResultType().equals(PrintableType.POLL)) {
         printableItemEntities.add((PrintableItemEntity) printableItemApiEntity);
+      } else if (printableItemApiEntity != null && printableItemApiEntity.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
+        printableItemEntities.add(externalVideoApiEntityMapper.transform((ExternalVideoApiEntity) printableItemApiEntity));
       }
     }
     return printableItemEntities;
