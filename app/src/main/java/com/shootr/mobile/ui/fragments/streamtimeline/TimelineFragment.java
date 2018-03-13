@@ -8,10 +8,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,14 +22,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
+import com.google.android.youtube.player.YouTubePlayerView;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
@@ -112,6 +120,9 @@ public class TimelineFragment extends BaseFragment
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_USER = "userId";
   public static final String TAG = "timeline";
+
+  private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
+
   private static final int FOLLOWERS = 0;
   private static final int CONNECTED = 1;
   private static final int REQUEST_STREAM_DETAIL = 1;
@@ -144,6 +155,16 @@ public class TimelineFragment extends BaseFragment
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
   @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
+  @BindView(R.id.player) FrameLayout player;
+  /*@BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
+  @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
+  @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
+  @BindView(R.id.timeline_message) ClickableTextView streamMessage;
+  @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
+  @BindView(R.id.poll_question) TextView pollQuestion;
+  @BindView(R.id.poll_action) TextView pollAction;
+  @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;*/
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -241,6 +262,27 @@ public class TimelineFragment extends BaseFragment
       public boolean canReuseUpdatedViewHolder(@NonNull RecyclerView.ViewHolder viewHolder,
           @NonNull List<Object> payloads) {
         return true;
+      }
+    });
+
+
+    YouTubePlayerSupportFragment youTubePlayerFragment = YouTubePlayerSupportFragment.newInstance();
+    FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+    transaction.add(R.id.player, youTubePlayerFragment).commit();
+
+    youTubePlayerFragment.initialize(API, new YouTubePlayer.OnInitializedListener() {
+      @Override public void onInitializationSuccess(YouTubePlayer.Provider provider,
+          YouTubePlayer youTubePlayer, boolean b) {
+        youTubePlayer.cueVideo("oboVPF7VIZo");
+
+        youTubePlayer.setManageAudioFocus(true);
+        
+      }
+
+      @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
+          YouTubeInitializationResult youTubeInitializationResult) {
+        Toast.makeText(getContext(), "fallo", Toast.LENGTH_LONG).show();
+        Log.d("youtube", "fallo " + youTubeInitializationResult);
       }
     });
 
