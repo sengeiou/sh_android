@@ -74,6 +74,7 @@ import com.shootr.mobile.ui.adapters.streamtimeline.StreamTimelineAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
 import com.shootr.mobile.ui.model.BaseMessageModel;
+import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -703,6 +704,10 @@ public class TimelineFragment extends BaseFragment
     } else {
       itemsList.scrollToPosition(0);
     }
+  }
+
+  @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
+    //TODO
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
