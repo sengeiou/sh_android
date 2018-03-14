@@ -5,19 +5,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.transition.AutoTransition;
+import android.support.transition.ChangeBounds;
+import android.support.transition.Transition;
+import android.support.transition.TransitionManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -26,6 +27,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -40,7 +45,6 @@ import com.daasuu.bl.BubbleLayout;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
-import com.google.android.youtube.player.YouTubePlayerView;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
@@ -1118,17 +1122,23 @@ public class TimelineFragment extends BaseFragment
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_showing_holding_shots:
-        timelinePresenter.onActivateFilterClick();
+        /*timelinePresenter.onActivateFilterClick();
         sendFilterOnAnalytics();
         filterShowcase.setVisibility(View.GONE);
         setShowcasePreference();
+        isFilterActivated = true;*/
         isFilterActivated = true;
+        showGenericItemsMenuItem();
+        changePlayerVisibility(true);
         return true;
       case R.id.menu_showing_all_shots:
-        timelinePresenter.onDesactivateFilterClick();
+        /*timelinePresenter.onDesactivateFilterClick();
         hideFilterAlert();
         sendFilterOffAnalytics();
+        isFilterActivated = false;*/
         isFilterActivated = false;
+        showImportantItemsMenuItem();
+        changePlayerVisibility(false);
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
@@ -1469,10 +1479,16 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void onPlaying() {
+    ChangeBounds transition = new ChangeBounds();
+    transition.setInterpolator(new AccelerateDecelerateInterpolator());
+    TransitionManager.beginDelayedTransition(container, transition);
     toolbarDecorator.hideToolbar();
   }
 
   @Override public void onPaused() {
+    ChangeBounds transition = new ChangeBounds();
+    transition.setInterpolator(new AccelerateDecelerateInterpolator());
+    TransitionManager.beginDelayedTransition(container, transition);
     toolbarDecorator.showToolbar();
   }
 
@@ -1541,5 +1557,58 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void onError(YouTubePlayer.ErrorReason errorReason) {
     toolbarDecorator.showToolbar();
+  }
+
+  public void slideUp(View view){
+    view.setVisibility(View.VISIBLE);
+    TranslateAnimation animate = new TranslateAnimation(
+        0,                 // fromXDelta
+        0,                 // toXDelta
+        view.getHeight(),  // fromYDelta
+        0);                // toYDelta
+    animate.setDuration(500);
+    animate.setFillAfter(true);
+    view.startAnimation(animate);
+  }
+
+  // slide the view from its current position to below itself
+  public void slideDown(View view){
+
+    TranslateAnimation animate = new TranslateAnimation(
+        0,                 // fromXDelta
+        0,                 // toXDelta
+        0,                 // fromYDelta
+        view.getHeight()); // toYDelta
+    animate.setDuration(500);
+    animate.setFillAfter(true);
+    animate.setAnimationListener(new Animation.AnimationListener() {
+      @Override public void onAnimationStart(Animation animation) {
+
+      }
+
+      @Override public void onAnimationEnd(Animation animation) {
+        player.setVisibility(View.GONE);
+      }
+
+      @Override public void onAnimationRepeat(Animation animation) {
+
+      }
+    });
+    view.startAnimation(animate);
+  }
+
+  public void changePlayerVisibility(final boolean show) {
+
+    ConstraintSet constraintSet = new ConstraintSet();
+
+    constraintSet.clone(getContext(), show ? R.layout.stream_timeline : R.layout.stream_timeline_hidden_video);
+    constraintSet.applyTo(container);
+
+    Transition transition = new AutoTransition();
+
+    transition.setInterpolator(new DecelerateInterpolator());
+
+    TransitionManager.beginDelayedTransition(
+        container, transition);
   }
 }
