@@ -271,6 +271,8 @@
   <string name="new_shot_placeholder">Missatge</string>
   <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
   <string name="new_stream_description_label">Descripció</string>
+  <string name="new_video_url_label">URL</string>
+  <string name="footer_video_url">Add a link with multimedia content (video or audio)</string>
   <string name="new_stream_title_label">Títol</string>
   <string name="new_topic" formatted="false">Nou missatge…</string>
   <string name="next">Següent</string>

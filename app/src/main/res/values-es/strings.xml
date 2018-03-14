@@ -271,6 +271,8 @@
   <string name="new_shot_placeholder">Mensaje</string>
   <string name="new_shot_repeated">Whoops! Ya has publicado eso</string>
   <string name="new_stream_description_label">Descripción</string>
+  <string name="new_video_url_label">URL</string>
+  <string name="footer_video_url">Add a link with multimedia content (video or audio)</string>
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nuevo mensaje…</string>
   <string name="next">Siguiente</string>
