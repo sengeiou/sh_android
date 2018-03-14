@@ -5,14 +5,19 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.transition.TransitionManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -115,7 +120,8 @@ import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, FixedItemView, LongPressView,
-    StreamTimelineOptionsView {
+    StreamTimelineOptionsView, YouTubePlayer.PlaybackEventListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.OnInitializedListener,
+    YouTubePlayer.PlayerStateChangeListener {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
@@ -157,6 +163,7 @@ public class TimelineFragment extends BaseFragment
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
   @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
   @BindView(R.id.player) FrameLayout player;
+  @BindView(R.id.container) ConstraintLayout container;
   /*@BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
@@ -238,6 +245,9 @@ public class TimelineFragment extends BaseFragment
 
   private PrintableModel shotStored;
   private int offset;
+
+  private boolean isFullScreen;
+  private YouTubePlayer videoPlayer;
 
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
 
@@ -692,27 +702,14 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
+    player.setVisibility(View.VISIBLE);
     if (youTubePlayerSupportFragment == null) {
       youTubePlayerSupportFragment = YouTubePlayerSupportFragment.newInstance();
       FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
       transaction.add(R.id.player, youTubePlayerSupportFragment).commit();
     }
 
-    youTubePlayerSupportFragment.initialize(API, new YouTubePlayer.OnInitializedListener() {
-      @Override public void onInitializationSuccess(YouTubePlayer.Provider provider,
-          YouTubePlayer youTubePlayer, boolean b) {
-        youTubePlayer.cueVideo("oboVPF7VIZo");
-
-        youTubePlayer.setManageAudioFocus(true);
-
-      }
-
-      @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
-          YouTubeInitializationResult youTubeInitializationResult) {
-        Toast.makeText(getContext(), "fallo", Toast.LENGTH_LONG).show();
-        Log.d("youtube", "fallo " + youTubeInitializationResult);
-      }
-    });
+    youTubePlayerSupportFragment.initialize(API, this);
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
@@ -1469,5 +1466,80 @@ public class TimelineFragment extends BaseFragment
     builder.setIdTargetUser(shot.getIdUser());
     builder.setTargetUsername(shot.getUsername());
     analyticsTool.analyticsSendAction(builder);
+  }
+
+  @Override public void onPlaying() {
+    toolbarDecorator.hideToolbar();
+  }
+
+  @Override public void onPaused() {
+    toolbarDecorator.showToolbar();
+  }
+
+  @Override public void onStopped() {
+
+  }
+
+  @Override public void onBuffering(boolean b) {
+
+  }
+
+  @Override public void onSeekTo(int i) {
+
+  }
+
+  @Override public void onFullscreen(boolean isFullScreen) {
+    this.isFullScreen = isFullScreen;
+  }
+
+  public boolean onBackPressed() {
+    if (isFullScreen) {
+      if (videoPlayer != null && isFullScreen) {
+        videoPlayer.setFullscreen(false);
+        return true;
+      }
+    }
+    return  false;
+  }
+
+  @Override
+  public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer,
+      boolean b) {
+    videoPlayer = youTubePlayer;
+    videoPlayer.cueVideo("oboVPF7VIZo");
+    videoPlayer.setPlaybackEventListener(TimelineFragment.this);
+    videoPlayer.setManageAudioFocus(true);
+    videoPlayer.setOnFullscreenListener(TimelineFragment.this);
+    videoPlayer.setPlayerStateChangeListener(this);
+  }
+
+  @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
+      YouTubeInitializationResult youTubeInitializationResult) {
+    Toast.makeText(getContext(), "fallo", Toast.LENGTH_LONG).show();
+    Log.d("youtube", "fallo " + youTubeInitializationResult);
+  }
+
+  @Override public void onLoading() {
+
+  }
+
+  @Override public void onLoaded(String s) {
+
+  }
+
+  @Override public void onAdStarted() {
+
+  }
+
+  @Override public void onVideoStarted() {
+
+  }
+
+  @Override public void onVideoEnded() {
+    toolbarDecorator.showToolbar();
+  }
+
+  @Override public void onError(YouTubePlayer.ErrorReason errorReason) {
+    toolbarDecorator.showToolbar();
   }
 }
