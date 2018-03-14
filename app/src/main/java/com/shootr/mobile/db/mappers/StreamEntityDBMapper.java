@@ -60,6 +60,7 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.StreamTable.PERMISSIONS, streamEntity.getPermissions());
     contentValues.put(DatabaseContract.StreamTable.LAST_TIME_SHOOTED, streamEntity.getLastTimeShooted());
     contentValues.put(DatabaseContract.StreamTable.SHARE_LINK, streamEntity.getShareLink());
+    contentValues.put(DatabaseContract.StreamTable.VIDEO_URL, streamEntity.getVideoUrl());
 
     setSynchronizedtoContentValues(streamEntity, contentValues);
   }
@@ -113,6 +114,8 @@ public class StreamEntityDBMapper extends GenericDBMapper {
         c.getLong(c.getColumnIndex(DatabaseContract.StreamTable.LAST_TIME_SHOOTED)));
     streamEntity.setShareLink(
         c.getString(c.getColumnIndex(DatabaseContract.StreamTable.SHARE_LINK)));
+    streamEntity.setVideoUrl(
+        c.getString(c.getColumnIndex(DatabaseContract.StreamTable.VIDEO_URL)));
 
     setSynchronizedfromCursor(c, streamEntity);
   }
@@ -123,13 +126,5 @@ public class StreamEntityDBMapper extends GenericDBMapper {
     streamSearchEntity.setTotalFollowingWatchers(
         cursor.getInt(cursor.getColumnIndex(DatabaseContract.StreamSearchTable.WATCHERS)));
     return streamSearchEntity;
-  }
-
-  public ContentValues toSearchContentValues(StreamSearchEntity entity) {
-    ContentValues contentValues = new ContentValues();
-    fillContentValues(entity, contentValues);
-    contentValues.put(DatabaseContract.StreamSearchTable.WATCHERS,
-        entity.getTotalFollowingWatchers());
-    return contentValues;
   }
 }
