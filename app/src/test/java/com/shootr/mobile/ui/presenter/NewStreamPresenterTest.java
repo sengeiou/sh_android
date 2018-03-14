@@ -33,6 +33,7 @@ public class NewStreamPresenterTest {
     private static final String USER_ID = "userId";
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final Integer MODE = 0;
+    public static final String URL = "URL";
     @Mock CreateStreamInteractor createStreamInteractor;
     @Mock GetStreamInteractor getStreamInteractor;
     @Mock SelectStreamInteractor selectStreamInteractor;
@@ -65,7 +66,7 @@ public class NewStreamPresenterTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         presenter.initialize(newStreamView, STREAM_ID);
 
-        presenter.done(TITLE, DESCRIPTION, MODE);
+        presenter.done(TITLE, DESCRIPTION, MODE, URL);
 
         verify(newStreamView).closeScreenWithResult(anyString());
     }
@@ -74,7 +75,7 @@ public class NewStreamPresenterTest {
         setupCreateStreamInteractorCallbackWithEmptyTopic();
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         presenter.initialize(newStreamView, null);
-        presenter.done(TITLE, DESCRIPTION, MODE);
+        presenter.done(TITLE, DESCRIPTION, MODE, URL);
 
         presenter.confirmNotify(TITLE, DESCRIPTION, MODE, true);
 
@@ -103,6 +104,7 @@ public class NewStreamPresenterTest {
                 anyString(),
                 anyString(),
                 anyInt(),
+                anyString(),
                 anyString(),
                 any(UpdateStreamInteractor.Callback.class),
                 any(Interactor.ErrorCallback.class));
