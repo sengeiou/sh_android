@@ -66,6 +66,7 @@ public class StreamEntityMapper {
     setPermissionsInBoolean(streamEntity.getPermissions(), stream);
     stream.setLastTimeShooted(streamEntity.getLastTimeShooted());
     stream.setShareLink(streamEntity.getShareLink());
+    stream.setVideoUrl(streamEntity.getVideoUrl());
     return stream;
   }
 
@@ -115,6 +116,7 @@ public class StreamEntityMapper {
     entityTemplate.setViews(stream.getViews());
     entityTemplate.setLastTimeShooted(stream.getLastTimeShooted());
     entityTemplate.setShareLink(stream.getShareLink());
+    entityTemplate.setVideoUrl(stream.getVideoUrl());
     setPermissionsToBinary(stream, entityTemplate);
   }
 

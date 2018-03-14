@@ -47,6 +47,7 @@ public class StreamModelMapper {
         streamModel.setCanWrite((stream.canWrite()));
         streamModel.setCanReply((stream.canReply()));
         streamModel.setShareLink(stream.getShareLink());
+        streamModel.setVideoUrl(stream.getVideoUrl());
         return streamModel;
     }
 
