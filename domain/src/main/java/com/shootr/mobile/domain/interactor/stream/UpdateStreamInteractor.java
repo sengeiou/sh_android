@@ -27,6 +27,7 @@ public class UpdateStreamInteractor implements Interactor {
   private String description;
   private String topic;
   private String idMedia;
+  private String videoUrl;
   private Callback callback;
   private ErrorCallback errorCallback;
 
@@ -45,13 +46,14 @@ public class UpdateStreamInteractor implements Interactor {
   }
 
   public void updateStream(String idStream, String title, String description, Integer streamMode,
-      String idMedia, Callback callback,
+      String idMedia, String videoUrl, Callback callback,
       ErrorCallback errorCallback) {
     this.idStream = idStream;
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
     this.idMedia = idMedia;
+    this.videoUrl = videoUrl;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -103,6 +105,7 @@ public class UpdateStreamInteractor implements Interactor {
     streamUpdateParameters.setPhotoIdMedia(idMedia);
     streamUpdateParameters.setReadWriteMode(streamMode);
     streamUpdateParameters.setTopic(topic);
+    streamUpdateParameters.setVideoUrl(videoUrl);
     streamUpdateParameters.setNotifyMessage(notifyTopicMessage);
 
     return streamUpdateParameters;
