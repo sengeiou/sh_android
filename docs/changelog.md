@@ -13,6 +13,11 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.6] - 2018-03-14
+### Fixed
+- Fix filter re-enter timeline
+- Fix socket subscription when back from pause
+
 ## [1.55.5] - 2018-03-07
 ### Fixed
 - Not verify hostname on socket connection
