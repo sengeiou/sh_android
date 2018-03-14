@@ -370,6 +370,8 @@ public class SQLiteUtils {
       + " NUMBER NULL,"
       + DatabaseContract.StreamTable.SHARE_LINK
       + " TEXT NULL,"
+      + DatabaseContract.StreamTable.VIDEO_URL
+      + " TEXT NULL,"
       + DatabaseContract.SyncColumns.BIRTH
       + " DATETIME NOT NULL,"
       + DatabaseContract.SyncColumns.MODIFIED
