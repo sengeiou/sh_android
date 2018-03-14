@@ -65,7 +65,8 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, EventReceived.Receiver {
+public class StreamTimelinePresenter
+    implements Presenter, ShotSent.Receiver, EventReceived.Receiver {
 
   private static final int TIMELINE_LOADING = 1;
   private static final int TIMELINE_PAGINATING = 2;
@@ -143,8 +144,9 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
       GetCachedTimelineInteractor getCachedTimelineInteractor,
       PutLastStreamVisitInteractor putLastStreamVisitInteractor,
       PutTimelineRepositionInteractor putTimelineRepositionInteractor,
-      GetTimelineRepositionInteractor getTimelineRepositionInteractor, SessionRepository sessionRepository,
-      PrintableModelMapper printableModelMapper, ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper,
+      GetTimelineRepositionInteractor getTimelineRepositionInteractor,
+      SessionRepository sessionRepository, PrintableModelMapper printableModelMapper,
+      ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper,
       ErrorMessageFactory errorMessageFactory, @Main Bus bus, Poller poller) {
     this.getStreamTimelineInteractor = getStreamTimelineInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
@@ -189,22 +191,24 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
     isFirstLoad = true;
     selectStream();
     loadType = TIMELINE_LOADING;
-    currentTimelineType = TimelineType.MAIN;
+    currentTimelineType =
+        sessionRepository.isTimelineFilterActivated() ? TimelineType.IMPORTANT : TimelineType.MAIN;
     view.showCheckingForShots();
     getCachedTimeline(idStream, currentTimelineType);
   }
 
   private void getCachedTimeline(String idStream, final String filterType) {
     Log.d("socket", "pido de cache");
-    getCachedTimelineInteractor.getTimeline(idStream, filterType, new Interactor.Callback<StreamTimeline>() {
-      @Override public void onLoaded(StreamTimeline streamTimeline) {
+    getCachedTimelineInteractor.getTimeline(idStream, filterType,
+        new Interactor.Callback<StreamTimeline>() {
+          @Override public void onLoaded(StreamTimeline streamTimeline) {
 
-        if (streamTimeline != null) {
-          onTimelineLoaded(streamTimeline);
-        }
-        subscribeTimeline(filterType);
-      }
-    });
+            if (streamTimeline != null) {
+              onTimelineLoaded(streamTimeline);
+            }
+            subscribeTimeline(filterType);
+          }
+        });
   }
 
   private void subscribeTimeline(final String filterType) {
@@ -265,8 +269,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
   }
 
   private void setupPinnedItems(List<PrintableItem> pinneds) {
-    List<PrintableModel> pinnedModels =
-        printableModelMapper.mapPinnableModel(pinneds);
+    List<PrintableModel> pinnedModels = printableModelMapper.mapPinnableModel(pinneds);
     view.renderPinnedItems(pinnedModels);
     storeCurrentTopic(pinnedModels);
   }
@@ -286,13 +289,13 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
       view.hideCheckingForShots();
       view.hideEmpty();
       if (streamTimeline.getTimelineReposition() != null) {
-        view.renderItems(printableModelMapper.mapPrintableModel(streamTimeline.getItems().getData()),
+        view.renderItems(
+            printableModelMapper.mapPrintableModel(streamTimeline.getItems().getData()),
             (PrintableModel) streamTimeline.getTimelineReposition().getFirstItem(),
             streamTimeline.getTimelineReposition().getOffset());
       } else {
-        view.renderItems(printableModelMapper.mapPrintableModel(streamTimeline.getItems().getData()),
-            null,
-            0);
+        view.renderItems(
+            printableModelMapper.mapPrintableModel(streamTimeline.getItems().getData()), null, 0);
       }
     }
   }
@@ -317,8 +320,7 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
 
   private void setupFixedItems(List<PrintableItem> pinneds) {
     if (!pinneds.isEmpty()) {
-      List<PrintableModel> fixedModel =
-          printableModelMapper.mapFixableModel(pinneds);
+      List<PrintableModel> fixedModel = printableModelMapper.mapFixableModel(pinneds);
       setupFixedItemsIds(fixedModel);
       view.renderFixedItems(fixedModel);
     } else {
@@ -535,22 +537,22 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
   }
 
   private void dismissHighlightShot(final String idShot, Boolean isAdminOrContributor) {
-    dismissHighlightShotInteractor.dismiss(idShot, isAdminOrContributor, new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        fixedItemView.hideFixedShot();
-        fixedItemsIds.remove(idShot);
-      }
-    });
+    dismissHighlightShotInteractor.dismiss(idShot, isAdminOrContributor,
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            fixedItemView.hideFixedShot();
+            fixedItemsIds.remove(idShot);
+          }
+        });
   }
 
   private void storeViewCount(String idShot) {
     if (!fixedItemsIds.isEmpty()) {
-      viewHighlightedShotEventInteractor.countViewEvent(idShot,
-          new Interactor.CompletedCallback() {
-            @Override public void onCompleted() {
+      viewHighlightedShotEventInteractor.countViewEvent(idShot, new Interactor.CompletedCallback() {
+        @Override public void onCompleted() {
         /* no-op */
-            }
-          });
+        }
+      });
     }
   }
 
@@ -667,23 +669,19 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
   private void setupFilterClick(boolean activating) {
     isFirstLoad = true;
     loadType = TIMELINE_LOADING;
-    //stopPollingShots();
     view.clearTimeline();
     if (activating) {
       currentTimelineType = TimelineType.IMPORTANT;
       view.showGenericItemsMenuItem();
       sessionRepository.setTimelineFilterActivated(true);
       getCachedTimeline(idStream, currentTimelineType);
-      //getTimeline("IMPORTANT", sinceTimestamp, false);
     } else {
       currentTimelineType = TimelineType.MAIN;
       view.showImportantItemsMenuItem();
       sessionRepository.setTimelineFilterActivated(false);
       getCachedTimeline(idStream, currentTimelineType);
-      //getTimeline("MAIN", sinceTimestamp, false);
     }
     sinceTimestamp = SINCE_TIMESTAMP;
-    //loadTimeline();
   }
   //endregion
 
@@ -746,7 +744,8 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
   }
 
   public void putItemForReposition(PrintableModel printableModel, int offset) {
-    putTimelineRepositionInteractor.putTimelineReposition(idStream, currentTimelineType, printableModel, offset);
+    putTimelineRepositionInteractor.putTimelineReposition(idStream, currentTimelineType,
+        printableModel, offset);
   }
 
   @Override @Subscribe public void onEvent(EventReceived.Event event) {
@@ -815,8 +814,10 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver, Ev
         NewBadgeContentSocketMessage newBadgeContentSocketMessage =
             (NewBadgeContentSocketMessage) event.getMessage();
         if (newBadgeContentSocketMessage.isActiveSubscription) {
-          if (newBadgeContentSocketMessage.getData().getBadgeType().equals(BadgeContent.TIMELINE_TYPE)
-              && currentTimelineType.equals(TimelineType.MAIN)) {
+          if (newBadgeContentSocketMessage.getData()
+              .getBadgeType()
+              .equals(BadgeContent.TIMELINE_TYPE) && currentTimelineType.equals(
+              TimelineType.MAIN)) {
             setupImportantBadge(true);
           }
         }

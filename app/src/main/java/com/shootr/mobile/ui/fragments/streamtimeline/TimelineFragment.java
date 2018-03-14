@@ -144,15 +144,6 @@ public class TimelineFragment extends BaseFragment
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
   @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
-  /*@BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
-  @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
-  @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
-  @BindView(R.id.timeline_message) ClickableTextView streamMessage;
-  @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
-  @BindView(R.id.poll_question) TextView pollQuestion;
-  @BindView(R.id.poll_action) TextView pollAction;
-  @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;*/
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -261,6 +252,7 @@ public class TimelineFragment extends BaseFragment
     setHasOptionsMenu(true);
     streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     idStream = getArguments().getString(EXTRA_STREAM_ID);
+    sessionRepository.resetFilter(idStream);
     initializePresenters();
     initializeViews();
   }

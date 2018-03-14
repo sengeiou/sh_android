@@ -52,8 +52,7 @@ public class SessionRepositoryImpl implements SessionRepository {
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
-      @DeviceId StringPreference deviceIdPreference,
-      @DevicePref DevicePreferences devicePreference,
+      @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
       @BootstrappingPref BootstrappingPreferences bootstrappingPreferences,
       @ActivityBadgeCount IntPreference badgeCount, CrashReportTool crashReportTool,
       AnalyticsTool analyticsTool, DualCache<LandingStreams> landingStreamsLruCache,
@@ -176,5 +175,11 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Override public String getLogAddress() {
     return bootstrappingPreferences.get().getLogsUrl();
+  }
+
+  @Override public void resetFilter(String idStream) {
+    if (!idStream.equals(currentUser.getIdWatchingStream())) {
+      setTimelineFilterActivated(false);
+    }
   }
 }
