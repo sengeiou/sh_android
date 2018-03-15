@@ -1065,6 +1065,9 @@ public class TimelineFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     timelinePresenter.destroy();
+    if (videoPlayer != null) {
+      videoPlayer.release();
+    }
   }
 
   @Override public void hideFixedShot() {
