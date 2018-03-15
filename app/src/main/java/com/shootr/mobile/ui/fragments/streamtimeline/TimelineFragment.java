@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import android.support.transition.ChangeBounds;
 import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -27,10 +29,10 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.Animation;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -227,6 +229,8 @@ public class TimelineFragment extends BaseFragment
   private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder showVideoMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder hideVideoMenuItem = new MenuItemValueHolder();
 
   private PhotoPickerController photoPickerController;
   private PreCachingLayoutManager preCachingLayoutManager;
@@ -254,6 +258,8 @@ public class TimelineFragment extends BaseFragment
   private YouTubePlayer videoPlayer;
 
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
+
+  private boolean videoAnimationPlaying = false;
 
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
     TimelineFragment fragment = new TimelineFragment();
@@ -311,6 +317,10 @@ public class TimelineFragment extends BaseFragment
     setupListScrollListeners();
     setupPhotoPicker();
     setupNewShotBarDelegate();
+
+    //TODO remover, esto es sólo de pruebas
+    renderExternalVideo(null);
+    showVideoVisibilityMenu();
   }
 
   private void setupListScrollListeners() {
@@ -699,13 +709,10 @@ public class TimelineFragment extends BaseFragment
     } else {
       itemsList.scrollToPosition(0);
     }
-
-    //TODO remover, esto es sólo de pruebas
-    renderExternalVideo(null);
-
   }
 
   @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
+    changeStatusBarColor();
     player.setVisibility(View.VISIBLE);
     if (youTubePlayerSupportFragment == null) {
       youTubePlayerSupportFragment = YouTubePlayerSupportFragment.newInstance();
@@ -1108,7 +1115,7 @@ public class TimelineFragment extends BaseFragment
 
   //region activity menu
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.timeline, menu);
+    inflater.inflate(R.menu.new_timeline, menu);
     importantItemsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
     importantItemsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     allItemsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
@@ -1117,28 +1124,32 @@ public class TimelineFragment extends BaseFragment
     removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
     muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
     unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
+    showVideoMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_show_video));
+    showVideoMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    hideVideoMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_hide_video));
+    hideVideoMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
+      case R.id.menu_show_video:
+        changePlayerVisibility(true);
+        return true;
+      case R.id.menu_hide_video:
+        changePlayerVisibility(false);
+        return true;
       case R.id.menu_showing_holding_shots:
-        /*timelinePresenter.onActivateFilterClick();
+        timelinePresenter.onActivateFilterClick();
         sendFilterOnAnalytics();
         filterShowcase.setVisibility(View.GONE);
         setShowcasePreference();
-        isFilterActivated = true;*/
         isFilterActivated = true;
-        showGenericItemsMenuItem();
-        changePlayerVisibility(true);
         return true;
       case R.id.menu_showing_all_shots:
-        /*timelinePresenter.onDesactivateFilterClick();
+        timelinePresenter.onDesactivateFilterClick();
         hideFilterAlert();
         sendFilterOffAnalytics();
-        isFilterActivated = false;*/
         isFilterActivated = false;
-        showImportantItemsMenuItem();
-        changePlayerVisibility(false);
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
@@ -1269,6 +1280,10 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void updateFixedItem(List<PrintableModel> printableModels) {
     adapter.updateFixedItem(printableModels.get(0));
+  }
+
+  @Override public void showVideoVisibilityMenu() {
+    hideVideoMenuItem.setVisible(true);
   }
 
   private void updateWatchNumberIcon() {
@@ -1493,15 +1508,15 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void onStopped() {
-
+    /* no-op */
   }
 
   @Override public void onBuffering(boolean b) {
-
+    /* no-op */
   }
 
   @Override public void onSeekTo(int i) {
-
+    /* no-op */
   }
 
   @Override public void onFullscreen(boolean isFullScreen) {
@@ -1536,19 +1551,19 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void onLoading() {
-
+    /* no-op */
   }
 
   @Override public void onLoaded(String s) {
-
+    /* no-op */
   }
 
   @Override public void onAdStarted() {
-
+    /* no-op */
   }
 
   @Override public void onVideoStarted() {
-
+    /* no-op */
   }
 
   @Override public void onVideoEnded() {
@@ -1559,56 +1574,54 @@ public class TimelineFragment extends BaseFragment
     toolbarDecorator.showToolbar();
   }
 
-  public void slideUp(View view){
-    view.setVisibility(View.VISIBLE);
-    TranslateAnimation animate = new TranslateAnimation(
-        0,                 // fromXDelta
-        0,                 // toXDelta
-        view.getHeight(),  // fromYDelta
-        0);                // toYDelta
-    animate.setDuration(500);
-    animate.setFillAfter(true);
-    view.startAnimation(animate);
-  }
-
-  // slide the view from its current position to below itself
-  public void slideDown(View view){
-
-    TranslateAnimation animate = new TranslateAnimation(
-        0,                 // fromXDelta
-        0,                 // toXDelta
-        0,                 // fromYDelta
-        view.getHeight()); // toYDelta
-    animate.setDuration(500);
-    animate.setFillAfter(true);
-    animate.setAnimationListener(new Animation.AnimationListener() {
-      @Override public void onAnimationStart(Animation animation) {
-
-      }
-
-      @Override public void onAnimationEnd(Animation animation) {
-        player.setVisibility(View.GONE);
-      }
-
-      @Override public void onAnimationRepeat(Animation animation) {
-
-      }
-    });
-    view.startAnimation(animate);
-  }
-
   public void changePlayerVisibility(final boolean show) {
 
-    ConstraintSet constraintSet = new ConstraintSet();
+    if (!videoAnimationPlaying) {
+      ConstraintSet constraintSet = new ConstraintSet();
 
-    constraintSet.clone(getContext(), show ? R.layout.stream_timeline : R.layout.stream_timeline_hidden_video);
-    constraintSet.applyTo(container);
+      constraintSet.clone(getContext(), show ? R.layout.stream_timeline : R.layout.stream_timeline_hidden_video);
+      constraintSet.applyTo(container);
 
-    Transition transition = new AutoTransition();
+      Transition transition = new AutoTransition();
+      transition.setInterpolator(new DecelerateInterpolator());
+      transition.addListener(new Transition.TransitionListener() {
+        @Override public void onTransitionStart(@NonNull Transition transition) {
+          videoAnimationPlaying = true;
+          if (show) {
+            hideVideoMenuItem.setVisible(true);
+            showVideoMenuItem.setVisible(false);
+          } else {
+            hideVideoMenuItem.setVisible(false);
+            showVideoMenuItem.setVisible(true);
+          }
+        }
 
-    transition.setInterpolator(new DecelerateInterpolator());
+        @Override public void onTransitionEnd(@NonNull Transition transition) {
+          videoAnimationPlaying = false;
+        }
 
-    TransitionManager.beginDelayedTransition(
-        container, transition);
+        @Override public void onTransitionCancel(@NonNull Transition transition) {
+          videoAnimationPlaying = false;
+        }
+
+        @Override public void onTransitionPause(@NonNull Transition transition) {
+          videoAnimationPlaying = false;
+        }
+
+        @Override public void onTransitionResume(@NonNull Transition transition) {
+          videoAnimationPlaying = true;
+        }
+      });
+      TransitionManager.beginDelayedTransition(container, transition);
+    }
   }
+
+  private void changeStatusBarColor() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Window window = getActivity().getWindow();
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(getContext().getResources().getColor(R.color.black));
+    }
+  }
+
 }

@@ -94,4 +94,6 @@ public interface StreamTimelineView {
   void hideEmpty();
 
   void updateFixedItem(List<PrintableModel> printableModels);
+
+  void showVideoVisibilityMenu();
 }
