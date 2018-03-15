@@ -245,14 +245,14 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                 presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),
-                    true);
+                    true, getVideoUrl());
               }
             })
         .setNegativeButton(getString(R.string.stream_notification_confirmation_no),
             new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
                 presenter.confirmNotify(getStreamTitle(), getStreamDescription(), getStreamMode(),
-                    false);
+                    false, getVideoUrl());
               }
             })
         .create()

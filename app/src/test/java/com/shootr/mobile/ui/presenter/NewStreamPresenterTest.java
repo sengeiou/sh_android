@@ -77,7 +77,7 @@ public class NewStreamPresenterTest {
         presenter.initialize(newStreamView, null);
         presenter.done(TITLE, DESCRIPTION, MODE, URL);
 
-        presenter.confirmNotify(TITLE, DESCRIPTION, MODE, true);
+        presenter.confirmNotify(TITLE, DESCRIPTION, MODE, true, URL);
 
         verify(newStreamView).goToShareStream(anyString());
     }

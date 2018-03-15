@@ -122,14 +122,15 @@ public class NewStreamPresenter implements Presenter {
   }
 
   public void confirmNotify(String streamTitle, String streamDescription, Integer streamMode,
-      boolean notify) {
+      boolean notify, String videoUrl) {
     notifyCreation = notify;
     newStreamView.showLoading();
-    createStream(streamTitle, streamDescription, streamMode);
+    createStream(streamTitle, streamDescription, streamMode, videoUrl);
   }
 
-  private void createStream(String streamTitle, String streamDescription, Integer streamMode) {
-    sendStream(streamTitle, streamDescription, streamMode);
+  private void createStream(String streamTitle, String streamDescription, Integer streamMode,
+      String videoUrl) {
+    sendStream(streamTitle, streamDescription, streamMode, videoUrl);
   }
 
   private void editStream(String preloadedStreamId, String streamTitle, String streamDescription,
@@ -152,10 +153,11 @@ public class NewStreamPresenter implements Presenter {
         });
   }
 
-  private void sendStream(String streamTitle, String streamDescription, Integer streamMode) {
+  private void sendStream(String streamTitle, String streamDescription, Integer streamMode,
+      String videoUrl) {
 
     createStreamInteractor.sendStream(streamTitle, streamDescription, streamMode, newIdMedia,
-        notifyCreation, new CreateStreamInteractor.Callback() {
+        videoUrl, notifyCreation, new CreateStreamInteractor.Callback() {
           @Override public void onLoaded(Stream stream) {
             streamCreated(stream);
             selectStream(stream);
