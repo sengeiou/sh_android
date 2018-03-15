@@ -1161,7 +1161,7 @@ public class StreamTimelinePresenterTest {
   private void setupCreateStreamInteractorCallbackWithTopic() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((UpdateStreamInteractor.Callback) invocation.getArguments()[3]).onLoaded(
+        ((UpdateStreamInteractor.Callback) invocation.getArguments()[4]).onLoaded(
             selectedStream().getStream());
         return null;
       }
@@ -1173,7 +1173,7 @@ public class StreamTimelinePresenterTest {
   private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        ((UpdateStreamInteractor.Callback) invocation.getArguments()[3]).onLoaded(
+        ((UpdateStreamInteractor.Callback) invocation.getArguments()[4]).onLoaded(
             selectedStreamWithEmptyTopic().getStream());
         return null;
       }
