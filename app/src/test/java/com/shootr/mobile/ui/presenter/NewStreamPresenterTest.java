@@ -94,7 +94,7 @@ public class NewStreamPresenterTest {
     private void setupUpdateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((UpdateStreamInteractor.Callback) invocation.getArguments()[5])
+                ((UpdateStreamInteractor.Callback) invocation.getArguments()[6])
                     .onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
