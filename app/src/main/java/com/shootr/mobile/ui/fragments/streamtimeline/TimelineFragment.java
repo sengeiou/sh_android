@@ -16,7 +16,6 @@ import android.support.transition.ChangeBounds;
 import android.support.transition.Transition;
 import android.support.transition.TransitionManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -126,7 +125,8 @@ import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, FixedItemView, LongPressView,
-    StreamTimelineOptionsView, YouTubePlayer.PlaybackEventListener, YouTubePlayer.OnFullscreenListener, YouTubePlayer.OnInitializedListener,
+    StreamTimelineOptionsView, YouTubePlayer.PlaybackEventListener,
+    YouTubePlayer.OnFullscreenListener, YouTubePlayer.OnInitializedListener,
     YouTubePlayer.PlayerStateChangeListener {
 
   public static final String EXTRA_STREAM_ID = "streamId";

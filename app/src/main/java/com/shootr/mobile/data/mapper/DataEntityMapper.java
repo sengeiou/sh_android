@@ -22,9 +22,9 @@ public class DataEntityMapper {
   private final PollEntityMapper pollEntityMapper;
   private final ExternalVideoEntityMapper externalVideoEntityMapper;
 
-  @Inject public DataEntityMapper(ShotEntityMapper shotEntityMapper,
-      TopicEntityMapper topicEntityMapper, PollEntityMapper pollEntityMapper,
-      ExternalVideoEntityMapper externalVideoEntityMapper) {
+  @Inject
+  public DataEntityMapper(ShotEntityMapper shotEntityMapper, TopicEntityMapper topicEntityMapper,
+      PollEntityMapper pollEntityMapper, ExternalVideoEntityMapper externalVideoEntityMapper) {
     this.shotEntityMapper = shotEntityMapper;
     this.topicEntityMapper = topicEntityMapper;
     this.pollEntityMapper = pollEntityMapper;
