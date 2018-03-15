@@ -273,6 +273,7 @@
   <string name="new_stream_description_label">Descripción</string>
   <string name="new_video_url_label">URL</string>
   <string name="footer_video_url">Add a link with multimedia content (video or audio)</string>
+  <string name="video_url_error">This is not a valid URL youtube video</string>
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nuevo mensaje…</string>
   <string name="next">Siguiente</string>
