@@ -9,6 +9,8 @@ public interface NewStreamView extends DataTransferView {
 
     void showTitleError(String errorMessage);
 
+    void showVideoUrlError();
+
     void closeScreenWithResult(String streamId);
 
     void doneButtonEnabled(boolean enable);

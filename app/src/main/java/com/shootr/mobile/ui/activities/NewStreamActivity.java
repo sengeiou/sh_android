@@ -75,6 +75,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
   @BindView(R.id.new_stream_title) EditText titleView;
   @BindView(R.id.new_stream_title_label) FloatLabelLayout titleLabelView;
   @BindView(R.id.new_stream_title_error) TextView titleErrorView;
+  @BindView(R.id.new_stream_video_url_error) TextView videoUrlErrorView;
   @BindView(R.id.new_stream_description) EditText descriptionView;
   @BindView(R.id.stream_read_write_mode) AppCompatSpinner readWriteModeSpinner;
   @BindView(R.id.cat_avatar) View streamPictureContainer;
@@ -84,6 +85,7 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
   @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
   @BindString(R.string.analytics_action_create_stream) String analyticsActionCreateStream;
   @BindString(R.string.analytics_label_create_stream) String analyticsLabelCreateStream;
+  @BindString(R.string.video_url_error) String errorVideoUrlMessage;
 
   private MenuItemValueHolder doneMenuItem = new MenuItemValueHolder();
   private StreamReadWriteModeAdapter spinnerAadapter;
@@ -220,6 +222,10 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
 
   @Override public void showTitleError(String errorMessage) {
     titleErrorView.setText(errorMessage);
+  }
+
+  @Override public void showVideoUrlError() {
+    videoUrlErrorView.setText(errorVideoUrlMessage);
   }
 
   @Override public void closeScreenWithResult(String streamId) {

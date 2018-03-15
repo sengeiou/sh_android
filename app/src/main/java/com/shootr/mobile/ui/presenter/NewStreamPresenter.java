@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.domain.exception.DomainValidationException;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.Interactor;
@@ -192,7 +193,9 @@ public class NewStreamPresenter implements Presenter {
 
   private void streamCreationError(ShootrException error) {
     newStreamView.hideLoading();
-    if (error instanceof DomainValidationException) {
+    if (error instanceof InvalidYoutubeVideoUrlException) {
+      showViewVideoUrlError(error.getMessage());
+    } else if (error instanceof DomainValidationException) {
       DomainValidationException validationException = (DomainValidationException) error;
       List<FieldValidationError> errors = validationException.getErrors();
       showValidationErrors(errors);
@@ -227,6 +230,10 @@ public class NewStreamPresenter implements Presenter {
 
   private void showViewTitleError(String errorMessage) {
     newStreamView.showTitleError(errorMessage);
+  }
+
+  private void showViewVideoUrlError(String errorMessage) {
+    newStreamView.showVideoUrlError();
   }
 
   private void showViewError(String errorMessage) {

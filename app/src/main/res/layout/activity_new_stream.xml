@@ -153,7 +153,7 @@
           android:id="@+id/new_stream_video_url"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="@string/new_stream_title_label"
+          android:hint="@string/new_video_url_label"
           android:imeOptions="actionDone"
           android:inputType="textUri"
           android:lines="1"
