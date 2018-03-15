@@ -36,18 +36,15 @@ public class UpdateStreamInteractor implements Interactor {
 
   private boolean isEditingTopic = false;
 
-
   @Inject public UpdateStreamInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      ExternalStreamRepository remoteStreamRepository) {
+      PostExecutionThread postExecutionThread, ExternalStreamRepository remoteStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteStreamRepository = remoteStreamRepository;
   }
 
   public void updateStream(String idStream, String title, String description, Integer streamMode,
-      String idMedia, String videoUrl, Callback callback,
-      ErrorCallback errorCallback) {
+      String idMedia, String videoUrl, Callback callback, ErrorCallback errorCallback) {
     this.idStream = idStream;
     this.title = title;
     this.description = description;
@@ -59,11 +56,12 @@ public class UpdateStreamInteractor implements Interactor {
     interactorHandler.execute(this);
   }
 
-  public void updateStreamMessage(String idStream, String topic, Boolean notifyTopicMessage, Callback callback,
-      ErrorCallback errorCallback) {
+  public void updateStreamMessage(String idStream, String topic, Boolean notifyTopicMessage,
+      String videoUrl, Callback callback, ErrorCallback errorCallback) {
     isEditingTopic = true;
     this.idStream = idStream;
     this.topic = topic == null ? "" : topic;
+    this.videoUrl = videoUrl;
     this.notifyTopicMessage = notifyTopicMessage;
     this.callback = callback;
     this.errorCallback = errorCallback;

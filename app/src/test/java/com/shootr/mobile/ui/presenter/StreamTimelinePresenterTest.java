@@ -1166,7 +1166,7 @@ public class StreamTimelinePresenterTest {
         return null;
       }
     }).when(updateStreamInteractor)
-        .updateStreamMessage(anyString(), anyString(), anyBoolean(),
+        .updateStreamMessage(anyString(), anyString(), anyBoolean(), anyString(),
             any(UpdateStreamInteractor.Callback.class), anyErrorCallback());
   }
 
@@ -1178,7 +1178,7 @@ public class StreamTimelinePresenterTest {
         return null;
       }
     }).when(updateStreamInteractor)
-        .updateStreamMessage(anyString(), anyString(), anyBoolean(),
+        .updateStreamMessage(anyString(), anyString(), anyBoolean(), anyString(),
             any(UpdateStreamInteractor.Callback.class), anyErrorCallback());
   }
 
