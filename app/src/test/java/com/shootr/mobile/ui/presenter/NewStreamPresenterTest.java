@@ -114,7 +114,7 @@ public class NewStreamPresenterTest {
     private void setupCreateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((CreateStreamInteractor.Callback) invocation.getArguments()[5])
+                ((CreateStreamInteractor.Callback) invocation.getArguments()[6])
                   .onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
@@ -123,6 +123,7 @@ public class NewStreamPresenterTest {
             anyString(),
             anyString(),
             anyInt(),
+            anyString(),
             anyString(),
             anyBoolean(),
             any(CreateStreamInteractor.Callback.class),
@@ -135,6 +136,7 @@ public class NewStreamPresenterTest {
         stream.setTitle(TITLE);
         stream.setAuthorId(USER_ID);
         stream.setDescription("");
+        stream.setVideoUrl(URL);
         return stream;
     }
 }

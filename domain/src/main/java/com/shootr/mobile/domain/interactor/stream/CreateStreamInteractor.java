@@ -31,6 +31,7 @@ public class CreateStreamInteractor implements Interactor {
   private String title;
   private String description;
   private String idMedia;
+  private String videoUrl;
   private boolean notifyCreation;
   private Callback callback;
   private ErrorCallback errorCallback;
@@ -51,12 +52,13 @@ public class CreateStreamInteractor implements Interactor {
   }
 
   public void sendStream(String title, String description, Integer streamMode,
-      String idMedia, boolean notifyCreation, Callback callback,
+      String idMedia, String videoUrl, boolean notifyCreation, Callback callback,
       ErrorCallback errorCallback) {
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
     this.idMedia = idMedia;
+    this.videoUrl = videoUrl;
     this.notifyCreation = notifyCreation;
     this.callback = callback;
     this.errorCallback = errorCallback;
@@ -91,6 +93,7 @@ public class CreateStreamInteractor implements Interactor {
     stream.setAuthorUsername(localUserRepository.getUserById(currentUserId).getUsername());
     stream.setTotalFollowers(0);
     stream.setTotalWatchers(0);
+    stream.setVideoUrl(videoUrl);
     if (idMedia != null) {
       stream.setPhotoIdMedia(idMedia);
     }
