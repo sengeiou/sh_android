@@ -143,7 +143,7 @@ public class NewStreamPresenter implements Presenter {
         streamMode, newIdMedia, videoUrl, new UpdateStreamInteractor.Callback() {
           @Override public void onLoaded(Stream stream) {
             streamCreated(stream);
-            seletStream(stream);
+            selectStream(stream);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -158,7 +158,7 @@ public class NewStreamPresenter implements Presenter {
         notifyCreation, new CreateStreamInteractor.Callback() {
           @Override public void onLoaded(Stream stream) {
             streamCreated(stream);
-            seletStream(stream);
+            selectStream(stream);
           }
         }, new Interactor.ErrorCallback() {
           @Override public void onError(ShootrException error) {
@@ -167,7 +167,7 @@ public class NewStreamPresenter implements Presenter {
         });
   }
 
-  protected void seletStream(Stream stream) {
+  protected void selectStream(Stream stream) {
     selectStreamInteractor.selectStream(stream.getId(),
         new Interactor.Callback<StreamSearchResult>() {
           @Override public void onLoaded(StreamSearchResult streamSearchResult) {
