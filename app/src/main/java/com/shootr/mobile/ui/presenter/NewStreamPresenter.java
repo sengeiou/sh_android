@@ -12,6 +12,7 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
 import com.shootr.mobile.ui.model.StreamModel;
@@ -34,9 +35,9 @@ public class NewStreamPresenter implements Presenter {
   private final SelectStreamInteractor selectStreamInteractor;
   private final StreamModelMapper streamModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
+  private final SessionRepository sessionRepository;
 
   private NewStreamView newStreamView;
-
   private boolean isNewStream;
   private String preloadedStreamId;
   private String currentTitle;
@@ -51,7 +52,7 @@ public class NewStreamPresenter implements Presenter {
       UpdateStreamInteractor updateStreamInteractor, GetStreamInteractor getStreamInteractor,
       ChangeStreamPhotoInteractor changeStreamPhotoInteractor,
       SelectStreamInteractor selectStreamInteractor, StreamModelMapper streamModelMapper,
-      ErrorMessageFactory errorMessageFactory) {
+      ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository) {
     this.createStreamInteractor = createStreamInteractor;
     this.updateStreamInteractor = updateStreamInteractor;
     this.getStreamInteractor = getStreamInteractor;
@@ -59,6 +60,7 @@ public class NewStreamPresenter implements Presenter {
     this.selectStreamInteractor = selectStreamInteractor;
     this.streamModelMapper = streamModelMapper;
     this.errorMessageFactory = errorMessageFactory;
+    this.sessionRepository = sessionRepository;
   }
 
   public void initialize(NewStreamView newStreamView, String optionalIdStreamToEdit) {
@@ -70,6 +72,13 @@ public class NewStreamPresenter implements Presenter {
       newStreamView.showEditPhotoPlaceHolder();
     }
     updateDoneButtonStatus();
+    hideVideoUrlFields();
+  }
+
+  private void hideVideoUrlFields() {
+    if (!sessionRepository.isNewTimeline()) {
+      newStreamView.hideVideoUrlFields();
+    }
   }
 
   private void preloadStreamToEdit(String optionalIdStreamToEdit) {

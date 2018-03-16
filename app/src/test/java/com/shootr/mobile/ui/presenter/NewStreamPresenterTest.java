@@ -51,7 +51,7 @@ public class NewStreamPresenterTest {
         presenter = new NewStreamPresenter(createStreamInteractor, updateStreamInteractor,
             getStreamInteractor, changeStreamPhotoInteractor, selectStreamInteractor,
           streamModelMapper,
-          errorMessageFactory);
+          errorMessageFactory, sessionRepository);
     }
 
     @Test public void shouldUpdateDoneButtonStatusWhenEditTitle() {

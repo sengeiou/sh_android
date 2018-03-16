@@ -45,4 +45,6 @@ public interface SessionRepository {
     String getLogAddress();
 
     void resetFilter(String idStream);
+
+    boolean isNewTimeline();
 }

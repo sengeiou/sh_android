@@ -368,6 +368,11 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     streamPhoto.setImageResource(R.drawable.ic_stream_picture_edit);
   }
 
+  @Override public void hideVideoUrlFields() {
+    videoUrlView.setVisibility(View.GONE);
+    videoUrlErrorView.setVisibility(View.GONE);
+  }
+
   @Override public void showLoading() {
     doneMenuItem.setActionView(R.layout.item_list_loading);
   }

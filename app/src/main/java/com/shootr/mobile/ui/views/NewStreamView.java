@@ -39,5 +39,7 @@ public interface NewStreamView extends DataTransferView {
 
     void goToShareStream(String id);
 
-  void showEditPhotoPlaceHolder();
+    void showEditPhotoPlaceHolder();
+
+    void hideVideoUrlFields();
 }

@@ -177,6 +177,10 @@ public class SessionRepositoryImpl implements SessionRepository {
     return bootstrappingPreferences.get().getLogsUrl();
   }
 
+  @Override public boolean isNewTimeline() {
+    return bootstrappingPreferences.get().isTimelineConnection();
+  }
+
   @Override public void resetFilter(String idStream) {
     if (!idStream.equals(currentUser.getIdWatchingStream())) {
       setTimelineFilterActivated(false);
