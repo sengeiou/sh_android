@@ -86,6 +86,7 @@ public class NewStreamPresenter implements Presenter {
     String preloadedTitle = streamModel.getTitle();
     newStreamView.setStreamTitle(preloadedTitle);
     newStreamView.showDescription(streamModel.getDescription());
+    newStreamView.showVideoUrl(streamModel.getVideoUrl());
     newStreamView.setModeValue(streamModel.getReadWriteMode());
     if (streamModel.getPicture() != null) {
       newStreamView.setStreamPhoto(streamModel.getPicture(), streamModel.getTitle());

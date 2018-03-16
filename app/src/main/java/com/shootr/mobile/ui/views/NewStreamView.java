@@ -21,6 +21,8 @@ public interface NewStreamView extends DataTransferView {
 
     void showDescription(String description);
 
+    void showVideoUrl(String videoUrl);
+
     void setModeValue(Integer readWriteMode);
 
     void showPhotoOptions();

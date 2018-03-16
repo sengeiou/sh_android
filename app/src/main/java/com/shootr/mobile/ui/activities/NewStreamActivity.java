@@ -284,6 +284,10 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
     descriptionView.setText(description);
   }
 
+  @Override public void showVideoUrl(String description) {
+    videoUrlView.setText(description);
+  }
+
   @Override public void setModeValue(Integer readWriteMode) {
     readWriteModeSpinner.setSelection(readWriteMode);
   }
