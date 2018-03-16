@@ -83,6 +83,7 @@ import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.streamtimeline.StreamTimelineAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.fragments.BottomYoutubeVideoPlayer;
 import com.shootr.mobile.ui.model.BaseMessageModel;
 import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PollModel;
@@ -260,6 +261,8 @@ public class TimelineFragment extends BaseFragment
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
 
   private boolean videoAnimationPlaying = false;
+
+  private boolean shouldLoadVideAfterResume = false;
 
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
     TimelineFragment fragment = new TimelineFragment();
@@ -486,9 +489,33 @@ public class TimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    Uri uri = Uri.parse(url);
+    /*Uri uri = Uri.parse(url);
     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    startActivity(intent);*/
+
+    if (videoPlayer != null) {
+      shouldLoadVideAfterResume = true;
+      changePlayerVisibility(false);
+      videoPlayer.release();
+    }
+
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(url);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(new BottomYoutubeVideoPlayer.videoPlayerCallback() {
+      @Override public void onDismiss() {
+        if (shouldLoadVideAfterResume) {
+          if (shouldLoadVideAfterResume) {
+            shouldLoadVideAfterResume = false;
+            renderExternalVideo(null);
+          }
+        }
+      }
+    });
+
+
+    bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
+
   }
 
   private void shareShotIntent(ShotModel shotModel) {
