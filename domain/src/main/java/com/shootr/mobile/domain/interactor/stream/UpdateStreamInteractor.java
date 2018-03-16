@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.exception.DomainValidationException;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrServerException;
@@ -84,6 +85,8 @@ public class UpdateStreamInteractor implements Interactor {
     try {
       Stream savedStream = sendStreamToServer(streamUpdateParameters);
       notifyLoaded(savedStream);
+    } catch (InvalidYoutubeVideoUrlException err) {
+      notifyError(err);
     } catch (ShootrException e) {
       handleServerError(e);
     }
