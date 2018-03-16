@@ -17,7 +17,6 @@ import com.shootr.mobile.domain.repository.user.UserRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.validation.FieldValidationError;
 import com.shootr.mobile.domain.validation.StreamValidator;
-import java.security.InvalidAlgorithmParameterException;
 import java.util.List;
 import javax.inject.Inject;
 
