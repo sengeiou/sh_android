@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,18 +13,10 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.shootr.mobile.R;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-/**
- * Created by miniserver on 15/3/18.
- */
 
 public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
 
   private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
-
-  String pattern = "(?<=watch\\?v=|/videos/|embed\\/)[^#\\&\\?]*";
 
   private FrameLayout playerContainer;
 
@@ -33,6 +24,7 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
 
   private videoPlayerCallback videoPlayerCallback;
+  private YouTubePlayer youTubePlayer;
 
   public BottomYoutubeVideoPlayer() {
     /* no-op */
@@ -66,8 +58,9 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
 
     youTubePlayerSupportFragment.initialize(API, new YouTubePlayer.OnInitializedListener() {
       @Override public void onInitializationSuccess(YouTubePlayer.Provider provider,
-          YouTubePlayer youTubePlayer, boolean b) {
-        youTubePlayer.loadVideo(videoId);
+          YouTubePlayer player, boolean b) {
+        youTubePlayer = player;
+        player.loadVideo(videoId);
       }
 
       @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
@@ -87,18 +80,13 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
   }
 
   public String getVideoId() {
-    Pattern compiledPattern = Pattern.compile(pattern);
-    Matcher matcher = compiledPattern.matcher(videoId);
-
-    if(matcher.find()){
-      return matcher.group();
-    }
-    return "";
+    return videoId;
   }
 
   @Override public void onDismiss(DialogInterface dialog) {
     super.onDismiss(dialog);
     if (this.videoPlayerCallback != null) {
+      youTubePlayer.release();
       this.videoPlayerCallback.onDismiss();
     }
   }

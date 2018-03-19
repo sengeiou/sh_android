@@ -107,6 +107,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -156,6 +157,7 @@ public class TimelineFragment extends BaseFragment
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
   @Inject LocaleProvider localeProvider;
   @Inject IntentFactory intentFactory;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   @Inject StreamTimelinePresenter timelinePresenter;
   @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
@@ -489,10 +491,19 @@ public class TimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    /*Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);*/
 
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
+  }
+
+  private void openExternalVideoInApp(String videoId) {
     if (videoPlayer != null) {
       shouldLoadVideAfterResume = true;
       changePlayerVisibility(false);
@@ -500,7 +511,7 @@ public class TimelineFragment extends BaseFragment
     }
 
     BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
-    bottomYoutubeVideoPlayer.setVideoId(url);
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
     bottomYoutubeVideoPlayer.setVideoPlayerCallback(new BottomYoutubeVideoPlayer.videoPlayerCallback() {
       @Override public void onDismiss() {
         if (shouldLoadVideAfterResume) {
@@ -512,10 +523,8 @@ public class TimelineFragment extends BaseFragment
       }
     });
 
-
     bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
         bottomYoutubeVideoPlayer.getTag());
-
   }
 
   private void shareShotIntent(ShotModel shotModel) {
