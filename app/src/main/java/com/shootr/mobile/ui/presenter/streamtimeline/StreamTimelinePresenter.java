@@ -272,8 +272,13 @@ public class StreamTimelinePresenter
   private void renderExternalVideo(List<PrintableItem> pinneds) {
     for (PrintableItem printableItem : pinneds) {
       if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
-        currentExternalVideo = externalVideoModelMapper.map((ExternalVideo) printableItem);
-        view.renderExternalVideo(currentExternalVideo);
+        ExternalVideoModel newExternalVideo =
+            externalVideoModelMapper.map((ExternalVideo) printableItem);
+        if (!newExternalVideo.getVideoId()
+            .equals(currentExternalVideo == null ? "" : currentExternalVideo.getVideoId())) {
+          currentExternalVideo = externalVideoModelMapper.map((ExternalVideo) printableItem);
+          view.renderExternalVideo(currentExternalVideo);
+        }
         break;
       }
     }

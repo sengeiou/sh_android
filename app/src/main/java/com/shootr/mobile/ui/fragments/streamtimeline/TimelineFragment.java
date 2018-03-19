@@ -266,6 +266,8 @@ public class TimelineFragment extends BaseFragment
 
   private boolean shouldLoadVideAfterResume = false;
 
+  private ExternalVideoModel currentVideoModel;
+
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
     TimelineFragment fragment = new TimelineFragment();
     fragment.setArguments(fragmentArguments);
@@ -317,15 +319,12 @@ public class TimelineFragment extends BaseFragment
     charCounterColorError = getResources().getColor(R.color.error);
     charCounterColorNormal = getResources().getColor(R.color.gray_70);
     writePermissionManager.init(getActivity());
+    player.setVisibility(View.GONE);
     setupListAdapter();
     //setupSwipeRefreshLayout();
     setupListScrollListeners();
     setupPhotoPicker();
     setupNewShotBarDelegate();
-
-    //TODO remover, esto es sólo de pruebas
-    renderExternalVideo(null);
-    showVideoVisibilityMenu();
   }
 
   private void setupListScrollListeners() {
@@ -517,7 +516,7 @@ public class TimelineFragment extends BaseFragment
         if (shouldLoadVideAfterResume) {
           if (shouldLoadVideAfterResume) {
             shouldLoadVideAfterResume = false;
-            renderExternalVideo(null);
+            renderExternalVideo(currentVideoModel);
           }
         }
       }
@@ -748,6 +747,8 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
+    showVideoVisibilityMenu();
+    currentVideoModel = externalVideoModel;
     changeStatusBarColor();
     player.setVisibility(View.VISIBLE);
     if (youTubePlayerSupportFragment == null) {
@@ -1576,7 +1577,7 @@ public class TimelineFragment extends BaseFragment
   public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer,
       boolean b) {
     videoPlayer = youTubePlayer;
-    videoPlayer.cueVideo("oboVPF7VIZo");
+    videoPlayer.cueVideo(currentVideoModel.getVideoId());
     videoPlayer.setPlaybackEventListener(TimelineFragment.this);
     videoPlayer.setManageAudioFocus(true);
     videoPlayer.setOnFullscreenListener(TimelineFragment.this);

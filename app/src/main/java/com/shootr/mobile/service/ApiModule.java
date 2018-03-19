@@ -13,6 +13,7 @@ import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.data.api.SocketApi;
 import com.shootr.mobile.data.api.WebSocketApiImpl;
 import com.shootr.mobile.data.api.entity.BaseMessageApiEntity;
+import com.shootr.mobile.data.api.entity.ExternalVideoApiEntity;
 import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.TopicApiEntity;
@@ -153,6 +154,7 @@ import timber.log.Timber;
             .registerSubtype(ShotApiEntity.class, "SHOT")
             .registerSubtype(BaseMessageApiEntity.class, "BASE_MESSAGE")
             .registerSubtype(TopicApiEntity.class, "TOPIC")
+            .registerSubtype(ExternalVideoApiEntity.class, "EXTERNAL_VIDEO")
             .registerSubtype(PollEntity.class, "POLL");
 
     return new GsonBuilder() //
