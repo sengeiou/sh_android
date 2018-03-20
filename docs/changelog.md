@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.7] - 2018-03-20
+### Added
+- Video Stream Creation
+- Video on Stream
+
+### Changed
+- View shot's video on streamtimeline 
+
 ## [1.55.6] - 2018-03-14
 ### Fixed
 - Fix filter re-enter timeline
