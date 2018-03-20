@@ -36,6 +36,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.fragments.BottomYoutubeVideoPlayer;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
@@ -48,6 +49,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Intents;
@@ -92,6 +94,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @BindString(R.string.analytics_source_shot_detail) String shotDetailSource;
   @BindString(R.string.analytics_source_ctashot_detail) String ctaShotSource;
   @BindString(R.string.stream_checked) String streamChecked;
+  @BindString(R.string.analytics_action_open_video) String analyticsActionOpenVideo;
+  @BindString(R.string.analytics_label_open_video) String analyticsLabelOpenVideo;
 
   @Inject ImageLoader imageLoader;
   @Inject TimeFormatter timeFormatter;
@@ -107,6 +111,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @Inject CrashReportTool crashReportTool;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   private PhotoPickerController photoPickerController;
   private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -251,6 +256,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setContext(getBaseContext());
     builder.setActionId(analyticsActionShareShot);
     builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(shotDetailSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(idUser);
+    if (detailAdapter.getMainShot() != null) {
+      builder.setTargetUsername(detailAdapter.getMainShot().getUsername());
+      builder.setIdStream(detailAdapter.getMainShot().getStreamId());
+      builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
+    }
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendOpenVideoAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionOpenVideo);
+    builder.setLabelId(analyticsLabelOpenVideo);
     builder.setSource(shotDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idUser);
@@ -553,9 +574,30 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   private void onShotVideoClick(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
+  }
+
+  private void openExternalVideoInApp(String videoId) {
+    sendOpenVideoAnalytics();
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            /* no-op */
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
   }
 
   @OnClick(R.id.shot_bar_text) public void onReplyClick() {

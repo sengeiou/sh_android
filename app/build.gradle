@@ -195,17 +195,15 @@ dependencies {
   debugCompile 'com.squareup.retrofit:retrofit-mock:1.9.0'
   debugCompile 'com.github.pedrovgs:lynx:1.4'
   testCompile 'junit:junit:4.12'
-  testCompile "org.mockito:mockito-core:1.9.5"
+  testCompile 'org.mockito:mockito-core:1.9.5'
   testCompile 'org.assertj:assertj-core:1.7.0'
   androidTestCompile('com.squareup.assertj:assertj-android:1.0.0') {
     exclude group: 'com.android.support'
   }
-
   compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
     transitive = true;
   }
   // If you want to use the GPU Filters
-
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'com.android.support.test:rules:0.5'
   androidTestCompile 'com.android.support:support-annotations:25.3.1'
@@ -252,10 +250,10 @@ dependencies {
   compile 'com.makeramen:roundedimageview:2.2.1'
   compile 'com.yayandroid:ParallaxRecyclerView:1.1'
   compile 'com.sackcentury:shinebutton:0.1.4'
-  compile "com.daimajia.swipelayout:library:1.2.0@aar"
+  compile 'com.daimajia.swipelayout:library:1.2.0@aar'
   compile 'com.eftimoff:androidplayer:1.0.3@aar'
   compile 'com.nineoldandroids:library:2.4.0'
-  compile "com.mixpanel.android:mixpanel-android:4.+"
+  compile 'com.mixpanel.android:mixpanel-android:4.+'
   compile 'com.isseiaoki:simplecropview:1.1.4'
   compile 'com.mikepenz:actionitembadge:3.3.0@aar'
   compile 'com.mikepenz:iconics-core:2.8.0@aar'
@@ -263,24 +261,22 @@ dependencies {
   compile 'com.github.clans:fab:1.6.4'
   compile 'com.daasuu:BubbleLayout:1.1.1'
   compile 'com.google.android.gms:play-services-safetynet:10.2.4'
-  compile ("com.github.bumptech.glide:recyclerview-integration:4.1.1") {
+  compile('com.github.bumptech.glide:recyclerview-integration:4.1.1') {
     // Excludes the support library because it's already included by Glide.
     transitive = false
   }
   compile 'com.github.devahamed:multi-view-adapter:1.2.2'
   compile 'com.github.devahamed:multi-view-adapter-databinding:1.2.2'
   compile 'com.google.firebase:firebase-ads:10.2.1'
-
-  compile ('com.facebook.android:audience-network-sdk:4.+') {
-    exclude group:"com.google.android.gms"
+  compile('com.facebook.android:audience-network-sdk:4.+') {
+    exclude group: "com.google.android.gms"
   }
   compile 'com.vincentbrison.openlibraries.android:dualcache:3.1.1'
   compile 'com.vincentbrison.openlibraries.android:dualcache-jsonserializer:3.1.1'
-
   compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-
   compile 'com.neovisionaries:nv-websocket-client:2.3'
-
+  compile 'com.android.support.constraint:constraint-layout:1.0.2'
+  compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
 
 /**

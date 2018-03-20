@@ -32,9 +32,12 @@ public class ToolbarDecorator implements ViewContainerDecorator {
   private ImageView verifiedImage;
   private AvatarView avatar;
 
+  private boolean isVisible;
+
   public ToolbarDecorator(Context context, ImageLoader imageLoader) {
     this.context = context;
     this.imageLoader = imageLoader;
+    isVisible = true;
   }
 
   @Override public ViewGroup decorateContainer(ViewGroup originalRoot) {
@@ -162,10 +165,16 @@ public class ToolbarDecorator implements ViewContainerDecorator {
   }
 
   public void hideToolbar() {
+    isVisible = false;
     toolbar.setVisibility(View.GONE);
   }
 
   public void showToolbar() {
+    isVisible = true;
     toolbar.setVisibility(View.VISIBLE);
+  }
+
+  public boolean isVisible() {
+    return isVisible;
   }
 }

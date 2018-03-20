@@ -13,7 +13,12 @@ android:
     - extra-android-m2repository
     - sys-img-armeabi-v7a-android-21
 
-before_install:
+ before_install:
+  - mkdir "$ANDROID_HOME/licenses" || true
+  # Added cuz Travis doesn't accept license agreements of ConstraintLayout.
+  # To fix it, we are copying the licenses that come with the SDK to Travis's directory.
+  # Reference: https://github.com/wolkenschieber/License/blob/master/.travis.yml#L35
+  - cp ./android-sdk-licenses/* "$ANDROID_HOME/licenses/"
   - rvm install 2.4.1
   - gem install fastlane -NV
 

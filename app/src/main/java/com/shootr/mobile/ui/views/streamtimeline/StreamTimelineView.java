@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.views.streamtimeline;
 
+import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import java.util.List;
@@ -7,6 +8,8 @@ import java.util.List;
 public interface StreamTimelineView {
 
   void renderItems(List<PrintableModel> items, PrintableModel itemForReposition, int offset);
+
+  void renderExternalVideo(ExternalVideoModel externalVideoModel);
 
   void renderFixedItems(List<PrintableModel> items);
 
@@ -91,4 +94,6 @@ public interface StreamTimelineView {
   void hideEmpty();
 
   void updateFixedItem(List<PrintableModel> printableModels);
+
+  void showVideoVisibilityMenu();
 }

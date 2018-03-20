@@ -29,6 +29,7 @@ import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.PutTimelineRepositionInteractor;
 import com.shootr.mobile.domain.model.BadgeContent;
+import com.shootr.mobile.domain.model.ExternalVideo;
 import com.shootr.mobile.domain.model.FixedItemSocketMessage;
 import com.shootr.mobile.domain.model.NewBadgeContentSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
@@ -46,6 +47,8 @@ import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
+import com.shootr.mobile.ui.model.ExternalVideoModel;
+import com.shootr.mobile.ui.model.ExternalVideoModelMapper;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -105,6 +108,7 @@ public class StreamTimelinePresenter
   private final SessionRepository sessionRepository;
   private final PrintableModelMapper printableModelMapper;
   private final ShotModelMapper shotModelMapper;
+  private final ExternalVideoModelMapper externalVideoModelMapper;
   private final StreamModelMapper streamModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
@@ -126,6 +130,7 @@ public class StreamTimelinePresenter
   private String currentTopicText;
   private String currentTimelineType = TimelineType.MAIN;
   private int loadType;
+  private ExternalVideoModel currentExternalVideo;
 
   @Inject public StreamTimelinePresenter(GetStreamTimelineInteractor getStreamTimelineInteractor,
       SelectStreamInteractor selectStreamInteractor, UpdateStreamInteractor updateStreamInteractor,
@@ -144,9 +149,10 @@ public class StreamTimelinePresenter
       GetCachedTimelineInteractor getCachedTimelineInteractor,
       PutLastStreamVisitInteractor putLastStreamVisitInteractor,
       PutTimelineRepositionInteractor putTimelineRepositionInteractor,
-      GetTimelineRepositionInteractor getTimelineRepositionInteractor,
-      SessionRepository sessionRepository, PrintableModelMapper printableModelMapper,
-      ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper,
+      GetTimelineRepositionInteractor getTimelineRepositionInteractor, SessionRepository sessionRepository,
+      PrintableModelMapper printableModelMapper, ShotModelMapper shotModelMapper,
+      ExternalVideoModelMapper externalVideoModelMapper, StreamModelMapper streamModelMapper,
+
       ErrorMessageFactory errorMessageFactory, @Main Bus bus, Poller poller) {
     this.getStreamTimelineInteractor = getStreamTimelineInteractor;
     this.selectStreamInteractor = selectStreamInteractor;
@@ -173,6 +179,7 @@ public class StreamTimelinePresenter
     this.sessionRepository = sessionRepository;
     this.printableModelMapper = printableModelMapper;
     this.shotModelMapper = shotModelMapper;
+    this.externalVideoModelMapper = externalVideoModelMapper;
     this.streamModelMapper = streamModelMapper;
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
@@ -262,6 +269,21 @@ public class StreamTimelinePresenter
     renderItems(streamTimeline);
   }
 
+  private void renderExternalVideo(List<PrintableItem> pinneds) {
+    for (PrintableItem printableItem : pinneds) {
+      if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
+        ExternalVideoModel newExternalVideo =
+            externalVideoModelMapper.map((ExternalVideo) printableItem);
+        if (!newExternalVideo.getVideoId()
+            .equals(currentExternalVideo == null ? "" : currentExternalVideo.getVideoId())) {
+          currentExternalVideo = externalVideoModelMapper.map((ExternalVideo) printableItem);
+          view.renderExternalVideo(currentExternalVideo);
+        }
+        break;
+      }
+    }
+  }
+
   private void setupImportantBadge(boolean show) {
     if (show) {
       view.showFilterAlert();
@@ -272,6 +294,7 @@ public class StreamTimelinePresenter
     List<PrintableModel> pinnedModels = printableModelMapper.mapPinnableModel(pinneds);
     view.renderPinnedItems(pinnedModels);
     storeCurrentTopic(pinnedModels);
+    renderExternalVideo(pinneds);
   }
 
   private void storeCurrentTopic(List<PrintableModel> pinnedModels) {

@@ -11,6 +11,7 @@ import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.shootr.mobile.data.api.entity.BaseMessageApiEntity;
+import com.shootr.mobile.data.api.entity.ExternalVideoApiEntity;
 import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.TopicApiEntity;
@@ -80,6 +81,7 @@ public class SocketMessageEntityWrapper {
             .registerSubtype(ShotApiEntity.class, "SHOT")
             .registerSubtype(BaseMessageApiEntity.class, "BASE_MESSAGE")
             .registerSubtype(TopicApiEntity.class, "TOPIC")
+            .registerSubtype(ExternalVideoApiEntity.class, "EXTERNAL_VIDEO")
             .registerSubtype(PollEntity.class, "POLL");
 
     return new GsonBuilder() //

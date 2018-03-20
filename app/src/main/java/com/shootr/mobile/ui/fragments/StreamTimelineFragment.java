@@ -106,6 +106,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -163,6 +164,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject FormatNumberUtils formatNumberUtils;
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
   @Inject NativeAdsManager adsManager;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -195,6 +197,8 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_action_checkin) String analyticsActionCheckin;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_open_video) String analyticsActionOpenVideo;
+  @BindString(R.string.analytics_label_open_video) String analyticsLabelOpenVideo;
   @BindString(R.string.analytics_action_filter_on_stream) String analyticsActionFilterOnStream;
   @BindString(R.string.analytics_label_filter_on_stream) String analyticsLabelFilterOnStream;
   @BindString(R.string.analytics_action_filter_off_stream) String analyticsActionFilterOffStream;
@@ -470,6 +474,21 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(timelineSource);
+    builder.setIdStream(idStream);
+    builder.setStreamName((streamTitle != null) ? streamTitle
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(streamTimelinePresenter.isStrategic());
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendOpenVideoAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenVideo);
+    builder.setLabelId(analyticsLabelOpenVideo);
     builder.setSource(timelineSource);
     builder.setIdStream(idStream);
     builder.setStreamName((streamTitle != null) ? streamTitle
@@ -793,10 +812,32 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
   }
+
+  private void openExternalVideoInApp(String videoId) {
+    sendOpenVideoAnalytics();
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            /* no-op */
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
+  }
+
 
   private void shareShotIntent(ShotModel shotModel) {
     Intent shareIntent = shareManager.shareShotIntent(getActivity(), shotModel);

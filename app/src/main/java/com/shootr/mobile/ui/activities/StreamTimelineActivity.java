@@ -106,8 +106,16 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     }
 
     @Override public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+        boolean handled = false;
+
+        if (currentFragment instanceof TimelineFragment) {
+            handled = ((TimelineFragment) currentFragment).onBackPressed();
+        }
+
+        if (!handled) {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.activity_back_in, R.anim.activity_back_out);
+        }
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,

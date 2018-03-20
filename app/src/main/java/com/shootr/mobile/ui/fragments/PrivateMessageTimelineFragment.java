@@ -49,6 +49,7 @@ import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.CrashReportTool;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -79,6 +80,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @Inject WritePermissionManager writePermissionManager;
   @Inject CrashReportTool crashReportTool;
   @Inject SessionRepository sessionRepository;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   @BindView(R.id.timeline_shot_list) RecyclerView messageRecycler;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -91,7 +93,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_action_private_message) String analyticsActionSendPrivateMessage;
   @BindString(R.string.analytics_label_private_message) String analyticsLabelSendPrivateMessage;
   @BindString(R.string.analytics_source_timeline) String timelineSource;
+  @BindString(R.string.analytics_source_private_messages_timeline) String privateMessagesSource;
   @BindString(R.string.not_allowed_blocked_user) String messageBlockedUserError;
+  @BindString(R.string.analytics_action_open_video) String analyticsActionOpenVideo;
+  @BindString(R.string.analytics_label_open_video) String analyticsLabelOpenVideo;
 
   private MessagesTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -358,9 +363,30 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
+  }
+
+  private void openExternalVideoInApp(String videoId) {
+    sendOpenVideoAnalytics();
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            /* no-op */
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
   }
 
   private void setStreamTitle(String streamTitle) {
@@ -433,6 +459,19 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     builder.setActionId(analyticsActionSendPrivateMessage);
     builder.setLabelId(analyticsLabelSendPrivateMessage);
     builder.setSource(timelineSource);
+    builder.setIdTargetUser(idTargetUser);
+    builder.setTargetUsername(streamTitle);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendOpenVideoAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenVideo);
+    builder.setLabelId(analyticsLabelOpenVideo);
+    builder.setSource(privateMessagesSource);
     builder.setIdTargetUser(idTargetUser);
     builder.setTargetUsername(streamTitle);
     builder.setUser(sessionRepository.getCurrentUser());

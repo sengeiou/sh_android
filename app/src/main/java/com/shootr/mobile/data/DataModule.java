@@ -61,6 +61,7 @@ import com.shootr.mobile.util.CrashReportToolFactoryImpl;
 import com.shootr.mobile.util.DeeplinkingNavigator;
 import com.shootr.mobile.util.DeeplinkingTool;
 import com.shootr.mobile.util.DefaultTabUtils;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.GenericAnalyticsTool;
@@ -86,6 +87,7 @@ import com.shootr.mobile.util.StringHashUtils;
 import com.shootr.mobile.util.TimeFormatter;
 import com.shootr.mobile.util.Version;
 import com.shootr.mobile.util.WritePermissionManager;
+import com.shootr.mobile.util.YoutubeVideoUtils;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.vincentbrison.openlibraries.android.dualcache.Builder;
@@ -379,5 +381,9 @@ import static android.content.Context.MODE_PRIVATE;
         BuildConfig.VERSION_CODE).useSerializerInRam(LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
         .build();
+  }
+
+  @Provides @Singleton ExternalVideoUtils provideYoutubeUtils(YoutubeVideoUtils youtubeVideoUtils) {
+    return youtubeVideoUtils;
   }
 }

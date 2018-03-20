@@ -5,13 +5,22 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.transition.AutoTransition;
+import android.support.transition.ChangeBounds;
+import android.support.transition.Transition;
+import android.support.transition.TransitionManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,15 +28,24 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import com.daasuu.bl.BubbleLayout;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.shootr.mobile.R;
 import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
@@ -65,7 +83,9 @@ import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.adapters.streamtimeline.StreamTimelineAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.fragments.BottomYoutubeVideoPlayer;
 import com.shootr.mobile.ui.model.BaseMessageModel;
+import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -87,6 +107,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -106,12 +127,17 @@ import timber.log.Timber;
 
 public class TimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, FixedItemView, LongPressView,
-    StreamTimelineOptionsView {
+    StreamTimelineOptionsView, YouTubePlayer.PlaybackEventListener,
+    YouTubePlayer.OnFullscreenListener, YouTubePlayer.OnInitializedListener,
+    YouTubePlayer.PlayerStateChangeListener {
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_ID_USER = "userId";
   public static final String TAG = "timeline";
+
+  private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
+
   private static final int FOLLOWERS = 0;
   private static final int CONNECTED = 1;
   private static final int REQUEST_STREAM_DETAIL = 1;
@@ -131,6 +157,7 @@ public class TimelineFragment extends BaseFragment
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
   @Inject LocaleProvider localeProvider;
   @Inject IntentFactory intentFactory;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   @Inject StreamTimelinePresenter timelinePresenter;
   @Inject StreamTimelineOptionsPresenter streamTimelineOptionsPresenter;
@@ -144,6 +171,17 @@ public class TimelineFragment extends BaseFragment
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
   @BindView(R.id.new_shots_notificator_text) TextView newShotsNotificatorText;
   @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
+  @BindView(R.id.player) FrameLayout player;
+  @BindView(R.id.container) ConstraintLayout container;
+  /*@BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
+  @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
+  @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
+  @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
+  @BindView(R.id.timeline_message) ClickableTextView streamMessage;
+  @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
+  @BindView(R.id.poll_question) TextView pollQuestion;
+  @BindView(R.id.poll_action) TextView pollAction;
+  @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;*/
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -194,6 +232,8 @@ public class TimelineFragment extends BaseFragment
   private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder showVideoMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder hideVideoMenuItem = new MenuItemValueHolder();
 
   private PhotoPickerController photoPickerController;
   private PreCachingLayoutManager preCachingLayoutManager;
@@ -216,6 +256,17 @@ public class TimelineFragment extends BaseFragment
 
   private PrintableModel shotStored;
   private int offset;
+
+  private boolean isFullScreen;
+  private YouTubePlayer videoPlayer;
+
+  private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
+
+  private boolean videoAnimationPlaying = false;
+
+  private boolean shouldLoadVideAfterResume = false;
+
+  private ExternalVideoModel currentVideoModel;
 
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
     TimelineFragment fragment = new TimelineFragment();
@@ -268,6 +319,7 @@ public class TimelineFragment extends BaseFragment
     charCounterColorError = getResources().getColor(R.color.error);
     charCounterColorNormal = getResources().getColor(R.color.gray_70);
     writePermissionManager.init(getActivity());
+    player.setVisibility(View.GONE);
     setupListAdapter();
     //setupSwipeRefreshLayout();
     setupListScrollListeners();
@@ -438,9 +490,40 @@ public class TimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
+  }
+
+  private void openExternalVideoInApp(String videoId) {
+    if (videoPlayer != null) {
+      shouldLoadVideAfterResume = true;
+      changePlayerVisibility(false);
+      videoPlayer.release();
+    }
+
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            if (shouldLoadVideAfterResume) {
+              shouldLoadVideAfterResume = false;
+              renderExternalVideo(currentVideoModel);
+              hideVideoMenuItem.setVisible(false);
+            }
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
   }
 
   private void shareShotIntent(ShotModel shotModel) {
@@ -661,6 +744,20 @@ public class TimelineFragment extends BaseFragment
     } else {
       itemsList.scrollToPosition(0);
     }
+  }
+
+  @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
+    showVideoVisibilityMenu();
+    currentVideoModel = externalVideoModel;
+    changeStatusBarColor();
+    player.setVisibility(View.VISIBLE);
+    if (youTubePlayerSupportFragment == null) {
+      youTubePlayerSupportFragment = YouTubePlayerSupportFragment.newInstance();
+      FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+      transaction.add(R.id.player, youTubePlayerSupportFragment).commit();
+    }
+
+    youTubePlayerSupportFragment.initialize(API, this);
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
@@ -1005,6 +1102,9 @@ public class TimelineFragment extends BaseFragment
   @Override public void onDestroyView() {
     super.onDestroyView();
     timelinePresenter.destroy();
+    if (videoPlayer != null) {
+      videoPlayer.release();
+    }
   }
 
   @Override public void hideFixedShot() {
@@ -1055,7 +1155,7 @@ public class TimelineFragment extends BaseFragment
 
   //region activity menu
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.timeline, menu);
+    inflater.inflate(R.menu.new_timeline, menu);
     importantItemsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
     importantItemsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     allItemsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
@@ -1064,10 +1164,20 @@ public class TimelineFragment extends BaseFragment
     removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
     muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
     unmuteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_unmute_stream));
+    showVideoMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_show_video));
+    showVideoMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    hideVideoMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_hide_video));
+    hideVideoMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
+      case R.id.menu_show_video:
+        changePlayerVisibility(true);
+        return true;
+      case R.id.menu_hide_video:
+        changePlayerVisibility(false);
+        return true;
       case R.id.menu_showing_holding_shots:
         timelinePresenter.onActivateFilterClick();
         sendFilterOnAnalytics();
@@ -1210,6 +1320,10 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void updateFixedItem(List<PrintableModel> printableModels) {
     adapter.updateFixedItem(printableModels.get(0));
+  }
+
+  @Override public void showVideoVisibilityMenu() {
+    hideVideoMenuItem.setVisible(true);
   }
 
   private void updateWatchNumberIcon() {
@@ -1418,4 +1532,136 @@ public class TimelineFragment extends BaseFragment
     builder.setTargetUsername(shot.getUsername());
     analyticsTool.analyticsSendAction(builder);
   }
+
+  @Override public void onPlaying() {
+    ChangeBounds transition = new ChangeBounds();
+    transition.setInterpolator(new AccelerateDecelerateInterpolator());
+    TransitionManager.beginDelayedTransition(container, transition);
+    toolbarDecorator.hideToolbar();
+  }
+
+  @Override public void onPaused() {
+    ChangeBounds transition = new ChangeBounds();
+    transition.setInterpolator(new AccelerateDecelerateInterpolator());
+    TransitionManager.beginDelayedTransition(container, transition);
+    toolbarDecorator.showToolbar();
+  }
+
+  @Override public void onStopped() {
+    /* no-op */
+  }
+
+  @Override public void onBuffering(boolean b) {
+    /* no-op */
+  }
+
+  @Override public void onSeekTo(int i) {
+    /* no-op */
+  }
+
+  @Override public void onFullscreen(boolean isFullScreen) {
+    this.isFullScreen = isFullScreen;
+  }
+
+  public boolean onBackPressed() {
+    if (isFullScreen) {
+      if (videoPlayer != null && isFullScreen) {
+        videoPlayer.setFullscreen(false);
+        return true;
+      }
+    }
+    return  false;
+  }
+
+  @Override
+  public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer,
+      boolean b) {
+    videoPlayer = youTubePlayer;
+    videoPlayer.cueVideo(currentVideoModel.getVideoId());
+    videoPlayer.setPlaybackEventListener(TimelineFragment.this);
+    videoPlayer.setManageAudioFocus(true);
+    videoPlayer.setOnFullscreenListener(TimelineFragment.this);
+    videoPlayer.setPlayerStateChangeListener(this);
+  }
+
+  @Override public void onInitializationFailure(YouTubePlayer.Provider provider,
+      YouTubeInitializationResult youTubeInitializationResult) {
+    Toast.makeText(getContext(), "fallo", Toast.LENGTH_LONG).show();
+    Log.d("youtube", "fallo " + youTubeInitializationResult);
+  }
+
+  @Override public void onLoading() {
+    /* no-op */
+  }
+
+  @Override public void onLoaded(String s) {
+    /* no-op */
+  }
+
+  @Override public void onAdStarted() {
+    /* no-op */
+  }
+
+  @Override public void onVideoStarted() {
+    /* no-op */
+  }
+
+  @Override public void onVideoEnded() {
+    toolbarDecorator.showToolbar();
+  }
+
+  @Override public void onError(YouTubePlayer.ErrorReason errorReason) {
+    toolbarDecorator.showToolbar();
+  }
+
+  public void changePlayerVisibility(final boolean show) {
+
+    if (!videoAnimationPlaying) {
+      ConstraintSet constraintSet = new ConstraintSet();
+
+      constraintSet.clone(getContext(), show ? R.layout.stream_timeline : R.layout.stream_timeline_hidden_video);
+      constraintSet.applyTo(container);
+
+      Transition transition = new AutoTransition();
+      transition.setInterpolator(new DecelerateInterpolator());
+      transition.addListener(new Transition.TransitionListener() {
+        @Override public void onTransitionStart(@NonNull Transition transition) {
+          videoAnimationPlaying = true;
+          if (show) {
+            hideVideoMenuItem.setVisible(true);
+            showVideoMenuItem.setVisible(false);
+          } else {
+            hideVideoMenuItem.setVisible(false);
+            showVideoMenuItem.setVisible(true);
+          }
+        }
+
+        @Override public void onTransitionEnd(@NonNull Transition transition) {
+          videoAnimationPlaying = false;
+        }
+
+        @Override public void onTransitionCancel(@NonNull Transition transition) {
+          videoAnimationPlaying = false;
+        }
+
+        @Override public void onTransitionPause(@NonNull Transition transition) {
+          videoAnimationPlaying = false;
+        }
+
+        @Override public void onTransitionResume(@NonNull Transition transition) {
+          videoAnimationPlaying = true;
+        }
+      });
+      TransitionManager.beginDelayedTransition(container, transition);
+    }
+  }
+
+  private void changeStatusBarColor() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+      Window window = getActivity().getWindow();
+      window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+      window.setStatusBarColor(getContext().getResources().getColor(R.color.black));
+    }
+  }
+
 }
