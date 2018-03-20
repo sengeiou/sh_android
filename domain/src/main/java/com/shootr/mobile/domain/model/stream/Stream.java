@@ -43,6 +43,7 @@ public class Stream implements Searchable, Followable, Validable {
     private long lastTimeShooted;
     private boolean showBadge;
     private String shareLink;
+    private String videoUrl;
 
     public Boolean isRemoved() {
         return removed;
@@ -376,5 +377,13 @@ public class Stream implements Searchable, Followable, Validable {
 
     public void setShareLink(String shareLink) {
         this.shareLink = shareLink;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
     }
 }

@@ -1,12 +1,14 @@
 package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.api.exception.ApiException;
+import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.api.service.UtilsApiService;
+import com.shootr.mobile.data.entity.BootstrapingEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LandingStreamsEntity;
-import com.shootr.mobile.data.entity.BootstrapingEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.io.IOException;
@@ -49,19 +51,32 @@ public class ServiceStreamDataSource implements StreamDataSource {
     return putStream(streamEntity, false);
   }
 
-  @Override public StreamEntity createStream(StreamEntity streamEntity) {
+  @Override public StreamEntity createStream(StreamEntity streamEntity)
+      throws InvalidYoutubeVideoUrlException {
     try {
       return streamApiService.createStream(streamEntity);
-    } catch (IOException | ApiException e) {
-      throw new ServerCommunicationException(e);
+    } catch (ApiException apiException) {
+      if (ErrorInfo.InvalidYoutubeVideoUrlException == apiException.getErrorInfo()) {
+        throw new InvalidYoutubeVideoUrlException(apiException);
+      } else {
+        throw new ServerCommunicationException(apiException);
+      }
+    } catch (IOException error) {
+      throw new ServerCommunicationException(error);
     }
   }
 
   @Override public StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters) {
     try {
       return streamApiService.updateStream(streamUpdateParameters);
-    } catch (IOException | ApiException e) {
-      throw new ServerCommunicationException(e);
+    } catch (ApiException apiException) {
+      if (ErrorInfo.InvalidYoutubeVideoUrlException == apiException.getErrorInfo()) {
+        throw new InvalidYoutubeVideoUrlException(apiException);
+      } else {
+        throw new ServerCommunicationException(apiException);
+      }
+    } catch (IOException error) {
+      throw new ServerCommunicationException(error);
     }
   }
 

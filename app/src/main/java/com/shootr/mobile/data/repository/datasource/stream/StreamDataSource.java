@@ -5,6 +5,7 @@ import com.shootr.mobile.data.entity.LandingStreamsEntity;
 import com.shootr.mobile.data.entity.BootstrapingEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface StreamDataSource extends SyncableDataSource<FollowEntity> {
 
   StreamEntity putStream(StreamEntity streamEntity);
 
-  StreamEntity createStream(StreamEntity streamEntity);
+  StreamEntity createStream(StreamEntity streamEntity) throws InvalidYoutubeVideoUrlException;
 
   StreamEntity updateStream(StreamUpdateParameters streamUpdateParameters);
 

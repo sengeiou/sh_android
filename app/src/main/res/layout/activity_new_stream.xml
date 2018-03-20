@@ -136,8 +136,54 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="4dp"
         android:drawSelectorOnTop="true"
+        android:nextFocusDown="@+id/new_stream_video_url"
         style="@style/Base.Widget.AppCompat.Spinner.Underlined"
         />
+    <com.shootr.mobile.ui.widgets.FloatLabelLayout
+        android:id="@+id/new_video_url_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        app:floatLabelTextAppearance="@style/TextAppearance.FloatLabel"
+        >
 
+      <EditText
+          android:id="@+id/new_stream_video_url"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="@string/new_video_url_label"
+          android:imeOptions="actionDone"
+          android:inputType="textUri"
+          android:lines="1"
+          android:maxLength="50"
+          android:singleLine="true"
+          tools:text="URL"
+          />
+
+    </com.shootr.mobile.ui.widgets.FloatLabelLayout>
+
+    <TextView
+        android:id="@+id/new_stream_video_url_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="@dimen/keyline_1"
+        android:paddingLeft="4dp"
+        android:visibility="visible"
+        tools:text="Invalid URL"
+        style="@style/ErrorSubtitle"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="16dp"
+        android:text="@string/footer_video_url"
+        android:textSize="12sp"
+        />
   </LinearLayout>
 </ScrollView>

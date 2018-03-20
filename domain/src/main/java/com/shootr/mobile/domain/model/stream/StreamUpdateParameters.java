@@ -8,6 +8,7 @@ public class StreamUpdateParameters implements Validable {
   private String title;
   private String photoIdMedia;
   private String readWriteMode;
+  private String videoUrl;
   private boolean notifyPinMessage;
 
   public String getDescription() {
@@ -72,5 +73,13 @@ public class StreamUpdateParameters implements Validable {
 
   @Override public String getDescriptionToValidate() {
     return description;
+  }
+
+  public String getVideoUrl() {
+    return videoUrl;
+  }
+
+  public void setVideoUrl(String videoUrl) {
+    this.videoUrl = videoUrl;
   }
 }

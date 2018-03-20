@@ -28,9 +28,8 @@ public class CreateStreamInteractorTest {
   private static final String TITLE = "title";
   private static final String DESCRIPTION = "description";
   private static final Integer PUBLIC_MODE = 0;
-  private static final String TOPIC = "topic";
+  private static final String URL = "URL";
   private static final boolean NOTIFY = true;
-  private static final boolean NOTIFY_TOPIC = true;
   private static final String SHORT_TITLE = "a";
   private static final String USER_ID = "userId";
   private static final String USER_NAME = "userName";
@@ -60,7 +59,7 @@ public class CreateStreamInteractorTest {
 
   @Test public void shouldThrowsDomainValidationExceptionWhenIsNotAValidStream() throws Exception {
 
-    interactor.sendStream(SHORT_TITLE, DESCRIPTION, PUBLIC_MODE, ID_MEDIA, NOTIFY,
+    interactor.sendStream(SHORT_TITLE, DESCRIPTION, PUBLIC_MODE, ID_MEDIA, URL, NOTIFY,
         callback, errorCallback);
 
     verify(errorCallback).onError(any(ShootrException.class));
@@ -70,7 +69,7 @@ public class CreateStreamInteractorTest {
     when(localStreamRepository.getStreamById(ID_STREAM, StreamMode.TYPES_STREAM)).thenReturn(
         new Stream());
 
-    interactor.sendStream(TITLE, DESCRIPTION, PUBLIC_MODE, ID_MEDIA, NOTIFY,
+    interactor.sendStream(TITLE, DESCRIPTION, PUBLIC_MODE, ID_MEDIA, URL, NOTIFY,
         callback, errorCallback);
 
     verify(callback).onLoaded(any(Stream.class));

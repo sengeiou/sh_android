@@ -15,6 +15,7 @@ import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.sync.SyncTrigger;
 import com.shootr.mobile.data.repository.sync.SyncableRepository;
 import com.shootr.mobile.data.repository.sync.SyncableStreamEntityFactory;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
 import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.QueueElement;
@@ -94,11 +95,12 @@ public class SyncStreamRepository
     return streamEntityMapper.transform(remoteEvents);
   }
 
-  @Override public Stream putStream(Stream stream) {
+  @Override public Stream putStream(Stream stream) throws InvalidYoutubeVideoUrlException {
     return putStream(stream, false);
   }
 
-  @Override public Stream putStream(Stream stream, boolean notify) {
+  @Override public Stream putStream(Stream stream, boolean notify)
+      throws InvalidYoutubeVideoUrlException {
     StreamEntity currentOrNewEntity = syncableStreamEntityFactory.updatedOrNewEntity(stream);
     currentOrNewEntity.setNotifyCreation(notify ? 1 : 0);
 

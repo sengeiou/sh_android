@@ -50,9 +50,6 @@ public interface StreamApiService {
   @PUT("/stream/{idStream}/restore") Response restoreStream(@Path("idStream") String idStream)
       throws IOException, ApiException;
 
-  @PUT("/stream/") StreamEntity updateStream(@Body StreamEntity streamEntity,
-      @Query("notifyPinMessage") Boolean notify) throws IOException, ApiException;
-
   @POST("/stream/{idStream}/share") Response shareStream(@Path("idStream") String idStream)
       throws ApiException, IOException;
 

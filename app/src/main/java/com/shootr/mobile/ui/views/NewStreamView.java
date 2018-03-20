@@ -9,6 +9,8 @@ public interface NewStreamView extends DataTransferView {
 
     void showTitleError(String errorMessage);
 
+    void showVideoUrlError();
+
     void closeScreenWithResult(String streamId);
 
     void doneButtonEnabled(boolean enable);
@@ -18,6 +20,8 @@ public interface NewStreamView extends DataTransferView {
     void showNotificationConfirmation();
 
     void showDescription(String description);
+
+    void showVideoUrl(String videoUrl);
 
     void setModeValue(Integer readWriteMode);
 
@@ -35,5 +39,7 @@ public interface NewStreamView extends DataTransferView {
 
     void goToShareStream(String id);
 
-  void showEditPhotoPlaceHolder();
+    void showEditPhotoPlaceHolder();
+
+    void hideVideoUrlFields();
 }

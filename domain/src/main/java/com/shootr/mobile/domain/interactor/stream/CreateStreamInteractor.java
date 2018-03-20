@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.exception.DomainValidationException;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrServerException;
@@ -31,6 +32,7 @@ public class CreateStreamInteractor implements Interactor {
   private String title;
   private String description;
   private String idMedia;
+  private String videoUrl;
   private boolean notifyCreation;
   private Callback callback;
   private ErrorCallback errorCallback;
@@ -39,8 +41,7 @@ public class CreateStreamInteractor implements Interactor {
 
   @Inject public CreateStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, SessionRepository sessionRepository,
-      ExternalStreamRepository remoteStreamRepository,
-      LocaleProvider localeProvider,
+      ExternalStreamRepository remoteStreamRepository, LocaleProvider localeProvider,
       @Local UserRepository localUserRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
@@ -50,13 +51,13 @@ public class CreateStreamInteractor implements Interactor {
     this.localUserRepository = localUserRepository;
   }
 
-  public void sendStream(String title, String description, Integer streamMode,
-      String idMedia, boolean notifyCreation, Callback callback,
-      ErrorCallback errorCallback) {
+  public void sendStream(String title, String description, Integer streamMode, String idMedia,
+      String videoUrl, boolean notifyCreation, Callback callback, ErrorCallback errorCallback) {
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
     this.idMedia = idMedia;
+    this.videoUrl = videoUrl;
     this.notifyCreation = notifyCreation;
     this.callback = callback;
     this.errorCallback = errorCallback;
@@ -69,6 +70,8 @@ public class CreateStreamInteractor implements Interactor {
       try {
         Stream savedStream = sendStreamToServer(stream, notifyCreation);
         notifyLoaded(savedStream);
+      } catch (InvalidYoutubeVideoUrlException err) {
+        notifyError(err);
       } catch (ShootrException e) {
         handleServerError(e);
       }
@@ -91,14 +94,20 @@ public class CreateStreamInteractor implements Interactor {
     stream.setAuthorUsername(localUserRepository.getUserById(currentUserId).getUsername());
     stream.setTotalFollowers(0);
     stream.setTotalWatchers(0);
+    stream.setVideoUrl(videoUrl);
     if (idMedia != null) {
       stream.setPhotoIdMedia(idMedia);
     }
     return stream;
   }
 
-  private Stream sendStreamToServer(Stream stream, boolean notify) {
-    return remoteStreamRepository.putStream(stream, notify);
+  private Stream sendStreamToServer(Stream stream, boolean notify)
+      throws InvalidYoutubeVideoUrlException {
+    try {
+      return remoteStreamRepository.putStream(stream, notify);
+    } catch (InvalidYoutubeVideoUrlException e) {
+      throw e;
+    }
   }
 
   //region Validation

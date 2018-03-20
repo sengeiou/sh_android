@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.exception.DomainValidationException;
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.exception.ShootrError;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.exception.ShootrServerException;
@@ -27,6 +28,7 @@ public class UpdateStreamInteractor implements Interactor {
   private String description;
   private String topic;
   private String idMedia;
+  private String videoUrl;
   private Callback callback;
   private ErrorCallback errorCallback;
 
@@ -35,33 +37,32 @@ public class UpdateStreamInteractor implements Interactor {
 
   private boolean isEditingTopic = false;
 
-
   @Inject public UpdateStreamInteractor(InteractorHandler interactorHandler,
-      PostExecutionThread postExecutionThread,
-      ExternalStreamRepository remoteStreamRepository) {
+      PostExecutionThread postExecutionThread, ExternalStreamRepository remoteStreamRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.remoteStreamRepository = remoteStreamRepository;
   }
 
   public void updateStream(String idStream, String title, String description, Integer streamMode,
-      String idMedia, Callback callback,
-      ErrorCallback errorCallback) {
+      String idMedia, String videoUrl, Callback callback, ErrorCallback errorCallback) {
     this.idStream = idStream;
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
     this.idMedia = idMedia;
+    this.videoUrl = videoUrl;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
   }
 
-  public void updateStreamMessage(String idStream, String topic, Boolean notifyTopicMessage, Callback callback,
-      ErrorCallback errorCallback) {
+  public void updateStreamMessage(String idStream, String topic, Boolean notifyTopicMessage,
+      String videoUrl, Callback callback, ErrorCallback errorCallback) {
     isEditingTopic = true;
     this.idStream = idStream;
     this.topic = topic == null ? "" : topic;
+    this.videoUrl = videoUrl;
     this.notifyTopicMessage = notifyTopicMessage;
     this.callback = callback;
     this.errorCallback = errorCallback;
@@ -84,6 +85,8 @@ public class UpdateStreamInteractor implements Interactor {
     try {
       Stream savedStream = sendStreamToServer(streamUpdateParameters);
       notifyLoaded(savedStream);
+    } catch (InvalidYoutubeVideoUrlException err) {
+      notifyError(err);
     } catch (ShootrException e) {
       handleServerError(e);
     }
@@ -103,6 +106,7 @@ public class UpdateStreamInteractor implements Interactor {
     streamUpdateParameters.setPhotoIdMedia(idMedia);
     streamUpdateParameters.setReadWriteMode(streamMode);
     streamUpdateParameters.setTopic(topic);
+    streamUpdateParameters.setVideoUrl(videoUrl);
     streamUpdateParameters.setNotifyMessage(notifyTopicMessage);
 
     return streamUpdateParameters;

@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.repository.stream;
 
+import com.shootr.mobile.domain.exception.InvalidYoutubeVideoUrlException;
 import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
@@ -12,7 +13,7 @@ public interface StreamRepository {
 
     List<Stream> getStreamsByIds(List<String> streamIds, String[] types);
 
-    Stream putStream(Stream stream);
+    Stream putStream(Stream stream) throws InvalidYoutubeVideoUrlException;
 
     void removeStream(String idStream);
 

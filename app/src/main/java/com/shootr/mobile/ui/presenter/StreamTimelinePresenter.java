@@ -100,10 +100,11 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       UnmarkNiceShotInteractor unmarkNiceShotInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor,
       ViewTimelineEventInteractor viewTimelineEventInteractor,
-      PutLastStreamVisitInteractor putLastStreamVisitInteractor, ReshootInteractor reshootInteractor,
-      UndoReshootInteractor undoReshootInteractor, ShotModelMapper shotModelMapper,
-      StreamModelMapper streamModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory,
-      Poller poller, UpdateWatchNumberInteractor updateWatchNumberInteractor,
+      PutLastStreamVisitInteractor putLastStreamVisitInteractor,
+      ReshootInteractor reshootInteractor, UndoReshootInteractor undoReshootInteractor,
+      ShotModelMapper shotModelMapper, StreamModelMapper streamModelMapper, @Main Bus bus,
+      ErrorMessageFactory errorMessageFactory, Poller poller,
+      UpdateWatchNumberInteractor updateWatchNumberInteractor,
       UpdateStreamInteractor updateStreamInteractor,
       GetNewFilteredShotsInteractor getNewFilteredShotsInteractor,
       GetConnectionTimesInteractor getConnectionTimesInteractor,
@@ -687,20 +688,20 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
     topic = trimTopicAndNullWhenEmpty(topic);
 
     updateStreamInteractor.updateStreamMessage(streamId, topic, notifyMessage,
-        new UpdateStreamInteractor.Callback() {
-          @Override public void onLoaded(Stream stream) {
-            streamTopic = stream.getTopic();
-            if (streamTopic != null && !streamTopic.isEmpty()) {
-              streamTimelineView.showPinnedMessage(streamTopic);
-            } else {
-              streamTimelineView.hidePinnedMessage();
-            }
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
-          }
-        });
+        streamModel.getVideoUrl(), new UpdateStreamInteractor.Callback() {
+      @Override public void onLoaded(Stream stream) {
+        streamTopic = stream.getTopic();
+        if (streamTopic != null && !streamTopic.isEmpty()) {
+          streamTimelineView.showPinnedMessage(streamTopic);
+        } else {
+          streamTimelineView.hidePinnedMessage();
+        }
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        streamTimelineView.showError(errorMessageFactory.getCommunicationErrorMessage());
+      }
+    });
   }
 
   private String trimTopicAndNullWhenEmpty(String streamTopic) {
@@ -838,5 +839,4 @@ public class StreamTimelinePresenter implements Presenter, ShotSent.Receiver {
       adsManager.loadAds();
     }
   }
-
 }
