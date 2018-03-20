@@ -93,7 +93,10 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_action_private_message) String analyticsActionSendPrivateMessage;
   @BindString(R.string.analytics_label_private_message) String analyticsLabelSendPrivateMessage;
   @BindString(R.string.analytics_source_timeline) String timelineSource;
+  @BindString(R.string.analytics_source_private_messages_timeline) String privateMessagesSource;
   @BindString(R.string.not_allowed_blocked_user) String messageBlockedUserError;
+  @BindString(R.string.analytics_action_open_video) String analyticsActionOpenVideo;
+  @BindString(R.string.analytics_label_open_video) String analyticsLabelOpenVideo;
 
   private MessagesTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -372,6 +375,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   private void openExternalVideoInApp(String videoId) {
+    sendOpenVideoAnalytics();
     BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
     bottomYoutubeVideoPlayer.setVideoId(videoId);
     bottomYoutubeVideoPlayer.setVideoPlayerCallback(
@@ -455,6 +459,19 @@ public class PrivateMessageTimelineFragment extends BaseFragment
     builder.setActionId(analyticsActionSendPrivateMessage);
     builder.setLabelId(analyticsLabelSendPrivateMessage);
     builder.setSource(timelineSource);
+    builder.setIdTargetUser(idTargetUser);
+    builder.setTargetUsername(streamTitle);
+    builder.setUser(sessionRepository.getCurrentUser());
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendOpenVideoAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenVideo);
+    builder.setLabelId(analyticsLabelOpenVideo);
+    builder.setSource(privateMessagesSource);
     builder.setIdTargetUser(idTargetUser);
     builder.setTargetUsername(streamTitle);
     builder.setUser(sessionRepository.getCurrentUser());

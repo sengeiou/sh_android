@@ -94,6 +94,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @BindString(R.string.analytics_source_shot_detail) String shotDetailSource;
   @BindString(R.string.analytics_source_ctashot_detail) String ctaShotSource;
   @BindString(R.string.stream_checked) String streamChecked;
+  @BindString(R.string.analytics_action_open_video) String analyticsActionOpenVideo;
+  @BindString(R.string.analytics_label_open_video) String analyticsLabelOpenVideo;
 
   @Inject ImageLoader imageLoader;
   @Inject TimeFormatter timeFormatter;
@@ -254,6 +256,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setContext(getBaseContext());
     builder.setActionId(analyticsActionShareShot);
     builder.setLabelId(analyticsLabelShareShot);
+    builder.setSource(shotDetailSource);
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIdTargetUser(idUser);
+    if (detailAdapter.getMainShot() != null) {
+      builder.setTargetUsername(detailAdapter.getMainShot().getUsername());
+      builder.setIdStream(detailAdapter.getMainShot().getStreamId());
+      builder.setStreamName(detailAdapter.getMainShot().getStreamTitle());
+    }
+    analyticsTool.analyticsSendAction(builder);
+  }
+
+  private void sendOpenVideoAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getBaseContext());
+    builder.setActionId(analyticsActionOpenVideo);
+    builder.setLabelId(analyticsLabelOpenVideo);
     builder.setSource(shotDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
     builder.setIdTargetUser(idUser);
@@ -568,6 +586,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   private void openExternalVideoInApp(String videoId) {
+    sendOpenVideoAnalytics();
     BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
     bottomYoutubeVideoPlayer.setVideoId(videoId);
     bottomYoutubeVideoPlayer.setVideoPlayerCallback(

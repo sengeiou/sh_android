@@ -197,6 +197,8 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.analytics_action_checkin) String analyticsActionCheckin;
   @BindString(R.string.analytics_action_favorite_stream) String analyticsActionFavoriteStream;
   @BindString(R.string.analytics_label_favorite_stream) String analyticsLabelFavoriteStream;
+  @BindString(R.string.analytics_action_open_video) String analyticsActionOpenVideo;
+  @BindString(R.string.analytics_label_open_video) String analyticsLabelOpenVideo;
   @BindString(R.string.analytics_action_filter_on_stream) String analyticsActionFilterOnStream;
   @BindString(R.string.analytics_label_filter_on_stream) String analyticsLabelFilterOnStream;
   @BindString(R.string.analytics_action_filter_off_stream) String analyticsActionFilterOffStream;
@@ -472,6 +474,21 @@ public class StreamTimelineFragment extends BaseFragment
     builder.setContext(getContext());
     builder.setActionId(analyticsActionFavoriteStream);
     builder.setLabelId(analyticsLabelFavoriteStream);
+    builder.setSource(timelineSource);
+    builder.setIdStream(idStream);
+    builder.setStreamName((streamTitle != null) ? streamTitle
+        : sessionRepository.getCurrentUser().getWatchingStreamTitle());
+    builder.setUser(sessionRepository.getCurrentUser());
+    builder.setIsStrategic(streamTimelinePresenter.isStrategic());
+    analyticsTool.analyticsSendAction(builder);
+    analyticsTool.appsFlyerSendAction(builder);
+  }
+
+  private void sendOpenVideoAnalytics() {
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(getContext());
+    builder.setActionId(analyticsActionOpenVideo);
+    builder.setLabelId(analyticsLabelOpenVideo);
     builder.setSource(timelineSource);
     builder.setIdStream(idStream);
     builder.setStreamName((streamTitle != null) ? streamTitle
@@ -807,6 +824,7 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void openExternalVideoInApp(String videoId) {
+    sendOpenVideoAnalytics();
     BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
     bottomYoutubeVideoPlayer.setVideoId(videoId);
     bottomYoutubeVideoPlayer.setVideoPlayerCallback(
