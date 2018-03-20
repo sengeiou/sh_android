@@ -511,16 +511,16 @@ public class TimelineFragment extends BaseFragment
 
     BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
     bottomYoutubeVideoPlayer.setVideoId(videoId);
-    bottomYoutubeVideoPlayer.setVideoPlayerCallback(new BottomYoutubeVideoPlayer.videoPlayerCallback() {
-      @Override public void onDismiss() {
-        if (shouldLoadVideAfterResume) {
-          if (shouldLoadVideAfterResume) {
-            shouldLoadVideAfterResume = false;
-            renderExternalVideo(currentVideoModel);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            if (shouldLoadVideAfterResume) {
+              shouldLoadVideAfterResume = false;
+              renderExternalVideo(currentVideoModel);
+              hideVideoMenuItem.setVisible(false);
+            }
           }
-        }
-      }
-    });
+        });
 
     bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
         bottomYoutubeVideoPlayer.getTag());

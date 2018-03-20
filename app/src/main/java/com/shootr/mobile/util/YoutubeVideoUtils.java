@@ -14,7 +14,7 @@ public class YoutubeVideoUtils implements ExternalVideoUtils {
   @Override public String getVideoId(String url) {
     Pattern compiledPattern = Pattern.compile(PATTERN);
     Matcher matcher = compiledPattern.matcher(url);
-    if(matcher.find()){
+    if (matcher.find()) {
       return matcher.group();
     }
     return null;

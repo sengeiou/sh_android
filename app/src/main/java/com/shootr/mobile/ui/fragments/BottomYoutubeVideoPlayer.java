@@ -23,7 +23,7 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
   private String videoId;
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
 
-  private videoPlayerCallback videoPlayerCallback;
+  private VideoPlayerCallback playerCallback;
   private YouTubePlayer youTubePlayer;
 
   public BottomYoutubeVideoPlayer() {
@@ -71,8 +71,8 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
   }
 
   public void setVideoPlayerCallback(
-      BottomYoutubeVideoPlayer.videoPlayerCallback videoPlayerCallback) {
-    this.videoPlayerCallback = videoPlayerCallback;
+      BottomYoutubeVideoPlayer.VideoPlayerCallback videoPlayerCallback) {
+    this.playerCallback = videoPlayerCallback;
   }
 
   public void setVideoId(String videoId) {
@@ -85,13 +85,13 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
 
   @Override public void onDismiss(DialogInterface dialog) {
     super.onDismiss(dialog);
-    if (this.videoPlayerCallback != null) {
+    if (this.playerCallback != null) {
       youTubePlayer.release();
-      this.videoPlayerCallback.onDismiss();
+      this.playerCallback.onDismiss();
     }
   }
 
-  public interface videoPlayerCallback {
+  public interface VideoPlayerCallback {
     void onDismiss();
   }
 }
