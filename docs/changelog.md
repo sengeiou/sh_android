@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.55.8] - 2018-03-20
+### Fixed
+- Fix crash on enter stream (videoStreamURL)
+
 ## [1.55.7] - 2018-03-20
 ### Added
 - Video Stream Creation
