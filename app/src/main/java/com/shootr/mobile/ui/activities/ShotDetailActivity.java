@@ -36,6 +36,7 @@ import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShareClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.fragments.BottomYoutubeVideoPlayer;
 import com.shootr.mobile.ui.fragments.NewShotBarViewDelegate;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
@@ -48,6 +49,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.Intents;
@@ -107,6 +109,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   @Inject CrashReportTool crashReportTool;
   @Inject AnalyticsTool analyticsTool;
   @Inject SessionRepository sessionRepository;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   private PhotoPickerController photoPickerController;
   private NewShotBarViewDelegate newShotBarViewDelegate;
@@ -553,9 +556,29 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   private void onShotVideoClick(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
+  }
+
+  private void openExternalVideoInApp(String videoId) {
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            /* no-op */
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
   }
 
   @OnClick(R.id.shot_bar_text) public void onReplyClick() {

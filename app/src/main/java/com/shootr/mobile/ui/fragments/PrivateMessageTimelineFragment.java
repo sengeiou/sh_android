@@ -49,6 +49,7 @@ import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.CrashReportTool;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.MenuItemValueHolder;
@@ -79,6 +80,7 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   @Inject WritePermissionManager writePermissionManager;
   @Inject CrashReportTool crashReportTool;
   @Inject SessionRepository sessionRepository;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   @BindView(R.id.timeline_shot_list) RecyclerView messageRecycler;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -358,9 +360,29 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
+  }
+
+  private void openExternalVideoInApp(String videoId) {
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            /* no-op */
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
   }
 
   private void setStreamTitle(String streamTitle) {

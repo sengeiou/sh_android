@@ -106,6 +106,7 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.CustomContextMenu;
+import com.shootr.mobile.util.ExternalVideoUtils;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.FormatNumberUtils;
 import com.shootr.mobile.util.ImageLoader;
@@ -163,6 +164,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Inject FormatNumberUtils formatNumberUtils;
   @Inject @CheckInShowcaseStatus ShowcasePreference checkInShowcasePreferences;
   @Inject NativeAdsManager adsManager;
+  @Inject ExternalVideoUtils externalVideoUtils;
 
   @BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
   @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
@@ -793,10 +795,31 @@ public class StreamTimelineFragment extends BaseFragment
   }
 
   private void openVideo(String url) {
-    Uri uri = Uri.parse(url);
-    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-    startActivity(intent);
+    String videoId = externalVideoUtils.getVideoId(url);
+
+    if (videoId != null) {
+      openExternalVideoInApp(videoId);
+    } else {
+      Uri uri = Uri.parse(url);
+      Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+      startActivity(intent);
+    }
   }
+
+  private void openExternalVideoInApp(String videoId) {
+    BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
+    bottomYoutubeVideoPlayer.setVideoId(videoId);
+    bottomYoutubeVideoPlayer.setVideoPlayerCallback(
+        new BottomYoutubeVideoPlayer.VideoPlayerCallback() {
+          @Override public void onDismiss() {
+            /* no-op */
+          }
+        });
+
+    bottomYoutubeVideoPlayer.show(getActivity().getSupportFragmentManager(),
+        bottomYoutubeVideoPlayer.getTag());
+  }
+
 
   private void shareShotIntent(ShotModel shotModel) {
     Intent shareIntent = shareManager.shareShotIntent(getActivity(), shotModel);
