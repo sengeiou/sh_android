@@ -2,15 +2,12 @@ package com.shootr.mobile.util;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import com.appsflyer.AppsFlyerLib;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.mixpanel.android.mpmetrics.MixpanelAPI;
-import com.mixpanel.android.mpmetrics.OnMixpanelTweaksUpdatedListener;
-import com.mixpanel.android.mpmetrics.OnMixpanelUpdatesReceivedListener;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.user.User;

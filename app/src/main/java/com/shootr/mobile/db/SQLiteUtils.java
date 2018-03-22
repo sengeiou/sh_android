@@ -22,16 +22,12 @@ public class SQLiteUtils {
       + " VARCHAR(255),"
       + DatabaseContract.UserTable.PHOTO
       + " VARCHAR(1024) NULL,"
-      + DatabaseContract.UserTable.POINTS
-      + " INT NULL,"
       + DatabaseContract.UserTable.NUM_FOLLOWINGS
       + " INT NOT NULL,"
       + DatabaseContract.UserTable.NUM_FOLLOWERS
       + " INT NOT NULL,"
       + DatabaseContract.UserTable.WEBSITE
       + " VARCHAR(255),"
-      + DatabaseContract.UserTable.RANK
-      + " INT,"
       + DatabaseContract.UserTable.BIO
       + " VARCHAR(150),"
       + DatabaseContract.UserTable.NAME_NORMALIZED
@@ -58,8 +54,6 @@ public class SQLiteUtils {
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.ANALYTICS_USER_TYPE
       + " TEXT NULL,"
-      + DatabaseContract.UserTable.NUM_MUTUALS
-      + " INTEGER NULL,"
       + DatabaseContract.UserTable.FIRST_SESSION_ACTIVATION
       + " INTEGER NULL,"
       + DatabaseContract.UserTable.STRATEGIC

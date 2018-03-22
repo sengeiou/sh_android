@@ -27,7 +27,6 @@ public class UserEntityMapper {
     user.setNumFollowers(userEntity.getNumFollowers());
     user.setWebsite(userEntity.getWebsite());
     user.setBio(userEntity.getBio());
-    user.setPoints(userEntity.getPoints());
     user.setShareLink(userEntity.getShareLink());
     user.setIdWatchingStream(userEntity.getIdWatchingStream());
     user.setWatchingStreamTitle(userEntity.getWatchingStreamTitle());
@@ -45,7 +44,6 @@ public class UserEntityMapper {
     }
     user.setVerifiedUser(userEntity.getVerifiedUser() != null && userEntity.getVerifiedUser() == 1);
     user.setSocialLogin(userEntity.getSocialLogin() == null ? false : userEntity.getSocialLogin());
-    user.setNumMutuals(userEntity.getNumMutuals());
     user.setFirstSessionActivation(userEntity.isFirstSessionActivation());
 
     user.setFollowing(userEntity.isFollowing());
@@ -77,7 +75,6 @@ public class UserEntityMapper {
     userEntity.setEmailConfirmed(user.isEmailConfirmed() ? 1 : 0);
     userEntity.setVerifiedUser(user.isVerifiedUser() ? 1 : 0);
     userEntity.setPhoto(user.getPhoto());
-    userEntity.setPoints(user.getPoints());
     userEntity.setNumFollowings(user.getNumFollowings());
     userEntity.setNumFollowers(user.getNumFollowers());
     userEntity.setWebsite(user.getWebsite());

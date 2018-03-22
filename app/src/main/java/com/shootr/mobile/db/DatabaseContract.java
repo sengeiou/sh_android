@@ -48,10 +48,8 @@ public class DatabaseContract {
     public static final String PHOTO = "photo";
     public static final String NUM_FOLLOWERS = "numFollowers";
     public static final String NUM_FOLLOWINGS = "numFollowings";
-    public static final String POINTS = "points";
     public static final String WEBSITE = "website";
     public static final String BIO = "bio";
-    public static final String RANK = "rank";
     public static final String NAME_NORMALIZED = "nameNormalized";
     public static final String USER_NAME_NORMALIZED = "userNameNormalized";
     public static final String EMAIL_NORMALIZED = "emailNormalized";
@@ -66,7 +64,6 @@ public class DatabaseContract {
     public static final String SOCIAL_LOGIN = "socialLogin";
     public static final String RECEIVED_REACTIONS = "receivedReactions";
     public static final String ANALYTICS_USER_TYPE = "analyticsUserType";
-    public static final String NUM_MUTUALS = "numMutuals";
     public static final String FIRST_SESSION_ACTIVATION = "firstSessionActivation";
     public static final String STRATEGIC = "strategic";
     public static final String FOLLOWING = "following";
@@ -75,9 +72,9 @@ public class DatabaseContract {
 
     public static final String[] PROJECTION = {
         ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
-        NUM_FOLLOWINGS, POINTS, WEBSITE, BIO, RANK, JOIN_STREAM_DATE, ID_WATCHING_STREAM,
+        NUM_FOLLOWINGS, WEBSITE, BIO, JOIN_STREAM_DATE, ID_WATCHING_STREAM,
         WATCHING_STREAM_TITLE, WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT,
-        FAVORITED_STREAMS_COUNT, SOCIAL_LOGIN, RECEIVED_REACTIONS, ANALYTICS_USER_TYPE, NUM_MUTUALS,
+        FAVORITED_STREAMS_COUNT, SOCIAL_LOGIN, RECEIVED_REACTIONS, ANALYTICS_USER_TYPE,
         FIRST_SESSION_ACTIVATION, STRATEGIC, FOLLOWING, MUTED, SHARE_LINK, BIRTH, MODIFIED, DELETED,
         REVISION, SYNCHRONIZED
     };

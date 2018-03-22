@@ -21,7 +21,6 @@ public class User implements Searchable, Followable {
   private Long numFollowers;
   private String website;
   private String bio;
-  private Long points;
   private Long joinStreamDate;
   private String idWatchingStream;
   private String watchingStreamTitle;
@@ -33,7 +32,6 @@ public class User implements Searchable, Followable {
   private boolean socialLogin;
   private String analyticsUserType;
   private Long receivedReactions;
-  private Long numMutuals;
   private Boolean firstSessionActivation;
   private boolean isStrategic;
   private boolean muted;
@@ -117,14 +115,6 @@ public class User implements Searchable, Followable {
 
   public void setBio(String bio) {
     this.bio = bio;
-  }
-
-  public Long getPoints() {
-    return points;
-  }
-
-  public void setPoints(Long points) {
-    this.points = points;
   }
 
   public boolean isFollowing() {
@@ -268,14 +258,6 @@ public class User implements Searchable, Followable {
 
   public Date getSignUpDate() {
     return metadata.getBirth();
-  }
-
-  public Long getNumMutuals() {
-    return numMutuals;
-  }
-
-  public void setNumMutuals(Long numMutuals) {
-    this.numMutuals = numMutuals;
   }
 
   public Boolean isFirstSessionActivation() {
