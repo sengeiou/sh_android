@@ -42,6 +42,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String FAVORITES = "Favorites";
   private static final String FOLLOWING = "Follows";
   private static final String FOLLOWERS = "Followers";
+  private static final String SIGNUP_METHOD = "Signup method";
   private static final String PLATFORM_TYPE = "shootrPlatform";
   private static final String ANDROID_PLATFORM = "shootrAndroid";
   private static final String FIRST_SESSION_ACTIVATION = "firstSessionActivation";
@@ -226,6 +227,9 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
         props.put(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
+        if (actionId.equals(R.string.analytics_action_signup)) {
+          props.put(SIGNUP_METHOD, user.isSocialLogin() ? "Facebook" : "Email");
+        }
         props.put(ID_USER, user.getIdUser());
         if (firstSession != null) {
           props.put(FIRST_SESSION, firstSession);
