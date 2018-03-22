@@ -24,10 +24,6 @@ public interface AnalyticsTool {
 
   void reset();
 
-  long getDiscoverTweak();
-
-  void identify(User currentUser);
-
   class Builder {
 
     Context context;
@@ -166,14 +162,6 @@ public interface AnalyticsTool {
 
     public void setIdPoll(String idPoll) {
       this.idPoll = idPoll;
-    }
-
-    public String getLoginType() {
-      return loginType;
-    }
-
-    public void setLoginType(String loginType) {
-      this.loginType = loginType;
     }
 
     public Boolean hasNewContent() {

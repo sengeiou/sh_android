@@ -42,20 +42,12 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String FAVORITES = "Favorites";
   private static final String FOLLOWING = "Follows";
   private static final String FOLLOWERS = "Followers";
-  private static final String SIGNUP_METHOD = "Signup method";
-  private static final String EMAIL = "$email";
-  private static final String FIRST_NAME = "$first_name";
-  private static final String ACTIVATED = "Activated";
-  private static final String TYPE = "Type";
-  private static final String LASTDATE = "LastDate";
   private static final String PLATFORM_TYPE = "shootrPlatform";
   private static final String ANDROID_PLATFORM = "shootrAndroid";
-  private static final String SIGN_UP_DATE = "signupDate";
-  private static final String NUM_MUTUALS = "Mutuals";
   private static final String FIRST_SESSION_ACTIVATION = "firstSessionActivation";
+  private static final String ID_USER = "idUser";
   private static final String FIRST_SESSION = "firstSession";
   private static final String STRATEGIC = "strategic";
-  private static final String NOTIFICATIONS = "notifications";
   private static final String NEW_CONTENT = "newContent";
   private final String ACTION = "action";
   private Tracker tracker;
@@ -83,27 +75,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     appsFlyerLib.startTracking(application, APPSFLYER);
   }
 
-  private void storeUserMixPanel() {
-    mixpanel.getPeople().set(SIGNUP_METHOD, user.isSocialLogin() ? "Facebook" : "Email");
-    mixpanel.getPeople().set(EMAIL, user.getEmail());
-    mixpanel.getPeople().set(FIRST_NAME, user.getUsername());
-    mixpanel.getPeople().set(ACTIVATED, user.getReceivedReactions() == 1L);
-    mixpanel.getPeople().set(TYPE, user.getAnalyticsUserType());
-    mixpanel.getPeople().set(DISTINCT_ID, user.getIdUser());
-    mixpanel.getPeople().set(FOLLOWERS, user.getNumFollowers());
-    mixpanel.getPeople().set(FOLLOWING, user.getNumFollowings());
-    mixpanel.getPeople().set(FAVORITES, user.getFavoritedStreamsCount());
-    mixpanel.getPeople().set(PLATFORM_TYPE, ANDROID_PLATFORM);
-    mixpanel.getPeople().set(LASTDATE, new Date());
-    mixpanel.getPeople().set(SIGN_UP_DATE, user.getSignUpDate());
-    mixpanel.getPeople().set(NUM_MUTUALS, user.getNumMutuals());
-    mixpanel.getPeople().set(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
-    if (appContext != null) {
-      mixpanel.getPeople()
-          .set(NOTIFICATIONS, NotificationManagerCompat.from(appContext).areNotificationsEnabled());
-    }
-  }
-
   @Override public void sendOpenAppMixPanelAnalytics(String actionId, Context context) {
     try {
       JSONObject props = new JSONObject();
@@ -116,18 +87,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   }
 
   @Override public void sendSignUpEvent(User newUser, String actionId, Context context) {
-    try {
-      JSONObject props = new JSONObject();
-      mixpanel = MixpanelAPI.
-          getInstance(context, (BuildConfig.DEBUG) ? MIX_PANEL_TST : MIX_PANEL_PRO);
-      mixpanel.alias(newUser.getIdUser(), mixpanel.getDistinctId());
-      mixpanel.getPeople().identify(newUser.getIdUser());
-      mixpanel.getPeople().set(DISTINCT_ID, newUser.getIdUser());
-      mixpanel.track(actionId, props);
-      mixpanel.flush();
-    } catch (NullPointerException error) {
-      Log.e("Shootr", "Unable to build mixPanel object", error);
-    }
     sendSignupToApsFlyer(actionId, context);
   }
 
@@ -147,12 +106,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
   @Override public void setUser(User user) {
     this.user = user;
-    try {
-      tracker.set("&uid", user.getIdUser());
-      storeUserMixPanel();
-    } catch (NullPointerException error) {
-      /* no-op */
-    }
   }
 
   @Override public void analyticsStart(Context context, String name) {
@@ -184,7 +137,6 @@ public class GenericAnalyticsTool implements AnalyticsTool {
       String stream = builder.getStreamName();
       String idPoll = builder.getIdPoll();
       String idShot = builder.getIdShot();
-      String loginType = builder.getLoginType();
       Boolean isStrategic = builder.getIsStrategic();
       Boolean newContent = builder.hasNewContent();
       Boolean firstSession = false;
@@ -193,8 +145,8 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         firstSession = (getSignUpDatePlusHour(user.getSignUpDate()).compareTo(new Date()) > 0);
       }
       sendMixPanelAnalytics(user, actionId, source, idTargetUser, targetUsername, notificationName,
-          pushRedirection, idStream, stream, idPoll, idShot, loginType, firstSession, isStrategic,
-          newContent, context);
+          pushRedirection, idStream, stream, idPoll, idShot, firstSession, isStrategic, newContent,
+          context);
     }
 
     sendGoogleAnalytics(context, action, actionId, labelId);
@@ -260,42 +212,13 @@ public class GenericAnalyticsTool implements AnalyticsTool {
     }
   }
 
-  @Override public long getDiscoverTweak() {
-    return 0;
-  }
-
-  @Override public void identify(User currentUser) {
-    try {
-      mixpanel.identify(currentUser.getIdUser());
-      mixpanel.flush();
-      mixpanel.getPeople()
-          .addOnMixpanelUpdatesReceivedListener(new OnMixpanelUpdatesReceivedListener() {
-            @Override public void onMixpanelUpdatesReceived() {
-              if (mixpanel.getPeople().getDistinctId() != null) {
-                mixpanel.getPeople().joinExperimentIfAvailable();
-              }
-            }
-          });
-      mixpanel.getPeople()
-          .addOnMixpanelTweaksUpdatedListener(new OnMixpanelTweaksUpdatedListener() {
-            @Override public void onMixpanelTweakUpdated() {
-
-            }
-          });
-    } catch (NullPointerException error) {
-      /* no-op */
-    }
-  }
-
   private void sendMixPanelAnalytics(User user, String actionId, String source, String idTargetUser,
       String targetUsername, String notificationName, String pushRedirection, String idStream,
-      String streamName, String idPoll, String idShot, String loginType, Boolean firstSession,
-      Boolean isStrategic, Boolean newContent, Context context) {
+      String streamName, String idPoll, String idShot, Boolean firstSession, Boolean isStrategic,
+      Boolean newContent, Context context) {
     try {
       JSONObject props = new JSONObject();
       if (user != null) {
-        mixpanel.identify(user.getIdUser());
-        mixpanel.getPeople().identify(user.getIdUser());
         props.put(DISTINCT_ID, user.getIdUser());
         props.put(ACTIVATED_USER, user.getReceivedReactions() == 1L);
         props.put(USER_TYPE, user.getAnalyticsUserType());
@@ -303,6 +226,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
         props.put(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
+        props.put(ID_USER, user.getIdUser());
         if (firstSession != null) {
           props.put(FIRST_SESSION, firstSession);
         }
