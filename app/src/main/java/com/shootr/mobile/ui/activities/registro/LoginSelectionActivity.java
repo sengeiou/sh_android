@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -115,8 +116,10 @@ public class LoginSelectionActivity extends BaseActivity {
   private void setupStatusBarColor() {
     View decorView = getWindow().getDecorView();
     int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-    decorView.setSystemUiVisibility(uiOptions);
-    android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+      decorView.setSystemUiVisibility(uiOptions);
+    }
+    ActionBar actionBar = getSupportActionBar();
     if (actionBar != null) {
       actionBar.hide();
     }
