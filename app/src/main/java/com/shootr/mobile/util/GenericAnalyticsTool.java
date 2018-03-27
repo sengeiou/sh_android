@@ -27,7 +27,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
   private static final String DISTINCT_ID = "distinct_id";
   private static final String ID_STREAM = "idStream";
   private static final String STREAM_TITLE = "streamTitle";
-  private static final String ACTIVATED_USER = "activatedUser";
+  private static final String ACTIVATED_USER = "Activated";
   private static final String USER_TYPE = "userType";
   private static final String SOURCE = "source";
   private static final String ID_TARGET_USER = "idTargetUser";
@@ -86,6 +86,12 @@ public class GenericAnalyticsTool implements AnalyticsTool {
 
   @Override public void sendSignUpEvent(User newUser, String actionId, Context context) {
     sendSignupToApsFlyer(actionId, context);
+    AnalyticsTool.Builder builder = new AnalyticsTool.Builder();
+    builder.setContext(context);
+    builder.setActionId(actionId);
+    builder.setLabelId(actionId);
+    builder.setUser(newUser);
+    analyticsSendAction(builder);
   }
 
   private void sendSignupToApsFlyer(String actionId, Context context) {
@@ -224,7 +230,7 @@ public class GenericAnalyticsTool implements AnalyticsTool {
         props.put(FOLLOWING, user.getNumFollowings());
         props.put(FOLLOWERS, user.getNumFollowers());
         props.put(FIRST_SESSION_ACTIVATION, user.isFirstSessionActivation());
-        if (actionId.equals(R.string.analytics_action_signup)) {
+        if (actionId.equals(context.getString(R.string.analytics_action_signup))) {
           props.put(SIGNUP_METHOD, user.isSocialLogin() ? "Facebook" : "Email");
         }
         props.put(ID_USER, user.getIdUser());
