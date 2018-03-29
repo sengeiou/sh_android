@@ -244,9 +244,6 @@ public class TimelineFragment extends BaseFragment
 
   private Integer[] watchNumberCount;
 
-  private PrintableModel shotStored;
-  private int offset;
-
   private boolean isFullScreen;
   private YouTubePlayer videoPlayer;
 
@@ -1124,8 +1121,9 @@ public class TimelineFragment extends BaseFragment
       int firstVisiblePosition = preCachingLayoutManager.findFirstCompletelyVisibleItemPosition();
       View v = preCachingLayoutManager.findViewByPosition(firstVisiblePosition);
 
-      shotStored = adapter.itemForIndex(firstVisiblePosition > 0 ? firstVisiblePosition : 0);
-      offset = v == null ? 0 : v.getTop();
+      PrintableModel shotStored =
+          adapter.itemForIndex(firstVisiblePosition > 0 ? firstVisiblePosition : 0);
+      int offset = v == null ? 0 : v.getTop();
 
       timelinePresenter.putItemForReposition(shotStored, offset);
     } catch (IndexOutOfBoundsException exception) {
