@@ -171,9 +171,7 @@ public class TimelineFragment extends BaseFragment
   @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
   @BindView(R.id.player) FrameLayout player;
   @BindView(R.id.container) ConstraintLayout container;
-  /*@BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
-  @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;*/
+  //@BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
