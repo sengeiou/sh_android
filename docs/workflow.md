@@ -25,7 +25,7 @@ Se recomienda hacer ./gradlew lint para comprobar que no falten strings traducid
   - Se actualiza el Changelog.
   - Todo esto en un commit tipo `Bump version for vX.Y.z final release` o parecido.
 4. Finalizar la release con `git flow release finish`. Se realizará un merge con master, se creará un tag, y se realizará un merge del tag con develop. Comprobar que estás en master (se suele hacer automáticamente).
-5. En develop, incrementar el número de revisión y quitar el flag de snapshot. Es el típico commit con mensaje `Bump version for next release vX.Y.z-snapshot`
+5. En develop, incrementar el número de revisión y quitar el flag de snapshot. Es el típico commit con mensaje `Bump version for next release vX.Y.z-snapshot` (z=z+1)
 6. Hacer push de master, develop, **y tags** (git push --tags).
 7. En master se tiene la última versión de release, por lo que se hace ./gradlew clean build para generar una apk.
 8. Esta apk generada deberá ser subida a Beta de Crashlytics para que todos los usuarios la tengan disponible.
