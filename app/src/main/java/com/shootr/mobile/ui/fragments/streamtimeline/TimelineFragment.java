@@ -853,7 +853,8 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void storeCtaClickLink(ShotModel shotModel) {
-
+    timelinePresenter.storeClickCount();
+    sendOpenCtaLinkAnalythics(shotModel);
   }
 
   @Override public void showFilterAlert() {
