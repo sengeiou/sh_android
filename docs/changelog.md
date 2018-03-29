@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.56.0] - 2018-03-29
+### Fixed
+- Socket reconnection on new library
+- Socket logs on error on new library
+- Signup method on mixpanel (event instead of user)
+- Clean code on new timeline
+- CtaLink Shot counter and analythics
+
+### Changed
+- Updated some libraries (facebook, mockito, firebase, ...)
+- New properties on mixpanel events
+- Icon on videos
+
+### Added
+- New viewer of Youtube videos on old and timeline
+
 ## [1.55.8] - 2018-03-20
 ### Fixed
 - Fix crash on enter stream (videoStreamURL)
