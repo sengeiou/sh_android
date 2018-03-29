@@ -276,30 +276,6 @@ public class UserAssert extends AbstractAssert<UserAssert, User> {
     }
 
     /**
-     * Verifies that the actual User's points is equal to the given one.
-     *
-     * @param points the given points to compare the actual User's points to.
-     * @return this assertion object.
-     * @throws AssertionError - if the actual User's points is not equal to the given one.
-     */
-    public UserAssert hasPoints(Long points) {
-        // check that actual User we want to make assertions on is not null.
-        isNotNull();
-
-        // overrides the default error message with a more explicit one
-        String assertjErrorMessage = "\nExpected points of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
-
-        // null safe check
-        Long actualPoints = actual.getPoints();
-        if (!Objects.areEqual(actualPoints, points)) {
-            failWithMessage(assertjErrorMessage, actual, points, actualPoints);
-        }
-
-        // return the current assertion for method chaining
-        return this;
-    }
-
-    /**
      * Verifies that the actual User's username is equal to the given one.
      *
      * @param username the given username to compare the actual User's username to.
