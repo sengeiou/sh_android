@@ -133,8 +133,6 @@ public class TimelineFragment extends BaseFragment
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
-  public static final String EXTRA_ID_USER = "userId";
-  public static final String TAG = "timeline";
 
   private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
 
@@ -235,7 +233,6 @@ public class TimelineFragment extends BaseFragment
   private Unbinder unbinder;
   private String idStream;
   private String streamTitle;
-  private String streamAuthorIdUser;
   private StreamTimelineAdapter adapter;
   private AlertDialog shotImageDialog;
 
@@ -296,7 +293,6 @@ public class TimelineFragment extends BaseFragment
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
-    streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     idStream = getArguments().getString(EXTRA_STREAM_ID);
     sessionRepository.resetFilter(idStream);
     initializePresenters();
