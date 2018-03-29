@@ -219,6 +219,7 @@ public class TimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
   @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
   @BindString(R.string.no_filter_shots) String emptyFilter;
+  @BindString(R.string.top_indicator) String topIndicator;
 
   private MenuItemValueHolder importantItemsMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder allItemsMenuItem = new MenuItemValueHolder();
@@ -345,7 +346,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
-    newShotsNotificatorText.setText("Arriba  ↑");
+    newShotsNotificatorText.setText(topIndicator);
     itemsList.scrollToPosition(0);
   }
 

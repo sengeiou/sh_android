@@ -305,6 +305,7 @@
   <string name="not_allowed_blocked_user">Has bloquejat aquest usuari. Desbloqueja per enviar missatges.</string>
   <string name="now">ara</string>
   <string name="no_filter_shots">No hi ha shots teus o de comptes verificats.</string>
+  <string name="top_indicator">Amunt  ↑</string>
   <string name="no_intent_handler">No hi ha aplicacions disponibles per realitzar aquesta acció.</string>
   <string name="official_poll_button_text">Anar a Notificacions</string>
   <string name="official_poll_description">Per garantir un sol vot per compte i dispositiu, abans de votar has d\'activar les notificacions de Shootr.</string>

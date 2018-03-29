@@ -306,6 +306,7 @@
   <string name="not_allowed_blocked_user">Você bloqueou este usuário. Desbloqueie para enviar mensagens.</string>
   <string name="now">agora</string>
   <string name="no_filter_shots">Não há shots seus ou de contas verificadas.</string>
+  <string name="top_indicator">Top  ↑</string>
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="official_poll_button_text">Ir a Notificações</string>
   <string name="official_poll_description">Para garantir um só voto por conta e dispositivo, antes de votar você deve ativar as notificações do Shootr.</string>
