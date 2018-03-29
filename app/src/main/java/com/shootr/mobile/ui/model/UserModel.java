@@ -15,7 +15,6 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private Long numFollowers;
   private String website;
   private String bio;
-  private Long points;
   private String streamWatchingId;
   private String streamWatchingTitle;
   private String joinStreamDate;
@@ -70,14 +69,6 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
 
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  public Long getPoints() {
-    return points;
-  }
-
-  public void setPoints(Long points) {
-    this.points = points;
   }
 
   public String getIdUser() {

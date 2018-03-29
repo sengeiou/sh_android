@@ -8,7 +8,6 @@ import com.shootr.mobile.db.mappers.StreamEntityDBMapper;
 import com.shootr.mobile.db.mappers.UserEntityDBMapper;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
-import com.shootr.mobile.ui.model.mappers.UserEntityModelMapper;
 import dagger.Module;
 import dagger.Provides;
 
@@ -29,10 +28,6 @@ import dagger.Provides;
 
   @Provides DeviceEntityDBMapper provideDeviceMapper() {
     return new DeviceEntityDBMapper();
-  }
-
-  @Provides UserEntityModelMapper provideUserVOMapper() {
-    return new UserEntityModelMapper();
   }
 
   @Provides UserEntityDBMapper provideUserMapper() {

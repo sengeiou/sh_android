@@ -35,8 +35,6 @@ public class UserEntityDBMapper extends GenericDBMapper {
     contentValues.put(UserTable.PHOTO, entity.getPhoto());
     contentValues.put(UserTable.NUM_FOLLOWERS, entity.getNumFollowers());
     contentValues.put(UserTable.NUM_FOLLOWINGS, entity.getNumFollowings());
-    contentValues.put(UserTable.POINTS, entity.getPoints());
-    contentValues.put(UserTable.RANK, entity.getRank());
     contentValues.put(UserTable.BIO, entity.getBio());
     contentValues.put(UserTable.WEBSITE, entity.getWebsite());
     contentValues.put(UserTable.NAME_NORMALIZED, normalizedText(entity.getName()));
@@ -54,7 +52,6 @@ public class UserEntityDBMapper extends GenericDBMapper {
         (entity.getSocialLogin() == null ? false : entity.getSocialLogin()));
     contentValues.put(UserTable.RECEIVED_REACTIONS, entity.getReceivedReactions());
     contentValues.put(UserTable.ANALYTICS_USER_TYPE, entity.getAnalyticsUserType());
-    contentValues.put(UserTable.NUM_MUTUALS, entity.getNumMutuals());
     contentValues.put(UserTable.FIRST_SESSION_ACTIVATION,
         (entity.isFirstSessionActivation() == null ? false : entity.isFirstSessionActivation()));
     contentValues.put(UserTable.STRATEGIC, entity.isStrategic());
@@ -75,9 +72,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
     entity.setPhoto(cursor.getString(cursor.getColumnIndex(UserTable.PHOTO)));
     entity.setNumFollowers(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_FOLLOWERS)));
     entity.setNumFollowings(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_FOLLOWINGS)));
-    entity.setPoints(cursor.getLong(cursor.getColumnIndex(UserTable.POINTS)));
     entity.setBio(cursor.getString(cursor.getColumnIndex(UserTable.BIO)));
-    entity.setRank(cursor.getLong(cursor.getColumnIndex(UserTable.RANK)));
     entity.setWebsite(cursor.getString(cursor.getColumnIndex(UserTable.WEBSITE)));
     entity.setIdWatchingStream(
         cursor.getString(cursor.getColumnIndex(UserTable.ID_WATCHING_STREAM)));
@@ -95,7 +90,6 @@ public class UserEntityDBMapper extends GenericDBMapper {
         cursor.getString(cursor.getColumnIndex(UserTable.ANALYTICS_USER_TYPE)));
     entity.setReceivedReactions(
         cursor.getLong(cursor.getColumnIndex(UserTable.RECEIVED_REACTIONS)));
-    entity.setNumMutuals(cursor.getLong(cursor.getColumnIndex(UserTable.NUM_MUTUALS)));
     entity.setFirstSessionActivation(
         (cursor.getInt(cursor.getColumnIndex(UserTable.FIRST_SESSION_ACTIVATION)) == 1));
     entity.setStrategic((cursor.getInt(cursor.getColumnIndex(UserTable.STRATEGIC)) == 1));

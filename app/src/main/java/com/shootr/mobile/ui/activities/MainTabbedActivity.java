@@ -102,10 +102,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     initSocket();
   }
 
-  private void sendOpenToMixpanel() {
-    analyticsTool.identify(sessionRepository.getCurrentUser());
-  }
-
   private void setupBottomBar(Bundle savedInstanceState) {
     bottomBar.setItems(R.xml.bottombar_menu);
     activitiesTab = bottomBar.getTabWithId(R.id.bottombar_activity);
@@ -224,7 +220,6 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
   @Override protected void onResume() {
     super.onResume();
     mainScreenPresenter.resume();
-    sendOpenToMixpanel();
   }
 
   @Override protected void onPause() {
