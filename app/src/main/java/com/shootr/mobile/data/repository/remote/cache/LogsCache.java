@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.os.Build;
+import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.repository.datasource.CachedDataSource;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.util.LogShootr;
@@ -21,11 +22,13 @@ import javax.inject.Singleton;
   private static final String NOT_DEFINED = "not defined";
   private final DualCache<List<LogShootr>> logShootrDualCache;
   private final SessionRepository sessionRepository;
+  private final Context context;
 
   @Inject public LogsCache(DualCache<List<LogShootr>> logShootrDualCache,
-      SessionRepository sessionRepository) {
+      SessionRepository sessionRepository, @ApplicationContext Context context) {
     this.logShootrDualCache = logShootrDualCache;
     this.sessionRepository = sessionRepository;
+    this.context = context;
   }
 
   public List<LogShootr> getLogs() {
@@ -36,8 +39,8 @@ import javax.inject.Singleton;
     }
   }
 
-  public void putNewLog(String message, Context context) {
-    LogShootr logShootr = buildNewLog(message, context);
+  public void putNewLog(String message) {
+    LogShootr logShootr = buildNewLog(message);
 
     List<LogShootr> logShootrs = getLogs();
     logShootrDualCache.invalidate();
@@ -48,7 +51,7 @@ import javax.inject.Singleton;
     logShootrDualCache.put(LOGS, logShootrs);
   }
 
-  private LogShootr buildNewLog(String message, Context context) {
+  private LogShootr buildNewLog(String message) {
     LogShootr logShootr = new LogShootr();
     logShootr.setTimestamp(new Date().getTime());
     logShootr.setPlatform(ANDROID);

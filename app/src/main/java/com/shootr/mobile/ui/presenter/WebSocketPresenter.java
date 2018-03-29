@@ -24,10 +24,8 @@ public class WebSocketPresenter {
   private final CloseSocketInteractor closeSocketInteractor;
   private final LogsCache logsCache;
   private final Context context;
-  private final String SOCKET_CONNECTED = "Socket connected succesful";
   private final String SOCKET_CONNECTION = "SOCKET_CONNECTION";
   private final String SOCKET_CONNECTION_ERROR = "SOCKET_CONNECTION_ERROR: ";
-  private final String SOCKET_SUBSCRIPTION_ERROR = "SOCKET_SUBSCRIPTION_ERROR: ";
   private final String TIMELINE = "TIMELINE";
   private final String NONE = "NONE";
   private final String BOOTSTRAP_RECEIVED = "Bootstrap received. Feature Flags: ";
@@ -52,10 +50,9 @@ public class WebSocketPresenter {
       @Override public void onLoaded(Bootstrapping bootstrapping) {
         if (bootstrapping != null) {
           logsCache.putNewLog(handleLogFeatureFlag(bootstrapping.isTimelineConnection(),
-              bootstrapping.isSocketConnection()), context);
+              bootstrapping.isSocketConnection()));
           if (bootstrapping.isSocketConnection() && bootstrapping.getSocket() != null) {
             connectSocket(bootstrapping.getSocket().getAddress());
-            logsCache.putNewLog(SOCKET_CONNECTED, context);
           } else {
             socketView.stopService();
           }
@@ -63,7 +60,7 @@ public class WebSocketPresenter {
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        logsCache.putNewLog(SOCKET_CONNECTION_ERROR + error.getMessage(), context);
+        logsCache.putNewLog(SOCKET_CONNECTION_ERROR + error.getMessage());
       }
     });
   }
@@ -112,7 +109,6 @@ public class WebSocketPresenter {
     }
 
     @Override public void onError(Throwable e) {
-      logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + e.getMessage(), context);
       Log.d("socket error", e.getLocalizedMessage());
       e.printStackTrace();
     }

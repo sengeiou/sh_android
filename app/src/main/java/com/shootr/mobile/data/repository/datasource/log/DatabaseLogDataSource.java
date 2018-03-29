@@ -16,7 +16,7 @@ public class DatabaseLogDataSource implements LogDataSource {
   }
 
   @Override public void putLog(String message, Context context) {
-    logsCache.putNewLog(message, context);
+    logsCache.putNewLog(message);
   }
 
   @Override public List<LogShootr> getLogs() {

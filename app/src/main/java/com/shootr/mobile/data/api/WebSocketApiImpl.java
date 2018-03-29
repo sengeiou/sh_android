@@ -11,6 +11,7 @@ import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import com.shootr.mobile.data.entity.SubscribeSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.UnsubscribeSocketMessageApiEntity;
+import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -26,17 +27,24 @@ import javax.inject.Inject;
 
 public class WebSocketApiImpl implements SocketApi {
 
+  private final String SOCKET_SUBSCRIPTION_ERROR = "SOCKET_SUBSCRIPTION_ERROR: ";
+  private final String SOCKET_CONNECTED = "Socket connected succesful";
+
   private WebSocket webSocket;
   private final int VERSION = 1;
   private final int RETRY_TIMES = 50;
   private final int DELAY = 10000;
   private final int MAX_SUBSCRIPTIONS = 2;
   private final SocketMessageEntityWrapper socketMessageWrapper;
+  private final LogsCache logsCache;
   private HashMap<String, SocketMessageApiEntity> lastEvents;
   private ArrayList<SubscribeSocketMessageApiEntity> subscriptions;
+  private boolean haveHadSomeError;
 
-  @Inject public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper) {
+  @Inject public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper,
+      LogsCache logsCache) {
     this.socketMessageWrapper = socketMessageWrapper;
+    this.logsCache = logsCache;
     lastEvents = new HashMap<>();
     subscriptions = new ArrayList<>();
   }
@@ -178,11 +186,15 @@ public class WebSocketApiImpl implements SocketApi {
           }
 
           @Override public void onConnected() {
+            haveHadSomeError = false;
             sendLastEvents();
+            logsCache.putNewLog(SOCKET_CONNECTED);
           }
 
           @Override public void onClosed() {
-            emitter.onComplete();
+            if (!haveHadSomeError) {
+              emitter.onComplete();
+            }
           }
         }))
         .connect()
@@ -190,13 +202,15 @@ public class WebSocketApiImpl implements SocketApi {
   }
 
   private void handleOnFailure(Throwable t, ObservableEmitter<SocketMessageApiEntity> emitter) {
+    haveHadSomeError = true;
     if (t != null) {
-      if (t.getMessage() != null && t.getMessage().equals("closed")) {
-        emitter.onComplete();
+      if (t.getMessage() != null) {
+        logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + t.getMessage());
+        webSocket.sendClose();
+        if (!emitter.isDisposed()) {
+          emitter.onError(new Throwable(t.getMessage()));
+        }
       }
-    } else {
-      webSocket.sendClose();
-      emitter.onError(t);
     }
   }
 
