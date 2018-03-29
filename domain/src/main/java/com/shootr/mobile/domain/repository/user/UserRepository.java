@@ -26,8 +26,6 @@ public interface UserRepository {
 
     Stream updateWatch(User user);
 
-    List<User> getFollowers(String idUser, Integer page, Integer pageSize);
-
     List<User> getLocalPeople(String idUser);
 
     void updateUserProfile(User updatedUserEntity)

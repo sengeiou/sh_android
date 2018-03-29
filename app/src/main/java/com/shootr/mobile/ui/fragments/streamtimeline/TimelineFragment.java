@@ -133,8 +133,6 @@ public class TimelineFragment extends BaseFragment
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
-  public static final String EXTRA_ID_USER = "userId";
-  public static final String TAG = "timeline";
 
   private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
 
@@ -173,15 +171,7 @@ public class TimelineFragment extends BaseFragment
   @BindView(R.id.filter_showcase) BubbleLayout filterShowcase;
   @BindView(R.id.player) FrameLayout player;
   @BindView(R.id.container) ConstraintLayout container;
-  /*@BindView(R.id.timeline_shot_list) RecyclerView shotsTimeline;
-  @BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
-  @BindView(R.id.timeline_new_shots_indicator_container) RelativeLayout timelineNewShotsIndicator;
-  @BindView(R.id.timeline_indicator) RelativeLayout timelineIndicatorContainer;
-  @BindView(R.id.timeline_message) ClickableTextView streamMessage;
-  @BindView(R.id.timeline_poll_indicator) RelativeLayout timelinePollIndicator;
-  @BindView(R.id.poll_question) TextView pollQuestion;
-  @BindView(R.id.poll_action) TextView pollAction;
-  @BindView(R.id.new_shots_notificator_container) RelativeLayout newShotsNotificatorContainer;*/
+  //@BindView(R.id.timeline_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.added_to_favorites) String addToFavorites;
   @BindString(R.string.shot_shared_message) String shotShared;
@@ -225,6 +215,7 @@ public class TimelineFragment extends BaseFragment
   @BindString(R.string.analytics_label_shot) String analyticsLabelSendShot;
   @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
   @BindString(R.string.no_filter_shots) String emptyFilter;
+  @BindString(R.string.top_indicator) String topIndicator;
 
   private MenuItemValueHolder importantItemsMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder allItemsMenuItem = new MenuItemValueHolder();
@@ -240,7 +231,6 @@ public class TimelineFragment extends BaseFragment
   private Unbinder unbinder;
   private String idStream;
   private String streamTitle;
-  private String streamAuthorIdUser;
   private StreamTimelineAdapter adapter;
   private AlertDialog shotImageDialog;
 
@@ -253,9 +243,6 @@ public class TimelineFragment extends BaseFragment
   private boolean isFilterActivated;
 
   private Integer[] watchNumberCount;
-
-  private PrintableModel shotStored;
-  private int offset;
 
   private boolean isFullScreen;
   private YouTubePlayer videoPlayer;
@@ -301,7 +288,6 @@ public class TimelineFragment extends BaseFragment
   @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
-    streamAuthorIdUser = getArguments().getString(EXTRA_ID_USER);
     idStream = getArguments().getString(EXTRA_STREAM_ID);
     sessionRepository.resetFilter(idStream);
     initializePresenters();
@@ -351,7 +337,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   @OnClick(R.id.new_shots_notificator_text) public void goToTopOfTimeline() {
-    newShotsNotificatorText.setText("Arriba  ↑");
+    newShotsNotificatorText.setText(topIndicator);
     itemsList.scrollToPosition(0);
   }
 
@@ -853,7 +839,8 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void storeCtaClickLink(ShotModel shotModel) {
-
+    timelinePresenter.storeClickCount();
+    sendOpenCtaLinkAnalythics(shotModel);
   }
 
   @Override public void showFilterAlert() {
@@ -1134,8 +1121,9 @@ public class TimelineFragment extends BaseFragment
       int firstVisiblePosition = preCachingLayoutManager.findFirstCompletelyVisibleItemPosition();
       View v = preCachingLayoutManager.findViewByPosition(firstVisiblePosition);
 
-      shotStored = adapter.itemForIndex(firstVisiblePosition > 0 ? firstVisiblePosition : 0);
-      offset = v == null ? 0 : v.getTop();
+      PrintableModel shotStored =
+          adapter.itemForIndex(firstVisiblePosition > 0 ? firstVisiblePosition : 0);
+      int offset = v == null ? 0 : v.getTop();
 
       timelinePresenter.putItemForReposition(shotStored, offset);
     } catch (IndexOutOfBoundsException exception) {

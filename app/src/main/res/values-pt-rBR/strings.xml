@@ -271,9 +271,9 @@
   <string name="new_shot_placeholder">Escreva algo…</string>
   <string name="new_shot_repeated">Whoops! Você já publicou isso</string>
   <string name="new_stream_description_label">Descrição</string>
-  <string name="new_video_url_label">URL</string>
-  <string name="footer_video_url">Add a link with multimedia content (video or audio)</string>
-  <string name="video_url_error">This is not a valid URL youtube video</string>
+  <string name="new_video_url_label">http://</string>
+  <string name="footer_video_url">Adicione um vídeo do YouTube</string>
+  <string name="video_url_error">Insira uma URL válida de vídeo do YouTube</string>
   <string name="new_stream_title_label">Título</string>
   <string name="new_topic" formatted="false">Nova mensagem…</string>
   <string name="next">Próximo</string>
@@ -306,6 +306,7 @@
   <string name="not_allowed_blocked_user">Você bloqueou este usuário. Desbloqueie para enviar mensagens.</string>
   <string name="now">agora</string>
   <string name="no_filter_shots">Não há shots seus ou de contas verificadas.</string>
+  <string name="top_indicator">Top  ↑</string>
   <string name="no_intent_handler">Não há aplicações disponíveis para executar esta ação.</string>
   <string name="official_poll_button_text">Ir a Notificações</string>
   <string name="official_poll_description">Para garantir um só voto por conta e dispositivo, antes de votar você deve ativar as notificações do Shootr.</string>

@@ -24,11 +24,6 @@ public class DatabaseUserDataSource implements UserDataSource {
         return userEntity;
     }
 
-    @Override public List<UserEntity> putUsers(List<UserEntity> userEntities) {
-        userManager.saveUsers(userEntities);
-        return userEntities;
-    }
-
     @Override public UserEntity getUser(String id) {
         return userManager.getUserByIdUser(id);
     }
@@ -52,16 +47,8 @@ public class DatabaseUserDataSource implements UserDataSource {
             userEntity.getIdWatchingStream()) : null;
     }
 
-    @Override public List<UserEntity> getFollowers(String idUser, Integer page, Integer pageSize) {
-        throw new IllegalArgumentException("this method has no local implementation");
-    }
-
     @Override public List<UserEntity> getRelatedUsers(String idUser, Long timestamp) {
         return userManager.getRelatedUsers(idUser);
-    }
-
-    @Override public List<UserEntity> getRelatedUsersByIdStream(String idStream, String idUser) {
-        return userManager.getRelatedUsersByIdStream(idStream, idUser);
     }
 
     @Override public UserEntity updateUser(UserEntity currentOrNewUserEntity) {

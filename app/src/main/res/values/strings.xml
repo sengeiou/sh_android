@@ -268,9 +268,9 @@
   <string name="new_shot_placeholder">Shoot something…</string>
   <string name="new_shot_repeated">Whoops! You already shot that</string>
   <string name="new_stream_description_label">Description</string>
-  <string name="new_video_url_label">URL</string>
-  <string name="footer_video_url">Add a link with multimedia content (video or audio)</string>
-  <string name="video_url_error">This is not a valid URL youtube video</string>
+  <string name="new_video_url_label">http://</string>
+  <string name="footer_video_url">Add a YouTube video</string>
+  <string name="video_url_error">Insert a valid YouTube video URL</string>
   <string name="new_stream_title_label">Title</string>
   <string name="new_topic" formatted="false">New message…</string>
   <string name="next">Next</string>
@@ -302,6 +302,7 @@
   <string name="not_allowed_blocked_user">You blocked this user. Unblock to shoot a message. </string>
   <string name="now">now</string>
   <string name="no_filter_shots">No shots by you or verified accounts.</string>
+  <string name="top_indicator">Top  ↑</string>
   <string name="no_intent_handler">There are no applications available to handle this action.</string>
   <string name="official_poll_button_text">Go to Notifications</string>
   <string name="official_poll_description">In order to secure one vote per account and device, please activate Shootr push notifications before voting.</string>
