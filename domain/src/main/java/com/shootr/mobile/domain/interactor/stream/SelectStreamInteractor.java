@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamMode;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
@@ -79,6 +80,7 @@ public class SelectStreamInteractor implements Interactor {
     if (selectedStream != null) {
       recentSearchRepository.putRecentStream(selectedStream, getCurrentTime());
       User updatedUser = updateUserWithStreamInfo(currentUser, selectedStream);
+      sessionRepository.setTimelineFilter(TimelineType.MAIN);
       sessionRepository.setTimelineFilterActivated(false);
       sessionRepository.setCurrentUser(updatedUser);
       notifyLoaded(remoteUserRepository.updateWatch(updatedUser));

@@ -164,6 +164,10 @@ public class Poll implements PrintableItem {
     return PrintableType.POLL;
   }
 
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
   @Override public String getMessageType() {
     return PrintableType.POLL;
   }

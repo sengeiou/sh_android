@@ -79,6 +79,9 @@ public class ShotModelMapper {
     if (shot.getMetadata() != null) {
       shotModel.setDeleted(shot.getMetadata().getDeleted() != null);
     }
+    if (shot.getOrder() != null) {
+      shotModel.setOrder(shot.getOrder());
+    }
     entitiesModelMapper.setupEntities(shot.getEntities());
 
     return shotModel;

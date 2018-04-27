@@ -21,9 +21,13 @@ public interface StreamTimelineView {
 
   void updateItem(PrintableModel updatedItem);
 
+  void updateNicestItem(PrintableModel updatedItem);
+
   void showGenericItemsMenuItem();
 
   void showImportantItemsMenuItem();
+
+  void showNicestItemsMenuItem();
 
   void hidePinnedMessage();
 
@@ -71,6 +75,8 @@ public interface StreamTimelineView {
 
   void showEmpty();
 
+  void showEmptyNicest();
+
   void showError(String errorMessage);
 
   void addMyItem(PrintableModel shotModel);
@@ -96,4 +102,9 @@ public interface StreamTimelineView {
   void updateFixedItem(List<PrintableModel> printableModels);
 
   void showVideoVisibilityMenu();
+
+  void resumeVideo();
+
+  void handleNewNicestItem(PrintableModel shotModel);
+
 }

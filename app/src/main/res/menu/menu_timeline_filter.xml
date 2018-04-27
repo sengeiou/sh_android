@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/none_filter"
+        android:title="@string/none_filter"/>
+    <item
+        android:id="@+id/important_filter"
+        android:title="@string/important_filter" />
+    <item
+        android:id="@+id/nicest_filter"
+        android:title="@string/nicest_filter" />
+</menu>

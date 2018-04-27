@@ -42,11 +42,13 @@
 
   <android.support.v7.widget.RecyclerView
       android:id="@+id/item_recycler"
-      android:layout_width="match_parent"
+      android:layout_width="0dp"
       android:layout_height="0dp"
-      tools:listitem="@layout/item_list_shot"
-      app:layout_constraintTop_toBottomOf="@id/player"
       app:layout_constraintBottom_toTopOf="@id/timeline_new_shot_bar"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toBottomOf="@id/player"
+      tools:listitem="@layout/item_list_shot"
       />
 
   <TextView

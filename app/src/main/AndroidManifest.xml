@@ -17,6 +17,7 @@
   <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
   <uses-permission android:name="${packageName}.c2dm.permission.RECEIVE"/>
   <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
   <!-- optional -->
   <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
@@ -350,6 +351,9 @@
     </activity>
 
     <service android:name=".data.background.sockets.WebSocketService"/>
+
+    <service
+        android:name=".ui.FloatingVideoService"/>
   </application>
 
 </manifest>

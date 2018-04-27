@@ -47,6 +47,8 @@ public interface StreamRepository {
 
     StreamTimeline getCachedTimeline(String idStream, String filter);
 
+    StreamTimeline getCachedNicestTimeline(String idStream, String filter, long period);
+
     void putTimelineReposition(TimelineReposition timelineReposition, String idStrea, String filter);
 
     TimelineReposition getTimelineReposition(String idStream, String filter);

@@ -229,6 +229,7 @@ public class StreamTimelineFragment extends BaseFragment
   @BindString(R.string.no_filter_shots) String emptyFilter;
   @BindString(R.string.follow_stream) String followStream;
   @BindString(R.string.admob_app_id) String adMobId;
+  @BindString(R.string.filtered_by_important) String filteredByImportant;
 
   private ShotsTimelineAdapter adapter;
   private PhotoPickerController photoPickerController;
@@ -1083,7 +1084,7 @@ public class StreamTimelineFragment extends BaseFragment
   @Override public void showAllStreamShots() {
     isFilterActivated = true;
     showAllShotsMenuItem.setVisible(true);
-    toolbarDecorator.putFilterSubtitle();
+    toolbarDecorator.putFilterSubtitle(filteredByImportant);
   }
 
   @Override public void showHoldingShots() {

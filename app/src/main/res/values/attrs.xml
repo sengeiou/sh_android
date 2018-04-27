@@ -16,4 +16,9 @@
     <declare-styleable name="FollowButton">
         <attr name="detail_button" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="CustomBubbleBaseMessageTextView">
+        <attr name="my_shot" format="boolean" />
+    </declare-styleable>
+
 </resources>

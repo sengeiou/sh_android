@@ -238,6 +238,11 @@ public class SyncStreamRepository
     throw new RuntimeException("Method not implemented yet!");
   }
 
+  @Override
+  public StreamTimeline getCachedNicestTimeline(String idStream, String filter, long period) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
   @Override public void putTimelineReposition(TimelineReposition timelineReposition, String idStrea,
       String filter) {
     throw new RuntimeException("Method not implemented yet!");

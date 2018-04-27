@@ -158,6 +158,9 @@ public class SocketMessageEntityMapper {
     params.setFilter(eventParams.getFilter());
     params.setIdShot(eventParams.getIdShot());
     params.setIdStream(eventParams.getIdStream());
+    if (eventParams.getParams() != null) {
+      params.setPeriod(eventParams.getParams().getPeriod().getDuration());
+    }
 
     return params;
   }

@@ -23,6 +23,7 @@ public class TimelineApiEntityMapper {
     entity.setItems(dataApiEntityMapper.map(apiEntity.getItems()));
     entity.setFilter(apiEntity.getFilter());
     entity.setNewBadgeContent(apiEntity.isNewBadgeContent());
+    entity.setParams(apiEntity.getParams());
 
 
     return entity;

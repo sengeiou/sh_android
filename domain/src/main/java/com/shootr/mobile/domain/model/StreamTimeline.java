@@ -14,6 +14,7 @@ public class StreamTimeline implements Message {
   private String filter;
   private boolean newBadgeContent;
   private TimelineReposition timelineReposition;
+  private long period;
 
 
   public Stream getStream() {
@@ -90,5 +91,13 @@ public class StreamTimeline implements Message {
 
   public void setTimelineReposition(TimelineReposition timelineReposition) {
     this.timelineReposition = timelineReposition;
+  }
+
+  public long getPeriod() {
+    return period;
+  }
+
+  public void setPeriod(long period) {
+    this.period = period;
   }
 }

@@ -82,6 +82,9 @@ public class ShotApiEntityMapper {
     shotEntity.setShareLink(shotApiEntity.getShareLink());
     entitiesApiEntityMapper.setupEntities(shotApiEntity.getEntities());
     shotEntity.setDeleted(shotApiEntity.getDeleted());
+    if (shotApiEntity.getOrder() != null) {
+      shotEntity.setOrder(shotApiEntity.getOrder());
+    }
     return shotEntity;
   }
 

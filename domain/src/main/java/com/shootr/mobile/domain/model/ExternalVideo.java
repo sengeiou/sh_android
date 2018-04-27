@@ -26,6 +26,10 @@ public class ExternalVideo implements PrintableItem {
     return PrintableType.EXTERNAL_VIDEO;
   }
 
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
   @Override public String getMessageType() {
     return null;
   }

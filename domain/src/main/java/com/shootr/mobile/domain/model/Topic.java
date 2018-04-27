@@ -27,6 +27,10 @@ public class Topic implements PrintableItem {
     return PrintableType.TOPIC;
   }
 
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
   @Override public String getMessageType() {
     return null;
   }

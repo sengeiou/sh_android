@@ -26,6 +26,10 @@ public interface SessionRepository {
 
     void setTimelineFilterActivated(boolean isFilterActivated);
 
+    String getTimelineFilter();
+
+    void setTimelineFilter(String typeFilter);
+
     int getSynchroTime();
 
     void setSynchroTime(String synchroTime);
@@ -45,6 +49,8 @@ public interface SessionRepository {
     String getLogAddress();
 
     void resetFilter(String idStream);
+
+    void resetMultipleFilter(String idStream);
 
     boolean isNewTimeline();
 }

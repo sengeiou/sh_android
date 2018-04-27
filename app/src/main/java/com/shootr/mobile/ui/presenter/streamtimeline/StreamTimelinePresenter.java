@@ -2,16 +2,18 @@ package com.shootr.mobile.ui.presenter.streamtimeline;
 
 import android.util.Log;
 import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.EventReceived;
+import com.shootr.mobile.domain.bus.FloatingPlayerState;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.CreateTopicInteractor;
 import com.shootr.mobile.domain.interactor.DeleteHighlightedItemInteractor;
 import com.shootr.mobile.domain.interactor.DeleteTopicInteractor;
+import com.shootr.mobile.domain.interactor.GetCachedNicestTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetCachedTimelineInteractor;
-import com.shootr.mobile.domain.interactor.GetStreamTimelineInteractor;
+import com.shootr.mobile.domain.interactor.GetNicestTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetTimelineInteractor;
-import com.shootr.mobile.domain.interactor.GetTimelineRepositionInteractor;
 import com.shootr.mobile.domain.interactor.HighlightItemInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PutLastStreamVisitInteractor;
@@ -26,7 +28,6 @@ import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewHighlightedShotEventInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
-import com.shootr.mobile.domain.interactor.stream.UpdateStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.PutTimelineRepositionInteractor;
 import com.shootr.mobile.domain.model.BadgeContent;
 import com.shootr.mobile.domain.model.ExternalVideo;
@@ -34,6 +35,7 @@ import com.shootr.mobile.domain.model.FixedItemSocketMessage;
 import com.shootr.mobile.domain.model.NewBadgeContentSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
 import com.shootr.mobile.domain.model.ParticipantsSocketMessage;
+import com.shootr.mobile.domain.model.PeriodType;
 import com.shootr.mobile.domain.model.PinnedItemSocketMessage;
 import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
@@ -76,16 +78,12 @@ public class StreamTimelinePresenter
   private static final int TIMELINE_RESUMING = 3;
   private static final int TIMELINE_LOADED = 4;
   private static final String SCHEMA = "shootr://";
-  private static final long REFRESH_INTERVAL_MILLISECONDS = 10 * 1000;
-  private static final long MAX_REFRESH_INTERVAL_MILLISECONDS = 60 * 1000;
   private static final int MAX_LENGTH = 40;
   private static final int SINCE_TIMESTAMP = 0;
   private static final int FOLLOWERS = 0;
   private static final int CONNECTED = 1;
 
-  private final GetStreamTimelineInteractor getStreamTimelineInteractor;
   private final SelectStreamInteractor selectStreamInteractor;
-  private final UpdateStreamInteractor updateStreamInteractor;
   private final CallCtaCheckInInteractor callCtaCheckInInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
@@ -101,10 +99,11 @@ public class StreamTimelinePresenter
   private final CreateTopicInteractor createTopicInteractor;
   private final DeleteTopicInteractor deleteTopicInteractor;
   private final GetTimelineInteractor getTimelineInteractor;
+  private final GetNicestTimelineInteractor getNicestTimelineInteractor;
   private final GetCachedTimelineInteractor getCachedTimelineInteractor;
+  private final GetCachedNicestTimelineInteractor getCachedNicestTimelineInteractor;
   private final PutLastStreamVisitInteractor putLastStreamVisitInteractor;
   private final PutTimelineRepositionInteractor putTimelineRepositionInteractor;
-  private final GetTimelineRepositionInteractor getTimelineRepositionInteractor;
   private final SessionRepository sessionRepository;
   private final PrintableModelMapper printableModelMapper;
   private final ShotModelMapper shotModelMapper;
@@ -113,6 +112,7 @@ public class StreamTimelinePresenter
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
   private final Poller poller;
+  private final BusPublisher busPublisher;
 
   private StreamTimelineView view;
   private FixedItemView fixedItemView;
@@ -121,7 +121,6 @@ public class StreamTimelinePresenter
   private boolean canFixItem;
   private ArrayList<String> fixedItemsIds = new ArrayList<>();
   private long maxTimestamp;
-  private long sinceTimestamp;
   private boolean mightHaveMoreItems;
   private boolean isFirstLoad;
   private boolean hasBeenPaused;
@@ -132,8 +131,7 @@ public class StreamTimelinePresenter
   private int loadType;
   private ExternalVideoModel currentExternalVideo;
 
-  @Inject public StreamTimelinePresenter(GetStreamTimelineInteractor getStreamTimelineInteractor,
-      SelectStreamInteractor selectStreamInteractor, UpdateStreamInteractor updateStreamInteractor,
+  @Inject public StreamTimelinePresenter(SelectStreamInteractor selectStreamInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ReshootInteractor reshootInteractor,
@@ -146,17 +144,16 @@ public class StreamTimelinePresenter
       DeleteHighlightedItemInteractor deleteHighlightedItemInteractor,
       CreateTopicInteractor createTopicInteractor, DeleteTopicInteractor deleteTopicInteractor,
       GetTimelineInteractor getTimelineInteractor,
+      GetNicestTimelineInteractor getNicestTimelineInteractor,
       GetCachedTimelineInteractor getCachedTimelineInteractor,
+      GetCachedNicestTimelineInteractor getCachedNicestTimelineInteractor,
       PutLastStreamVisitInteractor putLastStreamVisitInteractor,
       PutTimelineRepositionInteractor putTimelineRepositionInteractor,
-      GetTimelineRepositionInteractor getTimelineRepositionInteractor, SessionRepository sessionRepository,
-      PrintableModelMapper printableModelMapper, ShotModelMapper shotModelMapper,
-      ExternalVideoModelMapper externalVideoModelMapper, StreamModelMapper streamModelMapper,
-
-      ErrorMessageFactory errorMessageFactory, @Main Bus bus, Poller poller) {
-    this.getStreamTimelineInteractor = getStreamTimelineInteractor;
+      SessionRepository sessionRepository, PrintableModelMapper printableModelMapper,
+      ShotModelMapper shotModelMapper, ExternalVideoModelMapper externalVideoModelMapper,
+      StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus,
+      Poller poller, BusPublisher busPublisher) {
     this.selectStreamInteractor = selectStreamInteractor;
-    this.updateStreamInteractor = updateStreamInteractor;
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
@@ -172,10 +169,11 @@ public class StreamTimelinePresenter
     this.createTopicInteractor = createTopicInteractor;
     this.deleteTopicInteractor = deleteTopicInteractor;
     this.getTimelineInteractor = getTimelineInteractor;
+    this.getNicestTimelineInteractor = getNicestTimelineInteractor;
     this.getCachedTimelineInteractor = getCachedTimelineInteractor;
+    this.getCachedNicestTimelineInteractor = getCachedNicestTimelineInteractor;
     this.putLastStreamVisitInteractor = putLastStreamVisitInteractor;
     this.putTimelineRepositionInteractor = putTimelineRepositionInteractor;
-    this.getTimelineRepositionInteractor = getTimelineRepositionInteractor;
     this.sessionRepository = sessionRepository;
     this.printableModelMapper = printableModelMapper;
     this.shotModelMapper = shotModelMapper;
@@ -184,6 +182,7 @@ public class StreamTimelinePresenter
     this.errorMessageFactory = errorMessageFactory;
     this.bus = bus;
     this.poller = poller;
+    this.busPublisher = busPublisher;
   }
 
   public void setView(StreamTimelineView view, FixedItemView fixedItemView) {
@@ -198,24 +197,34 @@ public class StreamTimelinePresenter
     isFirstLoad = true;
     selectStream();
     loadType = TIMELINE_LOADING;
-    currentTimelineType =
-        sessionRepository.isTimelineFilterActivated() ? TimelineType.IMPORTANT : TimelineType.MAIN;
+    currentTimelineType = sessionRepository.getTimelineFilter();
     view.showCheckingForShots();
     getCachedTimeline(idStream, currentTimelineType);
   }
 
   private void getCachedTimeline(String idStream, final String filterType) {
     Log.d("socket", "pido de cache");
-    getCachedTimelineInteractor.getTimeline(idStream, filterType,
-        new Interactor.Callback<StreamTimeline>() {
-          @Override public void onLoaded(StreamTimeline streamTimeline) {
-
-            if (streamTimeline != null) {
-              onTimelineLoaded(streamTimeline);
+    if (filterType.equals(TimelineType.NICEST)) {
+      getCachedNicestTimelineInteractor.getTimeline(idStream, PeriodType.SEVEN_DAYS,
+          new Interactor.Callback<StreamTimeline>() {
+            @Override public void onLoaded(StreamTimeline streamTimeline) {
+              if (streamTimeline != null) {
+                onTimelineLoaded(streamTimeline);
+              }
+              subscribeNicestTimeline(filterType, PeriodType.SEVEN_DAYS);
             }
-            subscribeTimeline(filterType);
-          }
-        });
+          });
+    } else {
+      getCachedTimelineInteractor.getTimeline(idStream, filterType,
+          new Interactor.Callback<StreamTimeline>() {
+            @Override public void onLoaded(StreamTimeline streamTimeline) {
+              if (streamTimeline != null) {
+                onTimelineLoaded(streamTimeline);
+              }
+              subscribeTimeline(filterType);
+            }
+          });
+    }
   }
 
   private void subscribeTimeline(final String filterType) {
@@ -230,6 +239,19 @@ public class StreamTimelinePresenter
     });
   }
 
+  private void subscribeNicestTimeline(final String filterType, final long periodType) {
+    subscribeTimelineInteractor.subscribe(idStream, filterType, periodType,
+        new Interactor.Callback<Boolean>() {
+          @Override public void onLoaded(Boolean shouldGetTimeline) {
+            if (shouldGetTimeline) {
+              Log.d("socket", "debo de pedir timeline!!");
+              loadType = TIMELINE_LOADING;
+              getNicestTimeline(SINCE_TIMESTAMP, periodType);
+            }
+          }
+        });
+  }
+
   private void getTimeline(String filterType, long timestamp, boolean isPaginating) {
     getTimelineInteractor.getTimeline(idStream, filterType, timestamp, isPaginating,
         new Interactor.Callback<Boolean>() {
@@ -239,10 +261,21 @@ public class StreamTimelinePresenter
         });
   }
 
+  private void getNicestTimeline(long timestamp, long periodTime) {
+    getNicestTimelineInteractor.getTimeline(idStream, timestamp, periodTime,
+        new Interactor.Callback<Boolean>() {
+          @Override public void onLoaded(Boolean aBoolean) {
+            /* no-op */
+          }
+        });
+  }
+
   private void paginateTimeline() {
-    loadType = TIMELINE_PAGINATING;
-    view.showLoadingOldShots();
-    getTimeline(currentTimelineType, maxTimestamp, true);
+    if (!currentTimelineType.equals(TimelineType.NICEST)) {
+      loadType = TIMELINE_PAGINATING;
+      view.showLoadingOldShots();
+      getTimeline(currentTimelineType, maxTimestamp, true);
+    }
   }
 
   private void onTimelineLoaded(StreamTimeline streamTimeline) {
@@ -307,7 +340,11 @@ public class StreamTimelinePresenter
 
   private void renderItems(StreamTimeline streamTimeline) {
     if (streamTimeline.getItems().getData().isEmpty()) {
-      view.showEmpty();
+      if (currentTimelineType.equals(TimelineType.NICEST)) {
+        view.showEmptyNicest();
+      } else {
+        view.showEmpty();
+      }
     } else {
       view.hideCheckingForShots();
       view.hideEmpty();
@@ -320,14 +357,6 @@ public class StreamTimelinePresenter
         view.renderItems(
             printableModelMapper.mapPrintableModel(streamTimeline.getItems().getData()), null, 0);
       }
-    }
-  }
-
-  private void addNewItems(StreamTimeline streamTimeline) {
-    if (!streamTimeline.getItems().getData().isEmpty()) {
-      view.addNewItems(printableModelMapper.mapPrintableModel(streamTimeline.getItems().getData()));
-    } else {
-      //view.refreshShotsInfo();
     }
   }
 
@@ -390,19 +419,20 @@ public class StreamTimelinePresenter
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-                /* no-op */
+        /* no-op */
       }
     });
   }
 
   private void handleFilterVisibility(StreamModel streamModel) {
     if (streamModel.canWrite()) {
-      if (sessionRepository.isTimelineFilterActivated()) {
-        currentTimelineType = TimelineType.IMPORTANT;
-        view.showGenericItemsMenuItem();
-      } else {
-        currentTimelineType = TimelineType.MAIN;
+      currentTimelineType = sessionRepository.getTimelineFilter();
+      if (currentTimelineType.equals(TimelineType.IMPORTANT)) {
         view.showImportantItemsMenuItem();
+      } else if (currentTimelineType.equals(TimelineType.MAIN)) {
+        view.showGenericItemsMenuItem();
+      } else if (currentTimelineType.equals(TimelineType.NICEST)) {
+        view.showNicestItemsMenuItem();
       }
     }
   }
@@ -505,7 +535,7 @@ public class StreamTimelinePresenter
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-                /* no-op */
+        /* no-op */
       }
     });
   }
@@ -517,7 +547,7 @@ public class StreamTimelinePresenter
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-                /* no-op */
+        /* no-op */
       }
     });
   }
@@ -573,7 +603,7 @@ public class StreamTimelinePresenter
     if (!fixedItemsIds.isEmpty()) {
       viewHighlightedShotEventInteractor.countViewEvent(idShot, new Interactor.CompletedCallback() {
         @Override public void onCompleted() {
-        /* no-op */
+          /* no-op */
         }
       });
     }
@@ -584,7 +614,7 @@ public class StreamTimelinePresenter
       clickShotLinkEventInteractor.countClickLinkEvent(fixedItemsIds.get(0),
           new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
-        /* no-op */
+              /* no-op */
             }
           });
     }
@@ -596,35 +626,16 @@ public class StreamTimelinePresenter
     }
   }
 
-  private long handleIntervalSynchro() {
-    int actualSynchroInterval = sessionRepository.getSynchroTime();
-    long intervalSynchroServerResponse = actualSynchroInterval * 1000;
-    if (intervalSynchroServerResponse < REFRESH_INTERVAL_MILLISECONDS) {
-      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
-    } else if (intervalSynchroServerResponse > MAX_REFRESH_INTERVAL_MILLISECONDS) {
-      intervalSynchroServerResponse = REFRESH_INTERVAL_MILLISECONDS;
-    }
-    return intervalSynchroServerResponse;
-  }
-
-  private void changeSynchroTimePoller() {
-    if (poller.isPolling()) {
-      long intervalSynchroServerResponse = handleIntervalSynchro();
-      if (intervalSynchroServerResponse != poller.getIntervalMilliseconds()) {
-        poller.stopPolling();
-        poller.setIntervalMilliseconds(intervalSynchroServerResponse);
-        poller.startPolling();
-      }
-    }
-  }
-
   @Override public void resume() {
     bus.register(this);
     if (hasBeenPaused) {
       isFirstLoad = false;
       selectStream();
       getCachedTimeline(idStream, currentTimelineType);
-      //poller.startPolling();
+
+      if (currentExternalVideo != null) {
+        view.resumeVideo();
+      }
     }
   }
 
@@ -682,29 +693,31 @@ public class StreamTimelinePresenter
   }
 
   public void onActivateFilterClick() {
-    setupFilterClick(true);
+    setupFilterClick(TimelineType.IMPORTANT);
+  }
+
+  public void onActivateFilterNicestClick() {
+    setupFilterClick(TimelineType.NICEST);
   }
 
   public void onDesactivateFilterClick() {
-    setupFilterClick(false);
+    setupFilterClick(TimelineType.MAIN);
   }
 
-  private void setupFilterClick(boolean activating) {
+  private void setupFilterClick(String timelineType) {
     isFirstLoad = true;
     loadType = TIMELINE_LOADING;
     view.clearTimeline();
-    if (activating) {
-      currentTimelineType = TimelineType.IMPORTANT;
+    if (timelineType.equals(TimelineType.MAIN)) {
       view.showGenericItemsMenuItem();
-      sessionRepository.setTimelineFilterActivated(true);
-      getCachedTimeline(idStream, currentTimelineType);
-    } else {
-      currentTimelineType = TimelineType.MAIN;
+    } else if (timelineType.equals(TimelineType.IMPORTANT)) {
       view.showImportantItemsMenuItem();
-      sessionRepository.setTimelineFilterActivated(false);
-      getCachedTimeline(idStream, currentTimelineType);
+    } else if (timelineType.equals(TimelineType.NICEST)) {
+      view.showNicestItemsMenuItem();
     }
-    sinceTimestamp = SINCE_TIMESTAMP;
+    currentTimelineType = timelineType;
+    sessionRepository.setTimelineFilter(timelineType);
+    getCachedTimeline(idStream, currentTimelineType);
   }
   //endregion
 
@@ -791,8 +804,13 @@ public class StreamTimelinePresenter
         NewItemSocketMessage newItemSocketMessage = (NewItemSocketMessage) event.getMessage();
         ShotModel shotModel = shotModelMapper.transform((Shot) newItemSocketMessage.getData());
         shotModel.setTimelineGroup(PrintableModel.ITEMS_GROUP);
-        if (idStream.equals(shotModel.getStreamId()) && newItemSocketMessage.isActiveSubscription) {
-          view.addNewItems(Collections.<PrintableModel>singletonList(shotModel));
+        if (currentTimelineType.equals(TimelineType.NICEST)) {
+          view.handleNewNicestItem(shotModel);
+        } else {
+          if (idStream.equals(shotModel.getStreamId())
+              && newItemSocketMessage.isActiveSubscription) {
+            view.addNewItems(Collections.<PrintableModel>singletonList(shotModel));
+          }
         }
         break;
 
@@ -803,7 +821,11 @@ public class StreamTimelinePresenter
         updatedShot.setTimelineGroup(PrintableModel.ITEMS_GROUP);
         if (idStream.equals(updatedShot.getStreamId())
             && updateItemSocketMessage.isActiveSubscription) {
-          view.updateItem(updatedShot);
+          if (currentTimelineType.equals(TimelineType.NICEST)) {
+            view.updateNicestItem(updatedShot);
+          } else {
+            view.updateItem(updatedShot);
+          }
           view.updateFixedItem(printableModelMapper.mapFixableModel(
               Collections.singletonList(updateItemSocketMessage.getData())));
         }
@@ -849,5 +871,32 @@ public class StreamTimelinePresenter
       default:
         break;
     }
+  }
+
+  public void onVideoStarted() {
+    FloatingPlayerState.Event event = new FloatingPlayerState.Event();
+    event.setState(FloatingPlayerState.PLAY_PRESSED);
+    event.setStreamId(idStream);
+    event.setVideoId(currentExternalVideo.getVideoId());
+    busPublisher.post(event);
+  }
+
+  public void onBackPressedWhilePlayingVideo(long currentTimeMillis) {
+    FloatingPlayerState.Event event = new FloatingPlayerState.Event();
+    event.setState(FloatingPlayerState.ACTIVITY_PAUSED);
+    event.setStreamId(idStream);
+    event.setCurrentSecond(currentTimeMillis);
+    event.setVideoId(currentExternalVideo.getVideoId());
+    busPublisher.post(event);
+  }
+
+  public void onInAppVideoStarted() {
+    FloatingPlayerState.Event event = new FloatingPlayerState.Event();
+    event.setState(FloatingPlayerState.IN_APP_VIDEO);
+    busPublisher.post(event);
+  }
+
+  public String getFilterType() {
+    return currentTimelineType;
   }
 }

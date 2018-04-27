@@ -26,6 +26,9 @@ public class TimelineEntityMapper {
     streamTimeline.setStream(streamEntityMapper.transform(timelineEntity.getStream()));
     streamTimeline.setFilter(timelineEntity.getFilter());
     streamTimeline.setNewBadgeContent(timelineEntity.isNewBadgeContent());
+    if (timelineEntity.getParams() != null) {
+      streamTimeline.setPeriod(timelineEntity.getParams().getPeriod().getDuration());
+    }
 
     return streamTimeline;
   }

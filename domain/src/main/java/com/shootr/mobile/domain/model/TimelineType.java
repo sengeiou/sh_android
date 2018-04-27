@@ -4,4 +4,5 @@ public interface TimelineType {
 
   String MAIN = "MAIN";
   String IMPORTANT = "IMPORTANT";
+  String NICEST = "NICEST";
 }

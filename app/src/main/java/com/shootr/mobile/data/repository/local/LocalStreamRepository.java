@@ -144,6 +144,11 @@ public class LocalStreamRepository implements StreamRepository {
     }
 
     @Override
+    public StreamTimeline getCachedNicestTimeline(String idStream, String filter, long period) {
+        return timelineCache.getNicestTimeline(idStream, filter, period);
+    }
+
+    @Override
     public void putTimelineReposition(TimelineReposition timelineReposition, String idStrea,
         String filter) {
         timelineRepositionCache.putTimelineReposition(timelineReposition, idStrea, filter);

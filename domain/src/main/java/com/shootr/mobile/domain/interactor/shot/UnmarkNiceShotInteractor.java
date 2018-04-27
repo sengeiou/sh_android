@@ -50,7 +50,7 @@ public class UnmarkNiceShotInteractor implements Interactor {
     notifyCompleted();
   }
 
-  private void unmarkNiceInLocal() throws NiceNotMarkedException {
+  private void unmarkNiceInLocal() {
     Shot shot = getShotFromLocalIfExists();
     shot.setNiceCount(shot.getNiceCount() - 1);
     shot.setNiced(false);

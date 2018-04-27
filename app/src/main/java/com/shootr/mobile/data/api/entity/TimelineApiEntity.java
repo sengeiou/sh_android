@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.api.entity;
 
 import com.google.gson.annotations.SerializedName;
+import com.shootr.mobile.data.entity.ParamsEntity;
 import com.shootr.mobile.data.entity.ParticipantsEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 
@@ -16,6 +17,7 @@ public class TimelineApiEntity {
   private ItemsApiEntity items;
   private String filter;
   private boolean newBadgeContent;
+  private ParamsEntity params;
 
 
   public StreamEntity getStream() {
@@ -72,5 +74,13 @@ public class TimelineApiEntity {
 
   public void setNewBadgeContent(boolean newBadgeContent) {
     this.newBadgeContent = newBadgeContent;
+  }
+
+  public ParamsEntity getParams() {
+    return params;
+  }
+
+  public void setParams(ParamsEntity params) {
+    this.params = params;
   }
 }

@@ -182,6 +182,7 @@
   <string name="favorite_streams_push_settings">Streams que sigo</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtrado por: Importante</string>
+  <string name="filtered_by_nicest">Filtrado por: Nicest</string>
   <!-- Tap here to see the important shots -->
   <string name="filter_show_case">Pulsa aquí para ver los shots importantes</string>
   <string name="finished_poll">Resultado de la encuesta %s</string>
@@ -589,4 +590,8 @@
   <string name="stream_data_info_total_views">Totales</string>
   <string name="stream_data_info_views">Visitas</string>
   <string name="facebook_permissions_alert">Se requieren el email y la lista de amigos</string>
+  <string name="none_filter">Todos</string>
+  <string name="important_filter">Importante</string>
+  <string name="nicest_filter">Nicest</string>
+  <string name="nicest_timeline_empty_title">No hay shots con nice</string>
 </resources>

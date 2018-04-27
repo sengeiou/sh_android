@@ -49,4 +49,8 @@ public class ExternalVideoModel implements PrintableModel {
   @Override public void setTimelineGroup(String timelineGroup) {
     this.timelineGroup = timelineGroup;
   }
+
+  @Override public Long getOrder() {
+    return 0L;
+  }
 }

@@ -8,6 +8,8 @@ import com.shootr.mobile.data.entity.EventParams;
 import com.shootr.mobile.data.entity.GetTimelineSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.NiceSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
+import com.shootr.mobile.data.entity.ParamsEntity;
+import com.shootr.mobile.data.entity.PeriodEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import com.shootr.mobile.data.entity.SubscribeSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.UnsubscribeSocketMessageApiEntity;
@@ -41,8 +43,8 @@ public class WebSocketApiImpl implements SocketApi {
   private ArrayList<SubscribeSocketMessageApiEntity> subscriptions;
   private boolean haveHadSomeError;
 
-  @Inject public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper,
-      LogsCache logsCache) {
+  @Inject
+  public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper, LogsCache logsCache) {
     this.socketMessageWrapper = socketMessageWrapper;
     this.logsCache = logsCache;
     lastEvents = new HashMap<>();
@@ -66,7 +68,24 @@ public class WebSocketApiImpl implements SocketApi {
   }
 
   @Override
-  public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter) {
+  public void updateSocketSubscription(String idStream, String filter, ParamsEntity paramsEntity) {
+    //TODO pensar cómo podemos hacer este hash más generico
+    for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
+      int subscriptionHash =
+          subscriptionHash(subscription.getData().getIdStream(), subscription.getData().getFilter(),
+              subscription.getData().getParams());
+      int subscriptionHashForUpdate = subscriptionHash(idStream, filter, paramsEntity);
+      if (subscriptionHash == subscriptionHashForUpdate) {
+        subscription.getData().setParams(paramsEntity);
+        webSocket.sendText(socketMessageWrapper.transformEvent(subscription));
+        break;
+      }
+    }
+  }
+
+  @Override
+  public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter,
+      long period) {
     if (webSocket != null) {
 
       SubscribeSocketMessageApiEntity socketMessageApiEntity =
@@ -77,6 +96,16 @@ public class WebSocketApiImpl implements SocketApi {
       data.setFilter(filter);
       data.setIdStream(idStream);
       data.setSubscriptionType(subscriptionType);
+
+      if (period != 0) {
+        ParamsEntity paramsEntity = new ParamsEntity();
+        PeriodEntity periodEntity = new PeriodEntity();
+        periodEntity.setDuration(period);
+
+        paramsEntity.setPeriod(periodEntity);
+
+        data.setParams(paramsEntity);
+      }
 
       socketMessageApiEntity.setData(data);
 
@@ -137,6 +166,32 @@ public class WebSocketApiImpl implements SocketApi {
     return false;
   }
 
+  @Override public boolean getNicestTimeline(String idStream, String filter,
+      PaginationEntity paginationEntity, ParamsEntity paramsEntity) {
+    if (webSocket != null) {
+      GetTimelineSocketMessageApiEntity getTimelineSocketMessageApiEntity =
+          new GetTimelineSocketMessageApiEntity();
+      GetTimelineSocketMessageApiEntity.TimelineParams timelineParams =
+          new GetTimelineSocketMessageApiEntity.TimelineParams();
+
+      timelineParams.setFilter(filter);
+      timelineParams.setIdStream(idStream);
+      timelineParams.setPagination(paginationEntity);
+      timelineParams.setParams(paramsEntity);
+
+      getTimelineSocketMessageApiEntity.setRequestId(generateRequestId());
+      getTimelineSocketMessageApiEntity.setVersion(VERSION);
+      getTimelineSocketMessageApiEntity.setData(timelineParams);
+
+      lastEvents.put(getTimelineSocketMessageApiEntity.getRequestId(),
+          getTimelineSocketMessageApiEntity);
+      webSocket.sendText(socketMessageWrapper.transformEvent(getTimelineSocketMessageApiEntity));
+      return true;
+    }
+
+    return false;
+  }
+
   @Override public boolean sendNice(String idShot) {
 
     if (webSocket != null) {
@@ -169,7 +224,8 @@ public class WebSocketApiImpl implements SocketApi {
 
   private void setupSocketConnection(final ObservableEmitter<SocketMessageApiEntity> emitter,
       String address) throws Exception {
-    webSocket = new WebSocketFactory().setVerifyHostname(false).setConnectionTimeout(10000)
+    webSocket = new WebSocketFactory().setVerifyHostname(false)
+        .setConnectionTimeout(10000)
         .createSocket(address)
         .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
         .addListener(new WebSocketListenerImpl(new SocketListener.WebSocketConnection() {
@@ -255,6 +311,7 @@ public class WebSocketApiImpl implements SocketApi {
             EventParams eventParams = new EventParams();
             if (subscription.getRequestId().equals(socketMessage.getRequestId())) {
               eventParams.setFilter(subscription.getData().getFilter());
+              eventParams.setParams(subscription.getData().getParams());
               socketMessage.setEventParams(eventParams);
             }
           }
@@ -285,7 +342,17 @@ public class WebSocketApiImpl implements SocketApi {
       getTimeline(lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
           null);
       subscribeToTimeline(lastSubscription.getData().getSubscriptionType(),
-          lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter());
+          lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
+          lastSubscription.getData().getParams() == null ? 0
+              : lastSubscription.getData().getParams().getPeriod().getDuration());
     }
+  }
+
+  private int subscriptionHash(String idStream, String filter, ParamsEntity paramsEntity) {
+    int result = idStream != null ? idStream.hashCode() : 0;
+    result = 31 * result + (filter != null ? filter.hashCode() : 0);
+    result = 31 * result + (paramsEntity != null ? (int) paramsEntity.getPeriod().getDuration() * 31
+        : 0);
+    return result;
   }
 }

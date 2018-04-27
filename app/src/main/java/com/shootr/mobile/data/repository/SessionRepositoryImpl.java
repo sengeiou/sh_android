@@ -16,8 +16,10 @@ import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
+import com.shootr.mobile.data.prefs.TimelineMultipleFilter;
 import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.Device;
+import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -33,6 +35,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final StringPreference currentUserIdPreference;
   private final LongPreference cacheTimeKeepAlive;
   private final BooleanPreference timelineFilterPreference;
+  private final StringPreference timelineMultipleFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
   private final BooleanPreference publicVoteAlertPreference;
   private final StringPreference deviceIdPreference;
@@ -50,6 +53,7 @@ public class SessionRepositoryImpl implements SessionRepository {
       @CurrentUserId StringPreference currentUserIdPreference,
       @CacheTimeKeepAlive LongPreference cacheTimeKeepAlive,
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
+      @TimelineMultipleFilter StringPreference timelineMultipleFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
       @DeviceId StringPreference deviceIdPreference, @DevicePref DevicePreferences devicePreference,
@@ -61,6 +65,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;
     this.timelineFilterPreference = timelineFilterPreference;
+    this.timelineMultipleFilterPreference = timelineMultipleFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.publicVoteAlertPreference = publicVoteAlertPreference;
     this.deviceIdPreference = deviceIdPreference;
@@ -113,6 +118,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     sessionTokenPreference.delete();
     lastTimeFilteredPreference.delete();
     timelineFilterPreference.delete();
+    timelineMultipleFilterPreference.delete();
     publicVoteAlertPreference.delete();
     deviceIdPreference.delete();
     devicePreference.delete();
@@ -131,6 +137,14 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Override public void setTimelineFilterActivated(boolean isFilterActivated) {
     timelineFilterPreference.set(isFilterActivated);
+  }
+
+  @Override public String getTimelineFilter() {
+    return timelineMultipleFilterPreference.get();
+  }
+
+  @Override public void setTimelineFilter(String typeFilter) {
+    timelineMultipleFilterPreference.set(typeFilter);
   }
 
   @Override public int getSynchroTime() {
@@ -184,6 +198,12 @@ public class SessionRepositoryImpl implements SessionRepository {
   @Override public void resetFilter(String idStream) {
     if (!idStream.equals(currentUser.getIdWatchingStream())) {
       setTimelineFilterActivated(false);
+    }
+  }
+
+  @Override public void resetMultipleFilter(String idStream) {
+    if (!idStream.equals(currentUser.getIdWatchingStream())) {
+      setTimelineFilter(TimelineType.MAIN);
     }
   }
 }

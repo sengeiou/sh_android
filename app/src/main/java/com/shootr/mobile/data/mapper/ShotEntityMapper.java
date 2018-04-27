@@ -82,6 +82,9 @@ public class ShotEntityMapper {
     shot.setDetailFlags(shotEntity.getDetailFlags());
     shot.setImageIdMedia(shotEntity.getImageIdMedia());
     shot.setShareLink(shotEntity.getShareLink());
+    if (shotEntity.getOrder() != null) {
+      shot.setOrder(shotEntity.getOrder());
+    }
 
     return shot;
   }
@@ -158,6 +161,9 @@ public class ShotEntityMapper {
     shotEntity.setDetailFlags(shot.getDetailFlags());
     shotEntity.setImageIdMedia(shot.getImageIdMedia());
     shotEntity.setShareLink(shot.getShareLink());
+    if (shot.getOrder() != null) {
+      shotEntity.setOrder(shot.getOrder());
+    }
     return shotEntity;
   }
 

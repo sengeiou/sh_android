@@ -589,4 +589,8 @@
   <string name="stream_data_info_total_views">Totals</string>
   <string name="stream_data_info_views">Visites</string>
   <string name="facebook_permissions_alert">Es requereixen l\'email i la llista d\'amics</string>
+  <string name="none_filter">Tots</string>
+  <string name="important_filter">Important</string>
+  <string name="nicest_filter">Nicest</string>
+  <string name="nicest_timeline_empty_title">No hi ha shots amb nice</string>
 </resources>

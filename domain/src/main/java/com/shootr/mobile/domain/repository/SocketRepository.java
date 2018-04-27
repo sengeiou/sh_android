@@ -8,9 +8,12 @@ public interface SocketRepository {
 
   Observable<SocketMessage> connect(String socketAddress);
 
-  boolean subscribeToTimeline(String subscriptionType, String idStream, String filter);
+  boolean subscribeToTimeline(String subscriptionType, String idStream, String filter, long period);
 
   boolean getTimeline(String idStream, String filter, Pagination pagination);
+
+  boolean getNicestTimeline(String idStream, String filter, Pagination pagination,
+      long duration);
 
   void closeSocket();
 }

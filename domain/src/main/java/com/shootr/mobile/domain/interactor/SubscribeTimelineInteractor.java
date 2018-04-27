@@ -14,6 +14,7 @@ public class SubscribeTimelineInteractor implements Interactor {
   private Interactor.Callback<Boolean> callback;
   private String idStream;
   private String filterType;
+  private long period;
 
   @Inject public SubscribeTimelineInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread,
@@ -27,11 +28,20 @@ public class SubscribeTimelineInteractor implements Interactor {
     this.idStream = idStream;
     this.filterType = filterType;
     this.callback = callback;
+    this.period = 0;
+    interactorHandler.execute(this);
+  }
+
+  public void subscribe(String idStream, String filterType, long period, Interactor.Callback<Boolean> callback) {
+    this.idStream = idStream;
+    this.filterType = filterType;
+    this.callback = callback;
+    this.period = period;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    notify(socketRepository.subscribeToTimeline("TIMELINE", idStream, filterType));
+    notify(socketRepository.subscribeToTimeline("TIMELINE", idStream, filterType, period));
   }
 
   private void notify(final Boolean response) {

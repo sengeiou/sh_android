@@ -47,6 +47,7 @@ public class ShotApiEntity extends BaseMessageApiEntity {
   private Long reshootedTime;
   private Date deleted;
   private String shareLink;
+  private Long order;
 
   public ShotApiEntity() {
     setResultType(PrintableType.SHOT);
@@ -322,5 +323,13 @@ public class ShotApiEntity extends BaseMessageApiEntity {
 
   public void setShareLink(String shareLink) {
     this.shareLink = shareLink;
+  }
+
+  public Long getOrder() {
+    return order;
+  }
+
+  public void setOrder(Long order) {
+    this.order = order;
   }
 }

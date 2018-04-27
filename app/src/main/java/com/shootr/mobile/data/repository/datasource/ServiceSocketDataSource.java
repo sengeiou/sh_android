@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.datasource;
 import com.shootr.mobile.data.api.SocketApi;
 import com.shootr.mobile.data.api.entity.mapper.SocketMessageApiEntityMapper;
 import com.shootr.mobile.data.entity.PaginationEntity;
+import com.shootr.mobile.data.entity.ParamsEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import com.shootr.mobile.data.entity.SocketMessageEntity;
 import io.reactivex.Observable;
@@ -30,15 +31,25 @@ public class ServiceSocketDataSource implements SocketDataSource {
   }
 
   @Override
-  public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter) {
-    return socketApi.subscribeToTimeline(subscriptionType, idStream, filter);
+  public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter, long period) {
+    return socketApi.subscribeToTimeline(subscriptionType, idStream, filter, period);
   }
 
   @Override public boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity) {
     return socketApi.getTimeline(idStream, filter, paginationEntity);
   }
 
+  @Override public boolean getNicestTimeline(String idStream, String filter,
+      PaginationEntity paginationEntity, ParamsEntity paramsEntity) {
+    return socketApi.getNicestTimeline(idStream, filter, paginationEntity, paramsEntity);
+  }
+
   @Override public void closeSocket() {
     socketApi.closeSocket();
+  }
+
+  @Override
+  public void updateSocketSubscription(String idStream, String filter, ParamsEntity paramsEntity) {
+    socketApi.updateSocketSubscription(idStream, filter, paramsEntity);
   }
 }

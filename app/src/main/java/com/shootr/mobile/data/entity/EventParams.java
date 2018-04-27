@@ -6,6 +6,7 @@ public class EventParams {
   private String idStream;
   private String filter;
   private String idShot;
+  private ParamsEntity params;
 
   public String getSubscriptionType() {
     return subscriptionType;
@@ -39,13 +40,24 @@ public class EventParams {
     this.idShot = idShot;
   }
 
+  public ParamsEntity getParams() {
+    return params;
+  }
+
+  public void setParams(ParamsEntity params) {
+    this.params = params;
+  }
+
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
 
     EventParams that = (EventParams) o;
 
-    if (!getSubscriptionType().equals(that.getSubscriptionType())) return false;
+    if (getSubscriptionType() != null ? !getSubscriptionType().equals(that.getSubscriptionType())
+        : that.getSubscriptionType() != null) {
+      return false;
+    }
     if (getIdStream() != null ? !getIdStream().equals(that.getIdStream())
         : that.getIdStream() != null) {
       return false;
@@ -53,14 +65,18 @@ public class EventParams {
     if (getFilter() != null ? !getFilter().equals(that.getFilter()) : that.getFilter() != null) {
       return false;
     }
-    return getIdShot() != null ? getIdShot().equals(that.getIdShot()) : that.getIdShot() == null;
+    if (getIdShot() != null ? !getIdShot().equals(that.getIdShot()) : that.getIdShot() != null) {
+      return false;
+    }
+    return params != null ? params.equals(that.params) : that.params == null;
   }
 
   @Override public int hashCode() {
-    int result = getSubscriptionType().hashCode();
+    int result = getSubscriptionType() != null ? getSubscriptionType().hashCode() : 0;
     result = 31 * result + (getIdStream() != null ? getIdStream().hashCode() : 0);
     result = 31 * result + (getFilter() != null ? getFilter().hashCode() : 0);
     result = 31 * result + (getIdShot() != null ? getIdShot().hashCode() : 0);
+    result = 31 * result + (params != null ? params.hashCode() : 0);
     return result;
   }
 
@@ -78,6 +94,8 @@ public class EventParams {
         + ", idShot='"
         + idShot
         + '\''
+        + ", params="
+        + params
         + '}';
   }
 }

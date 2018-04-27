@@ -10,4 +10,6 @@ public interface PrintableModel {
   String getTimelineGroup();
 
   void setTimelineGroup(String timelineGroup);
+
+  Long getOrder();
 }

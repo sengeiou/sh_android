@@ -6,8 +6,7 @@ import java.util.ArrayList;
 public class BaseMessageEntity extends Synchronized {
 
   private String idUser;
-  @SerializedName("userName")
-  private String username;
+  @SerializedName("userName") private String username;
   private Long verifiedUser;
 
   private String comment;
@@ -23,7 +22,6 @@ public class BaseMessageEntity extends Synchronized {
   private String imageIdMedia;
   private ArrayList<String> timelineFlags;
   private ArrayList<String> detailFlags;
-
 
   public String getIdUser() {
     return idUser;

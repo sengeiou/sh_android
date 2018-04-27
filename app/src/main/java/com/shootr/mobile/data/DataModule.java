@@ -29,6 +29,7 @@ import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
+import com.shootr.mobile.domain.repository.Nicest;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DeviceFactory;
 import com.shootr.mobile.domain.utils.ImageResizer;
@@ -158,6 +159,7 @@ import static android.content.Context.MODE_PRIVATE;
   private static final int LRU_CACHE_SIZE = 100;
   private static final int TIMELINE_CACHE_SIZE = 150 * 1024 * 1024; // 150 MB;
   private static final String TIMELINE_CACHE = "timeline_cache";
+  private static final String NICEST_TIMELINE_CACHE = "nicest_timeline_cache";
   private static final int ADS_COUNT = 8;
   private static final String LANDING_STREAM = "landing_streams";
   private static final String LAST_VISIT = "last_visit";
@@ -337,6 +339,16 @@ import static android.content.Context.MODE_PRIVATE;
     CacheSerializer<StreamTimeline> jsonSerializer = new JsonSerializer<>(StreamTimeline.class);
 
     return new Builder<StreamTimeline>(TIMELINE_CACHE, BuildConfig.VERSION_CODE).useSerializerInRam(
+        LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton @Nicest DualCache<StreamTimeline> provideNicestStreamTimelineLruCache(
+      Application application) {
+    CacheSerializer<StreamTimeline> jsonSerializer = new JsonSerializer<>(StreamTimeline.class);
+
+    return new Builder<StreamTimeline>(NICEST_TIMELINE_CACHE, BuildConfig.VERSION_CODE).useSerializerInRam(
         LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
         .build();

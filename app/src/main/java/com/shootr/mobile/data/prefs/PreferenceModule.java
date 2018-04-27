@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.prefs;
 
 import android.content.SharedPreferences;
+import com.shootr.mobile.domain.model.TimelineType;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
@@ -44,6 +45,11 @@ import javax.inject.Singleton;
     @Provides @Singleton @TimelineFilterActivated
     BooleanPreference provideIsTimelineFilterActivated(SharedPreferences preferences) {
         return new BooleanPreference(preferences, "timeline_filter", false);
+    }
+
+    @Provides @Singleton @TimelineMultipleFilter
+    StringPreference provideTimelineFilter(SharedPreferences preferences) {
+        return new StringPreference(preferences, "new_timeline_filter", TimelineType.MAIN);
     }
 
     @Provides @Singleton @LastTimeFiltered StringPreference provideLastTimeFiltered(SharedPreferences preferences) {

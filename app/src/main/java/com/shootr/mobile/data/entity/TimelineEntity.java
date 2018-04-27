@@ -9,6 +9,7 @@ public class TimelineEntity {
   private ItemsEntity items;
   private String filter;
   private boolean newBadgeContent;
+  private ParamsEntity params;
 
   public StreamEntity getStream() {
     return stream;
@@ -64,5 +65,13 @@ public class TimelineEntity {
 
   public void setNewBadgeContent(boolean newBadgeContent) {
     this.newBadgeContent = newBadgeContent;
+  }
+
+  public ParamsEntity getParams() {
+    return params;
+  }
+
+  public void setParams(ParamsEntity params) {
+    this.params = params;
   }
 }

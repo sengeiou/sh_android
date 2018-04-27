@@ -20,6 +20,7 @@ public class GetTimelineSocketMessageApiEntity extends SocketMessageApiEntity {
     String idStream;
     String filter;
     PaginationEntity pagination;
+    ParamsEntity params;
 
     public String getIdStream() {
       return idStream;
@@ -43,6 +44,14 @@ public class GetTimelineSocketMessageApiEntity extends SocketMessageApiEntity {
 
     public void setPagination(PaginationEntity pagination) {
       this.pagination = pagination;
+    }
+
+    public ParamsEntity getParams() {
+      return params;
+    }
+
+    public void setParams(ParamsEntity params) {
+      this.params = params;
     }
   }
 }

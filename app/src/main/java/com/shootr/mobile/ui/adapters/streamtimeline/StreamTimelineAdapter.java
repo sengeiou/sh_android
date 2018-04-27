@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.adapters.streamtimeline;
 
+import android.os.Bundle;
 import android.view.View;
 import com.ahamed.multiviewadapter.DataItemManager;
 import com.ahamed.multiviewadapter.DataListManager;
@@ -20,12 +21,13 @@ import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
+import com.shootr.mobile.ui.adapters.streamtimeline.holder.BubbleShotBinder;
 import com.shootr.mobile.ui.adapters.streamtimeline.holder.CtaShotBinder;
 import com.shootr.mobile.ui.adapters.streamtimeline.holder.FixedCtaShotBinder;
 import com.shootr.mobile.ui.adapters.streamtimeline.holder.FixedShotBinder;
 import com.shootr.mobile.ui.adapters.streamtimeline.holder.LoadingBinder;
+import com.shootr.mobile.ui.adapters.streamtimeline.holder.MyShotBinder;
 import com.shootr.mobile.ui.adapters.streamtimeline.holder.PollBinder;
-import com.shootr.mobile.ui.adapters.streamtimeline.holder.ShotBinder;
 import com.shootr.mobile.ui.adapters.streamtimeline.holder.TopicBinder;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -33,6 +35,8 @@ import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class StreamTimelineAdapter extends RecyclerAdapter {
@@ -64,9 +68,9 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
   private DataListManager<PrintableModel> shotsListManager;
   private DataListManager<PrintableModel> fixedItemsListManager;
   private DataListManager<PrintableModel> pinnedItemsListManager;
+  private List<PrintableModel> nicestList;
 
   private DataItemManager<Boolean> loadingItem;
-
 
   public StreamTimelineAdapter(ImageLoader imageLoader, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
@@ -74,7 +78,8 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
       ShotTextSpannableBuilder shotTextSpannableBuilder, ShotClickListener shotClickListener,
       OnShotLongClick onShotLongClick, OnOpenShotMenuListener onOpenShotMenuListener,
       OnImageLongClickListener onLongClickListener, View.OnTouchListener onTouchListener,
-      OnImageClickListener onImageClickListener, OnDeleteHighlightedItemClick onHideHighlightClickListener,
+      OnImageClickListener onImageClickListener,
+      OnDeleteHighlightedItemClick onHideHighlightClickListener,
       OnUrlClickListener onUrlClickListener, OnUrlClickListener onUrlFixedShotClickListener,
       OnReshootClickListener onReshootClickListener, OnCtaClickListener onCtaClickListener,
       OnItemsInserted onItemsInserted, NumberFormatUtil numberFormatUtil,
@@ -108,32 +113,36 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
   }
 
   private void setupList() {
+    nicestList = new ArrayList<>();
     shotsListManager = new DataListManager<>(this, new PayloadProvider<PrintableModel>() {
       @Override public boolean areContentsTheSame(PrintableModel oldItem, PrintableModel newItem) {
         if (oldItem instanceof ShotModel && newItem instanceof ShotModel) {
-          return ((ShotModel) oldItem).getIdShot().equals(((ShotModel) newItem).getIdShot())
-              && ((ShotModel) oldItem).getNiceCount().equals(((ShotModel) newItem).getNiceCount())
-              && ((ShotModel) oldItem).getReplyCount().equals(((ShotModel) newItem).getReplyCount())
-              && ((ShotModel) newItem).isReshooted() == ((ShotModel) oldItem).isReshooted()
-              && ((ShotModel) oldItem).isNiced()
-              && ((ShotModel) newItem).isNiced();
+          return isTheSameItem((ShotModel) oldItem, (ShotModel) newItem);
         }
         return false;
       }
 
       @Override public Object getChangePayload(PrintableModel oldItem, PrintableModel newItem) {
-        return null;
+        Bundle diffBundle = new Bundle();
+        if (!((ShotModel) oldItem).getNiceCount().equals(((ShotModel) newItem).getNiceCount())) {
+          diffBundle.putSerializable(BubbleShotBinder.NICE_BUNDLE, (ShotModel) newItem);
+        }
+
+        if (!((ShotModel) oldItem).getReplyCount().equals(((ShotModel) newItem).getReplyCount())) {
+          diffBundle.putSerializable(BubbleShotBinder.REPLY_BUNDLE, (ShotModel) newItem);
+        }
+
+        if (((ShotModel) oldItem).isReshooted() != (((ShotModel) newItem).isReshooted())) {
+          diffBundle.putSerializable(BubbleShotBinder.RESHOOT_BUNDLE, (ShotModel) newItem);
+        }
+
+        return diffBundle;
       }
     });
     fixedItemsListManager = new DataListManager<>(this, new PayloadProvider<PrintableModel>() {
       @Override public boolean areContentsTheSame(PrintableModel oldItem, PrintableModel newItem) {
         if (oldItem instanceof ShotModel && newItem instanceof ShotModel) {
-          return ((ShotModel) oldItem).getIdShot().equals(((ShotModel) newItem).getIdShot())
-              && ((ShotModel) oldItem).getNiceCount().equals(((ShotModel) newItem).getNiceCount())
-              && ((ShotModel) oldItem).getReplyCount().equals(((ShotModel) newItem).getReplyCount())
-              && ((ShotModel) newItem).isReshooted() == ((ShotModel) oldItem).isReshooted()
-              && ((ShotModel) oldItem).isNiced()
-              && ((ShotModel) newItem).isNiced();
+          return isTheSameItem((ShotModel) oldItem, (ShotModel) newItem);
         }
         return false;
       }
@@ -149,29 +158,37 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
     addDataManager(shotsListManager);
 
     registerBinder(
-        new ShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
+        new BubbleShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
             onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
             onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
             onImageClickListener, onHideHighlightClickListener, onUrlClickListener,
             onReshootClickListener, onCtaClickListener, numberFormatUtil));
 
-    registerBinder(new FixedShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
-        onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
-        onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
-        onImageClickListener, onHideHighlightClickListener,
+    registerBinder(
+        new MyShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
+            onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
+            onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
+            onImageClickListener, onHideHighlightClickListener, onUrlClickListener,
+            onReshootClickListener, onCtaClickListener, numberFormatUtil));
+
+    registerBinder(new FixedShotBinder(imageLoader, avatarClickListener, videoClickListener,
+        onNiceShotListener, onUsernameClickListener, timeUtils, shotTextSpannableBuilder,
+        shotClickListener, onShotLongClick, onOpenShotMenuListener, onLongClickListener,
+        onTouchListener, onImageClickListener, onHideHighlightClickListener,
         onUrlFixedShotClickListener, onReshootClickListener, onCtaClickListener, numberFormatUtil,
         canFixItems));
 
-    registerBinder(new CtaShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
-        onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
-        onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
-        onImageClickListener, onHideHighlightClickListener, onUrlClickListener,
-        onReshootClickListener, onCtaClickListener, numberFormatUtil));
+    registerBinder(
+        new CtaShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
+            onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
+            onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
+            onImageClickListener, onHideHighlightClickListener, onUrlClickListener,
+            onReshootClickListener, onCtaClickListener, numberFormatUtil));
 
-    registerBinder(new FixedCtaShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
-        onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
-        onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
-        onImageClickListener, onHideHighlightClickListener,
+    registerBinder(new FixedCtaShotBinder(imageLoader, avatarClickListener, videoClickListener,
+        onNiceShotListener, onUsernameClickListener, timeUtils, shotTextSpannableBuilder,
+        shotClickListener, onShotLongClick, onOpenShotMenuListener, onLongClickListener,
+        onTouchListener, onImageClickListener, onHideHighlightClickListener,
         onUrlFixedShotClickListener, onReshootClickListener, onCtaClickListener, numberFormatUtil,
         canFixItems));
 
@@ -182,8 +199,22 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
     registerBinder(new LoadingBinder());
   }
 
+  private boolean isTheSameItem(ShotModel oldItem, ShotModel newItem) {
+    return oldItem.getIdShot().equals(newItem.getIdShot())
+        && oldItem.getNiceCount().equals(newItem.getNiceCount())
+        && oldItem.getReplyCount().equals(newItem.getReplyCount())
+        && newItem.isReshooted() == oldItem.isReshooted()
+        && oldItem.isNiced() == newItem.isNiced();
+  }
+
   public void setShotList(List<PrintableModel> list) {
     shotsListManager.set(list);
+  }
+
+  public void setNicestShotList(List<PrintableModel> list) {
+    Collections.sort(list, new ShotModel.OrderFieldComparator());
+    nicestList = list;
+    shotsListManager.set(nicestList);
   }
 
   public void setFixedItems(List<PrintableModel> list) {
@@ -233,6 +264,29 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
           shotsListManager.set(index, item);
         }
       }
+    }
+  }
+
+  public void updateNicestItem(PrintableModel item) {
+    if (item.getTimelineGroup().equals(PrintableModel.ITEMS_GROUP)) {
+      int index = nicestList.indexOf(item);
+      if (index != -1) {
+        if (((ShotModel) item).isDeleted()) {
+          nicestList.remove(index);
+        } else {
+          nicestList.set(index, item);
+        }
+      } else {
+        nicestList.add(item);
+      }
+      setNicestShotList(nicestList);
+    }
+  }
+
+  public void handleNicestItem(PrintableModel item) {
+    if (item.getTimelineGroup().equals(PrintableModel.ITEMS_GROUP)) {
+      nicestList.remove(item);
+      setNicestShotList(nicestList);
     }
   }
 

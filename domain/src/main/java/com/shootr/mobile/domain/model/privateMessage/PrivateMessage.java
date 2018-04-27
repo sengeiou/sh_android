@@ -121,6 +121,10 @@ public class PrivateMessage extends BaseMessage {
     return "PRIVATE_MESSAGE";
   }
 
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
   @Override public String getMessageType() {
     return null;
   }

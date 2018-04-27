@@ -5,4 +5,6 @@ import com.shootr.mobile.domain.messages.Message;
 public interface PrintableItem extends Message {
 
   String getResultType();
+
+  Long getOrder();
 }

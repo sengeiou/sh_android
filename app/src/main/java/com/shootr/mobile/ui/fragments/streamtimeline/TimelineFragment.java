@@ -1,12 +1,12 @@
 package com.shootr.mobile.ui.fragments.streamtimeline;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -35,6 +35,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.BindString;
@@ -52,8 +53,10 @@ import com.shootr.mobile.data.prefs.CheckInShowcaseStatus;
 import com.shootr.mobile.data.prefs.ShowcasePreference;
 import com.shootr.mobile.data.prefs.ShowcaseStatus;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
+import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
+import com.shootr.mobile.ui.FloatingVideoService;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
@@ -125,6 +128,8 @@ import java.util.Locale;
 import javax.inject.Inject;
 import timber.log.Timber;
 
+import static android.app.Activity.RESULT_OK;
+
 public class TimelineFragment extends BaseFragment
     implements StreamTimelineView, NewShotBarView, FixedItemView, LongPressView,
     StreamTimelineOptionsView, YouTubePlayer.PlaybackEventListener,
@@ -133,6 +138,7 @@ public class TimelineFragment extends BaseFragment
 
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
+  private static final int DRAW_OVER_OTHER_APP_PERMISSION_REQUEST_CODE = 1222;
 
   private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
 
@@ -216,15 +222,18 @@ public class TimelineFragment extends BaseFragment
   @BindString(R.string.shot_timeline_empty_title) String emptyTimeline;
   @BindString(R.string.no_filter_shots) String emptyFilter;
   @BindString(R.string.top_indicator) String topIndicator;
+  @BindString(R.string.filtered_by_important) String filteredByImportant;
+  @BindString(R.string.filtered_by_nicest) String filteredByNicest;
+  @BindString(R.string.nicest_timeline_empty_title) String empty_nicest_timeline;
+  @BindString(R.string.shot_timeline_empty_title) String empty_shot_timeline;
 
-  private MenuItemValueHolder importantItemsMenuItem = new MenuItemValueHolder();
-  private MenuItemValueHolder allItemsMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder addToFavoritesMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder removeFromFavoritesMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder muteMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder unmuteMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder showVideoMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder hideVideoMenuItem = new MenuItemValueHolder();
+  private MenuItemValueHolder filterMenuItem = new MenuItemValueHolder();
 
   private PhotoPickerController photoPickerController;
   private PreCachingLayoutManager preCachingLayoutManager;
@@ -239,13 +248,11 @@ public class TimelineFragment extends BaseFragment
 
   private int charCounterColorError;
   private int charCounterColorNormal;
-
-  private boolean isFilterActivated;
-
   private Integer[] watchNumberCount;
 
   private boolean isFullScreen;
   private YouTubePlayer videoPlayer;
+  private boolean videoHasBeenPlayed;
 
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
 
@@ -290,6 +297,7 @@ public class TimelineFragment extends BaseFragment
     setHasOptionsMenu(true);
     idStream = getArguments().getString(EXTRA_STREAM_ID);
     sessionRepository.resetFilter(idStream);
+    sessionRepository.resetMultipleFilter(idStream);
     initializePresenters();
     initializeViews();
   }
@@ -494,6 +502,7 @@ public class TimelineFragment extends BaseFragment
       changePlayerVisibility(false);
       videoPlayer.release();
     }
+    timelinePresenter.onInAppVideoStarted();
 
     BottomYoutubeVideoPlayer bottomYoutubeVideoPlayer = new BottomYoutubeVideoPlayer();
     bottomYoutubeVideoPlayer.setVideoId(videoId);
@@ -670,7 +679,7 @@ public class TimelineFragment extends BaseFragment
     topicCharCounter = (TextView) dialogView.findViewById(R.id.new_topic_char_counter);
     newTopicText.addTextChangedListener(new TextWatcher() {
       @Override public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                /* no - op */
+        /* no - op */
       }
 
       @Override public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -678,7 +687,7 @@ public class TimelineFragment extends BaseFragment
       }
 
       @Override public void afterTextChanged(Editable editable) {
-                /* no-op */
+        /* no-op */
       }
     });
     if (timelinePresenter.getCurrentTopicText() != null) {
@@ -723,7 +732,11 @@ public class TimelineFragment extends BaseFragment
       int offset) {
     checkingForShotsView.setVisibility(View.GONE);
     itemsList.scrollToPosition(0);
-    adapter.setShotList(items);
+    if (timelinePresenter.getFilterType().equals(TimelineType.NICEST)) {
+      adapter.setNicestShotList(items);
+    } else {
+      adapter.setShotList(items);
+    }
     if (itemForReposition != null && adapter.indexOf(itemForReposition) != -1) {
       preCachingLayoutManager.scrollToPositionWithOffset(adapter.indexOf(itemForReposition),
           offset);
@@ -733,6 +746,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void renderExternalVideo(ExternalVideoModel externalVideoModel) {
+    createFloatingWidget();
     showVideoVisibilityMenu();
     currentVideoModel = externalVideoModel;
     changeStatusBarColor();
@@ -772,6 +786,10 @@ public class TimelineFragment extends BaseFragment
     adapter.updateItem(updatedItem);
   }
 
+  @Override public void updateNicestItem(PrintableModel updatedItem) {
+    adapter.updateNicestItem(updatedItem);
+  }
+
   @Override public void addMyItem(PrintableModel shotModel) {
     adapter.addNewItem(shotModel);
   }
@@ -801,15 +819,15 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void showGenericItemsMenuItem() {
-    allItemsMenuItem.setVisible(true);
-    importantItemsMenuItem.setVisible(false);
-    toolbarDecorator.putFilterSubtitle();
+    toolbarDecorator.hideFilterSubtitle();
   }
 
   @Override public void showImportantItemsMenuItem() {
-    importantItemsMenuItem.setVisible(true);
-    allItemsMenuItem.setVisible(false);
-    toolbarDecorator.hideFilterSubtitle();
+    toolbarDecorator.putFilterSubtitle(filteredByImportant);
+  }
+
+  @Override public void showNicestItemsMenuItem() {
+    toolbarDecorator.putFilterSubtitle(filteredByNicest);
   }
 
   @Override public void hidePinnedMessage() {
@@ -844,16 +862,16 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void showFilterAlert() {
-    if (importantItemsMenuItem != null) {
-      CustomActionItemBadge.updateFilterAlert(getActivity(), importantItemsMenuItem,
-          importantItemsMenuItem.getIcon(), " ");
+    if (filterMenuItem != null) {
+      CustomActionItemBadge.updateFilterAlert(getActivity(), filterMenuItem,
+          filterMenuItem.getIcon(), " ");
     }
   }
 
   private void hideFilterAlert() {
-    if (importantItemsMenuItem != null) {
-      ActionItemBadge.update(getActivity(), importantItemsMenuItem,
-          importantItemsMenuItem.getIcon(), ActionItemBadge.BadgeStyles.RED, null);
+    if (filterMenuItem != null) {
+      ActionItemBadge.update(getActivity(), filterMenuItem, filterMenuItem.getIcon(),
+          ActionItemBadge.BadgeStyles.RED, null);
     }
   }
 
@@ -867,6 +885,10 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void setReshoot(String idShot, boolean mark) {
     /* no-op */
+  }
+
+  @Override public void handleNewNicestItem(PrintableModel shotModel) {
+    adapter.handleNicestItem(shotModel);
   }
 
   @Override public void showLoadingOldShots() {
@@ -947,6 +969,12 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void showEmpty() {
+    emptyView.setText(empty_shot_timeline);
+    emptyView.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void showEmptyNicest() {
+    emptyView.setText(empty_nicest_timeline);
     emptyView.setVisibility(View.VISIBLE);
   }
 
@@ -976,14 +1004,7 @@ public class TimelineFragment extends BaseFragment
 
   @Override
   public void showAlertLanguageSupportDialog(final String sessionToken, final ShotModel shotModel) {
-    /*new AlertDialog.Builder(getContext()).setMessage(getString(R.string.language_support_alert))
-        .setPositiveButton(getString(R.string.email_confirmation_ok),
-            new DialogInterface.OnClickListener() {
-              @Override public void onClick(DialogInterface dialog, int which) {
-                goToReport(sessionToken, shotModel);
-              }
-            })
-        .show();*/
+    goToReport(sessionToken, shotModel);
   }
 
   @Override
@@ -1078,7 +1099,7 @@ public class TimelineFragment extends BaseFragment
       if (getActivity() != null) {
         getActivity().finish();
       }
-    } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == Activity.RESULT_OK) {
+    } else if (requestCode == REQUEST_STREAM_DETAIL && resultCode == RESULT_OK) {
       String updatedTitle = data.getStringExtra(StreamDetailActivity.EXTRA_STREAM_TITLE);
       setTitle(updatedTitle);
     } else {
@@ -1114,6 +1135,9 @@ public class TimelineFragment extends BaseFragment
     super.onPause();
     timelinePresenter.pause();
     calculateItemForReposition();
+    if (videoPlayer != null && videoPlayer.isPlaying()) {
+      timelinePresenter.onBackPressedWhilePlayingVideo(videoPlayer.getCurrentTimeMillis());
+    }
   }
 
   private void calculateItemForReposition() {
@@ -1144,10 +1168,6 @@ public class TimelineFragment extends BaseFragment
   //region activity menu
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     inflater.inflate(R.menu.new_timeline, menu);
-    importantItemsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_holding_shots));
-    importantItemsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-    allItemsMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_showing_all_shots));
-    allItemsMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     addToFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_add_favorite));
     removeFromFavoritesMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_stream_remove_favorite));
     muteMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_mute_stream));
@@ -1156,6 +1176,8 @@ public class TimelineFragment extends BaseFragment
     showVideoMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     hideVideoMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_hide_video));
     hideVideoMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+    filterMenuItem.bindRealMenuItem(menu.findItem(R.id.menu_filter_shots));
+    filterMenuItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
   }
 
   @Override public boolean onOptionsItemSelected(MenuItem item) {
@@ -1166,18 +1188,8 @@ public class TimelineFragment extends BaseFragment
       case R.id.menu_hide_video:
         changePlayerVisibility(false);
         return true;
-      case R.id.menu_showing_holding_shots:
-        timelinePresenter.onActivateFilterClick();
-        sendFilterOnAnalytics();
-        filterShowcase.setVisibility(View.GONE);
-        setShowcasePreference();
-        isFilterActivated = true;
-        return true;
-      case R.id.menu_showing_all_shots:
-        timelinePresenter.onDesactivateFilterClick();
-        hideFilterAlert();
-        sendFilterOffAnalytics();
-        isFilterActivated = false;
+      case R.id.menu_filter_shots:
+        showFilteringPopUpWindows();
         return true;
       case R.id.menu_stream_add_favorite:
         streamTimelineOptionsPresenter.addToFavorites();
@@ -1196,6 +1208,89 @@ public class TimelineFragment extends BaseFragment
       default:
         return super.onOptionsItemSelected(item);
     }
+  }
+
+  private void showFilteringPopUpWindows() {
+    PopupWindow popupWindow = popupDisplay();
+
+    popupWindow.showAsDropDown(getActivity().findViewById(R.id.menu_filter_shots), (int) dp(-116),
+        (int) dp(-48));
+  }
+
+  public PopupWindow popupDisplay() {
+
+    final PopupWindow popupWindow = new PopupWindow();
+
+    LayoutInflater inflater =
+        (LayoutInflater) getContext().getSystemService(getContext().LAYOUT_INFLATER_SERVICE);
+
+    View view = inflater.inflate(R.layout.menu_filter_layout, null);
+    ImageView imgNone = (ImageView) view.findViewById(R.id.none_filter_selected);
+    ImageView imgImportant = (ImageView) view.findViewById(R.id.important_filter_selected);
+    ImageView imgNicest = (ImageView) view.findViewById(R.id.nicest_filter_selected);
+    TextView txtNone = (TextView) view.findViewById(R.id.none_filter);
+    TextView txtImportant = (TextView) view.findViewById(R.id.important_filter);
+    TextView txtNicest = (TextView) view.findViewById(R.id.nicest_filter);
+
+    View.OnClickListener onClickListener = new View.OnClickListener() {
+      @Override public void onClick(View view) {
+        switch (view.getId()) {
+          case R.id.none_filter:
+            timelinePresenter.onDesactivateFilterClick();
+            sendFilterOffAnalytics();
+            break;
+          case R.id.important_filter:
+            timelinePresenter.onActivateFilterClick();
+            sendFilterOnAnalytics();
+            filterShowcase.setVisibility(View.GONE);
+            setShowcasePreference();
+            break;
+          case R.id.nicest_filter:
+            timelinePresenter.onActivateFilterNicestClick();
+            setShowcasePreference();
+            break;
+          default:
+            break;
+        }
+        popupWindow.dismiss();
+      }
+    };
+
+    txtNone.setOnClickListener(onClickListener);
+    txtImportant.setOnClickListener(onClickListener);
+    txtNicest.setOnClickListener(onClickListener);
+
+    switch (timelinePresenter.getFilterType()) {
+      case TimelineType.MAIN:
+        imgNone.setVisibility(View.VISIBLE);
+        imgImportant.setVisibility(View.INVISIBLE);
+        imgNicest.setVisibility(View.INVISIBLE);
+        break;
+      case TimelineType.IMPORTANT:
+        imgNone.setVisibility(View.INVISIBLE);
+        imgImportant.setVisibility(View.VISIBLE);
+        imgNicest.setVisibility(View.INVISIBLE);
+        break;
+      case TimelineType.NICEST:
+        imgNone.setVisibility(View.INVISIBLE);
+        imgImportant.setVisibility(View.INVISIBLE);
+        imgNicest.setVisibility(View.VISIBLE);
+        break;
+      default:
+        break;
+    }
+
+    popupWindow.setFocusable(true);
+    popupWindow.setWidth((int) dp(200f));
+    popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+    popupWindow.setContentView(view);
+
+    return popupWindow;
+  }
+
+  private float dp(float dp) {
+    float scale = getResources().getDisplayMetrics().density;
+    return (int) (dp * scale + 0.5f);
   }
 
   @Override public void showAddToFavoritesButton() {
@@ -1314,8 +1409,15 @@ public class TimelineFragment extends BaseFragment
     hideVideoMenuItem.setVisible(true);
   }
 
+  @Override public void resumeVideo() {
+    createFloatingWidget();
+    if (videoPlayer != null && videoHasBeenPlayed) {
+      timelinePresenter.onVideoStarted();
+    }
+  }
+
   private void updateWatchNumberIcon() {
-    if (watchNumberCount != null && !isFilterActivated) {
+    if (watchNumberCount != null && timelinePresenter.getFilterType().equals(TimelineType.MAIN)) {
       toolbarDecorator.showSubtitle();
       toolbarDecorator.setSubtitle(handleSubtitle());
     } else {
@@ -1558,7 +1660,29 @@ public class TimelineFragment extends BaseFragment
         return true;
       }
     }
-    return  false;
+    return false;
+  }
+
+  public void createFloatingWidget() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getContext())) {
+      Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+          Uri.parse("package:" + getContext().getPackageName()));
+      startActivityForResult(intent, DRAW_OVER_OTHER_APP_PERMISSION_REQUEST_CODE);
+    } else {
+      FloatingVideoService.startService(getContext());
+    }
+  }
+
+  @Override public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+
+    if (requestCode == DRAW_OVER_OTHER_APP_PERMISSION_REQUEST_CODE) {
+      if (grantResults.length > 0) {
+        createFloatingWidget();
+      }
+    } else {
+      super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
   }
 
   @Override
@@ -1591,7 +1715,8 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void onVideoStarted() {
-    /* no-op */
+    videoHasBeenPlayed = true;
+    timelinePresenter.onVideoStarted();
   }
 
   @Override public void onVideoEnded() {
@@ -1607,7 +1732,8 @@ public class TimelineFragment extends BaseFragment
     if (!videoAnimationPlaying) {
       ConstraintSet constraintSet = new ConstraintSet();
 
-      constraintSet.clone(getContext(), show ? R.layout.stream_timeline : R.layout.stream_timeline_hidden_video);
+      constraintSet.clone(getContext(),
+          show ? R.layout.stream_timeline : R.layout.stream_timeline_hidden_video);
       constraintSet.applyTo(container);
 
       Transition transition = new AutoTransition();
@@ -1651,5 +1777,4 @@ public class TimelineFragment extends BaseFragment
       window.setStatusBarColor(getContext().getResources().getColor(R.color.black));
     }
   }
-
 }

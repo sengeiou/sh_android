@@ -141,7 +141,7 @@
           android:background="@drawable/round_corner"
           android:foreground="?selectableItemBackground"
           android:visibility="gone"
-          tools:visibility="visible"
+          tools:visibility="gone"
           >
 
         <TextView

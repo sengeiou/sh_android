@@ -6,6 +6,7 @@ public class EventParams {
   private String idStream;
   private String filter;
   private String idShot;
+  private long period;
 
   public String getSubscriptionType() {
     return subscriptionType;
@@ -37,5 +38,13 @@ public class EventParams {
 
   public void setIdShot(String idShot) {
     this.idShot = idShot;
+  }
+
+  public long getPeriod() {
+    return period;
+  }
+
+  public void setPeriod(long period) {
+    this.period = period;
   }
 }

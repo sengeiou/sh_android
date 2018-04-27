@@ -121,6 +121,10 @@ public class BaseMessageModel implements Serializable, PrintableModel, EntityCon
     this.timelineGroup = timelineGroup;
   }
 
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
   public ArrayList<String> getTimelineFlags() {
     return timelineFlags;
   }

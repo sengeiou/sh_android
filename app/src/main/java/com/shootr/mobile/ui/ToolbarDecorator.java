@@ -91,8 +91,9 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     }
   }
 
-  public void putFilterSubtitle() {
+  public void putFilterSubtitle(String subtitle) {
     subtitleText.setVisibility(View.GONE);
+    subtitleFilteredText.setText(subtitle);
     subtitleFilteredText.setVisibility(View.VISIBLE);
   }
 
@@ -101,7 +102,6 @@ public class ToolbarDecorator implements ViewContainerDecorator {
         subtitleText.getText().toString().isEmpty() ? View.GONE : View.VISIBLE);
     subtitleFilteredText.setVisibility(View.GONE);
   }
-
 
   public void showSubtitle() {
     if (subtitleFilteredText.getVisibility() != View.VISIBLE) {
