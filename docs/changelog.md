@@ -13,6 +13,19 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.57.0] - 2018-04-27
+### Fixed
+- Fix al hacer dismiss al bottomVideo 
+- Fix al hacer spans de urls
+
+### Changed
+- View por followers en Search Streams
+- New timeline design
+
+### Added
+- Floating video on streams
+- Sorted by nicest shots
+
 ## [1.56.0] - 2018-03-29
 ### Fixed
 - Socket reconnection on new library

@@ -39,7 +39,7 @@ import static com.shootr.mobile.ShootrApplication.SCREEN_SIZE;
  * Created by miniserver on 28/9/17.
  */
 
-public class CustomBaseMessageTextView extends View  {
+public class CustomBaseMessageTextView extends View {
 
   public static final String[] ALLOWED_SCHEMAS = { "http://", "https://", "rtsp://" };
   public static final String DEFAULT_SCHEMA = "http://";
@@ -61,7 +61,7 @@ public class CustomBaseMessageTextView extends View  {
     int niceContainerSize = (int) dp(49);
     int conatinerPadding = (int) dp(32);
 
-    int textXOffset =  avatarImageMargin + avatarImageSize + niceContainerSize + conatinerPadding;
+    int textXOffset = avatarImageMargin + avatarImageSize + niceContainerSize + conatinerPadding;
 
     LayoutCache.INSTANCE.changeWidth(SCREEN_SIZE.x - textXOffset);
   }
@@ -113,8 +113,7 @@ public class CustomBaseMessageTextView extends View  {
     return staticLayout;
   }
 
-  @Override
-  protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+  @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     int width = MeasureSpec.getSize(widthMeasureSpec);
     int height;
     int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -130,8 +129,7 @@ public class CustomBaseMessageTextView extends View  {
     setMeasuredDimension(width, height);
   }
 
-  @Override
-  protected void onDraw(Canvas canvas) {
+  @Override protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
     canvas.save();
     canvas.translate(getPaddingLeft(), getPaddingTop());
@@ -140,7 +138,8 @@ public class CustomBaseMessageTextView extends View  {
   }
 
   private float sp(float sp) {
-    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, getResources().getDisplayMetrics());
+    return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp,
+        getResources().getDisplayMetrics());
   }
 
   private float dp(float dp) {
@@ -222,14 +221,14 @@ public class CustomBaseMessageTextView extends View  {
 
           String textToReplace = stringBuilder.toString().substring(start, end);
 
-          BaseMessageUsernameSpan usernameClickSpan = new BaseMessageUsernameSpan(mentionModel.getIdUser()) {
-            @Override public void onUsernameClick(String idUser) {
-              goToUserProfile(idUser);
-            }
-          };
+          BaseMessageUsernameSpan usernameClickSpan =
+              new BaseMessageUsernameSpan(mentionModel.getIdUser()) {
+                @Override public void onUsernameClick(String idUser) {
+                  goToUserProfile(idUser);
+                }
+              };
 
-          stringBuilder.setSpan(usernameClickSpan, start,
-              end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+          stringBuilder.setSpan(usernameClickSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
           stringBuilder.replace(start, end, mentionModel.getUsername());
 
@@ -241,25 +240,26 @@ public class CustomBaseMessageTextView extends View  {
     }
   }
 
-
   private void spanUrls(SpannableStringBuilder stringBuilder) {
     int lastUrlindex = 0;
     if (baseMessageModel.getEntitiesModel() != null) {
-      for (UrlModel urlModel : baseMessageModel.getEntitiesModel().getUrls()) {
-        try {
-          int start = urlModel.getIndices().get(0) + lastUrlindex;
-          int end = urlModel.getIndices().get(1) + lastUrlindex;
+      if (baseMessageModel.getEntitiesModel().getUrls() != null) {
+        for (UrlModel urlModel : baseMessageModel.getEntitiesModel().getUrls()) {
+          try {
+            int start = urlModel.getIndices().get(0) + lastUrlindex;
+            int end = urlModel.getIndices().get(1) + lastUrlindex;
 
-          String textToReplace = stringBuilder.toString().substring(start, end);
+            String textToReplace = stringBuilder.toString().substring(start, end);
 
-          stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener), start,
-              end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            stringBuilder.setSpan(new TouchableUrlSpan(urlModel.getUrl(), onUrlClickListener),
+                start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-          stringBuilder.replace(start, end, urlModel.getDisplayUrl());
+            stringBuilder.replace(start, end, urlModel.getDisplayUrl());
 
-          lastUrlindex += urlModel.getDisplayUrl().length() - textToReplace.length();
-        } catch (IndexOutOfBoundsException error) {
-          /* no-op */
+            lastUrlindex += urlModel.getDisplayUrl().length() - textToReplace.length();
+          } catch (IndexOutOfBoundsException error) {
+            /* no-op */
+          }
         }
       }
     }
@@ -366,8 +366,8 @@ public class CustomBaseMessageTextView extends View  {
     return false;
   }
 
-  private BaseMessagePressableSpan getTouchedSpan(MotionEvent event, CustomBaseMessageTextView widget,
-      Spannable buffer) {
+  private BaseMessagePressableSpan getTouchedSpan(MotionEvent event,
+      CustomBaseMessageTextView widget, Spannable buffer) {
     int x = (int) event.getX();
     int y = (int) event.getY();
 
@@ -434,12 +434,13 @@ public class CustomBaseMessageTextView extends View  {
     INSTANCE;
 
     private int width;
-    private final LruCache<CharSequence, StaticLayout> commentCache = new LruCache<CharSequence, StaticLayout>(100) {
-      @Override
-      protected StaticLayout create(CharSequence key) {
-        return new StaticLayout(key, textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1, 1, true);
-      }
-    };
+    private final LruCache<CharSequence, StaticLayout> commentCache =
+        new LruCache<CharSequence, StaticLayout>(100) {
+          @Override protected StaticLayout create(CharSequence key) {
+            return new StaticLayout(key, textPaint, width, Layout.Alignment.ALIGN_NORMAL, 1, 1,
+                true);
+          }
+        };
 
     public void changeWidth(int newWidth) {
       if (width != newWidth) {
@@ -452,6 +453,4 @@ public class CustomBaseMessageTextView extends View  {
       return commentCache.get(text);
     }
   }
-
-
 }
