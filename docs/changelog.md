@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.57.1] - 2018-04-27
+### Added
+- Add timestamp to new timeline design
+
 ## [1.57.0] - 2018-04-27
 ### Fixed
 - Fix al hacer dismiss al bottomVideo 
