@@ -181,7 +181,7 @@
   <string name="favorite_streams_push_settings">Streams I follow</string>
   <string name="feedback_email_address">feedback@shootr.com</string>
   <string name="filtered_by_important">Filtered by: Important</string>
-  <string name="filtered_by_nicest">Filtered by: Nicest</string>
+  <string name="filtered_by_nicest">Filtered by: Nicest (last 7d)</string>
   <!-- Tap here to see the important shots -->
   <string name="filter_show_case">Tap here to see the important shots</string>
   <string name="finished_poll">Results for the poll %s</string>

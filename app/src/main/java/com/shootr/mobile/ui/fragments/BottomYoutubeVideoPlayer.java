@@ -86,7 +86,7 @@ public class BottomYoutubeVideoPlayer extends BottomSheetDialogFragment {
   @Override public void onDismiss(DialogInterface dialog) {
     super.onDismiss(dialog);
     if (this.playerCallback != null) {
-      if(youTubePlayer != null) {
+      if (youTubePlayer != null) {
         youTubePlayer.release();
       }
       this.playerCallback.onDismiss();

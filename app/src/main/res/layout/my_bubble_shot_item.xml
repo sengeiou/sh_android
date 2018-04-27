@@ -82,6 +82,22 @@
       tools:text="JorgeMartinez"
       />
 
+  <TextView
+      android:id="@+id/shot_timestamp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginRight="4dp"
+      android:maxLines="1"
+      android:textSize="12sp"
+      android:fontFamily="sans-serif"
+      android:textStyle="normal"
+      android:textColor="@color/gray_80"
+      android:paddingBottom="4dp"
+      app:layout_constraintEnd_toStartOf="@+id/shot_user_name"
+      tools:text="22m"
+      />
+
+
   <android.support.constraint.Guideline
       android:id="@+id/guideline"
       android:layout_width="wrap_content"

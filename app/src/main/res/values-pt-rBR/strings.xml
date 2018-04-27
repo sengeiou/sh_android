@@ -589,7 +589,7 @@
   <string name="stream_data_info_total_views">Total</string>
   <string name="stream_data_info_views">Visualizações</string>
   <string name="facebook_permissions_alert">O email e a lista de amigos são necessários</string>
-  <string name="none_filter">Todos</string>
+  <string name="none_filter">Todo</string>
   <string name="important_filter">Important</string>
   <string name="nicest_filter">Nicest</string>
   <string name="nicest_timeline_empty_title">No nice shots</string>

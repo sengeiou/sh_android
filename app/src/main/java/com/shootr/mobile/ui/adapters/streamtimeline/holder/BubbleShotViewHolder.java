@@ -57,6 +57,7 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
   @BindView(R.id.verified_user) ImageView verifiedUser;
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
   @BindView(R.id.open_menu) ImageView openImageMenu;
+  @BindView(R.id.shot_timestamp) TextView timestamp;
   private View view;
   private ShotModel item;
 
@@ -97,6 +98,7 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
     setupListeners(shot, shotClickListener, onShotLongClick, onReshootClickListener,
         onOpenShotMenuListener);
     setupShotActions(shot, onReshootClickListener);
+    bindElapsedTime(shot);
     item = shot;
   }
 
@@ -352,6 +354,14 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
       });
     }
   }
+
+  private void bindElapsedTime(ShotModel shot) {
+    long shotTimestamp = shot.getBirth().getTime();
+    if (timestamp != null) {
+      this.timestamp.setText(timeUtils.getElapsedTime(view.getContext(), shotTimestamp));
+    }
+  }
+
 
 
 }
