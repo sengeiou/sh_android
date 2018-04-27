@@ -39,6 +39,7 @@ import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import java.util.List;
 import javax.inject.Inject;
@@ -67,6 +68,7 @@ public class GenericSearchFragment extends BaseFragment
   @Inject FeedbackMessage feedbackMessage;
   @Inject ShareManager shareManager;
   @Inject InitialsLoader initialsLoader;
+  @Inject NumberFormatUtil numberFormatUtil;
   @Inject ImageLoader imageLoader;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
@@ -87,7 +89,7 @@ public class GenericSearchFragment extends BaseFragment
 
   private void initializeStreamListAdapter() {
 
-    adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
+    adapter = new SearchAdapter(imageLoader, numberFormatUtil, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
         searchItemsPresenter.followUser(user);
         adapter.followUser(user);

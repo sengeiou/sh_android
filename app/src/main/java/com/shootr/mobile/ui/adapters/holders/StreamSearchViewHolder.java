@@ -14,6 +14,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.widgets.FollowButton;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 
 public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
 
@@ -21,6 +22,7 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   private final FavoriteClickListener onFavoriteClickListener;
   private final ImageLoader imageLoader;
   private final InitialsLoader initialsLoader;
+  private final NumberFormatUtil numberFormatUtil;
 
   @BindView(R.id.stream_picture) ImageView picture;
   @BindView(R.id.stream_picture_without_text) ImageView pictureWithoutText;
@@ -35,12 +37,13 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
 
   public StreamSearchViewHolder(View itemView, OnSearchStreamClickListener onStreamClickListener,
       FavoriteClickListener onFavoriteClickListener, ImageLoader imageLoader,
-      InitialsLoader initialsLoader) {
+      InitialsLoader initialsLoader, NumberFormatUtil numberFormatUtil) {
     super(itemView);
     this.onStreamClickListener = onStreamClickListener;
     this.onFavoriteClickListener = onFavoriteClickListener;
     this.imageLoader = imageLoader;
     this.initialsLoader = initialsLoader;
+    this.numberFormatUtil = numberFormatUtil;
     ButterKnife.bind(this, itemView);
   }
 
@@ -84,14 +87,17 @@ public class StreamSearchViewHolder extends RecyclerView.ViewHolder {
   }
 
   private void setupAuthorAndDescriptionSubtitle(StreamModel stream) {
-    if (subtitle != null && subtitleDescription != null) {
-      subtitle.setText("@" + stream.getAuthorUsername());
-      subtitleDescription.setVisibility(View.VISIBLE);
-      String favorites = subtitle.getContext()
+    if (subtitle != null) {
+      subtitle.setVisibility(View.VISIBLE);
+      String numViews = subtitle.getContext()
           .getResources()
-          .getQuantityString(R.plurals.listing_favorites, stream.getTotalFollowers(),
-              stream.getTotalFollowers());
-      subtitleDescription.setText(favorites);
+          .getQuantityString(R.plurals.view_count_pattern, ((int) stream.getViews()),
+              numberFormatUtil.formatNumbers(stream.getViews()));
+      subtitle.setText(numViews);
+    }
+    if (subtitleDescription != null) {
+      subtitleDescription.setVisibility(View.VISIBLE);
+      subtitleDescription.setText("@" + stream.getAuthorUsername());
     }
   }
 

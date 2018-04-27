@@ -35,6 +35,7 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
 import javax.inject.Inject;
 import timber.log.Timber;
@@ -62,6 +63,7 @@ public class StreamFollowersFragment extends BaseFragment
   @Inject ShareManager shareManager;
   @Inject InitialsLoader initialsLoader;
   @Inject ImageLoader imageLoader;
+  @Inject NumberFormatUtil numberFormatUtil;
   @Inject SessionRepository sessionRepository;
   @Inject AnalyticsTool analyticsTool;
 
@@ -132,7 +134,7 @@ public class StreamFollowersFragment extends BaseFragment
 
   private void initializeStreamListAdapter() {
 
-    adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
+    adapter = new SearchAdapter(imageLoader, numberFormatUtil, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
         followPresenter.followUser(user);
         adapter.followUser(user);

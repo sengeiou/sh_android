@@ -33,6 +33,7 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.FeedbackMessage;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -40,6 +41,7 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
 
   @Inject ImageLoader imageLoader;
   @Inject InitialsLoader initialsLoader;
+  @Inject NumberFormatUtil numberFormatUtil;
   @Inject FeedbackMessage feedbackMessage;
   @Inject SearchItemsPresenter presenter;
   @Inject AnalyticsTool analyticsTool;
@@ -105,7 +107,7 @@ public class FindFriendsFragment extends BaseFragment implements SearchUserView,
   }
 
   private void setupViews() {
-    adapter = new SearchAdapter(imageLoader, initialsLoader, new OnFollowUnfollowListener() {
+    adapter = new SearchAdapter(imageLoader, numberFormatUtil, initialsLoader, new OnFollowUnfollowListener() {
       @Override public void onFollow(UserModel user) {
         presenter.followUser(user);
         adapter.followUser(user);

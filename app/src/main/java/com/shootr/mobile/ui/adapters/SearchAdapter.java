@@ -16,6 +16,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.InitialsLoader;
+import com.shootr.mobile.util.NumberFormatUtil;
 import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -25,6 +26,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
   private static final int UNKNOWN = -1;
 
   private final ImageLoader imageLoader;
+  private final NumberFormatUtil numberFormatUtil;
   private final OnFollowUnfollowListener onFollowUnfollowListener;
   private final OnUserClickListener onUserClickListener;
   private final OnSearchStreamClickListener onStreamClickListener;
@@ -33,11 +35,12 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
   private List<SearchableModel> items;
 
-  public SearchAdapter(ImageLoader imageLoader, InitialsLoader initialsLoader,
+  public SearchAdapter(ImageLoader imageLoader, NumberFormatUtil numberFormatUtil, InitialsLoader initialsLoader,
       OnFollowUnfollowListener onFollowUnfollowListener, OnUserClickListener onUserClickListener,
       OnSearchStreamClickListener onStreamClickListener,
       FavoriteClickListener onFavoriteClickListener) {
     this.imageLoader = imageLoader;
+    this.numberFormatUtil = numberFormatUtil;
     this.onFollowUnfollowListener = onFollowUnfollowListener;
     this.onUserClickListener = onUserClickListener;
     this.onStreamClickListener = onStreamClickListener;
@@ -63,7 +66,7 @@ public class SearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
       view = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.item_list_stream, parent, false);
       viewHolder = new StreamSearchViewHolder(view, onStreamClickListener, onFavoriteClickListener,
-          imageLoader, initialsLoader);
+          imageLoader, initialsLoader, numberFormatUtil);
     } else if (viewType == TYPE_USER) {
       view =
           LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_user, parent, false);
