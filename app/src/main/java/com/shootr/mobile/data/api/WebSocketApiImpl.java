@@ -1,6 +1,8 @@
 package com.shootr.mobile.data.api;
 
+import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.shootr.mobile.data.background.sockets.SocketListener;
@@ -224,37 +226,44 @@ public class WebSocketApiImpl implements SocketApi {
 
   private void setupSocketConnection(final ObservableEmitter<SocketMessageApiEntity> emitter,
       String address) throws Exception {
-    webSocket = new WebSocketFactory().setVerifyHostname(false)
-        .setConnectionTimeout(10000)
-        .createSocket(address)
-        .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
-        .addListener(new WebSocketListenerImpl(new SocketListener.WebSocketConnection() {
-          @Override public void onFailure(Throwable t) {
-            handleOnFailure(t, emitter);
-          }
-
-          @Override public void onMessage(String message) {
-            SocketMessageApiEntity socketMessage =
-                socketMessageWrapper.transformSocketMessage(message);
-            if (socketMessage != null) {
-              handleNewMessage(socketMessage, emitter);
+    try {
+      webSocket = new WebSocketFactory().setVerifyHostname(false)
+          .setConnectionTimeout(10000)
+          .createSocket(address)
+          .addExtension(WebSocketExtension.PERMESSAGE_DEFLATE)
+          .addListener(new WebSocketListenerImpl(new SocketListener.WebSocketConnection() {
+            @Override public void onFailure(Throwable t) {
+              handleOnFailure(t, emitter);
             }
-          }
 
-          @Override public void onConnected() {
-            haveHadSomeError = false;
-            sendLastEvents();
-            logsCache.putNewLog(SOCKET_CONNECTED);
-          }
-
-          @Override public void onClosed() {
-            if (!haveHadSomeError) {
-              emitter.onComplete();
+            @Override public void onMessage(String message) {
+              SocketMessageApiEntity socketMessage = socketMessageWrapper.transformSocketMessage(message);
+              if (socketMessage != null) {
+                handleNewMessage(socketMessage, emitter);
+              }
             }
-          }
-        }))
-        .connect()
-        .setPingInterval(10000);
+
+            @Override public void onConnected() {
+              haveHadSomeError = false;
+              sendLastEvents();
+              logsCache.putNewLog(SOCKET_CONNECTED);
+            }
+
+            @Override public void onClosed() {
+              if (!haveHadSomeError) {
+                emitter.onComplete();
+              }
+            }
+          }))
+          .connect()
+          .setPingInterval(10000);
+    } catch (OpeningHandshakeException error) {
+      logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + error.getMessage());
+      emitter.onComplete();
+    } catch (WebSocketException exception) {
+      logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + exception.getMessage());
+      emitter.onComplete();
+    }
   }
 
   private void handleOnFailure(Throwable t, ObservableEmitter<SocketMessageApiEntity> emitter) {
