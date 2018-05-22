@@ -13,6 +13,17 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.58.0] - 2018-05-22
+
+### Changed
+- Shot detail, now we have shot detail in real time thanks to sockets technology!!!
+
+### Fixed
+- Socket connections and exceptions
+
+### Added
+- Add timestamp to new timeline design
+
 ## [1.57.1] - 2018-04-27
 ### Added
 - Add timestamp to new timeline design
