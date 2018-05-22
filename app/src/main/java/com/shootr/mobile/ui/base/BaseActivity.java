@@ -14,6 +14,7 @@ import com.shootr.mobile.data.bus.ServerDown;
 import com.shootr.mobile.data.bus.Unauthorized;
 import com.shootr.mobile.data.bus.VersionOutdatedError;
 import com.shootr.mobile.domain.bus.InAppNotificationEvent;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.SessionHandler;
 import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.UpdateWarningActivity;
@@ -34,6 +35,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     @Inject VersionUpdater versionUpdater;
     @Inject SessionHandler sessionHandler;
     @Inject ImageLoader imageLoader;
+    @Inject SessionRepository sessionRepository;
 
     private ServerDown.Receiver serverDownReceiver;
     private VersionOutdatedError.Receiver preconditionFailedReceiver;
@@ -165,6 +167,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     private void showInApp(InAppNotificationEvent.Event event) {
 
             InAppNotificationView.with(this)
+                .setIsNewShotDetail(sessionRepository.isNewShotDetail())
                 .setTitle(event.getInAppNotification().getTitle())
                 .setMessage((event.getInAppNotification().getComment()))
                 .setAvatar(event.getInAppNotification().getAvatar())

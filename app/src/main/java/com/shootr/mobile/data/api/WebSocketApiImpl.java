@@ -5,44 +5,37 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import com.shootr.mobile.data.ShotSocketApiManager;
 import com.shootr.mobile.data.background.sockets.SocketListener;
-import com.shootr.mobile.data.entity.EventParams;
-import com.shootr.mobile.data.entity.GetTimelineSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.NiceSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
-import com.shootr.mobile.data.entity.PeriodEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
-import com.shootr.mobile.data.entity.SubscribeSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.UnsubscribeSocketMessageApiEntity;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
-public class WebSocketApiImpl implements SocketApi {
+public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   private final String SOCKET_SUBSCRIPTION_ERROR = "SOCKET_SUBSCRIPTION_ERROR: ";
   private final String SOCKET_CONNECTED = "Socket connected succesful";
 
   private WebSocket webSocket;
-  private final int VERSION = 1;
   private final int RETRY_TIMES = 50;
   private final int DELAY = 10000;
-  private final int MAX_SUBSCRIPTIONS = 2;
   private final SocketMessageEntityWrapper socketMessageWrapper;
   private final LogsCache logsCache;
   private HashMap<String, SocketMessageApiEntity> lastEvents;
-  private ArrayList<SubscribeSocketMessageApiEntity> subscriptions;
+  private SubscriptionSocketApiManager subscriptionSocketApiService;
+  private TimelineSocketApiManager timelineSocketApiManager;
+  private ShotSocketApiManager shotSocketApiManager;
+
   private boolean haveHadSomeError;
 
   @Inject
@@ -50,7 +43,9 @@ public class WebSocketApiImpl implements SocketApi {
     this.socketMessageWrapper = socketMessageWrapper;
     this.logsCache = logsCache;
     lastEvents = new HashMap<>();
-    subscriptions = new ArrayList<>();
+    subscriptionSocketApiService = new SubscriptionSocketApiManager(this);
+    timelineSocketApiManager = new TimelineSocketApiManager(this);
+    shotSocketApiManager = new ShotSocketApiManager(this);
   }
 
   @Override public Observable<SocketMessageApiEntity> connect(final String socketAddress) {
@@ -69,145 +64,71 @@ public class WebSocketApiImpl implements SocketApi {
     });
   }
 
+  @Override public void sendEvent(SocketMessageApiEntity event) {
+    lastEvents.put(event.getRequestId(), event);
+    if (webSocket != null && webSocket.isOpen()) {
+      webSocket.sendText(socketMessageWrapper.transformEvent(event));
+    }
+  }
+
+  @Override public void onRestoreLastTimeline(String idStream, String filter,
+      PaginationEntity paginationEntity) {
+    getTimeline(idStream,
+        filter, paginationEntity);
+  }
+
   @Override
   public void updateSocketSubscription(String idStream, String filter, ParamsEntity paramsEntity) {
-    //TODO pensar cómo podemos hacer este hash más generico
-    for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
-      int subscriptionHash =
-          subscriptionHash(subscription.getData().getIdStream(), subscription.getData().getFilter(),
-              subscription.getData().getParams());
-      int subscriptionHashForUpdate = subscriptionHash(idStream, filter, paramsEntity);
-      if (subscriptionHash == subscriptionHashForUpdate) {
-        subscription.getData().setParams(paramsEntity);
-        webSocket.sendText(socketMessageWrapper.transformEvent(subscription));
-        break;
-      }
-    }
+    subscriptionSocketApiService.updateSocketSubscription(idStream, filter, paramsEntity);
   }
 
   @Override
   public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter,
       long period) {
-    if (webSocket != null) {
 
-      SubscribeSocketMessageApiEntity socketMessageApiEntity =
-          new SubscribeSocketMessageApiEntity();
-
-      EventParams data = new EventParams();
-
-      data.setFilter(filter);
-      data.setIdStream(idStream);
-      data.setSubscriptionType(subscriptionType);
-
-      if (period != 0) {
-        ParamsEntity paramsEntity = new ParamsEntity();
-        PeriodEntity periodEntity = new PeriodEntity();
-        periodEntity.setDuration(period);
-
-        paramsEntity.setPeriod(periodEntity);
-
-        data.setParams(paramsEntity);
-      }
-
-      socketMessageApiEntity.setData(data);
-
-      if (subscriptions.contains(socketMessageApiEntity)) {
-        SubscribeSocketMessageApiEntity aux =
-            subscriptions.remove(subscriptions.indexOf(socketMessageApiEntity));
-        aux.setActiveSubscription(true);
-        subscriptions.add(0, aux);
-        return false;
-      } else {
-        socketMessageApiEntity.setRequestId(generateRequestId());
-        socketMessageApiEntity.setVersion(VERSION);
-        lastEvents.put(socketMessageApiEntity.getRequestId(), socketMessageApiEntity);
-        webSocket.sendText(socketMessageWrapper.transformEvent(socketMessageApiEntity));
-        return true;
-      }
-    }
-    return false;
+    return subscriptionSocketApiService.subscribeToTimeline(subscriptionType, idStream, filter,
+        period);
   }
 
-  private void unsubscribeFirstSubscription() {
-    for (SubscribeSocketMessageApiEntity timelineSubscription : subscriptions) {
-      if (subscriptions.indexOf(timelineSubscription) > MAX_SUBSCRIPTIONS) {
-        UnsubscribeSocketMessageApiEntity unsubscribeSocketMessageApiEntity =
-            new UnsubscribeSocketMessageApiEntity();
-        unsubscribeSocketMessageApiEntity.setRequestId(timelineSubscription.getRequestId());
-        unsubscribeSocketMessageApiEntity.setVersion(VERSION);
-        lastEvents.put(unsubscribeSocketMessageApiEntity.getRequestId(),
-            unsubscribeSocketMessageApiEntity);
-        webSocket.sendText(socketMessageWrapper.transformEvent(unsubscribeSocketMessageApiEntity));
-      }
-    }
+  @Override public boolean subscribeToShotDetail(String subscriptionType, String idShot) {
+    return subscriptionSocketApiService.subscribeToShotDetail(subscriptionType, idShot);
   }
 
   @Override
   public boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity) {
 
-    if (webSocket != null) {
-      GetTimelineSocketMessageApiEntity getTimelineSocketMessageApiEntity =
-          new GetTimelineSocketMessageApiEntity();
-      GetTimelineSocketMessageApiEntity.TimelineParams timelineParams =
-          new GetTimelineSocketMessageApiEntity.TimelineParams();
-
-      timelineParams.setFilter(filter);
-      timelineParams.setIdStream(idStream);
-      timelineParams.setPagination(paginationEntity);
-
-      getTimelineSocketMessageApiEntity.setRequestId(generateRequestId());
-      getTimelineSocketMessageApiEntity.setVersion(VERSION);
-      getTimelineSocketMessageApiEntity.setData(timelineParams);
-
-      lastEvents.put(getTimelineSocketMessageApiEntity.getRequestId(),
-          getTimelineSocketMessageApiEntity);
-      webSocket.sendText(socketMessageWrapper.transformEvent(getTimelineSocketMessageApiEntity));
+    if (webSocket != null && webSocket.isOpen()) {
+      timelineSocketApiManager.getTimeline(idStream, filter, paginationEntity);
       return true;
     }
-
     return false;
   }
 
   @Override public boolean getNicestTimeline(String idStream, String filter,
       PaginationEntity paginationEntity, ParamsEntity paramsEntity) {
-    if (webSocket != null) {
-      GetTimelineSocketMessageApiEntity getTimelineSocketMessageApiEntity =
-          new GetTimelineSocketMessageApiEntity();
-      GetTimelineSocketMessageApiEntity.TimelineParams timelineParams =
-          new GetTimelineSocketMessageApiEntity.TimelineParams();
-
-      timelineParams.setFilter(filter);
-      timelineParams.setIdStream(idStream);
-      timelineParams.setPagination(paginationEntity);
-      timelineParams.setParams(paramsEntity);
-
-      getTimelineSocketMessageApiEntity.setRequestId(generateRequestId());
-      getTimelineSocketMessageApiEntity.setVersion(VERSION);
-      getTimelineSocketMessageApiEntity.setData(timelineParams);
-
-      lastEvents.put(getTimelineSocketMessageApiEntity.getRequestId(),
-          getTimelineSocketMessageApiEntity);
-      webSocket.sendText(socketMessageWrapper.transformEvent(getTimelineSocketMessageApiEntity));
+    if (webSocket != null && webSocket.isOpen()) {
+      timelineSocketApiManager.getNicestTimeline(idStream, filter, paginationEntity, paramsEntity);
       return true;
     }
 
     return false;
   }
 
+  @Override public boolean getShotDetail(String idShot, PaginationEntity promotedPagination,
+      PaginationEntity subscribersPagination, PaginationEntity basicPagination) {
+    shotSocketApiManager.getShotDetail(idShot, promotedPagination, subscribersPagination,
+        basicPagination);
+    return true;
+  }
+
+  @Override public void unsubscribeShotDetail(String idShot) {
+    subscriptionSocketApiService.unsubscribeShotDetail(idShot);
+  }
+
   @Override public boolean sendNice(String idShot) {
 
-    if (webSocket != null) {
-      NiceSocketMessageApiEntity niceSocketMessageApiEntity = new NiceSocketMessageApiEntity();
-      EventParams eventParams = new EventParams();
-
-      eventParams.setIdShot(idShot);
-
-      niceSocketMessageApiEntity.setRequestId(generateRequestId());
-      niceSocketMessageApiEntity.setVersion(VERSION);
-      niceSocketMessageApiEntity.setData(eventParams);
-
-      lastEvents.put(niceSocketMessageApiEntity.getRequestId(), niceSocketMessageApiEntity);
-      webSocket.sendText(socketMessageWrapper.transformEvent(niceSocketMessageApiEntity));
+    if (webSocket != null && webSocket.isOpen()) {
+      shotSocketApiManager.sendNice(idShot);
       return true;
     }
 
@@ -218,10 +139,6 @@ public class WebSocketApiImpl implements SocketApi {
     if (webSocket != null) {
       webSocket.sendClose();
     }
-  }
-
-  private String generateRequestId() {
-    return UUID.randomUUID().toString();
   }
 
   private void setupSocketConnection(final ObservableEmitter<SocketMessageApiEntity> emitter,
@@ -288,80 +205,39 @@ public class WebSocketApiImpl implements SocketApi {
         SocketMessageApiEntity event = lastEvents.get(socketMessage.getRequestId());
 
         if (event != null && event.getEventType().equals(SocketMessageApiEntity.SUBSCRIBE)) {
-          for (SubscribeSocketMessageApiEntity timelineSubscription : subscriptions) {
-            timelineSubscription.setActiveSubscription(false);
-          }
-
-          ((SubscribeSocketMessageApiEntity) event).setActiveSubscription(true);
-          subscriptions.add(0, (SubscribeSocketMessageApiEntity) event);
-          if (subscriptions.size() >= MAX_SUBSCRIPTIONS) {
-            unsubscribeFirstSubscription();
-          }
+          subscriptionSocketApiService.onSubscriptionAck(event);
         }
 
         if (event != null && event.getEventType().equals(SocketMessageApiEntity.UNSUBSCRIBE)) {
-          for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
-            if (subscription.getRequestId().equals(event.getRequestId())) {
-              subscriptions.remove(subscription);
-            }
-          }
+          subscriptionSocketApiService.onUnsubscriptionAck(event);
         }
 
         lastEvents.remove(socketMessage.getRequestId());
         break;
 
       default:
-        if (!subscriptions.isEmpty()) {
-          socketMessage.setActiveSubscription(
-              subscriptions.get(0).getRequestId().equals(socketMessage.getRequestId())
-                  && subscriptions.get(0).isActiveSubscription);
-
-          for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
-            EventParams eventParams = new EventParams();
-            if (subscription.getRequestId().equals(socketMessage.getRequestId())) {
-              eventParams.setFilter(subscription.getData().getFilter());
-              eventParams.setParams(subscription.getData().getParams());
-              socketMessage.setEventParams(eventParams);
-            }
-          }
-        }
-        emitter.onNext(socketMessage);
+        emitter.onNext(subscriptionSocketApiService.setupSocketMessageEventParams(socketMessage));
         break;
     }
   }
 
   private void sendLastEvents() {
     if (!lastEvents.isEmpty()) {
-      Iterator it = lastEvents.entrySet().iterator();
+      try {
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
 
-      while (it.hasNext()) {
-        Map.Entry pair = (Map.Entry) it.next();
+      for (Object o : lastEvents.entrySet()) {
+        Map.Entry pair = (Map.Entry) o;
         webSocket.sendText(
             socketMessageWrapper.transformEvent((SocketMessageApiEntity) pair.getValue()));
       }
     }
 
-    subscribeToLastSubscription();
+    subscriptionSocketApiService.subscribeToLastSubscription();
   }
 
-  private void subscribeToLastSubscription() {
-    if (!subscriptions.isEmpty()) {
-      SubscribeSocketMessageApiEntity lastSubscription = subscriptions.get(0);
-      subscriptions.clear();
-      getTimeline(lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
-          null);
-      subscribeToTimeline(lastSubscription.getData().getSubscriptionType(),
-          lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
-          lastSubscription.getData().getParams() == null ? 0
-              : lastSubscription.getData().getParams().getPeriod().getDuration());
-    }
-  }
 
-  private int subscriptionHash(String idStream, String filter, ParamsEntity paramsEntity) {
-    int result = idStream != null ? idStream.hashCode() : 0;
-    result = 31 * result + (filter != null ? filter.hashCode() : 0);
-    result = 31 * result + (paramsEntity != null ? (int) paramsEntity.getPeriod().getDuration() * 31
-        : 0);
-    return result;
-  }
 }

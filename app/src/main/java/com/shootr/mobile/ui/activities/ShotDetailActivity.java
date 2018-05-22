@@ -126,23 +126,41 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   private int screenHeight;
   private String idUser;
 
-  public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
-    Intent intent = new Intent(context, ShotDetailActivity.class);
-    intent.putExtra(EXTRA_SHOT, shotModel);
-    return intent;
+  public static Intent getIntentForActivity(Context context, ShotModel shotModel, boolean isNewShotDetail) {
+    if (isNewShotDetail) {
+      Intent intent = new Intent(context, NewShotDetailActivity.class);
+      intent.putExtra(EXTRA_ID_SHOT, shotModel.getIdShot());
+      return intent;
+    } else {
+      Intent intent = new Intent(context, ShotDetailActivity.class);
+      intent.putExtra(EXTRA_SHOT, shotModel);
+      return intent;
+    }
   }
 
-  public static Intent getIntentForActivityFromTimeline(Context context, ShotModel shotModel) {
-    Intent intent = new Intent(context, ShotDetailActivity.class);
-    intent.putExtra(EXTRA_SHOT, shotModel);
-    intent.putExtra(EXTRA_IS_IN_TIMELINE, true);
-    return intent;
+  public static Intent getIntentForActivityFromTimeline(Context context, ShotModel shotModel, boolean isNewShotDetail) {
+    if (isNewShotDetail) {
+      Intent intent = new Intent(context, NewShotDetailActivity.class);
+      intent.putExtra(EXTRA_ID_SHOT, shotModel.getIdShot());
+      return intent;
+    } else {
+      Intent intent = new Intent(context, ShotDetailActivity.class);
+      intent.putExtra(EXTRA_SHOT, shotModel);
+      intent.putExtra(EXTRA_IS_IN_TIMELINE, true);
+      return intent;
+    }
   }
 
-  public static Intent getIntentForActivity(Context context, String idShot) {
-    Intent intent = new Intent(context, ShotDetailActivity.class);
-    intent.putExtra(EXTRA_ID_SHOT, idShot);
-    return intent;
+  public static Intent getIntentForActivity(Context context, String idShot, boolean isNewShotDetail) {
+    if (isNewShotDetail) {
+      Intent intent = new Intent(context, NewShotDetailActivity.class);
+      intent.putExtra(EXTRA_ID_SHOT, idShot);
+      return intent;
+    } else {
+      Intent intent = new Intent(context, ShotDetailActivity.class);
+      intent.putExtra(EXTRA_ID_SHOT, idShot);
+      return intent;
+    }
   }
 
   @Override protected int getLayoutResource() {
@@ -501,7 +519,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void openShot(ShotModel shotModel) {
-    startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
+    startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel,
+        sessionRepository.isNewShotDetail()));
   }
 
   @Override public void goToStreamTimeline(String idStream) {

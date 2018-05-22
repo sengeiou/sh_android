@@ -273,7 +273,7 @@
   <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
   <string name="new_stream_description_label">Descripció</string>
   <string name="new_video_url_label">http://</string>
-  <string name="footer_video_url">Afegeix un vídeo de YouTube</string>
+  <string name="footer_video_url">Afegeix un video de YouTube</string>
   <string name="video_url_error">Introduïu un URL de vídeo de YouTube vàlid</string>
   <string name="new_stream_title_label">Títol</string>
   <string name="new_topic" formatted="false">Nou missatge…</string>
@@ -594,4 +594,8 @@
   <string name="important_filter">Important</string>
   <string name="nicest_filter">Nicest</string>
   <string name="nicest_timeline_empty_title">No hi ha shots amb nice</string>
+  <string name="shot_detail_subscribers">Subscriptors</string>
+  <string name="shot_detail_non_subscribers">No Subscriptors</string>
+  <string name="show_previous">Mostrar</string>
+  <string name="hide_previous">ocultar</string>
 </resources>

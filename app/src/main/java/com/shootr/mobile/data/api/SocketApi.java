@@ -12,6 +12,8 @@ public interface SocketApi {
 
   boolean subscribeToTimeline(String subscriptionType, String idStream, String filter, long period);
 
+  boolean subscribeToShotDetail(String subscriptionType, String idShot);
+
   boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity);
 
   boolean getNicestTimeline(String idStream, String filter, PaginationEntity paginationEntity,
@@ -22,4 +24,9 @@ public interface SocketApi {
   void closeSocket();
 
   void updateSocketSubscription(String idStream, String filter, ParamsEntity paramsEntity);
+
+  boolean getShotDetail(String idShot, PaginationEntity promotedPagination,
+      PaginationEntity subscribersPagination, PaginationEntity basicPagination);
+
+  void unsubscribeShotDetail(String idShot);
 }

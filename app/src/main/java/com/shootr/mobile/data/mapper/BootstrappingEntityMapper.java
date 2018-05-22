@@ -33,6 +33,8 @@ public class BootstrappingEntityMapper {
         bootstrapping.setSocketConnection(true);
       } else if (featureFlagEntity.getType().equals(FeatureFlagType.TIMELINE)) {
         bootstrapping.setTimelineConnection(true);
+      } else if (featureFlagEntity.getType().equals(FeatureFlagType.SHOT_DETAIL_CONNECTION)) {
+        bootstrapping.setShotDetailConnection(true);
       }
     }
   }

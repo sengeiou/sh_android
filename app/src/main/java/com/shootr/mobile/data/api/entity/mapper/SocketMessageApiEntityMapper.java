@@ -4,6 +4,7 @@ import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.BadgeContentEntity;
 import com.shootr.mobile.data.entity.FixedItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.FixedItemsSocketMessagesApiEntity;
+import com.shootr.mobile.data.entity.ItemEntity;
 import com.shootr.mobile.data.entity.NewBadgeContentSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.NewBadgeContentSocketMessageEntity;
 import com.shootr.mobile.data.entity.NewItemSocketMessageApiEntity;
@@ -12,6 +13,10 @@ import com.shootr.mobile.data.entity.ParticipantsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.ParticipantsSocketMessageEntity;
 import com.shootr.mobile.data.entity.PinnedItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.PinnedItemsSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.ShotDetailSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.ShotDetailSocketMessageEntity;
+import com.shootr.mobile.data.entity.ShotUpdateSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.ShotUpdateSocketMessageEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import com.shootr.mobile.data.entity.SocketMessageEntity;
 import com.shootr.mobile.data.entity.TimelineMessageApiEntity;
@@ -25,12 +30,15 @@ public class SocketMessageApiEntityMapper {
   private final ShotApiEntityMapper shotApiEntityMapper;
   private final TimelineApiEntityMapper timelineApiEntityMapper;
   private final DataApiEntityMapper dataApiEntityMapper;
+  private final ShotDetailApiEntityMapper shotDetailApiEntityMapper;
 
   @Inject public SocketMessageApiEntityMapper(ShotApiEntityMapper shotApiEntityMapper,
-      TimelineApiEntityMapper timelineApiEntityMapper, DataApiEntityMapper dataApiEntityMapper) {
+      TimelineApiEntityMapper timelineApiEntityMapper, DataApiEntityMapper dataApiEntityMapper,
+      ShotDetailApiEntityMapper shotDetailApiEntityMapper) {
     this.shotApiEntityMapper = shotApiEntityMapper;
     this.timelineApiEntityMapper = timelineApiEntityMapper;
     this.dataApiEntityMapper = dataApiEntityMapper;
+    this.shotDetailApiEntityMapper = shotDetailApiEntityMapper;
   }
 
   public SocketMessageEntity transform(SocketMessageApiEntity socketMessage) {
@@ -57,8 +65,12 @@ public class SocketMessageApiEntityMapper {
           newItemSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
           newItemSocketMessageEntity.setEventParams(socketMessage.getEventParams());
 
-          newItemSocketMessageEntity.setData(shotApiEntityMapper.transform(
-              (ShotApiEntity) ((NewItemSocketMessageApiEntity) socketMessage).getData()));
+          ItemEntity itemEntity = new ItemEntity();
+          itemEntity.setItem(shotApiEntityMapper.transform(
+              (ShotApiEntity) ((NewItemSocketMessageApiEntity) socketMessage).getData().getItem()));
+          itemEntity.setList(((NewItemSocketMessageApiEntity) socketMessage).getData().getList());
+
+          newItemSocketMessageEntity.setData(itemEntity);
 
           return newItemSocketMessageEntity;
 
@@ -71,8 +83,12 @@ public class SocketMessageApiEntityMapper {
           updateItemSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
           updateItemSocketMessageEntity.setEventParams(socketMessage.getEventParams());
 
-          updateItemSocketMessageEntity.setData(shotApiEntityMapper.transform(
-              (ShotApiEntity) ((UpdateItemSocketMessageApiEntity) socketMessage).getData()));
+          itemEntity = new ItemEntity();
+          itemEntity.setItem(shotApiEntityMapper.transform(
+              (ShotApiEntity) ((UpdateItemSocketMessageApiEntity) socketMessage).getData().getItem()));
+          itemEntity.setList(((UpdateItemSocketMessageApiEntity) socketMessage).getData().getList());
+
+          updateItemSocketMessageEntity.setData(itemEntity);
 
           return updateItemSocketMessageEntity;
 
@@ -138,6 +154,34 @@ public class SocketMessageApiEntityMapper {
           newBadgeContentSocketMessageEntity.setData(badgeContentEntity);
 
           return newBadgeContentSocketMessageEntity;
+
+        case SocketMessageApiEntity.SHOT_DETAIL:
+
+          ShotDetailSocketMessageEntity shotDetailSocketMessageEntity = new ShotDetailSocketMessageEntity();
+          shotDetailSocketMessageEntity.setEventType(socketMessage.getEventType());
+          shotDetailSocketMessageEntity.setVersion(socketMessage.getVersion());
+          shotDetailSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          shotDetailSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+
+          shotDetailSocketMessageEntity.setData(shotDetailApiEntityMapper.transform(
+              ((ShotDetailSocketMessageApiEntity) socketMessage).getData()));
+
+          return shotDetailSocketMessageEntity;
+
+        case SocketMessageApiEntity.SHOT_UPDATE:
+          ShotUpdateSocketMessageEntity shotUpdateSocketMessageEntity =
+              new ShotUpdateSocketMessageEntity();
+          shotUpdateSocketMessageEntity.setEventType(socketMessage.getEventType());
+          shotUpdateSocketMessageEntity.setVersion(socketMessage.getVersion());
+          shotUpdateSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          shotUpdateSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+          shotUpdateSocketMessageEntity.setEventParams(socketMessage.getEventParams());
+
+          shotUpdateSocketMessageEntity.setData(shotApiEntityMapper.transform(
+              (ShotApiEntity) ((ShotUpdateSocketMessageApiEntity) socketMessage).getData()));
+
+          return shotUpdateSocketMessageEntity;
+
         default:
           break;
       }

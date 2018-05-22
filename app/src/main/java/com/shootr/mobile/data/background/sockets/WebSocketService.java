@@ -35,7 +35,6 @@ public class WebSocketService extends Service
 
   @Inject BusPublisher busPublisher;
   @Inject @Main Bus bus;
-  @Inject SocketMessageWrapper socketMessageWrapper;
   @Inject MessageMapper messageMapper;
   @Inject Gson gson;
   @Inject SessionRepository sessionRepository;

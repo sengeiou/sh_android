@@ -200,7 +200,8 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
   }
 
   private void openShotDetail(ShotModel shot) {
-    Intent shotIntent = ShotDetailActivity.getIntentForActivity(this, shot);
+    Intent shotIntent =
+        ShotDetailActivity.getIntentForActivity(this, shot, sessionRepository.isNewShotDetail());
     startActivity(shotIntent);
   }
 

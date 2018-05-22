@@ -49,6 +49,33 @@ public class PrintableModelMapper {
     return  printableModels;
   }
 
+  public List<PrintableModel> mapResponseModel(List<PrintableItem> printableItems) {
+    ArrayList<PrintableModel> printableModels = new ArrayList<>();
+    for (PrintableItem printableItem : printableItems) {
+      if (printableItem instanceof Shot) {
+        mapShotModel(printableModels, (Shot) printableItem, PrintableModel.REPLY);
+      } else if (printableItem instanceof Topic) {
+        mapTopicModel(printableModels, (Topic) printableItem);
+      }
+    }
+
+    return  printableModels;
+  }
+
+  public List<PrintableModel> mapMainShot(List<PrintableItem> printableItems) {
+    ArrayList<PrintableModel> printableModels = new ArrayList<>();
+    for (PrintableItem printableItem : printableItems) {
+      if (printableItem instanceof Shot) {
+        mapShotModel(printableModels, (Shot) printableItem, PrintableModel.MAIN_SHOT);
+      } else if (printableItem instanceof Topic) {
+        mapTopicModel(printableModels, (Topic) printableItem);
+      }
+    }
+
+    return  printableModels;
+  }
+
+
   public List<PrintableModel> mapPinnableModel(List<PrintableItem> printableItems) {
     ArrayList<PrintableModel> printableModels = new ArrayList<>();
     for (PrintableItem printableItem : printableItems) {

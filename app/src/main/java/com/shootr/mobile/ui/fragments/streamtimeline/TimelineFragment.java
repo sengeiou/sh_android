@@ -386,7 +386,8 @@ public class TimelineFragment extends BaseFragment
           }
         }, timeUtils, new ShotTextSpannableBuilder(), new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
-        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
+        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot,
+            sessionRepository.isNewShotDetail());
         startActivity(intent);
       }
     }, new OnShotLongClick() {

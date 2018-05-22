@@ -1,0 +1,13 @@
+package com.shootr.mobile.domain.model;
+
+public interface ListType {
+
+  String PROMOTED_REPLIES = "PROMOTED_REPLIES";
+  String SUBSCRIBERS_REPLIES = "SUBSCRIBERS_REPLIES";
+  String OTHER_REPLIES = "OTHER_REPLIES";
+  String TIMELINE_ITEMS = "TIMELINE_ITEMS";
+  String TIMELINE_H1 = "TIMELINE_H1";
+  String TIMELINE_H2 = "TIMELINE_H2";
+  String ITEM_DETAIL = "ITEM_DETAIL";
+  String PARENTS_DETAIL = "PARENTS_DETAIL";
+}

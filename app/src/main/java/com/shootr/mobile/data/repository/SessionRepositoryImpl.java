@@ -195,6 +195,10 @@ public class SessionRepositoryImpl implements SessionRepository {
     return bootstrappingPreferences.get().isTimelineConnection();
   }
 
+  @Override public boolean isNewShotDetail() {
+    return bootstrappingPreferences.get().isShotDetailConnection();
+  }
+
   @Override public void resetFilter(String idStream) {
     if (!idStream.equals(currentUser.getIdWatchingStream())) {
       setTimelineFilterActivated(false);

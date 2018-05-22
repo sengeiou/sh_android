@@ -10,10 +10,17 @@ public interface SocketRepository {
 
   boolean subscribeToTimeline(String subscriptionType, String idStream, String filter, long period);
 
+  boolean subscribeToShotDetail(String subscriptionType, String idShot);
+
   boolean getTimeline(String idStream, String filter, Pagination pagination);
 
   boolean getNicestTimeline(String idStream, String filter, Pagination pagination,
       long duration);
+
+  boolean getShotDetail(String idShot, Pagination promotedPagination,
+      Pagination subscribersPagination, Pagination basicPagination);
+
+  void unsubscribeShotDetail(String idShot);
 
   void closeSocket();
 }

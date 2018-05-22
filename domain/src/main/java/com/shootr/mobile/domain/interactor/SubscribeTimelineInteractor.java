@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor;
 
 import com.shootr.mobile.domain.executor.PostExecutionThread;
+import com.shootr.mobile.domain.model.SubscriptionType;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SocketRepository;
 import javax.inject.Inject;
@@ -41,7 +42,7 @@ public class SubscribeTimelineInteractor implements Interactor {
   }
 
   @Override public void execute() throws Exception {
-    notify(socketRepository.subscribeToTimeline("TIMELINE", idStream, filterType, period));
+    notify(socketRepository.subscribeToTimeline(SubscriptionType.TIMELINE, idStream, filterType, period));
   }
 
   private void notify(final Boolean response) {

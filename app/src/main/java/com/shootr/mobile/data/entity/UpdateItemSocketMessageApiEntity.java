@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
+import com.shootr.mobile.data.api.entity.ItemApiEntity;
 
 public class UpdateItemSocketMessageApiEntity extends SocketMessageApiEntity {
 
@@ -8,13 +8,13 @@ public class UpdateItemSocketMessageApiEntity extends SocketMessageApiEntity {
     setEventType(SocketMessageApiEntity.UPDATE_ITEM_DATA);
   }
 
-  private PrintableItemApiEntity data;
+  private ItemApiEntity data;
 
-  public PrintableItemApiEntity getData() {
+  public ItemApiEntity getData() {
     return data;
   }
 
-  public void setData(PrintableItemApiEntity data) {
+  public void setData(ItemApiEntity data) {
     this.data = data;
   }
 }

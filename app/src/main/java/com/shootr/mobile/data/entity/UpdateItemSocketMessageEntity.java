@@ -6,13 +6,13 @@ public class UpdateItemSocketMessageEntity extends SocketMessageEntity {
     setEventType(SocketMessageApiEntity.UPDATE_ITEM_DATA);
   }
 
-  private PrintableItemEntity data;
+  private ItemEntity data;
 
-  public PrintableItemEntity getData() {
+  public ItemEntity getData() {
     return data;
   }
 
-  public void setData(PrintableItemEntity data) {
+  public void setData(ItemEntity data) {
     this.data = data;
   }
 }

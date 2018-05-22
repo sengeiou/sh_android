@@ -5,7 +5,9 @@ import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.data.mapper.ProfileShotTimelineMapper;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
+import com.shootr.mobile.data.repository.remote.cache.ShotDetailCache;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
+import com.shootr.mobile.domain.model.shot.NewShotDetail;
 import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
@@ -23,15 +25,18 @@ public class LocalShotRepository implements InternalShotRepository {
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
   private final ProfileShotTimelineMapper profileShotTimelineMapper;
   private final SessionRepository sessionRepository;
+  private final ShotDetailCache shotDetailCache;
 
   @Inject public LocalShotRepository(@Local ShotDataSource localShotDataSource,
       ShotEntityMapper shotEntityMapper, HighlightedShotEntityMapper highlightedShotEntityMapper,
-      ProfileShotTimelineMapper profileShotTimelineMapper, SessionRepository sessionRepository) {
+      ProfileShotTimelineMapper profileShotTimelineMapper, SessionRepository sessionRepository,
+      ShotDetailCache shotDetailCache) {
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
     this.profileShotTimelineMapper = profileShotTimelineMapper;
     this.sessionRepository = sessionRepository;
+    this.shotDetailCache = shotDetailCache;
   }
 
   @Override public Shot putShot(Shot shot) {
@@ -147,5 +152,9 @@ public class LocalShotRepository implements InternalShotRepository {
 
   @Override public boolean hasNewFilteredShots(String idStream, String lastTimeFiltered) {
     return localShotDataSource.hasNewFilteredShots(idStream, lastTimeFiltered, sessionRepository.getCurrentUserId());
+  }
+
+  @Override public NewShotDetail getCachedShotDetail(String idShot) {
+    return shotDetailCache.getShot(idShot);
   }
 }

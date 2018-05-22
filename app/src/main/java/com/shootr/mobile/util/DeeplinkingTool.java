@@ -78,13 +78,16 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
       context.startActivity(StreamTimelineActivity.newIntent(context, removeLocale(idStream)));
     } else if (matcherShareShotHttp.find()) {
       String idShot = address.substring(matcherShareShotHttp.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot),
+          sessionRepository.isNewShotDetail()));
     } else if (matcherShareShotHttps.find()) {
       String idShot = address.substring(matcherShareShotHttps.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot),
+          sessionRepository.isNewShotDetail()));
     } else if (matcherShareShotShootr.find()) {
       String idShot = address.substring(matcherShareShotShootr.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot),
+          sessionRepository.isNewShotDetail()));
     } else if (matcherSharePollHttps.find()) {
       String idPoll = address.substring(matcherSharePollHttps.end());
       context.startActivity(

@@ -349,6 +349,7 @@
         android:name=".ui.activities.HistoryActivity"
         android:label="@string/title_activity_history">
     </activity>
+    <activity android:name=".ui.activities.NewShotDetailActivity"/>
 
     <service android:name=".data.background.sockets.WebSocketService"/>
 

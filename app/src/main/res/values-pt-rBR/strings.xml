@@ -593,4 +593,8 @@
   <string name="important_filter">Important</string>
   <string name="nicest_filter">Nicest</string>
   <string name="nicest_timeline_empty_title">No nice shots</string>
+  <string name="shot_detail_subscribers">Inscritos</string>
+  <string name="shot_detail_non_subscribers">Não-Inscritos</string>
+  <string name="show_previous">Mostrar</string>
+  <string name="hide_previous">ocultar</string>
 </resources>

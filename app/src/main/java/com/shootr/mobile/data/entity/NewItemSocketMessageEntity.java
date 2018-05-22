@@ -6,13 +6,13 @@ public class NewItemSocketMessageEntity extends SocketMessageEntity {
     setEventType(SocketMessageApiEntity.NEW_ITEM_DATA);
   }
 
-  private PrintableItemEntity data;
+  private ItemEntity data;
 
-  public PrintableItemEntity getData() {
+  public ItemEntity getData() {
     return data;
   }
 
-  public void setData(PrintableItemEntity data) {
+  public void setData(ItemEntity data) {
     this.data = data;
   }
 }

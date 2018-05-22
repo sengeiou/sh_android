@@ -324,10 +324,11 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
           @Override
           public void onResult(@NonNull SafetyNetApi.AttestationResult attestationResult) {
             Status status = attestationResult.getStatus();
+            String jwsResult = null;
             if (status.isSuccess()) {
-              String jwsResult = attestationResult.getJwsResult();
-              sendDeviceInfoInteractor.sendDeviceInfo(jwsResult);
+              jwsResult = attestationResult.getJwsResult();
             }
+            sendDeviceInfoInteractor.sendDeviceInfo(jwsResult);
           }
         });
   }

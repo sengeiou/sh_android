@@ -148,11 +148,9 @@ public class GCMIntentService extends IntentService {
   }
 
   private boolean areShotPushTypesKnown(PushNotification pushNotification) {
-    String streamType = pushNotification.getParameters().getStreamReadWriteMode();
     String shotType = pushNotification.getParameters().getShotType();
-    List<String> streamTypes = Arrays.asList(StreamMode.TYPES_STREAM);
     List<String> shotTypes = Arrays.asList(ShotType.TYPES_SHOWN);
-    return shotTypes.contains(shotType) && streamTypes.contains(streamType);
+    return shotTypes.contains(shotType);
   }
 
   private void receivedActivity(PushNotification push) throws JSONException {

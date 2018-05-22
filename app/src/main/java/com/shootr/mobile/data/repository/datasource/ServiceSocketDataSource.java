@@ -22,26 +22,39 @@ public class ServiceSocketDataSource implements SocketDataSource {
   }
 
   @Override public Observable<SocketMessageEntity> connect(String socketAddress) {
-    return socketApi.connect(socketAddress).map(new Function<SocketMessageApiEntity, SocketMessageEntity>() {
-      @Override public SocketMessageEntity apply(SocketMessageApiEntity socketMessage) throws Exception {
-        return socketMessageApiEntityMapper.transform(socketMessage);
-      }
-    });
-
+    return socketApi.connect(socketAddress)
+        .map(new Function<SocketMessageApiEntity, SocketMessageEntity>() {
+          @Override public SocketMessageEntity apply(SocketMessageApiEntity socketMessage)
+              throws Exception {
+            return socketMessageApiEntityMapper.transform(socketMessage);
+          }
+        });
   }
 
   @Override
-  public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter, long period) {
+  public boolean subscribeToTimeline(String subscriptionType, String idStream, String filter,
+      long period) {
     return socketApi.subscribeToTimeline(subscriptionType, idStream, filter, period);
   }
 
-  @Override public boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity) {
+  @Override public boolean subscribeToShotDetail(String subscriptionType, String idShot) {
+    return socketApi.subscribeToShotDetail(subscriptionType, idShot);
+  }
+
+  @Override
+  public boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity) {
     return socketApi.getTimeline(idStream, filter, paginationEntity);
   }
 
   @Override public boolean getNicestTimeline(String idStream, String filter,
       PaginationEntity paginationEntity, ParamsEntity paramsEntity) {
     return socketApi.getNicestTimeline(idStream, filter, paginationEntity, paramsEntity);
+  }
+
+  @Override public boolean getShotDetail(String idShot, PaginationEntity promotedPagination,
+      PaginationEntity subscribersPagination, PaginationEntity basicPagination) {
+    return socketApi.getShotDetail(idShot, promotedPagination, subscribersPagination,
+        basicPagination);
   }
 
   @Override public void closeSocket() {
@@ -51,5 +64,9 @@ public class ServiceSocketDataSource implements SocketDataSource {
   @Override
   public void updateSocketSubscription(String idStream, String filter, ParamsEntity paramsEntity) {
     socketApi.updateSocketSubscription(idStream, filter, paramsEntity);
+  }
+
+  @Override public void unsubscribeShotDetail(String idShot) {
+    socketApi.unsubscribeShotDetail(idShot);
   }
 }

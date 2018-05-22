@@ -7,13 +7,13 @@ public class UpdateItemSocketMessage extends SocketMessage {
     setEventType(SocketMessage.UPDATE_ITEM_DATA);
   }
 
-  private PrintableItem data;
+  private Item data;
 
-  public PrintableItem getData() {
+  public Item getData() {
     return data;
   }
 
-  public void setData(PrintableItem data) {
+  public void setData(Item data) {
     this.data = data;
   }
 

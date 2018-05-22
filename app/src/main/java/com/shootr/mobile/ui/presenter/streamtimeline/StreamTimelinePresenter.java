@@ -32,6 +32,7 @@ import com.shootr.mobile.domain.interactor.timeline.PutTimelineRepositionInterac
 import com.shootr.mobile.domain.model.BadgeContent;
 import com.shootr.mobile.domain.model.ExternalVideo;
 import com.shootr.mobile.domain.model.FixedItemSocketMessage;
+import com.shootr.mobile.domain.model.ListType;
 import com.shootr.mobile.domain.model.NewBadgeContentSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
 import com.shootr.mobile.domain.model.ParticipantsSocketMessage;
@@ -802,13 +803,15 @@ public class StreamTimelinePresenter
 
       case SocketMessage.NEW_ITEM_DATA:
         NewItemSocketMessage newItemSocketMessage = (NewItemSocketMessage) event.getMessage();
-        ShotModel shotModel = shotModelMapper.transform((Shot) newItemSocketMessage.getData());
+        ShotModel shotModel =
+            shotModelMapper.transform((Shot) newItemSocketMessage.getData().getItem());
         shotModel.setTimelineGroup(PrintableModel.ITEMS_GROUP);
         if (currentTimelineType.equals(TimelineType.NICEST)) {
           view.handleNewNicestItem(shotModel);
         } else {
           if (idStream.equals(shotModel.getStreamId())
-              && newItemSocketMessage.isActiveSubscription) {
+              && newItemSocketMessage.isActiveSubscription
+              && newItemSocketMessage.getData().getList().equals(ListType.TIMELINE_ITEMS)) {
             view.addNewItems(Collections.<PrintableModel>singletonList(shotModel));
           }
         }
@@ -817,7 +820,8 @@ public class StreamTimelinePresenter
       case SocketMessage.UPDATE_ITEM_DATA:
         UpdateItemSocketMessage updateItemSocketMessage =
             (UpdateItemSocketMessage) event.getMessage();
-        ShotModel updatedShot = shotModelMapper.transform((Shot) updateItemSocketMessage.getData());
+        ShotModel updatedShot =
+            shotModelMapper.transform((Shot) updateItemSocketMessage.getData().getItem());
         updatedShot.setTimelineGroup(PrintableModel.ITEMS_GROUP);
         if (idStream.equals(updatedShot.getStreamId())
             && updateItemSocketMessage.isActiveSubscription) {
@@ -827,7 +831,7 @@ public class StreamTimelinePresenter
             view.updateItem(updatedShot);
           }
           view.updateFixedItem(printableModelMapper.mapFixableModel(
-              Collections.singletonList(updateItemSocketMessage.getData())));
+              Collections.singletonList(updateItemSocketMessage.getData().getItem())));
         }
         break;
 

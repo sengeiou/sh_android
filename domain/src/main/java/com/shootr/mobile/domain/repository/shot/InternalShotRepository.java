@@ -1,5 +1,6 @@
 package com.shootr.mobile.domain.repository.shot;
 
+import com.shootr.mobile.domain.model.shot.NewShotDetail;
 import com.shootr.mobile.domain.model.shot.Shot;
 import java.util.List;
 
@@ -12,4 +13,6 @@ public interface InternalShotRepository extends ShotRepository {
   void hideHighlightedShot(String idHighlightedShot);
 
   boolean hasNewFilteredShots(String idStream, String lastTimeFiltered);
+
+  NewShotDetail getCachedShotDetail(String idShot);
 }
