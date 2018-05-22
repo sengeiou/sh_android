@@ -229,9 +229,6 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   //region Lifecycle
   @Override public void resume() {
     bus.register(this);
-    if (hasBeenPaused) {
-      loadLandingStreams();
-    }
   }
 
   @Override public void pause() {
