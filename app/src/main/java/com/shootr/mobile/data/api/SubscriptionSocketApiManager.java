@@ -55,6 +55,7 @@ public class SubscriptionSocketApiManager {
           eventParams.setFilter(subscription.getData().getFilter());
           eventParams.setParams(subscription.getData().getParams());
           eventParams.setIdShot(subscription.getData().getIdShot());
+          eventParams.setIdStream(subscription.getData().getIdStream());
           socketMessage.setEventParams(eventParams);
         }
       }

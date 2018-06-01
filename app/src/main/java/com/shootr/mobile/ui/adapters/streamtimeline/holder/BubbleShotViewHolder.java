@@ -260,7 +260,7 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
     }
   }
 
-  private void bindVideoInfo(final ShotModel shot) {
+  public void bindVideoInfo(final ShotModel shot) {
 
     if (!shot.getEntitiesModel().getCards().isEmpty()) {
       final CardModel cardModel = shot.getEntitiesModel().getCards().get(0);

@@ -131,6 +131,7 @@ public class StreamTimelinePresenter
   private String currentTimelineType = TimelineType.MAIN;
   private int loadType;
   private ExternalVideoModel currentExternalVideo;
+  private boolean pinnedContainsVideo;
 
   @Inject public StreamTimelinePresenter(SelectStreamInteractor selectStreamInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor,
@@ -304,17 +305,26 @@ public class StreamTimelinePresenter
   }
 
   private void renderExternalVideo(List<PrintableItem> pinneds) {
-    for (PrintableItem printableItem : pinneds) {
-      if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
-        ExternalVideoModel newExternalVideo =
-            externalVideoModelMapper.map((ExternalVideo) printableItem);
-        if (!newExternalVideo.getVideoId()
-            .equals(currentExternalVideo == null ? "" : currentExternalVideo.getVideoId())) {
-          currentExternalVideo = externalVideoModelMapper.map((ExternalVideo) printableItem);
-          view.renderExternalVideo(currentExternalVideo);
+    pinnedContainsVideo = false;
+    if (!pinneds.isEmpty()) {
+      for (PrintableItem printableItem : pinneds) {
+        if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
+          ExternalVideoModel newExternalVideo =
+              externalVideoModelMapper.map((ExternalVideo) printableItem);
+          if (!newExternalVideo.getVideoId()
+              .equals(currentExternalVideo == null ? "" : currentExternalVideo.getVideoId())) {
+            currentExternalVideo = externalVideoModelMapper.map((ExternalVideo) printableItem);
+            view.renderExternalVideo(currentExternalVideo);
+          }
+          pinnedContainsVideo = true;
+          break;
         }
-        break;
       }
+      if (!pinnedContainsVideo) {
+        view.hideExternalVideo();
+      }
+    } else {
+      view.hideExternalVideo();
     }
   }
 

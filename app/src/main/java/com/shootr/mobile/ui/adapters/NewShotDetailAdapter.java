@@ -241,6 +241,10 @@ public class NewShotDetailAdapter extends RecyclerAdapter {
           diffBundle.putSerializable(BubbleShotBinder.RESHOOT_BUNDLE, (ShotModel) newItem);
         }
 
+        if (((ShotModel) oldItem).hasMedia() != (((ShotModel) newItem).hasMedia())) {
+          diffBundle.putSerializable(BubbleShotBinder.MEDIA_BUNDLE, (ShotModel) newItem);
+        }
+
         return diffBundle;
       }
     };

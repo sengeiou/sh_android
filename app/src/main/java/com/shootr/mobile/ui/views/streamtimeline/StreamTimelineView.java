@@ -107,4 +107,5 @@ public interface StreamTimelineView {
 
   void handleNewNicestItem(PrintableModel shotModel);
 
+  void hideExternalVideo();
 }

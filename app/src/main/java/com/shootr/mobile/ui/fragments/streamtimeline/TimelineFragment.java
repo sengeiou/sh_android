@@ -756,9 +756,18 @@ public class TimelineFragment extends BaseFragment
       youTubePlayerSupportFragment = YouTubePlayerSupportFragment.newInstance();
       FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
       transaction.add(R.id.player, youTubePlayerSupportFragment).commit();
+      youTubePlayerSupportFragment.initialize(API, this);
+    } else {
+      if (player != null) {
+        try {
+          if (videoPlayer != null) {
+            videoPlayer.cueVideo(currentVideoModel.getVideoId());
+          }
+        } catch (IllegalStateException error) {
+          youTubePlayerSupportFragment.initialize(API, this);
+        }
+      }
     }
-
-    youTubePlayerSupportFragment.initialize(API, this);
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
@@ -890,6 +899,20 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void handleNewNicestItem(PrintableModel shotModel) {
     adapter.handleNicestItem(shotModel);
+  }
+
+  @Override public void hideExternalVideo() {
+    if (videoPlayer != null) {
+      videoPlayer.release();
+    }
+
+    if (player != null) {
+      player.setVisibility(View.GONE);
+    }
+
+    hideVideoMenuItem.setVisible(false);
+    showVideoMenuItem.setVisible(false);
+    videoPlayer = null;
   }
 
   @Override public void showLoadingOldShots() {
@@ -1427,20 +1450,22 @@ public class TimelineFragment extends BaseFragment
   }
 
   private String handleSubtitle() {
-    long followers = watchNumberCount[FOLLOWERS], connected = watchNumberCount[CONNECTED];
     String result = "";
-    if (followers > 0) {
-      result = getContext().getResources()
-          .getQuantityString(R.plurals.total_followers_pattern, watchNumberCount[FOLLOWERS],
-              formatNumberUtils.formatNumbers(Long.valueOf(watchNumberCount[FOLLOWERS])));
-    }
-    if (followers > 0 && connected > 0) {
-      result += ", ";
-    }
-    if (connected > 0) {
-      result += getContext().getResources()
-          .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[CONNECTED],
-              formatNumberUtils.formatNumbers(Long.valueOf(watchNumberCount[CONNECTED])));
+    if (isAdded()) {
+      long followers = watchNumberCount[FOLLOWERS], connected = watchNumberCount[CONNECTED];
+      if (followers > 0) {
+        result = getContext().getResources()
+            .getQuantityString(R.plurals.total_followers_pattern, watchNumberCount[FOLLOWERS],
+                formatNumberUtils.formatNumbers(Long.valueOf(watchNumberCount[FOLLOWERS])));
+      }
+      if (followers > 0 && connected > 0) {
+        result += ", ";
+      }
+      if (connected > 0) {
+        result += getContext().getResources()
+            .getQuantityString(R.plurals.total_watchers_pattern, watchNumberCount[CONNECTED],
+                formatNumberUtils.formatNumbers(Long.valueOf(watchNumberCount[CONNECTED])));
+      }
     }
     return result;
   }

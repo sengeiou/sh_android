@@ -37,6 +37,7 @@ public class BubbleShotBinder extends ItemBinder<ShotModel, BubbleShotViewHolder
   public static final String NICE_BUNDLE = "NICE";
   public static final String REPLY_BUNDLE = "REPLY";
   public static final String RESHOOT_BUNDLE = "RESHOOT";
+  public static final String MEDIA_BUNDLE = "MEDIA";
 
 
   protected final ImageLoader imageLoader;
@@ -125,6 +126,8 @@ public class BubbleShotBinder extends ItemBinder<ShotModel, BubbleShotViewHolder
         case RESHOOT_BUNDLE:
           holder.setupReshootState((ShotModel) bundle.getSerializable(RESHOOT_BUNDLE));
           break;
+        case MEDIA_BUNDLE:
+          holder.bindVideoInfo((ShotModel) bundle.getSerializable(MEDIA_BUNDLE));
           default:
             break;
       }
