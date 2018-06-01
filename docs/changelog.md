@@ -13,6 +13,12 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.58.0] - 2018-06-01
+
+### Fixed
+- Socket connections and exceptions
+- Video issues
+
 ## [1.58.0] - 2018-05-22
 
 ### Changed
