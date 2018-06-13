@@ -11,15 +11,13 @@ import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.ObservableSource;
-import io.reactivex.functions.Function;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
@@ -32,6 +30,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
   private final int DELAY = 10000;
   private final SocketMessageEntityWrapper socketMessageWrapper;
   private final LogsCache logsCache;
+  private final BusPublisher busPublisher;
   private HashMap<String, SocketMessageApiEntity> lastEvents;
   private SubscriptionSocketApiManager subscriptionSocketApiService;
   private TimelineSocketApiManager timelineSocketApiManager;
@@ -40,9 +39,11 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
   private boolean haveHadSomeError;
 
   @Inject
-  public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper, LogsCache logsCache) {
+  public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper, LogsCache logsCache,
+      BusPublisher busPublisher) {
     this.socketMessageWrapper = socketMessageWrapper;
     this.logsCache = logsCache;
+    this.busPublisher = busPublisher;
     lastEvents = new HashMap<>();
     subscriptionSocketApiService = new SubscriptionSocketApiManager(this);
     timelineSocketApiManager = new TimelineSocketApiManager(this);
@@ -158,6 +159,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
               haveHadSomeError = false;
               sendLastEvents();
               logsCache.putNewLog(SOCKET_CONNECTED);
+              busPublisher.post(new ConnectedSocketEvent.Event());
             }
 
             @Override public void onClosed() {
@@ -183,6 +185,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
       if (t.getMessage() != null) {
         logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + t.getMessage());
         webSocket.sendClose();
+        subscriptionSocketApiService.clearSubscriptions();
         if (!emitter.isDisposed()) {
           emitter.onError(new Throwable(t.getMessage()));
         }
