@@ -132,6 +132,16 @@ public class SubscriptionSocketApiManager {
     }
   }
 
+  public void unsubscribeAll() {
+    for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
+      UnsubscribeSocketMessageApiEntity unsubscribeSocketMessageApiEntity =
+          new UnsubscribeSocketMessageApiEntity();
+      unsubscribeSocketMessageApiEntity.setRequestId(subscription.getRequestId());
+      unsubscribeSocketMessageApiEntity.setVersion(VERSION);
+      sendSocketEventListener.sendEvent(unsubscribeSocketMessageApiEntity);
+    }
+  }
+
   public void unsubscribeShotDetail(String idShot) {
 
     for (SubscribeSocketMessageApiEntity timelineSubscription : subscriptions) {
@@ -195,5 +205,4 @@ public class SubscriptionSocketApiManager {
   private String generateRequestId() {
     return UUID.randomUUID().toString();
   }
-
 }

@@ -98,12 +98,8 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   @Override
   public boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity) {
-
-    if (webSocket != null && webSocket.isOpen()) {
-      timelineSocketApiManager.getTimeline(idStream, filter, paginationEntity);
-      return true;
-    }
-    return false;
+    timelineSocketApiManager.getTimeline(idStream, filter, paginationEntity);
+    return true;
   }
 
   @Override public boolean getNicestTimeline(String idStream, String filter,
@@ -139,6 +135,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   @Override public void closeSocket() {
     if (webSocket != null) {
+      subscriptionSocketApiService.unsubscribeAll();
       webSocket.sendClose();
     }
   }
@@ -238,9 +235,5 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
             socketMessageWrapper.transformEvent((SocketMessageApiEntity) pair.getValue()));
       }
     }
-
-    subscriptionSocketApiService.subscribeToLastSubscription();
   }
-
-
 }
