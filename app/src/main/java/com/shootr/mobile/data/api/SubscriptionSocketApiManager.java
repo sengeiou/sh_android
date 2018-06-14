@@ -205,4 +205,8 @@ public class SubscriptionSocketApiManager {
   private String generateRequestId() {
     return UUID.randomUUID().toString();
   }
+
+  public void clearSubscriptions() {
+    subscriptions.clear();
+  }
 }

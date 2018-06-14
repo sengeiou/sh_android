@@ -1,6 +1,7 @@
 package com.shootr.mobile.ui.presenter;
 
 import android.content.Context;
+import android.util.Log;
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -108,10 +109,13 @@ public class WebSocketPresenter {
     }
 
     @Override public void onError(Throwable e) {
+      Log.d("SOCKETSPRESENTER", "recibo fallo en el presenter" + e.getLocalizedMessage());
       e.printStackTrace();
+      socketView.stopService();
     }
 
     @Override public void onComplete() {
+      Log.d("SOCKETSPRESENTER", "he completado");
       socketView.stopService();
     }
   }

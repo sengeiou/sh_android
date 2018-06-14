@@ -16,6 +16,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.functions.Function;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -53,13 +54,6 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
       @Override public void subscribe(final ObservableEmitter<SocketMessageApiEntity> emitter)
           throws Exception {
         setupSocketConnection(emitter, socketAddress);
-      }
-    }).retryWhen(new Function<Observable<Throwable>, ObservableSource<?>>() {
-      @Override public ObservableSource<?> apply(Observable<Throwable> throwableObservable)
-          throws Exception {
-        return throwableObservable.take(RETRY_TIMES)
-            .delay(DELAY, TimeUnit.MILLISECONDS)
-            .timeInterval();
       }
     });
   }

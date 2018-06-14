@@ -277,6 +277,7 @@ dependencies {
   compile 'com.neovisionaries:nv-websocket-client:2.3'
   compile 'com.android.support.constraint:constraint-layout:1.0.2'
   compile files('libs/YouTubeAndroidPlayerApi.jar')
+  compile 'com.treebo:internetavailabilitychecker:1.0.1'
 }
 
 /**
