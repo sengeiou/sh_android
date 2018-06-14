@@ -30,7 +30,7 @@ repositories {
   maven { url 'http://dl.bintray.com/sloy/maven' }
   //TODO remove when https://github.com/Fewlaps/quitnow-cache/pull/14 is merged and released
   mavenCentral()
-  maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
+  maven { url 'https://maven.google.com' }
 }
 
 def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()

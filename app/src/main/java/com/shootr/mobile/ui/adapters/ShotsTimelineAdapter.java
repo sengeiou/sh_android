@@ -14,7 +14,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.ui.adapters.holders.HighLightedShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.HighlightedPromotedShotViewHolder;
-import com.shootr.mobile.ui.adapters.holders.NativeContentAdViewHolder;
 import com.shootr.mobile.ui.adapters.holders.PromotedShotViewHolder;
 import com.shootr.mobile.ui.adapters.holders.ShotTimelineViewHolder;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -184,9 +183,7 @@ public class ShotsTimelineAdapter
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
 
     if (viewType == TYPE_ITEM_CONTENT_AD) {
-      View v =
-          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
-      return new NativeContentAdViewHolder(v);
+      /* no-op */
     }
 
     if (viewType == TYPE_HEADER_CHECK_IN) {
@@ -209,9 +206,7 @@ public class ShotsTimelineAdapter
   @Override
   protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM_CONTENT_AD) {
-      View v =
-          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
-      return new NativeContentAdViewHolder(v);
+     /* no-op */
     }
 
     return getShotViewHolder(parent, viewType);
@@ -236,16 +231,14 @@ public class ShotsTimelineAdapter
   @Override
   protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
     if (viewType == TYPE_ITEM_CONTENT_AD) {
-      View v =
-          LayoutInflater.from(parent.getContext()).inflate(R.layout.item_ad_content, parent, false);
-      return new NativeContentAdViewHolder(v);
+      /* no-op */
     }
     return getShotViewHolder(parent, viewType);
   }
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      ((NativeContentAdViewHolder) holder).render((NativeAd) highlightedShotModel);
+      /* no-op */
       return;
     }
 
@@ -266,7 +259,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      ((NativeContentAdViewHolder) holder).render((NativeAd) shots.get(position));
+      /* no-op */
       return;
     }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
@@ -288,7 +281,7 @@ public class ShotsTimelineAdapter
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
     if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      ((NativeContentAdViewHolder) holder).render((NativeAd) shots.get(position));
+      /* no-op */
       return;
     }
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
