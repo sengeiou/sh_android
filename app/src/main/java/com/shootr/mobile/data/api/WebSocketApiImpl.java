@@ -60,11 +60,14 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
   }
 
   @Override public void sendEvent(SocketMessageApiEntity event) {
-    lastEvents.put(event.getRequestId(), event);
-    if (webSocket != null && webSocket.isOpen()) {
-      String message = socketMessageWrapper.transformEvent(event);
-      webSocket.sendText(message);
-      logsCache.putNewLog(message);
+    if (!lastEvents.containsKey(event.getRequestId())) {
+      lastEvents.put(event.getRequestId(), event);
+
+      if (webSocket != null && webSocket.isOpen()) {
+        String message = socketMessageWrapper.transformEvent(event);
+        webSocket.sendText(message);
+        logsCache.putNewLog(message);
+      }
     }
   }
 
@@ -130,7 +133,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   @Override public void closeSocket() {
     if (webSocket != null) {
-      subscriptionSocketApiService.unsubscribeAll();
+      subscriptionSocketApiService.clearSubscriptions();
       webSocket.sendClose();
     }
   }

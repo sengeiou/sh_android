@@ -187,7 +187,7 @@ public class SubscriptionSocketApiManager {
       subscriptions.add(0, aux);
       return false;
     } else {
-      socketMessageApiEntity.setRequestId(generateRequestId());
+      socketMessageApiEntity.setRequestId(String.valueOf(subscriptionHash(idStream, filter, null)));
       socketMessageApiEntity.setVersion(VERSION);
       sendSocketEventListener.sendEvent(socketMessageApiEntity);
       return true;

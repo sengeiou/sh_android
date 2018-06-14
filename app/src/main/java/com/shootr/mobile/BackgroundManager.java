@@ -20,6 +20,8 @@ public class BackgroundManager implements Application.ActivityLifecycleCallbacks
     void onBecameForeground();
 
     void onBecameBackground();
+
+    void onStartActivity();
   }
 
   private boolean inBackground = true;
@@ -104,6 +106,13 @@ public class BackgroundManager implements Application.ActivityLifecycleCallbacks
   }
 
   @Override public void onActivityStarted(Activity activity) {
+    for (Listener listener : listeners) {
+      try {
+        listener.onStartActivity();
+      } catch (Exception e) {
+        Log.e(LOG, "Listener threw exception!" + e);
+      }
+    }
   }
 
   @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
