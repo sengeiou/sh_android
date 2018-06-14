@@ -7,7 +7,6 @@ import android.view.Display;
 import android.view.WindowManager;
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
 import com.crashlytics.android.answers.Answers;
-import com.neovisionaries.ws.client.WebSocketException;
 import com.shootr.mobile.data.background.sockets.WebSocketService;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.CloseSocketEvent;
