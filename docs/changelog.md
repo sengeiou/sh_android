@@ -13,6 +13,13 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.59.0] - 2018-06-18
+
+### Fixed
+- Doble suscripción del Timeline
+- Doble suscripción del Shot Detail
+- Envío del evento de entrada en el timeline
+
 ## [1.58.0] - 2018-06-01
 
 ### Fixed
