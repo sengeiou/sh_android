@@ -86,8 +86,6 @@ public class SubscriptionSocketApiManager {
       if (lastSubscription.getData().getSubscriptionType().equals(SubscriptionType.TIMELINE)) {
         sendSocketEventListener.onRestoreLastTimeline(lastSubscription.getData().getIdStream(),
             lastSubscription.getData().getFilter(), null);
-        /*getTimeline(lastSubscription.getData().getIdStream(),
-            lastSubscription.getData().getFilter(), null);*/
         subscribeToTimeline(lastSubscription.getData().getSubscriptionType(),
             lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
             lastSubscription.getData().getParams() == null ? 0
@@ -113,7 +111,7 @@ public class SubscriptionSocketApiManager {
       subscriptions.add(0, aux);
       return false;
     } else {
-      socketMessageApiEntity.setRequestId(generateRequestId());
+      socketMessageApiEntity.setRequestId(String.valueOf(shotDetailSubscriptionHash(idShot)));
       socketMessageApiEntity.setVersion(VERSION);
       sendSocketEventListener.sendEvent(socketMessageApiEntity);
       return true;
@@ -200,6 +198,10 @@ public class SubscriptionSocketApiManager {
     result = 31 * result + (paramsEntity != null ? (int) paramsEntity.getPeriod().getDuration() * 31
         : 0);
     return result;
+  }
+
+  private int shotDetailSubscriptionHash(String idShot) {
+    return idShot != null ? idShot.hashCode() : 0;
   }
 
   private String generateRequestId() {
