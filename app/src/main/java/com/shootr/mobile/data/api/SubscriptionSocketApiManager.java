@@ -86,8 +86,6 @@ public class SubscriptionSocketApiManager {
       if (lastSubscription.getData().getSubscriptionType().equals(SubscriptionType.TIMELINE)) {
         sendSocketEventListener.onRestoreLastTimeline(lastSubscription.getData().getIdStream(),
             lastSubscription.getData().getFilter(), null);
-        /*getTimeline(lastSubscription.getData().getIdStream(),
-            lastSubscription.getData().getFilter(), null);*/
         subscribeToTimeline(lastSubscription.getData().getSubscriptionType(),
             lastSubscription.getData().getIdStream(), lastSubscription.getData().getFilter(),
             lastSubscription.getData().getParams() == null ? 0
@@ -113,7 +111,7 @@ public class SubscriptionSocketApiManager {
       subscriptions.add(0, aux);
       return false;
     } else {
-      socketMessageApiEntity.setRequestId(generateRequestId());
+      socketMessageApiEntity.setRequestId(String.valueOf(shotDetailSubscriptionHash(idShot)));
       socketMessageApiEntity.setVersion(VERSION);
       sendSocketEventListener.sendEvent(socketMessageApiEntity);
       return true;
@@ -129,6 +127,16 @@ public class SubscriptionSocketApiManager {
         unsubscribeSocketMessageApiEntity.setVersion(VERSION);
         sendSocketEventListener.sendEvent(unsubscribeSocketMessageApiEntity);
       }
+    }
+  }
+
+  public void unsubscribeAll() {
+    for (SubscribeSocketMessageApiEntity subscription : subscriptions) {
+      UnsubscribeSocketMessageApiEntity unsubscribeSocketMessageApiEntity =
+          new UnsubscribeSocketMessageApiEntity();
+      unsubscribeSocketMessageApiEntity.setRequestId(subscription.getRequestId());
+      unsubscribeSocketMessageApiEntity.setVersion(VERSION);
+      sendSocketEventListener.sendEvent(unsubscribeSocketMessageApiEntity);
     }
   }
 
@@ -177,7 +185,7 @@ public class SubscriptionSocketApiManager {
       subscriptions.add(0, aux);
       return false;
     } else {
-      socketMessageApiEntity.setRequestId(generateRequestId());
+      socketMessageApiEntity.setRequestId(String.valueOf(subscriptionHash(idStream, filter, null)));
       socketMessageApiEntity.setVersion(VERSION);
       sendSocketEventListener.sendEvent(socketMessageApiEntity);
       return true;
@@ -192,8 +200,15 @@ public class SubscriptionSocketApiManager {
     return result;
   }
 
+  private int shotDetailSubscriptionHash(String idShot) {
+    return idShot != null ? idShot.hashCode() : 0;
+  }
+
   private String generateRequestId() {
     return UUID.randomUUID().toString();
   }
 
+  public void clearSubscriptions() {
+    subscriptions.clear();
+  }
 }

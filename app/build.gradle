@@ -206,7 +206,7 @@ dependencies {
   // If you want to use the GPU Filters
   androidTestCompile 'com.android.support.test:runner:0.5'
   androidTestCompile 'com.android.support.test:rules:0.5'
-  androidTestCompile 'com.android.support:support-annotations:25.3.1'
+  androidTestCompile 'com.android.support:support-annotations:26.1.0'
   compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
   compile 'com.artjimlop:altex-image-downloader:0.0.4'
   compile 'com.amulyakhare:com.amulyakhare.textdrawable:1.0.1'
@@ -277,6 +277,7 @@ dependencies {
   compile 'com.neovisionaries:nv-websocket-client:2.3'
   compile 'com.android.support.constraint:constraint-layout:1.0.2'
   compile files('libs/YouTubeAndroidPlayerApi.jar')
+  compile 'com.treebo:internetavailabilitychecker:1.0.1'
 }
 
 /**

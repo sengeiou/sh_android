@@ -196,11 +196,15 @@ public class SocketMessageEntityMapper {
   private EventParams transformParams(com.shootr.mobile.data.entity.EventParams eventParams) {
     EventParams params = new EventParams();
 
-    params.setFilter(eventParams.getFilter());
-    params.setIdShot(eventParams.getIdShot());
-    params.setIdStream(eventParams.getIdStream());
-    if (eventParams.getParams() != null) {
-      params.setPeriod(eventParams.getParams().getPeriod().getDuration());
+    try {
+      params.setFilter(eventParams.getFilter());
+      params.setIdShot(eventParams.getIdShot());
+      params.setIdStream(eventParams.getIdStream());
+      if (eventParams.getParams() != null && eventParams.getParams().getPeriod() != null) {
+        params.setPeriod(eventParams.getParams().getPeriod().getDuration());
+      }
+    } catch (Exception e) {
+      /* no-op */
     }
 
     return params;

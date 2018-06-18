@@ -5,6 +5,7 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.EventReceived;
 import com.shootr.mobile.domain.bus.FloatingPlayerState;
+import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.CreateTopicInteractor;
@@ -72,7 +73,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class StreamTimelinePresenter
-    implements Presenter, ShotSent.Receiver, EventReceived.Receiver {
+    implements Presenter, ShotSent.Receiver, EventReceived.Receiver, ConnectedSocketEvent.Receiver {
 
   private static final int TIMELINE_LOADING = 1;
   private static final int TIMELINE_PAGINATING = 2;
@@ -912,5 +913,9 @@ public class StreamTimelinePresenter
 
   public String getFilterType() {
     return currentTimelineType;
+  }
+
+  @Subscribe @Override public void onRestoreEvent(ConnectedSocketEvent.Event event) {
+    getCachedTimeline(idStream, currentTimelineType);
   }
 }

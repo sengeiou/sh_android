@@ -28,7 +28,7 @@ import javax.inject.Inject;
 public class WebSocketService extends Service
     implements SocketView, CloseSocketEvent.Receiver {
 
-  private static boolean isRunning = false;
+  public static boolean isRunning = false;
   private static Intent serviceIntent;
 
   @Inject WebSocketPresenter presenter;

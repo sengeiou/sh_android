@@ -16,12 +16,14 @@ import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DatabaseVersionUtils;
 import com.shootr.mobile.util.LogTreeFactory;
+import com.treebo.internetavailabilitychecker.InternetAvailabilityChecker;
+import com.treebo.internetavailabilitychecker.InternetConnectivityListener;
 import dagger.ObjectGraph;
 import io.fabric.sdk.android.Fabric;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class ShootrApplication extends MultiDexApplication {
+public class ShootrApplication extends MultiDexApplication implements InternetConnectivityListener {
 
     public static final Point SCREEN_SIZE = new Point();
     private ObjectGraph objectGraph;
@@ -30,6 +32,9 @@ public class ShootrApplication extends MultiDexApplication {
     @Inject AnalyticsTool analyticsTool;
     @Inject SessionRepository sessionRepository;
     @Inject BusPublisher busPublisher;
+
+    private boolean socketClosedForInternetProblems = false;
+    private boolean inBackground;
 
     @Override public void onCreate() {
         super.onCreate();
@@ -48,6 +53,9 @@ public class ShootrApplication extends MultiDexApplication {
         }
 
         BackgroundManager.get(this).registerListener(appActivityListener);
+        InternetAvailabilityChecker.init(this);
+        InternetAvailabilityChecker internetAvailabilityChecker = InternetAvailabilityChecker.getInstance();
+        internetAvailabilityChecker.addInternetConnectivityListener(this);
     }
 
     public void plantLoggerTrees() {
@@ -83,6 +91,7 @@ public class ShootrApplication extends MultiDexApplication {
 
     private BackgroundManager.Listener appActivityListener = new BackgroundManager.Listener() {
         public void onBecameForeground() {
+            inBackground = false;
             if (sessionRepository.getCurrentUserId() != null
                 && !sessionRepository.getCurrentUserId().isEmpty()) {
                 WebSocketService.startService(getApplicationContext());
@@ -90,7 +99,35 @@ public class ShootrApplication extends MultiDexApplication {
         }
 
         public void onBecameBackground() {
+            inBackground = true;
             busPublisher.post(new CloseSocketEvent.Event());
         }
+
+        @Override public void onStartActivity() {
+            if (!inBackground) {
+                if (sessionRepository.getCurrentUserId() != null
+                    && !sessionRepository.getCurrentUserId().isEmpty() && !WebSocketService.isRunning) {
+                    WebSocketService.startService(getApplicationContext());
+                }
+            }
+        }
     };
+
+    @Override public void onInternetConnectivityChanged(boolean isConnected) {
+        if (!inBackground) {
+            if (!isConnected) {
+                if (sessionRepository.getCurrentUserId() != null
+                    && !sessionRepository.getCurrentUserId().isEmpty()) {
+                    socketClosedForInternetProblems = true;
+                    busPublisher.post(new CloseSocketEvent.Event());
+                }
+            } else if (socketClosedForInternetProblems && isConnected) {
+                if (sessionRepository.getCurrentUserId() != null
+                    && !sessionRepository.getCurrentUserId().isEmpty()) {
+                    WebSocketService.startService(getApplicationContext());
+                    socketClosedForInternetProblems = false;
+                }
+            }
+        }
+    }
 }
