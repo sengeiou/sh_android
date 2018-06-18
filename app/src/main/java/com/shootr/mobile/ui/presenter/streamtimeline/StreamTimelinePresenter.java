@@ -28,6 +28,7 @@ import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewHighlightedShotEventInteractor;
+import com.shootr.mobile.domain.interactor.shot.ViewTimelineEventInteractor;
 import com.shootr.mobile.domain.interactor.stream.SelectStreamInteractor;
 import com.shootr.mobile.domain.interactor.timeline.PutTimelineRepositionInteractor;
 import com.shootr.mobile.domain.model.BadgeContent;
@@ -89,6 +90,7 @@ public class StreamTimelinePresenter
   private final CallCtaCheckInInteractor callCtaCheckInInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
+  private final ViewTimelineEventInteractor viewTimelineEventInteractor;
   private final ReshootInteractor reshootInteractor;
   private final UndoReshootInteractor undoReshootInteractor;
   private final HighlightShotInteractor highlightShotInteractor;
@@ -137,7 +139,8 @@ public class StreamTimelinePresenter
   @Inject public StreamTimelinePresenter(SelectStreamInteractor selectStreamInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor,
       MarkNiceShotInteractor markNiceShotInteractor,
-      UnmarkNiceShotInteractor unmarkNiceShotInteractor, ReshootInteractor reshootInteractor,
+      UnmarkNiceShotInteractor unmarkNiceShotInteractor,
+      ViewTimelineEventInteractor viewTimelineEventInteractor, ReshootInteractor reshootInteractor,
       UndoReshootInteractor undoReshootInteractor, HighlightShotInteractor highlightShotInteractor,
       SubscribeTimelineInteractor subscribeTimelineInteractor,
       DismissHighlightShotInteractor dismissHighlightShotInteractor,
@@ -160,6 +163,7 @@ public class StreamTimelinePresenter
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
+    this.viewTimelineEventInteractor = viewTimelineEventInteractor;
     this.reshootInteractor = reshootInteractor;
     this.undoReshootInteractor = undoReshootInteractor;
     this.highlightShotInteractor = highlightShotInteractor;
@@ -279,6 +283,14 @@ public class StreamTimelinePresenter
       view.showLoadingOldShots();
       getTimeline(currentTimelineType, maxTimestamp, true);
     }
+  }
+
+  private void sendViewTimelineEvent() {
+    viewTimelineEventInteractor.countViewEvent(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
+      }
+    });
   }
 
   private void onTimelineLoaded(StreamTimeline streamTimeline) {
@@ -416,6 +428,7 @@ public class StreamTimelinePresenter
   }
 
   protected void selectStream() {
+    sendViewTimelineEvent();
     selectStreamInteractor.selectStream(idStream, new Interactor.Callback<StreamSearchResult>() {
       @Override public void onLoaded(StreamSearchResult streamSearchResult) {
         if (isFirstLoad) {
