@@ -662,7 +662,9 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void hideDraftsButton() {
-    newShotBarContainer.hideDraftsButton();
+    if (isAdded()) {
+      newShotBarContainer.hideDraftsButton();
+    }
   }
 
   //endregion
