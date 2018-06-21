@@ -731,18 +731,20 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void renderItems(List<PrintableModel> items, PrintableModel itemForReposition,
       int offset) {
-    checkingForShotsView.setVisibility(View.GONE);
-    itemsList.scrollToPosition(0);
-    if (timelinePresenter.getFilterType().equals(TimelineType.NICEST)) {
-      adapter.setNicestShotList(items);
-    } else {
-      adapter.setShotList(items);
-    }
-    if (itemForReposition != null && adapter.indexOf(itemForReposition) != -1) {
-      preCachingLayoutManager.scrollToPositionWithOffset(adapter.indexOf(itemForReposition),
-          offset);
-    } else {
+    if (isAdded()) {
+      checkingForShotsView.setVisibility(View.GONE);
       itemsList.scrollToPosition(0);
+      if (timelinePresenter.getFilterType().equals(TimelineType.NICEST)) {
+        adapter.setNicestShotList(items);
+      } else {
+        adapter.setShotList(items);
+      }
+      if (itemForReposition != null && adapter.indexOf(itemForReposition) != -1) {
+        preCachingLayoutManager.scrollToPositionWithOffset(adapter.indexOf(itemForReposition),
+            offset);
+      } else {
+        itemsList.scrollToPosition(0);
+      }
     }
   }
 
