@@ -215,8 +215,12 @@ public class GCMIntentService extends IntentService {
 
   private boolean isStreamPushTypeKnown(PushNotification pushNotification) {
     String streamType = pushNotification.getParameters().getStreamReadWriteMode();
-    List<String> streamTypes = Arrays.asList(StreamMode.TYPES_STREAM);
-    return streamTypes.contains(streamType);
+    if (streamType != null) {
+      List<String> streamTypes = Arrays.asList(StreamMode.TYPES_STREAM);
+      return streamTypes.contains(streamType);
+    } else {
+      return true;
+    }
   }
 
   private void setupGoToShotDetailNotification(PushNotification push, String activityType) {
