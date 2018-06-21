@@ -13,6 +13,13 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.59.1] - 2018-06-21
+- Se corrigen null fixes en la suscripción a sockets
+- Se corrige conforme precisa de actualización en un push de polls 
+
+### Fixed
+- Doble suscripción del Timeline
+
 ## [1.59.0] - 2018-06-18
 
 ### Fixed
