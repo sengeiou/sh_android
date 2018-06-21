@@ -85,10 +85,12 @@ public class NewShotBarPresenter implements Presenter, ShotFailed.Receiver {
   }
 
   public void newShotFromTextBox() {
-    if (!isStreamReadOnly) {
-      newShotBarView.openNewShotView();
-    } else {
-      this.showReadOnlyError();
+    if (newShotBarView != null) {
+      if (!isStreamReadOnly) {
+        newShotBarView.openNewShotView();
+      } else {
+        this.showReadOnlyError();
+      }
     }
   }
 
