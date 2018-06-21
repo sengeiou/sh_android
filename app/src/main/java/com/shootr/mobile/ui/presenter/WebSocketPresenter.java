@@ -89,7 +89,9 @@ public class WebSocketPresenter {
   public void closeSocket() {
     closeSocketInteractor.closeSocket(new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        socketView.stopService();
+        if (socketView != null) {
+          socketView.stopService();
+        }
       }
     });
   }
