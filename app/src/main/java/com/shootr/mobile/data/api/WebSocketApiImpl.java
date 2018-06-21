@@ -197,6 +197,8 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
       }
     } catch (Exception e) {
       /* no-op */
+    } catch (Throwable throwable) {
+      /* no-op */
     }
   }
 
