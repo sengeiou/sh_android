@@ -63,7 +63,7 @@ public class PrivacyLawsActivity extends BaseActivity implements PrivacyLawView 
 
   private void setupWebView() {
     String privacyUrl =
-        String.format(getResources().getString(R.string.privacy_policy_service_base_url),
+        String.format(getResources().getString(R.string.privacy_policy_service_url),
             localeProvider.getLanguage());
     webView = (WebView) findViewById(R.id.webview);
     WebSettings webSettings = webView.getSettings();
