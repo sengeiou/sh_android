@@ -65,6 +65,7 @@ public class FixedCtaShotBinder extends ShotBinder {
     if (item instanceof ShotModel) {
       canBind = ((ShotModel) item).getTimelineGroup().equals(PrintableModel.FIXED_GROUP)
           && (((ShotModel) item).getType().equals(ShotType.CTACHECKIN)
+          || ((ShotModel) item).getType().equals(ShotType.WAKEUP)
           || ((ShotModel) item).getType().equals(ShotType.CTAGENERICLINK));
     }
     return canBind;
