@@ -5,14 +5,17 @@ import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketExtension;
 import com.neovisionaries.ws.client.WebSocketFactory;
+import com.shootr.mobile.data.ShotSenderSocketApiManager;
 import com.shootr.mobile.data.ShotSocketApiManager;
 import com.shootr.mobile.data.background.sockets.SocketListener;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
+import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
@@ -29,25 +32,29 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
   private final int RETRY_TIMES = 50;
   private final int DELAY = 10000;
   private final SocketMessageEntityWrapper socketMessageWrapper;
+  private final SessionRepository sessionRepository;
   private final LogsCache logsCache;
   private final BusPublisher busPublisher;
   private HashMap<String, SocketMessageApiEntity> lastEvents;
   private SubscriptionSocketApiManager subscriptionSocketApiService;
   private TimelineSocketApiManager timelineSocketApiManager;
   private ShotSocketApiManager shotSocketApiManager;
+  private ShotSenderSocketApiManager shotSenderSocketApiManager;
 
   private boolean haveHadSomeError;
 
-  @Inject
-  public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper, LogsCache logsCache,
-      BusPublisher busPublisher) {
+  @Inject public WebSocketApiImpl(SocketMessageEntityWrapper socketMessageWrapper,
+      SessionRepository sessionRepository, LogsCache logsCache, BusPublisher busPublisher) {
     this.socketMessageWrapper = socketMessageWrapper;
+    this.sessionRepository = sessionRepository;
     this.logsCache = logsCache;
     this.busPublisher = busPublisher;
     lastEvents = new HashMap<>();
-    subscriptionSocketApiService = new SubscriptionSocketApiManager(this);
+    subscriptionSocketApiService =
+        new SubscriptionSocketApiManager(this, sessionRepository.getCurrentUserId());
     timelineSocketApiManager = new TimelineSocketApiManager(this);
     shotSocketApiManager = new ShotSocketApiManager(this);
+    shotSenderSocketApiManager = new ShotSenderSocketApiManager(this);
   }
 
   @Override public Observable<SocketMessageApiEntity> connect(final String socketAddress) {
@@ -121,6 +128,11 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     subscriptionSocketApiService.unsubscribeShotDetail(idShot);
   }
 
+  @Override public void sendNewShot(ShotEntity shotEntity, String idQueue) {
+    shotSenderSocketApiManager.sendNewShot(shotEntity, idQueue);
+  }
+
+
   @Override public boolean sendNice(String idShot) {
 
     if (webSocket != null && webSocket.isOpen()) {
@@ -179,6 +191,8 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     } catch (WebSocketException exception) {
       logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + exception.getMessage());
       emitter.onComplete();
+    } catch (Throwable error) {
+      emitter.onComplete();
     }
   }
 
@@ -221,6 +235,12 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
         lastEvents.remove(socketMessage.getRequestId());
         break;
 
+      case SocketMessageApiEntity.CREATED_SHOT:
+        emitter.onNext(shotSenderSocketApiManager.setupShotSent(socketMessage));
+        break;
+      case SocketMessageApiEntity.ERROR:
+        emitter.onNext(shotSenderSocketApiManager.setupIdQueue(socketMessage));
+        break;
       default:
         emitter.onNext(subscriptionSocketApiService.setupSocketMessageEventParams(socketMessage));
         break;

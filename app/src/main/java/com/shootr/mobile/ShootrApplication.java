@@ -34,7 +34,7 @@ public class ShootrApplication extends MultiDexApplication implements InternetCo
     @Inject BusPublisher busPublisher;
 
     private boolean socketClosedForInternetProblems = false;
-    private boolean inBackground;
+    private boolean inBackground = true;
 
     @Override public void onCreate() {
         super.onCreate();

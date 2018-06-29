@@ -17,10 +17,13 @@ public class SubscriptionSocketApiManager {
 
   private ArrayList<SubscribeSocketMessageApiEntity> subscriptions;
   private SendSocketEventListener sendSocketEventListener;
+  private String idUser;
 
-  public SubscriptionSocketApiManager(SendSocketEventListener sendSocketEventListener) {
+  public SubscriptionSocketApiManager(SendSocketEventListener sendSocketEventListener,
+      String idUser) {
     this.sendSocketEventListener = sendSocketEventListener;
     this.subscriptions = new ArrayList<>();
+    this.idUser = idUser;
   }
 
   public void onSubscriptionAck(SocketMessageApiEntity event) {
@@ -43,7 +46,8 @@ public class SubscriptionSocketApiManager {
     }
   }
 
-  public SocketMessageApiEntity setupSocketMessageEventParams(SocketMessageApiEntity socketMessage) {
+  public SocketMessageApiEntity setupSocketMessageEventParams(
+      SocketMessageApiEntity socketMessage) {
     if (!subscriptions.isEmpty()) {
       socketMessage.setActiveSubscription(
           subscriptions.get(0).getRequestId().equals(socketMessage.getRequestId())
@@ -195,13 +199,16 @@ public class SubscriptionSocketApiManager {
   private int subscriptionHash(String idStream, String filter, ParamsEntity paramsEntity) {
     int result = idStream != null ? idStream.hashCode() : 0;
     result = 31 * result + (filter != null ? filter.hashCode() : 0);
+    result = 31 * result + (idUser != null ? idUser.hashCode() : 0);
     result = 31 * result + (paramsEntity != null ? (int) paramsEntity.getPeriod().getDuration() * 31
         : 0);
     return result;
   }
 
   private int shotDetailSubscriptionHash(String idShot) {
-    return idShot != null ? idShot.hashCode() : 0;
+    int result = idShot != null ? idShot.hashCode() : 0;
+    result = 31 * result + (idUser != null ? idUser.hashCode() : 0);
+    return result;
   }
 
   private String generateRequestId() {

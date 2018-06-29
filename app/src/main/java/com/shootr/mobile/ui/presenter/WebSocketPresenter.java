@@ -61,6 +61,7 @@ public class WebSocketPresenter {
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
         logsCache.putNewLog(SOCKET_CONNECTION_ERROR + error.getMessage());
+        socketView.stopService();
       }
     });
   }

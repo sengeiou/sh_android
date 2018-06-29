@@ -2,6 +2,11 @@ package com.shootr.mobile.data.api.entity.mapper;
 
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.BadgeContentEntity;
+import com.shootr.mobile.data.entity.CreatedShotSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.CreatedShotSocketMessageEntity;
+import com.shootr.mobile.data.entity.ErrorEntity;
+import com.shootr.mobile.data.entity.ErrorSocketMessageEntity;
+import com.shootr.mobile.data.entity.ErrorSocketMessaggeApiEntity;
 import com.shootr.mobile.data.entity.FixedItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.FixedItemsSocketMessagesApiEntity;
 import com.shootr.mobile.data.entity.ItemEntity;
@@ -182,6 +187,36 @@ public class SocketMessageApiEntityMapper {
 
           return shotUpdateSocketMessageEntity;
 
+        case SocketMessageApiEntity.CREATED_SHOT:
+          CreatedShotSocketMessageEntity createdShotSocketMessageEntity =
+              new CreatedShotSocketMessageEntity();
+          createdShotSocketMessageEntity.setEventType(socketMessage.getEventType());
+          createdShotSocketMessageEntity.setVersion(socketMessage.getVersion());
+          createdShotSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          createdShotSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+
+          createdShotSocketMessageEntity.setIdQueue(
+              ((CreatedShotSocketMessageApiEntity) socketMessage).getIdQueue());
+
+          return createdShotSocketMessageEntity;
+
+        case SocketMessageApiEntity.ERROR:
+          ErrorSocketMessageEntity errorSocketMessageEntity =
+              new ErrorSocketMessageEntity();
+          errorSocketMessageEntity.setEventType(socketMessage.getEventType());
+          errorSocketMessageEntity.setVersion(socketMessage.getVersion());
+          errorSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          errorSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+          errorSocketMessageEntity.setEventParams(socketMessage.getEventParams());
+
+          ErrorEntity errorEntity = new ErrorEntity();
+
+          errorEntity.setCommand(((ErrorSocketMessaggeApiEntity) socketMessage).getData().getCommand());
+          errorEntity.setErrorCode(((ErrorSocketMessaggeApiEntity) socketMessage).getData().getErrorCode());
+
+          errorSocketMessageEntity.setData(errorEntity);
+
+          return errorSocketMessageEntity;
         default:
           break;
       }

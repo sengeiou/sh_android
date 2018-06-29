@@ -16,6 +16,8 @@ import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.TopicApiEntity;
 import com.shootr.mobile.data.entity.AckSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.CreatedShotSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.ErrorSocketMessaggeApiEntity;
 import com.shootr.mobile.data.entity.FixedItemsSocketMessagesApiEntity;
 import com.shootr.mobile.data.entity.FollowableEntity;
 import com.shootr.mobile.data.entity.NewBadgeContentSocketMessageApiEntity;
@@ -71,6 +73,8 @@ public class SocketMessageEntityWrapper {
             .registerSubtype(NewBadgeContentSocketMessageApiEntity.class, SocketMessageApiEntity.NEW_BADGE_CONTENT)
             .registerSubtype(ShotDetailSocketMessageApiEntity.class, SocketMessageApiEntity.SHOT_DETAIL)
             .registerSubtype(ShotUpdateSocketMessageApiEntity.class, SocketMessageApiEntity.SHOT_UPDATE)
+            .registerSubtype(CreatedShotSocketMessageApiEntity.class, SocketMessageApiEntity.CREATED_SHOT)
+            .registerSubtype(ErrorSocketMessaggeApiEntity.class, SocketMessageApiEntity.ERROR)
             .registerSubtype(AckSocketMessageApiEntity.class, SocketMessageApiEntity.ACK);
 
     final RuntimeTypeAdapterFactory<FollowableEntity> typeFactory =

@@ -1,5 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
+import com.shootr.mobile.data.entity.CreatedShotSocketMessageEntity;
+import com.shootr.mobile.data.entity.ErrorSocketMessageEntity;
 import com.shootr.mobile.data.entity.FixedItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.NewBadgeContentSocketMessageEntity;
 import com.shootr.mobile.data.entity.NewItemSocketMessageEntity;
@@ -12,6 +14,9 @@ import com.shootr.mobile.data.entity.SocketMessageEntity;
 import com.shootr.mobile.data.entity.TimelineMessageEntity;
 import com.shootr.mobile.data.entity.UpdateItemSocketMessageEntity;
 import com.shootr.mobile.domain.model.BadgeContent;
+import com.shootr.mobile.domain.model.CreatedShotSocketMessage;
+import com.shootr.mobile.domain.model.Error;
+import com.shootr.mobile.domain.model.ErrorSocketMessage;
 import com.shootr.mobile.domain.model.EventParams;
 import com.shootr.mobile.domain.model.FixedItemSocketMessage;
 import com.shootr.mobile.domain.model.Item;
@@ -185,6 +190,36 @@ public class SocketMessageEntityMapper {
               (ShotEntity) ((ShotUpdateSocketMessageEntity) socketMessage).getData()));
 
           return shotUpdateSocketMessage;
+
+        case SocketMessage.CREATED_SHOT:
+          CreatedShotSocketMessage createdShotSocketMessage = new CreatedShotSocketMessage();
+
+          createdShotSocketMessage.setEventType(socketMessage.getEventType());
+          createdShotSocketMessage.setVersion(socketMessage.getVersion());
+          createdShotSocketMessage.setRequestId(socketMessage.getRequestId());
+          createdShotSocketMessage.setActiveSubscription(socketMessage.isActiveSubscription());
+
+          createdShotSocketMessage.setIdQueue(
+              ((CreatedShotSocketMessageEntity) socketMessage).getIdQueue());
+
+          return createdShotSocketMessage;
+
+        case SocketMessage.ERROR:
+          ErrorSocketMessage errorSocketMessage =
+              new ErrorSocketMessage();
+          errorSocketMessage.setEventType(socketMessage.getEventType());
+          errorSocketMessage.setVersion(socketMessage.getVersion());
+          errorSocketMessage.setRequestId(socketMessage.getRequestId());
+
+          Error error = new Error();
+
+          error.setCommand(((ErrorSocketMessageEntity) socketMessage).getData().getCommand());
+          error.setErrorCode(((ErrorSocketMessageEntity) socketMessage).getData().getErrorCode());
+          errorSocketMessage.setEventParams(transformParams(socketMessage.getEventParams()));
+
+          errorSocketMessage.setData(error);
+
+          return errorSocketMessage;
         default:
           break;
       }
@@ -195,7 +230,6 @@ public class SocketMessageEntityMapper {
 
   private EventParams transformParams(com.shootr.mobile.data.entity.EventParams eventParams) {
     EventParams params = new EventParams();
-
     try {
       params.setFilter(eventParams.getFilter());
       params.setIdShot(eventParams.getIdShot());

@@ -38,6 +38,15 @@ public class ShotQueueManager extends AbstractManager {
         getWritableDatabase().delete(DatabaseContract.ShotQueueTable.TABLE, whereClause, whereArgs);
     }
 
+    public void deleteShotQueue(String idShotQueueEntity) {
+        String[] whereArgs = {
+            String.valueOf(idShotQueueEntity)
+        };
+        String whereClause = DatabaseContract.ShotQueueTable.ID_QUEUE + "=?";
+        getWritableDatabase().delete(DatabaseContract.ShotQueueTable.TABLE, whereClause, whereArgs);
+    }
+
+
     public List<ShotQueueEntity> retrievePendingShotQueue() {
         List<ShotQueueEntity> results = new ArrayList<>();
         String where = DatabaseContract.ShotQueueTable.FAILED + "=?";

@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.remote;
 
 import android.support.annotation.NonNull;
+import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
 import com.shootr.mobile.data.entity.PeriodEntity;
@@ -11,6 +12,10 @@ import com.shootr.mobile.data.repository.datasource.SocketDataSource;
 import com.shootr.mobile.data.repository.remote.cache.ShotDetailCache;
 import com.shootr.mobile.data.repository.remote.cache.TimelineCache;
 import com.shootr.mobile.data.repository.remote.cache.TimelineRepositionCache;
+import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.ShotFailed;
+import com.shootr.mobile.domain.model.CreatedShotSocketMessage;
+import com.shootr.mobile.domain.model.ErrorSocketMessage;
 import com.shootr.mobile.domain.model.FixedItemSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
 import com.shootr.mobile.domain.model.Pagination;
@@ -20,8 +25,11 @@ import com.shootr.mobile.domain.model.SocketMessage;
 import com.shootr.mobile.domain.model.TimelineSocketMessage;
 import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
+import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SocketRepository;
+import com.shootr.mobile.domain.service.QueueRepository;
+import com.shootr.mobile.domain.service.ShotQueueListener;
 import io.reactivex.Observable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -34,15 +42,23 @@ public class RemoteSocketRepository implements SocketRepository {
   private final TimelineCache timelineCache;
   private final TimelineRepositionCache timelineRepositionCache;
   private final ShotDetailCache shotDetailCache;
+  private final QueueRepository queueRepository;
+  private final ShotQueueListener shotQueueListener;
+  private final BusPublisher busPublisher;
 
   @Inject public RemoteSocketRepository(@Remote SocketDataSource socketDataSource,
       SocketMessageEntityMapper socketEntityMapper, TimelineCache timelineCache,
-      TimelineRepositionCache timelineRepositionCache, ShotDetailCache shotDetailCache) {
+      TimelineRepositionCache timelineRepositionCache, ShotDetailCache shotDetailCache,
+      QueueRepository queueRepository, ShotQueueListener shotQueueListener,
+      BusPublisher busPublisher) {
     this.socketDataSource = socketDataSource;
     this.socketEntityMapper = socketEntityMapper;
     this.timelineCache = timelineCache;
     this.timelineRepositionCache = timelineRepositionCache;
     this.shotDetailCache = shotDetailCache;
+    this.queueRepository = queueRepository;
+    this.shotQueueListener = shotQueueListener;
+    this.busPublisher = busPublisher;
   }
 
   @Override public Observable<SocketMessage> connect(final String socketAddress) {
@@ -126,6 +142,12 @@ public class RemoteSocketRepository implements SocketRepository {
                   socketMessage.getEventParams().getIdShot(),
                   ((UpdateItemSocketMessage) socketMessage).getData().getList());
               break;
+            case SocketMessage.CREATED_SHOT:
+              queueRepository.remove(((CreatedShotSocketMessage) socketMessage).getIdQueue());
+              break;
+            case SocketMessage.ERROR:
+              handleError((ErrorSocketMessage) socketMessage);
+              break;
             default:
               break;
           }
@@ -182,5 +204,39 @@ public class RemoteSocketRepository implements SocketRepository {
     paginationEntity.setMaxTimestamp(pagination.getMaxTimestamp());
     paginationEntity.setSinceTimestamp(pagination.getSinceTimestamp());
     return paginationEntity;
+  }
+
+  private void handleError(ErrorSocketMessage errorMessage) {
+    if (errorMessage.getData().getErrorCode() == ErrorInfo.CODE_RESOURCE_NOT_FOUND) {
+      notifyShotSendingHasDeletedParent(
+          clearShotFromQueue(errorMessage.getEventParams().getIdShot()));
+    } else if (errorMessage.getData().getErrorCode() == ErrorInfo.CODE_STREAM_REMOVED) {
+      notifyShotSendingHasRemovedStream(
+          clearShotFromQueue(errorMessage.getEventParams().getIdShot()));
+    } else if (errorMessage.getData().getErrorCode() == ErrorInfo.CODE_STREAM_VIEW_ONLY) {
+      notifyShotSendingHasReadOnlyStream(
+          clearShotFromQueue(errorMessage.getEventParams().getIdShot()));
+    }
+  }
+
+  private QueuedShot clearShotFromQueue(String idQueued) {
+    QueuedShot queuedShot = queueRepository.getQueue(Long.valueOf(idQueued), QueueRepository.SHOT_TYPE);
+    queueRepository.remove(idQueued);
+    return queuedShot;
+  }
+
+  private void notifyShotSendingHasDeletedParent(QueuedShot queuedShot) {
+    shotQueueListener.onShotHasParentDeleted(queuedShot);
+    busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));
+  }
+
+  private void notifyShotSendingHasRemovedStream(QueuedShot queuedShot) {
+    shotQueueListener.onShotHasStreamRemoved(queuedShot);
+    busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));
+  }
+
+  private void notifyShotSendingHasReadOnlyStream(QueuedShot queuedShot) {
+    shotQueueListener.onShotIsOnReadOnly(queuedShot);
+    busPublisher.post(new ShotFailed.Event(queuedShot.getBaseMessage()));
   }
 }

@@ -12,6 +12,8 @@ public interface QueueRepository {
 
     void remove(QueuedShot queuedShot);
 
+    void remove(String idQueuedShot);
+
     List<QueuedShot> getPendingQueue();
 
     QueuedShot nextQueued(String queuedType);

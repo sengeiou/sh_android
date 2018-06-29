@@ -1,6 +1,7 @@
 package com.shootr.mobile.data.repository.datasource.shot;
 
 import android.support.annotation.NonNull;
+import com.shootr.mobile.data.api.SocketApi;
 import com.shootr.mobile.data.api.entity.CreateAHighlightedShotEntity;
 import com.shootr.mobile.data.api.entity.ProfileShotTimelineApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
@@ -36,17 +37,19 @@ public class ServiceShotDatasource implements ShotDataSource {
   private final HighlightedShotEntityMapper highlightedShotEntityMapper;
   private final ProfileShotTimelineApiEntityMapper profileShotTimelineApiEntityMapper;
   private final DatabaseShotDataSource databaseShotDataSource;
+  private final SocketApi socketApi;
 
   @Inject public ServiceShotDatasource(ShotApiService shotApiService,
       ShotApiEntityMapper shotApiEntityMapper,
       HighlightedShotEntityMapper highlightedShotEntityMapper,
       ProfileShotTimelineApiEntityMapper profileShotTimelineApiEntityMapper,
-      DatabaseShotDataSource databaseShotDataSource) {
+      DatabaseShotDataSource databaseShotDataSource, SocketApi socketApi) {
     this.shotApiService = shotApiService;
     this.shotApiEntityMapper = shotApiEntityMapper;
     this.highlightedShotEntityMapper = highlightedShotEntityMapper;
     this.profileShotTimelineApiEntityMapper = profileShotTimelineApiEntityMapper;
     this.databaseShotDataSource = databaseShotDataSource;
+    this.socketApi = socketApi;
   }
 
   @Override public ShotEntity putShot(ShotEntity shotEntity, String idUserMe) {
@@ -65,6 +68,10 @@ public class ServiceShotDatasource implements ShotDataSource {
         throw new ServerCommunicationException(e);
       }
     }
+  }
+
+  @Override public void putShotViaSocket(ShotEntity shotEntity, String idQueue) {
+    socketApi.sendNewShot(shotEntity, idQueue);
   }
 
   @Override public void putShots(List<ShotEntity> shotEntities, String idUserMe) {

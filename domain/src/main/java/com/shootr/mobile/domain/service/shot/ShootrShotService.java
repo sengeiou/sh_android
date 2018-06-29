@@ -61,6 +61,10 @@ public class ShootrShotService {
     return remoteShotRepository.putShot(shot);
   }
 
+  public void sendShotViaSocket(Shot shot, String idQueue) {
+    remoteShotRepository.sendShotViaSocket(shot, idQueue);
+  }
+
   public PrivateMessage sendPrivateMessage(PrivateMessage privateMessage) {
     try {
       if (localFollowRepository.getBlockedIdUsers().contains(privateMessage.getIdTargetUser())) {

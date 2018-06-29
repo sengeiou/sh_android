@@ -16,4 +16,6 @@ public interface ExternalShotRepository extends ShotRepository {
       UserCannotCheckInRequestException;
 
   List<Shot> updateImportantShots(StreamTimelineParameters streamTimelineParameters);
+
+  void sendShotViaSocket(Shot shot, String idQueue);
 }

@@ -53,6 +53,11 @@ public enum ErrorInfo {
   UserBlockedToPrivateMessageException(9001, "User blocked", 400),
   InvalidYoutubeVideoUrlException(10001, "Invalid Youtube Url video", 400);
 
+  public static final int CODE_RESOURCE_NOT_FOUND = 3001;
+  public static final int CODE_STREAM_REMOVED = 6002;
+  public static final int CODE_STREAM_VIEW_ONLY = 6004;
+
+
   private int code;
   private int httpCode;
   private String description;

@@ -218,6 +218,11 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     return shotEntityMapper.transform(shots);
   }
 
+  @Override public void sendShotViaSocket(Shot shot, String idQueue) {
+    ShotEntity shotEntity = shotEntityMapper.transform(shot);
+    remoteShotDataSource.putShotViaSocket(shotEntity, idQueue);
+  }
+
   @Override public HighlightedShot getHighlightedShots(String idStream) {
     return highlightedShotEntityMapper.mapToDomain(
         remoteShotDataSource.getHighlightedShot(idStream));

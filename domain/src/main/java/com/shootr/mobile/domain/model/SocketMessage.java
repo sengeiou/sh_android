@@ -13,6 +13,8 @@ public class SocketMessage {
   public static final String NEW_BADGE_CONTENT = "NEW_BADGE_CONTENT";
   public static final String SHOT_DETAIL = "SHOT_DETAIL";
   public static final String SHOT_UPDATE = "SHOT_UPDATE";
+  public static final String CREATED_SHOT = "CREATED_SHOT";
+  public static final String ERROR = "ERROR";
 
   private String type;
   private int version;

@@ -19,6 +19,9 @@ public class SocketMessageApiEntity {
   public static final String SHOT_DETAIL = "SHOT_DETAIL";
   public static final String GET_SHOT_DETAIL = "GET_SHOT_DETAIL";
   public static final String SHOT_UPDATE = "SHOT_UPDATE";
+  public static final String CREATE_SHOT = "CREATE_SHOT";
+  public static final String CREATED_SHOT = "CREATED_SHOT";
+  public static final String ERROR = "ERROR";
 
   private String type;
   private int version;

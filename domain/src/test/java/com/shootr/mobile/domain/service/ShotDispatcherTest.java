@@ -3,8 +3,10 @@ package com.shootr.mobile.domain.service;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import java.io.File;
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class ShotDispatcherTest {
     @Mock BusPublisher busPublisher;
     @Mock ShotQueueListener shotQueueListener;
     @Mock ShootrShotService shootrShotService;
+    @Mock SessionRepository sessionRepository;
     @Spy QueueRepository queueRepository = new StubShotQueueRepository();
 
     private ShotDispatcher shotDispatcher;
@@ -47,7 +50,8 @@ public class ShotDispatcherTest {
           shootrShotService,
           busPublisher,
           shotQueueListener,
-          EXTERNAL_FILES_STUB);
+          EXTERNAL_FILES_STUB, sessionRepository);
+        when(sessionRepository.getBootstrapping()).thenReturn(new Bootstrapping());
     }
 
     @Test public void shouldPutOneShotInRepositoryWhenOneShotSent() throws Exception {
@@ -172,6 +176,10 @@ public class ShotDispatcherTest {
         }
 
         @Override public void remove(QueuedShot queuedShot) {
+            queuedShots.remove(0);
+        }
+
+        @Override public void remove(String idQueuedShot) {
             queuedShots.remove(0);
         }
 

@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
 import com.shootr.mobile.domain.model.shot.Sendable;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.service.shot.ShootrShotService;
 import com.shootr.mobile.domain.utils.Patterns;
 import java.io.File;
@@ -40,18 +41,20 @@ public class ShotDispatcher implements MessageSender {
   private final BusPublisher busPublisher;
   private final ShotQueueListener shotQueueListener;
   private final File queuedImagesDir;
+  private final SessionRepository sessionRepository;
 
   private boolean isDispatching;
 
   @Inject
   public ShotDispatcher(QueueRepository queueRepository, ShootrShotService shootrShotService,
       BusPublisher busPublisher, ShotQueueListener shotQueueListener,
-      @TemporaryFilesDir File externalFilesDir) {
+      @TemporaryFilesDir File externalFilesDir, SessionRepository sessionRepository) {
     this.queueRepository = queueRepository;
     this.shootrShotService = shootrShotService;
     this.busPublisher = busPublisher;
     this.shotQueueListener = shotQueueListener;
     this.queuedImagesDir = new File(externalFilesDir, "queuedImages");
+    this.sessionRepository = sessionRepository;
     this.queuedImagesDir.mkdirs();
   }
 
@@ -153,18 +156,26 @@ public class ShotDispatcher implements MessageSender {
   private void dispatchNextItems(String queuedType) {
     QueuedShot queuedShot = queueRepository.nextQueued(queuedType);
     if (queuedShot != null) {
-      sendShotToServer(queuedShot);
-      dispatchNextItems(queuedType);
+      boolean haveBeenSendViaSocket = sendShotToServer(queuedShot);
+      if (!haveBeenSendViaSocket) {
+        dispatchNextItems(queuedType);
+      }
     }
   }
 
-  private void sendShotToServer(QueuedShot queuedShot) {
+  private boolean sendShotToServer(QueuedShot queuedShot) {
     try {
       notifySendingShot(queuedShot);
       fillImageUrlFromQueuedShot(queuedShot);
       BaseMessage shotSent;
       if (queuedShot.getBaseMessage() instanceof Shot) {
-        shotSent = shootrShotService.sendShot((Shot) queuedShot.getBaseMessage());
+        if (sessionRepository.getBootstrapping().isSocketConnection()) {
+          shootrShotService.sendShotViaSocket((Shot) queuedShot.getBaseMessage(),
+              queuedShot.getIdQueue().toString());
+          return true;
+        } else {
+          shotSent = shootrShotService.sendShot((Shot) queuedShot.getBaseMessage());
+        }
       } else {
         shotSent =
             shootrShotService.sendPrivateMessage((PrivateMessage) queuedShot.getBaseMessage());
@@ -191,6 +202,7 @@ public class ShotDispatcher implements MessageSender {
       clearShotFromQueue(queuedShot);
       notifyShotSendingHasReadOnlyStream(queuedShot, e);
     }
+    return false;
   }
 
   private void embedVideoFromLinksInComment(QueuedShot queuedShot) {
@@ -231,7 +243,10 @@ public class ShotDispatcher implements MessageSender {
 
   private void notifyShotQueued(QueuedShot queuedShot) {
     busPublisher.post(new ShotQueued.Event(queuedShot));
-    shotQueueListener.onQueueShot(queuedShot);
+    if (!sessionRepository.getBootstrapping().isSocketConnection()
+        && queuedShot.getBaseMessage() instanceof Shot) {
+      shotQueueListener.onQueueShot(queuedShot);
+    }
   }
 
   private void notifySendingShot(QueuedShot queuedShot) {

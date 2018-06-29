@@ -42,7 +42,6 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
 
     @Override public void onShotHasParentDeleted(QueuedShot shot, Exception e) {
         shotQueueNotificationManager.showShotHasParentDeletedNotification(shot);
-        Timber.e(e, "Shot has parent removed");
     }
 
     @Override public void onShotHasStreamRemoved(QueuedShot shot, Exception e) {
@@ -68,6 +67,18 @@ public class ShotQueueNotificationListener implements ShotQueueListener {
     }
 
     @Override public void onShotIsOnReadOnly(QueuedShot queuedShot, Exception e) {
+        shotQueueNotificationManager.showShotIsOnReadOnlyStreamNotification(queuedShot);
+    }
+
+    @Override public void onShotHasParentDeleted(QueuedShot shot) {
+        shotQueueNotificationManager.showShotHasParentDeletedNotification(shot);
+    }
+
+    @Override public void onShotHasStreamRemoved(QueuedShot shot) {
+        shotQueueNotificationManager.showShotHasStreamRemovedNotification(shot);
+    }
+
+    @Override public void onShotIsOnReadOnly(QueuedShot queuedShot) {
         shotQueueNotificationManager.showShotIsOnReadOnlyStreamNotification(queuedShot);
     }
 }

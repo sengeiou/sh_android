@@ -53,6 +53,10 @@ public class QueueRepositoryImpl implements QueueRepository {
     }
   }
 
+  @Override public void remove(String idQueuedShot) {
+    shotQueueManager.deleteShotQueue(idQueuedShot);
+  }
+
   @Override public List<QueuedShot> getPendingQueue() {
     ArrayList<QueuedShot> queued = new ArrayList<>();
     queued.addAll(mapper.transformShotQueue(shotQueueManager.retrievePendingShotQueue()));

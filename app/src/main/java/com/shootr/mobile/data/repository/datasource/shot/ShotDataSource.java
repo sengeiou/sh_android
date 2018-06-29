@@ -14,6 +14,8 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   ShotEntity putShot(ShotEntity shotEntity, String idUserMe);
 
+  void putShotViaSocket(ShotEntity shotEntity, String idQueue);
+
   void putShots(List<ShotEntity> shotEntities, String idUserMe);
 
   List<ShotEntity> getShotsForStreamTimeline(StreamTimelineParameters parameters);

@@ -23,4 +23,10 @@ public interface ShotQueueListener {
     void resetQueue();
 
     void onShotIsOnReadOnly(QueuedShot queuedShot, Exception e);
+
+    void onShotHasParentDeleted(QueuedShot shot);
+
+    void onShotHasStreamRemoved(QueuedShot shot);
+
+    void onShotIsOnReadOnly(QueuedShot queuedShot);
 }

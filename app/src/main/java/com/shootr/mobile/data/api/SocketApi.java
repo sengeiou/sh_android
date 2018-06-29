@@ -2,6 +2,7 @@ package com.shootr.mobile.data.api;
 
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
+import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.SocketMessageApiEntity;
 import io.reactivex.Observable;
 
@@ -29,4 +30,6 @@ public interface SocketApi {
       PaginationEntity subscribersPagination, PaginationEntity basicPagination);
 
   void unsubscribeShotDetail(String idShot);
+
+  void sendNewShot(ShotEntity shotEntity, String idQueue);
 }

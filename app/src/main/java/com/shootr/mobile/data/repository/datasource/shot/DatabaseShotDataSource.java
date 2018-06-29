@@ -27,6 +27,10 @@ public class DatabaseShotDataSource implements ShotDataSource {
     return shotEntity;
   }
 
+  @Override public void putShotViaSocket(ShotEntity shotEntity, String idQueue) {
+    throw new IllegalArgumentException("reshoot should not have local implementation");
+  }
+
   @Override public void putShots(List<ShotEntity> shotEntities, String idUserMe) {
     shotManager.saveShots(shotEntities, idUserMe);
   }
