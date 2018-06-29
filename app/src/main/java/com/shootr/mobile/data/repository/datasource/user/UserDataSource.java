@@ -32,4 +32,6 @@ public interface UserDataSource extends SyncableDataSource<UserEntity> {
     void mute(String idUser);
 
     void unMute(String idUser);
+
+    void acceptTerms();
 }

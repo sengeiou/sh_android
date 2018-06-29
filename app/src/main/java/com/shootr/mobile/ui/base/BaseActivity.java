@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.bus.Main;
+import com.shootr.mobile.data.bus.PrivacyLawEvent;
 import com.shootr.mobile.data.bus.ServerDown;
 import com.shootr.mobile.data.bus.Unauthorized;
 import com.shootr.mobile.data.bus.VersionOutdatedError;
@@ -20,6 +21,7 @@ import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.UpdateWarningActivity;
 import com.shootr.mobile.ui.activities.WhaleActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
+import com.shootr.mobile.ui.activities.registro.PrivacyLawsActivity;
 import com.shootr.mobile.ui.widgets.InAppNotificationView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.VersionUpdater;
@@ -40,6 +42,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     private ServerDown.Receiver serverDownReceiver;
     private VersionOutdatedError.Receiver preconditionFailedReceiver;
     private Unauthorized.Receiver unauthorizedReceiver;
+    private PrivacyLawEvent.Receiver privacyLawReceiver;
     InAppNotificationEvent.Receiver inAppNotificationReceiver;
     private ObjectGraph activityGraph;
     private View activityView;
@@ -55,6 +58,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         setupUpdateWarningPage();
         setupUnauthorizedRedirection();
         setupInAppNotification();
+        setupPrivacyLawPage();
         if (!requiresUserLogin() || sessionHandler.hasSession()) {
             createLayout();
             initializeViews(savedInstanceState);
@@ -88,6 +92,7 @@ public abstract class BaseActivity extends ActionBarActivity {
         bus.register(unauthorizedReceiver);
         bus.register(preconditionFailedReceiver);
         bus.register(inAppNotificationReceiver);
+        bus.register(privacyLawReceiver);
     }
 
     @Override protected void onPause() {
@@ -97,6 +102,7 @@ public abstract class BaseActivity extends ActionBarActivity {
             bus.unregister(unauthorizedReceiver);
             bus.unregister(preconditionFailedReceiver);
             bus.unregister(inAppNotificationReceiver);
+            bus.unregister(privacyLawReceiver);
         } catch (RuntimeException error) {
             /* no-op */
         }
@@ -134,6 +140,14 @@ public abstract class BaseActivity extends ActionBarActivity {
         serverDownReceiver = new ServerDown.Receiver() {
             @Subscribe @Override public void onServerDown(ServerDown.Event event) {
                 openWhalePage();
+            }
+        };
+    }
+
+    private void setupPrivacyLawPage() {
+        privacyLawReceiver = new PrivacyLawEvent.Receiver() {
+            @Subscribe  @Override public void onPrivacyLaw(PrivacyLawEvent.Event event) {
+               openPrivacyLawPage();
             }
         };
     }
@@ -180,6 +194,11 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     private void openWhalePage() {
         startActivity(WhaleActivity.newIntent(this));
+        overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
+    }
+
+    private void openPrivacyLawPage() {
+        startActivity(PrivacyLawsActivity.newIntent(this));
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 

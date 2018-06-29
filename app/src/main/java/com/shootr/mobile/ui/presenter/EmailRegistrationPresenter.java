@@ -17,6 +17,8 @@ import timber.log.Timber;
 
 public class EmailRegistrationPresenter implements Presenter {
 
+  private static final boolean POLICY_ACCEPTED = true;
+
   private final CreateAccountInteractor createAccountInteractor;
   private final ErrorMessageFactory errorMessageFactory;
 
@@ -61,13 +63,17 @@ public class EmailRegistrationPresenter implements Presenter {
     }
   }
 
+  public void onConfirmEmail() {
+    emailRegistrationView.showPrivacyLaws();
+  }
+
   public void confirmAccountCreation() {
     showViewLoading();
     String email = emailRegistrationView.getEmail();
     String username = emailRegistrationView.getUsername();
     String password = emailRegistrationView.getPassword();
 
-    createAccountInteractor.createAccount(email, username, password, //
+    createAccountInteractor.createAccount(email, username, password, POLICY_ACCEPTED, //
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             emailRegistrationView.navigateToWelcomePage();

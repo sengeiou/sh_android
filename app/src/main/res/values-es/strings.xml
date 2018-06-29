@@ -598,4 +598,5 @@
   <string name="shot_detail_non_subscribers">No Suscriptores</string>
   <string name="show_previous">Mostrar</string>
   <string name="hide_previous">Ocultar</string>
+  <string name="privacy_info">Pulsa \"Aceptar\" para aceptar nuestras condiciones</string>
 </resources>

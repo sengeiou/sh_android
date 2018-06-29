@@ -75,6 +75,10 @@ public class LocalUserRepository implements UserRepository {
     suggestedPeopleCache.putSuggestedPeopleList(suggestedPeopleList);
   }
 
+  @Override public void acceptTerms() {
+    throw new IllegalArgumentException("getAllParticipants has no local implementation");
+  }
+
   @Override public List<User> getAllParticipants(String idStream, Long maxJoinDate) {
     throw new IllegalArgumentException("getAllParticipants has no local implementation");
   }

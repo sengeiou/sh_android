@@ -295,6 +295,10 @@ public class SyncUserRepository
     throw new IllegalArgumentException("this method has no remote implementation");
   }
 
+  @Override public void acceptTerms() {
+    remoteUserDataSource.acceptTerms();
+  }
+
   @Subscribe @Override public void onWatchUpdateRequest(WatchUpdateRequest.Event event) {
     try {
       /* no-op */

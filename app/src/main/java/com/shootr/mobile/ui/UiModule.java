@@ -47,6 +47,7 @@ import com.shootr.mobile.ui.activities.WhaleActivity;
 import com.shootr.mobile.ui.activities.registro.EmailLoginActivity;
 import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
+import com.shootr.mobile.ui.activities.registro.PrivacyLawsActivity;
 import com.shootr.mobile.ui.activities.registro.ResetPasswordActivity;
 import com.shootr.mobile.ui.base.BaseToolbarActivity;
 import com.shootr.mobile.ui.fragments.ActivityTimelineFragment;
@@ -113,7 +114,7 @@ import javax.inject.Singleton;
     OnBoardingUserActivity.class,
     GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class,
       PollOptionVotedActivity.class, HiddenPollResultsActivity.class, HistoryActivity.class,
-      NewShotDetailActivity.class
+      NewShotDetailActivity.class, PrivacyLawsActivity.class
   },
   complete = false, library = true) public class UiModule {
 

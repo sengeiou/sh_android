@@ -27,6 +27,7 @@ public class CreateAccountInteractor implements Interactor {
   private String email;
   private String username;
   private String password;
+  private boolean privacyAccepted;
   private CompletedCallback callback;
   private ErrorCallback errorCallback;
 
@@ -39,11 +40,12 @@ public class CreateAccountInteractor implements Interactor {
     this.localeProvider = localeProvider;
   }
 
-  public void createAccount(String email, String username, String password,
+  public void createAccount(String email, String username, String password, boolean privacyAccepted,
       CompletedCallback completedCallback, ErrorCallback errorCallback) {
     this.email = email;
     this.username = username;
     this.password = password;
+    this.privacyAccepted = privacyAccepted;
     this.callback = completedCallback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -52,7 +54,8 @@ public class CreateAccountInteractor implements Interactor {
   @Override public void execute() throws Exception {
     if (validateInput()) {
       try {
-        shootrUserService.createAccount(username, email, password, localeProvider.getLocale());
+        shootrUserService.createAccount(username, email, password, privacyAccepted,
+            localeProvider.getLocale());
         notifyLoaded();
       } catch (MassiveRegisterErrorException e) {
         notifyError(e);

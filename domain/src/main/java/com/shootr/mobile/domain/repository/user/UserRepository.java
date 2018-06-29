@@ -38,4 +38,6 @@ public interface UserRepository {
     void unMute(String idUser);
 
     void updateSuggestedPeopleCache(List<SuggestedPeople> suggestedPeopleList);
+
+    void acceptTerms();
 }

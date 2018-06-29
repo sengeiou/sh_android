@@ -35,10 +35,11 @@ public class ServiceCreateAccountGateway implements CreateAccountGateway {
   }
 
   @Override public LoginResult performCreateAccount(String username, String email, String password,
-      String locale) throws EmailAlreadyExistsException, UsernameAlreadyExistsException,
+      boolean privacyAccepted, String locale)
+      throws EmailAlreadyExistsException, UsernameAlreadyExistsException,
       MassiveRegisterErrorException {
     try {
-      return sendCreateAccount(username, email, password, locale);
+      return sendCreateAccount(username, email, password, privacyAccepted, locale);
     } catch (ApiException apiException) {
       if (ErrorInfo.EmailAlreadyExistsException == apiException.getErrorInfo()) {
         throw new EmailAlreadyExistsException(apiException);
@@ -56,10 +57,10 @@ public class ServiceCreateAccountGateway implements CreateAccountGateway {
   }
 
   @NonNull protected LoginResult sendCreateAccount(String username, String email, String password,
-      String locale) throws ApiException, IOException {
+      boolean privacyAccepted, String locale) throws ApiException, IOException {
     CreateAccountApiEntity createAccountApiEntity =
         new CreateAccountApiEntity(username, email, password, locale, deviceFactory.getAndroidId(),
-            deviceFactory.getAdvertisingId());
+            deviceFactory.getAdvertisingId(), privacyAccepted);
     UserEntity newLoggedInUser = authApiService.createAccount(createAccountApiEntity);
     checkNotNull(newLoggedInUser);
     User loggedInUser = userEntityMapper.transform(newLoggedInUser);

@@ -27,6 +27,8 @@ import javax.inject.Inject;
 
 public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity implements EmailRegistrationView {
 
+    private static final int PRIVACY_LAWS = 1;
+
     @BindView(R.id.registration_email) EditText emailInput;
     @BindView(R.id.registration_username) EditText usernameInput;
     @BindView(R.id.registration_password) EditText passwordInput;
@@ -158,7 +160,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
           .setMessage(getEmail())
           .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
               @Override public void onClick(DialogInterface dialog, int which) {
-                  presenter.confirmAccountCreation();
+                  presenter.onConfirmEmail();
               }
           })
           .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -189,5 +191,18 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
         navigateToWelcomePageIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(navigateToWelcomePageIntent);
     }
+
+    @Override public void showPrivacyLaws() {
+        Intent intent = new Intent(this, PrivacyLawsActivity.class);
+        startActivityForResult(intent, PRIVACY_LAWS);
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            presenter.confirmAccountCreation();
+        }
+    }
+
     //endregion
 }

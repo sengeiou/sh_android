@@ -30,4 +30,6 @@ public interface AuthApiService {
       throws ApiException, IOException;
 
     @POST("/auth/logout") Void logout(@Body LogoutApiEntity logoutEntity) throws ApiException, IOException;
+
+    @POST("/user/acceptTerms") Void acceptPrivacyTerms() throws ApiException, IOException;
 }

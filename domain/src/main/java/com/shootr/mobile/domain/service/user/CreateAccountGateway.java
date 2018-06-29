@@ -7,7 +7,8 @@ import com.shootr.mobile.domain.model.user.LoginResult;
 
 public interface CreateAccountGateway {
 
-    LoginResult performCreateAccount(String username, String email, String password, String language)
+  LoginResult performCreateAccount(String username, String email, String password,
+      boolean privacyAccepted, String language)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException,
-        MassiveRegisterErrorException;
+      MassiveRegisterErrorException;
 }

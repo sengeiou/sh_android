@@ -3,6 +3,7 @@ package com.shootr.mobile.data.repository.datasource.user;
 import com.shootr.mobile.data.api.entity.mapper.UserApiEntityMapper;
 import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
+import com.shootr.mobile.data.api.service.AuthApiService;
 import com.shootr.mobile.data.api.service.UserApiService;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -18,12 +19,15 @@ import javax.inject.Inject;
 public class ServiceUserDataSource implements UserDataSource {
 
     private final UserApiService userApiService;
+    private final AuthApiService authApiService;
     private final UserApiEntityMapper userApiEntityMapper;
     private final SessionRepository sessionRepository;
 
-    @Inject public ServiceUserDataSource(UserApiService userApiService, UserApiEntityMapper userApiEntityMapper,
-      SessionRepository sessionRepository) {
+    @Inject
+    public ServiceUserDataSource(UserApiService userApiService, AuthApiService authApiService,
+        UserApiEntityMapper userApiEntityMapper, SessionRepository sessionRepository) {
         this.userApiService = userApiService;
+        this.authApiService = authApiService;
         this.userApiEntityMapper = userApiEntityMapper;
         this.sessionRepository = sessionRepository;
     }
@@ -135,6 +139,14 @@ public class ServiceUserDataSource implements UserDataSource {
     @Override public void unMute(String idUser) {
         try {
             userApiService.unMute(idUser);
+        } catch (ApiException | IOException e) {
+            throw new ServerCommunicationException(e);
+        }
+    }
+
+    @Override public void acceptTerms() {
+        try {
+            authApiService.acceptPrivacyTerms();
         } catch (ApiException | IOException e) {
             throw new ServerCommunicationException(e);
         }

@@ -8,15 +8,17 @@ public class CreateAccountApiEntity {
   private String locale;
   private String deviceUUID;
   private String advertisingId;
+  private boolean privacyPolicyAccepted;
 
   public CreateAccountApiEntity(String userName, String email, String password, String locale,
-      String deviceUUID, String advertisingId) {
+      String deviceUUID, String advertisingId, boolean privacyAccepted) {
     this.userName = userName;
     this.email = email;
     this.password = password;
     this.locale = locale;
     this.deviceUUID = deviceUUID;
     this.advertisingId = advertisingId;
+    this.privacyPolicyAccepted = privacyAccepted;
   }
 
   public String getUserName() {
@@ -51,4 +53,11 @@ public class CreateAccountApiEntity {
     this.locale = locale;
   }
 
+  public boolean getPrivacyPolicyAccepted() {
+    return privacyPolicyAccepted;
+  }
+
+  public void setPrivacyPolicyAccepted(boolean privacyPolicyAccepted) {
+    this.privacyPolicyAccepted = privacyPolicyAccepted;
+  }
 }

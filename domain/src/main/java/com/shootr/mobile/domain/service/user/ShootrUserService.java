@@ -54,11 +54,11 @@ public class ShootrUserService {
     this.databaseUtils = databaseUtils;
   }
 
-  public void createAccount(String username, String email, String password, String locale)
+  public void createAccount(String username, String email, String password, boolean privacyAccepted, String locale)
       throws EmailAlreadyExistsException, UsernameAlreadyExistsException,
       MassiveRegisterErrorException {
     LoginResult loginResult =
-        createAccountGateway.performCreateAccount(username, email, password, locale);
+        createAccountGateway.performCreateAccount(username, email, password, privacyAccepted, locale);
     retrievePostLoginInformation(loginResult);
   }
 

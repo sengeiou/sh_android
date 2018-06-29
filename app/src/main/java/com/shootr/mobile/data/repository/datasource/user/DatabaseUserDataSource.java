@@ -68,6 +68,10 @@ public class DatabaseUserDataSource implements UserDataSource {
         userManager.mute(idUser);
     }
 
+    @Override public void acceptTerms() {
+        throw new IllegalArgumentException("this method has no local implementation");
+    }
+
     @Override public List<UserEntity> getEntitiesNotSynchronized() {
         return userManager.getUsersNotSynchronized();
     }
