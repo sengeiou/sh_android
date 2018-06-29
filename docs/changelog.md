@@ -13,11 +13,17 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
-## [1.59.5] - 2018-06-21
-- Se corrigen null fixes en la suscripción a sockets
-- Se corrige conforme precisa de actualización en un push de polls 
+## [1.60.0] - 2018-06-29
+### Added
+- Nueva privacy law bloqueante
 
 ### Fixed
+- Envío de shots por sockets
+
+## [1.59.5] - 2018-06-21
+### Fixed
+- Se corrigen null fixes en la suscripción a sockets
+- Se corrige conforme precisa de actualización en un push de polls 
 - Doble suscripción del Timeline
 
 ## [1.59.0] - 2018-06-18
