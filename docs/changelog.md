@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.60.1] - 2018-06-29
+### Fixed
+- Fix enter timeline
+
 ## [1.60.0] - 2018-06-29
 ### Added
 - Nueva privacy law bloqueante
