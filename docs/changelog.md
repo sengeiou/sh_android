@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.60.2] - 2018-07-02
+### Fixed
+- Fix base activity error privacity recursive
+
 ## [1.60.1] - 2018-06-29
 ### Fixed
 - Fix enter timeline
