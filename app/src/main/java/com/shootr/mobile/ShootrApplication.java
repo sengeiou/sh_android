@@ -104,12 +104,7 @@ public class ShootrApplication extends MultiDexApplication implements InternetCo
         }
 
         @Override public void onStartActivity() {
-            if (!inBackground) {
-                if (sessionRepository.getCurrentUserId() != null
-                    && !sessionRepository.getCurrentUserId().isEmpty() && !WebSocketService.isRunning) {
-                    WebSocketService.startService(getApplicationContext());
-                }
-            }
+          /* no-op */
         }
     };
 
