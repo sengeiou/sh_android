@@ -10,6 +10,11 @@ import javax.inject.Inject;
 
 public class StreamEntityMapper {
 
+  private static final int CAN_WRITE = 1;
+  private static final int CAN_REPLY = 2;
+  private static final int CAN_H1_ITEM = 4;
+  private static final int CAN_H2_ITEM = 8;
+
   private final UserEntityMapper userEntityMapper;
   private final SessionRepository sessionRepository;
 
@@ -121,15 +126,10 @@ public class StreamEntityMapper {
   }
 
   private void setPermissionsInBoolean(int permissionsInDecimal, Stream stream) {
-
-    String numberAsString = Integer.toBinaryString(permissionsInDecimal);
-
-    String binaryPermissions = String.format("%04d", Integer.valueOf(numberAsString));
-
-    stream.setCanWrite(binaryPermissions.charAt(3) == '1');
-    stream.setCanReply(binaryPermissions.charAt(2) == '1');
-    stream.setCanPinItem(binaryPermissions.charAt(1) == '1');
-    stream.setCanFixItem(binaryPermissions.charAt(0) == '1');
+    stream.setCanWrite((permissionsInDecimal & CAN_WRITE) == CAN_WRITE);
+    stream.setCanReply((permissionsInDecimal & CAN_REPLY) == CAN_REPLY);
+    stream.setCanPinItem((permissionsInDecimal & CAN_H1_ITEM) == CAN_H1_ITEM);
+    stream.setCanFixItem((permissionsInDecimal & CAN_H2_ITEM) == CAN_H2_ITEM);
   }
 
   private void setPermissionsToBinary(Stream stream, StreamEntity streamEntity) {
