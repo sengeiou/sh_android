@@ -775,7 +775,9 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void renderFixedItems(List<PrintableModel> items) {
-    checkingForShotsView.setVisibility(View.GONE);
+    if (checkingForShotsView != null) {
+      checkingForShotsView.setVisibility(View.GONE);
+    }
     adapter.setFixedItems(items);
   }
 
