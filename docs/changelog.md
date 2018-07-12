@@ -13,6 +13,12 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.60.3] - 2018-07-12
+### Fixed
+- Redirect on privacy law
+- Null pointer on Timeline
+- Update fabric version
+
 ## [1.60.2] - 2018-07-02
 ### Fixed
 - Fix base activity error privacity recursive
