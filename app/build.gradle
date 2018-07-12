@@ -200,7 +200,7 @@ dependencies {
   androidTestCompile('com.squareup.assertj:assertj-android:1.0.0') {
     exclude group: 'com.android.support'
   }
-  compile('com.crashlytics.sdk.android:crashlytics:2.9.3@aar') {
+  compile('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') {
     transitive = true;
   }
   // If you want to use the GPU Filters
