@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.60.4] - 2018-07-12
+### Fixed
+- Fix en permisos
+
 ## [1.60.3] - 2018-07-12
 ### Fixed
 - Redirect on privacy law
