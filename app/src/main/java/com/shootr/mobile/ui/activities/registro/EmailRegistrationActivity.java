@@ -193,7 +193,7 @@ public class EmailRegistrationActivity extends BaseToolbarDecoratedActivity impl
     }
 
     @Override public void showPrivacyLaws() {
-        Intent intent = new Intent(this, PrivacyLawsActivity.class);
+        Intent intent = new Intent(this, PrivacyLawActivity.class);
         startActivityForResult(intent, PRIVACY_LAWS);
     }
 

@@ -21,7 +21,7 @@ import com.shootr.mobile.ui.AppContainer;
 import com.shootr.mobile.ui.activities.UpdateWarningActivity;
 import com.shootr.mobile.ui.activities.WhaleActivity;
 import com.shootr.mobile.ui.activities.registro.LoginSelectionActivity;
-import com.shootr.mobile.ui.activities.registro.PrivacyLawsActivity;
+import com.shootr.mobile.ui.activities.registro.PrivacyLawActivity;
 import com.shootr.mobile.ui.widgets.InAppNotificationView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.VersionUpdater;
@@ -198,7 +198,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     private void openPrivacyLawPage() {
-        startActivity(PrivacyLawsActivity.newIntent(this));
+        startActivity(PrivacyLawActivity.newIntent(this));
         overridePendingTransition(R.anim.abc_fade_in, R.anim.abc_fade_out);
     }
 

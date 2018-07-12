@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.utils.LocaleProvider;
@@ -17,7 +18,7 @@ import com.shootr.mobile.ui.presenter.PrivacyLawPresenter;
 import com.shootr.mobile.ui.views.PrivacyLawView;
 import javax.inject.Inject;
 
-public class PrivacyLawsActivity extends BaseActivity implements PrivacyLawView {
+public class PrivacyLawActivity extends BaseActivity implements PrivacyLawView {
 
   private static final String AUTOMATIC_PRIVACY = "AUTOMATIC_PRIVACY";
 
@@ -30,7 +31,7 @@ public class PrivacyLawsActivity extends BaseActivity implements PrivacyLawView 
   private boolean isAutomatic = false;
 
   public static Intent newIntent(@NonNull Context context) {
-    Intent intent = new Intent(context, PrivacyLawsActivity.class);
+    Intent intent = new Intent(context, PrivacyLawActivity.class);
     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
     intent.putExtra(AUTOMATIC_PRIVACY, true);
     return intent;
@@ -62,12 +63,17 @@ public class PrivacyLawsActivity extends BaseActivity implements PrivacyLawView 
   }
 
   private void setupWebView() {
-    String privacyUrl =
-        String.format(getResources().getString(R.string.privacy_policy_service_url),
-            localeProvider.getLanguage());
+    String privacyUrl = String.format(getResources().getString(R.string.privacy_policy_service_url),
+        localeProvider.getLanguage());
     webView = (WebView) findViewById(R.id.webview);
     WebSettings webSettings = webView.getSettings();
     webSettings.setJavaScriptEnabled(true);
+    webView.setWebViewClient(new WebViewClient() {
+      public boolean shouldOverrideUrlLoading(WebView view, String url) {
+        view.loadUrl(url);
+        return false;
+      }
+    });
     webView.loadUrl(privacyUrl);
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -351,7 +351,7 @@
     </activity>
     <activity android:name=".ui.activities.NewShotDetailActivity"/>
 
-    <activity android:name=".ui.activities.registro.PrivacyLawsActivity">
+    <activity android:name=".ui.activities.registro.PrivacyLawActivity">
     </activity>
 
     <service android:name=".data.background.sockets.WebSocketService"/>
