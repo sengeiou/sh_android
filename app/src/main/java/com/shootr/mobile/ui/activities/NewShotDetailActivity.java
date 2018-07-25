@@ -127,8 +127,6 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   private MenuItemValueHolder undoReshootMenuItem = new MenuItemValueHolder();
 
   private LinearLayoutManager linearLayoutManager;
-  private int overallYScroll;
-  private int screenHeight;
   private String idUser;
   private ShotModel mainShot;
 
@@ -222,7 +220,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
     detailAdapter =
         new NewShotDetailAdapter(imageLoader, numberFormatUtil, new OnUsernameClickListener() {
           @Override public void onUsernameClick(String username) {
-        /* no-op */
+            /* no-op */
           }
         }, new OnAvatarClickListener() {
           @Override public void onAvatarClick(String userId, View avatarView) {
@@ -331,7 +329,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
           }
 
           @Override public void openEditTopicDialog() {
-                  /* no-op */
+            /* no-op */
           }
 
           @Override public void onCheckIn() {
@@ -351,6 +349,9 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   public void setupNewShotBarDelegate(final ShotModel shotModel) {
+    if (shotModel != null) {
+      idUser = shotModel.getIdUser();
+    }
     newShotBarViewDelegate =
         new NewShotBarViewDelegate(photoPickerController, replyDraftsButton, feedbackMessage) {
           @Override public void openNewShotView() {
@@ -371,7 +372,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
           }
 
           @Override public void openEditTopicDialog() {
-                /* no-op */
+            /* no-op */
           }
         };
   }
@@ -526,7 +527,8 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
 
   @Override
   public void renderShotDetail(List<PrintableModel> mainShot, List<PrintableModel> promotedItem,
-      List<PrintableModel> subscribersItem, List<PrintableModel> basicItems, List<PrintableModel> parents) {
+      List<PrintableModel> subscribersItem, List<PrintableModel> basicItems,
+      List<PrintableModel> parents) {
     this.mainShot = (ShotModel) mainShot.get(0);
     detailAdapter.renderItems(mainShot, promotedItem, subscribersItem, basicItems, parents);
   }
@@ -544,7 +546,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showHolderOptions() {
-        /* no-op */
+    /* no-op */
   }
 
   @Override public void showPrivateMessageOptions() {
@@ -556,7 +558,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void openEditTopicDialog() {
-        /* no-op */
+    /* no-op */
   }
 
   @Override public void showDraftsButton() {
@@ -703,5 +705,9 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setIdStream(shot.getStreamId());
     builder.setStreamName(shot.getStreamTitle());
     analyticsTool.analyticsSendAction(builder);
+  }
+
+  @OnClick(R.id.stream_name) public void goToTimeline() {
+    openStreamTimeline(mainShot.getStreamId());
   }
 }
