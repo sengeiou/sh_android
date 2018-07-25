@@ -658,7 +658,9 @@ public class TimelineFragment extends BaseFragment
   }
 
   @Override public void showDraftsButton() {
-    newShotBarContainer.showDraftsButton();
+    if (newShotBarContainer != null) {
+      newShotBarContainer.showDraftsButton();
+    }
   }
 
   @Override public void hideDraftsButton() {
