@@ -2,7 +2,7 @@ package com.shootr.mobile.data.repository.datasource.stream;
 
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LandingStreamsEntity;
-import com.shootr.mobile.data.entity.BootstrapingEntity;
+import com.shootr.mobile.data.entity.socket.BootstrapingEntity;
 import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.db.manager.StreamManager;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;

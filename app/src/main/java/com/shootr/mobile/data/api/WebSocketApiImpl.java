@@ -11,7 +11,7 @@ import com.shootr.mobile.data.background.sockets.SocketListener;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
-import com.shootr.mobile.data.entity.SocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
@@ -132,6 +132,23 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     shotSenderSocketApiManager.sendNewShot(shotEntity, idQueue);
   }
 
+  @Override public boolean highlightShot(String idShot, String idStream) {
+    if (webSocket != null && webSocket.isOpen()) {
+      shotSocketApiManager.sendHighlightShot(idShot, idStream);
+      return true;
+    }
+
+    return false;
+  }
+
+  @Override public boolean unHighlightShot(String idShot, String idStream) {
+    if (webSocket != null && webSocket.isOpen()) {
+      shotSocketApiManager.sendUnHighlightShot(idShot, idStream);
+      return true;
+    }
+
+    return false;
+  }
 
   @Override public boolean sendNice(String idShot) {
 

@@ -122,6 +122,7 @@ import com.shootr.mobile.util.ShareManager;
 import com.shootr.mobile.util.ShotTextSpannableBuilder;
 import com.shootr.mobile.util.WritePermissionManager;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -943,6 +944,10 @@ public class TimelineFragment extends BaseFragment
     }
   }
 
+  @Override public void setFixedItemsIds(ArrayList<String> fixedItemsIds) {
+    longPressShotPresenter.setFixedItemsIds(fixedItemsIds);
+  }
+
   @Override public void setTitle(String title) {
     streamTitle = title;
     toolbarDecorator.setTitle(streamTitle);
@@ -1041,7 +1046,6 @@ public class TimelineFragment extends BaseFragment
 
   @Override
   public void showContextMenu(HashMap<Integer, Boolean> menus, final ShotModel shotModel) {
-
     CustomContextMenu.Builder customContextMenu = new CustomContextMenu.Builder(getActivity());
 
     if (menus.get(LongPressShotPresenter.HIGHLIGHT)) {
@@ -1052,13 +1056,13 @@ public class TimelineFragment extends BaseFragment
       });
     }
 
-    /*if (menus.get(LongPressShotPresenter.DISMISS_HIGHLIGHT)) {
+    if (menus.get(LongPressShotPresenter.DISMISS_HIGHLIGHT)) {
       customContextMenu.addAction(R.string.remove_highlight, new Runnable() {
         @Override public void run() {
-          //TODO esto sólo ha de aparecer si puedo pinear items
+          timelinePresenter.deleteHighlightedItem(shotModel);
         }
       });
-    }*/
+    }
 
     if (menus.get(LongPressShotPresenter.RESHOOT)) {
       customContextMenu.addAction(R.string.menu_share_shot_via_shootr, new Runnable() {

@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
-import com.shootr.mobile.data.entity.HighlightedShotEntity;
+import com.shootr.mobile.data.api.SocketApi;
 import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
 import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
@@ -40,12 +40,13 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
   private final UserDataSource userDataSource;
   private final SyncTrigger syncTrigger;
   private final SessionRepository sessionRepository;
+  private final SocketApi socketApi;
 
   @Inject public SyncShotRepository(@Remote ShotDataSource remoteShotDataSource,
       @Local ShotDataSource localShotDataSource, ShotEntityMapper shotEntityMapper,
       HighlightedShotEntityMapper highlightedShotEntityMapper,
       ProfileShotTimelineMapper profileShotTimelineMapper, @Local UserDataSource userDataSource,
-      SyncTrigger syncTrigger, SessionRepository sessionRepository) {
+      SyncTrigger syncTrigger, SessionRepository sessionRepository, SocketApi socketApi) {
     this.remoteShotDataSource = remoteShotDataSource;
     this.localShotDataSource = localShotDataSource;
     this.shotEntityMapper = shotEntityMapper;
@@ -54,6 +55,7 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     this.userDataSource = userDataSource;
     this.syncTrigger = syncTrigger;
     this.sessionRepository = sessionRepository;
+    this.socketApi = socketApi;
   }
 
   @Override public Shot putShot(Shot shot) {
@@ -201,9 +203,8 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     remoteShotDataSource.unhideShot(idShot);
   }
 
-  @Override public void highlightShot(String idShot) {
-    HighlightedShotEntity highlightedShotEntity = remoteShotDataSource.highlightShot(idShot);
-    localShotDataSource.putHighlightShot(highlightedShotEntity);
+  @Override public void highlightShot(String idShot, String idStream) {
+    socketApi.highlightShot(idShot, idStream);
   }
 
   @Override public void callCtaCheckIn(String idStream)

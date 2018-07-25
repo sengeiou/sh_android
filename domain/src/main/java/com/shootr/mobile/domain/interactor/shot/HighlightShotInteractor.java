@@ -14,6 +14,7 @@ public class HighlightShotInteractor implements Interactor {
   private final ExternalShotRepository remoteShotRepository;
 
   private String idShot;
+  private String idStream;
   private CompletedCallback completedCallback;
 
   @Inject public HighlightShotInteractor(InteractorHandler interactorHandler,
@@ -23,15 +24,16 @@ public class HighlightShotInteractor implements Interactor {
     this.remoteShotRepository = remoteShotRepository;
   }
 
-  public void highlight(String idShot, CompletedCallback completedCallback) {
+  public void highlight(String idShot, String idStream, CompletedCallback completedCallback) {
     this.idShot = idShot;
+    this.idStream = idStream;
     this.completedCallback = completedCallback;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
     try {
-      remoteShotRepository.highlightShot(idShot);
+      remoteShotRepository.highlightShot(idShot, idStream);
     } catch (ServerCommunicationException e) {
       /* Ignore error and notify callback */
     }

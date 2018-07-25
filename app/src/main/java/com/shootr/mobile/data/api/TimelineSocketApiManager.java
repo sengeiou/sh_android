@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.api;
 
-import com.shootr.mobile.data.entity.GetTimelineSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.GetTimelineSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
 import java.util.UUID;

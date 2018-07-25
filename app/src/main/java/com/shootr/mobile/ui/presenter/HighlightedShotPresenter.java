@@ -183,7 +183,7 @@ public class HighlightedShotPresenter implements Presenter {
   }
 
   public void highlightShot(String idShot) {
-    highlightShotInteractor.highlight(idShot, new Interactor.CompletedCallback() {
+    highlightShotInteractor.highlight(idShot, idStream, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
         refreshHighlight();
       }

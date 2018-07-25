@@ -2,7 +2,7 @@ package com.shootr.mobile.data.repository.datasource;
 
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
-import com.shootr.mobile.data.entity.SocketMessageEntity;
+import com.shootr.mobile.data.entity.socket.SocketMessageEntity;
 import io.reactivex.Observable;
 
 public interface SocketDataSource {

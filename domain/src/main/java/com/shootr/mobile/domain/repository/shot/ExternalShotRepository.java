@@ -10,7 +10,7 @@ public interface ExternalShotRepository extends ShotRepository {
 
   void unhideShot(String idShot);
 
-  void highlightShot(String idShot);
+  void highlightShot(String idShot, String idStream);
 
   void callCtaCheckIn(String idStream) throws UserAlreadyCheckInRequestException,
       UserCannotCheckInRequestException;

@@ -1,5 +1,6 @@
 package com.shootr.mobile.data.repository.remote;
 
+import com.shootr.mobile.data.api.SocketApi;
 import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.mapper.TimelineEntityMapper;
 import com.shootr.mobile.data.repository.datasource.StreamTimelineDataSource;
@@ -15,14 +16,16 @@ public class RemoteTimelineRepository implements ExternalTimelineRepository {
   private final TimelineEntityMapper timelineEntityMapper;
   private final ShotEntityMapper shotEntityMapper;
   private final TimelineCache timelineCache;
+  private final SocketApi socketApi;
 
   @Inject public RemoteTimelineRepository(@Remote StreamTimelineDataSource streamTimelineDataSource,
       TimelineEntityMapper timelineEntityMapper, ShotEntityMapper shotEntityMapper,
-      TimelineCache timelineCache) {
+      TimelineCache timelineCache, SocketApi socketApi) {
     this.streamTimelineDataSource = streamTimelineDataSource;
     this.timelineEntityMapper = timelineEntityMapper;
     this.shotEntityMapper = shotEntityMapper;
     this.timelineCache = timelineCache;
+    this.socketApi = socketApi;
   }
 
   @Override public StreamTimeline getTimeline(String idStream, String timelineType, Long timestamp) {
@@ -39,6 +42,7 @@ public class RemoteTimelineRepository implements ExternalTimelineRepository {
 
   @Override public void deleteHighlightedItem(String resultType, String itemId, String idStream) {
     streamTimelineDataSource.deleteHighlightedItem(resultType, itemId, idStream);
+    socketApi.unHighlightShot(itemId, idStream);
   }
 
   @Override

@@ -4,7 +4,7 @@ import com.shootr.mobile.data.api.exception.ApiException;
 import com.shootr.mobile.data.api.exception.ErrorInfo;
 import com.shootr.mobile.data.api.service.StreamApiService;
 import com.shootr.mobile.data.api.service.UtilsApiService;
-import com.shootr.mobile.data.entity.BootstrapingEntity;
+import com.shootr.mobile.data.entity.socket.BootstrapingEntity;
 import com.shootr.mobile.data.entity.FollowEntity;
 import com.shootr.mobile.data.entity.LandingStreamsEntity;
 import com.shootr.mobile.data.entity.StreamEntity;

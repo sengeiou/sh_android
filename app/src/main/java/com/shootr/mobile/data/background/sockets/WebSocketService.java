@@ -8,7 +8,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.data.entity.MessageMapper;
+import com.shootr.mobile.data.entity.socket.MessageMapper;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.CloseSocketEvent;
 import com.shootr.mobile.domain.bus.EventReceived;

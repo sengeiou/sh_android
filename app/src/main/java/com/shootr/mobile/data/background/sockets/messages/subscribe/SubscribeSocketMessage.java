@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.background.sockets.messages.subscribe;
 
-import com.shootr.mobile.data.entity.SocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
 
 public class SubscribeSocketMessage extends SocketMessageApiEntity {
 

@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.views.streamtimeline;
 import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface StreamTimelineView {
@@ -56,6 +57,8 @@ public interface StreamTimelineView {
   void hideLoadingOldShots();
 
   void showCheckingForShots();
+
+  void setFixedItemsIds(ArrayList<String> fixedItemsIds);
 
   void hideCheckingForShots();
 

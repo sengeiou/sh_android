@@ -1,13 +1,13 @@
 package com.shootr.mobile.data;
 
 import com.shootr.mobile.data.api.SendSocketEventListener;
-import com.shootr.mobile.data.entity.CreateShotSocketMessageApiService;
-import com.shootr.mobile.data.entity.CreatedShotSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.CreateShotSocketMessageApiService;
+import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.EventParams;
-import com.shootr.mobile.data.entity.NewShotContentApiEntity;
+import com.shootr.mobile.data.entity.socket.NewShotContentApiEntity;
 import com.shootr.mobile.data.entity.NewShotParameters;
 import com.shootr.mobile.data.entity.ShotEntity;
-import com.shootr.mobile.data.entity.SocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
 import java.util.HashMap;
 import java.util.UUID;
 

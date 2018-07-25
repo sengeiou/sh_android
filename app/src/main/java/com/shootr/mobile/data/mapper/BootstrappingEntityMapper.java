@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.mapper;
 
-import com.shootr.mobile.data.entity.BootstrapingEntity;
+import com.shootr.mobile.data.entity.socket.BootstrapingEntity;
 import com.shootr.mobile.data.entity.FeatureFlagEntity;
 import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.FeatureFlagType;

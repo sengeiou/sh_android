@@ -12,6 +12,7 @@ import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
 import com.shootr.mobile.ui.views.streamtimeline.LongPressView;
 import com.shootr.mobile.util.ErrorMessageFactory;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.inject.Inject;
 
@@ -32,14 +33,14 @@ public class LongPressShotPresenter implements Presenter {
   private final SessionRepository sessionRepository;
   private final UserModelMapper userModelMapper;
   private final GetLocalStreamInteractor getLocalStreamInteractor;
+  private ArrayList<String> fixedItemsIds;
 
   private LongPressView longPressView;
   private String idStream;
 
   @Inject public LongPressShotPresenter(DeleteShotInteractor deleteShotInteractor,
       ErrorMessageFactory errorMessageFactory, SessionRepository sessionRepository,
-      UserModelMapper userModelMapper,
-      GetLocalStreamInteractor getLocalStreamInteractor) {
+      UserModelMapper userModelMapper, GetLocalStreamInteractor getLocalStreamInteractor) {
     this.deleteShotInteractor = deleteShotInteractor;
     this.errorMessageFactory = errorMessageFactory;
     this.sessionRepository = sessionRepository;
@@ -53,7 +54,12 @@ public class LongPressShotPresenter implements Presenter {
 
   public void initialize(LongPressView longPressView, String idStream) {
     setView(longPressView);
+    fixedItemsIds = new ArrayList<>();
     this.idStream = idStream;
+  }
+
+  public void setFixedItemsIds(ArrayList fixedItemsIds) {
+    this.fixedItemsIds = fixedItemsIds;
   }
 
   public void report(ShotModel shotModel) {
@@ -75,9 +81,9 @@ public class LongPressShotPresenter implements Presenter {
 
         HashMap<Integer, Boolean> menus = new HashMap<>();
 
-        menus.put(HIGHLIGHT, stream.canPinItem() && !shotModel.getTimelineGroup().equals(
-            PrintableModel.FIXED_GROUP));
-        //TODO menus.put(DISMISS_HIGHLIGHT, )
+        menus.put(HIGHLIGHT, stream.canPinItem() && !shotModel.getTimelineGroup()
+            .equals(PrintableModel.FIXED_GROUP));
+        menus.put(DISMISS_HIGHLIGHT, fixedItemsIds.contains(shotModel.getIdShot()));
         menus.put(RESHOOT, !shotModel.isReshooted());
         menus.put(UNDO_RESHOOT, shotModel.isReshooted());
         menus.put(SHARE_VIA, true);
@@ -118,10 +124,10 @@ public class LongPressShotPresenter implements Presenter {
   }
 
   @Override public void resume() {
-        /* no-op */
+    /* no-op */
   }
 
   @Override public void pause() {
-        /* no-op */
+    /* no-op */
   }
 }

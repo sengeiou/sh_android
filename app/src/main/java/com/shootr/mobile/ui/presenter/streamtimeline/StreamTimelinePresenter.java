@@ -3,9 +3,9 @@ package com.shootr.mobile.ui.presenter.streamtimeline;
 import android.util.Log;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
 import com.shootr.mobile.domain.bus.EventReceived;
 import com.shootr.mobile.domain.bus.FloatingPlayerState;
-import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
 import com.shootr.mobile.domain.bus.ShotSent;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.CreateTopicInteractor;
@@ -402,6 +402,7 @@ public class StreamTimelinePresenter
     } else {
       view.removeHighlightedItem();
     }
+    view.setFixedItemsIds(fixedItemsIds);
   }
 
   private void setupFixedItemsIds(List<PrintableModel> fixedModel) {
@@ -931,4 +932,5 @@ public class StreamTimelinePresenter
   @Subscribe @Override public void onRestoreEvent(ConnectedSocketEvent.Event event) {
     getCachedTimeline(idStream, currentTimelineType);
   }
+
 }
