@@ -1,14 +1,8 @@
 package com.shootr.mobile.data.entity;
 
-public class FollowableEntity extends Synchronized {
+public abstract class FollowableEntity extends Synchronized {
 
-  private String resultType;
+  public abstract String getResultType();
 
-  public String getResultType() {
-    return resultType;
-  }
-
-  public void setResultType(String resultType) {
-    this.resultType = resultType;
-  }
+  public abstract void setResultType(String resultType);
 }

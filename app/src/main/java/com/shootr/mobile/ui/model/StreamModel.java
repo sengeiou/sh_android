@@ -3,7 +3,7 @@ package com.shootr.mobile.ui.model;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 
-public class StreamModel implements Serializable, SearchableModel {
+public class StreamModel implements Serializable, SearchableModel, PrintableModel {
 
     private String idStream;
     private String authorId;
@@ -153,6 +153,7 @@ public class StreamModel implements Serializable, SearchableModel {
 
         if (getPosition() != that.getPosition()) return false;
         if (showBadge != that.showBadge) return false;
+        if (isFollowing() != that.isFollowing()) return false;
         return getIdStream().equals(that.getIdStream());
     }
 
@@ -302,5 +303,17 @@ public class StreamModel implements Serializable, SearchableModel {
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    @Override public String getTimelineGroup() {
+        return null;
+    }
+
+    @Override public void setTimelineGroup(String timelineGroup) {
+        /* no-op */
+    }
+
+    @Override public Long getOrder() {
+        return null;
     }
 }

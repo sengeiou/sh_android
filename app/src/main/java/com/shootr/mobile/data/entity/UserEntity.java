@@ -1,11 +1,12 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 import timber.log.Timber;
 
-public class UserEntity extends FollowableEntity
+public class UserEntity extends PrintableItemApiEntity
     implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity {
 
   private String idUser;

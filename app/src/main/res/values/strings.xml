@@ -596,4 +596,8 @@
   <string name="show_previous">show</string>
   <string name="hide_previous">hide</string>
   <string name="privacy_info">Tap \"Accept\" to accept our conditions.</string>
+  <string name="promoted_card_subtitle">%1$s · %2$s</string>
+  <string name="promoted_follow">Follow</string>
+  <string name="promoted_go">Go</string>
+  <string name="promoted_title">Destacado</string>
 </resources>

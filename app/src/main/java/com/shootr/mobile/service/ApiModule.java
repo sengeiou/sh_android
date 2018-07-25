@@ -155,6 +155,7 @@ import timber.log.Timber;
             .registerSubtype(BaseMessageApiEntity.class, "BASE_MESSAGE")
             .registerSubtype(TopicApiEntity.class, "TOPIC")
             .registerSubtype(ExternalVideoApiEntity.class, "EXTERNAL_VIDEO")
+            .registerSubtype(StreamEntity.class, "STREAM")
             .registerSubtype(PollEntity.class, "POLL");
 
     return new GsonBuilder() //

@@ -2,6 +2,8 @@ package com.shootr.mobile.domain.model.stream;
 
 import com.shootr.mobile.domain.model.Followable;
 import com.shootr.mobile.domain.model.FollowableType;
+import com.shootr.mobile.domain.model.PrintableItem;
+import com.shootr.mobile.domain.model.PrintableType;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.user.User;
@@ -10,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Stream implements Searchable, Followable, Validable {
+public class Stream implements Searchable, Followable, Validable, PrintableItem {
 
     private String id;
     private String authorId;
@@ -217,6 +219,18 @@ public class Stream implements Searchable, Followable, Validable {
 
     @Override public String getDescriptionToValidate() {
         return description;
+    }
+
+    @Override public String getResultType() {
+        return PrintableType.STREAM;
+    }
+
+    @Override public Long getOrder() {
+        return 0L;
+    }
+
+    @Override public String getMessageType() {
+        return null;
     }
 
     public static class StreamExplicitComparator implements Comparator<Stream> {

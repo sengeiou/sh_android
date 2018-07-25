@@ -27,9 +27,6 @@ public class ShotApiEntity extends BaseMessageApiEntity {
   private ShotApiEntity parent;
 
   private List<ShotApiEntity> thread;
-  private Long birth;
-  private Long modified;
-  private Integer revision;
   private Long profileHidden;
   private Long replyCount;
   private Long reshootCount;
@@ -45,7 +42,6 @@ public class ShotApiEntity extends BaseMessageApiEntity {
   private boolean reshooted;
   private Long nicedTime;
   private Long reshootedTime;
-  private Date deleted;
   private String shareLink;
   private Long order;
 
@@ -115,22 +111,6 @@ public class ShotApiEntity extends BaseMessageApiEntity {
 
   public void setUser(EmbedUserApiEntity user) {
     this.user = user;
-  }
-
-  public Long getBirth() {
-    return birth;
-  }
-
-  public void setBirth(Long birth) {
-    this.birth = birth;
-  }
-
-  public Long getModified() {
-    return modified;
-  }
-
-  public void setModified(Long modified) {
-    this.modified = modified;
   }
 
   public Integer getRevision() {

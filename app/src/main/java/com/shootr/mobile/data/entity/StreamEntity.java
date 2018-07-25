@@ -1,10 +1,11 @@
 package com.shootr.mobile.data.entity;
 
+import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.domain.model.FollowableType;
 import com.shootr.mobile.domain.model.SearchableType;
 import java.util.List;
 
-public class StreamEntity extends FollowableEntity implements Comparable<StreamEntity>, SearchableEntity {
+public class StreamEntity extends PrintableItemApiEntity implements Comparable<StreamEntity>, SearchableEntity {
 
     private String idStream;
     private String idUser;

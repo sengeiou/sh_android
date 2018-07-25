@@ -7,4 +7,6 @@ public interface LocaleProvider {
     String getLanguage();
 
     String getCountry();
+
+    String getLocaleInLanguageTag();
 }

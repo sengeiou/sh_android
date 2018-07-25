@@ -1,6 +1,8 @@
 package com.shootr.mobile.data.api.entity;
 
-public class PrintableItemApiEntity {
+import com.shootr.mobile.data.entity.FollowableEntity;
+
+public class PrintableItemApiEntity extends FollowableEntity {
 
   private String resultType;
 

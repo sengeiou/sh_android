@@ -4,7 +4,6 @@ import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -52,8 +51,8 @@ public class ShotApiEntityMapper {
     Integer niceCount = shotApiEntity.getNiceCount();
     shotEntity.setNiceCount(niceCount != null ? niceCount : 0);
 
-    shotEntity.setBirth(new Date(shotApiEntity.getBirth()));
-    shotEntity.setModified(new Date(shotApiEntity.getModified()));
+    shotEntity.setBirth(shotApiEntity.getBirth());
+    shotEntity.setModified(shotApiEntity.getModified());
     shotEntity.setRevision(shotApiEntity.getRevision());
 
     shotEntity.setProfileHidden(shotApiEntity.getProfileHidden());

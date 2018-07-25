@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -26,8 +25,11 @@ import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.LandingStreamsAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnLandingStreamClickListener;
+import com.shootr.mobile.ui.adapters.listeners.PromotedItemsClickListener;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.model.LandingStreamsModel;
+import com.shootr.mobile.ui.model.PromotedGroupModel;
+import com.shootr.mobile.ui.model.PromotedLandingItemModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
@@ -42,6 +44,7 @@ import com.shootr.mobile.util.InitialsLoader;
 import com.shootr.mobile.util.Intents;
 import com.shootr.mobile.util.NumberFormatUtil;
 import com.shootr.mobile.util.ShareManager;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -50,7 +53,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   public static final int REQUEST_NEW_STREAM = 3;
 
   @BindView(R.id.streams_list) RecyclerView streamsList;
-  @BindView(R.id.streams_list_swipe_refresh) SwipeRefreshLayout swipeRefreshLayout;
   @BindView(R.id.streams_empty) View emptyView;
   @BindView(R.id.streams_loading) View loadingView;
   @BindString(R.string.added_to_favorites) String addedToFavorites;
@@ -81,7 +83,10 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
   private LandingStreamsAdapter adapter;
   private Unbinder unbinder;
+  private LinearLayoutManager linearLayoutManager;
   private Menu menu;
+  private int position = 0;
+  private int offset = 0;
 
   public static StreamsListFragment newInstance() {
     return new StreamsListFragment();
@@ -109,7 +114,8 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
   protected void initializeViews(Bundle savedInstanceState) {
     unbinder = ButterKnife.bind(this, getView());
-    streamsList.setLayoutManager(new LinearLayoutManager(getActivity()));
+    linearLayoutManager = new LinearLayoutManager(getContext());
+    streamsList.setLayoutManager(linearLayoutManager);
 
     streamsList.addItemDecoration(new BottomOffsetDecoration(200));
 
@@ -123,19 +129,28 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
             presenter.onStreamLongClicked(stream);
             return true;
           }
-        }, numberFormatUtil);
+        }, numberFormatUtil, new PromotedItemsClickListener() {
+          @Override public void onImageClick(PromotedLandingItemModel promotedModel) {
+            /* no-op */
+          }
+
+          @Override public void onFollowClick(PromotedLandingItemModel promotedModel) {
+            calculateItemForReposition();
+            presenter.addToFavorites(((StreamModel) promotedModel.getData()), true);
+        }
+
+          @Override public void onGoClick(PromotedLandingItemModel promotedModel) {
+            presenter.selectStream((StreamModel) promotedModel.getData());
+          }
+
+          @Override public void onPromotedClick(PromotedLandingItemModel promotedModel) {
+            presenter.selectStream((StreamModel) promotedModel.getData());
+          }
+        });
 
     adapter.setHasStableIds(true);
 
     streamsList.setAdapter(adapter);
-
-    swipeRefreshLayout.setColorSchemeResources(R.color.refresh_1, R.color.refresh_2,
-        R.color.refresh_3, R.color.refresh_4);
-    swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override public void onRefresh() {
-        presenter.refresh();
-      }
-    });
   }
 
   protected void initializePresenter() {
@@ -145,7 +160,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Override public void onResume() {
     super.onResume();
     presenter.resume();
-    redrawStreamListWithCurrentValues();
   }
 
   private void redrawStreamListWithCurrentValues() {
@@ -155,7 +169,19 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
   @Override public void onPause() {
     super.onPause();
     presenter.pause();
+    calculateItemForReposition();
   }
+
+  private void calculateItemForReposition() {
+    try {
+      position = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+      View v = linearLayoutManager.findViewByPosition(position);
+      offset = v == null ? 0 : v.getTop();
+    } catch (IndexOutOfBoundsException exception) {
+      /* no-op */
+    }
+  }
+
 
   @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
@@ -345,6 +371,13 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
     adapter.onMute(stream);
   }
 
+  @Override public void renderPromoteds(ArrayList<PromotedLandingItemModel> promotedItems) {
+    PromotedGroupModel promotedGroupModel = new PromotedGroupModel();
+    promotedGroupModel.setPromotedModels(promotedItems);
+    adapter.setPromoted(promotedGroupModel);
+    linearLayoutManager.scrollToPositionWithOffset(position, offset);
+  }
+
   @Override public void showEmpty() {
     emptyView.setVisibility(View.VISIBLE);
   }
@@ -361,7 +394,6 @@ public class StreamsListFragment extends BaseFragment implements StreamsListView
 
   @Override public void hideLoading() {
     loadingView.setVisibility(View.GONE);
-    swipeRefreshLayout.setRefreshing(false);
   }
 
   @Override public void showError(String message) {

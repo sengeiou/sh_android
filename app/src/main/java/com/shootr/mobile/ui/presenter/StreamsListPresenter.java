@@ -14,16 +14,22 @@ import com.shootr.mobile.domain.interactor.stream.ShareStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnfollowStreamInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnmuteInteractor;
 import com.shootr.mobile.domain.interactor.stream.UnwatchStreamInteractor;
+import com.shootr.mobile.domain.model.PrintableType;
+import com.shootr.mobile.domain.model.PromotedLandingItem;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.PromotedLandingItemModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
+import com.shootr.mobile.ui.model.mappers.ImageMediaModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamResultModelMapper;
 import com.shootr.mobile.ui.views.StreamsListView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -38,6 +44,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   private final HideStreamInteractor hideStreamInteractor;
   private final UnmuteInteractor unmuteInterator;
   private final StreamResultModelMapper streamResultModelMapper;
+  private final ImageMediaModelMapper imageMediaModelMapper;
   private final StreamModelMapper streamModelMapper;
   private final SessionRepository sessionRepository;
   private final ErrorMessageFactory errorMessageFactory;
@@ -45,13 +52,15 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
 
   private StreamsListView streamsListView;
   private boolean hasBeenPaused;
+  ArrayList<PromotedLandingItemModel> promotedItems;
 
   @Inject public StreamsListPresenter(GetLandingStreamsInteractor getLandingStreamsInteractor,
       FollowStreamInteractor followStreamInteractor,
       UnfollowStreamInteractor unfollowStreamInteractor,
       UnwatchStreamInteractor unwatchStreamInteractor, ShareStreamInteractor shareStreamInteractor,
-      MuteInteractor muteInteractor, HideStreamInteractor hideStreamInteractor, UnmuteInteractor unmuteInterator,
-      StreamResultModelMapper streamResultModelMapper, StreamModelMapper streamModelMapper,
+      MuteInteractor muteInteractor, HideStreamInteractor hideStreamInteractor,
+      UnmuteInteractor unmuteInterator, StreamResultModelMapper streamResultModelMapper,
+      ImageMediaModelMapper imageMediaModelMapper, StreamModelMapper streamModelMapper,
       SessionRepository sessionRepository, ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
     this.getLandingStreamsInteractor = getLandingStreamsInteractor;
     this.followStreamInteractor = followStreamInteractor;
@@ -62,6 +71,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
     this.hideStreamInteractor = hideStreamInteractor;
     this.unmuteInterator = unmuteInterator;
     this.streamResultModelMapper = streamResultModelMapper;
+    this.imageMediaModelMapper = imageMediaModelMapper;
     this.streamModelMapper = streamModelMapper;
     this.sessionRepository = sessionRepository;
     this.errorMessageFactory = errorMessageFactory;
@@ -110,6 +120,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         if (landingStreams != null) {
           streamsListView.hideLoading();
           streamsListView.renderLanding(streamModelMapper.transformLandingStreams(landingStreams));
+          setupPromoteds(landingStreams);
         }
       }
     }, new Interactor.ErrorCallback() {
@@ -117,6 +128,22 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
         showViewError(error);
       }
     });
+  }
+
+  private void setupPromoteds(LandingStreams landingStreams) {
+    promotedItems = new ArrayList<>();
+    for (PromotedLandingItem promotedItem : landingStreams.getPromoted().getPromotedItems()) {
+      if (promotedItem.getData().getResultType().equals(PrintableType.STREAM)) {
+        PromotedLandingItemModel promotedModel = new PromotedLandingItemModel();
+        promotedModel.setData(streamModelMapper.transform((Stream) promotedItem.getData()));
+        promotedModel.setImageMediaModel(imageMediaModelMapper.transform(promotedItem.getImage()));
+        promotedModel.setSubtitle(promotedItem.getSubtitle());
+
+        promotedItems.add(promotedModel);
+      }
+    }
+
+    streamsListView.renderPromoteds(promotedItems);
   }
 
   public void streamCreated(String streamId) {
@@ -154,6 +181,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
               streamResultModel.setFollowing(true);
               streamsListView.renderFollow(streamResultModel);
               streamsListView.showAddedToFavorites();
+              renderFollowInPromoted(streamResultModel, true);
             }
           }
         }, new Interactor.ErrorCallback() {
@@ -161,6 +189,19 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
             showViewError(error);
           }
         });
+  }
+
+  private void renderFollowInPromoted(StreamModel streamResultModel, boolean isFollowing) {
+    for (PromotedLandingItemModel promotedItem : promotedItems) {
+      if (promotedItem.getData() instanceof StreamModel
+          && ((StreamModel) promotedItem.getData()).getIdStream()
+          .equals(streamResultModel.getIdStream())) {
+        streamResultModel.setFollowing(isFollowing);
+        promotedItem.setData(streamResultModel);
+      }
+    }
+
+    streamsListView.renderPromoteds(promotedItems);
   }
 
   public void removeFromFavorites(final StreamModel streamResultModel, final Boolean notify) {
@@ -171,6 +212,7 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
               streamResultModel.setFollowing(false);
               streamsListView.renderFollow(streamResultModel);
               streamsListView.showRemovedFromFavorites();
+              renderFollowInPromoted(streamResultModel, false);
             }
           }
         });
@@ -229,6 +271,9 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   //region Lifecycle
   @Override public void resume() {
     bus.register(this);
+    if (hasBeenPaused) {
+      loadLandingStreams();
+    }
   }
 
   @Override public void pause() {

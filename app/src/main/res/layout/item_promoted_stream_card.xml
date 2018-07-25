@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+  <android.support.v7.widget.CardView
+      android:id="@+id/stream_card"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="10dp"
+      android:layout_marginTop="4dp"
+      card_view:cardCornerRadius="4dp"
+      card_view:cardElevation="4dp"
+      card_view:cardUseCompatPadding="true"
+      android:foreground="?selectableItemBackground"
+      >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+      <ImageView
+          android:id="@+id/promoted_image"
+          android:layout_width="match_parent"
+          android:layout_height="185dp"
+          android:scaleType="centerCrop"
+          app:layout_constraintTop_toTopOf="parent"
+          tools:src="@drawable/sample3"
+          />
+
+      <com.shootr.mobile.ui.widgets.AvatarView
+          android:id="@+id/avatar"
+          android:layout_width="42dp"
+          android:layout_height="42dp"
+          android:layout_marginBottom="8dp"
+          android:layout_marginLeft="10dp"
+          android:layout_marginTop="8dp"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/promoted_image"
+          tools:background="@color/gray"
+          />
+
+      <LinearLayout
+          android:id="@+id/info_container"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:gravity="center_vertical"
+          android:orientation="vertical"
+          android:padding="10dp"
+          app:layout_constraintLeft_toRightOf="@+id/avatar"
+          app:layout_constraintRight_toLeftOf="@+id/cta_button"
+          app:layout_constraintTop_toBottomOf="@+id/promoted_image"
+          >
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawablePadding="8dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="Titulo Dos líneas cuales todos están hablando sin saber de lo que puede hacer"
+            />
+
+        <TextView
+            android:id="@+id/card_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/gray_material"
+            android:textSize="13sp"
+            tools:text="Mas y mejor · 45000 visitas de las cuales todos están hablando sin saber de lo que puede hacer  "
+            />
+      </LinearLayout>
+
+
+      <TextView
+          android:id="@+id/cta_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="8dp"
+          android:fontFamily="sans-serif-medium"
+          android:paddingTop="8dp"
+          android:paddingBottom="8dp"
+          android:paddingRight="16dp"
+          android:paddingLeft="16dp"
+          android:textColor="@color/follow_button"
+          android:textSize="16sp"
+          android:textAllCaps="true"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/promoted_image"
+          android:foreground="?selectableItemBackground"
+          tools:text="FOLLOW"
+          />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+  </android.support.v7.widget.CardView>
+
+</RelativeLayout>

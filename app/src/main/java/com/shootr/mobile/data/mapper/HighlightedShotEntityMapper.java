@@ -69,7 +69,7 @@ public class HighlightedShotEntityMapper {
     highlightedShot.setNicedTime(shotApiEntity.getNicedTime());
 
     highlightedShot.setBirth(value.getBirth());
-    highlightedShot.setModified(new Date(shotApiEntity.getModified()));
+    highlightedShot.setModified(shotApiEntity.getModified());
     highlightedShot.setRevision(value.getRevision());
 
     highlightedShot.setProfileHidden(shotApiEntity.getProfileHidden());

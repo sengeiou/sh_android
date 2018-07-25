@@ -52,4 +52,12 @@ public class ResourcesLocaleProvider implements LocaleProvider {
         }
         return country;
     }
+
+    @Override public String getLocaleInLanguageTag() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return resources.getConfiguration().getLocales().get(0).toLanguageTag();
+        } else {
+            return resources.getConfiguration().locale.toLanguageTag();
+        }
+    }
 }

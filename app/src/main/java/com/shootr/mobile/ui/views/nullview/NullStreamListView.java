@@ -1,9 +1,11 @@
 package com.shootr.mobile.ui.views.nullview;
 
 import com.shootr.mobile.ui.model.LandingStreamsModel;
+import com.shootr.mobile.ui.model.PromotedLandingItemModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.StreamsListView;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NullStreamListView implements StreamsListView {
@@ -69,6 +71,10 @@ public class NullStreamListView implements StreamsListView {
     }
 
     @Override public void renderMute(StreamModel stream) {
+        /* no-op */
+    }
+
+    @Override public void renderPromoteds(ArrayList<PromotedLandingItemModel> promotedItems) {
         /* no-op */
     }
 

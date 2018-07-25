@@ -1,9 +1,11 @@
 package com.shootr.mobile.ui.views;
 
 import com.shootr.mobile.ui.model.LandingStreamsModel;
+import com.shootr.mobile.ui.model.PromotedLandingItemModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.StreamResultModel;
 import com.shootr.mobile.ui.views.base.LoadDataView;
+import java.util.ArrayList;
 import java.util.List;
 
 public interface StreamsListView extends LoadDataView {
@@ -39,4 +41,6 @@ public interface StreamsListView extends LoadDataView {
     void renderFollow(StreamModel streamModel);
 
     void renderMute(StreamModel stream);
+
+  void renderPromoteds(ArrayList<PromotedLandingItemModel> promotedItems);
 }
