@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.interactor.stream;
 
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
+import com.shootr.mobile.domain.exception.StreamRemovedException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
@@ -13,7 +14,6 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import com.shootr.mobile.domain.repository.user.UserRepository;
-import com.shootr.mobile.domain.utils.Preconditions;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -79,12 +79,9 @@ public class GetStreamInfoInteractor implements Interactor {
   protected StreamInfo getStreamInfo(final StreamRepository streamRepository, boolean localOnly) {
     User currentUser = localUserRepository.getUserById(sessionRepository.getCurrentUserId());
     Stream stream = streamRepository.getStreamById(idStreamWanted, StreamMode.TYPES_STREAM);
-    checkNotNull(stream, new Preconditions.LazyErrorMessage() {
-      @Override public Object getMessage() {
-        return "Stream not found in " + streamRepository.getClass().getSimpleName();
-      }
-    });
-
+    if (stream == null) {
+      notifyError(new StreamRemovedException(new Throwable()));
+    }
     List<User> watchers = new ArrayList<>();
     boolean hasMoreParticipants = false;
     if (!localOnly) {
