@@ -15,7 +15,6 @@ import com.shootr.mobile.domain.interactor.GetCachedNicestTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetCachedTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetNicestTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetTimelineInteractor;
-import com.shootr.mobile.domain.interactor.HighlightItemInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PutLastStreamVisitInteractor;
 import com.shootr.mobile.domain.interactor.SubscribeTimelineInteractor;
@@ -98,7 +97,6 @@ public class StreamTimelinePresenter
   private final DismissHighlightShotInteractor dismissHighlightShotInteractor;
   private final ViewHighlightedShotEventInteractor viewHighlightedShotEventInteractor;
   private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
-  private final HighlightItemInteractor highlightItemInteractor;
   private final DeleteHighlightedItemInteractor deleteHighlightedItemInteractor;
   private final CreateTopicInteractor createTopicInteractor;
   private final DeleteTopicInteractor deleteTopicInteractor;
@@ -146,7 +144,6 @@ public class StreamTimelinePresenter
       DismissHighlightShotInteractor dismissHighlightShotInteractor,
       ViewHighlightedShotEventInteractor viewHighlightedShotEventInteractor,
       ClickShotLinkEventInteractor clickShotLinkEventInteractor,
-      HighlightItemInteractor highlightItemInteractor,
       DeleteHighlightedItemInteractor deleteHighlightedItemInteractor,
       CreateTopicInteractor createTopicInteractor, DeleteTopicInteractor deleteTopicInteractor,
       GetTimelineInteractor getTimelineInteractor,
@@ -171,7 +168,6 @@ public class StreamTimelinePresenter
     this.dismissHighlightShotInteractor = dismissHighlightShotInteractor;
     this.viewHighlightedShotEventInteractor = viewHighlightedShotEventInteractor;
     this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
-    this.highlightItemInteractor = highlightItemInteractor;
     this.deleteHighlightedItemInteractor = deleteHighlightedItemInteractor;
     this.createTopicInteractor = createTopicInteractor;
     this.deleteTopicInteractor = deleteTopicInteractor;
@@ -775,8 +771,8 @@ public class StreamTimelinePresenter
 
   public void highlightItem(final PrintableModel printableModel) {
     if (printableModel instanceof ShotModel) {
-      highlightItemInteractor.highlightItem(PrintableType.SHOT,
-          ((ShotModel) printableModel).getIdShot(), idStream, new Interactor.CompletedCallback() {
+      highlightShotInteractor.highlight(((ShotModel) printableModel).getIdShot(), idStream,
+          new Interactor.CompletedCallback() {
             @Override public void onCompleted() {
               /* no-op */
             }

@@ -3,10 +3,10 @@ package com.shootr.mobile.data;
 import com.shootr.mobile.data.api.SendSocketEventListener;
 import com.shootr.mobile.data.entity.EventParams;
 import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.socket.HighlightSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.HighlightSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
-import com.shootr.mobile.data.entity.socket.UnHighlightSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.UnHighlightSocketMessageApiEntity;
 import java.util.UUID;
 
 public class ShotSocketApiManager {
