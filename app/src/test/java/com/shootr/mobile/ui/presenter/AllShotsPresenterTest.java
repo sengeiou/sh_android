@@ -58,7 +58,8 @@ public class AllShotsPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper());
+    shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper(
+        sessionRepository));
     allShotsPresenter =
         new AllShotsPresenter(getProfileShotTimelineInteractor, markNiceShotInteractor,
             unmarkNiceShotInteractor, undoReshootInteractor, reshootInteractor, errorMessageFactory,

@@ -8,13 +8,16 @@ public class StreamTimeline implements Message {
   private Stream stream;
   private int participantsNumber;
   private int followingNumber;
-  private DataItem fixed;
-  private DataItem pinned;
   private TimelineItem items;
   private String filter;
   private boolean newBadgeContent;
   private TimelineReposition timelineReposition;
   private long period;
+  private TimelineItem polls;
+  private TimelineItem highlightedShots;
+  private TimelineItem promotedShots;
+  private TimelineItem videos;
+  private TimelineItem followings;
 
 
   public Stream getStream() {
@@ -39,22 +42,6 @@ public class StreamTimeline implements Message {
 
   public void setFollowingNumber(int followingNumber) {
     this.followingNumber = followingNumber;
-  }
-
-  public DataItem getFixed() {
-    return fixed;
-  }
-
-  public void setFixed(DataItem fixed) {
-    this.fixed = fixed;
-  }
-
-  public DataItem getPinned() {
-    return pinned;
-  }
-
-  public void setPinned(DataItem pinned) {
-    this.pinned = pinned;
   }
 
   public TimelineItem getItems() {
@@ -99,5 +86,45 @@ public class StreamTimeline implements Message {
 
   public void setPeriod(long period) {
     this.period = period;
+  }
+
+  public TimelineItem getPolls() {
+    return polls;
+  }
+
+  public void setPolls(TimelineItem polls) {
+    this.polls = polls;
+  }
+
+  public TimelineItem getHighlightedShots() {
+    return highlightedShots;
+  }
+
+  public void setHighlightedShots(TimelineItem highlightedShots) {
+    this.highlightedShots = highlightedShots;
+  }
+
+  public TimelineItem getPromotedShots() {
+    return promotedShots;
+  }
+
+  public void setPromotedShots(TimelineItem promotedShots) {
+    this.promotedShots = promotedShots;
+  }
+
+  public TimelineItem getVideos() {
+    return videos;
+  }
+
+  public void setVideos(TimelineItem videos) {
+    this.videos = videos;
+  }
+
+  public TimelineItem getFollowings() {
+    return followings;
+  }
+
+  public void setFollowings(TimelineItem followings) {
+    this.followings = followings;
   }
 }

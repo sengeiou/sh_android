@@ -8,6 +8,7 @@ import com.shootr.mobile.data.entity.socket.SubscribeSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.UnsubscribeSocketMessageApiEntity;
 import com.shootr.mobile.domain.model.SubscriptionType;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class SubscriptionSocketApiManager {
@@ -18,6 +19,7 @@ public class SubscriptionSocketApiManager {
   private ArrayList<SubscribeSocketMessageApiEntity> subscriptions;
   private SendSocketEventListener sendSocketEventListener;
   private String idUser;
+  private SubscribeSocketMessageApiEntity currentPromotedSubscription;
 
   public SubscriptionSocketApiManager(SendSocketEventListener sendSocketEventListener,
       String idUser) {
@@ -27,14 +29,17 @@ public class SubscriptionSocketApiManager {
   }
 
   public void onSubscriptionAck(SocketMessageApiEntity event) {
-    for (SubscribeSocketMessageApiEntity timelineSubscription : subscriptions) {
-      timelineSubscription.setActiveSubscription(false);
-    }
+    if (!Arrays.asList(SubscriptionType.PERSISTENT_SUBSCRIPTIONS)
+        .contains(((SubscribeSocketMessageApiEntity) event).getData().getSubscriptionType())) {
+      for (SubscribeSocketMessageApiEntity timelineSubscription : subscriptions) {
+        timelineSubscription.setActiveSubscription(false);
+      }
 
-    event.setActiveSubscription(true);
-    subscriptions.add(0, (SubscribeSocketMessageApiEntity) event);
-    if (subscriptions.size() >= MAX_SUBSCRIPTIONS) {
-      unsubscribeFirstSubscription();
+      event.setActiveSubscription(true);
+      subscriptions.add(0, (SubscribeSocketMessageApiEntity) event);
+      if (subscriptions.size() >= MAX_SUBSCRIPTIONS) {
+        unsubscribeFirstSubscription();
+      }
     }
   }
 
@@ -120,6 +125,22 @@ public class SubscriptionSocketApiManager {
       sendSocketEventListener.sendEvent(socketMessageApiEntity);
       return true;
     }
+  }
+
+  public boolean subscribePromotedTiers(String subscriptionType) {
+
+    if (currentPromotedSubscription == null) {
+      currentPromotedSubscription = new SubscribeSocketMessageApiEntity();
+
+      EventParams data = new EventParams();
+      data.setSubscriptionType(subscriptionType);
+      currentPromotedSubscription.setData(data);
+      currentPromotedSubscription.setRequestId(String.valueOf(subscriptionHash(subscriptionType)));
+      currentPromotedSubscription.setVersion(VERSION);
+    }
+    sendSocketEventListener.sendEvent(currentPromotedSubscription);
+
+    return true;
   }
 
   private void unsubscribeFirstSubscription() {
@@ -209,6 +230,10 @@ public class SubscriptionSocketApiManager {
     int result = idShot != null ? idShot.hashCode() : 0;
     result = 31 * result + (idUser != null ? idUser.hashCode() : 0);
     return result;
+  }
+
+  private int subscriptionHash(String hashValue) {
+    return hashValue != null ? hashValue.hashCode() : 0;
   }
 
   private String generateRequestId() {

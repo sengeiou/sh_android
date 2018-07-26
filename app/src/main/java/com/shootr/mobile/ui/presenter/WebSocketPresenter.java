@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.interactor.CloseSocketInteractor;
 import com.shootr.mobile.domain.interactor.ConnectSocketInteractor;
 import com.shootr.mobile.domain.interactor.GetSocketInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.SubscribePromotedTiersInteractor;
 import com.shootr.mobile.domain.interactor.user.DefaultObserver;
 import com.shootr.mobile.domain.model.Bootstrapping;
 import com.shootr.mobile.domain.model.SocketMessage;
@@ -22,6 +23,7 @@ public class WebSocketPresenter {
   private final ConnectSocketInteractor connectSocketInteractor;
   private final GetSocketInteractor getSocketInteractor;
   private final CloseSocketInteractor closeSocketInteractor;
+  private final SubscribePromotedTiersInteractor subscribePromotedTiersInteractor;
   private final LogsCache logsCache;
   private final Context context;
   private final String SOCKET_CONNECTION = "SOCKET_CONNECTION";
@@ -36,10 +38,12 @@ public class WebSocketPresenter {
 
   @Inject public WebSocketPresenter(ConnectSocketInteractor connectSocketInteractor,
       GetSocketInteractor getSocketInteractor, CloseSocketInteractor closeSocketInteractor,
+      SubscribePromotedTiersInteractor subscribePromotedTiersInteractor,
       LogsCache logsCache, @ApplicationContext Context context) {
     this.connectSocketInteractor = connectSocketInteractor;
     this.getSocketInteractor = getSocketInteractor;
     this.closeSocketInteractor = closeSocketInteractor;
+    this.subscribePromotedTiersInteractor = subscribePromotedTiersInteractor;
     this.logsCache = logsCache;
     this.context = context;
   }
@@ -93,6 +97,15 @@ public class WebSocketPresenter {
         if (socketView != null) {
           socketView.stopService();
         }
+      }
+    });
+  }
+
+  public void subscribeStaticSubscriptions() {
+    Log.d("socket", "me suscribo de nuevo a promoted");
+    subscribePromotedTiersInteractor.subscribe(new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean aBoolean) {
+        /* no-op */
       }
     });
   }

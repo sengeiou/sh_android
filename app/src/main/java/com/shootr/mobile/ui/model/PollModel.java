@@ -1,10 +1,12 @@
 package com.shootr.mobile.ui.model;
 
+import com.shootr.mobile.domain.model.Seenable;
 import com.shootr.mobile.domain.model.poll.PollStatus;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
-public class PollModel implements PrintableModel, Serializable {
+public class PollModel implements PrintableModel, Serializable, Seenable {
 
   public static final String RESULTS = "RESULTS";
   public static final String VOTE = "VOTE";
@@ -29,6 +31,8 @@ public class PollModel implements PrintableModel, Serializable {
   private String timelineGroup;
   private String shareLink;
   private String action;
+  private Date deleted;
+  private Boolean seen;
 
   public String getIdPoll() {
     return idPoll;
@@ -189,6 +193,10 @@ public class PollModel implements PrintableModel, Serializable {
     return 0L;
   }
 
+  @Override public boolean isDeleted() {
+    return deleted != null;
+  }
+
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
@@ -219,5 +227,21 @@ public class PollModel implements PrintableModel, Serializable {
 
   public void setAction(String action) {
     this.action = action;
+  }
+
+  public Date getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(Date deleted) {
+    this.deleted = deleted;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen != null ? seen : false;
   }
 }

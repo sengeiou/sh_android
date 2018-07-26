@@ -1,11 +1,12 @@
 package com.shootr.mobile.data.api.entity;
 
 import com.google.gson.annotations.SerializedName;
+import com.shootr.mobile.data.entity.SeenableEntity;
 import com.shootr.mobile.domain.model.PrintableType;
 import java.util.Date;
 import java.util.List;
 
-public class ShotApiEntity extends BaseMessageApiEntity {
+public class ShotApiEntity extends BaseMessageApiEntity implements SeenableEntity {
 
   private String idShot;
   private String idStream;
@@ -27,6 +28,9 @@ public class ShotApiEntity extends BaseMessageApiEntity {
   private ShotApiEntity parent;
 
   private List<ShotApiEntity> thread;
+  private Long birth;
+  private Long modified;
+  private Integer revision;
   private Long profileHidden;
   private Long replyCount;
   private Long reshootCount;
@@ -42,8 +46,10 @@ public class ShotApiEntity extends BaseMessageApiEntity {
   private boolean reshooted;
   private Long nicedTime;
   private Long reshootedTime;
+  private Date deleted;
   private String shareLink;
   private Long order;
+  private Boolean seen;
 
   public ShotApiEntity() {
     setResultType(PrintableType.SHOT);
@@ -311,5 +317,29 @@ public class ShotApiEntity extends BaseMessageApiEntity {
 
   public void setOrder(Long order) {
     this.order = order;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
+  }
+
+  public Long getBirth() {
+    return birth;
+  }
+
+  public void setBirth(Long birth) {
+    this.birth = birth;
+  }
+
+  public Long getModified() {
+    return modified;
+  }
+
+  public void setModified(Long modified) {
+    this.modified = modified;
   }
 }

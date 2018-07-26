@@ -11,6 +11,7 @@ public class Entities {
   private ArrayList<ImageMedia> images;
   private ArrayList<Mention> mentions;
   private ArrayList<Card> cards;
+  private Promoted promoted;
 
   public ArrayList<Url> getUrls() {
     return urls;
@@ -58,5 +59,13 @@ public class Entities {
 
   public void setCards(ArrayList<Card> cards) {
     this.cards = cards;
+  }
+
+  public Promoted getPromoted() {
+    return promoted;
+  }
+
+  public void setPromoted(Promoted promoted) {
+    this.promoted = promoted;
   }
 }

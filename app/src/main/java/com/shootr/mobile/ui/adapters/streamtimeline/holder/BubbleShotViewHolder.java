@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.adapters.streamtimeline.holder;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -30,6 +31,7 @@ import com.shootr.mobile.ui.widgets.VideoImageView;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
+import com.shootr.mobile.util.PromotedColorManager;
 
 public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
 
@@ -58,12 +60,16 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
   @BindView(R.id.holder_or_contributor_user) ImageView holderOrContributor;
   @BindView(R.id.open_menu) ImageView openImageMenu;
   @BindView(R.id.shot_timestamp) TextView timestamp;
+  @BindView(R.id.shot_price) TextView shotPrice;
+  @BindView(R.id.shot_container) LinearLayout container;
   private View view;
   private ShotModel item;
 
   @BindString(R.string.menu_share_shot_via_shootr) String reshoootResource;
   @BindString(R.string.undo_reshoot) String undoReshootResource;
   @BindString(R.string.reshoot_action_text) String reshootActionTextResource;
+
+  private PromotedColorManager promotedColorManager;
 
   public BubbleShotViewHolder(View itemView, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
@@ -77,6 +83,7 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
     this.numberFormatUtil = numberFormatUtil;
     this.view = itemView;
     ButterKnife.bind(this, view);
+    promotedColorManager = new PromotedColorManager(itemView.getContext());
 
   }
 
@@ -99,6 +106,8 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
         onOpenShotMenuListener);
     setupShotActions(shot, onReshootClickListener);
     bindElapsedTime(shot);
+    setupBubbleBackground(shot);
+    setupPrice(shot);
     item = shot;
   }
 
@@ -362,6 +371,19 @@ public class BubbleShotViewHolder extends BaseViewHolder<ShotModel> {
     }
   }
 
+  private void setupBubbleBackground(ShotModel shot) {
+    container.setBackground(promotedColorManager.getDrawableForPromoted(shot));
+  }
 
+  private void setupPrice(ShotModel shotModel) {
+    String price = promotedColorManager.getPromotedPrice(shotModel);
 
+    if (!price.isEmpty()) {
+      shotPrice.setVisibility(View.VISIBLE);
+      shotPrice.setText(price);
+      shotPrice.setTextColor(promotedColorManager.getPriceColor(shotModel));
+    } else {
+      shotPrice.setVisibility(View.GONE);
+    }
+  }
 }

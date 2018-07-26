@@ -49,7 +49,7 @@ public class DraftsPresenterTest {
         when(sessionRepository.getCurrentUser()).thenReturn(currentUser());
         when(sessionRepository.getCurrentUserId()).thenReturn("userId");
         DraftModelMapper draftModelMapper = new DraftModelMapper(sessionRepository, new ShotModelMapper(
-            sessionRepository, new EntitiesModelMapper()),
+            sessionRepository, new EntitiesModelMapper(sessionRepository)),
             new PrivateMessageModelMapper(sessionRepository));
         presenter = new DraftsPresenter(interactor, sendDraftInteractor,
             sendPrivateMessageDraftInteractor, deleteDraftInteractor, draftModelMapper, bus);

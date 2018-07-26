@@ -18,12 +18,15 @@ public class TimelineApiEntityMapper {
 
     entity.setStream(apiEntity.getStream());
     entity.setParticipants(apiEntity.getParticipants());
-    entity.setFixed(dataApiEntityMapper.map(apiEntity.getFixed()));
-    entity.setPinned(dataApiEntityMapper.map(apiEntity.getPinned()));
     entity.setItems(dataApiEntityMapper.map(apiEntity.getItems()));
     entity.setFilter(apiEntity.getFilter());
     entity.setNewBadgeContent(apiEntity.isNewBadgeContent());
     entity.setParams(apiEntity.getParams());
+    entity.setPolls(dataApiEntityMapper.map(apiEntity.getPolls()));
+    entity.setHighlightedShots(dataApiEntityMapper.map(apiEntity.getHighlightedShots()));
+    entity.setVideos(dataApiEntityMapper.map(apiEntity.getVideos()));
+    entity.setPromotedShots(dataApiEntityMapper.map(apiEntity.getPromotedShots()));
+    entity.setFollowings(dataApiEntityMapper.map(apiEntity.getFollowings()));
 
 
     return entity;

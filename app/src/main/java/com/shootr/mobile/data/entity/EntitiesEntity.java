@@ -10,6 +10,7 @@ public class EntitiesEntity {
   private ArrayList<ImageMediaEntity> images;
   private ArrayList<MentionsEntity> mentions;
   private ArrayList<CardEntity> cards;
+  private PromotedEntity promotedEntity;
 
   public ArrayList<UrlEntity> getUrls() {
     return urls;
@@ -59,6 +60,14 @@ public class EntitiesEntity {
     this.cards = cards;
   }
 
+  public PromotedEntity getPromotedEntity() {
+    return promotedEntity;
+  }
+
+  public void setPromotedEntity(PromotedEntity promotedEntity) {
+    this.promotedEntity = promotedEntity;
+  }
+
   @Override public String toString() {
     return "EntitiesEntity{"
         + "urls="
@@ -73,6 +82,8 @@ public class EntitiesEntity {
         + mentions
         + ", cards="
         + cards
+        + ", promotedEntity="
+        + promotedEntity
         + '}';
   }
 }

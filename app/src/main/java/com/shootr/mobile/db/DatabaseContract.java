@@ -261,11 +261,13 @@ public class DatabaseContract {
     public static final String ID_QUEUE = "idQueue";
     public static final String FAILED = "failed";
     public static final String IMAGE_FILE = "imageFile";
+    public static final String RECEIPT = "RECEIPT";
+    public static final String RECEIPT_TYPE = "RECEIPT_TYPE";
 
     public static final String[] PROJECTION = {
         ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE,
         ID_STREAM, STREAM_TITLE, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL,
-        VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
+        VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED, RECEIPT, RECEIPT_TYPE
     };
   }
 

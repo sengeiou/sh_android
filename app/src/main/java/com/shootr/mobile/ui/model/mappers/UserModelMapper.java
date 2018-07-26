@@ -43,6 +43,8 @@ public class UserModelMapper {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));
             userModel.setJoinStreamTimestamp(joinStreamDate);
         }
+        userModel.setDeleted(user.getDeletedData());
+        userModel.setSeen(user.getSeen());
         return userModel;
     }
 

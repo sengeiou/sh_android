@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-  <item>
-    <shape>
-      <solid android:color="@color/bubble_color"/>
-      <corners android:radius="15dip"/>
-    </shape>
-  </item>
-  <item>
-    <selector xmlns:android="http://schemas.android.com/apk/res/android">
-        <item android:drawable="@drawable/new_shot_notificator_state_pressed" android:state_pressed="true"/>
-        <item android:drawable="@drawable/new_shot_notificator_state"/>
-    </selector>
-  </item>
-</selector>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+  <solid android:color="@color/bubble_color"/>
+  <corners android:radius="15dip"/>
+</shape>

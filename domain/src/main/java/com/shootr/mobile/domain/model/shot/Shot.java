@@ -1,10 +1,11 @@
 package com.shootr.mobile.domain.model.shot;
 
 import com.shootr.mobile.domain.messages.Message;
+import com.shootr.mobile.domain.model.Seenable;
 import java.util.Comparator;
 import java.util.Date;
 
-public class Shot extends BaseMessage {
+public class Shot extends BaseMessage implements Seenable {
 
   private String idShot;
   private ShotStreamInfo streamInfo;
@@ -27,12 +28,14 @@ public class Shot extends BaseMessage {
   private boolean isPadding;
   private boolean isFromHolder;
   private boolean isFromContributor;
-  private boolean niced;
-  private boolean reshooted;
+  private Boolean niced;
+  private Boolean reshooted;
   private Date nicedTime;
   private Date reshootedTime;
   private String shareLink;
   private Long order;
+  private PromotedShotParams promotedShotParams;
+  private Boolean seen;
 
   public String getIdShot() {
     return idShot;
@@ -145,6 +148,14 @@ public class Shot extends BaseMessage {
 
   @Override public Long getOrder() {
     return order;
+  }
+
+  @Override public Date getDeletedData() {
+    return getMetadata().getDeleted();
+  }
+
+  @Override public void setDeletedData(Date deleted) {
+    getMetadata().setDeleted(deleted);
   }
 
   @Override public String getMessageType() {
@@ -292,7 +303,7 @@ public class Shot extends BaseMessage {
     isFromContributor = contributor;
   }
 
-  public boolean isNiced() {
+  public Boolean getNiced() {
     return niced;
   }
 
@@ -300,7 +311,7 @@ public class Shot extends BaseMessage {
     this.niced = niced;
   }
 
-  public boolean isReshooted() {
+  public Boolean getReshooted() {
     return reshooted;
   }
 
@@ -330,5 +341,42 @@ public class Shot extends BaseMessage {
 
   public void setShareLink(String shareLink) {
     this.shareLink = shareLink;
+  }
+
+  public PromotedShotParams getPromotedShotParams() {
+    return promotedShotParams;
+  }
+
+  public void setPromotedShotParams(PromotedShotParams promotedShotParams) {
+    this.promotedShotParams = promotedShotParams;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
+  }
+
+  public static class PromotedShotParams {
+    private String type;
+    private String data;
+
+    public String getType() {
+      return type;
+    }
+
+    public void setType(String type) {
+      this.type = type;
+    }
+
+    public String getData() {
+      return data;
+    }
+
+    public void setData(String data) {
+      this.data = data;
+    }
   }
 }

@@ -14,6 +14,8 @@ public class ExternalVideoEntityMapper {
 
     externalVideo.setProvider(entity.getProvider());
     externalVideo.setVideoId(entity.getVideoId());
+    externalVideo.setDeletedData(entity.getDeleted());
+    externalVideo.setIdExternalVideo(entity.getIdExternalVideo());
 
     return externalVideo;
   }

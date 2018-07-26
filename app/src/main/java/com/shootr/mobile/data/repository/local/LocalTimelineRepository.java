@@ -24,6 +24,6 @@ public class LocalTimelineRepository implements InternalTimelineRepository {
   }
 
   @Override public void putItem(String requestId, PrintableItem printableItem) {
-    timelineCache.putItemInTimeline(printableItem, null);
+    timelineCache.putItemInTimeline(printableItem, null, null, null);
   }
 }

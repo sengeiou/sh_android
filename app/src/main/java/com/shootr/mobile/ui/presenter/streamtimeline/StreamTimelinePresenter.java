@@ -16,6 +16,7 @@ import com.shootr.mobile.domain.interactor.GetCachedTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetNicestTimelineInteractor;
 import com.shootr.mobile.domain.interactor.GetTimelineInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.MarkSeenInteractor;
 import com.shootr.mobile.domain.interactor.PutLastStreamVisitInteractor;
 import com.shootr.mobile.domain.interactor.SubscribeTimelineInteractor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
@@ -36,6 +37,7 @@ import com.shootr.mobile.domain.model.FixedItemSocketMessage;
 import com.shootr.mobile.domain.model.ListType;
 import com.shootr.mobile.domain.model.NewBadgeContentSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
+import com.shootr.mobile.domain.model.PartialUpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.ParticipantsSocketMessage;
 import com.shootr.mobile.domain.model.PeriodType;
 import com.shootr.mobile.domain.model.PinnedItemSocketMessage;
@@ -106,6 +108,7 @@ public class StreamTimelinePresenter
   private final GetCachedNicestTimelineInteractor getCachedNicestTimelineInteractor;
   private final PutLastStreamVisitInteractor putLastStreamVisitInteractor;
   private final PutTimelineRepositionInteractor putTimelineRepositionInteractor;
+  private final MarkSeenInteractor markSeenInteractor;
   private final SessionRepository sessionRepository;
   private final PrintableModelMapper printableModelMapper;
   private final ShotModelMapper shotModelMapper;
@@ -132,7 +135,6 @@ public class StreamTimelinePresenter
   private String currentTimelineType = TimelineType.MAIN;
   private int loadType;
   private ExternalVideoModel currentExternalVideo;
-  private boolean pinnedContainsVideo;
 
   @Inject public StreamTimelinePresenter(SelectStreamInteractor selectStreamInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor,
@@ -152,10 +154,11 @@ public class StreamTimelinePresenter
       GetCachedNicestTimelineInteractor getCachedNicestTimelineInteractor,
       PutLastStreamVisitInteractor putLastStreamVisitInteractor,
       PutTimelineRepositionInteractor putTimelineRepositionInteractor,
-      SessionRepository sessionRepository, PrintableModelMapper printableModelMapper,
-      ShotModelMapper shotModelMapper, ExternalVideoModelMapper externalVideoModelMapper,
-      StreamModelMapper streamModelMapper, ErrorMessageFactory errorMessageFactory, @Main Bus bus,
-      Poller poller, BusPublisher busPublisher) {
+      MarkSeenInteractor markSeenInteractor, SessionRepository sessionRepository,
+      PrintableModelMapper printableModelMapper, ShotModelMapper shotModelMapper,
+      ExternalVideoModelMapper externalVideoModelMapper, StreamModelMapper streamModelMapper,
+      ErrorMessageFactory errorMessageFactory, @Main Bus bus, Poller poller,
+      BusPublisher busPublisher) {
     this.selectStreamInteractor = selectStreamInteractor;
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
@@ -177,6 +180,7 @@ public class StreamTimelinePresenter
     this.getCachedNicestTimelineInteractor = getCachedNicestTimelineInteractor;
     this.putLastStreamVisitInteractor = putLastStreamVisitInteractor;
     this.putTimelineRepositionInteractor = putTimelineRepositionInteractor;
+    this.markSeenInteractor = markSeenInteractor;
     this.sessionRepository = sessionRepository;
     this.printableModelMapper = printableModelMapper;
     this.shotModelMapper = shotModelMapper;
@@ -308,33 +312,50 @@ public class StreamTimelinePresenter
     setupConnected(streamTimeline.getStream().getTotalFollowers(),
         streamTimeline.getParticipantsNumber());
     setupImportantBadge(streamTimeline.isNewBadgeContent());
-    setupPinnedItems(streamTimeline.getPinned().getData());
-    setupFixedItems(streamTimeline.getFixed().getData());
+    setupHighlighteds(streamTimeline.getHighlightedShots().getData());
+    setupPromoted(streamTimeline.getPromotedShots().getData());
+    setupPolls(streamTimeline.getPolls().getData());
+    setupFollowings(streamTimeline.getFollowings().getData());
+    renderExternalVideo(streamTimeline.getVideos().getData());
     renderItems(streamTimeline);
   }
 
-  private void renderExternalVideo(List<PrintableItem> pinneds) {
-    pinnedContainsVideo = false;
-    if (!pinneds.isEmpty()) {
-      for (PrintableItem printableItem : pinneds) {
-        if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
-          ExternalVideoModel newExternalVideo =
-              externalVideoModelMapper.map((ExternalVideo) printableItem);
-          if (!newExternalVideo.getVideoId()
-              .equals(currentExternalVideo == null ? "" : currentExternalVideo.getVideoId())) {
-            currentExternalVideo = externalVideoModelMapper.map((ExternalVideo) printableItem);
-            view.renderExternalVideo(currentExternalVideo);
-          }
-          pinnedContainsVideo = true;
-          break;
-        }
-      }
-      if (!pinnedContainsVideo) {
-        view.hideExternalVideo();
+  private void renderExternalVideo(List<PrintableItem> videos) {
+    if (!videos.isEmpty()) {
+      ExternalVideoModel newExternalVideo =
+          externalVideoModelMapper.map((ExternalVideo) videos.get(0));
+      if (!newExternalVideo.getVideoId()
+          .equals(currentExternalVideo == null ? "" : currentExternalVideo.getVideoId())) {
+        currentExternalVideo = newExternalVideo;
+        view.renderExternalVideo(currentExternalVideo);
       }
     } else {
       view.hideExternalVideo();
     }
+  }
+
+  private void updateExternalVideo(PrintableItem video) {
+    if (video.getDeletedData() == null) {
+      renderExternalVideo(Collections.singletonList(video));
+    } else {
+      view.hideExternalVideo();
+    }
+  }
+
+  private void setupHighlighteds(List<PrintableItem> pinneds) {
+    if (!pinneds.isEmpty()) {
+      view.showPromotedList();
+    }
+    List<PrintableModel> pinnedModels =
+        printableModelMapper.mapPrintableModel(pinneds, PrintableModel.HIGHLIGHTED_GROUP);
+    view.renderHighlightedItems(pinnedModels);
+  }
+
+  private void setupPromoted(List<PrintableItem> promoteds) {
+    if (!promoteds.isEmpty()) {
+      view.showPromotedList();
+    }
+    view.renderPromoteds(printableModelMapper.mapPrintableModel(promoteds, PrintableModel.PROMOTED_GROUP));
   }
 
   private void setupImportantBadge(boolean show) {
@@ -345,7 +366,7 @@ public class StreamTimelinePresenter
 
   private void setupPinnedItems(List<PrintableItem> pinneds) {
     List<PrintableModel> pinnedModels = printableModelMapper.mapPinnableModel(pinneds);
-    view.renderPinnedItems(pinnedModels);
+    view.renderHighlightedItems(pinnedModels);
     storeCurrentTopic(pinnedModels);
     renderExternalVideo(pinneds);
   }
@@ -390,24 +411,20 @@ public class StreamTimelinePresenter
     }
   }
 
-  private void setupFixedItems(List<PrintableItem> pinneds) {
-    if (!pinneds.isEmpty()) {
-      List<PrintableModel> fixedModel = printableModelMapper.mapFixableModel(pinneds);
-      setupFixedItemsIds(fixedModel);
-      view.renderFixedItems(fixedModel);
-    } else {
-      view.removeHighlightedItem();
+  private void setupPolls(List<PrintableItem> polls) {
+    if (!polls.isEmpty()) {
+      view.showPromotedList();
     }
+    view.renderPolls(printableModelMapper.mapPrintableModel(polls, PrintableModel.POLL_GROUP));
     view.setFixedItemsIds(fixedItemsIds);
   }
 
-  private void setupFixedItemsIds(List<PrintableModel> fixedModel) {
-    for (PrintableModel printableModel : fixedModel) {
-      if (printableModel instanceof ShotModel && !fixedItemsIds.contains(
-          ((ShotModel) printableModel).getIdShot())) {
-        fixedItemsIds.add(((ShotModel) printableModel).getIdShot());
-        storeViewCount(((ShotModel) printableModel).getIdShot());
+  private void setupFollowings(List<PrintableItem> users) {
+    if (users != null) {
+      if (!users.isEmpty()) {
+        view.showPromotedList();
       }
+      view.renderFollowings(printableModelMapper.mapPrintableModel(users, PrintableModel.USER_GROUP));
     }
   }
 
@@ -471,6 +488,12 @@ public class StreamTimelinePresenter
       view.showNewShotTextBox();
     } else {
       view.showViewOnlyTextBox();
+    }
+
+    if (streamModel.canPostPromoted()) {
+      view.showPromotedButton();
+    } else {
+      view.hidePromotedButton();
     }
   }
 
@@ -603,11 +626,11 @@ public class StreamTimelinePresenter
     return canFixItem;
   }
 
-  public void onDismissHighlightShot(String idShot, String streamAuthorIdUser) {
+  public void onDismissHighlightShot(ShotModel shotModel, String streamAuthorIdUser) {
     if (canFixItem()) {
-      fixedItemView.showDismissDialog(idShot);
+      fixedItemView.showDismissDialog(shotModel);
     } else {
-      dismissHighlightShot(idShot, false);
+      dismissHighlightShot(shotModel.getIdShot(), false);
     }
   }
 
@@ -824,35 +847,76 @@ public class StreamTimelinePresenter
 
       case SocketMessage.NEW_ITEM_DATA:
         NewItemSocketMessage newItemSocketMessage = (NewItemSocketMessage) event.getMessage();
-        ShotModel shotModel =
-            shotModelMapper.transform((Shot) newItemSocketMessage.getData().getItem());
-        shotModel.setTimelineGroup(PrintableModel.ITEMS_GROUP);
+
         if (currentTimelineType.equals(TimelineType.NICEST)) {
-          view.handleNewNicestItem(shotModel);
-        } else {
-          if (idStream.equals(shotModel.getStreamId())
-              && newItemSocketMessage.isActiveSubscription
+          if (newItemSocketMessage.getData().getItem().getResultType().equals(PrintableType.SHOT)
               && newItemSocketMessage.getData().getList().equals(ListType.TIMELINE_ITEMS)) {
-            view.addNewItems(Collections.<PrintableModel>singletonList(shotModel));
+            {
+              view.handleNewNicestItem(
+                  printableModelMapper.mapPrintableModel(newItemSocketMessage.getData().getItem(),
+                      PrintableModel.ITEMS_GROUP));
+            }
+          }
+        } else {
+          if (idStream.equals(newItemSocketMessage.getEventParams().getIdStream())
+              && newItemSocketMessage.isActiveSubscription) {
+            PrintableModel printableModel =
+                printableModelMapper.mapPrintableModel(newItemSocketMessage.getData().getItem(),
+                    null);
+            setupNewItem(newItemSocketMessage, printableModel);
           }
         }
+
         break;
 
       case SocketMessage.UPDATE_ITEM_DATA:
         UpdateItemSocketMessage updateItemSocketMessage =
             (UpdateItemSocketMessage) event.getMessage();
-        ShotModel updatedShot =
-            shotModelMapper.transform((Shot) updateItemSocketMessage.getData().getItem());
-        updatedShot.setTimelineGroup(PrintableModel.ITEMS_GROUP);
-        if (idStream.equals(updatedShot.getStreamId())
-            && updateItemSocketMessage.isActiveSubscription) {
-          if (currentTimelineType.equals(TimelineType.NICEST)) {
-            view.updateNicestItem(updatedShot);
-          } else {
-            view.updateItem(updatedShot);
+        if (currentTimelineType.equals(TimelineType.NICEST)) {
+          if (updateItemSocketMessage.getData().getItem().getResultType().equals(PrintableType.SHOT)
+              && updateItemSocketMessage.getData().getList().equals(ListType.TIMELINE_ITEMS)) {
+            {
+              ShotModel updatedShot =
+                  shotModelMapper.transform((Shot) updateItemSocketMessage.getData().getItem());
+              view.updateNicestItem(updatedShot);
+            }
           }
-          view.updateFixedItem(printableModelMapper.mapFixableModel(
-              Collections.singletonList(updateItemSocketMessage.getData().getItem())));
+        } else {
+          if (idStream.equals(updateItemSocketMessage.getEventParams().getIdStream())
+              && updateItemSocketMessage.isActiveSubscription) {
+            PrintableModel printableModel =
+                printableModelMapper.mapPrintableModel(updateItemSocketMessage.getData().getItem(),
+                    null);
+            setupUpdateItem(updateItemSocketMessage.getData().getItem(), printableModel,
+                updateItemSocketMessage.getData().getList());
+          }
+        }
+        break;
+
+      case SocketMessage.PARTIAL_UPDATE_ITEM_DATA:
+        PartialUpdateItemSocketMessage partialUpdateItemSocketMessage =
+            (PartialUpdateItemSocketMessage) event.getMessage();
+        if (currentTimelineType.equals(TimelineType.NICEST)) {
+          if (partialUpdateItemSocketMessage.getData()
+              .getItem()
+              .getResultType()
+              .equals(PrintableType.SHOT) && partialUpdateItemSocketMessage.getData()
+              .getList()
+              .equals(ListType.TIMELINE_ITEMS)) {
+            {
+              ShotModel updatedShot = shotModelMapper.transform(
+                  (Shot) partialUpdateItemSocketMessage.getData().getItem());
+              view.updateNicestItem(updatedShot);
+            }
+          }
+        } else {
+          if (idStream.equals(partialUpdateItemSocketMessage.getEventParams().getIdStream())
+              && partialUpdateItemSocketMessage.isActiveSubscription) {
+            PrintableModel printableModel = printableModelMapper.mapPrintableModel(
+                partialUpdateItemSocketMessage.getData().getItem(), null);
+            setupUpdateItem(partialUpdateItemSocketMessage.getData().getItem(), printableModel,
+                partialUpdateItemSocketMessage.getData().getList());
+          }
         }
         break;
 
@@ -876,7 +940,7 @@ public class StreamTimelinePresenter
       case SocketMessage.FIXED_ITEMS:
         FixedItemSocketMessage fixedItemSocketMessage = (FixedItemSocketMessage) event.getMessage();
         if (fixedItemSocketMessage.isActiveSubscription) {
-          setupFixedItems(fixedItemSocketMessage.getData().getData());
+          setupPolls(fixedItemSocketMessage.getData().getData());
         }
         break;
 
@@ -897,6 +961,81 @@ public class StreamTimelinePresenter
         break;
     }
   }
+
+  private void setupNewItem(NewItemSocketMessage newItemSocketMessage,
+      PrintableModel printableModel) {
+    switch (newItemSocketMessage.getData().getList()) {
+      case ListType.TIMELINE_ITEMS:
+        printableModel.setTimelineGroup(PrintableModel.ITEMS_GROUP);
+        view.addNewItems(Collections.singletonList(printableModel));
+        break;
+
+      case ListType.TIMELINE_HIGHLIGHTED_SHOTS:
+        printableModel.setTimelineGroup(PrintableModel.HIGHLIGHTED_GROUP);
+        view.addNewHighlighted(Collections.<PrintableModel>singletonList(printableModel));
+        break;
+
+      case ListType.TIMELINE_POLLS:
+        printableModel.setTimelineGroup(PrintableModel.POLL_GROUP);
+        view.addNewPoll(Collections.<PrintableModel>singletonList(printableModel));
+        break;
+
+      case ListType.TIMELINE_PROMOTED_SHOTS:
+        printableModel.setTimelineGroup(PrintableModel.PROMOTED_GROUP);
+        view.addNewPromoted(Collections.<PrintableModel>singletonList(printableModel));
+        break;
+
+      case ListType.TIMELINE_VIDEOS:
+        renderExternalVideo(Collections.singletonList(newItemSocketMessage.getData().getItem()));
+        break;
+
+      case ListType.TIMELINE_FOLLOWING_USERS:
+        printableModel.setTimelineGroup(PrintableModel.USER_GROUP);
+        view.addNewFollowing(Collections.<PrintableModel>singletonList(printableModel));
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void setupUpdateItem(PrintableItem item, PrintableModel printableModel, String list) {
+    if (printableModel != null) {
+      switch (list) {
+        case ListType.TIMELINE_ITEMS:
+          printableModel.setTimelineGroup(PrintableModel.ITEMS_GROUP);
+          view.updateItem(printableModel);
+          break;
+
+        case ListType.TIMELINE_HIGHLIGHTED_SHOTS:
+          printableModel.setTimelineGroup(PrintableModel.HIGHLIGHTED_GROUP);
+          view.updateHighlighted(printableModel);
+          break;
+
+        case ListType.TIMELINE_POLLS:
+          printableModel.setTimelineGroup(PrintableModel.POLL_GROUP);
+          view.updatePoll(printableModel);
+          break;
+
+        case ListType.TIMELINE_PROMOTED_SHOTS:
+          printableModel.setTimelineGroup(PrintableModel.PROMOTED_GROUP);
+          view.updatePromoted(printableModel);
+          break;
+
+        case ListType.TIMELINE_VIDEOS:
+          updateExternalVideo((item));
+          break;
+
+        case ListType.TIMELINE_FOLLOWING_USERS:
+          printableModel.setTimelineGroup(PrintableModel.USER_GROUP);
+          view.updateFollowing(printableModel);
+          break;
+        default:
+          break;
+      }
+    }
+  }
+
 
   public void onVideoStarted() {
     FloatingPlayerState.Event event = new FloatingPlayerState.Event();
@@ -929,4 +1068,11 @@ public class StreamTimelinePresenter
     getCachedTimeline(idStream, currentTimelineType);
   }
 
+  public void markSeen(String type, String idItem) {
+    markSeenInteractor.markSeen(type, idItem, new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean aBoolean) {
+        /* no-op */
+      }
+    });
+  }
 }

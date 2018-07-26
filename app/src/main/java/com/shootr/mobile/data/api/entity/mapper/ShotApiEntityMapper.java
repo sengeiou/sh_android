@@ -4,10 +4,9 @@ import com.shootr.mobile.data.api.entity.EmbedUserApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
-
-import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
 public class ShotApiEntityMapper {
 
@@ -30,12 +29,11 @@ public class ShotApiEntityMapper {
     shotEntity.setType(shotApiEntity.getType());
 
     EmbedUserApiEntity userApiEntity = shotApiEntity.getUser();
-    checkNotNull(userApiEntity,
-        "Oh no! Shot from Api didn't have the User embeded! We can't do a proper mapping. idShot=%s",
-        shotApiEntity.getIdShot());
-    shotEntity.setIdUser(userApiEntity.getIdUser());
-    shotEntity.setUsername(userApiEntity.getUserName());
-    shotEntity.setUserPhoto(userApiEntity.getPhoto());
+    if (userApiEntity != null) {
+      shotEntity.setIdUser(userApiEntity.getIdUser());
+      shotEntity.setUsername(userApiEntity.getUserName());
+      shotEntity.setUserPhoto(userApiEntity.getPhoto());
+    }
 
     shotEntity.setIdShotParent(shotApiEntity.getIdShotParent());
     shotEntity.setIdUserParent(shotApiEntity.getIdUserParent());
@@ -49,10 +47,14 @@ public class ShotApiEntityMapper {
     shotEntity.setVideoDuration(shotApiEntity.getVideoDuration());
 
     Integer niceCount = shotApiEntity.getNiceCount();
-    shotEntity.setNiceCount(niceCount != null ? niceCount : 0);
+    shotEntity.setNiceCount(niceCount);
 
-    shotEntity.setBirth(shotApiEntity.getBirth());
-    shotEntity.setModified(shotApiEntity.getModified());
+    if (shotApiEntity.getBirth() != null) {
+      shotEntity.setBirth(new Date(shotApiEntity.getBirth()));
+    }
+    if (shotApiEntity.getModified() != null) {
+      shotEntity.setModified(new Date(shotApiEntity.getModified()));
+    }
     shotEntity.setRevision(shotApiEntity.getRevision());
 
     shotEntity.setProfileHidden(shotApiEntity.getProfileHidden());
@@ -61,8 +63,7 @@ public class ShotApiEntityMapper {
     shotEntity.setViews(shotApiEntity.getViews() != null ? shotApiEntity.getViews() : 0);
     shotEntity.setLinkClicks(
         shotApiEntity.getLinkClicks() != null ? shotApiEntity.getLinkClicks() : 0);
-    shotEntity.setReshootCounter(
-        shotApiEntity.getReshootCount() != null ? shotApiEntity.getReshootCount() : 0);
+    shotEntity.setReshootCounter(shotApiEntity.getReshootCount());
     shotEntity.setPromoted(shotApiEntity.getPromoted() != null ? shotApiEntity.getPromoted() : 0);
     shotEntity.setNiced(shotApiEntity.getNiced());
     shotEntity.setReshooted(shotApiEntity.getReshooted());
@@ -84,6 +85,7 @@ public class ShotApiEntityMapper {
     if (shotApiEntity.getOrder() != null) {
       shotEntity.setOrder(shotApiEntity.getOrder());
     }
+    shotEntity.setSeen(shotApiEntity.getSeen());
     return shotEntity;
   }
 

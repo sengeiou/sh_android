@@ -33,9 +33,10 @@ public class DataApiEntityMapper {
 
     DataEntity dataEntity = new DataEntity();
 
-    ArrayList<PrintableItemEntity> printableItemEntities =
-        getPrintableItemEntities(apiEntity.getData());
-    dataEntity.setData(printableItemEntities);
+    if (apiEntity != null) {
+      ArrayList<PrintableItemEntity> printableItemEntities = getPrintableItemEntities(apiEntity.getData());
+      dataEntity.setData(printableItemEntities);
+    }
 
     return dataEntity;
   }
@@ -60,6 +61,9 @@ public class DataApiEntityMapper {
           .equals(PrintableType.EXTERNAL_VIDEO)) {
         printableItemEntities.add(externalVideoApiEntityMapper.transform(
             (ExternalVideoApiEntity) printableItemApiEntity));
+      } else if (printableItemApiEntity != null && printableItemApiEntity.getResultType()
+          .equals(PrintableType.USER)) {
+        printableItemEntities.add((PrintableItemEntity) printableItemApiEntity);
       }
     }
     return printableItemEntities;

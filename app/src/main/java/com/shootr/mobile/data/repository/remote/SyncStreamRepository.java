@@ -25,6 +25,7 @@ import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamUpdateParameters;
+import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.stream.ExternalStreamRepository;
@@ -249,6 +250,10 @@ public class SyncStreamRepository
   }
 
   @Override public TimelineReposition getTimelineReposition(String idStrea, String filter) {
+    throw new RuntimeException("Method not implemented yet!");
+  }
+
+  @Override public PromotedTiers getPromotedTiers() {
     throw new RuntimeException("Method not implemented yet!");
   }
 

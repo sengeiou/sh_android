@@ -10,6 +10,7 @@ public class BaseMessageEntitiesApiEntity {
   private ArrayList<ImageMediaApiEntity> images;
   private ArrayList<MentionsApiEntity> mentions;
   private ArrayList<CardApiEntity> cards;
+  private PromotedApiEntity promoted;
 
   public ArrayList<UrlApiEntity> getUrls() {
     return urls;
@@ -57,5 +58,13 @@ public class BaseMessageEntitiesApiEntity {
 
   public void setCards(ArrayList<CardApiEntity> cards) {
     this.cards = cards;
+  }
+
+  public PromotedApiEntity getPromoted() {
+    return promoted;
+  }
+
+  public void setPromoted(PromotedApiEntity promoted) {
+    this.promoted = promoted;
   }
 }

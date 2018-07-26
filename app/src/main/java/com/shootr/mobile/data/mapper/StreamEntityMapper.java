@@ -14,6 +14,7 @@ public class StreamEntityMapper {
   private static final int CAN_REPLY = 2;
   private static final int CAN_H1_ITEM = 4;
   private static final int CAN_H2_ITEM = 8;
+  private static final int CAN_SEND_PROMOTED = 16;
 
   private final UserEntityMapper userEntityMapper;
   private final SessionRepository sessionRepository;
@@ -130,12 +131,14 @@ public class StreamEntityMapper {
     stream.setCanReply((permissionsInDecimal & CAN_REPLY) == CAN_REPLY);
     stream.setCanPinItem((permissionsInDecimal & CAN_H1_ITEM) == CAN_H1_ITEM);
     stream.setCanFixItem((permissionsInDecimal & CAN_H2_ITEM) == CAN_H2_ITEM);
+    stream.setCanPostPromoted((permissionsInDecimal & CAN_SEND_PROMOTED) == CAN_SEND_PROMOTED);
   }
 
   private void setPermissionsToBinary(Stream stream, StreamEntity streamEntity) {
 
     String permissions = "";
 
+    permissions = permissions + (stream.canPostPromoted() ? "1" : "0");
     permissions = permissions + (stream.canFixItem() ? "1" : "0");
     permissions = permissions + (stream.canPinItem() ? "1" : "0");
     permissions = permissions + (stream.canReply() ? "1" : "0");

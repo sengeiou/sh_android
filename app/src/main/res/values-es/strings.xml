@@ -599,5 +599,22 @@
   <string name="show_previous">Mostrar</string>
   <string name="hide_previous">Ocultar</string>
   <string name="privacy_info">Pulsa \"Aceptar\" para aceptar nuestras condiciones</string>
+  <string name="promoted_shot_first_paragraph">¡El Super Shot es un mensaje que destaca entre la multitud!</string>
+  <string name="promoted_shot_second_paragraph">Al comprar un Super Shot, tu mensaje permanece anclado en la parte superior del stream. Cuanto más gastas, más tiempo se queda.</string>
+  <string name="promoted_shot_third_paragraph">Así, el creador del stream y toda la gente conectada ve tu mensaje. El creador también gana una parte de la compra.</string>
+  <string name="free_shot">Canjear y Enviar</string>
+  <string name="learn_more">MÁS INFO</string>
+  <string name="send_a_super_shot">Super Shot</string>
+  <string name="buy_and_shoot"><![CDATA[COMPRAR Y ENVIAR]]></string>
+  <string name="pending_receipts">Has comprado Super Shots que están pendientes de usar. Desliza la barra para encontrarlos.</string>
+  <string name="error_validating_receipt">Se ha producido un error. Por favor, inténtalo más tarde.</string>
+  <string name="error_sending_promoted_shot">El Super Shot se ha comprado correctamente pero ha ocurrido un error al enviarse. Puedes volver a enviar este Super Shot sin coste adicional.</string>
+  <string name="promoted_info_title">Super Shots</string>
+  <plurals name="promoted_minutes">
+    <item quantity="one">%s min</item>
+    <item quantity="other">%s min</item>
+    <item quantity="zero">%s min</item>
+  </plurals>
   <string name="promoted_follow">Seguir</string>
+  <string name="new_promoted_shot_discard_message">¿Descartar Super Shot?</string>
 </resources>

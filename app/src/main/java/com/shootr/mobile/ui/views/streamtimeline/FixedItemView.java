@@ -7,7 +7,7 @@ public interface FixedItemView {
 
   void hideFixedShot();
 
-  void showDismissDialog(String idShot);
+  void showDismissDialog(ShotModel shotModel);
 
   void setHighlightShotBackground(Boolean isAdmin);
 

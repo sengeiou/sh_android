@@ -60,7 +60,7 @@ import timber.log.Timber;
     ShootrPhotoService.class, PhotoService.class,
 }, complete = false, library = true) public final class ApiModule {
 
-  public static final String PRODUCTION_ENDPOINT_URL = "https://api.shootr.com/v1";
+  public static final String PRODUCTION_ENDPOINT_URL = "http://tst-api.shootr.com/v1";
   public static final String PRE_PRODUCTION_ENDPOINT_URL = "https://pre-api2.shootr.com/v1";
 
   @Provides @Singleton PhotoService providePhotoService(ShootrPhotoService photoService) {

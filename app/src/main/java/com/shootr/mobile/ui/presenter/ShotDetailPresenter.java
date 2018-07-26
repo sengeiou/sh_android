@@ -184,7 +184,7 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     if (shotDetail.getNicers() != null && !shotDetail.getNicers().isEmpty()) {
       setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
     }
-    if (shotDetail.getShot().isReshooted()) {
+    if (shotDetail.getShot().getReshooted()) {
       shotDetailView.showUndoReshootMenu();
     } else {
       shotDetailView.showReshootMenu();

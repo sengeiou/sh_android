@@ -86,6 +86,8 @@
     <color name="shootr_orange">#fb830e</color>
     <color name="bubble_color">#F5F5F5</color>
     <color name="pressed_button">#80D8FF</color>
+    <color name="promoted_pressed">#80D8FF</color>
+
 
 
 </resources>

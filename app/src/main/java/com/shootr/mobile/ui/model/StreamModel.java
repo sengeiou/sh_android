@@ -32,6 +32,7 @@ public class StreamModel implements Serializable, SearchableModel, PrintableMode
     private boolean canReply;
     private boolean canPinItem;
     private boolean canFixItem;
+    private boolean canPostPromoted;
     private boolean showBadge;
     private boolean shouldHideStream;
     private String shareLink;
@@ -273,6 +274,14 @@ public class StreamModel implements Serializable, SearchableModel, PrintableMode
         this.canFixItem = canFixItem;
     }
 
+    public boolean canPostPromoted() {
+        return canPostPromoted;
+    }
+
+    public void setCanPostPromoted(boolean canPostPromoted) {
+        this.canPostPromoted = canPostPromoted;
+    }
+
     public boolean shouldShowBadge() {
         return showBadge;
     }
@@ -315,5 +324,9 @@ public class StreamModel implements Serializable, SearchableModel, PrintableMode
 
     @Override public Long getOrder() {
         return null;
+    }
+
+    @Override public boolean isDeleted() {
+        return false;
     }
 }

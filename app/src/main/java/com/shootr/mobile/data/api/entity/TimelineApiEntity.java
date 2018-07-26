@@ -10,11 +10,12 @@ public class TimelineApiEntity {
   private StreamEntity stream;
   @SerializedName("connected")
   private ParticipantsEntity participants;
-  @SerializedName("header2")
-  private DataApiEntity fixed;
-  @SerializedName("header1")
-  private DataApiEntity pinned;
+  private ItemsApiEntity polls;
+  private ItemsApiEntity highlightedShots;
+  private ItemsApiEntity promotedShots;
+  private ItemsApiEntity videos;
   private ItemsApiEntity items;
+  private ItemsApiEntity followings;
   private String filter;
   private boolean newBadgeContent;
   private ParamsEntity params;
@@ -34,22 +35,6 @@ public class TimelineApiEntity {
 
   public void setParticipants(ParticipantsEntity participants) {
     this.participants = participants;
-  }
-
-  public DataApiEntity getFixed() {
-    return fixed;
-  }
-
-  public void setFixed(DataApiEntity fixed) {
-    this.fixed = fixed;
-  }
-
-  public DataApiEntity getPinned() {
-    return pinned;
-  }
-
-  public void setPinned(DataApiEntity pinned) {
-    this.pinned = pinned;
   }
 
   public ItemsApiEntity getItems() {
@@ -82,5 +67,45 @@ public class TimelineApiEntity {
 
   public void setParams(ParamsEntity params) {
     this.params = params;
+  }
+
+  public ItemsApiEntity getPolls() {
+    return polls;
+  }
+
+  public void setPolls(ItemsApiEntity polls) {
+    this.polls = polls;
+  }
+
+  public ItemsApiEntity getHighlightedShots() {
+    return highlightedShots;
+  }
+
+  public void setHighlightedShots(ItemsApiEntity highlightedShots) {
+    this.highlightedShots = highlightedShots;
+  }
+
+  public ItemsApiEntity getPromotedShots() {
+    return promotedShots;
+  }
+
+  public void setPromotedShots(ItemsApiEntity promotedShots) {
+    this.promotedShots = promotedShots;
+  }
+
+  public ItemsApiEntity getVideos() {
+    return videos;
+  }
+
+  public void setVideos(ItemsApiEntity videos) {
+    this.videos = videos;
+  }
+
+  public ItemsApiEntity getFollowings() {
+    return followings;
+  }
+
+  public void setFollowings(ItemsApiEntity followings) {
+    this.followings = followings;
   }
 }

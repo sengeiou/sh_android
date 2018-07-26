@@ -6,4 +6,5 @@
     <string name="help_service_base_url">http://help.shootr.com</string>
     <string name="report_base_url">https://report.shootr.com/#/?token=%1$s&amp;idShot=%2$s</string>
     <string name="share_shot_base_url">http://web.shootr.com/s/%1$s?%2$s</string>
+    <string name="promoted_info">https://shootrnetwork.freshdesk.com/support/home</string>
 </resources>

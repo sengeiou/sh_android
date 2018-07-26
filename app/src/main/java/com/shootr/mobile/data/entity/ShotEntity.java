@@ -2,7 +2,7 @@ package com.shootr.mobile.data.entity;
 
 import com.shootr.mobile.domain.model.PrintableType;
 
-public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity {
+public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity, SeenableEntity {
 
   private String idShot;
 
@@ -33,12 +33,15 @@ public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity
   private Integer isPadding;
   private Integer isFromHolder;
   private Integer isFromContributor;
-  private boolean niced;
-  private boolean reshooted;
+  private Boolean niced;
+  private Boolean reshooted;
   private Long nicedTime;
   private Long reshootedTime;
   private String shareLink;
   private Long order;
+  private String receipt;
+  private String receiptType;
+  private Boolean seen;
 
   public String getIdShot() {
     return idShot;
@@ -212,7 +215,7 @@ public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity
     return niced;
   }
 
-  public void setNiced(boolean niced) {
+  public void setNiced(Boolean niced) {
     this.niced = niced;
   }
 
@@ -220,7 +223,7 @@ public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity
     return reshooted;
   }
 
-  public void setReshooted(boolean reshooted) {
+  public void setReshooted(Boolean reshooted) {
     this.reshooted = reshooted;
   }
 
@@ -258,5 +261,29 @@ public class ShotEntity extends BaseMessageEntity implements PrintableItemEntity
 
   public void setOrder(Long order) {
     this.order = order;
+  }
+
+  public String getReceipt() {
+    return receipt;
+  }
+
+  public void setReceipt(String receipt) {
+    this.receipt = receipt;
+  }
+
+  public String getReceiptType() {
+    return receiptType;
+  }
+
+  public void setReceiptType(String receiptType) {
+    this.receiptType = receiptType;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
   }
 }

@@ -8,12 +8,14 @@ import com.shootr.mobile.data.api.entity.ImageMediaApiEntity;
 import com.shootr.mobile.data.api.entity.MentionsApiEntity;
 import com.shootr.mobile.data.api.entity.StreamIndexApiEntity;
 import com.shootr.mobile.data.api.entity.UrlApiEntity;
+import com.shootr.mobile.data.entity.BackgroundEntity;
 import com.shootr.mobile.data.entity.BaseMessagePollEntity;
 import com.shootr.mobile.data.entity.CardEntity;
 import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ImageMediaEntity;
 import com.shootr.mobile.data.entity.ImageSizeEntity;
 import com.shootr.mobile.data.entity.MentionsEntity;
+import com.shootr.mobile.data.entity.PromotedEntity;
 import com.shootr.mobile.data.entity.SizeEntity;
 import com.shootr.mobile.data.entity.StreamIndexEntity;
 import com.shootr.mobile.data.entity.UrlEntity;
@@ -34,6 +36,7 @@ public class EntitiesApiEntityMapper {
       setupImages(entitiesApiEntity, entitiesEntity);
       setupMentions(entitiesApiEntity, entitiesEntity);
       setupCards(entitiesApiEntity, entitiesEntity);
+      setupPromoted(entitiesApiEntity, entitiesEntity);
     }
     return entitiesEntity;
   }
@@ -156,6 +159,27 @@ public class EntitiesApiEntityMapper {
       }
     }
     entitiesEntity.setCards(cardEntities);
+  }
+
+  private void setupPromoted(BaseMessageEntitiesApiEntity entitiesApiEntity, EntitiesEntity entitiesEntity) {
+    if (entitiesApiEntity.getPromoted() != null) {
+      PromotedEntity promotedEntity = new PromotedEntity();
+      promotedEntity.setCurrency(entitiesApiEntity.getPromoted().getCurrency());
+      promotedEntity.setDisplayPrice(entitiesApiEntity.getPromoted().getDisplayPrice());
+      promotedEntity.setPrice(entitiesApiEntity.getPromoted().getPrice());
+
+      BackgroundEntity backgroundEntity = new BackgroundEntity();
+      if (entitiesApiEntity.getPromoted().getBackground() != null) {
+        backgroundEntity.setAngle(entitiesApiEntity.getPromoted().getBackground().getAngle());
+        backgroundEntity.setColors(entitiesApiEntity.getPromoted().getBackground().getColors());
+        backgroundEntity.setType(entitiesApiEntity.getPromoted().getBackground().getType());
+      }
+
+      promotedEntity.setBackground(backgroundEntity);
+
+      entitiesEntity.setPromotedEntity(promotedEntity);
+
+    }
   }
 
 }

@@ -267,7 +267,7 @@
     <item quantity="one">%d shot novo</item>
     <item quantity="other">%d shots novos</item>
   </plurals>
-  <string name="new_shot_discard_message">Descartar foto?</string>
+  <string name="new_shot_discard_message">Descartar shot?</string>
   <string name="new_shot_placeholder">Escreva algo…</string>
   <string name="new_shot_repeated">Whoops! Você já publicou isso</string>
   <string name="new_stream_description_label">Descrição</string>
@@ -598,4 +598,21 @@
   <string name="show_previous">Mostrar</string>
   <string name="hide_previous">ocultar</string>
   <string name="privacy_info">Clique em \"Aceitar\" para aceitar as nossas condições.</string>
+  <string name="promoted_shot_first_paragraph">O Super Shot é uma mensagem que se destaca na multidão!</string>
+  <string name="promoted_shot_second_paragraph">Ao comprar um Super Shot, a sua mensagem permanece ancorada na parte superior do stream. Quanto mais você investe, mais tempo ele fica.</string>
+  <string name="promoted_shot_third_paragraph">Assim, o criador do stream e todas as pessoas conectadas veem a sua mensagem. O criador também ganha uma parte da compra.</string>
+  <string name="free_shot">Redimir e Enviar</string>
+  <string name="learn_more">MAIS INFORMAÇÃO</string>
+  <string name="send_a_super_shot">Super Shot</string>
+  <string name="buy_and_shoot"><![CDATA[COMPRE E ENVIE]]></string>
+  <string name="pending_receipts">Você comprou Super Shots que estão pendentes de usar. Deslize a barra para encontrá-los.</string>
+  <string name="error_validating_receipt">Houve um erro. Tente novamente mais tarde.</string>
+  <string name="error_sending_promoted_shot">O Super Shot foi comprado corretamente mas houve um erro ao ser enviado. Você pode voltar a enviar este Super Shot sem custo adicional.</string>
+  <string name="promoted_info_title">Super Shots</string>
+  <plurals name="promoted_minutes">
+    <item quantity="one">%s min</item>
+    <item quantity="other">%s min</item>
+    <item quantity="zero">%s min</item>
+  </plurals>
+  <string name="new_promoted_shot_discard_message">Descartar Super Shot?</string>
 </resources>

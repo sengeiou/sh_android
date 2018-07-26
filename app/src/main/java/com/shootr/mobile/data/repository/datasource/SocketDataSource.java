@@ -13,6 +13,8 @@ public interface SocketDataSource {
 
   boolean subscribeToShotDetail(String subscriptionType, String idShot);
 
+  void subscribeToPromotedTiers(String subscriptionType);
+
   boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity);
 
   boolean getNicestTimeline(String idStream, String filter, PaginationEntity paginationEntity,
@@ -26,4 +28,10 @@ public interface SocketDataSource {
   void updateSocketSubscription(String idStream, String filter, ParamsEntity paramsEntity);
 
   void unsubscribeShotDetail(String idShot);
+
+  void getPromotedTiers();
+
+  void verifyReceipt(String receipt);
+
+  void markSeen(String type, String itemId);
 }

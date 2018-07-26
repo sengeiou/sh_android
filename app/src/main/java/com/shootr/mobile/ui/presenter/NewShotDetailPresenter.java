@@ -152,7 +152,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
     }
     setupNewShotBox(shotDetail);
 
-    if (((Shot) shotDetail.getShot()).isReshooted()) {
+    if (((Shot) shotDetail.getShot()).getReshooted()) {
       view.showUndoReshootMenu();
     } else {
       view.showReshootMenu();
@@ -164,6 +164,10 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
       view.showNewShotTextBox();
     } else {
       view.showViewOnlyTextBox();
+    }
+
+    if (shotDetail.getStream().canPostPromoted()) {
+      view.showPromotedButton();
     }
   }
 
@@ -217,8 +221,8 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
   }
 
   private void initializeNewShotBarDelegate(ShotModel shotModel) {
-    view.setupNewShotBarDelegate(shotModel);
     view.initializeNewShotBarPresenter(shotModel.getStreamId());
+    view.setupNewShotBarDelegate(shotModel);
   }
 
   public void markNiceShot(final ShotModel shotModel) {
@@ -360,13 +364,18 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
       case SocketMessage.UPDATE_ITEM_DATA:
         UpdateItemSocketMessage updateItemSocketMessage =
             (UpdateItemSocketMessage) event.getMessage();
-        updateItem(updateItemSocketMessage.getData().getItem(), updateItemSocketMessage.getData().getList());
+        if (updateItemSocketMessage.getData().getItem() instanceof Shot) {
+          updateItem(updateItemSocketMessage.getData().getItem(),
+              updateItemSocketMessage.getData().getList());
+        }
         break;
 
       case SocketMessage.NEW_ITEM_DATA:
         NewItemSocketMessage newItemSocketMessage = (NewItemSocketMessage) event.getMessage();
-        addNewItem(newItemSocketMessage.getData().getItem(),
-            newItemSocketMessage.getData().getList());
+        if (newItemSocketMessage.getData().getItem() instanceof Shot) {
+          addNewItem(newItemSocketMessage.getData().getItem(),
+              newItemSocketMessage.getData().getList());
+        }
         break;
       default:
         break;

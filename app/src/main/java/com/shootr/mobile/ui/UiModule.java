@@ -29,6 +29,7 @@ import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
+import com.shootr.mobile.ui.activities.PostPromotedShotActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
@@ -58,6 +59,8 @@ import com.shootr.mobile.ui.fragments.GenericSearchFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.widgets.MessageBox;
+import com.shootr.mobile.ui.widgets.PromotedMessageBox;
+import com.shootr.mobile.ui.widgets.PromotedShotInfoDialog;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
@@ -114,7 +117,8 @@ import javax.inject.Singleton;
     OnBoardingUserActivity.class,
     GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class,
       PollOptionVotedActivity.class, HiddenPollResultsActivity.class, HistoryActivity.class,
-      NewShotDetailActivity.class, PrivacyLawActivity.class
+      NewShotDetailActivity.class, PrivacyLawActivity.class, PostPromotedShotActivity.class,
+      PromotedMessageBox.class, PromotedShotInfoDialog.class
   },
   complete = false, library = true) public class UiModule {
 

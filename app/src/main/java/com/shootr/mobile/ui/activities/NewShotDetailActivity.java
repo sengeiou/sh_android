@@ -45,6 +45,7 @@ import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.NewShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NewShotDetailView;
+import com.shootr.mobile.ui.widgets.PromotedMessageBox;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
@@ -74,9 +75,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   private static final int OFFSET_WITH_REPLIES = 400;
 
   @BindView(R.id.shot_detail_list) RecyclerView detailList;
-  @BindView(R.id.shot_bar_text) TextView replyPlaceholder;
-  @BindView(R.id.shot_bar_drafts) View replyDraftsButton;
-  @BindView(R.id.detail_new_shot_bar) View newShotBar;
+  @BindView(R.id.detail_new_shot_bar) PromotedMessageBox newShotBar;
   @BindView(R.id.container) View container;
   @BindView(R.id.stream_name) TextView streamName;
   @BindView(R.id.show_action) TextView showParents;
@@ -349,32 +348,51 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   public void setupNewShotBarDelegate(final ShotModel shotModel) {
-    if (shotModel != null) {
-      idUser = shotModel.getIdUser();
-    }
-    newShotBarViewDelegate =
-        new NewShotBarViewDelegate(photoPickerController, replyDraftsButton, feedbackMessage) {
-          @Override public void openNewShotView() {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(NewShotDetailActivity.this) //
-                .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
-                .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
-            startActivity(newShotIntent);
-          }
-
-          @Override public void openNewShotViewWithImage(File image) {
-            Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                .from(NewShotDetailActivity.this) //
-                .withImage(image) //
-                .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
-                .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
-            startActivity(newShotIntent);
-          }
-
-          @Override public void openEditTopicDialog() {
+    if (!newShotBar.isInited()) {
+      newShotBar.init(this, photoPickerController, imageLoader, feedbackMessage,
+          new PromotedMessageBox.OnActionsClick() {
+            @Override public void onTopicClick() {
             /* no-op */
-          }
-        };
+            }
+
+            @Override public void onNewShotClick() {
+              Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(NewShotDetailActivity.this) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
+                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
+              startActivity(newShotIntent);
+            }
+
+            @Override public void onShotWithImageClick(File image) {
+              Intent newShotIntent = PostNewShotActivity.IntentBuilder //
+                  .from(NewShotDetailActivity.this) //
+                  .withImage(image) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
+                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
+              startActivity(newShotIntent);
+            }
+
+            @Override public void onAttachClick() {
+              newShotBarPresenter.newShotFromImage();
+            }
+
+            @Override public void onSendClick() {
+            /* no-op */
+            }
+
+            @Override public void onCheckInClick() {
+              //TODO
+            }
+
+            @Override public void onPromotedClick() {
+              Intent newShotIntent = PostPromotedShotActivity.IntentBuilder //
+                  .from(NewShotDetailActivity.this) //
+                  .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
+                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
+              startActivity(newShotIntent);
+            }
+          }, false, null, true, shotModel.getIdShot(), shotModel.getStreamId());
+    }
   }
 
   @Override public void shareShot(ShotModel mainShot) {
@@ -441,7 +459,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void setReplyUsername(String username) {
-    replyPlaceholder.setText(getString(R.string.reply_placeholder_pattern, username));
+    newShotBar.setHintText(getString(R.string.reply_placeholder_pattern, username));
   }
 
   @Override public void renderShowParents() {
@@ -508,7 +526,10 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showNewShotTextBox() {
-    newShotBar.setVisibility(View.VISIBLE);
+    if (newShotBar != null) {
+      newShotBar.setVisibility(View.VISIBLE);
+      newShotBar.showMessageBox();
+    }
   }
 
   @Override public void showViewOnlyTextBox() {
@@ -525,6 +546,15 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
     undoReshootMenuItem.setVisible(false);
   }
 
+  @Override public void showPromotedButton() {
+    if (sessionRepository.isPromotedShotActivated()) {
+      if (newShotBar != null) {
+        newShotBar.setCanPostPromotedShot(true);
+        newShotBar.showPromotedButton();
+      }
+    }
+  }
+
   @Override
   public void renderShotDetail(List<PrintableModel> mainShot, List<PrintableModel> promotedItem,
       List<PrintableModel> subscribersItem, List<PrintableModel> basicItems,
@@ -538,11 +568,11 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void openNewShotView() {
-    newShotBarViewDelegate.openNewShotView();
+    newShotBar.getNewShotBarViewDelegate().openNewShotView();
   }
 
   @Override public void pickImage() {
-    newShotBarViewDelegate.pickImage();
+    newShotBar.pickImage();
   }
 
   @Override public void showHolderOptions() {
@@ -554,7 +584,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void openNewShotViewWithImage(File image) {
-    newShotBarViewDelegate.openNewShotViewWithImage(image);
+    newShotBar.openNewShotViewWithImage(image);
   }
 
   @Override public void openEditTopicDialog() {
@@ -562,11 +592,11 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showDraftsButton() {
-    newShotBarViewDelegate.showDraftsButton();
+    newShotBar.showDraftsButton();
   }
 
   @Override public void hideDraftsButton() {
-    newShotBarViewDelegate.hideDraftsButton();
+    newShotBar.hideDraftsButton();
   }
 
   @Override public void onStart() {
@@ -612,18 +642,6 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
 
   @OnClick(R.id.show_action) public void onShowParentsClick() {
     detailPresenter.showParentsPressed();
-  }
-
-  @OnClick(R.id.shot_bar_text) public void onReplyClick() {
-    newShotBarPresenter.newShotFromTextBox();
-  }
-
-  @OnClick(R.id.shot_bar_photo) public void onStartNewShotWithPhoto() {
-    newShotBarPresenter.newShotFromImage();
-  }
-
-  @OnClick(R.id.shot_bar_drafts) public void openDrafts() {
-    startActivity(new Intent(this, DraftsActivity.class));
   }
 
   private void sendScreenToAnalythics() {

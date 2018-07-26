@@ -26,6 +26,10 @@ public class TopicModel implements PrintableModel, EntityContainable {
     return 0L;
   }
 
+  @Override public boolean isDeleted() {
+    return false;
+  }
+
   @Override public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;

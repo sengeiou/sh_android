@@ -15,6 +15,8 @@ public class ExternalVideoApiEntityMapper {
 
     externalVideoEntity.setProvider(apiEntity.getProvider());
     externalVideoEntity.setVideoId(apiEntity.getVideoId());
+    externalVideoEntity.setDeleted(apiEntity.getDeleted());
+    externalVideoEntity.setIdExternalVideo(apiEntity.getIdExternalVideo());
 
     return externalVideoEntity;
   }

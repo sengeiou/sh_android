@@ -268,7 +268,7 @@
     <item quantity="one">%d shot nou</item>
     <item quantity="other">%d shots nous</item>
   </plurals>
-  <string name="new_shot_discard_message">Descartar foto?</string>
+  <string name="new_shot_discard_message">Descartar shot?</string>
   <string name="new_shot_placeholder">Missatge</string>
   <string name="new_shot_repeated">Whoops! Ja has publicat això</string>
   <string name="new_stream_description_label">Descripció</string>
@@ -599,4 +599,21 @@
   <string name="show_previous">Mostrar</string>
   <string name="hide_previous">ocultar</string>
   <string name="privacy_info">Prem \"Acceptar\" per acceptar les nostres condicions.</string>
+  <string name="promoted_shot_first_paragraph">El Super Shot és un missatge que destaca entre la multitud!</string>
+  <string name="promoted_shot_second_paragraph">Al comprar un Super Shot, el teu missatge es manté fixat a la part superior de l\'stream. Com més gastes, més temps es manté.</string>
+  <string name="promoted_shot_third_paragraph">Així, el creador del stream i tota la gent connectada veu el teu missatge. El creador també guanya una part de la compra.</string>
+  <string name="free_shot">Bescanviar i Enviar</string>
+  <string name="learn_more">MÉS INFORMACIÓ</string>
+  <string name="send_a_super_shot">Super Shot</string>
+  <string name="buy_and_shoot"><![CDATA[COMPRAR I ENVIAR]]></string>
+  <string name="pending_receipts">Has comprat Super Shots que estan pendents d\'utilitzar. Llisca la barra per trobar-los.</string>
+  <string name="error_validating_receipt">S\'ha produït un error. Si us plau, intenta-ho més tard.</string>
+  <string name="error_sending_promoted_shot">El Super Shot s\'ha comprat correctament però s\'ha produït un error a l\'enviar-se. Pots tornar a enviar aquest Super Shot sense cost addicional.</string>
+  <string name="promoted_info_title">Super Shots</string>
+  <plurals name="promoted_minutes">
+    <item quantity="one">%s min</item>
+    <item quantity="other">%s min</item>
+    <item quantity="zero">%s min</item>
+  </plurals>
+  <string name="new_promoted_shot_discard_message">Descartar Super Shot?</string>
 </resources>

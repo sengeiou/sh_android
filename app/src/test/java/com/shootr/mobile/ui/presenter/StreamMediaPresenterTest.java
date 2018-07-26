@@ -47,7 +47,8 @@ public class StreamMediaPresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper());
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper(
+        sessionRepository));
     presenter = new StreamMediaPresenter(getStreamMediaInteractor, getOlderStreamMediaInteractor,
         shotModelMapper, errorMessageFactory);
     presenter.setView(streamMediaView);

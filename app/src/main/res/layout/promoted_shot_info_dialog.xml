@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+  <RelativeLayout
+      android:id="@+id/header_container"
+      android:layout_width="match_parent"
+      android:layout_height="56dp"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:padding="16dp"
+        android:textSize="18sp"
+        android:text="@string/promoted_info_title"
+        />
+
+    <ImageButton
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="?selectableItemBackground"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        app:srcCompat="@drawable/ic_close_black"
+        />
+  </RelativeLayout>
+
+  <View
+      android:id="@+id/separator"
+      android:layout_width="match_parent"
+      android:layout_height="0.5dp"
+      android:background="@color/separator"
+      app:layout_constraintTop_toBottomOf="@+id/header_container"
+      />
+
+  <TextView
+      android:id="@+id/promoted_shot_first_paragraph"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:fontFamily="sans-serif"
+      android:textColor="@color/black"
+      android:layout_alignParentLeft="true"
+      android:padding="16dp"
+      android:textSize="16sp"
+      android:text="@string/promoted_shot_first_paragraph"
+      app:layout_constraintTop_toBottomOf="@+id/separator"
+      />
+
+  <ImageView
+      android:id="@+id/info_image"
+      android:layout_width="match_parent"
+      android:layout_height="64dp"
+      android:src="@drawable/info_image"
+      app:layout_constraintTop_toBottomOf="@+id/promoted_shot_first_paragraph"
+      android:layout_marginTop="20dp"
+      />
+
+  <TextView
+      android:id="@+id/promoted_shot_second_paragraph"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:fontFamily="sans-serif"
+      android:textColor="@color/black"
+      android:layout_alignParentLeft="true"
+      android:padding="16dp"
+      android:textSize="16sp"
+      android:layout_marginTop="20dp"
+      android:text="@string/promoted_shot_second_paragraph"
+      app:layout_constraintTop_toBottomOf="@+id/info_image"
+      />
+
+  <TextView
+      android:id="@+id/promoted_shot_third_paragraph"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:fontFamily="sans-serif"
+      android:textColor="@color/black"
+      android:layout_alignParentLeft="true"
+      android:padding="16dp"
+      android:textSize="16sp"
+      android:text="@string/promoted_shot_third_paragraph"
+      app:layout_constraintTop_toBottomOf="@+id/promoted_shot_second_paragraph"
+      />
+
+  <TextView
+      android:id="@+id/learn_more"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:paddingLeft="16dp"
+      android:paddingRight="16dp"
+      android:fontFamily="sans-serif"
+      android:textColor="@color/accent"
+      android:layout_alignParentLeft="true"
+      android:textStyle="bold"
+      android:textAllCaps="true"
+      android:padding="16dp"
+      android:textSize="14sp"
+      android:text="@string/learn_more"
+      app:layout_constraintTop_toBottomOf="@+id/promoted_shot_third_paragraph"
+      />
+
+
+</android.support.constraint.ConstraintLayout>

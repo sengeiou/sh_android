@@ -125,6 +125,10 @@ public class BaseMessageModel implements Serializable, PrintableModel, EntityCon
     return 0L;
   }
 
+  @Override public boolean isDeleted() {
+    return false;
+  }
+
   public ArrayList<String> getTimelineFlags() {
     return timelineFlags;
   }

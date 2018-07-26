@@ -1,5 +1,7 @@
 package com.shootr.mobile.data.mapper;
 
+import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageEntity;
+import com.shootr.mobile.data.entity.PromotedTiersSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.FixedItemSocketMessageEntity;
@@ -22,14 +24,17 @@ import com.shootr.mobile.domain.model.FixedItemSocketMessage;
 import com.shootr.mobile.domain.model.Item;
 import com.shootr.mobile.domain.model.NewBadgeContentSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
+import com.shootr.mobile.domain.model.PartialUpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.Participants;
 import com.shootr.mobile.domain.model.ParticipantsSocketMessage;
 import com.shootr.mobile.domain.model.PinnedItemSocketMessage;
+import com.shootr.mobile.domain.model.PromotedTiersSocketMessage;
 import com.shootr.mobile.domain.model.ShotDetailSocketMessage;
 import com.shootr.mobile.domain.model.ShotUpdateSocketMessage;
 import com.shootr.mobile.domain.model.SocketMessage;
 import com.shootr.mobile.domain.model.TimelineSocketMessage;
 import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
+import com.shootr.mobile.domain.model.user.PromotedTiers;
 import javax.inject.Inject;
 
 public class SocketMessageEntityMapper {
@@ -38,14 +43,23 @@ public class SocketMessageEntityMapper {
   private final TimelineEntityMapper timelineEntityMapper;
   private final DataEntityMapper dataEntityMapper;
   private final ShotDetailEntityMapper shotDetailEntityMapper;
+  private final PromotedTierEntityMapper promotedTierEntityMapper;
+  private final PromotedReceiptEntityMapper promotedReceiptEntityMapper;
+  private final PrintableEntityMapper printableEntityMapper;
 
   @Inject public SocketMessageEntityMapper(ShotEntityMapper shotApiEntityMapper,
       TimelineEntityMapper timelineEntityMapper, DataEntityMapper dataEntityMapper,
-      ShotDetailEntityMapper shotDetailEntityMapper) {
+      ShotDetailEntityMapper shotDetailEntityMapper,
+      PromotedTierEntityMapper promotedTierEntityMapper,
+      PromotedReceiptEntityMapper promotedReceiptEntityMapper,
+      PrintableEntityMapper printableEntityMapper) {
     this.shotEntityMapper = shotApiEntityMapper;
     this.timelineEntityMapper = timelineEntityMapper;
     this.dataEntityMapper = dataEntityMapper;
     this.shotDetailEntityMapper = shotDetailEntityMapper;
+    this.promotedTierEntityMapper = promotedTierEntityMapper;
+    this.promotedReceiptEntityMapper = promotedReceiptEntityMapper;
+    this.printableEntityMapper = printableEntityMapper;
   }
 
   public SocketMessage transform(SocketMessageEntity socketMessage) {
@@ -74,9 +88,10 @@ public class SocketMessageEntityMapper {
           newItemSocketMessage.setEventParams(transformParams(socketMessage.getEventParams()));
 
           Item item = new Item();
-          item.setItem(shotEntityMapper.transform(
-              (ShotEntity) ((NewItemSocketMessageEntity) socketMessage).getData().getItem()));
           item.setList(((NewItemSocketMessageEntity) socketMessage).getData().getList());
+
+          item.setItem(printableEntityMapper.map(
+              ((NewItemSocketMessageEntity) socketMessage).getData().getItem()));
 
           newItemSocketMessage.setData(item);
 
@@ -92,13 +107,33 @@ public class SocketMessageEntityMapper {
           updateItemSocketMessage.setEventParams(transformParams(socketMessage.getEventParams()));
 
           item = new Item();
-          item.setItem(shotEntityMapper.transform(
-              (ShotEntity) ((UpdateItemSocketMessageEntity) socketMessage).getData().getItem()));
           item.setList(((UpdateItemSocketMessageEntity) socketMessage).getData().getList());
+
+          item.setItem(printableEntityMapper.map(
+              ((UpdateItemSocketMessageEntity) socketMessage).getData().getItem()));
 
           updateItemSocketMessage.setData(item);
 
           return updateItemSocketMessage;
+
+        case SocketMessage.PARTIAL_UPDATE_ITEM_DATA:
+          PartialUpdateItemSocketMessage partialUpdateItemSocketMessage = new PartialUpdateItemSocketMessage();
+
+          partialUpdateItemSocketMessage.setEventType(socketMessage.getEventType());
+          partialUpdateItemSocketMessage.setVersion(socketMessage.getVersion());
+          partialUpdateItemSocketMessage.setRequestId(socketMessage.getRequestId());
+          partialUpdateItemSocketMessage.setActiveSubscription(socketMessage.isActiveSubscription());
+          partialUpdateItemSocketMessage.setEventParams(transformParams(socketMessage.getEventParams()));
+
+          item = new Item();
+          item.setList(((PartialUpdateItemSocketMessageEntity) socketMessage).getData().getList());
+
+          item.setItem(printableEntityMapper.map(
+              ((PartialUpdateItemSocketMessageEntity) socketMessage).getData().getItem()));
+
+          partialUpdateItemSocketMessage.setData(item);
+
+          return partialUpdateItemSocketMessage;
 
         case SocketMessage.FIXED_ITEMS:
           FixedItemSocketMessage fixedItemSocketMessage = new FixedItemSocketMessage();
@@ -220,6 +255,23 @@ public class SocketMessageEntityMapper {
           errorSocketMessage.setData(error);
 
           return errorSocketMessage;
+
+        case SocketMessage.PROMOTED_TIERS:
+          PromotedTiersSocketMessage promotedTiersSocketMessage =
+              new PromotedTiersSocketMessage();
+          promotedTiersSocketMessage.setEventType(socketMessage.getEventType());
+          promotedTiersSocketMessage.setVersion(socketMessage.getVersion());
+          promotedTiersSocketMessage.setRequestId(socketMessage.getRequestId());
+
+          PromotedTiers promotedTiers = new PromotedTiers();
+          promotedTiers.setData(promotedTierEntityMapper.transform(
+              ((PromotedTiersSocketMessageEntity) socketMessage).getData().getData()));
+          promotedTiers.setPendingReceipts(promotedReceiptEntityMapper.transform(
+              ((PromotedTiersSocketMessageEntity) socketMessage).getData().getPendingReceipts()));
+
+          promotedTiersSocketMessage.setData(promotedTiers);
+
+          return promotedTiersSocketMessage;
         default:
           break;
       }

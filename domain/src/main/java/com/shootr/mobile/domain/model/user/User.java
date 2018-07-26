@@ -3,12 +3,15 @@ package com.shootr.mobile.domain.model.user;
 import com.shootr.mobile.domain.model.EntityMetadata;
 import com.shootr.mobile.domain.model.Followable;
 import com.shootr.mobile.domain.model.FollowableType;
+import com.shootr.mobile.domain.model.PrintableItem;
+import com.shootr.mobile.domain.model.PrintableType;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
+import com.shootr.mobile.domain.model.Seenable;
 import java.util.Comparator;
 import java.util.Date;
 
-public class User implements Searchable, Followable {
+public class User implements Searchable, Followable, PrintableItem, Seenable {
 
   private String idUser;
   private String username;
@@ -36,6 +39,7 @@ public class User implements Searchable, Followable {
   private boolean isStrategic;
   private boolean muted;
   private String shareLink;
+  private Boolean seen;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -231,6 +235,34 @@ public class User implements Searchable, Followable {
 
   @Override public String getFollowableType() {
     return FollowableType.USER;
+  }
+
+  @Override public String getResultType() {
+    return PrintableType.USER;
+  }
+
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
+  @Override public Date getDeletedData() {
+    return metadata != null ? metadata.getDeleted() : null;
+  }
+
+  @Override public void setDeletedData(Date deleted) {
+    metadata.setDeleted(deleted);
+  }
+
+  @Override public String getMessageType() {
+    return PrintableType.USER;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
   }
 
   public static class UsernameComparator implements Comparator<User> {

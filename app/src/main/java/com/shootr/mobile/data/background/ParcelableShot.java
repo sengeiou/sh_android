@@ -55,6 +55,10 @@ public class ParcelableShot implements Parcelable {
         dest.writeLong(videoDuration != null ? videoDuration : 0);
 
         dest.writeString(shot.getType());
+
+        Shot.PromotedShotParams promotedShotParams = shot.getPromotedShotParams();
+        dest.writeString(promotedShotParams != null ? promotedShotParams.getType() : null);
+        dest.writeString(promotedShotParams != null ? promotedShotParams.getData() : null);
     }
 
     public void readFromParcel(Parcel parcel) {
@@ -92,6 +96,14 @@ public class ParcelableShot implements Parcelable {
         shot.setVideoDuration(parcel.readLong());
 
         shot.setType(parcel.readString());
+
+        Shot.PromotedShotParams promotedShotParams = new Shot.PromotedShotParams();
+        promotedShotParams.setType(parcel.readString());
+        promotedShotParams.setData(parcel.readString());
+        String receipt = promotedShotParams.getData();
+        if (receipt != null) {
+            shot.setPromotedShotParams(promotedShotParams);
+        }
     }
 
     public static final Creator<ParcelableShot> CREATOR = new Creator<ParcelableShot>() {

@@ -199,6 +199,10 @@ public class SessionRepositoryImpl implements SessionRepository {
     return bootstrappingPreferences.get().isShotDetailConnection();
   }
 
+  @Override public boolean isPromotedShotActivated() {
+    return bootstrappingPreferences.get().isSuperShot();
+  }
+
   @Override public void resetFilter(String idStream) {
     if (!idStream.equals(currentUser.getIdWatchingStream())) {
       setTimelineFilterActivated(false);

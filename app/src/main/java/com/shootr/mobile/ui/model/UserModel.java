@@ -1,11 +1,14 @@
 package com.shootr.mobile.ui.model;
 
 import com.shootr.mobile.domain.model.SearchableType;
+import com.shootr.mobile.domain.model.Seenable;
 import java.io.Serializable;
 import java.util.Comparator;
+import java.util.Date;
 import timber.log.Timber;
 
-public class UserModel implements Serializable, Cloneable, SearchableModel {
+public class UserModel implements Serializable, Cloneable, SearchableModel, PrintableModel,
+    Seenable {
 
   private String idUser;
   private String userName;
@@ -30,6 +33,9 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
   private boolean isFollowing;
   private boolean isMe;
   private String shareLink;
+  private String timelineGroup;
+  private Date deleted;
+  private Boolean seen;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -232,6 +238,38 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
     return SearchableType.USER;
   }
 
+  @Override public String getTimelineGroup() {
+    return timelineGroup;
+  }
+
+  @Override public void setTimelineGroup(String timelineGroup) {
+    this.timelineGroup = timelineGroup;
+  }
+
+  @Override public Long getOrder() {
+    return 0L;
+  }
+
+  @Override public boolean isDeleted() {
+    return deleted != null;
+  }
+
+  public Date getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(Date deleted) {
+    this.deleted = deleted;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen == null ? true : seen;
+  }
+
   static public class MentionComparator implements Comparator<UserModel> {
     @Override public int compare(UserModel user1, UserModel user2) {
       if (user1.isFollowing() && !user2.isFollowing()) {
@@ -242,5 +280,26 @@ public class UserModel implements Serializable, Cloneable, SearchableModel {
         return user1.getName().compareToIgnoreCase(user2.getName());
       }
     }
+  }
+
+  public static class OrderFieldComparator implements Comparator<PrintableModel> {
+
+    @Override public int compare(PrintableModel s1, PrintableModel s2) {
+      return s2.getOrder().compareTo(s1.getOrder());
+    }
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    UserModel userModel = (UserModel) o;
+
+    return getIdUser() != null ? getIdUser().equals(userModel.getIdUser())
+        : userModel.getIdUser() == null;
+  }
+
+  @Override public int hashCode() {
+    return getIdUser() != null ? getIdUser().hashCode() : 0;
   }
 }

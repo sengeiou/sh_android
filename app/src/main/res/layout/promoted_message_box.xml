@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible"
+    >
+
+  <com.shootr.mobile.ui.widgets.NestedListView
+      android:id="@+id/new_shot_mentions"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:divider="@null"
+      android:visibility="gone"
+      />
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:baselineAligned="false"
+      android:orientation="horizontal"
+      >
+
+    <LinearLayout
+        android:id="@+id/shot_bar_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_weight="8"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/promoted_round_corner"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:focusable="true"
+        android:orientation="horizontal"
+        >
+
+      <EditText
+          android:id="@+id/shot_bar_text"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:layout_marginLeft="16dp"
+          android:layout_weight="5"
+          android:animateLayoutChanges="true"
+          android:background="@null"
+          android:ellipsize="end"
+          android:fontFamily="sans-serif"
+          android:hint="@string/new_shot_placeholder"
+          android:inputType="text|textCapSentences|textMultiLine|textShortMessage"
+          android:minHeight="48dp"
+          android:padding="8dp"
+          android:textColor="@color/material_black"
+          android:textSize="16sp"
+          />
+
+      <TextView
+          android:id="@+id/new_shot_char_counter"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="bottom"
+          android:layout_marginBottom="4dp"
+          android:gravity="center"
+          android:padding="8dp"
+          android:textColor="@color/gray_70"
+          android:textSize="12sp"
+          android:visibility="visible"
+          tools:text="140"
+          />
+
+      <ImageButton
+          android:id="@+id/new_shot_send_button"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:background="?selectableItemBackground"
+          android:enabled="false"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:src="@drawable/ic_send"
+          android:visibility="gone"
+          />
+
+      <ImageButton
+          android:id="@+id/shot_bar_drafts"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:background="?selectableItemBackground"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          android:src="@drawable/ic_drafts_24_gray54"
+          android:visibility="gone"
+          />
+
+      <ImageButton
+          android:id="@+id/shot_bar_photo"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center_vertical"
+          android:background="?selectableItemBackground"
+          android:paddingLeft="16dp"
+          android:paddingRight="16dp"
+          app:srcCompat="@drawable/ic_add_black_promoted_24dp"
+          />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/promoted_shot_button"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="2dp"
+        android:animateLayoutChanges="true"
+        android:background="@drawable/promoted_round_layout"
+        android:clickable="true"
+        android:elevation="1dp"
+        android:focusable="true"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          app:srcCompat="@drawable/ic_euro_symbol"
+          />
+
+      <View
+          android:id="@+id/pending_badge"
+          android:layout_width="12dp"
+          android:layout_height="12dp"
+          android:layout_alignParentRight="true"
+          android:layout_alignParentTop="true"
+          android:layout_marginRight="2dp"
+          android:elevation="2dp"
+          android:background="@drawable/pending_badge"
+          android:visibility="gone"
+          />
+
+    </RelativeLayout>
+  </LinearLayout>
+</LinearLayout>

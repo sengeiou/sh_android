@@ -113,7 +113,8 @@ public class StreamTimelinePresenterTest {
 
   @Before public void setUp() throws Exception {
     MockitoAnnotations.initMocks(this);
-    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper());
+    ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository, new EntitiesModelMapper(
+        sessionRepository));
     StreamModelMapper streamModelMapper = new StreamModelMapper(sessionRepository);
     presenter = new StreamTimelinePresenter(timelineInteractorWrapper,
         selectStreamInteractor, markNiceShotInteractor,

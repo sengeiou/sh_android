@@ -6,12 +6,14 @@ public class Bootstrapping {
   private boolean timelineConnection;
   private boolean socketConnection;
   private boolean shotDetailConnection;
+  private boolean superShot;
   private String logsUrl;
 
   public Bootstrapping() {
     this.timelineConnection = false;
     this.socketConnection = false;
     this.shotDetailConnection = false;
+    this.superShot = false;
   }
 
   public Socket getSocket() {
@@ -52,5 +54,13 @@ public class Bootstrapping {
 
   public void setShotDetailConnection(boolean shotDetailConnection) {
     this.shotDetailConnection = shotDetailConnection;
+  }
+
+  public boolean isSuperShot() {
+    return superShot;
+  }
+
+  public void setSuperShot(boolean superShot) {
+    this.superShot = superShot;
   }
 }

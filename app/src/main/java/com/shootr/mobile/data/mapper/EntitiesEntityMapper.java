@@ -1,22 +1,26 @@
 package com.shootr.mobile.data.mapper;
 
 import android.support.annotation.NonNull;
+import com.shootr.mobile.data.entity.BackgroundEntity;
 import com.shootr.mobile.data.entity.BaseMessagePollEntity;
 import com.shootr.mobile.data.entity.CardEntity;
 import com.shootr.mobile.data.entity.EntitiesEntity;
 import com.shootr.mobile.data.entity.ImageMediaEntity;
 import com.shootr.mobile.data.entity.ImageSizeEntity;
 import com.shootr.mobile.data.entity.MentionsEntity;
+import com.shootr.mobile.data.entity.PromotedEntity;
 import com.shootr.mobile.data.entity.SizeEntity;
 import com.shootr.mobile.data.entity.StreamIndexEntity;
 import com.shootr.mobile.data.entity.UrlEntity;
 import com.shootr.mobile.domain.model.ImageMedia;
 import com.shootr.mobile.domain.model.ImageSize;
 import com.shootr.mobile.domain.model.Sizes;
+import com.shootr.mobile.domain.model.shot.Background;
 import com.shootr.mobile.domain.model.shot.Card;
 import com.shootr.mobile.domain.model.shot.Entities;
 import com.shootr.mobile.domain.model.shot.Mention;
 import com.shootr.mobile.domain.model.shot.Poll;
+import com.shootr.mobile.domain.model.shot.Promoted;
 import com.shootr.mobile.domain.model.shot.StreamIndex;
 import com.shootr.mobile.domain.model.shot.Url;
 import java.util.ArrayList;
@@ -36,6 +40,7 @@ public class EntitiesEntityMapper {
       setupImages(entities, entitiesEntity);
       setupMentions(entities, entitiesEntity);
       setupCards(entities, entitiesEntity);
+      setupPromoted(entities, entitiesEntity);
     }
     return entitiesEntity;
   }
@@ -161,6 +166,23 @@ public class EntitiesEntityMapper {
     entitiesEntity.setCards(cardEntities);
   }
 
+  private void setupPromoted(Entities entities, EntitiesEntity entitiesEntity) {
+    if (entities.getPromoted() != null) {
+      PromotedEntity promotedEntity = new PromotedEntity();
+      promotedEntity.setCurrency(entities.getPromoted().getCurrency());
+      promotedEntity.setDisplayPrice(entities.getPromoted().getDisplayPrice());
+      promotedEntity.setPrice(entities.getPromoted().getPrice());
+
+      BackgroundEntity backgroundEntity = new BackgroundEntity();
+      backgroundEntity.setAngle(entities.getPromoted().getBackground().getAngle());
+      backgroundEntity.setColors(entities.getPromoted().getBackground().getColors());
+      backgroundEntity.setType(entities.getPromoted().getBackground().getType());
+      promotedEntity.setBackground(backgroundEntity);
+
+      entitiesEntity.setPromotedEntity(promotedEntity);
+    }
+  }
+
   public Entities setupEntities(EntitiesEntity entitiesEntity) {
     Entities entities = new Entities();
     if (entitiesEntity != null) {
@@ -170,6 +192,7 @@ public class EntitiesEntityMapper {
       setupImages(entitiesEntity, entities);
       setupMentions(entitiesEntity, entities);
       setupCards(entitiesEntity, entities);
+      setupPromoted(entitiesEntity, entities);
     }
     return entities;
   }
@@ -296,4 +319,21 @@ public class EntitiesEntityMapper {
     entities.setCards(cards);
   }
 
+  private void setupPromoted(EntitiesEntity entitiesEntity, Entities entities) {
+    if (entitiesEntity.getPromotedEntity() != null) {
+      Promoted promoted = new Promoted();
+      promoted.setCurrency(entitiesEntity.getPromotedEntity().getCurrency());
+      promoted.setDisplayPrice(entitiesEntity.getPromotedEntity().getDisplayPrice());
+      promoted.setPrice(entitiesEntity.getPromotedEntity().getPrice());
+
+      Background backgroundEntity = new Background();
+      backgroundEntity.setAngle(entitiesEntity.getPromotedEntity().getBackground().getAngle());
+      backgroundEntity.setColors(entitiesEntity.getPromotedEntity().getBackground().getColors());
+      backgroundEntity.setType(entitiesEntity.getPromotedEntity().getBackground().getType());
+
+      promoted.setBackground(backgroundEntity);
+
+      entities.setPromoted(promoted);
+    }
+  }
 }

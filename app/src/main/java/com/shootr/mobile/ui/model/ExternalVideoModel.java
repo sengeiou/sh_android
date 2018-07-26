@@ -1,10 +1,14 @@
 package com.shootr.mobile.ui.model;
 
+import java.util.Date;
+
 public class ExternalVideoModel implements PrintableModel {
 
   private String provider;
   private String videoId;
   private String timelineGroup;
+  private Date deleted;
+  private String idExternalVideo;
 
   public String getProvider() {
     return provider;
@@ -52,5 +56,25 @@ public class ExternalVideoModel implements PrintableModel {
 
   @Override public Long getOrder() {
     return 0L;
+  }
+
+  @Override public boolean isDeleted() {
+    return deleted != null;
+  }
+
+  public Date getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(Date deleted) {
+    this.deleted = deleted;
+  }
+
+  public String getIdExternalVideo() {
+    return idExternalVideo;
+  }
+
+  public void setIdExternalVideo(String idExternalVideo) {
+    this.idExternalVideo = idExternalVideo;
   }
 }

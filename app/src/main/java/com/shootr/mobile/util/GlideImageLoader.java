@@ -155,6 +155,13 @@ public class GlideImageLoader implements ImageLoader {
     load(url, view, callback);
   }
 
+  @Override public void loadImageWithId(ImageView view, int resourceId) {
+    glide.load(resourceId)
+        .dontAnimate()
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(view);
+  }
+
   @Override public Bitmap loadProfilePhoto(String url) throws IOException {
     try {
       boolean isValidPhoto = url != null && !url.isEmpty();

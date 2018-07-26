@@ -53,12 +53,13 @@ public class UserEntityMapper {
         (userEntity.getReceivedReactions() == null ? 0L : userEntity.getReceivedReactions()));
     user.setAnalyticsUserType(
         userEntity.getAnalyticsUserType() == null ? "NORMAL" : userEntity.getAnalyticsUserType());
-    user.setStrategic(userEntity.isStrategic());
+    user.setStrategic((userEntity.isStrategic() != null ? userEntity.isStrategic() : false));
     user.setMuted(userEntity.isMuted() != null ? userEntity.isMuted() : false);
     user.setMetadata(metadataMapper.metadataFromEntity(userEntity));
 
     user.setCreatedStreamsCount(userEntity.getCreatedStreamsCount());
     user.setFavoritedStreamsCount(userEntity.getFavoritedStreamsCount());
+    user.setSeen(userEntity.getSeen());
 
     return user;
   }

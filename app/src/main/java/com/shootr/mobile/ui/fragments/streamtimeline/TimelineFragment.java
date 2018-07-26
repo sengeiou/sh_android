@@ -13,6 +13,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -65,6 +66,8 @@ import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
 import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
+import com.shootr.mobile.ui.activities.PostPromotedShotActivity;
+import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
@@ -82,7 +85,9 @@ import com.shootr.mobile.ui.adapters.listeners.OnShotLongClick;
 import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnUsernameClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnVideoClickListener;
+import com.shootr.mobile.ui.adapters.listeners.PromotedItemClickListener;
 import com.shootr.mobile.ui.adapters.listeners.ShotClickListener;
+import com.shootr.mobile.ui.adapters.streamtimeline.PromotedItemsAdapter;
 import com.shootr.mobile.ui.adapters.streamtimeline.StreamTimelineAdapter;
 import com.shootr.mobile.ui.base.BaseFragment;
 import com.shootr.mobile.ui.component.PhotoPickerController;
@@ -92,6 +97,7 @@ import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.LongPressShotPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.StreamTimelineOptionsPresenter;
@@ -103,8 +109,8 @@ import com.shootr.mobile.ui.views.streamtimeline.LongPressView;
 import com.shootr.mobile.ui.views.streamtimeline.StreamTimelineView;
 import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
-import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
+import com.shootr.mobile.ui.widgets.PromotedMessageBox;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -170,7 +176,8 @@ public class TimelineFragment extends BaseFragment
   @Inject LongPressShotPresenter longPressShotPresenter;
 
   @BindView(R.id.item_recycler) RecyclerView itemsList;
-  @BindView(R.id.timeline_new_shot_bar) MessageBox newShotBarContainer;
+  @BindView(R.id.promoted_recycler) RecyclerView promotedList;
+  @BindView(R.id.timeline_new_shot_bar) PromotedMessageBox newShotBarContainer;
   @BindView(R.id.timeline_view_only_stream_indicator) View timelineViewOnlyStreamIndicator;
   @BindView(R.id.timeline_empty) TextView emptyView;
   @BindView(R.id.timeline_checking_for_shots) TextView checkingForShotsView;
@@ -242,6 +249,7 @@ public class TimelineFragment extends BaseFragment
   private String idStream;
   private String streamTitle;
   private StreamTimelineAdapter adapter;
+  private PromotedItemsAdapter promotedAdapter;
   private AlertDialog shotImageDialog;
 
   private EditText newTopicText;
@@ -290,6 +298,11 @@ public class TimelineFragment extends BaseFragment
       }
     });
 
+    LinearLayoutManager promotedLinearLayout =
+        new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+    promotedList.setLayoutManager(promotedLinearLayout);
+    promotedList.setHasFixedSize(false);
+
     return fragmentView;
   }
 
@@ -315,11 +328,52 @@ public class TimelineFragment extends BaseFragment
     charCounterColorNormal = getResources().getColor(R.color.gray_70);
     writePermissionManager.init(getActivity());
     player.setVisibility(View.GONE);
+    setupPromotedList();
     setupListAdapter();
     //setupSwipeRefreshLayout();
     setupListScrollListeners();
     setupPhotoPicker();
     setupNewShotBarDelegate();
+  }
+
+  private void setupPromotedList() {
+    promotedAdapter = new PromotedItemsAdapter(new PromotedItemClickListener() {
+      @Override public void markSeen(String type, String idItem) {
+        timelinePresenter.markSeen(type, idItem);
+      }
+
+      @Override public void onPollClick(PollModel pollModel) {
+        timelinePresenter.onPollActionClick(pollModel);
+      }
+
+      @Override public void onHighlightedClick(ShotModel shotModel) {
+        goToShotDetail(shotModel);
+      }
+
+      @Override public void onPromotedShotClick(ShotModel shotModel) {
+        goToShotDetail(shotModel);
+      }
+
+      @Override public void onAddPromotedPressed() {
+        goToNewPromotedShot();
+      }
+
+      @Override public void onUserFollowingClick(UserModel user) {
+        goToChannelTimeline(user.getIdUser());
+      }
+    }, new OnShotLongClick() {
+      @Override public void onShotLongClick(ShotModel shot) {
+        longPressShotPresenter.onLongClickPressed(shot);
+      }
+    }, imageLoader);
+    promotedList.setAdapter(promotedAdapter);
+  }
+
+  private void goToNewPromotedShot() {
+    Intent newShotIntent = PostPromotedShotActivity.IntentBuilder //
+        .from(getActivity()) //
+        .setStreamData(idStream, streamTitle).build();
+    getActivity().startActivity(newShotIntent);
   }
 
   private void setupListScrollListeners() {
@@ -387,9 +441,7 @@ public class TimelineFragment extends BaseFragment
           }
         }, timeUtils, new ShotTextSpannableBuilder(), new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
-        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot,
-            sessionRepository.isNewShotDetail());
-        startActivity(intent);
+        goToShotDetail(shot);
       }
     }, new OnShotLongClick() {
       @Override public void onShotLongClick(ShotModel shot) {
@@ -466,6 +518,12 @@ public class TimelineFragment extends BaseFragment
     }, timelinePresenter.canFixItem());
 
     itemsList.setAdapter(adapter);
+  }
+
+  private void goToShotDetail(ShotModel shot) {
+    Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot,
+        sessionRepository.isNewShotDetail());
+    startActivity(intent);
   }
 
   private void openProfile(String idUser) {
@@ -600,7 +658,7 @@ public class TimelineFragment extends BaseFragment
 
   private void setupNewShotBarDelegate() {
     newShotBarContainer.init(getActivity(), photoPickerController, imageLoader, feedbackMessage,
-        new MessageBox.OnActionsClick() {
+        new PromotedMessageBox.OnActionsClick() {
           @Override public void onTopicClick() {
             setupTopicCustomDialog();
           }
@@ -631,7 +689,11 @@ public class TimelineFragment extends BaseFragment
           @Override public void onCheckInClick() {
             //TODO
           }
-        }, false, null);
+
+          @Override public void onPromotedClick() {
+            goToNewPromotedShot();
+          }
+        }, false, null, false, null, idStream);
   }
 
   @Override public void openNewShotView() {
@@ -777,15 +839,14 @@ public class TimelineFragment extends BaseFragment
     }
   }
 
-  @Override public void renderFixedItems(List<PrintableModel> items) {
-    if (checkingForShotsView != null) {
-      checkingForShotsView.setVisibility(View.GONE);
-    }
-    adapter.setFixedItems(items);
+
+  @Override public void renderPolls(List<PrintableModel> items) {
+    checkingForShotsView.setVisibility(View.GONE);
+    promotedAdapter.setPolls(items);
   }
 
-  @Override public void renderPinnedItems(List<PrintableModel> items) {
-    adapter.setPinnedItems(items);
+  @Override public void renderHighlightedItems(List<PrintableModel> items) {
+    promotedAdapter.setHighlightedList(items);
   }
 
   @Override public void addNewItems(List<PrintableModel> items) {
@@ -924,6 +985,76 @@ public class TimelineFragment extends BaseFragment
     videoPlayer = null;
   }
 
+  @Override public void showPromotedButton() {
+    if (sessionRepository.isPromotedShotActivated()) {
+      if (newShotBarContainer != null) {
+        newShotBarContainer.setCanPostPromotedShot(true);
+        newShotBarContainer.showPromotedButton();
+        promotedAdapter.setShouldShowAddSuperShot(true);
+        promotedAdapter.showAddPromoted();
+      }
+    } else {
+      hidePromotedButton();
+    }
+  }
+
+  @Override public void addNewHighlighted(List<PrintableModel> printableModels) {
+    promotedList.setVisibility(View.VISIBLE);
+    promotedAdapter.addNewHighlighted(printableModels);
+  }
+
+  @Override public void addNewPoll(List<PrintableModel> printableModels) {
+    promotedList.setVisibility(View.VISIBLE);
+    promotedAdapter.addNewPoll(printableModels);
+  }
+
+  @Override public void addNewPromoted(List<PrintableModel> printableModels) {
+    promotedList.setVisibility(View.VISIBLE);
+    promotedAdapter.addNewPromoted(printableModels);
+  }
+
+  @Override public void showPromotedList() {
+    if (isAdded()) {
+      promotedList.setVisibility(View.VISIBLE);
+    }
+  }
+
+  @Override public void updateHighlighted(PrintableModel printableModel) {
+    promotedAdapter.updateHighlighted(printableModel);
+  }
+
+  @Override public void updatePoll(PrintableModel printableModel) {
+    promotedAdapter.updatePolls(printableModel);
+  }
+
+  @Override public void updatePromoted(PrintableModel printableModel) {
+    promotedAdapter.updatePromoted(printableModel);
+  }
+
+  @Override public void renderPromoteds(List<PrintableModel> printableModels) {
+    promotedAdapter.setPromotedList(printableModels);
+  }
+
+  @Override public void hidePromotedButton() {
+    if (newShotBarContainer != null) {
+      newShotBarContainer.setCanPostPromotedShot(false);
+      newShotBarContainer.hidePromotedButton();
+      promotedAdapter.setShouldShowAddSuperShot(false);
+    }
+  }
+
+  @Override public void renderFollowings(List<PrintableModel> printableModels) {
+    promotedAdapter.setFollowingList(printableModels);
+  }
+
+  @Override public void addNewFollowing(List<PrintableModel> printableModels) {
+    promotedAdapter.addNewUser(printableModels);
+  }
+
+  @Override public void updateFollowing(PrintableModel printableModel) {
+    promotedAdapter.updateFollowing(printableModel);
+  }
+
   @Override public void showLoadingOldShots() {
     adapter.showLoadingMoreItems();
   }
@@ -1059,7 +1190,7 @@ public class TimelineFragment extends BaseFragment
     if (menus.get(LongPressShotPresenter.DISMISS_HIGHLIGHT)) {
       customContextMenu.addAction(R.string.remove_highlight, new Runnable() {
         @Override public void run() {
-          timelinePresenter.deleteHighlightedItem(shotModel);
+         timelinePresenter.onDismissHighlightShot(shotModel, shotModel.getIdUser());
         }
       });
     }
@@ -1155,8 +1286,16 @@ public class TimelineFragment extends BaseFragment
 
   }
 
-  @Override public void showDismissDialog(String idShot) {
-
+  @Override public void showDismissDialog(final ShotModel shotModel) {
+    new AlertDialog.Builder(getActivity()).setMessage(getString(R.string.highlight_shot_dialog))
+        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+          @Override public void onClick(DialogInterface dialog, int which) {
+            timelinePresenter.deleteHighlightedItem(shotModel);
+          }
+        })
+        .setNegativeButton(getString(R.string.cancel), null)
+        .create()
+        .show();
   }
 
   @Override public void setHighlightShotBackground(Boolean isAdmin) {
@@ -1814,5 +1953,9 @@ public class TimelineFragment extends BaseFragment
       window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
       window.setStatusBarColor(getContext().getResources().getColor(R.color.black));
     }
+  }
+
+  private void goToChannelTimeline(String idTargetUser) {
+    startActivity(PrivateMessageTimelineActivity.newIntent(getContext(), idTargetUser));
   }
 }

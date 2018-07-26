@@ -20,8 +20,6 @@ public class TimelineEntityMapper {
 
     streamTimeline.setParticipantsNumber(timelineEntity.getParticipants().getTotal());
     streamTimeline.setFollowingNumber(timelineEntity.getParticipants().getFollowing());
-    streamTimeline.setFixed(dataEntityMapper.map(timelineEntity.getFixed()));
-    streamTimeline.setPinned(dataEntityMapper.map(timelineEntity.getPinned()));
     streamTimeline.setItems(dataEntityMapper.map(timelineEntity.getItems()));
     streamTimeline.setStream(streamEntityMapper.transform(timelineEntity.getStream()));
     streamTimeline.setFilter(timelineEntity.getFilter());
@@ -29,6 +27,11 @@ public class TimelineEntityMapper {
     if (timelineEntity.getParams() != null) {
       streamTimeline.setPeriod(timelineEntity.getParams().getPeriod().getDuration());
     }
+    streamTimeline.setPolls(dataEntityMapper.map(timelineEntity.getPolls()));
+    streamTimeline.setHighlightedShots(dataEntityMapper.map(timelineEntity.getHighlightedShots()));
+    streamTimeline.setVideos(dataEntityMapper.map(timelineEntity.getVideos()));
+    streamTimeline.setPromotedShots(dataEntityMapper.map(timelineEntity.getPromotedShots()));
+    streamTimeline.setFollowings(dataEntityMapper.map(timelineEntity.getFollowings()));
 
     return streamTimeline;
   }

@@ -125,6 +125,14 @@ public class PrivateMessage extends BaseMessage {
     return 0L;
   }
 
+  @Override public Date getDeletedData() {
+    return getMetadata().getDeleted();
+  }
+
+  @Override public void setDeletedData(Date deleted) {
+    //TODO
+  }
+
   @Override public String getMessageType() {
     return null;
   }

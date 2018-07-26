@@ -174,6 +174,10 @@ public class SQLiteUtils {
       + " INT NOT NULL,"
       + DatabaseContract.ShotQueueTable.IMAGE_FILE
       + " TEXT NULL,"
+      + DatabaseContract.ShotQueueTable.RECEIPT_TYPE
+      + " TEXT NULL,"
+      + DatabaseContract.ShotQueueTable.RECEIPT
+      + " TEXT NULL,"
       + DatabaseContract.ShotQueueTable.ID_SHOT
       + " TEXT NULL,"
       + DatabaseContract.ShotQueueTable.ID_USER

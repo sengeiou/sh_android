@@ -11,6 +11,7 @@ public class EntitiesModel implements Serializable {
   private ArrayList<ImageMediaModel> images;
   private ArrayList<MentionModel> mentions;
   private ArrayList<CardModel> cards;
+  private PromotedModel promoted;
 
   public ArrayList<UrlModel> getUrls() {
     return urls;
@@ -58,5 +59,13 @@ public class EntitiesModel implements Serializable {
 
   public void setCards(ArrayList<CardModel> cards) {
     this.cards = cards;
+  }
+
+  public PromotedModel getPromoted() {
+    return promoted;
+  }
+
+  public void setPromoted(PromotedModel promoted) {
+    this.promoted = promoted;
   }
 }

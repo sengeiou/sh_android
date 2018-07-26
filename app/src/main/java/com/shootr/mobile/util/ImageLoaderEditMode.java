@@ -61,6 +61,10 @@ public class ImageLoaderEditMode implements ImageLoader {
         view.setImageResource(R.drawable.sample_avatar);
     }
 
+    @Override public void loadImageWithId(ImageView view, int resourceId) {
+        view.setImageResource(R.drawable.sample_avatar);
+    }
+
     @Override public Bitmap loadProfilePhoto(String url) throws IOException {
         return null;
     }

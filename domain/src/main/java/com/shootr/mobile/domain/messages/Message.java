@@ -6,6 +6,8 @@ public interface Message {
   String UNSUBSCRIBE = "UNSUBSCRIBE";
   String TIMELINE = "TIMELINE";
   String SHOT = "SHOT";
+  String POLL = "POLL";
+  String UNKNOWN = "UNKNOWN";
 
   String getMessageType();
 

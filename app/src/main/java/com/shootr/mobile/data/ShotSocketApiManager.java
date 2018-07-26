@@ -6,6 +6,9 @@ import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.HighlightSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
+import com.shootr.mobile.data.entity.SeenParams;
+import com.shootr.mobile.data.entity.SeenSocketMessageApiEntity;
+import java.util.Date;
 import com.shootr.mobile.data.entity.UnHighlightSocketMessageApiEntity;
 import java.util.UUID;
 
@@ -86,6 +89,21 @@ public class ShotSocketApiManager {
     unHighlightSocketMessageApiEntity.setData(eventParams);
 
     sendSocketEventListener.sendEvent(unHighlightSocketMessageApiEntity);
+  }
+
+  public void sendSeen(String type, String itemId) {
+    SeenSocketMessageApiEntity seenSocketMessageApiEntity = new SeenSocketMessageApiEntity();
+    SeenParams seenParams = new SeenParams();
+
+    seenParams.setItemId(itemId);
+    seenParams.setType(type);
+    seenParams.setTimestamp(new Date().getTime());
+
+    seenSocketMessageApiEntity.setRequestId(generateRequestId());
+    seenSocketMessageApiEntity.setVersion(VERSION);
+    seenSocketMessageApiEntity.setData(seenParams);
+
+    sendSocketEventListener.sendEvent(seenSocketMessageApiEntity);
   }
 
   private String generateRequestId() {

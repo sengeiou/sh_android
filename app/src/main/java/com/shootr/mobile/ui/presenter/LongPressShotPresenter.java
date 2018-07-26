@@ -81,9 +81,10 @@ public class LongPressShotPresenter implements Presenter {
 
         HashMap<Integer, Boolean> menus = new HashMap<>();
 
-        menus.put(HIGHLIGHT, stream.canPinItem() && !shotModel.getTimelineGroup()
-            .equals(PrintableModel.FIXED_GROUP));
-        menus.put(DISMISS_HIGHLIGHT, fixedItemsIds.contains(shotModel.getIdShot()));
+        menus.put(HIGHLIGHT, stream.canPinItem() && !shotModel.getTimelineGroup().equals(
+            PrintableModel.HIGHLIGHTED_GROUP));
+        menus.put(DISMISS_HIGHLIGHT, stream.canPinItem() && shotModel.getTimelineGroup().equals(
+            PrintableModel.HIGHLIGHTED_GROUP) || stream.canPinItem() && fixedItemsIds.contains(shotModel.getIdShot()));
         menus.put(RESHOOT, !shotModel.isReshooted());
         menus.put(UNDO_RESHOOT, shotModel.isReshooted());
         menus.put(SHARE_VIA, true);

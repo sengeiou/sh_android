@@ -27,6 +27,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   private final String SOCKET_SUBSCRIPTION_ERROR = "SOCKET_SUBSCRIPTION_ERROR: ";
   private final String SOCKET_CONNECTED = "Socket connected succesful";
+  private static final int VERSION = 2;
 
   private WebSocket webSocket;
   private final int RETRY_TIMES = 50;
@@ -67,6 +68,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
   }
 
   @Override public void sendEvent(SocketMessageApiEntity event) {
+    event.setVersion(VERSION);
     if (!lastEvents.containsKey(event.getRequestId())) {
       lastEvents.put(event.getRequestId(), event);
 
@@ -132,6 +134,24 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     shotSenderSocketApiManager.sendNewShot(shotEntity, idQueue);
   }
 
+  @Override public void getPromotedTiers() {
+    timelineSocketApiManager.getPromotedTiers();
+  }
+
+  @Override public void verifyReceipt(String receipt) {
+    timelineSocketApiManager.verifyReceipt(receipt);
+  }
+
+  @Override public void subscribeToPromotedTiers(String subscriptionType) {
+    subscriptionSocketApiService.subscribePromotedTiers(subscriptionType);
+  }
+
+  @Override public void markSeen(String type, String itemId) {
+    if (webSocket != null && webSocket.isOpen()) {
+      shotSocketApiManager.sendSeen(type, itemId);
+    }
+  }
+
   @Override public boolean highlightShot(String idShot, String idStream) {
     if (webSocket != null && webSocket.isOpen()) {
       shotSocketApiManager.sendHighlightShot(idShot, idStream);
@@ -148,6 +168,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     }
 
     return false;
+
   }
 
   @Override public boolean sendNice(String idShot) {
@@ -224,6 +245,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
           if (!emitter.isDisposed()) {
             emitter.onError(new Throwable(t.getMessage()));
           }
+
         }
       }
     } catch (Exception e) {

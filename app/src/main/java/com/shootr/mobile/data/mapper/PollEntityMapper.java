@@ -18,7 +18,7 @@ public class PollEntityMapper {
     Poll poll = new Poll();
     if (pollEntity != null) {
       poll.setStatus(pollEntity.getStatus());
-      poll.setPublished(pollEntity.getPublished() != 0L);
+      poll.setPublished(pollEntity.getPublished() != null ? pollEntity.getPublished() != 0L : null);
       poll.setIdStream(pollEntity.getIdStream());
       poll.setIdPoll(pollEntity.getIdPoll());
       poll.setIdUser(pollEntity.getIdUser());
@@ -33,6 +33,8 @@ public class PollEntityMapper {
       poll.setCanVote(pollEntity.canVote());
       poll.setDailyPoll(pollEntity.isDailyPoll());
       poll.setShareLink(pollEntity.getShareLink());
+      poll.setDeletedData(pollEntity.getDeleted());
+      poll.setSeen(pollEntity.getSeen());
     }
     return poll;
   }

@@ -60,4 +60,6 @@ public interface NewShotDetailView {
   void showUndoReshootMenu();
 
   void showReshootMenu();
+
+  void showPromotedButton();
 }

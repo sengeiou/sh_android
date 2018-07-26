@@ -41,6 +41,10 @@ public class ServiceSocketDataSource implements SocketDataSource {
     return socketApi.subscribeToShotDetail(subscriptionType, idShot);
   }
 
+  @Override public void subscribeToPromotedTiers(String subscriptionType) {
+    socketApi.subscribeToPromotedTiers(subscriptionType);
+  }
+
   @Override
   public boolean getTimeline(String idStream, String filter, PaginationEntity paginationEntity) {
     return socketApi.getTimeline(idStream, filter, paginationEntity);
@@ -68,5 +72,17 @@ public class ServiceSocketDataSource implements SocketDataSource {
 
   @Override public void unsubscribeShotDetail(String idShot) {
     socketApi.unsubscribeShotDetail(idShot);
+  }
+
+  @Override public void getPromotedTiers() {
+    socketApi.getPromotedTiers();
+  }
+
+  @Override public void verifyReceipt(String receipt) {
+    socketApi.verifyReceipt(receipt);
+  }
+
+  @Override public void markSeen(String type, String itemId) {
+    socketApi.markSeen(type, itemId);
   }
 }

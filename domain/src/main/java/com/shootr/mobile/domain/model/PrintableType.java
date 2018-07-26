@@ -10,9 +10,15 @@ public interface PrintableType {
 
   String EXTERNAL_VIDEO = "EXTERNAL_VIDEO";
 
+  String PROMOTED_RECEIPT = "PROMOTED_RECEIPT";
+
+  String USER = "USER";
+
   String STREAM = "STREAM";
 
+  String UNKNOWN = "UNKNOWN";
+
   String[] PRINTABLE_TYPES = {
-      SHOT, TOPIC, POLL, EXTERNAL_VIDEO, STREAM
+      SHOT, TOPIC, POLL, EXTERNAL_VIDEO, USER, STREAM
   };
 }

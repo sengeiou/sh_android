@@ -7,6 +7,7 @@ import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.entity.PrintableItemEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.TopicEntity;
+import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.model.DataItem;
 import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
@@ -21,20 +22,25 @@ public class DataEntityMapper {
   private final TopicEntityMapper topicEntityMapper;
   private final PollEntityMapper pollEntityMapper;
   private final ExternalVideoEntityMapper externalVideoEntityMapper;
+  private final UserEntityMapper userEntityMapper;
 
   @Inject
   public DataEntityMapper(ShotEntityMapper shotEntityMapper, TopicEntityMapper topicEntityMapper,
-      PollEntityMapper pollEntityMapper, ExternalVideoEntityMapper externalVideoEntityMapper) {
+      PollEntityMapper pollEntityMapper, ExternalVideoEntityMapper externalVideoEntityMapper,
+      UserEntityMapper userEntityMapper) {
     this.shotEntityMapper = shotEntityMapper;
     this.topicEntityMapper = topicEntityMapper;
     this.pollEntityMapper = pollEntityMapper;
     this.externalVideoEntityMapper = externalVideoEntityMapper;
+    this.userEntityMapper = userEntityMapper;
   }
 
   public DataItem map(DataEntity entity) {
 
     DataItem dataItem = new DataItem();
-    dataItem.setData(getPrintableItemEntities(entity.getData()));
+    if (entity.getData() != null) {
+      dataItem.setData(getPrintableItemEntities(entity.getData()));
+    }
 
     return dataItem;
   }
@@ -62,6 +68,9 @@ public class DataEntityMapper {
       } else if (printableItem.getResultType().equals(PrintableType.EXTERNAL_VIDEO)) {
         printableItems.add(
             externalVideoEntityMapper.transform((ExternalVideoEntity) printableItem));
+      } else if (printableItem.getResultType().equals(PrintableType.USER)) {
+        printableItems.add(
+            userEntityMapper.transform((UserEntity) printableItem));
       }
     }
     return printableItems;

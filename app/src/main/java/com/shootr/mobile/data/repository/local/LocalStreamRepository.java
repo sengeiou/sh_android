@@ -6,6 +6,7 @@ import com.shootr.mobile.data.repository.datasource.stream.StreamDataSource;
 import com.shootr.mobile.data.repository.datasource.stream.StreamSearchDataSource;
 import com.shootr.mobile.data.repository.remote.cache.LandingStreamsCache;
 import com.shootr.mobile.data.repository.remote.cache.LastStreamVisitCache;
+import com.shootr.mobile.data.repository.remote.cache.PromotedTiersCache;
 import com.shootr.mobile.data.repository.remote.cache.StreamCache;
 import com.shootr.mobile.data.repository.remote.cache.TimelineCache;
 import com.shootr.mobile.data.repository.remote.cache.TimelineRepositionCache;
@@ -13,6 +14,7 @@ import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.stream.StreamRepository;
 import java.util.List;
@@ -28,11 +30,13 @@ public class LocalStreamRepository implements StreamRepository {
     private final LastStreamVisitCache lastStreamVisitCache;
     private final TimelineCache timelineCache;
     private final TimelineRepositionCache timelineRepositionCache;
+    private final PromotedTiersCache promotedTiersCache;
 
     @Inject public LocalStreamRepository(@Local StreamDataSource localStreamDataSource,
         @Local StreamSearchDataSource localStreamSearchDataSource, StreamEntityMapper streamEntityMapper,
         StreamCache streamCache, LandingStreamsCache landingStreamsCache, LastStreamVisitCache lastStreamVisitCache,
-        TimelineCache timelineCache, TimelineRepositionCache timelineRepositionCache) {
+        TimelineCache timelineCache, TimelineRepositionCache timelineRepositionCache,
+        PromotedTiersCache promotedTiersCache) {
         this.localStreamDataSource = localStreamDataSource;
         this.localStreamSearchDataSource = localStreamSearchDataSource;
         this.streamEntityMapper = streamEntityMapper;
@@ -41,6 +45,7 @@ public class LocalStreamRepository implements StreamRepository {
         this.lastStreamVisitCache = lastStreamVisitCache;
         this.timelineCache = timelineCache;
         this.timelineRepositionCache = timelineRepositionCache;
+        this.promotedTiersCache = promotedTiersCache;
     }
 
     @Override public Stream getStreamById(String idStream, String[] types) {
@@ -156,5 +161,9 @@ public class LocalStreamRepository implements StreamRepository {
 
     @Override public TimelineReposition getTimelineReposition(String idStream, String filter) {
         return timelineRepositionCache.getTimelineReposition(idStream, filter);
+    }
+
+    @Override public PromotedTiers getPromotedTiers() {
+        return promotedTiersCache.getPromotedTiers();
     }
 }

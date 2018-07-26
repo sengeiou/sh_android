@@ -35,6 +35,8 @@ public class BootstrappingEntityMapper {
         bootstrapping.setTimelineConnection(true);
       } else if (featureFlagEntity.getType().equals(FeatureFlagType.SHOT_DETAIL_CONNECTION)) {
         bootstrapping.setShotDetailConnection(true);
+      } else if (featureFlagEntity.getType().equals(FeatureFlagType.SUPER_SHOT)) {
+        bootstrapping.setSuperShot(true);
       }
     }
   }

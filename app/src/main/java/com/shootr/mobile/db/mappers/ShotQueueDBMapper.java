@@ -57,6 +57,16 @@ public class ShotQueueDBMapper extends GenericDBMapper {
           cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.USERNAME_PARENT)));
     }
 
+    if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.RECEIPT))) {
+      shotQueueEntity.setReceipt(
+          cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.RECEIPT)));
+    }
+
+    if (!cursor.isNull(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.RECEIPT_TYPE))) {
+      shotQueueEntity.setReceiptType(
+          cursor.getString(cursor.getColumnIndex(DatabaseContract.ShotQueueTable.RECEIPT_TYPE)));
+    }
+
     setSynchronizedfromCursor(cursor, shotQueueEntity);
     return shotQueueEntity;
   }
@@ -79,6 +89,8 @@ public class ShotQueueDBMapper extends GenericDBMapper {
     contentValues.put(DatabaseContract.ShotQueueTable.ID_SHOT_PARENT, entity.getIdShotParent());
     contentValues.put(DatabaseContract.ShotQueueTable.ID_USER_PARENT, entity.getIdUserParent());
     contentValues.put(DatabaseContract.ShotQueueTable.USERNAME_PARENT, entity.getUserNameParent());
+    contentValues.put(DatabaseContract.ShotQueueTable.RECEIPT, entity.getReceipt());
+    contentValues.put(DatabaseContract.ShotQueueTable.RECEIPT_TYPE, entity.getReceiptType());
     setSynchronizedtoContentValues(entity, contentValues);
 
     return contentValues;

@@ -5,6 +5,7 @@ import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.stream.Stream;
+import com.shootr.mobile.domain.model.user.PromotedTiers;
 import java.util.List;
 
 public interface StreamRepository {
@@ -52,4 +53,6 @@ public interface StreamRepository {
     void putTimelineReposition(TimelineReposition timelineReposition, String idStrea, String filter);
 
     TimelineReposition getTimelineReposition(String idStream, String filter);
+
+    PromotedTiers getPromotedTiers();
 }

@@ -2,9 +2,11 @@ package com.shootr.mobile.domain.model.poll;
 
 import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
+import com.shootr.mobile.domain.model.Seenable;
+import java.util.Date;
 import java.util.List;
 
-public class Poll implements PrintableItem {
+public class Poll implements PrintableItem, Seenable {
 
   private String idPoll;
   private String idStream;
@@ -23,6 +25,8 @@ public class Poll implements PrintableItem {
   private boolean canVote;
   private boolean dailyPoll;
   private String shareLink;
+  private Date deleted;
+  private Boolean seen;
 
   public String getIdPoll() {
     return idPoll;
@@ -168,7 +172,36 @@ public class Poll implements PrintableItem {
     return 0L;
   }
 
+  @Override public Date getDeletedData() {
+    return deleted;
+  }
+
+  @Override public void setDeletedData(Date deleted) {
+    this.deleted = deleted;
+  }
+
   @Override public String getMessageType() {
     return PrintableType.POLL;
+  }
+
+  @Override public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Poll poll = (Poll) o;
+
+    return getIdPoll() != null ? getIdPoll().equals(poll.getIdPoll()) : poll.getIdPoll() == null;
+  }
+
+  @Override public int hashCode() {
+    return getIdPoll() != null ? getIdPoll().hashCode() : 0;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
   }
 }

@@ -12,6 +12,8 @@ public interface SocketRepository {
 
   boolean subscribeToShotDetail(String subscriptionType, String idShot);
 
+  void subscribeToPromotedTiers(String subscriptionType);
+
   boolean getTimeline(String idStream, String filter, Pagination pagination);
 
   boolean getNicestTimeline(String idStream, String filter, Pagination pagination,
@@ -23,4 +25,10 @@ public interface SocketRepository {
   void unsubscribeShotDetail(String idShot);
 
   void closeSocket();
+
+  void getPromotedTiers();
+
+  void verifyReceipt(String receipt);
+
+  void markSeen(String type, String itemId);
 }

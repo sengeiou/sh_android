@@ -2,6 +2,7 @@ package com.shootr.mobile.ui.adapters.streamtimeline.holder;
 
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,6 +23,7 @@ import com.shootr.mobile.ui.widgets.VideoFrameView;
 import com.shootr.mobile.ui.widgets.VideoImageView;
 import com.shootr.mobile.util.ImageLoader;
 import com.shootr.mobile.util.NumberFormatUtil;
+import com.shootr.mobile.util.PromotedColorManager;
 import com.shootr.mobile.util.TimeFormatter;
 
 public class BubbleShotDetailViewHolder extends BaseViewHolder<ShotModel> {
@@ -53,6 +55,10 @@ public class BubbleShotDetailViewHolder extends BaseViewHolder<ShotModel> {
   @BindView(R.id.open_menu) ImageView openImageMenu;
   @BindView(R.id.shot_timestamp) TextView timestamp;
   @BindView(R.id.parent_separator) View parentSeparator;
+  @BindView(R.id.shot_container) LinearLayout container;
+  @BindView(R.id.shot_price) TextView shotPrice;
+
+  private PromotedColorManager promotedColorManager;
 
   public BubbleShotDetailViewHolder(View itemView, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, OnNiceShotListener onNiceShotListener,
@@ -68,6 +74,7 @@ public class BubbleShotDetailViewHolder extends BaseViewHolder<ShotModel> {
     this.onUrlClickListener = onUrlClickListener;
     this.onImageClickListener = onImageClickListener;
     ButterKnife.bind(this, itemView);
+    promotedColorManager = new PromotedColorManager(itemView.getContext());
   }
 
   public void render(ShotModel shot) {
@@ -83,6 +90,8 @@ public class BubbleShotDetailViewHolder extends BaseViewHolder<ShotModel> {
     bindReplyCount(shot);
     bindElapsedTime(shot);
     setupParentSeparator(shot);
+    setupBubbleBackground(shot);
+    setupPrice(shot);
   }
 
   private void setupParentSeparator(ShotModel shot) {
@@ -277,4 +286,21 @@ public class BubbleShotDetailViewHolder extends BaseViewHolder<ShotModel> {
     long shotTimestamp = shot.getBirth().getTime();
     this.timestamp.setText(timeFormatter.getDateAndTimeDetailed(shotTimestamp));
   }
+
+  private void setupBubbleBackground(ShotModel shot) {
+    container.setBackground(promotedColorManager.getDrawableForPromoted(shot));
+  }
+
+  private void setupPrice(ShotModel shotModel) {
+    String price = promotedColorManager.getPromotedPrice(shotModel);
+
+    if (!price.isEmpty()) {
+      shotPrice.setVisibility(View.VISIBLE);
+      shotPrice.setText(price);
+      shotPrice.setTextColor(promotedColorManager.getPriceColor(shotModel));
+    } else {
+      shotPrice.setVisibility(View.GONE);
+    }
+  }
+
 }

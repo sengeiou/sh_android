@@ -34,4 +34,10 @@ public interface MessageBoxView {
   void enableSendButton();
 
   void disableSendButton();
+
+  void hidePromotedButton();
+
+  void showPromotedButton();
+
+  void showPromotedBadge();
 }

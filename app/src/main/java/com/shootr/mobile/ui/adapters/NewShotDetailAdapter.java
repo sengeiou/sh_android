@@ -3,9 +3,12 @@ package com.shootr.mobile.ui.adapters;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
+import com.ahamed.multiviewadapter.DataItemManager;
 import com.ahamed.multiviewadapter.DataListManager;
 import com.ahamed.multiviewadapter.RecyclerAdapter;
 import com.ahamed.multiviewadapter.util.PayloadProvider;
+import com.shootr.mobile.ui.adapters.binder.ListElement;
+import com.shootr.mobile.ui.adapters.binder.NonSubscriberHeaderBinder;
 import com.shootr.mobile.ui.adapters.binder.SeparatorElementBinder;
 import com.shootr.mobile.ui.adapters.binder.ShotDetailBinder;
 import com.shootr.mobile.ui.adapters.binder.ShotDetailRepliesBinder;
@@ -64,6 +67,7 @@ public class NewShotDetailAdapter extends RecyclerAdapter {
   private DataListManager<PrintableModel> subscribersReplies;
   private DataListManager<PrintableModel> basicReplies;
   private DataListManager<PrintableModel> mainShot;
+  private DataItemManager<ListElement> nonSubscribersHeader;
   private PayloadProvider<PrintableModel> payloadProvider;
   private List<PrintableModel> parentsList;
 
@@ -111,11 +115,13 @@ public class NewShotDetailAdapter extends RecyclerAdapter {
     subscribersReplies = new DataListManager<>(this, payloadProvider);
     basicReplies = new DataListManager<>(this, payloadProvider);
     mainShot = new DataListManager<>(this, payloadProvider);
+    nonSubscribersHeader = new DataItemManager<>(this);
 
     addDataManager(parentShots);
     addDataManager(mainShot);
     addDataManager(promotedReplies);
     addDataManager(subscribersReplies);
+    addDataManager(nonSubscribersHeader);
     addDataManager(basicReplies);
 
     registerBinder(new ShotDetailBinder(imageLoader, avatarClickListener, videoClickListener,
@@ -129,7 +135,7 @@ public class NewShotDetailAdapter extends RecyclerAdapter {
         replyShotClickListener, onShotLongClick, onOpenShotMenuListener, onLongClickListener,
         onTouchListener, imageClickListener, null, onUrlClickListener, onReshootClickListener, null,
         numberFormatUtil));
-    registerBinder(new SeparatorElementBinder());
+    registerBinder(new NonSubscriberHeaderBinder());
   }
 
   @Override public long getItemId(int position) {
@@ -137,12 +143,26 @@ public class NewShotDetailAdapter extends RecyclerAdapter {
   }
 
   public void renderItems(List<PrintableModel> mainShot, List<PrintableModel> promotedItem,
-      List<PrintableModel> subscribersItem, List<PrintableModel> basicItems, List<PrintableModel> parents) {
+      List<PrintableModel> subscribersItem, List<PrintableModel> basicItems,
+      List<PrintableModel> parents) {
     this.mainShot.set(mainShot);
     promotedReplies.set(promotedItem);
     subscribersReplies.set(subscribersItem);
     basicReplies.set(basicItems);
     parentsList = parents;
+    if ((!promotedItem.isEmpty() || !subscribersItem.isEmpty()) && !basicItems.isEmpty()) {
+      showNonSubscribersHeader();
+    } else {
+      hideNonSubscribersHeader();
+    }
+  }
+
+  public void showNonSubscribersHeader() {
+    nonSubscribersHeader.setItem(new ListElement(ListElement.NON_SUBSCRIBERS));
+  }
+
+  public void hideNonSubscribersHeader() {
+    nonSubscribersHeader.removeItem();
   }
 
   public void addPromotedShot(PrintableModel item) {

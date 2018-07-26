@@ -7,7 +7,9 @@ import com.shootr.mobile.data.entity.EventParams;
 import com.shootr.mobile.data.entity.socket.NewShotContentApiEntity;
 import com.shootr.mobile.data.entity.NewShotParameters;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.socket.ShotReceiptApiEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
+
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -34,6 +36,14 @@ public class ShotSenderSocketApiManager {
     newShotParameters.setType(shotEntity.getType());
     newShotParameters.setImageMedia(shotEntity.getImageIdMedia());
     newShotParameters.setIdShotParent(shotEntity.getIdShotParent());
+
+    if (shotEntity.getReceipt() != null) {
+      ShotReceiptApiEntity shotReceiptApiEntity = new ShotReceiptApiEntity();
+      shotReceiptApiEntity.setData(shotEntity.getReceipt());
+      shotReceiptApiEntity.setType(shotEntity.getReceiptType());
+
+      newShotContentApiEntity.setReceipt(shotReceiptApiEntity);
+    }
 
     newShotContentApiEntity.setShot(newShotParameters);
     createShotSocketMessageApiService.setData(newShotContentApiEntity);

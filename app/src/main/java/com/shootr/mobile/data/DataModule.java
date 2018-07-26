@@ -29,6 +29,7 @@ import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineReposition;
 import com.shootr.mobile.domain.model.shot.NewShotDetail;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
+import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
 import com.shootr.mobile.domain.repository.Nicest;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -168,6 +169,7 @@ import static android.content.Context.MODE_PRIVATE;
   private static final String LOGS = "logs";
   private static final String TIMELINE_REPOSITION_CACHE = "timeline_reposition_cache";
   private static final String SHOT_DETAIL_CACHE = "shot_detail_cache";
+  private static final String PROMOTED_TIER_CACHE = "promoted_tier_cache";
 
   @Provides @Singleton DeviceFactory provideDeviceFactory(
       AndroidDeviceFactory androidDeviceFactory) {
@@ -406,6 +408,17 @@ import static android.content.Context.MODE_PRIVATE;
         new JsonSerializer<>(NewShotDetail.class);
 
     return new Builder<NewShotDetail>(SHOT_DETAIL_CACHE,
+        BuildConfig.VERSION_CODE).useSerializerInRam(LRU_CACHE_SIZE, jsonSerializer)
+        .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
+        .build();
+  }
+
+  @Provides @Singleton DualCache<PromotedTiers> providePromotedTiersLruCache(
+      Application application) {
+    CacheSerializer<PromotedTiers> jsonSerializer =
+        new JsonSerializer<>(PromotedTiers.class);
+
+    return new Builder<PromotedTiers>(PROMOTED_TIER_CACHE,
         BuildConfig.VERSION_CODE).useSerializerInRam(LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
         .build();

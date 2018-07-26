@@ -8,6 +8,7 @@ import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
 import com.shootr.mobile.domain.model.user.User;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +39,7 @@ public class Stream implements Searchable, Followable, Validable, PrintableItem 
     private String photoIdMedia;
     private boolean muted;
     private long views;
+    private boolean canPostPromoted;
     private boolean canWrite;
     private boolean canReply;
     private boolean canPinItem;
@@ -229,6 +231,14 @@ public class Stream implements Searchable, Followable, Validable, PrintableItem 
         return 0L;
     }
 
+    @Override public Date getDeletedData() {
+        return null;
+    }
+
+    @Override public void setDeletedData(Date deleted) {
+        /* no-op */
+    }
+
     @Override public String getMessageType() {
         return null;
     }
@@ -335,6 +345,14 @@ public class Stream implements Searchable, Followable, Validable, PrintableItem 
 
     public void setViews(long views) {
         this.views = views;
+    }
+
+    public boolean canPostPromoted() {
+        return canPostPromoted;
+    }
+
+    public void setCanPostPromoted(boolean canPostPromoted) {
+        this.canPostPromoted = canPostPromoted;
     }
 
     public boolean canWrite() {

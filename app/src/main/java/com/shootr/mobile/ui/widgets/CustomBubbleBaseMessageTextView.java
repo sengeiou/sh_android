@@ -30,8 +30,10 @@ import com.shootr.mobile.ui.adapters.listeners.OnUrlClickListener;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.EntityContainable;
 import com.shootr.mobile.ui.model.MentionModel;
+import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamIndexModel;
 import com.shootr.mobile.ui.model.UrlModel;
+import com.shootr.mobile.util.PromotedColorManager;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,6 +52,7 @@ public class CustomBubbleBaseMessageTextView extends View  {
   private String textColor = "#FF000000";
   private AttributeSet attributeSet;
   private int maxWidth;
+  private PromotedColorManager promotedColorManager;
 
   String text = "";
   CharSequence currenText;
@@ -89,6 +92,7 @@ public class CustomBubbleBaseMessageTextView extends View  {
   }
 
   public void initLabelView(AttributeSet attributeSet) {
+    promotedColorManager = new PromotedColorManager(getContext());
     this.attributeSet = attributeSet;
 
     if (attributeSet != null) {
@@ -107,27 +111,24 @@ public class CustomBubbleBaseMessageTextView extends View  {
     } else {
       textColor = DEFAULT_COLOR_TEXT;
     }
-
-    if (textPaint == null) {
-      textPaint = new TextPaint();
-      textPaint.setAntiAlias(true);
-      textPaint.setTextSize(sp(16));
-      textPaint.setColor(Color.parseColor(textColor));
-      Typeface typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
-      textPaint.setTypeface(typeface);
-      textPaint.linkColor = Color.parseColor("#bdbdbd");
-    }
   }
 
   public void setText(CharSequence text, boolean myShot) {
+
+    textPaint = new TextPaint();
+    textPaint.setAntiAlias(true);
+    textPaint.setTextSize(sp(16));
+    textPaint.setColor(Color.parseColor(textColor));
+    Typeface typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
+    textPaint.setTypeface(typeface);
+    textPaint.linkColor = Color.parseColor("#bdbdbd");
 
     currenText = text;
     int textWidth = (int) textPaint.measureText(text.toString());
     if (textWidth > maxWidth) {
       textWidth = maxWidth;
     }
-
-
+    setupTextColor(isMine);
     staticLayout =
         new StaticLayout(text, textPaint, textWidth, Layout.Alignment.ALIGN_NORMAL, 1, 1, true);
     requestLayout();
@@ -136,6 +137,12 @@ public class CustomBubbleBaseMessageTextView extends View  {
       setVisibility(GONE);
     } else {
       setVisibility(VISIBLE);
+    }
+  }
+
+  private void setupTextColor(boolean isMine) {
+    if (baseMessageModel != null) {
+      textPaint.setColor(promotedColorManager.getDetailColors((ShotModel) baseMessageModel));
     }
   }
 

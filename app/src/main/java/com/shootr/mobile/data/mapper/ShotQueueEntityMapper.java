@@ -50,6 +50,12 @@ public class ShotQueueEntityMapper {
         entity.setVideoDuration(shot.getVideoDuration());
 
         entity.setType(shot.getType());
+
+        Shot.PromotedShotParams promotedShotParams = shot.getPromotedShotParams();
+        if (promotedShotParams != null) {
+            entity.setReceiptType(promotedShotParams.getType());
+            entity.setReceipt(promotedShotParams.getData());
+        }
         return entity;
     }
 
@@ -97,6 +103,14 @@ public class ShotQueueEntityMapper {
         shot.setType(entity.getType());
 
         queuedShot.setBaseMessage(shot);
+
+        Shot.PromotedShotParams promotedShotParams = new Shot.PromotedShotParams();
+        promotedShotParams.setData(entity.getReceipt());
+        promotedShotParams.setType(entity.getReceiptType());
+        if (promotedShotParams.getData() != null) {
+            shot.setPromotedShotParams(promotedShotParams);
+        }
+
         return queuedShot;
     }
 

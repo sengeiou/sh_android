@@ -2,6 +2,7 @@ package com.shootr.mobile.data.repository.remote.cache;
 
 import com.shootr.mobile.data.repository.datasource.CachedDataSource;
 import com.shootr.mobile.domain.model.DataItem;
+import com.shootr.mobile.domain.model.ListType;
 import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
 import com.shootr.mobile.domain.model.StreamTimeline;
@@ -10,6 +11,7 @@ import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.repository.Nicest;
 import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
+import com.shootr.mobile.util.MergeUtils;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 import java.util.ArrayList;
 import javax.inject.Inject;
@@ -94,7 +96,7 @@ public class TimelineCache implements CachedDataSource {
   public void putFixedItem(DataItem fixed, String idStream, String filter) {
     StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
     if (timeline != null) {
-      timeline.setFixed(fixed);
+      //timeline.setFixed(fixed);
       storeTimeline(timeline);
     }
 
@@ -103,7 +105,7 @@ public class TimelineCache implements CachedDataSource {
   public void putPinnedItem(DataItem pinned, String idStream, String filter) {
     StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
     if (timeline != null) {
-      timeline.setPinned(pinned);
+      //timeline.setPinned(pinned);
       storeTimeline(timeline);
       for (PrintableItem printableItem : pinned.getData()) {
         if (printableItem.getResultType().equals(PrintableType.POLL)) {
@@ -115,15 +117,42 @@ public class TimelineCache implements CachedDataSource {
 
   }
 
-  public void putItemInTimeline(PrintableItem printableItem, String filter) {
-    if (printableItem.getResultType().equals(PrintableType.SHOT)) {
-      String idStream = ((Shot) printableItem).getStreamInfo().getIdStream();
-      StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
-      if (timeline != null) {
-        timeline.getItems().getData().add(0, printableItem);
-        storeTimeline(timeline);
-      }
+  public void putItemInTimeline(PrintableItem printableItem, String idStream, String filter,
+      String list) {
+
+    StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
+
+    if (timeline == null) {
+      return;
     }
+
+    switch (list) {
+      case ListType.TIMELINE_ITEMS:
+        timeline.getItems().getData().add(0, printableItem);
+        break;
+
+      case ListType.TIMELINE_VIDEOS:
+        timeline.getVideos().getData().add(0, printableItem);
+        break;
+
+      case ListType.TIMELINE_POLLS:
+        timeline.getPolls().getData().add(0, printableItem);
+        break;
+
+      case ListType.TIMELINE_HIGHLIGHTED_SHOTS:
+        timeline.getHighlightedShots().getData().add(0, printableItem);
+        break;
+      case ListType.TIMELINE_PROMOTED_SHOTS:
+        timeline.getPromotedShots().getData().add(0, printableItem);
+        break;
+      case ListType.TIMELINE_FOLLOWING_USERS:
+        timeline.getFollowings().getData().add(0, printableItem);
+        break;
+      default:
+        break;
+    }
+
+    storeTimeline(timeline);
   }
 
   public void updateItemInNicestTimeline(PrintableItem printableItem, String filter, long period) {
@@ -132,34 +161,98 @@ public class TimelineCache implements CachedDataSource {
       StreamTimeline timeline = this.getNicestTimeline(idStream, filter.toLowerCase(), period);
       if (timeline != null) {
         updateItemInList(timeline.getItems().getData(), printableItem, true);
-        if (timeline.getFixed() != null) {
-          updateItemInList(timeline.getFixed().getData(), printableItem, false);
-        }
         putNicestTimeline(timeline);
       }
 
     }
   }
 
-  public void updateItem(PrintableItem printableItem, String filter) {
-    if (printableItem.getResultType().equals(PrintableType.SHOT)) {
-      String idStream = ((Shot) printableItem).getStreamInfo().getIdStream();
-      StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
-      if (timeline != null) {
+  public void updateItem(PrintableItem printableItem, String idStream, String filter, String list) {
 
-        updateItemInList(timeline.getItems().getData(), printableItem, false);
-        if (timeline.getFixed() != null) {
-          updateItemInList(timeline.getFixed().getData(), printableItem, false);
-        }
-        storeTimeline(timeline);
-      }
+    StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
+
+    if (timeline == null) {
+      return;
     }
+
+    switch (list) {
+      case ListType.TIMELINE_ITEMS:
+        updateItemInList(timeline.getItems().getData(), printableItem, false);
+        break;
+
+      case ListType.TIMELINE_VIDEOS:
+        updateItemInList(timeline.getVideos().getData(), printableItem, false);
+        break;
+
+      case ListType.TIMELINE_POLLS:
+        updateItemInList(timeline.getPolls().getData(), printableItem, false);
+        break;
+
+      case ListType.TIMELINE_HIGHLIGHTED_SHOTS:
+        updateItemInList(timeline.getHighlightedShots().getData(), printableItem, false);
+
+      case ListType.TIMELINE_PROMOTED_SHOTS:
+        updateItemInList(timeline.getPromotedShots().getData(), printableItem, false);
+        break;
+      case ListType.TIMELINE_FOLLOWING_USERS:
+        updateItemInList(timeline.getFollowings().getData(), printableItem, false);
+        break;
+      default:
+        break;
+    }
+
+    storeTimeline(timeline);
   }
 
-  private void updateItemInList(ArrayList<PrintableItem> items, PrintableItem printableItem, boolean insertIfNoExists) {
+  public PrintableItem partialUpdateItem(PrintableItem printableItem, String idStream,
+      String filter, String list) {
+
+    PrintableItem printableItemResult = null;
+    StreamTimeline timeline = this.getTimeline(idStream, filter.toLowerCase());
+
+    if (timeline == null) {
+      return printableItemResult;
+    }
+
+    switch (list) {
+      case ListType.TIMELINE_ITEMS:
+        printableItemResult = partialUpdateItemInList(timeline.getItems().getData(), printableItem);
+        break;
+
+      case ListType.TIMELINE_VIDEOS:
+        printableItemResult =
+            partialUpdateItemInList(timeline.getVideos().getData(), printableItem);
+        break;
+
+      case ListType.TIMELINE_POLLS:
+        printableItemResult = partialUpdateItemInList(timeline.getPolls().getData(), printableItem);
+        break;
+
+      case ListType.TIMELINE_HIGHLIGHTED_SHOTS:
+        printableItemResult =
+            partialUpdateItemInList(timeline.getHighlightedShots().getData(), printableItem);
+        break;
+      case ListType.TIMELINE_PROMOTED_SHOTS:
+        printableItemResult =
+            partialUpdateItemInList(timeline.getPromotedShots().getData(), printableItem);
+        break;
+      case ListType.TIMELINE_FOLLOWING_USERS:
+        printableItemResult =
+            partialUpdateItemInList(timeline.getFollowings().getData(), printableItem);
+        break;
+      default:
+        break;
+    }
+    storeTimeline(timeline);
+    return printableItemResult;
+  }
+
+
+  private void updateItemInList(ArrayList<PrintableItem> items, PrintableItem printableItem,
+      boolean insertIfNoExists) {
     int index = items.indexOf(printableItem);
     if (index != -1) {
-      if (((Shot) printableItem).getMetadata().getDeleted() != null) {
+      if (printableItem.getDeletedData() != null) {
         items.remove(index);
       } else {
         items.set(index, printableItem);
@@ -169,6 +262,21 @@ public class TimelineCache implements CachedDataSource {
         items.add(0, printableItem);
       }
     }
+  }
+
+  private PrintableItem partialUpdateItemInList(ArrayList<PrintableItem> items,
+      PrintableItem printableItem) {
+    PrintableItem returnValue = null;
+    int index = items.indexOf(printableItem);
+    if (index != -1) {
+      returnValue = (PrintableItem) MergeUtils.mergePrintableItem(printableItem, items.get(index));
+      if (returnValue.getDeletedData() != null) {
+        items.remove(index);
+      } else {
+        items.set(index, returnValue);
+      }
+    }
+    return returnValue;
   }
 
   @Override public boolean isValid() {

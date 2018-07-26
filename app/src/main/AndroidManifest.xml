@@ -22,6 +22,8 @@
   <!-- optional -->
   <uses-permission android:name="${applicationId}.permission.C2D_MESSAGE"/>
 
+  <uses-permission android:name="com.android.vending.BILLING" />
+
   <permission
       android:name="${packageName}.permission.C2D_MESSAGE"
       android:protectionLevel="signature"/>
@@ -350,9 +352,13 @@
         android:label="@string/title_activity_history">
     </activity>
     <activity android:name=".ui.activities.NewShotDetailActivity"/>
-
     <activity android:name=".ui.activities.registro.PrivacyLawActivity">
     </activity>
+
+    <activity
+        android:name=".ui.activities.PostPromotedShotActivity"
+        android:theme="@style/ShootrTheme.NoActionBar.Floating"/>
+
 
     <service android:name=".data.background.sockets.WebSocketService"/>
 

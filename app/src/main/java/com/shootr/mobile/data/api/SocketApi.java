@@ -33,7 +33,16 @@ public interface SocketApi {
 
   void sendNewShot(ShotEntity shotEntity, String idQueue);
 
+  void getPromotedTiers();
+
+  void verifyReceipt(String receipt);
+
+  void subscribeToPromotedTiers(String subscriptionType);
+
+  void markSeen(String type, String itemId);
+
   boolean highlightShot(String idShot, String idStream);
 
   boolean unHighlightShot(String idShot, String idStream);
+
 }

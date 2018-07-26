@@ -4,6 +4,7 @@ public class ListElement {
 
   public static final String SEPARATOR = "separator";
   public static final String HEADER = "header";
+  public static final String NON_SUBSCRIBERS = "non_subscribers";
 
   private String elementType;
 

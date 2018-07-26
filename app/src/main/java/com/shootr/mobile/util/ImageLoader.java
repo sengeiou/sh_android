@@ -48,6 +48,9 @@ public interface ImageLoader {
     @UiThread
     void loadWithPreview(String url, String previewUrl, ImageView view, Callback callback);
 
+    @UiThread
+    void loadImageWithId(ImageView view, int resourceId);
+
     @WorkerThread
     Bitmap loadProfilePhoto(String url) throws IOException;
 

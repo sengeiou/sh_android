@@ -55,4 +55,6 @@ public interface SessionRepository {
     boolean isNewTimeline();
 
     boolean isNewShotDetail();
+
+    boolean isPromotedShotActivated();
 }

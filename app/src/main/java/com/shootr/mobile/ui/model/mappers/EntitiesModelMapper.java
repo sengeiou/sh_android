@@ -8,12 +8,15 @@ import com.shootr.mobile.domain.model.shot.Mention;
 import com.shootr.mobile.domain.model.shot.Poll;
 import com.shootr.mobile.domain.model.shot.StreamIndex;
 import com.shootr.mobile.domain.model.shot.Url;
+import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.model.BackgroundModel;
 import com.shootr.mobile.ui.model.BaseMessagePollModel;
 import com.shootr.mobile.ui.model.CardModel;
 import com.shootr.mobile.ui.model.EntitiesModel;
 import com.shootr.mobile.ui.model.ImageMediaModel;
 import com.shootr.mobile.ui.model.ImageSizeModel;
 import com.shootr.mobile.ui.model.MentionModel;
+import com.shootr.mobile.ui.model.PromotedModel;
 import com.shootr.mobile.ui.model.SizesModel;
 import com.shootr.mobile.ui.model.StreamIndexModel;
 import com.shootr.mobile.ui.model.UrlModel;
@@ -22,7 +25,10 @@ import javax.inject.Inject;
 
 public class EntitiesModelMapper {
 
-  @Inject public EntitiesModelMapper() {
+  private final SessionRepository sessionRepository;
+
+  @Inject public EntitiesModelMapper(SessionRepository sessionRepository) {
+    this.sessionRepository = sessionRepository;
   }
 
   public EntitiesModel setupEntities(Entities entities) {
@@ -34,6 +40,9 @@ public class EntitiesModelMapper {
       setupImages(entities, entitiesModel);
       setupMentions(entities, entitiesModel);
       setupCards(entities, entitiesModel);
+      if (sessionRepository.isPromotedShotActivated()) {
+        setupPromoted(entities, entitiesModel);
+      }
     }
     return entitiesModel;
   }
@@ -165,4 +174,20 @@ public class EntitiesModelMapper {
     return String.format("%d:%s", minutes, secondsTwoDigits);
   }
 
+  private void setupPromoted(Entities entities, EntitiesModel entitiesModel) {
+    if (entities.getPromoted() != null) {
+      PromotedModel promotedModel = new PromotedModel();
+      promotedModel.setCurrency(entities.getPromoted().getCurrency());
+      promotedModel.setDisplayPrice(entities.getPromoted().getDisplayPrice());
+      promotedModel.setPrice(entities.getPromoted().getPrice());
+
+      BackgroundModel backgroundModel = new BackgroundModel();
+      backgroundModel.setAngle(entities.getPromoted().getBackground().getAngle());
+      backgroundModel.setColors(entities.getPromoted().getBackground().getColors());
+      backgroundModel.setType(entities.getPromoted().getBackground().getType());
+      promotedModel.setBackground(backgroundModel);
+
+      entitiesModel.setPromoted(promotedModel);
+    }
+  }
 }

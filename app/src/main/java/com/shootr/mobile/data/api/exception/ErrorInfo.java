@@ -56,6 +56,9 @@ public enum ErrorInfo {
   public static final int CODE_RESOURCE_NOT_FOUND = 3001;
   public static final int CODE_STREAM_REMOVED = 6002;
   public static final int CODE_STREAM_VIEW_ONLY = 6004;
+  public static final int CODE_INVALID_RECEIPT = 11001;
+  public static final int CODE_INVALID_SHOT_RECEIPT = 2004;
+
 
 
   private int code;

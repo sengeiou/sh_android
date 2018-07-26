@@ -13,25 +13,28 @@ import com.google.gson.JsonSerializer;
 import com.shootr.mobile.data.api.entity.BaseMessageApiEntity;
 import com.shootr.mobile.data.api.entity.ExternalVideoApiEntity;
 import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
+import com.shootr.mobile.data.api.entity.PromotedReceiptApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.TopicApiEntity;
+import com.shootr.mobile.data.entity.FollowableEntity;
+import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.PollEntity;
+import com.shootr.mobile.data.entity.PromotedTiersSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.StreamEntity;
+import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.data.entity.socket.AckSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessaggeApiEntity;
 import com.shootr.mobile.data.entity.socket.FixedItemsSocketMessagesApiEntity;
-import com.shootr.mobile.data.entity.FollowableEntity;
 import com.shootr.mobile.data.entity.socket.NewBadgeContentSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.NewItemSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ParticipantsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.PinnedItemsSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
-import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.service.RuntimeTypeAdapterFactory;
 import java.lang.reflect.Type;
 import java.util.Date;
@@ -64,17 +67,30 @@ public class SocketMessageEntityWrapper {
 
     final RuntimeTypeAdapterFactory<SocketMessageApiEntity> socketMessageRuntimeTypeAdapterFactory =
         RuntimeTypeAdapterFactory.of(SocketMessageApiEntity.class, "type")
-            .registerSubtype(NewItemSocketMessageApiEntity.class, SocketMessageApiEntity.NEW_ITEM_DATA)
-            .registerSubtype(UpdateItemSocketMessageApiEntity.class, SocketMessageApiEntity.UPDATE_ITEM_DATA)
+            .registerSubtype(NewItemSocketMessageApiEntity.class,
+                SocketMessageApiEntity.NEW_ITEM_DATA)
+            .registerSubtype(UpdateItemSocketMessageApiEntity.class,
+                SocketMessageApiEntity.UPDATE_ITEM_DATA)
+            .registerSubtype(PartialUpdateItemSocketMessageApiEntity.class,
+                SocketMessageApiEntity.PARTIAL_UPDATE_ITEM_DATA)
             .registerSubtype(TimelineMessageApiEntity.class, SocketMessageApiEntity.TIMELINE)
-            .registerSubtype(ParticipantsSocketMessageApiEntity.class, SocketMessageApiEntity.PARTICIPANTS_UPDATE)
-            .registerSubtype(PinnedItemsSocketMessageApiEntity.class, SocketMessageApiEntity.H1_ITEMS)
-            .registerSubtype(FixedItemsSocketMessagesApiEntity.class, SocketMessageApiEntity.H2_ITEMS)
-            .registerSubtype(NewBadgeContentSocketMessageApiEntity.class, SocketMessageApiEntity.NEW_BADGE_CONTENT)
-            .registerSubtype(ShotDetailSocketMessageApiEntity.class, SocketMessageApiEntity.SHOT_DETAIL)
-            .registerSubtype(ShotUpdateSocketMessageApiEntity.class, SocketMessageApiEntity.SHOT_UPDATE)
-            .registerSubtype(CreatedShotSocketMessageApiEntity.class, SocketMessageApiEntity.CREATED_SHOT)
+            .registerSubtype(ParticipantsSocketMessageApiEntity.class,
+                SocketMessageApiEntity.PARTICIPANTS_UPDATE)
+            .registerSubtype(PinnedItemsSocketMessageApiEntity.class,
+                SocketMessageApiEntity.H1_ITEMS)
+            .registerSubtype(FixedItemsSocketMessagesApiEntity.class,
+                SocketMessageApiEntity.H2_ITEMS)
+            .registerSubtype(NewBadgeContentSocketMessageApiEntity.class,
+                SocketMessageApiEntity.NEW_BADGE_CONTENT)
+            .registerSubtype(ShotDetailSocketMessageApiEntity.class,
+                SocketMessageApiEntity.SHOT_DETAIL)
+            .registerSubtype(ShotUpdateSocketMessageApiEntity.class,
+                SocketMessageApiEntity.SHOT_UPDATE)
+            .registerSubtype(CreatedShotSocketMessageApiEntity.class,
+                SocketMessageApiEntity.CREATED_SHOT)
             .registerSubtype(ErrorSocketMessaggeApiEntity.class, SocketMessageApiEntity.ERROR)
+            .registerSubtype(PromotedTiersSocketMessageApiEntity.class,
+                SocketMessageApiEntity.PROMOTED_TIERS)
             .registerSubtype(AckSocketMessageApiEntity.class, SocketMessageApiEntity.ACK);
 
     final RuntimeTypeAdapterFactory<FollowableEntity> typeFactory =
@@ -89,7 +105,9 @@ public class SocketMessageEntityWrapper {
             .registerSubtype(BaseMessageApiEntity.class, "BASE_MESSAGE")
             .registerSubtype(TopicApiEntity.class, "TOPIC")
             .registerSubtype(ExternalVideoApiEntity.class, "EXTERNAL_VIDEO")
-            .registerSubtype(PollEntity.class, "POLL");
+            .registerSubtype(PromotedReceiptApiEntity.class, "PROMOTED_RECEIPT")
+            .registerSubtype(PollEntity.class, "POLL")
+            .registerSubtype(UserEntity.class, "USER");
 
     return new GsonBuilder() //
         .registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {

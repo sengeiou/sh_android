@@ -1,6 +1,7 @@
 package com.shootr.mobile.domain.model;
 
 import com.shootr.mobile.domain.model.shot.Entities;
+import java.util.Date;
 
 public class Topic implements PrintableItem {
 
@@ -29,6 +30,14 @@ public class Topic implements PrintableItem {
 
   @Override public Long getOrder() {
     return 0L;
+  }
+
+  @Override public Date getDeletedData() {
+    return null;
+  }
+
+  @Override public void setDeletedData(Date deleted) {
+    /* NO-OP */
   }
 
   @Override public String getMessageType() {

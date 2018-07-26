@@ -4,6 +4,7 @@ import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.executor.PostExecutionThread;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.InteractorHandler;
+import com.shootr.mobile.domain.model.ReceiptType;
 import com.shootr.mobile.domain.model.privateMessage.PrivateMessage;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Sendable;
@@ -25,6 +26,7 @@ public abstract class PostNewMessageInteractor implements Interactor {
   private String comment;
   private File imageFile;
   private boolean isShot;
+  private String receipt;
   private CompletedCallback callback;
   private ErrorCallback errorCallback;
 
@@ -42,6 +44,17 @@ public abstract class PostNewMessageInteractor implements Interactor {
     this.comment = comment;
     this.imageFile = image;
     this.isShot = isShot;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
+  public void postNewPromotedShot(String comment, File image, String receipt, CompletedCallback callback,
+      ErrorCallback errorCallback) {
+    this.comment = comment;
+    this.imageFile = image;
+    this.isShot = true;
+    this.receipt = receipt;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -75,7 +88,17 @@ public abstract class PostNewMessageInteractor implements Interactor {
     shot.setPublishDate(new Date());
     fillShotContextualInfo(shot);
     shot.setType(ShotType.COMMENT);
+    setupReceipt(shot);
     return shot;
+  }
+
+  private void setupReceipt(Shot shot) {
+    if (receipt != null) {
+      Shot.PromotedShotParams promotedShotParams = new Shot.PromotedShotParams();
+      promotedShotParams.setData(receipt);
+      promotedShotParams.setType(ReceiptType.CUSTOM);
+      shot.setPromotedShotParams(promotedShotParams);
+    }
   }
 
   private BaseMessage createMessageFromParameters() {

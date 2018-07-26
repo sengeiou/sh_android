@@ -12,9 +12,9 @@ public interface StreamTimelineView {
 
   void renderExternalVideo(ExternalVideoModel externalVideoModel);
 
-  void renderFixedItems(List<PrintableModel> items);
+  void renderPolls(List<PrintableModel> items);
 
-  void renderPinnedItems(List<PrintableModel> items);
+  void renderHighlightedItems(List<PrintableModel> items);
 
   void addNewItems(List<PrintableModel> items);
 
@@ -111,4 +111,30 @@ public interface StreamTimelineView {
   void handleNewNicestItem(PrintableModel shotModel);
 
   void hideExternalVideo();
+
+  void showPromotedButton();
+
+  void addNewHighlighted(List<PrintableModel> printableModels);
+
+  void addNewPoll(List<PrintableModel> printableModels);
+
+  void addNewPromoted(List<PrintableModel> printableModels);
+
+  void showPromotedList();
+
+  void updateHighlighted(PrintableModel printableModel);
+
+  void updatePoll(PrintableModel printableModel);
+
+  void updatePromoted(PrintableModel printableModel);
+
+  void renderPromoteds(List<PrintableModel> printableModels);
+
+  void hidePromotedButton();
+
+  void renderFollowings(List<PrintableModel> printableModels);
+
+  void addNewFollowing(List<PrintableModel> printableModels);
+
+  void updateFollowing(PrintableModel printableModel);
 }

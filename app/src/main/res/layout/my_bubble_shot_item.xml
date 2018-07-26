@@ -135,7 +135,7 @@
           android:layout_height="175dp"
           android:foreground="?selectableItemBackground"
           android:visibility="gone"
-          tools:visibility="visible">
+          tools:visibility="gone">
 
         <com.shootr.mobile.ui.widgets.VideoImageView
             android:id="@+id/video_image"
@@ -240,6 +240,19 @@
       app:layout_constraintTop_toBottomOf="@id/shot_container"
       app:layout_constraintEnd_toEndOf="@+id/shot_container"
       >
+
+    <TextView
+        android:id="@+id/shot_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        android:visibility="gone"
+        android:padding="4dp"
+        tools:text="1 response"
+        tools:visibility="visible"
+        />
 
     <TextView
         android:id="@+id/shot_reply_count"

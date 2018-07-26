@@ -17,10 +17,12 @@ import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetPromotedTiersInteractor;
 import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.GetSocketInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SendCacheQueueInteractor;
+import com.shootr.mobile.domain.interactor.SubscribePromotedTiersInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
@@ -65,6 +67,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   private final GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor;
   private final GetLocalStreamInteractor getStreamInteractor;
   private final GetShootrEventsInteractor getShootrEventsInteractor;
+  private final GetPromotedTiersInteractor getPromotedTiersInteractor;
   private final StreamModelMapper streamModelMapper;
   private final Bus bus;
   private final BusPublisher busPublisher;
@@ -92,9 +95,11 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
       @ActivityBadgeCount IntPreference badgeCount,
       GetPrivateMessagesChannelsInteractor getPrivateMessagesChannelsInteractor,
       GetLocalStreamInteractor getStreamInteractor,
-      GetShootrEventsInteractor getShootrEventsInteractor, StreamModelMapper streamModelMapper,
-      @Main Bus bus, BusPublisher busPublisher, @ApplicationContext Context context,
-      LogsCache logsCache, AnalyticsTool analyticsTool) {
+      GetShootrEventsInteractor getShootrEventsInteractor,
+      GetPromotedTiersInteractor getPromotedTiersInteractor,
+      SubscribePromotedTiersInteractor subscribePromotedTiersInteractor,
+      StreamModelMapper streamModelMapper, @Main Bus bus, BusPublisher busPublisher,
+      @ApplicationContext Context context, LogsCache logsCache, AnalyticsTool analyticsTool) {
     this.getCurrentUserInteractor = getCurrentUserInteractor;
     this.sendDeviceInfoInteractor = sendDeviceInfoInteractor;
     this.sendShootrEventStatsInteractor = sendShootrEventStatsInteractor;
@@ -109,6 +114,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.getPrivateMessagesChannelsInteractor = getPrivateMessagesChannelsInteractor;
     this.getStreamInteractor = getStreamInteractor;
     this.getShootrEventsInteractor = getShootrEventsInteractor;
+    this.getPromotedTiersInteractor = getPromotedTiersInteractor;
     this.streamModelMapper = streamModelMapper;
     this.bus = bus;
     this.busPublisher = busPublisher;
@@ -131,8 +137,7 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     this.updateActivityBadge();
     this.loadConnectedStream();
     this.getChannels(false);
-    //TODO ELIMINAR DE AQUI
-    this.setupSocketConnection();
+    this.getPromotedTiers();
   }
 
   private void setupDeviceInfo() {
@@ -147,8 +152,12 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
     });
   }
 
-  private void setupSocketConnection() {
-
+  private void getPromotedTiers() {
+    getPromotedTiersInteractor.getPromotedTiers(new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean aBoolean) {
+        /* no-op */
+      }
+    });
   }
 
   private void getRecentSearch() {

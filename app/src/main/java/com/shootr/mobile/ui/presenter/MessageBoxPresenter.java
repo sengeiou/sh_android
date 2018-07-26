@@ -3,12 +3,15 @@ package com.shootr.mobile.ui.presenter;
 import android.support.annotation.NonNull;
 import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetCachedPromotedTiers;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PostNewPrivateMessageInteractor;
+import com.shootr.mobile.domain.interactor.shot.NewShotAsReplyInteractor;
 import com.shootr.mobile.domain.interactor.shot.PostNewShotInStreamInteractor;
 import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
+import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.UserModelMapper;
@@ -31,7 +34,9 @@ public class MessageBoxPresenter {
   private final ErrorMessageFactory errorMessageFactory;
   private final PostNewShotInStreamInteractor postNewShotInStreamInteractor;
   private final PostNewPrivateMessageInteractor postNewPrivateMessageInteractor;
+  private final NewShotAsReplyInteractor postNewShotAsReplyInteractor;
   private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
+  private final GetCachedPromotedTiers getCachedPromotedTiers;
   private final UserModelMapper userModelMapper;
 
   private MessageBoxView messageBoxView;
@@ -43,16 +48,23 @@ public class MessageBoxPresenter {
   private String[] words;
   private String idTargetUser;
   private int maxLength = MAX_LENGTH;
+  private boolean isReply = false;
+  private String parentId;
+  private String idStream;
 
   @Inject public MessageBoxPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewShotInStreamInteractor postNewShotInStreamInteractor,
       PostNewPrivateMessageInteractor postNewPrivateMessageInteractor,
-      GetMentionedPeopleInteractor getMentionedPeopleInteractor, UserModelMapper userModelMapper) {
+      NewShotAsReplyInteractor postNewShotAsReplyInteractor,
+      GetMentionedPeopleInteractor getMentionedPeopleInteractor,
+      GetCachedPromotedTiers getCachedPromotedTiers, UserModelMapper userModelMapper) {
     this.bus = bus;
     this.errorMessageFactory = errorMessageFactory;
     this.postNewShotInStreamInteractor = postNewShotInStreamInteractor;
     this.postNewPrivateMessageInteractor = postNewPrivateMessageInteractor;
+    this.postNewShotAsReplyInteractor = postNewShotAsReplyInteractor;
     this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
+    this.getCachedPromotedTiers = getCachedPromotedTiers;
     this.userModelMapper = userModelMapper;
   }
 
@@ -63,12 +75,31 @@ public class MessageBoxPresenter {
 
   public void initializeAsNewShot(MessageBoxView postNewShotView) {
     this.setView(postNewShotView);
+    setupPromotedBadge();
   }
 
   public void initializeAsNewMessage(MessageBoxView postNewShotView, String idTargetUser) {
     this.setView(postNewShotView);
     this.idTargetUser = idTargetUser;
     this.maxLength = MAX_MESSAGE_LENGTH;
+  }
+
+  public void initializeAsReply(MessageBoxView postNewShotView, String parentId, String idStream) {
+    this.setView(postNewShotView);
+    this.isReply = true;
+    this.parentId = parentId;
+    this.idStream = idStream;
+    setupPromotedBadge();
+  }
+
+  private void setupPromotedBadge() {
+    getCachedPromotedTiers.getPromotedTiers(new Interactor.Callback<PromotedTiers>() {
+      @Override public void onLoaded(PromotedTiers promotedTiers) {
+        if (!promotedTiers.getPendingReceipts().isEmpty()) {
+          messageBoxView.showPromotedBadge();
+        }
+      }
+    });
   }
 
   public void sendShot(String text) {
@@ -113,6 +144,11 @@ public class MessageBoxPresenter {
     currentTextWritten = filterText(currentText);
     updateCharCounter(currentTextWritten);
     updateSendButonEnabled(currentTextWritten);
+    if (currentTextWritten.length() > 0) {
+      messageBoxView.hidePromotedButton();
+    } else {
+      messageBoxView.showPromotedButton();
+    }
   }
 
   private void updateSendButonEnabled(String filteredText) {
@@ -165,17 +201,31 @@ public class MessageBoxPresenter {
   }
 
   private void postStreamShot() {
-    postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend, selectedImageFile,
-        new Interactor.CompletedCallback() {
-          @Override public void onCompleted() {
-            messageBoxView.hideSendButton();
-            messageBoxView.clearTextBox();
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            onShotError();
-          }
-        });
+    if (!isReply) {
+      postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend, selectedImageFile,
+          new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+              messageBoxView.hideSendButton();
+              messageBoxView.clearTextBox();
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              onShotError();
+            }
+          });
+    } else {
+      postNewShotAsReplyInteractor.postNewShotAsReply(shotCommentToSend, selectedImageFile,
+          parentId, idStream, new Interactor.CompletedCallback() {
+            @Override public void onCompleted() {
+              messageBoxView.hideSendButton();
+              messageBoxView.clearTextBox();
+            }
+          }, new Interactor.ErrorCallback() {
+            @Override public void onError(ShootrException error) {
+              onShotError();
+            }
+          });
+    }
   }
 
   private void onShotError() {

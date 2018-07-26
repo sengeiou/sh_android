@@ -4,12 +4,15 @@ public class TimelineEntity {
 
   private StreamEntity stream;
   private ParticipantsEntity participants;
-  private DataEntity fixed;
-  private DataEntity pinned;
   private ItemsEntity items;
   private String filter;
   private boolean newBadgeContent;
   private ParamsEntity params;
+  private ItemsEntity polls;
+  private ItemsEntity highlightedShots;
+  private ItemsEntity promotedShots;
+  private ItemsEntity videos;
+  private ItemsEntity followings;
 
   public StreamEntity getStream() {
     return stream;
@@ -25,22 +28,6 @@ public class TimelineEntity {
 
   public void setParticipants(ParticipantsEntity participants) {
     this.participants = participants;
-  }
-
-  public DataEntity getFixed() {
-    return fixed;
-  }
-
-  public void setFixed(DataEntity fixed) {
-    this.fixed = fixed;
-  }
-
-  public DataEntity getPinned() {
-    return pinned;
-  }
-
-  public void setPinned(DataEntity pinned) {
-    this.pinned = pinned;
   }
 
   public ItemsEntity getItems() {
@@ -73,5 +60,45 @@ public class TimelineEntity {
 
   public void setParams(ParamsEntity params) {
     this.params = params;
+  }
+
+  public ItemsEntity getPolls() {
+    return polls;
+  }
+
+  public void setPolls(ItemsEntity polls) {
+    this.polls = polls;
+  }
+
+  public ItemsEntity getHighlightedShots() {
+    return highlightedShots;
+  }
+
+  public void setHighlightedShots(ItemsEntity highlightedShots) {
+    this.highlightedShots = highlightedShots;
+  }
+
+  public ItemsEntity getPromotedShots() {
+    return promotedShots;
+  }
+
+  public void setPromotedShots(ItemsEntity promotedShots) {
+    this.promotedShots = promotedShots;
+  }
+
+  public ItemsEntity getVideos() {
+    return videos;
+  }
+
+  public void setVideos(ItemsEntity videos) {
+    this.videos = videos;
+  }
+
+  public ItemsEntity getFollowings() {
+    return followings;
+  }
+
+  public void setFollowings(ItemsEntity followings) {
+    this.followings = followings;
   }
 }

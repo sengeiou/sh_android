@@ -13,6 +13,8 @@ public class ExternalVideoModelMapper {
 
     model.setProvider(externalVideo.getProvider());
     model.setVideoId(externalVideo.getVideoId());
+    model.setVideoId(externalVideo.getVideoId());
+    model.setVideoId(externalVideo.getVideoId());
 
     return model;
   }

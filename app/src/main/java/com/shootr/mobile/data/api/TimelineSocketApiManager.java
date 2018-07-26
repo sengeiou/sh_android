@@ -1,13 +1,15 @@
 package com.shootr.mobile.data.api;
 
-import com.shootr.mobile.data.entity.socket.GetTimelineSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.GetPromotedTiersSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.ParamsEntity;
+import com.shootr.mobile.data.entity.VerifyReceipSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.GetTimelineSocketMessageApiEntity;
 import java.util.UUID;
 
 public class TimelineSocketApiManager {
 
-  private final int VERSION = 1;
+  private final int VERSION = 2;
 
   private final SendSocketEventListener sendSocketEventListener;
 
@@ -49,6 +51,28 @@ public class TimelineSocketApiManager {
     getTimelineSocketMessageApiEntity.setData(timelineParams);
 
     sendSocketEventListener.sendEvent(getTimelineSocketMessageApiEntity);
+  }
+
+  public void getPromotedTiers() {
+    GetPromotedTiersSocketMessageApiEntity getPromotedTiersSocketMessageApiEntity =
+        new GetPromotedTiersSocketMessageApiEntity();
+    getPromotedTiersSocketMessageApiEntity.setRequestId(generateRequestId());
+    getPromotedTiersSocketMessageApiEntity.setVersion(VERSION);
+    sendSocketEventListener.sendEvent(getPromotedTiersSocketMessageApiEntity);
+  }
+
+  public void verifyReceipt(String receipt) {
+    VerifyReceipSocketMessageApiEntity verifyReceipSocketMessageApiEntity = new VerifyReceipSocketMessageApiEntity();
+
+    VerifyReceipSocketMessageApiEntity.ReceiptData receiptData = new VerifyReceipSocketMessageApiEntity.ReceiptData();
+    receiptData.setReceipt(receipt);
+    receiptData.setType("PLAY_STORE");
+
+    verifyReceipSocketMessageApiEntity.setRequestId(generateRequestId());
+    verifyReceipSocketMessageApiEntity.setVersion(VERSION);
+    verifyReceipSocketMessageApiEntity.setData(receiptData);
+
+    sendSocketEventListener.sendEvent(verifyReceipSocketMessageApiEntity);
   }
 
   private String generateRequestId() {

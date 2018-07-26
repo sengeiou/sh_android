@@ -11,6 +11,7 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.entity.socket.MessageMapper;
 import com.shootr.mobile.domain.bus.BusPublisher;
 import com.shootr.mobile.domain.bus.CloseSocketEvent;
+import com.shootr.mobile.domain.bus.ConnectedSocketEvent;
 import com.shootr.mobile.domain.bus.EventReceived;
 import com.shootr.mobile.domain.model.SocketMessage;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -26,7 +27,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class WebSocketService extends Service
-    implements SocketView, CloseSocketEvent.Receiver {
+    implements SocketView, CloseSocketEvent.Receiver, ConnectedSocketEvent.Receiver {
 
   public static boolean isRunning = false;
   private static Intent serviceIntent;
@@ -102,4 +103,7 @@ public class WebSocketService extends Service
     stopSelf();
   }
 
+  @Subscribe @Override public void onRestoreEvent(ConnectedSocketEvent.Event event) {
+    presenter.subscribeStaticSubscriptions();
+  }
 }

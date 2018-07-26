@@ -4,10 +4,12 @@ import android.content.Context;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.domain.interactor.GetPromotedTiersInteractor;
 import com.shootr.mobile.domain.interactor.GetShootrEventsInteractor;
 import com.shootr.mobile.domain.interactor.GetSocketInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.SendCacheQueueInteractor;
+import com.shootr.mobile.domain.interactor.SubscribePromotedTiersInteractor;
 import com.shootr.mobile.domain.interactor.device.SendDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.device.ShouldUpdateDeviceInfoInteractor;
 import com.shootr.mobile.domain.interactor.shot.SendShootrEventStatsInteractor;
@@ -71,6 +73,8 @@ public class MainScreenPresenterTest {
   @Mock GetShootrEventsInteractor getShootrEventsInteractor;
   @Mock Context context;
   @Mock SendCacheQueueInteractor sendEventsOnQueueCacheInteractor;
+  @Mock GetPromotedTiersInteractor getPromotedTiersInteractor;
+  @Mock SubscribePromotedTiersInteractor subscribePromotedTiersInteractor;
   @Mock LogsCache logsCache;
   private MainScreenPresenter mainScreenPresenter;
 
@@ -84,7 +88,8 @@ public class MainScreenPresenterTest {
             getUserForAnalythicsByIdInteractor, shouldUpdateDeviceInfoInteractor,
             getSocketInteractor, unwatchStreamInteractor, sessionRepository, userModelMapper,
             badgeCount, getPrivateMessagesChannelsInteractor, getStreamInteractor,
-            getShootrEventsInteractor, streamModelMapper, bus, busPublisher, context, logsCache,
+            getShootrEventsInteractor, getPromotedTiersInteractor, subscribePromotedTiersInteractor,
+            streamModelMapper, bus, busPublisher, context, logsCache,
             analyticsTool);
     mainScreenPresenter.setView(view);
     User user = new User();

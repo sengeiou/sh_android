@@ -85,6 +85,7 @@ public class ShotEntityMapper {
     if (shotEntity.getOrder() != null) {
       shot.setOrder(shotEntity.getOrder());
     }
+    shot.setSeen(shotEntity.getSeen());
 
     return shot;
   }
@@ -149,8 +150,8 @@ public class ShotEntityMapper {
       shotEntity.setFromContributor(0);
     }
     shotEntity.setFromHolder(shot.isFromHolder() ? 1 : 0);
-    shotEntity.setNiced(shot.isNiced());
-    shotEntity.setReshooted(shot.isReshooted());
+    shotEntity.setNiced(shot.getNiced());
+    shotEntity.setReshooted(shot.getReshooted());
     shotEntity.setNicedTime(shot.getNicedTime() != null ? shot.getNicedTime().getTime() : 0L);
     shotEntity.setReshootedTime(
         shot.getReshootedTime() != null ? shot.getReshootedTime().getTime() : 0L);
@@ -163,6 +164,11 @@ public class ShotEntityMapper {
     shotEntity.setShareLink(shot.getShareLink());
     if (shot.getOrder() != null) {
       shotEntity.setOrder(shot.getOrder());
+    }
+
+    if (shot.getPromotedShotParams() != null) {
+      shotEntity.setReceipt(shot.getPromotedShotParams().getData());
+      shotEntity.setReceiptType(shot.getPromotedShotParams().getType());
     }
     return shotEntity;
   }

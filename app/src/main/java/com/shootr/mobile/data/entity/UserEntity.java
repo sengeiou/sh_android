@@ -6,8 +6,10 @@ import com.shootr.mobile.domain.model.SearchableType;
 import java.io.Serializable;
 import timber.log.Timber;
 
-public class UserEntity extends PrintableItemApiEntity
-    implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity {
+
+public class UserEntity extends Synchronized
+    implements Serializable, Comparable<UserEntity>, Cloneable, SearchableEntity, FollowableEntity,
+    PrintableItemApiEntity, PrintableItemEntity, SeenableEntity {
 
   private String idUser;
   private String sessionToken;
@@ -35,6 +37,8 @@ public class UserEntity extends PrintableItemApiEntity
   private boolean following;
   private Boolean muted;
   private String shareLink;
+  private String resultType;
+  private Boolean seen;
 
   public UserEntity() {
     setResultType(FollowableType.USER);
@@ -281,5 +285,21 @@ public class UserEntity extends PrintableItemApiEntity
 
   public void setShareLink(String shareLink) {
     this.shareLink = shareLink;
+  }
+
+  @Override public String getResultType() {
+    return resultType;
+  }
+
+  @Override public void setResultType(String resultType) {
+    this.resultType = resultType;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
   }
 }

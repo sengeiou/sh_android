@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 
-public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>, Serializable {
+public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>, Serializable, SeenableModel {
 
   private String idShot;
   private List<String> nicers;
@@ -33,6 +33,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
   private boolean deleted;
   private String shareLink;
   private long order;
+  private boolean seen;
 
   public String getIdShot() {
     return idShot;
@@ -264,7 +265,7 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     return getIdShot() != null ? getIdShot().hashCode() : 0;
   }
 
-  public boolean isDeleted() {
+  @Override public boolean isDeleted() {
     return deleted;
   }
 
@@ -280,7 +281,22 @@ public class ShotModel extends BaseMessageModel implements Comparable<ShotModel>
     this.order = order;
   }
 
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen != null ? seen : false;
+  }
+
   public static class OrderFieldComparator implements Comparator<PrintableModel> {
+
+    @Override public int compare(PrintableModel s1, PrintableModel s2) {
+      return s2.getOrder().compareTo(s1.getOrder());
+    }
+  }
+
+  public static class OrderFieldPromotedComparator implements Comparator<PrintableModel> {
 
     @Override public int compare(PrintableModel s1, PrintableModel s2) {
       return s2.getOrder().compareTo(s1.getOrder());

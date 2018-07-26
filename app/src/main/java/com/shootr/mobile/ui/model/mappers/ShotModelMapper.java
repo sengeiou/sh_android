@@ -63,8 +63,8 @@ public class ShotModelMapper {
     shotModel.setPromoted(shot.getPromoted());
     shotModel.setType(shot.getType());
     shotModel.setHolderOrContributor(shot.isFromContributor() || shot.isFromHolder());
-    shotModel.setNiced(shot.isNiced());
-    shotModel.setReshooted(shot.isReshooted());
+    shotModel.setNiced(shot.getNiced() != null ? shot.getNiced() : false);
+    shotModel.setReshooted(shot.getReshooted() != null ? shot.getReshooted() : false);
     if (userInfo.getIdUser() != null) {
       shotModel.setMyshot(
           shot.getUserInfo().getIdUser().equals(sessionRepository.getCurrentUserId()));
@@ -83,6 +83,7 @@ public class ShotModelMapper {
       shotModel.setOrder(shot.getOrder());
     }
     entitiesModelMapper.setupEntities(shot.getEntities());
+    shotModel.setSeen(shot.getSeen());
 
     return shotModel;
   }

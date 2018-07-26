@@ -5,6 +5,11 @@ import com.shootr.mobile.data.entity.BadgeContentEntity;
 import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageEntity;
 import com.shootr.mobile.data.entity.ErrorEntity;
+import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageEntity;
+import com.shootr.mobile.data.entity.PromotedTiersEntity;
+import com.shootr.mobile.data.entity.PromotedTiersSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.PromotedTiersSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessaggeApiEntity;
 import com.shootr.mobile.data.entity.socket.FixedItemSocketMessageEntity;
@@ -28,6 +33,7 @@ import com.shootr.mobile.data.entity.socket.TimelineMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageEntity;
+
 import javax.inject.Inject;
 
 public class SocketMessageApiEntityMapper {
@@ -36,14 +42,23 @@ public class SocketMessageApiEntityMapper {
   private final TimelineApiEntityMapper timelineApiEntityMapper;
   private final DataApiEntityMapper dataApiEntityMapper;
   private final ShotDetailApiEntityMapper shotDetailApiEntityMapper;
+  private final PromotedTierApiEntityMapper promotedTierApiEntityMapper;
+  private final PromotedReceiptApiEntityMapper promotedReceiptApiEntityMapper;
+  private final PrintableItemApiEntityMapper printableItemApiEntityMapper;
 
   @Inject public SocketMessageApiEntityMapper(ShotApiEntityMapper shotApiEntityMapper,
       TimelineApiEntityMapper timelineApiEntityMapper, DataApiEntityMapper dataApiEntityMapper,
-      ShotDetailApiEntityMapper shotDetailApiEntityMapper) {
+      ShotDetailApiEntityMapper shotDetailApiEntityMapper,
+      PromotedTierApiEntityMapper promotedTierApiEntityMapper,
+      PromotedReceiptApiEntityMapper promotedReceiptApiEntityMapper,
+      PrintableItemApiEntityMapper printableItemApiEntityMapper) {
     this.shotApiEntityMapper = shotApiEntityMapper;
     this.timelineApiEntityMapper = timelineApiEntityMapper;
     this.dataApiEntityMapper = dataApiEntityMapper;
     this.shotDetailApiEntityMapper = shotDetailApiEntityMapper;
+    this.promotedTierApiEntityMapper = promotedTierApiEntityMapper;
+    this.promotedReceiptApiEntityMapper = promotedReceiptApiEntityMapper;
+    this.printableItemApiEntityMapper = printableItemApiEntityMapper;
   }
 
   public SocketMessageEntity transform(SocketMessageApiEntity socketMessage) {
@@ -71,9 +86,10 @@ public class SocketMessageApiEntityMapper {
           newItemSocketMessageEntity.setEventParams(socketMessage.getEventParams());
 
           ItemEntity itemEntity = new ItemEntity();
-          itemEntity.setItem(shotApiEntityMapper.transform(
-              (ShotApiEntity) ((NewItemSocketMessageApiEntity) socketMessage).getData().getItem()));
           itemEntity.setList(((NewItemSocketMessageApiEntity) socketMessage).getData().getList());
+
+          itemEntity.setItem(printableItemApiEntityMapper.map(
+              ((NewItemSocketMessageApiEntity) socketMessage).getData().getItem()));
 
           newItemSocketMessageEntity.setData(itemEntity);
 
@@ -89,13 +105,35 @@ public class SocketMessageApiEntityMapper {
           updateItemSocketMessageEntity.setEventParams(socketMessage.getEventParams());
 
           itemEntity = new ItemEntity();
-          itemEntity.setItem(shotApiEntityMapper.transform(
-              (ShotApiEntity) ((UpdateItemSocketMessageApiEntity) socketMessage).getData().getItem()));
+
           itemEntity.setList(((UpdateItemSocketMessageApiEntity) socketMessage).getData().getList());
+
+          itemEntity.setItem(printableItemApiEntityMapper.map(
+              ((UpdateItemSocketMessageApiEntity) socketMessage).getData().getItem()));
 
           updateItemSocketMessageEntity.setData(itemEntity);
 
           return updateItemSocketMessageEntity;
+
+        case SocketMessageApiEntity.PARTIAL_UPDATE_ITEM_DATA:
+          PartialUpdateItemSocketMessageEntity partialUpdateItemSocketMessageEntity =
+              new PartialUpdateItemSocketMessageEntity();
+          partialUpdateItemSocketMessageEntity.setEventType(socketMessage.getEventType());
+          partialUpdateItemSocketMessageEntity.setVersion(socketMessage.getVersion());
+          partialUpdateItemSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          partialUpdateItemSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+          partialUpdateItemSocketMessageEntity.setEventParams(socketMessage.getEventParams());
+
+          itemEntity = new ItemEntity();
+
+          itemEntity.setList(((PartialUpdateItemSocketMessageApiEntity) socketMessage).getData().getList());
+
+          itemEntity.setItem(printableItemApiEntityMapper.map(
+              ((PartialUpdateItemSocketMessageApiEntity) socketMessage).getData().getItem()));
+
+          partialUpdateItemSocketMessageEntity.setData(itemEntity);
+
+          return partialUpdateItemSocketMessageEntity;
 
         case SocketMessageApiEntity.FIXED_ITEMS:
 
@@ -186,7 +224,6 @@ public class SocketMessageApiEntityMapper {
               (ShotApiEntity) ((ShotUpdateSocketMessageApiEntity) socketMessage).getData()));
 
           return shotUpdateSocketMessageEntity;
-
         case SocketMessageApiEntity.CREATED_SHOT:
           CreatedShotSocketMessageEntity createdShotSocketMessageEntity =
               new CreatedShotSocketMessageEntity();
@@ -217,6 +254,25 @@ public class SocketMessageApiEntityMapper {
           errorSocketMessageEntity.setData(errorEntity);
 
           return errorSocketMessageEntity;
+        case SocketMessageApiEntity.PROMOTED_TIERS:
+          PromotedTiersSocketMessageEntity promotedTiersSocketMessageEntity =
+              new PromotedTiersSocketMessageEntity();
+          promotedTiersSocketMessageEntity.setEventType(socketMessage.getEventType());
+          promotedTiersSocketMessageEntity.setVersion(socketMessage.getVersion());
+          promotedTiersSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+
+          PromotedTiersEntity promotedTiersEntity = new PromotedTiersEntity();
+
+          promotedTiersEntity.setData(promotedTierApiEntityMapper.transform(
+              ((PromotedTiersSocketMessageApiEntity) socketMessage).getData().getData()));
+
+          promotedTiersEntity.setPendingReceipts(promotedReceiptApiEntityMapper.transform(
+              ((PromotedTiersSocketMessageApiEntity) socketMessage).getData()
+                  .getPendingReceipts()));
+
+          promotedTiersSocketMessageEntity.setData(promotedTiersEntity);
+
+          return promotedTiersSocketMessageEntity;
         default:
           break;
       }

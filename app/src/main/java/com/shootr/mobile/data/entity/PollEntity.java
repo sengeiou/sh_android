@@ -2,10 +2,12 @@ package com.shootr.mobile.data.entity;
 
 import com.shootr.mobile.data.api.entity.PrintableItemApiEntity;
 import com.shootr.mobile.domain.model.PrintableType;
+import java.util.Date;
 import java.util.List;
 
-public class PollEntity extends PrintableItemApiEntity implements PrintableItemEntity {
+public class PollEntity implements PrintableItemApiEntity, PrintableItemEntity, SeenableEntity {
 
+  private String resultType;
   private String idPoll;
   private String idStream;
   private String idUser;
@@ -21,6 +23,8 @@ public class PollEntity extends PrintableItemApiEntity implements PrintableItemE
   private boolean canVote;
   private boolean dailyPoll;
   private String shareLink;
+  private Date deleted;
+  private Boolean seen;
 
   public PollEntity() {
     setResultType(PrintableType.POLL);
@@ -144,5 +148,29 @@ public class PollEntity extends PrintableItemApiEntity implements PrintableItemE
 
   public void setShareLink(String shareLink) {
     this.shareLink = shareLink;
+  }
+
+  public Date getDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(Date deleted) {
+    this.deleted = deleted;
+  }
+
+  @Override public Boolean getSeen() {
+    return seen;
+  }
+
+  @Override public void setSeen(Boolean seen) {
+    this.seen = seen;
+  }
+
+  @Override public String getResultType() {
+    return resultType;
+  }
+
+  @Override public void setResultType(String resultType) {
+    this.resultType = resultType;
   }
 }

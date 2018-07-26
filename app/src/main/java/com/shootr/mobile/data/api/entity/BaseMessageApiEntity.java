@@ -2,9 +2,10 @@ package com.shootr.mobile.data.api.entity;
 
 import java.util.ArrayList;
 
-public class BaseMessageApiEntity extends PrintableItemApiEntity {
+public class BaseMessageApiEntity implements PrintableItemApiEntity {
 
   private String comment;
+  private String resultType;
   private String image;
   private Long imageWidth;
   private Long imageHeight;
@@ -102,5 +103,13 @@ public class BaseMessageApiEntity extends PrintableItemApiEntity {
 
   public void setDetailFlags(ArrayList<String> detailFlags) {
     this.detailFlags = detailFlags;
+  }
+
+  @Override public String getResultType() {
+    return resultType;
+  }
+
+  @Override public void setResultType(String resultType) {
+    this.resultType = resultType;
   }
 }

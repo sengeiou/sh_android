@@ -66,7 +66,7 @@ public class ShotDetaillPresenterTest {
     @Before public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         ShotModelMapper shotModelMapper = new ShotModelMapper(sessionRepository,
-            new EntitiesModelMapper());
+            new EntitiesModelMapper(sessionRepository));
         NicerModelMapper nicerModelMapper = new NicerModelMapper();
         presenter = new ShotDetailPresenter(getShotDetaillInteractor,
           markNiceShotInteractor,
@@ -365,6 +365,8 @@ public class ShotDetaillPresenterTest {
         shot.setIdShot(ID_SHOT);
         shot.setStreamInfo(new Shot.ShotStreamInfo());
         shot.setUserInfo(new BaseMessage.BaseMessageUserInfo());
+        shot.setReshooted(false);
+        shot.setNiced(false);
         return shot;
     }
 

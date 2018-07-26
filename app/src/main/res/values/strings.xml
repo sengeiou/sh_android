@@ -596,8 +596,27 @@
   <string name="show_previous">show</string>
   <string name="hide_previous">hide</string>
   <string name="privacy_info">Tap \"Accept\" to accept our conditions.</string>
+  <string name="promoted_shot_first_paragraph">Super Shot is a message that stands out amongst the crowd!</string>
+  <string name="promoted_shot_second_paragraph">When you buy a Super Shot, your message stays pinned at the top of the stream. The more you spend, the longer it stays.</string>
+  <string name="promoted_shot_third_paragraph">This way, everyone in the stream, including the creator will read your shot. The creator will also earn a share of your Super Shot purchase.</string>
+  <string name="learn_more">LEARN MORE</string>
+  <string name="send_a_super_shot">Super Shot</string>
+  <string name="buy_and_shoot"><![CDATA[BUY AND SHOOT]]></string>
+  <string name="free_shot">Reedem and Shoot</string>
+  <string name="pending_receipts">You purchased Super Shots that are pending to use. Move the slider to find them.</string>
+  <string name="error_validating_receipt">An error has occured. Try again later.</string>
+  <string name="error_sending_promoted_shot">The Super Shot was purchased successfully but an error occurred when sending it. You can shoot again this Super Shot at no additional cost.</string>
+  <string name="promoted_info_title">Super Shots</string>
+  <plurals name="promoted_minutes">
+    <item quantity="one">%s min</item>
+    <item quantity="other">%s min</item>
+    <item quantity="zero">%s min</item>
+  </plurals>
   <string name="promoted_card_subtitle">%1$s · %2$s</string>
   <string name="promoted_follow">Follow</string>
   <string name="promoted_go">Go</string>
   <string name="promoted_title">Destacado</string>
+  <string name="super_shot">Super Shot</string>
+  <string name="poll">Encuesta</string>
+  <string name="new_promoted_shot_discard_message">Discard Super Shot?</string>
 </resources>
