@@ -8,15 +8,15 @@
     tools:context="com.shootr.mobile.ui.activities.registro.PrivacyLawActivity"
     >
 
-
   <WebView
       android:id="@+id/webview"
       android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      
+      android:layout_height="0dp"
+      app:layout_constraintBottom_toTopOf="@+id/footer"
+      app:layout_constraintTop_toTopOf="parent"
       />
-  
   <LinearLayout
+      android:id="@+id/footer"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:background="@color/white"
@@ -53,6 +53,5 @@
         android:layout_marginBottom="4dp"
         style="?android:attr/borderlessButtonStyle"
         />
-
   </LinearLayout>
 </android.support.constraint.ConstraintLayout>
