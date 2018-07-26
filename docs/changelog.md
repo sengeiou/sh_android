@@ -13,6 +13,22 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.61.0] - 2018-07-26
+### Fixed
+- Fabric Bug fixing
+
+### Changed
+- Privacy Law
+- Gradle 4
+- Update Fabric version
+- Highlighted Shot via socket
+- Undo Highlighted Shot fix (via socket)
+
+### Added 
+- Go to StreamTimeline from Shot Detail
+- Super Shots on Timeline
+- Following on Ticker
+
 ## [1.60.4] - 2018-07-12
 ### Fixed
 - Fix en permisos
