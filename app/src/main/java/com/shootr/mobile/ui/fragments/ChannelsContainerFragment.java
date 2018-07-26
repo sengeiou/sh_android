@@ -125,7 +125,7 @@ public class ChannelsContainerFragment extends BaseFragment {
 
   private class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    SectionsPagerAdapter(FragmentManager fm) {
       super(fm);
     }
 

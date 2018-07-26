@@ -26,7 +26,7 @@ public class SeparatorElementBinder extends ItemBinder<ListElement, SeparatorEle
 
   static class SeparatorViewHolder extends BaseViewHolder<ListElement> {
 
-    public SeparatorViewHolder(View itemView) {
+    SeparatorViewHolder(View itemView) {
       super(itemView);
     }
   }

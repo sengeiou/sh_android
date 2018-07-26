@@ -148,7 +148,7 @@ public class ShotDispatcherBackgroundService extends Service {
         private final File imageFile;
         Thread thread;
 
-        public SendShotRunnable(Sendable shot, File imageFile) {
+        SendShotRunnable(Sendable shot, File imageFile) {
             this.shot = shot;
             this.imageFile = imageFile;
         }

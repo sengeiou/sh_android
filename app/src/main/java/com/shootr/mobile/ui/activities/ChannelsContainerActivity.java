@@ -111,7 +111,7 @@ public class ChannelsContainerActivity extends BaseToolbarDecoratedActivity {
 
   private class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    public SectionsPagerAdapter(FragmentManager fm) {
+    SectionsPagerAdapter(FragmentManager fm) {
       super(fm);
     }
 

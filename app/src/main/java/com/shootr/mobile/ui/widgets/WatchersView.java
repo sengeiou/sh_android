@@ -147,7 +147,7 @@ public class WatchersView extends LinearLayout {
         @BindView(R.id.watcher_user_watching) TextView watchingText;
         String userId;
 
-        public WatcherViewHolder(View itemView) {
+        WatcherViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

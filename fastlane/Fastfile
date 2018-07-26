@@ -11,7 +11,7 @@ update_fastlane
 
 # This is the minimum version number required.
 # Update this, if you use features of a newer version
-fastlane_version "2.27.0"
+fastlane_version "2.89.0"
 
 default_platform :android
 
@@ -28,7 +28,7 @@ platform :android do
   desc "Submit a new Beta Build to Crashlytics Beta"
   lane :beta do
     gradle(task: "clean")
-    gradle(task: "assembleProdUniversalRelease")
+    gradle(task: "assembleProdRelease")
 
     # Single APK upload to Beta by Crashlytics
      crashlytics(
@@ -43,7 +43,7 @@ platform :android do
   desc "Submit a test apk to S3"
   lane :apk_to_s3 do
     gradle(task: "clean")
-    gradle(task: "assembleDevUniversalDebug")
+    gradle(task: "assembleDev")
     aws_s3(
       access_key: "#{ENV["ACCESS_KEY"]}",
       secret_access_key: "#{ENV["SECRET_ACCESS_KEY"]}",

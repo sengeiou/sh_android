@@ -182,10 +182,6 @@ public class ShotsTimelineAdapter
   @Override
   protected RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent, int viewType) {
 
-    if (viewType == TYPE_ITEM_CONTENT_AD) {
-      /* no-op */
-    }
-
     if (viewType == TYPE_HEADER_CHECK_IN) {
       View v = LayoutInflater.from(parent.getContext())
           .inflate(R.layout.highlighted_shot_promoted, parent, false);
@@ -205,9 +201,6 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateSubheaderViewHolder(ViewGroup parent, int viewType) {
-    if (viewType == TYPE_ITEM_CONTENT_AD) {
-     /* no-op */
-    }
 
     return getShotViewHolder(parent, viewType);
   }
@@ -230,17 +223,11 @@ public class ShotsTimelineAdapter
 
   @Override
   protected RecyclerView.ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
-    if (viewType == TYPE_ITEM_CONTENT_AD) {
-      /* no-op */
-    }
+
     return getShotViewHolder(parent, viewType);
   }
 
   @Override protected void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      /* no-op */
-      return;
-    }
 
     if (holder.getItemViewType() == TYPE_HEADER_CHECK_IN) {
       ((HighlightedPromotedShotViewHolder) holder).render(
@@ -258,10 +245,7 @@ public class ShotsTimelineAdapter
   }
 
   @Override protected void onBindSubheaderViewHolder(RecyclerView.ViewHolder holder, int position) {
-    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      /* no-op */
-      return;
-    }
+
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 
@@ -280,10 +264,7 @@ public class ShotsTimelineAdapter
   }
 
   @Override protected void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position) {
-    if (holder.getItemViewType() == TYPE_ITEM_CONTENT_AD) {
-      /* no-op */
-      return;
-    }
+
     renderShotViewHolder((ShotTimelineViewHolder) holder, position);
   }
 

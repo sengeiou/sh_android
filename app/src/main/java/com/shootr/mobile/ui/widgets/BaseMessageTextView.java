@@ -300,11 +300,11 @@ public class BaseMessageTextView extends TextView {
     private OnUrlClickListener onUrlClickListener;
     private boolean isPressed = false;
 
-    public TouchableUrlSpan(String url) {
+    TouchableUrlSpan(String url) {
       super(url);
     }
 
-    public TouchableUrlSpan(String url, OnUrlClickListener onUrlClickListener) {
+    TouchableUrlSpan(String url, OnUrlClickListener onUrlClickListener) {
       super(url);
       this.onUrlClickListener = onUrlClickListener;
     }

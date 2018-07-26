@@ -26,7 +26,7 @@ public class HotElementBinder extends ItemBinder<ListElement, HotElementBinder.H
 
   static class HotHeaderViewHolder extends BaseViewHolder<ListElement> {
 
-    public HotHeaderViewHolder(View itemView) {
+    HotHeaderViewHolder(View itemView) {
       super(itemView);
     }
   }

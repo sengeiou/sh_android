@@ -2,7 +2,7 @@ package com.shootr.mobile.ui.base;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.ViewGroup;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
 
 import static butterknife.ButterKnife.findById;
 
-public class BaseToolbarActivity extends ActionBarActivity {
+public class BaseToolbarActivity extends AppCompatActivity {
 
     @Inject AppContainer appContainer;
     @Inject @Main Bus bus;

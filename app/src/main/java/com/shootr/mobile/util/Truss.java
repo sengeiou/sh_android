@@ -56,7 +56,7 @@ public class Truss {
         final int start;
         final Object span;
 
-        public Span(int start, Object span) {
+        Span(int start, Object span) {
             this.start = start;
             this.span = span;
         }

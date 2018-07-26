@@ -1,7 +1,7 @@
 package com.shootr.mobile.ui.base;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.ViewGroup;
 import com.shootr.mobile.ShootrApplication;
@@ -9,7 +9,7 @@ import com.shootr.mobile.ui.AppContainer;
 import dagger.ObjectGraph;
 import javax.inject.Inject;
 
-public class BaseNoToolbarActivity extends ActionBarActivity {
+public class BaseNoToolbarActivity extends AppCompatActivity {
 
     @Inject AppContainer appContainer;
 

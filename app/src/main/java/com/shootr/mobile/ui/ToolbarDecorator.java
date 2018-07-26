@@ -6,7 +6,7 @@ import android.graphics.Color;
 import android.support.annotation.StringRes;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +55,7 @@ public class ToolbarDecorator implements ViewContainerDecorator {
     return (ViewGroup) inflatedView.findViewById(R.id.action_bar_activity_content);
   }
 
-  public void bindActionbar(ActionBarActivity activity) {
+  public void bindActionbar(AppCompatActivity activity) {
     activity.setSupportActionBar(toolbar);
     supportActionBar = activity.getSupportActionBar();
     setTitle(supportActionBar.getTitle());

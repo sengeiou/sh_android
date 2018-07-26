@@ -183,7 +183,7 @@ public class DraftAdapter extends RecyclerView.Adapter<DraftAdapter.DraftViewHol
     @BindView(R.id.shot_draft_buttons) View draftButtons;
     DraftItemView draftItemView;
 
-    public DraftViewHolder(View itemView) {
+    DraftViewHolder(View itemView) {
       super(itemView);
       draftItemView = (DraftItemView) itemView;
       ButterKnife.bind(this, itemView);
