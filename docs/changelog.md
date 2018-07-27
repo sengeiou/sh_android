@@ -13,6 +13,11 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.61.1] - 2018-07-27
+### Fixed
+- Production endpoint
+- Floated video fix
+
 ## [1.61.0] - 2018-07-26
 ### Fixed
 - Fabric Bug fixing
