@@ -13,6 +13,7 @@ import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.domain.bus.EventReceived;
 import com.shootr.mobile.domain.exception.ShootrException;
 import com.shootr.mobile.domain.interactor.GetCachedPromotedTiers;
+import com.shootr.mobile.domain.interactor.GetPromotedTermsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PostNewPrivateMessageInteractor;
 import com.shootr.mobile.domain.interactor.VerifyReceiptInteractor;
@@ -67,6 +68,7 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
   private final IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
   private final VerifyReceiptInteractor verifyReceiptInteractor;
+  private final GetPromotedTermsInteractor getPromotedTermsInteractor;
   private final GetCachedPromotedTiers getCachedPromotedTiers;
   private final UserModelMapper userModelMapper;
   private final PromotedTierModelMapper promotedTierModelMapper;
@@ -104,6 +106,7 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
       GetMentionedPeopleInteractor getMentionedPeopleInteractor,
       IncrementReplyCountShotInteractor incrementReplyCountShotInteractor,
       VerifyReceiptInteractor verifyReceiptInteractor,
+      GetPromotedTermsInteractor getPromotedTermsInteractor,
       GetCachedPromotedTiers getCachedPromotedTiers, UserModelMapper userModelMapper,
       PromotedTierModelMapper promotedTierModelMapper, @ApplicationContext Context context) {
     this.bus = bus;
@@ -114,6 +117,7 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
     this.incrementReplyCountShotInteractor = incrementReplyCountShotInteractor;
     this.verifyReceiptInteractor = verifyReceiptInteractor;
+    this.getPromotedTermsInteractor = getPromotedTermsInteractor;
     this.getCachedPromotedTiers = getCachedPromotedTiers;
     this.userModelMapper = userModelMapper;
     this.promotedTierModelMapper = promotedTierModelMapper;
@@ -129,9 +133,10 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     this.activity = activity;
   }
 
-  public void initializeAsNewShot(PostPromotedShotView postNewShotView) {
+  public void initializeAsNewShot(PostPromotedShotView postNewShotView, String idStream) {
     this.setView(postNewShotView);
     initializeBillingManager();
+    getPromotedTerms(idStream);
   }
 
   public void initializeAsReply(PostPromotedShotView postNewShotView, String replyParentId,
@@ -146,7 +151,16 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     this.replyParentId = replyParentId;
     this.idStream = idStream;
     this.view.showReplyToUsername(replyToUsername);
+    getPromotedTerms(idStream);
     initializeBillingManager();
+  }
+
+  private void getPromotedTerms(String idStream) {
+    getPromotedTermsInteractor.getPromotedTerms(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
+      }
+    });
   }
 
   private void initializeBillingManager() {

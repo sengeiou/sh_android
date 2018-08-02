@@ -2,6 +2,7 @@ package com.shootr.mobile.data;
 
 import com.shootr.mobile.data.api.SendSocketEventListener;
 import com.shootr.mobile.data.entity.EventParams;
+import com.shootr.mobile.data.entity.GetPromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.HighlightSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
@@ -104,6 +105,19 @@ public class ShotSocketApiManager {
     seenSocketMessageApiEntity.setData(seenParams);
 
     sendSocketEventListener.sendEvent(seenSocketMessageApiEntity);
+  }
+
+  public void getPromotedTerms(String idStream) {
+    GetPromotedTermsSocketMessageApiEntity getPromotedTermsSocketMessageApiEntity = new GetPromotedTermsSocketMessageApiEntity();
+    GetPromotedTermsSocketMessageApiEntity.Params params = new GetPromotedTermsSocketMessageApiEntity.Params();
+
+    params.setIdStream(idStream);
+
+    getPromotedTermsSocketMessageApiEntity.setRequestId(generateRequestId());
+    getPromotedTermsSocketMessageApiEntity.setVersion(VERSION);
+    getPromotedTermsSocketMessageApiEntity.setData(params);
+
+    sendSocketEventListener.sendEvent(getPromotedTermsSocketMessageApiEntity);
   }
 
   private String generateRequestId() {

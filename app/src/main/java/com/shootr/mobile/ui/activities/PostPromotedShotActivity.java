@@ -172,7 +172,7 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
       if (isReply) {
         presenter.initializeAsReply(this, replyParentId, replyToUsername, extraIdStream);
       } else {
-        presenter.initializeAsNewShot(this);
+        presenter.initializeAsNewShot(this, extraIdStream);
       }
     }
   }

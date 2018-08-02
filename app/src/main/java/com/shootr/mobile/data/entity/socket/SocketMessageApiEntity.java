@@ -31,6 +31,7 @@ public class SocketMessageApiEntity {
   public static final String CREATE_RECEIPT = "CREATE_RECEIPT";
   public static final String PARTIAL_UPDATE_ITEM_DATA = "PARTIAL_UPDATE_ITEM_DATA";
   public static final String MARK_ITEM_SEEN = "MARK_ITEM_SEEN";
+  public static final String GET_PROMOTED_TERMS = "GET_PROMOTED_TERMS";
 
   private String type;
   private int version;

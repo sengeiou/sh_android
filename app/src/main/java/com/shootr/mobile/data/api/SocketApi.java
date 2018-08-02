@@ -45,4 +45,6 @@ public interface SocketApi {
 
   boolean unHighlightShot(String idShot, String idStream);
 
+  void getPromotedTerms(String idStream);
+
 }

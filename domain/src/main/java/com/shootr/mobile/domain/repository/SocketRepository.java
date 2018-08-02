@@ -31,4 +31,6 @@ public interface SocketRepository {
   void verifyReceipt(String receipt);
 
   void markSeen(String type, String itemId);
+
+  void getPromotedTerms(String idStream);
 }
