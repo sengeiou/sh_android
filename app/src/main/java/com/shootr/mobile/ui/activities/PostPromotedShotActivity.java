@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -745,7 +746,9 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
   @Override public void setMaxRange(int range) {
     if (seekBar != null) {
       seekBar.setMax(range);
-      seekBar.setProgress(2, true);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        seekBar.setProgress(2, true);
+      }
     }
   }
 

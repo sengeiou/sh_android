@@ -1,6 +1,7 @@
 package com.shootr.mobile.data;
 
 import com.shootr.mobile.data.api.SendSocketEventListener;
+import com.shootr.mobile.data.entity.AcceptPromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.EventParams;
 import com.shootr.mobile.data.entity.GetPromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
@@ -118,6 +119,20 @@ public class ShotSocketApiManager {
     getPromotedTermsSocketMessageApiEntity.setData(params);
 
     sendSocketEventListener.sendEvent(getPromotedTermsSocketMessageApiEntity);
+  }
+
+  public void acceptPromotedTerms(String idStream, int version) {
+    AcceptPromotedTermsSocketMessageApiEntity acceptPromotedTermsSocketMessageApiEntity = new AcceptPromotedTermsSocketMessageApiEntity();
+    AcceptPromotedTermsSocketMessageApiEntity.Params params = new AcceptPromotedTermsSocketMessageApiEntity.Params();
+
+    params.setIdStream(idStream);
+    params.setVersion(version);
+
+    acceptPromotedTermsSocketMessageApiEntity.setRequestId(generateRequestId());
+    acceptPromotedTermsSocketMessageApiEntity.setVersion(VERSION);
+    acceptPromotedTermsSocketMessageApiEntity.setData(params);
+
+    sendSocketEventListener.sendEvent(acceptPromotedTermsSocketMessageApiEntity);
   }
 
   private String generateRequestId() {

@@ -5,7 +5,7 @@ import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SocketRepository;
 import javax.inject.Inject;
 
-public class GetPromotedTermsInteractor implements Interactor {
+public class AcceptPromotedTermsInteractor implements Interactor {
 
   private final InteractorHandler interactorHandler;
   private final PostExecutionThread postExecutionThread;
@@ -13,22 +13,24 @@ public class GetPromotedTermsInteractor implements Interactor {
 
   private CompletedCallback callback;
   private String idStream;
+  private int version;
 
-  @Inject public GetPromotedTermsInteractor(InteractorHandler interactorHandler,
+  @Inject public AcceptPromotedTermsInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, @Remote SocketRepository socketRepository) {
     this.interactorHandler = interactorHandler;
     this.postExecutionThread = postExecutionThread;
     this.socketRepository = socketRepository;
   }
 
-  public void getPromotedTerms(String idStream, CompletedCallback callback) {
+  public void accepPromotedTerms(String idStream, int version, CompletedCallback callback) {
     this.callback = callback;
     this.idStream = idStream;
+    this.version = version;
     interactorHandler.execute(this);
   }
 
   @Override public void execute() throws Exception {
-    socketRepository.getPromotedTerms(idStream);
+    socketRepository.acceptPromotedTerms(idStream, version);
     notifyComplete();
   }
 

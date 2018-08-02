@@ -47,4 +47,6 @@ public interface SocketApi {
 
   void getPromotedTerms(String idStream);
 
+  void acceptPromotedTerms(String idStream, int version);
+
 }
