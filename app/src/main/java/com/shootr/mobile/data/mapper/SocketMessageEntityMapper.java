@@ -2,6 +2,7 @@ package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.PromotedTiersSocketMessageEntity;
+import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.FixedItemSocketMessageEntity;
@@ -9,8 +10,8 @@ import com.shootr.mobile.data.entity.socket.NewBadgeContentSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.NewItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ParticipantsSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.PinnedItemSocketMessageEntity;
+import com.shootr.mobile.data.entity.socket.PromotedTermsSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageEntity;
-import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageEntity;
@@ -28,6 +29,8 @@ import com.shootr.mobile.domain.model.PartialUpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.Participants;
 import com.shootr.mobile.domain.model.ParticipantsSocketMessage;
 import com.shootr.mobile.domain.model.PinnedItemSocketMessage;
+import com.shootr.mobile.domain.model.PromotedTerms;
+import com.shootr.mobile.domain.model.PromotedTermsSocketMessage;
 import com.shootr.mobile.domain.model.PromotedTiersSocketMessage;
 import com.shootr.mobile.domain.model.ShotDetailSocketMessage;
 import com.shootr.mobile.domain.model.ShotUpdateSocketMessage;
@@ -272,6 +275,24 @@ public class SocketMessageEntityMapper {
           promotedTiersSocketMessage.setData(promotedTiers);
 
           return promotedTiersSocketMessage;
+
+        case SocketMessage.PROMOTED_TERMS:
+          PromotedTermsSocketMessage promotedTermsSocketMessage =
+              new PromotedTermsSocketMessage();
+
+          promotedTermsSocketMessage.setEventType(socketMessage.getEventType());
+          promotedTermsSocketMessage.setVersion(socketMessage.getVersion());
+          promotedTermsSocketMessage.setRequestId(socketMessage.getRequestId());
+
+          PromotedTerms promotedTerms = new PromotedTerms();
+
+          promotedTerms.setTerms(((PromotedTermsSocketMessageEntity) socketMessage).getData().getTerms());
+          promotedTerms.setVersion(((PromotedTermsSocketMessageEntity) socketMessage).getData().getVersion());
+
+
+          promotedTermsSocketMessage.setData(promotedTerms);
+
+          return promotedTermsSocketMessage;
         default:
           break;
       }
