@@ -25,6 +25,7 @@ import com.shootr.mobile.domain.model.shot.NewShotDetail;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.PrintableModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -130,7 +131,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
   private void renderShotDetail(NewShotDetail shotDetail) {
     view.hideLoading();
     mainShot = shotModelMapper.transform((Shot) shotDetail.getShot());
-    initializeNewShotBarDelegate(mainShot);
+    initializeNewShotBarDelegate(mainShot, streamModelMapper.transform(shotDetail.getStream()));
     List<PrintableModel> mainShot =
         printableModelMapper.mapMainShot(Collections.singletonList(shotDetail.getShot()));
 
@@ -220,9 +221,9 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
     }
   }
 
-  private void initializeNewShotBarDelegate(ShotModel shotModel) {
+  private void initializeNewShotBarDelegate(ShotModel shotModel, StreamModel streamModel) {
     view.initializeNewShotBarPresenter(shotModel.getStreamId());
-    view.setupNewShotBarDelegate(shotModel);
+    view.setupNewShotBarDelegate(shotModel, streamModel);
   }
 
   public void markNiceShot(final ShotModel shotModel) {

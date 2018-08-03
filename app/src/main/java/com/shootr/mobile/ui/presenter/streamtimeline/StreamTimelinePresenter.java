@@ -1075,4 +1075,8 @@ public class StreamTimelinePresenter
       }
     });
   }
+
+  public void onAddPromotedPressed() {
+    view.goToNewPromotedShot(streamModel);
+  }
 }

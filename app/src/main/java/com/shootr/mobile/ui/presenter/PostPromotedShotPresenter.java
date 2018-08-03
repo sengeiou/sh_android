@@ -278,7 +278,7 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
       billingManager.initiatePurchaseFlow(auxPromoted.get(currentTierIndex).getProductId());
     }
     } else {
-      view.showPromotedTerms();
+      view.showPromotedTerms(promotedTermsModel);
     }
   }
 

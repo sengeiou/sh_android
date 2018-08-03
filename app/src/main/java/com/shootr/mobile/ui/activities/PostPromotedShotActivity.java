@@ -36,12 +36,15 @@ import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.MentionsAdapter;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.PromotedTermsModel;
 import com.shootr.mobile.ui.model.PromotedTierModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostPromotedShotPresenter;
 import com.shootr.mobile.ui.views.PostPromotedShotView;
 import com.shootr.mobile.ui.widgets.NestedListView;
 import com.shootr.mobile.ui.widgets.PromotedShotInfoDialog;
+import com.shootr.mobile.ui.widgets.PromotedTermsDialog;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -74,6 +77,7 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_IS_PRIVATE_MESSAGE = "privateMessage";
   public static final String EXTRA_ID_TARGET_USER = "extraIdTargetUser";
+  public static final String EXTRA_STREAM = "extraStream";
   public static final String SPACE = " ";
 
 
@@ -623,6 +627,7 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
     private String streamTitle;
     private Boolean isPrivateMessage;
     private String idTargetUser;
+    private StreamModel stream;
 
     public static IntentBuilder from(Context launchingContext) {
       IntentBuilder intentBuilder = new IntentBuilder();
@@ -643,6 +648,11 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
     public IntentBuilder setStreamData(String idStream, String streamTitle) {
       this.idStream = idStream;
       this.streamTitle = streamTitle;
+      return this;
+    }
+
+    public IntentBuilder setStream(StreamModel stream) {
+      this.stream = stream;
       return this;
     }
 
@@ -682,6 +692,9 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
       }
       if (isPrivateMessage != null) {
         intent.putExtra(EXTRA_IS_PRIVATE_MESSAGE, isPrivateMessage);
+      }
+      if (stream != null) {
+        intent.putExtra(EXTRA_STREAM, stream);
       }
       return intent;
     }
@@ -772,7 +785,17 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
     feedbackMessage.show(getView(), errorSendingShot);
   }
 
-  @Override public void showPromotedTerms() {
-    //TODO
+  @Override public void showPromotedTerms(PromotedTermsModel promotedTermsModel) {
+    Bundle args = new Bundle();
+    args.putSerializable(PromotedTermsDialog.STREAM, getIntent().getExtras().getSerializable(EXTRA_STREAM));
+    args.putString(PromotedTermsDialog.TERMS, promotedTermsModel.getTerms());
+    PromotedTermsDialog promotedTermsDialog = new PromotedTermsDialog();
+    promotedTermsDialog.setOnAcceptClickListener(new PromotedTermsDialog.OnAcceptClickListener() {
+      @Override public void onClick() {
+        presenter.acceptPromotedTerms();
+      }
+    });
+    promotedTermsDialog.setArguments(args);
+    promotedTermsDialog.show(getFragmentManager(), PromotedShotInfoDialog.TAG);
   }
 }

@@ -1,5 +1,6 @@
 package com.shootr.mobile.ui.views;
 
+import com.shootr.mobile.ui.model.PromotedTermsModel;
 import com.shootr.mobile.ui.model.PromotedTierModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.views.base.DataTransferView;
@@ -70,5 +71,5 @@ public interface PostPromotedShotView extends DataTransferView {
 
   void showReceiptErrorSnedingShot();
 
-  void showPromotedTerms();
+  void showPromotedTerms(PromotedTermsModel promotedTermsModel);
 }

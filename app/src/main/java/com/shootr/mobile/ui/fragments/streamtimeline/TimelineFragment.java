@@ -97,6 +97,7 @@ import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.LongPressShotPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
@@ -355,7 +356,7 @@ public class TimelineFragment extends BaseFragment
       }
 
       @Override public void onAddPromotedPressed() {
-        goToNewPromotedShot();
+        timelinePresenter.onAddPromotedPressed();
       }
 
       @Override public void onUserFollowingClick(UserModel user) {
@@ -369,10 +370,10 @@ public class TimelineFragment extends BaseFragment
     promotedList.setAdapter(promotedAdapter);
   }
 
-  private void goToNewPromotedShot() {
+  @Override public void goToNewPromotedShot(StreamModel streamModel) {
     Intent newShotIntent = PostPromotedShotActivity.IntentBuilder //
         .from(getActivity()) //
-        .setStreamData(idStream, streamTitle).build();
+        .setStreamData(idStream, streamTitle).setStream(streamModel).build();
     getActivity().startActivity(newShotIntent);
   }
 
@@ -691,7 +692,7 @@ public class TimelineFragment extends BaseFragment
           }
 
           @Override public void onPromotedClick() {
-            goToNewPromotedShot();
+            timelinePresenter.onAddPromotedPressed();
           }
         }, false, null, false, null, idStream);
   }

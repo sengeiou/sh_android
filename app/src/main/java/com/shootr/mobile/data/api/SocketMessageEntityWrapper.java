@@ -30,6 +30,7 @@ import com.shootr.mobile.data.entity.socket.NewBadgeContentSocketMessageApiEntit
 import com.shootr.mobile.data.entity.socket.NewItemSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ParticipantsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.PinnedItemsSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.PromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
@@ -91,6 +92,8 @@ public class SocketMessageEntityWrapper {
             .registerSubtype(ErrorSocketMessaggeApiEntity.class, SocketMessageApiEntity.ERROR)
             .registerSubtype(PromotedTiersSocketMessageApiEntity.class,
                 SocketMessageApiEntity.PROMOTED_TIERS)
+            .registerSubtype(PromotedTermsSocketMessageApiEntity.class,
+                SocketMessageApiEntity.PROMOTED_TERMS)
             .registerSubtype(AckSocketMessageApiEntity.class, SocketMessageApiEntity.ACK);
 
     final RuntimeTypeAdapterFactory<FollowableEntity> typeFactory =
