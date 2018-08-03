@@ -69,4 +69,6 @@ public interface PostPromotedShotView extends DataTransferView {
   void showReceiptError();
 
   void showReceiptErrorSnedingShot();
+
+  void showPromotedTerms();
 }

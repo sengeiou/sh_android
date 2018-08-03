@@ -25,6 +25,7 @@ import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
 import com.shootr.mobile.domain.model.ErrorSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
 import com.shootr.mobile.domain.model.PromotedReceipt;
+import com.shootr.mobile.domain.model.PromotedTermsSocketMessage;
 import com.shootr.mobile.domain.model.PromotedTier;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
@@ -33,6 +34,7 @@ import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.task.events.CommunicationErrorEvent;
 import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
+import com.shootr.mobile.ui.model.PromotedTermsModel;
 import com.shootr.mobile.ui.model.PromotedTierModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.PromotedTierModelMapper;
@@ -100,6 +102,8 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   private boolean isFreeShot;
   private String idStream;
   private String currentPurchaseToken;
+  private PromotedTermsModel promotedTermsModel;
+  private boolean promotedTermsAccepted;
 
   @Inject public PostPromotedShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewPromotedShotInStreamInteractor postNewShotInStreamInteractor,
@@ -225,10 +229,11 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     });
   }
 
-  private void acceptPromotedTerms() {
-    acceptPromotedTermsInteractor.accepPromotedTerms(idStream, /* poner número de versión*/1, new Interactor.CompletedCallback() {
+  public void acceptPromotedTerms() {
+    acceptPromotedTermsInteractor.accepPromotedTerms(idStream, promotedTermsModel.getVersion(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        //TODO llamar al método para enviar el prmoted shot
+        promotedTermsAccepted = true;
+        initPromotedShot(textToSend);
       }
     });
   }
@@ -266,11 +271,23 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   public void initPromotedShot(String text) {
     sendingState = PREPARING_SHOT;
     textToSend = text;
+    if (promotedTermsAccepted && !shouldShowPromotedTerms()) {
     if (isFreeShot && currentPromotedReceipt != null) {
       sendShot(textToSend);
     } else {
       billingManager.initiatePurchaseFlow(auxPromoted.get(currentTierIndex).getProductId());
     }
+    } else {
+      view.showPromotedTerms();
+    }
+  }
+
+  private boolean shouldShowPromotedTerms() {
+    if (promotedTermsModel != null && !promotedTermsModel.getTerms().isEmpty()) {
+      return true;
+    }
+    promotedTermsAccepted = true;
+    return false;
   }
 
   public void sendShot(String text) {
@@ -621,6 +638,13 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
       } else if (errorSocketMessage.getData().getErrorCode() == ErrorInfo.CODE_INVALID_SHOT_RECEIPT) {
         sendingState = ERROR;
         view.showReceiptErrorSnedingShot();
+      }
+    } else if (event.getMessage().getEventType().equals(SocketMessage.PROMOTED_TERMS)) {
+      if (promotedTermsModel == null) {
+        PromotedTermsSocketMessage promotedTermsSocketMessage = (PromotedTermsSocketMessage) event.getMessage();
+        promotedTermsModel = new PromotedTermsModel();
+        promotedTermsModel.setTerms((promotedTermsSocketMessage.getData()).getTerms());
+        promotedTermsModel.setVersion((promotedTermsSocketMessage.getData()).getVersion());
       }
     }
   }
