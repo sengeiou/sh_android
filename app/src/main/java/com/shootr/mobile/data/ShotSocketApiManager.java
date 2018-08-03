@@ -4,14 +4,14 @@ import com.shootr.mobile.data.api.SendSocketEventListener;
 import com.shootr.mobile.data.entity.AcceptPromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.EventParams;
 import com.shootr.mobile.data.entity.GetPromotedTermsSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.HighlightSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.SeenParams;
 import com.shootr.mobile.data.entity.SeenSocketMessageApiEntity;
-import java.util.Date;
 import com.shootr.mobile.data.entity.UnHighlightSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
+import java.util.Date;
 import java.util.UUID;
 
 public class ShotSocketApiManager {
@@ -109,8 +109,10 @@ public class ShotSocketApiManager {
   }
 
   public void getPromotedTerms(String idStream) {
-    GetPromotedTermsSocketMessageApiEntity getPromotedTermsSocketMessageApiEntity = new GetPromotedTermsSocketMessageApiEntity();
-    GetPromotedTermsSocketMessageApiEntity.Params params = new GetPromotedTermsSocketMessageApiEntity.Params();
+    GetPromotedTermsSocketMessageApiEntity getPromotedTermsSocketMessageApiEntity =
+        new GetPromotedTermsSocketMessageApiEntity();
+    GetPromotedTermsSocketMessageApiEntity.Params params =
+        new GetPromotedTermsSocketMessageApiEntity.Params();
 
     params.setIdStream(idStream);
 
@@ -122,8 +124,10 @@ public class ShotSocketApiManager {
   }
 
   public void acceptPromotedTerms(String idStream, int version) {
-    AcceptPromotedTermsSocketMessageApiEntity acceptPromotedTermsSocketMessageApiEntity = new AcceptPromotedTermsSocketMessageApiEntity();
-    AcceptPromotedTermsSocketMessageApiEntity.Params params = new AcceptPromotedTermsSocketMessageApiEntity.Params();
+    AcceptPromotedTermsSocketMessageApiEntity acceptPromotedTermsSocketMessageApiEntity =
+        new AcceptPromotedTermsSocketMessageApiEntity();
+    AcceptPromotedTermsSocketMessageApiEntity.Params params =
+        new AcceptPromotedTermsSocketMessageApiEntity.Params();
 
     params.setIdStream(idStream);
     params.setVersion(version);

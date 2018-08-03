@@ -230,12 +230,13 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   }
 
   public void acceptPromotedTerms() {
-    acceptPromotedTermsInteractor.accepPromotedTerms(idStream, promotedTermsModel.getVersion(), new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        promotedTermsAccepted = true;
-        initPromotedShot(textToSend);
-      }
-    });
+    acceptPromotedTermsInteractor.accepPromotedTerms(idStream, promotedTermsModel.getVersion(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            promotedTermsAccepted = true;
+            initPromotedShot(textToSend);
+          }
+        });
   }
 
   public void textChanged(String currentText) {
