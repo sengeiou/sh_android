@@ -771,4 +771,8 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
   @Override public void showReceiptErrorSnedingShot() {
     feedbackMessage.show(getView(), errorSendingShot);
   }
+
+  @Override public void showPromotedTerms() {
+    //TODO
+  }
 }
