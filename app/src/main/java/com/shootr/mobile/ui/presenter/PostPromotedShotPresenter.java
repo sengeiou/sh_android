@@ -272,21 +272,28 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   public void initPromotedShot(String text) {
     sendingState = PREPARING_SHOT;
     textToSend = text;
-    if (promotedTermsAccepted && !shouldShowPromotedTerms()) {
-    if (isFreeShot && currentPromotedReceipt != null) {
-      sendShot(textToSend);
-    } else {
-      billingManager.initiatePurchaseFlow(auxPromoted.get(currentTierIndex).getProductId());
-    }
+    if (!shouldShowPromotedTerms()) {
+      if (isFreeShot && currentPromotedReceipt != null) {
+        sendShot(textToSend);
+      } else {
+        billingManager.initiatePurchaseFlow(auxPromoted.get(currentTierIndex).getProductId());
+      }
     } else {
       view.showPromotedTerms(promotedTermsModel);
     }
   }
 
   private boolean shouldShowPromotedTerms() {
-    if (promotedTermsModel != null && !promotedTermsModel.getTerms().isEmpty()) {
+    if (promotedTermsAccepted) {
+      return false;
+    }
+
+    if (promotedTermsModel != null
+        && promotedTermsModel.getTerms() != null
+        && !promotedTermsModel.getTerms().isEmpty()) {
       return true;
     }
+
     promotedTermsAccepted = true;
     return false;
   }

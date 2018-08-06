@@ -789,10 +789,11 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
     Bundle args = new Bundle();
     args.putSerializable(PromotedTermsDialog.STREAM, getIntent().getExtras().getSerializable(EXTRA_STREAM));
     args.putString(PromotedTermsDialog.TERMS, promotedTermsModel.getTerms());
-    PromotedTermsDialog promotedTermsDialog = new PromotedTermsDialog();
+    final PromotedTermsDialog promotedTermsDialog = new PromotedTermsDialog();
     promotedTermsDialog.setOnAcceptClickListener(new PromotedTermsDialog.OnAcceptClickListener() {
       @Override public void onClick() {
         presenter.acceptPromotedTerms();
+        promotedTermsDialog.dismiss();
       }
     });
     promotedTermsDialog.setArguments(args);
