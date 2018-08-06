@@ -95,7 +95,7 @@ public class MessageBoxPresenter {
   private void setupPromotedBadge() {
     getCachedPromotedTiers.getPromotedTiers(new Interactor.Callback<PromotedTiers>() {
       @Override public void onLoaded(PromotedTiers promotedTiers) {
-        if (!promotedTiers.getPendingReceipts().isEmpty()) {
+        if (promotedTiers != null && !promotedTiers.getPendingReceipts().isEmpty()) {
           messageBoxView.showPromotedBadge();
         }
       }
