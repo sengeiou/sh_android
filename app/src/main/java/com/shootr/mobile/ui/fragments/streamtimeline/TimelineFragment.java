@@ -841,8 +841,10 @@ public class TimelineFragment extends BaseFragment
 
 
   @Override public void renderPolls(List<PrintableModel> items) {
-    checkingForShotsView.setVisibility(View.GONE);
-    promotedAdapter.setPolls(items);
+    if (isAdded()) {
+      checkingForShotsView.setVisibility(View.GONE);
+      promotedAdapter.setPolls(items);
+    }
   }
 
   @Override public void renderHighlightedItems(List<PrintableModel> items) {

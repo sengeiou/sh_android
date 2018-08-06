@@ -82,8 +82,7 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   @Override public void onRestoreLastTimeline(String idStream, String filter,
       PaginationEntity paginationEntity) {
-    getTimeline(idStream,
-        filter, paginationEntity);
+    getTimeline(idStream, filter, paginationEntity);
   }
 
   @Override
@@ -168,7 +167,6 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     }
 
     return false;
-
   }
 
   @Override public boolean sendNice(String idShot) {
@@ -201,7 +199,8 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
             }
 
             @Override public void onMessage(String message) {
-              SocketMessageApiEntity socketMessage = socketMessageWrapper.transformSocketMessage(message);
+              SocketMessageApiEntity socketMessage =
+                  socketMessageWrapper.transformSocketMessage(message);
               if (socketMessage != null) {
                 handleNewMessage(socketMessage, emitter);
                 logsCache.putNewLog(message);
@@ -243,9 +242,12 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
           webSocket.sendClose();
           subscriptionSocketApiService.clearSubscriptions();
           if (!emitter.isDisposed()) {
-            emitter.onError(new Throwable(t.getMessage()));
+            try {
+              emitter.onError(new Throwable(t.getMessage()));
+            } catch (Throwable error) {
+              /* no-op */
+            }
           }
-
         }
       }
     } catch (Exception e) {
