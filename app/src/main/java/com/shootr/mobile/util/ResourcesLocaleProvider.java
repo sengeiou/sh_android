@@ -57,7 +57,11 @@ public class ResourcesLocaleProvider implements LocaleProvider {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             return resources.getConfiguration().getLocales().get(0).toLanguageTag();
         } else {
-            return resources.getConfiguration().locale.toLanguageTag();
+            try {
+                return resources.getConfiguration().locale.toLanguageTag();
+            } catch (NoSuchMethodError error) {
+                return resources.getConfiguration().locale.toString();
+            }
         }
     }
 }
