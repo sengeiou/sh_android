@@ -38,10 +38,10 @@ def gitBranch = 'git rev-parse --abbrev-ref HEAD'.execute([], project.rootDir).t
 
 def versionMajor = 1
 def versionMinor = 61
-def versionRevision = 2
+def versionRevision = 3
 
 
-def isSnapshot = false
+def isSnapshot = true
 def isPreProduction = false
 def databaseVersion = 72
 
