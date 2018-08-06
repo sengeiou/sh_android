@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.61.2] - 2018-08-06
+### Fixed
+- Fixes for Android 4.x
+
 ## [1.61.1] - 2018-07-27
 ### Fixed
 - Production endpoint
