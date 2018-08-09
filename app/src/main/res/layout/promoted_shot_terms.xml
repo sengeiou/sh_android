@@ -26,7 +26,7 @@
         android:padding="16dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:text="@string/promoted_info_title"
+        tools:text="@string/promoted_info_title"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"

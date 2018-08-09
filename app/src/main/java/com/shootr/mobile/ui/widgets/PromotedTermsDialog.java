@@ -92,6 +92,9 @@ public class PromotedTermsDialog extends DialogFragment {
       }
     });
 
+    TextView title = view.findViewById(R.id.title);
+
+    title.setText(streamModel.getTitle());
     return view;
   }
 
