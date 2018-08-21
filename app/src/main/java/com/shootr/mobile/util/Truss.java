@@ -21,7 +21,9 @@ public class Truss {
     }
 
     public Truss append(String string) {
-        builder.append(string);
+        if (string != null) {
+            builder.append(string);
+        }
         return this;
     }
 

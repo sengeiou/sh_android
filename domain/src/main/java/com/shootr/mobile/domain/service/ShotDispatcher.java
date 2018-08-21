@@ -78,9 +78,9 @@ public class ShotDispatcher implements MessageSender {
     queuedShot = putShotIntoPersistenQueue(queuedShot);
     notifyShotQueued(queuedShot);
     if (queuedShot.getBaseMessage() instanceof Shot) {
-      startDispatching(QueueRepository.SHOT_TYPE);
+      startDispatching(QueueRepository.SHOT_TYPE, queuedShot);
     } else {
-      startDispatching(QueueRepository.MESSAGE_TYPE);
+      startDispatching(QueueRepository.MESSAGE_TYPE, queuedShot);
     }
   }
 
@@ -145,11 +145,20 @@ public class ShotDispatcher implements MessageSender {
     return queuedShot;
   }
 
-  private void startDispatching(String queuedType) {
+  private void startDispatching(String queuedType, QueuedShot queuedShot) {
     if (!isDispatching) {
       isDispatching = true;
-      dispatchNextItems(queuedType);
+      dispatchNextItems(queuedType, queuedShot);
       isDispatching = false;
+    }
+  }
+
+  private void dispatchNextItems(String queuedType, QueuedShot queuedShot) {
+    if (queuedShot != null) {
+      boolean haveBeenSendViaSocket = sendShotToServer(queuedShot);
+      if (!haveBeenSendViaSocket) {
+        dispatchNextItems(queuedType);
+      }
     }
   }
 

@@ -52,6 +52,8 @@ public class PostNewShotPresenter implements Presenter {
   private String[] words;
   private String idTargetUser;
   private int maxLength = MAX_LENGTH;
+  private String streamTitle;
+  private String idStream;
 
   @Inject public PostNewShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewShotInStreamInteractor postNewShotInStreamInteractor,
@@ -75,8 +77,10 @@ public class PostNewShotPresenter implements Presenter {
     this.isInitialized = true;
   }
 
-  public void initializeAsNewShot(PostNewShotView postNewShotView) {
+  public void initializeAsNewShot(PostNewShotView postNewShotView, String idStream, String streamTitle) {
     this.setView(postNewShotView);
+    this.idStream = idStream;
+    this.streamTitle = streamTitle;
   }
 
   public void initializeAsNewMessage(PostNewShotView postNewShotView, String idTargetUser) {
@@ -212,7 +216,7 @@ public class PostNewShotPresenter implements Presenter {
   }
 
   private void postStreamShot() {
-    postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend, selectedImageFile,
+    postNewShotInStreamInteractor.postNewShotInStream(shotCommentToSend, selectedImageFile, idStream, streamTitle,
         new Interactor.CompletedCallback() {
           @Override public void onCompleted() {
             onShotSending();

@@ -16,7 +16,6 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -56,19 +55,6 @@ public class PostNewShotInStreamInteractorTest extends PostNewShotInteractorTest
     Shot publishedShot = shotArgumentCaptor.getValue();
     Shot.ShotStreamInfo streamInfo = publishedShot.getStreamInfo();
     assertStreamInfoIsFromStream(streamInfo, watchingStream());
-  }
-
-  @Test public void shouldSendShotWithoutStreamInfoWhenNoStreamWatching() throws Exception {
-    setupCurrentUserSession();
-
-    interactor.postNewShotInStream(COMMENT_STUB, IMAGE_NULL, new DummyCallback(),
-        new DummyErrorCallback());
-
-    ArgumentCaptor<Shot> shotArgumentCaptor = ArgumentCaptor.forClass(Shot.class);
-    verify(messageSender).sendMessage(shotArgumentCaptor.capture(), any(File.class));
-    Shot publishedShot = shotArgumentCaptor.getValue();
-    Shot.ShotStreamInfo streamInfo = publishedShot.getStreamInfo();
-    assertThat(streamInfo).isNull();
   }
 
   private void setupWatchingStream() {

@@ -4,11 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class FileChooserUtils {
 
@@ -151,4 +157,34 @@ public class FileChooserUtils {
     public static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
+
+  public static File getFileFromUri(Context context, Uri uri, File tmpFiles) {
+    File file = null;
+    InputStream inputStream = null;
+    if (uri.getAuthority() != null) {
+      try {
+        inputStream = context.getContentResolver().openInputStream(uri);
+        Bitmap bmp = BitmapFactory.decodeStream(inputStream);
+
+        file = new File(tmpFiles, "image.png");
+
+        FileOutputStream out = new FileOutputStream(file);
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
+        out.flush();
+        out.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      } finally {
+        if (inputStream != null) {
+          try {
+            inputStream.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+    }
+    return file;
+  }
+
 }

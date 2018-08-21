@@ -230,7 +230,8 @@ public class PostNewShotPresenterTest {
     presenter.sendShot(TEXT);
 
     verify(postNewShotInStreamInteractor).postNewShotInStream(anyString(), any(File.class),
-        any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
+        anyString(), anyString(), any(Interactor.CompletedCallback.class),
+        any(Interactor.ErrorCallback.class));
   }
 
   @Test public void shouldShowReplyToUsernameWhenInitializeAsAReply() throws Exception {
@@ -292,14 +293,14 @@ public class PostNewShotPresenterTest {
   protected void setupPostStreamShotErrorCallback() {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-        Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[3];
+        Interactor.ErrorCallback callback = (Interactor.ErrorCallback) invocation.getArguments()[5];
         callback.onError(new ShootrException() {
         });
         return null;
       }
     }).when(postNewShotInStreamInteractor)
-        .postNewShotInStream(anyString(), any(File.class), any(Interactor.CompletedCallback.class),
-            any(Interactor.ErrorCallback.class));
+        .postNewShotInStream(anyString(), any(File.class), anyString(), anyString(),
+            any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
   }
 
   @Test public void shouldShowResultOkWhenReplyErrorCallback() throws Exception {
@@ -341,13 +342,13 @@ public class PostNewShotPresenterTest {
     doAnswer(new Answer() {
       @Override public Object answer(InvocationOnMock invocation) throws Throwable {
         Interactor.CompletedCallback callback =
-            (Interactor.CompletedCallback) invocation.getArguments()[2];
+            (Interactor.CompletedCallback) invocation.getArguments()[4];
         callback.onCompleted();
         return null;
       }
     }).when(postNewShotInStreamInteractor)
-        .postNewShotInStream(anyString(), any(File.class), any(Interactor.CompletedCallback.class),
-            any(Interactor.ErrorCallback.class));
+        .postNewShotInStream(anyString(), any(File.class), anyString(), anyString(),
+            any(Interactor.CompletedCallback.class), any(Interactor.ErrorCallback.class));
   }
 
   private List<Searchable> mentionSuggestions() {

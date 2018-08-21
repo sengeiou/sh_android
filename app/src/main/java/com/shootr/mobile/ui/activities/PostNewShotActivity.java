@@ -65,6 +65,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_IS_PRIVATE_MESSAGE = "privateMessage";
   public static final String EXTRA_ID_TARGET_USER = "extraIdTargetUser";
+  public static final String EXTRA_OPEN_STREAM_AFTER_SEDN_SHOT = "openStream";
+  public static final String EXTRA_TEXT = "extraText";
   public static final String SPACE = " ";
 
   @BindView(R.id.new_shot_avatar) AvatarView avatar;
@@ -108,6 +110,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   private String replyUsername;
   private String idStream;
   private String streamTitle;
+  private boolean openStreamAfterSendShot;
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
     toolbarDecorator.getToolbar().setVisibility(View.GONE);
@@ -134,7 +137,9 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
       String replyParentId = extras.getString(EXTRA_REPLY_PARENT_ID);
       String extraIdStream = extras.getString(EXTRA_ID_STREAM);
       String extraStreamTitle = extras.getString(EXTRA_STREAM_TITLE);
+      String extraTextToSend = extras.getString(EXTRA_TEXT);
       Boolean isPrivateMessage = extras.getBoolean(EXTRA_IS_PRIVATE_MESSAGE, false);
+      openStreamAfterSendShot = extras.getBoolean(EXTRA_OPEN_STREAM_AFTER_SEDN_SHOT, false);
       idUserReplied = replyParentId;
       if (replyToUsername != null) {
         replyUsername = replyToUsername;
@@ -145,6 +150,9 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
       if (extraStreamTitle != null) {
         this.streamTitle = extraStreamTitle;
       }
+      if (extraTextToSend != null) {
+        editTextView.setText(extraTextToSend);
+      }
       isReply = replyToUsername != null;
       if (isReply) {
         presenter.initializeAsReply(this, replyParentId, replyToUsername);
@@ -153,7 +161,7 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
         presenter.initializeAsNewMessage(this, targetUser);
         charCounter.setText(String.valueOf(MAX_MESSAGE_LENGTH));
       } else {
-        presenter.initializeAsNewShot(this);
+        presenter.initializeAsNewShot(this, extraIdStream, extraStreamTitle);
       }
     }
   }
@@ -448,6 +456,9 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
   }
 
   @Override public void closeScreen() {
+    if (openStreamAfterSendShot) {
+      startActivity(StreamTimelineActivity.newIntent(this, idStream));
+    }
     finish();
   }
 
@@ -578,6 +589,8 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
     private String streamTitle;
     private Boolean isPrivateMessage;
     private String idTargetUser;
+    private Boolean openStreamAfterSendShot;
+    private String textToSend;
 
     public static IntentBuilder from(Context launchingContext) {
       IntentBuilder intentBuilder = new IntentBuilder();
@@ -592,6 +605,11 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
 
     public IntentBuilder withImage(File imageFile) {
       this.imageFile = imageFile;
+      return this;
+    }
+
+    public IntentBuilder withText(String textToSend) {
+      this.textToSend = textToSend;
       return this;
     }
 
@@ -617,6 +635,11 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
       return this;
     }
 
+    public IntentBuilder openTimelineAfterSendShot() {
+      this.openStreamAfterSendShot = true;
+      return this;
+    }
+
     public Intent build() {
       Intent intent = new Intent(launchingContext, PostNewShotActivity.class);
       if (imageFile != null) {
@@ -637,6 +660,12 @@ public class PostNewShotActivity extends BaseToolbarDecoratedActivity implements
       }
       if (isPrivateMessage != null) {
         intent.putExtra(EXTRA_IS_PRIVATE_MESSAGE, isPrivateMessage);
+      }
+      if (openStreamAfterSendShot != null) {
+        intent.putExtra(EXTRA_OPEN_STREAM_AFTER_SEDN_SHOT, openStreamAfterSendShot);
+      }
+      if (textToSend != null) {
+        intent.putExtra(EXTRA_TEXT, textToSend);
       }
       return intent;
     }

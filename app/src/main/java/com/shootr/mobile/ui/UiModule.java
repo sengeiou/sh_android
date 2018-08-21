@@ -34,6 +34,7 @@ import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
 import com.shootr.mobile.ui.activities.SearchActivity;
+import com.shootr.mobile.ui.activities.SearchToShareActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
 import com.shootr.mobile.ui.activities.ShareStreamActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
@@ -56,6 +57,7 @@ import com.shootr.mobile.ui.fragments.ChannelsContainerFragment;
 import com.shootr.mobile.ui.fragments.FindFriendsFragment;
 import com.shootr.mobile.ui.fragments.FindStreamsFragment;
 import com.shootr.mobile.ui.fragments.GenericSearchFragment;
+import com.shootr.mobile.ui.fragments.SearchStreamToShareFragment;
 import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.widgets.MessageBox;
@@ -92,7 +94,8 @@ import javax.inject.Singleton;
     ChannelsContainerFragment.class, ShareStreamActivity.class, PollOptionVotedActivity.class,
     HiddenPollResultsActivity.class, HistoryActivity.class, NewShotDetailActivity.class,
     PrivacyLawActivity.class, PostPromotedShotActivity.class, PromotedMessageBox.class,
-    PromotedShotInfoDialog.class, PromotedShotIntroActivity.class, PromotedShotActivationInfoDialog.class
+    PromotedShotInfoDialog.class, PromotedShotIntroActivity.class, PromotedShotActivationInfoDialog.class,
+  SearchStreamToShareFragment.class, SearchToShareActivity.class
 }, complete = false, library = true) public class UiModule {
 
   @Provides @Singleton AppContainer provideAppContainer() {

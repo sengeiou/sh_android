@@ -19,6 +19,9 @@ public class PostNewShotInStreamInteractor extends PostNewMessageInteractor {
   private final SessionRepository sessionRepository;
   private final StreamRepository localStreamRepository;
 
+  private String idStream;
+  private String streamTitle;
+
   @Inject public PostNewShotInStreamInteractor(PostExecutionThread postExecutionThread,
       InteractorHandler interactorHandler, SessionRepository sessionRepository,
       @Local StreamRepository localStreamRepository, @Background MessageSender messageSender) {
@@ -32,14 +35,26 @@ public class PostNewShotInStreamInteractor extends PostNewMessageInteractor {
     super.postNewBaseMessage(comment, image, true, callback, errorCallback);
   }
 
+  public void postNewShotInStream(String comment, File image, String idStream, String streamTitle,
+      CompletedCallback callback, ErrorCallback errorCallback) {
+    this.idStream = idStream;
+    this.streamTitle = streamTitle;
+    super.postNewBaseMessage(comment, image, true, callback, errorCallback);
+  }
+
   @Override protected void fillShotStreamInfo(Shot shot) {
     Stream stream = currentVisibleStream();
-    if (stream != null) {
-      Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
-      eventInfo.setIdStream(stream.getId());
-      eventInfo.setStreamTitle(stream.getTitle());
-      shot.setStreamInfo(eventInfo);
+    Shot.ShotStreamInfo eventInfo = new Shot.ShotStreamInfo();
+    if (idStream == null) {
+      if (stream != null) {
+        eventInfo.setIdStream(stream.getId());
+        eventInfo.setStreamTitle(stream.getTitle());
+      }
+    } else {
+      eventInfo.setIdStream(idStream);
+      eventInfo.setStreamTitle(streamTitle);
     }
+    shot.setStreamInfo(eventInfo);
   }
 
   @Override protected void fillPrivateMessageTargetInfo(PrivateMessage privateMessage) {
