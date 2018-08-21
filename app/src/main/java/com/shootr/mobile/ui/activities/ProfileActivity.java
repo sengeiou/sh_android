@@ -27,6 +27,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -92,6 +93,7 @@ public class ProfileActivity extends BaseActivity
 
   public static final String EXTRA_USER = "user";
   public static final String EXTRA_USERNAME = "username";
+  public static final String EURO = " €";
   public static final int LOGOUT_DISMISS_DELAY = 1500;
 
   private static final int REQUEST_CHOOSE_PHOTO = 1;
@@ -108,7 +110,7 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.toolbar_layout) CollapsingToolbarLayout collapsingToolbarLayout;
   @BindView(R.id.channel_button) FloatingActionButton channelButton;
   @BindView(R.id.user_muted) ImageView userMuted;
-
+  @BindView(R.id.balance_tab_container) FrameLayout balanceContainer;
   @BindView(R.id.profile_marks_followers) TextView followersTextView;
   @BindView(R.id.profile_marks_following) TextView followingTextView;
 
@@ -130,6 +132,7 @@ public class ProfileActivity extends BaseActivity
   @BindView(R.id.profile_detail_container) NestedScrollView nestedScrollView;
   @BindView(R.id.app_bar) ScrollableAppLayout appBarLayout;
   @BindView(R.id.stream_number) TextView streamNumber;
+  @BindView(R.id.balance_number) TextView balanceNumber;
 
   @BindString(R.string.report_base_url) String reportBaseUrl;
   @BindString(R.string.analytics_screen_me) String analyticsScreenMe;
@@ -274,7 +277,7 @@ public class ProfileActivity extends BaseActivity
           }
         }, new OnUrlClickListener() {
           @Override public void onClick() {
-        /* no-op */
+            /* no-op */
           }
         }, new OnReshootClickListener() {
           @Override public void onReshootClick(ShotModel shot) {
@@ -981,8 +984,16 @@ public class ProfileActivity extends BaseActivity
     /* no-op */
   }
 
+  @Override public void showBalance() {
+    balanceContainer.setVisibility(View.VISIBLE);
+  }
+
   @Override public void setStreamsCount(Integer streamCount) {
     streamNumber.setText(String.valueOf(streamCount));
+  }
+
+  @Override public void setBalance(float balance) {
+    balanceNumber.setText(String.valueOf(balance) + EURO);
   }
 
   @Override public void refreshSuggestedPeople(List<UserModel> suggestedPeople) {

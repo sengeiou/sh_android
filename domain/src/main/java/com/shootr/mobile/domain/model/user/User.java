@@ -40,6 +40,7 @@ public class User implements Searchable, Followable, PrintableItem, Seenable {
   private boolean muted;
   private String shareLink;
   private Boolean seen;
+  private float balance;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -191,6 +192,14 @@ public class User implements Searchable, Followable, PrintableItem, Seenable {
 
   public void setWatchingStreamTitle(String watchingStreamTitle) {
     this.watchingStreamTitle = watchingStreamTitle;
+  }
+
+  public float getBalance() {
+    return balance;
+  }
+
+  public void setBalance(float balance) {
+    this.balance = balance;
   }
 
   @Override public String toString() {

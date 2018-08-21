@@ -36,6 +36,7 @@ public class SuggestedPeopleEntityMapper {
         user.setJoinStreamDate(suggestedPeopleEntity.getJoinStreamDate());
         user.setCreatedStreamsCount(suggestedPeopleEntity.getCreatedStreamsCount());
         user.setFavoritedStreamsCount(suggestedPeopleEntity.getFavoritedStreamsCount());
+        user.setBalance(suggestedPeopleEntity.getBalance());
 
         suggestedPeople.setRelevance(suggestedPeopleEntity.getRelevance());
         suggestedPeople.setUser(user);
@@ -61,13 +62,10 @@ public class SuggestedPeopleEntityMapper {
         suggestedPeopleEntity.setBio(suggestedPeople.getUser().getBio());
         suggestedPeopleEntity.setCreatedStreamsCount(suggestedPeople.getUser().getCreatedStreamsCount());
         suggestedPeopleEntity.setFavoritedStreamsCount(suggestedPeople.getUser().getFavoritedStreamsCount());
-
         suggestedPeopleEntity.setIdWatchingStream(suggestedPeople.getUser().getIdWatchingStream());
-
         suggestedPeopleEntity.setWatchingStreamTitle(suggestedPeople.getUser().getWatchingStreamTitle());
-
         suggestedPeopleEntity.setJoinStreamDate(suggestedPeople.getUser().getJoinStreamDate());
-
+        suggestedPeopleEntity.setBalance(suggestedPeople.getUser().getBalance());
         suggestedPeopleEntity.setRelevance(suggestedPeople.getRelevance());
 
         return suggestedPeopleEntity;

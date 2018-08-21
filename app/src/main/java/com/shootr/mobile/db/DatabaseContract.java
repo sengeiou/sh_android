@@ -69,14 +69,14 @@ public class DatabaseContract {
     public static final String FOLLOWING = "following";
     public static final String MUTED = "muted";
     public static final String SHARE_LINK = "shareLink";
+    public static final String BALANCE = "balance";
 
     public static final String[] PROJECTION = {
         ID, USER_NAME, EMAIL, EMAIL_CONFIRMED, USER_VERIFIED, NAME, PHOTO, NUM_FOLLOWERS,
-        NUM_FOLLOWINGS, WEBSITE, BIO, JOIN_STREAM_DATE, ID_WATCHING_STREAM,
-        WATCHING_STREAM_TITLE, WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT,
-        FAVORITED_STREAMS_COUNT, SOCIAL_LOGIN, RECEIVED_REACTIONS, ANALYTICS_USER_TYPE,
-        FIRST_SESSION_ACTIVATION, STRATEGIC, FOLLOWING, MUTED, SHARE_LINK, BIRTH, MODIFIED, DELETED,
-        REVISION, SYNCHRONIZED
+        NUM_FOLLOWINGS, WEBSITE, BIO, JOIN_STREAM_DATE, ID_WATCHING_STREAM, WATCHING_STREAM_TITLE,
+        WATCHING_SYNCHRONIZED, CREATED_STREAMS_COUNT, FAVORITED_STREAMS_COUNT, SOCIAL_LOGIN,
+        RECEIVED_REACTIONS, ANALYTICS_USER_TYPE, FIRST_SESSION_ACTIVATION, STRATEGIC, FOLLOWING,
+        MUTED, SHARE_LINK, BALANCE, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED
     };
   }
 
@@ -140,7 +140,7 @@ public class DatabaseContract {
   public static final class FollowTable {
 
     private FollowTable() {
-            /* no instances */
+      /* no instances */
     }
 
     public static final String TABLE = "Follow";
@@ -156,7 +156,7 @@ public class DatabaseContract {
   public static final class BlockTable implements SyncColumns {
 
     private BlockTable() {
-            /* no instances */
+      /* no instances */
     }
 
     public static final String TABLE = "Block";
@@ -267,7 +267,8 @@ public class DatabaseContract {
     public static final String[] PROJECTION = {
         ID_QUEUE, FAILED, IMAGE_FILE, ID_SHOT, ID_USER, USERNAME, USER_PHOTO, COMMENT, IMAGE,
         ID_STREAM, STREAM_TITLE, TYPE, ID_SHOT_PARENT, ID_USER_PARENT, USERNAME_PARENT, VIDEO_URL,
-        VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED, RECEIPT, RECEIPT_TYPE
+        VIDEO_TITLE, VIDEO_DURATION, BIRTH, MODIFIED, DELETED, REVISION, SYNCHRONIZED, RECEIPT,
+        RECEIPT_TYPE
     };
   }
 
@@ -371,7 +372,7 @@ public class DatabaseContract {
   public static final class ContributorTable implements SyncColumns {
 
     private ContributorTable() {
-            /* no instances */
+      /* no instances */
     }
 
     public static final String TABLE = "Contributor";
@@ -385,7 +386,7 @@ public class DatabaseContract {
   public static final class TimelineSyncTable {
 
     private TimelineSyncTable() {
-            /* non instanciable */
+      /* non instanciable */
     }
 
     public static final String TABLE = "TimelineSync";

@@ -38,6 +38,7 @@ public class UserModelMapper {
         userModel.setMuted(user.isMuted());
         userModel.setShareLink(user.getShareLink());
         userModel.setFollowing(user.isFollowing());
+        userModel.setBalance(user.getBalance());
         Long joinStreamDate = user.getJoinStreamDate();
         if (joinStreamDate != null) {
             userModel.setJoinStreamDate(streamJoinDateFormatter.format(joinStreamDate));

@@ -39,6 +39,7 @@ public class UserEntity extends Synchronized
   private String shareLink;
   private String resultType;
   private Boolean seen;
+  private float balance;
 
   public UserEntity() {
     setResultType(FollowableType.USER);
@@ -146,6 +147,14 @@ public class UserEntity extends Synchronized
 
   public void setBio(String bio) {
     this.bio = bio;
+  }
+
+  public float getBalance() {
+    return balance;
+  }
+
+  public void setBalance(float balance) {
+    this.balance = balance;
   }
 
   @Override public int compareTo(UserEntity another) {

@@ -36,6 +36,7 @@ public class UserModel implements Serializable, Cloneable, SearchableModel, Prin
   private String timelineGroup;
   private Date deleted;
   private Boolean seen;
+  private float balance;
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -187,6 +188,14 @@ public class UserModel implements Serializable, Cloneable, SearchableModel, Prin
 
   public void setShareLink(String shareLink) {
     this.shareLink = shareLink;
+  }
+
+  public float getBalance() {
+    return balance;
+  }
+
+  public void setBalance(float balance) {
+    this.balance = balance;
   }
 
   @Override public UserModel clone() {

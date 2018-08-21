@@ -372,6 +372,7 @@
   <string name="profile_following">Siguiendo</string>
   <string name="profile_listing">Streams</string>
   <string name="profile_listing_number">0</string>
+  <string name="profile_balance">Saldo</string>
   <string name="profile_logout">Cerrar sesión</string>
   <string name="profile_marks_followers">seguidores</string>
   <string name="profile_marks_following">siguiendo</string>

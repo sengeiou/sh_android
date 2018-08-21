@@ -368,6 +368,7 @@
   <string name="profile_following">Following</string>
   <string name="profile_listing">Streams</string>
   <string name="profile_listing_number">0</string>
+  <string name="profile_balance">Balance</string>
   <string name="profile_logout">Sign out</string>
   <string name="profile_marks_followers">followers</string>
   <string name="profile_marks_following">following</string>

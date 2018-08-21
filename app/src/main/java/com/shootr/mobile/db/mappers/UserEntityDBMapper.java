@@ -58,6 +58,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
     contentValues.put(UserTable.FOLLOWING, (entity.isFollowing()));
     contentValues.put(UserTable.MUTED, (entity.isMuted() == null ? false : entity.isMuted()));
     contentValues.put(UserTable.SHARE_LINK, entity.getShareLink());
+    contentValues.put(UserTable.BALANCE, entity.getBalance());
     setSynchronizedtoContentValues(entity, contentValues);
   }
 
@@ -96,6 +97,7 @@ public class UserEntityDBMapper extends GenericDBMapper {
     entity.setFollowing((cursor.getInt(cursor.getColumnIndex(UserTable.FOLLOWING)) == 1));
     entity.setMuted((cursor.getInt(cursor.getColumnIndex(UserTable.MUTED)) == 1));
     entity.setShareLink(cursor.getString(cursor.getColumnIndex(UserTable.SHARE_LINK)));
+    entity.setBalance(cursor.getLong(cursor.getColumnIndex(UserTable.BALANCE)));
     setSynchronizedfromCursor(cursor, entity);
   }
 

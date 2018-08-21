@@ -192,10 +192,43 @@
       android:clickable="true"
       app:detail_button="true"
       />
+  <FrameLayout android:id="@+id/balance_tab_container"
+      android:layout_width="match_parent"
+      android:layout_height="40dp"
+      android:background="?selectableItemBackground"
+      android:visibility="gone"
+      android:clickable="true"
+      >
 
+    <ImageView android:id="@+id/euro_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_euro"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="@dimen/keyline_2"
+        android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
+        android:text="@string/profile_balance" />
+
+    <TextView android:id="@+id/balance_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginRight="16dp"
+        android:gravity="center_vertical"
+        android:paddingRight="8dp"
+        android:textAppearance="@style/TextAppearance.BottomSheet.Persistent.Row"
+        android:textColor="@color/gray_60"
+        tools:text="95" />
+  </FrameLayout>
   <FrameLayout android:id="@+id/streams_tab_container"
       android:layout_width="match_parent"
-      android:layout_height="56dp"
+      android:layout_height="40dp"
       android:background="?selectableItemBackground"
       android:visibility="visible"
       android:clickable="true"

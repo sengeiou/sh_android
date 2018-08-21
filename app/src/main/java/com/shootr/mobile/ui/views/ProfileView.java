@@ -88,6 +88,10 @@ public interface ProfileView {
 
     void hideUserMuted();
 
+    void showBalance();
+
+    void setBalance(float balance);
+
     void showStreamsCount();
 
     void setStreamsCount(Integer streams);

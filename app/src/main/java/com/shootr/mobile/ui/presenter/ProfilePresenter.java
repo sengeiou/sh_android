@@ -150,6 +150,7 @@ public class ProfilePresenter implements Presenter {
     setupShowUserSettingsMenu();
     profileView.setUserInfo(userModel);
     renderStreamsNumber();
+    renderBalance();
     profileView.setupAnalytics(isCurrentUser);
     profileView.resetTimelineAdapter();
     if (isCurrentUser) {
@@ -169,6 +170,14 @@ public class ProfilePresenter implements Presenter {
             .intValue();
     profileView.showStreamsCount();
     profileView.setStreamsCount(streamsCount);
+  }
+
+  private void renderBalance() {
+    float balance = userModel.getBalance();
+    if ((balance > 0 && userModel.isMe()) || (userModel.isVerifiedUser() && userModel.isMe())) {
+      profileView.showBalance();
+      profileView.setBalance(balance);
+    }
   }
 
   private void setupVerifiedUserIcon() {
@@ -249,7 +258,7 @@ public class ProfilePresenter implements Presenter {
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-                /* no-op */
+        /* no-op */
       }
     });
   }
@@ -261,7 +270,7 @@ public class ProfilePresenter implements Presenter {
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-                /* no-op */
+        /* no-op */
       }
     });
   }
