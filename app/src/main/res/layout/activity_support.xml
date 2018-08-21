@@ -6,6 +6,22 @@
   tools:context="com.shootr.mobile.ui.activities.SupportActivity">
 
     <View android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@color/separator" />
+
+    <TextView android:id="@+id/supershot_help_text"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="?selectableItemBackground"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:text="@string/supershot_help"
+        android:textAppearance="@style/TextAppearance.Switch"
+        android:textColor="@color/gray_30" />
+
+    <View android:layout_width="match_parent"
       android:layout_height="0.5dp"
       android:layout_marginLeft="8dp"
       android:layout_marginRight="8dp"

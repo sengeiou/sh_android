@@ -34,11 +34,12 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
   @BindString(R.string.terms_of_service_base_url) String termsOfServiceBaseUrl;
   @BindString(R.string.privacy_policy_service_base_url) String privacyPolicyServiceBaseUrl;
   @BindString(R.string.help_service_base_url) String helpServiceBaseUrl;
+  @BindString(R.string.help_service_ss_url) String helpServiceSSUrl;
   @BindString(R.string.analytics_screen_support) String analyticsScreenStreamSupport;
 
   //region lifecycle methods
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
-        /* no-op */
+    /* no-op */
   }
 
   @Override protected int getLayoutResource() {
@@ -82,6 +83,12 @@ public class SupportActivity extends BaseToolbarDecoratedActivity implements Sup
   @OnClick(R.id.support_help_text) public void onHelpClick() {
     String helpUrl = String.format(helpServiceBaseUrl, localeProvider.getLanguage());
     Intent helpIntent = intentFactory.openEmbededUrlIntent(this, helpUrl);
+    Intents.maybeStartActivity(this, helpIntent);
+  }
+
+  @OnClick(R.id.supershot_help_text) public void onSuperShotClick() {
+    String supportUrl = String.format(helpServiceSSUrl, localeProvider.getLanguage());
+    Intent helpIntent = intentFactory.openEmbededUrlIntent(this, supportUrl);
     Intents.maybeStartActivity(this, helpIntent);
   }
 

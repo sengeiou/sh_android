@@ -55,7 +55,7 @@ public class PromotedShotInfoDialog extends DialogFragment {
 
     learnMore.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View v) {
-        String termsUrl = getActivity().getResources().getString(R.string.promoted_info);
+        String termsUrl = getActivity().getResources().getString(R.string.help_service_ss_url);
         Intent termsIntent = intentFactory.openEmbededUrlIntent(getActivity(), termsUrl);
         Intents.maybeStartActivity(getActivity(), termsIntent);
       }
