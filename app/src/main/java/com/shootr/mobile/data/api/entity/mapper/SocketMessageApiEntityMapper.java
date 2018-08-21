@@ -2,14 +2,15 @@ package com.shootr.mobile.data.api.entity.mapper;
 
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.entity.BadgeContentEntity;
-import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageEntity;
 import com.shootr.mobile.data.entity.ErrorEntity;
 import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PartialUpdateItemSocketMessageEntity;
+import com.shootr.mobile.data.entity.PromotedTermsEntity;
 import com.shootr.mobile.data.entity.PromotedTiersEntity;
 import com.shootr.mobile.data.entity.PromotedTiersSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PromotedTiersSocketMessageEntity;
+import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.CreatedShotSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ErrorSocketMessaggeApiEntity;
 import com.shootr.mobile.data.entity.socket.FixedItemSocketMessageEntity;
@@ -23,6 +24,8 @@ import com.shootr.mobile.data.entity.socket.ParticipantsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ParticipantsSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.PinnedItemSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.PinnedItemsSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.PromotedTermsSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.PromotedTermsSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageApiEntity;
@@ -35,7 +38,6 @@ import com.shootr.mobile.data.entity.socket.TimelineMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageEntity;
-
 import javax.inject.Inject;
 
 public class SocketMessageApiEntityMapper {
@@ -290,6 +292,23 @@ public class SocketMessageApiEntityMapper {
               ((StreamUpdateSocketMessageApiEntity) socketMessage).getData()));
 
           return streamUpdateSocketMessageEntity;
+        case SocketMessageApiEntity.PROMOTED_TERMS:
+          PromotedTermsSocketMessageEntity promotedTermsSocketMessageEntity =
+              new PromotedTermsSocketMessageEntity();
+          promotedTermsSocketMessageEntity.setEventType(socketMessage.getEventType());
+          promotedTermsSocketMessageEntity.setVersion(socketMessage.getVersion());
+          promotedTermsSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          promotedTermsSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+          promotedTermsSocketMessageEntity.setEventParams(socketMessage.getEventParams());
+
+          PromotedTermsEntity promotedTermsEntity = new PromotedTermsEntity();
+
+          promotedTermsEntity.setTerms(((PromotedTermsSocketMessageApiEntity) socketMessage).getData().getTerms());
+          promotedTermsEntity.setVersion(((PromotedTermsSocketMessageApiEntity) socketMessage).getData().getVersion());
+
+          promotedTermsSocketMessageEntity.setData(promotedTermsEntity);
+
+          return promotedTermsSocketMessageEntity;
         default:
           break;
       }

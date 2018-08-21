@@ -367,10 +367,10 @@ public class TimelineFragment extends BaseFragment
     promotedList.setAdapter(promotedAdapter);
   }
 
-  private void goToNewPromotedShot() {
+  @Override public void goToNewPromotedShot(StreamModel streamModel) {
     Intent newShotIntent = PostPromotedShotActivity.IntentBuilder //
         .from(getActivity()) //
-        .setStreamData(idStream, streamTitle).build();
+        .setStreamData(idStream, streamTitle).setStream(streamModel).build();
     getActivity().startActivity(newShotIntent);
   }
 
@@ -709,7 +709,7 @@ public class TimelineFragment extends BaseFragment
       showIntroSS();
       sessionRepository.setShowIntroPromotedShot(true);
     } else {
-      goToNewPromotedShot();
+      timelinePresenter.onAddPromotedPressed();
     }
   }
 

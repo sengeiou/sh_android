@@ -82,7 +82,15 @@ public class ServiceSocketDataSource implements SocketDataSource {
     socketApi.verifyReceipt(receipt);
   }
 
+  @Override public void getPromotedTerms(String idStream) {
+    socketApi.getPromotedTerms(idStream);
+  }
+
   @Override public void markSeen(String type, String itemId) {
     socketApi.markSeen(type, itemId);
+  }
+
+  @Override public void acceptPromotedTerms(String idStream, int version) {
+    socketApi.acceptPromotedTerms(idStream, version);
   }
 }

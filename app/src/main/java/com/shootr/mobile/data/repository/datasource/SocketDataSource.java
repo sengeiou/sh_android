@@ -33,5 +33,9 @@ public interface SocketDataSource {
 
   void verifyReceipt(String receipt);
 
+  void getPromotedTerms(String idStream);
+
   void markSeen(String type, String itemId);
+
+  void acceptPromotedTerms(String idStream, int version);
 }

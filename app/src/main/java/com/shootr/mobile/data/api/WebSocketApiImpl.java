@@ -169,6 +169,18 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
     return false;
   }
 
+  @Override public void getPromotedTerms(String idStream) {
+    if (webSocket != null && webSocket.isOpen()) {
+      shotSocketApiManager.getPromotedTerms(idStream);
+    }
+  }
+
+  @Override public void acceptPromotedTerms(String idStream, int version) {
+    if (webSocket != null && webSocket.isOpen()) {
+      shotSocketApiManager.acceptPromotedTerms(idStream, version);
+    }
+  }
+
   @Override public boolean sendNice(String idShot) {
 
     if (webSocket != null && webSocket.isOpen()) {

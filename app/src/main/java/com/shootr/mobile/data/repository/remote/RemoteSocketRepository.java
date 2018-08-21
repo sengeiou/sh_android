@@ -315,6 +315,14 @@ public class RemoteSocketRepository implements SocketRepository {
     socketDataSource.markSeen(type, itemId);
   }
 
+  @Override public void getPromotedTerms(String idStream) {
+    socketDataSource.getPromotedTerms(idStream);
+  }
+
+  @Override public void acceptPromotedTerms(String idStream, int version) {
+    socketDataSource.acceptPromotedTerms(idStream, version);
+  }
+
   @NonNull private PaginationEntity transformPagination(Pagination pagination) {
     PaginationEntity paginationEntity = new PaginationEntity();
     paginationEntity.setMaxTimestamp(pagination.getMaxTimestamp());

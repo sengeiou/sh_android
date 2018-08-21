@@ -1,15 +1,17 @@
 package com.shootr.mobile.data;
 
 import com.shootr.mobile.data.api.SendSocketEventListener;
+import com.shootr.mobile.data.entity.AcceptPromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.EventParams;
-import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.GetPromotedTermsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.HighlightSocketMessageApiEntity;
-import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.PaginationEntity;
 import com.shootr.mobile.data.entity.SeenParams;
 import com.shootr.mobile.data.entity.SeenSocketMessageApiEntity;
-import java.util.Date;
 import com.shootr.mobile.data.entity.UnHighlightSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.GetShotDetailSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.NiceSocketMessageApiEntity;
+import java.util.Date;
 import java.util.UUID;
 
 public class ShotSocketApiManager {
@@ -104,6 +106,37 @@ public class ShotSocketApiManager {
     seenSocketMessageApiEntity.setData(seenParams);
 
     sendSocketEventListener.sendEvent(seenSocketMessageApiEntity);
+  }
+
+  public void getPromotedTerms(String idStream) {
+    GetPromotedTermsSocketMessageApiEntity getPromotedTermsSocketMessageApiEntity =
+        new GetPromotedTermsSocketMessageApiEntity();
+    GetPromotedTermsSocketMessageApiEntity.Params params =
+        new GetPromotedTermsSocketMessageApiEntity.Params();
+
+    params.setIdStream(idStream);
+
+    getPromotedTermsSocketMessageApiEntity.setRequestId(generateRequestId());
+    getPromotedTermsSocketMessageApiEntity.setVersion(VERSION);
+    getPromotedTermsSocketMessageApiEntity.setData(params);
+
+    sendSocketEventListener.sendEvent(getPromotedTermsSocketMessageApiEntity);
+  }
+
+  public void acceptPromotedTerms(String idStream, int version) {
+    AcceptPromotedTermsSocketMessageApiEntity acceptPromotedTermsSocketMessageApiEntity =
+        new AcceptPromotedTermsSocketMessageApiEntity();
+    AcceptPromotedTermsSocketMessageApiEntity.Params params =
+        new AcceptPromotedTermsSocketMessageApiEntity.Params();
+
+    params.setIdStream(idStream);
+    params.setVersion(version);
+
+    acceptPromotedTermsSocketMessageApiEntity.setRequestId(generateRequestId());
+    acceptPromotedTermsSocketMessageApiEntity.setVersion(VERSION);
+    acceptPromotedTermsSocketMessageApiEntity.setData(params);
+
+    sendSocketEventListener.sendEvent(acceptPromotedTermsSocketMessageApiEntity);
   }
 
   private String generateRequestId() {

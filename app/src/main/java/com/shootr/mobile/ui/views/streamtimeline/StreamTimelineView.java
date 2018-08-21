@@ -142,4 +142,6 @@ public interface StreamTimelineView {
   void showPromotedWithInfoState();
 
   void openPromotedActivationDialog(StreamModel streamModel);
+
+  void goToNewPromotedShot(StreamModel streamModel);
 }

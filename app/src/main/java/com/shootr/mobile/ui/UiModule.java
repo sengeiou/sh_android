@@ -33,6 +33,7 @@ import com.shootr.mobile.ui.activities.PostPromotedShotActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.ProfileEditActivity;
+import com.shootr.mobile.ui.activities.PromotedShotIntroActivity;
 import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.SearchToShareActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
@@ -64,7 +65,7 @@ import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
 import com.shootr.mobile.ui.widgets.PromotedShotActivationInfoDialog;
 import com.shootr.mobile.ui.widgets.PromotedShotInfoDialog;
-import com.shootr.mobile.ui.activities.PromotedShotIntroActivity;
+import com.shootr.mobile.ui.widgets.PromotedTermsDialog;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
@@ -95,7 +96,7 @@ import javax.inject.Singleton;
     HiddenPollResultsActivity.class, HistoryActivity.class, NewShotDetailActivity.class,
     PrivacyLawActivity.class, PostPromotedShotActivity.class, PromotedMessageBox.class,
     PromotedShotInfoDialog.class, PromotedShotIntroActivity.class, PromotedShotActivationInfoDialog.class,
-  SearchStreamToShareFragment.class, SearchToShareActivity.class
+  SearchStreamToShareFragment.class, SearchToShareActivity.class, PromotedTermsDialog.class
 }, complete = false, library = true) public class UiModule {
 
   @Provides @Singleton AppContainer provideAppContainer() {

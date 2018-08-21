@@ -348,7 +348,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
         .build();
   }
 
-  public void setupNewShotBarDelegate(final ShotModel shotModel) {
+  public void setupNewShotBarDelegate(final ShotModel shotModel, final StreamModel streamModel) {
     if (!newShotBar.isInited()) {
       newShotBar.init(this, photoPickerController, imageLoader, feedbackMessage,
           new PromotedMessageBox.OnActionsClick() {
@@ -389,7 +389,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
               Intent newShotIntent = PostPromotedShotActivity.IntentBuilder //
                   .from(NewShotDetailActivity.this) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
-                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
+                  .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).setStream(streamModel).build();
               startActivity(newShotIntent);
             }
 

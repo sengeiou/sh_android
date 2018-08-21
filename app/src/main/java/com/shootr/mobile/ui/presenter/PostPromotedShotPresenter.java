@@ -12,7 +12,9 @@ import com.shootr.mobile.data.bus.Main;
 import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.domain.bus.EventReceived;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.AcceptPromotedTermsInteractor;
 import com.shootr.mobile.domain.interactor.GetCachedPromotedTiers;
+import com.shootr.mobile.domain.interactor.GetPromotedTermsInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
 import com.shootr.mobile.domain.interactor.PostNewPrivateMessageInteractor;
 import com.shootr.mobile.domain.interactor.VerifyReceiptInteractor;
@@ -23,6 +25,7 @@ import com.shootr.mobile.domain.interactor.user.GetMentionedPeopleInteractor;
 import com.shootr.mobile.domain.model.ErrorSocketMessage;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
 import com.shootr.mobile.domain.model.PromotedReceipt;
+import com.shootr.mobile.domain.model.PromotedTermsSocketMessage;
 import com.shootr.mobile.domain.model.PromotedTier;
 import com.shootr.mobile.domain.model.Searchable;
 import com.shootr.mobile.domain.model.SearchableType;
@@ -31,6 +34,7 @@ import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.model.user.User;
 import com.shootr.mobile.task.events.CommunicationErrorEvent;
 import com.shootr.mobile.task.events.ConnectionNotAvailableEvent;
+import com.shootr.mobile.ui.model.PromotedTermsModel;
 import com.shootr.mobile.ui.model.PromotedTierModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.model.mappers.PromotedTierModelMapper;
@@ -67,6 +71,8 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   private final GetMentionedPeopleInteractor getMentionedPeopleInteractor;
   private final IncrementReplyCountShotInteractor incrementReplyCountShotInteractor;
   private final VerifyReceiptInteractor verifyReceiptInteractor;
+  private final GetPromotedTermsInteractor getPromotedTermsInteractor;
+  private final AcceptPromotedTermsInteractor acceptPromotedTermsInteractor;
   private final GetCachedPromotedTiers getCachedPromotedTiers;
   private final UserModelMapper userModelMapper;
   private final PromotedTierModelMapper promotedTierModelMapper;
@@ -96,6 +102,8 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   private boolean isFreeShot;
   private String idStream;
   private String currentPurchaseToken;
+  private PromotedTermsModel promotedTermsModel;
+  private boolean promotedTermsAccepted;
 
   @Inject public PostPromotedShotPresenter(@Main Bus bus, ErrorMessageFactory errorMessageFactory,
       PostNewPromotedShotInStreamInteractor postNewShotInStreamInteractor,
@@ -104,6 +112,8 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
       GetMentionedPeopleInteractor getMentionedPeopleInteractor,
       IncrementReplyCountShotInteractor incrementReplyCountShotInteractor,
       VerifyReceiptInteractor verifyReceiptInteractor,
+      GetPromotedTermsInteractor getPromotedTermsInteractor,
+      AcceptPromotedTermsInteractor acceptPromotedTermsInteractor,
       GetCachedPromotedTiers getCachedPromotedTiers, UserModelMapper userModelMapper,
       PromotedTierModelMapper promotedTierModelMapper, @ApplicationContext Context context) {
     this.bus = bus;
@@ -114,6 +124,8 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     this.getMentionedPeopleInteractor = getMentionedPeopleInteractor;
     this.incrementReplyCountShotInteractor = incrementReplyCountShotInteractor;
     this.verifyReceiptInteractor = verifyReceiptInteractor;
+    this.getPromotedTermsInteractor = getPromotedTermsInteractor;
+    this.acceptPromotedTermsInteractor = acceptPromotedTermsInteractor;
     this.getCachedPromotedTiers = getCachedPromotedTiers;
     this.userModelMapper = userModelMapper;
     this.promotedTierModelMapper = promotedTierModelMapper;
@@ -129,9 +141,11 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     this.activity = activity;
   }
 
-  public void initializeAsNewShot(PostPromotedShotView postNewShotView) {
+  public void initializeAsNewShot(PostPromotedShotView postNewShotView, String idStream) {
     this.setView(postNewShotView);
     initializeBillingManager();
+    this.idStream = idStream;
+    getPromotedTerms(idStream);
   }
 
   public void initializeAsReply(PostPromotedShotView postNewShotView, String replyParentId,
@@ -146,7 +160,16 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     this.replyParentId = replyParentId;
     this.idStream = idStream;
     this.view.showReplyToUsername(replyToUsername);
+    getPromotedTerms(idStream);
     initializeBillingManager();
+  }
+
+  private void getPromotedTerms(String idStream) {
+    getPromotedTermsInteractor.getPromotedTerms(idStream, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        /* no-op */
+      }
+    });
   }
 
   private void initializeBillingManager() {
@@ -206,6 +229,16 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
     });
   }
 
+  public void acceptPromotedTerms() {
+    acceptPromotedTermsInteractor.accepPromotedTerms(idStream, promotedTermsModel.getVersion(),
+        new Interactor.CompletedCallback() {
+          @Override public void onCompleted() {
+            promotedTermsAccepted = true;
+            initPromotedShot(textToSend);
+          }
+        });
+  }
+
   public void textChanged(String currentText) {
     currentTextWritten = filterText(currentText);
     updateCharCounter(currentTextWritten);
@@ -239,11 +272,30 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
   public void initPromotedShot(String text) {
     sendingState = PREPARING_SHOT;
     textToSend = text;
-    if (isFreeShot && currentPromotedReceipt != null) {
-      sendShot(textToSend);
+    if (!shouldShowPromotedTerms()) {
+      if (isFreeShot && currentPromotedReceipt != null) {
+        sendShot(textToSend);
+      } else {
+        billingManager.initiatePurchaseFlow(auxPromoted.get(currentTierIndex).getProductId());
+      }
     } else {
-      billingManager.initiatePurchaseFlow(auxPromoted.get(currentTierIndex).getProductId());
+      view.showPromotedTerms(promotedTermsModel);
     }
+  }
+
+  private boolean shouldShowPromotedTerms() {
+    if (promotedTermsAccepted) {
+      return false;
+    }
+
+    if (promotedTermsModel != null
+        && promotedTermsModel.getTerms() != null
+        && !promotedTermsModel.getTerms().isEmpty()) {
+      return true;
+    }
+
+    promotedTermsAccepted = true;
+    return false;
   }
 
   public void sendShot(String text) {
@@ -594,6 +646,13 @@ public class PostPromotedShotPresenter implements Presenter, BillingUpdatesListe
       } else if (errorSocketMessage.getData().getErrorCode() == ErrorInfo.CODE_INVALID_SHOT_RECEIPT) {
         sendingState = ERROR;
         view.showReceiptErrorSnedingShot();
+      }
+    } else if (event.getMessage().getEventType().equals(SocketMessage.PROMOTED_TERMS)) {
+      if (promotedTermsModel == null) {
+        PromotedTermsSocketMessage promotedTermsSocketMessage = (PromotedTermsSocketMessage) event.getMessage();
+        promotedTermsModel = new PromotedTermsModel();
+        promotedTermsModel.setTerms((promotedTermsSocketMessage.getData()).getTerms());
+        promotedTermsModel.setVersion((promotedTermsSocketMessage.getData()).getVersion());
       }
     }
   }

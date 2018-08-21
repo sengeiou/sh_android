@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -35,12 +36,15 @@ import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.adapters.listeners.OnMentionClickListener;
 import com.shootr.mobile.ui.adapters.recyclerview.MentionsAdapter;
 import com.shootr.mobile.ui.component.PhotoPickerController;
+import com.shootr.mobile.ui.model.PromotedTermsModel;
 import com.shootr.mobile.ui.model.PromotedTierModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.PostPromotedShotPresenter;
 import com.shootr.mobile.ui.views.PostPromotedShotView;
 import com.shootr.mobile.ui.widgets.NestedListView;
 import com.shootr.mobile.ui.widgets.PromotedShotInfoDialog;
+import com.shootr.mobile.ui.widgets.PromotedTermsDialog;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.FeedbackMessage;
@@ -73,6 +77,7 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String EXTRA_IS_PRIVATE_MESSAGE = "privateMessage";
   public static final String EXTRA_ID_TARGET_USER = "extraIdTargetUser";
+  public static final String EXTRA_STREAM = "extraStream";
   public static final String SPACE = " ";
 
 
@@ -172,7 +177,7 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
       if (isReply) {
         presenter.initializeAsReply(this, replyParentId, replyToUsername, extraIdStream);
       } else {
-        presenter.initializeAsNewShot(this);
+        presenter.initializeAsNewShot(this, extraIdStream);
       }
     }
   }
@@ -622,6 +627,7 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
     private String streamTitle;
     private Boolean isPrivateMessage;
     private String idTargetUser;
+    private StreamModel stream;
 
     public static IntentBuilder from(Context launchingContext) {
       IntentBuilder intentBuilder = new IntentBuilder();
@@ -642,6 +648,11 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
     public IntentBuilder setStreamData(String idStream, String streamTitle) {
       this.idStream = idStream;
       this.streamTitle = streamTitle;
+      return this;
+    }
+
+    public IntentBuilder setStream(StreamModel stream) {
+      this.stream = stream;
       return this;
     }
 
@@ -681,6 +692,9 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
       }
       if (isPrivateMessage != null) {
         intent.putExtra(EXTRA_IS_PRIVATE_MESSAGE, isPrivateMessage);
+      }
+      if (stream != null) {
+        intent.putExtra(EXTRA_STREAM, stream);
       }
       return intent;
     }
@@ -745,7 +759,9 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
   @Override public void setMaxRange(int range) {
     if (seekBar != null) {
       seekBar.setMax(range);
-      seekBar.setProgress(2, true);
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        seekBar.setProgress(2, true);
+      }
     }
   }
 
@@ -767,5 +783,20 @@ public class PostPromotedShotActivity extends BaseToolbarDecoratedActivity imple
 
   @Override public void showReceiptErrorSnedingShot() {
     feedbackMessage.show(getView(), errorSendingShot);
+  }
+
+  @Override public void showPromotedTerms(PromotedTermsModel promotedTermsModel) {
+    Bundle args = new Bundle();
+    args.putSerializable(PromotedTermsDialog.STREAM, getIntent().getExtras().getSerializable(EXTRA_STREAM));
+    args.putString(PromotedTermsDialog.TERMS, promotedTermsModel.getTerms());
+    final PromotedTermsDialog promotedTermsDialog = new PromotedTermsDialog();
+    promotedTermsDialog.setOnAcceptClickListener(new PromotedTermsDialog.OnAcceptClickListener() {
+      @Override public void onClick() {
+        presenter.acceptPromotedTerms();
+        promotedTermsDialog.dismiss();
+      }
+    });
+    promotedTermsDialog.setArguments(args);
+    promotedTermsDialog.show(getFragmentManager(), PromotedShotInfoDialog.TAG);
   }
 }

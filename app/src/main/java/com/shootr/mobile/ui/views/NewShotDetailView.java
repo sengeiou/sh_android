@@ -15,7 +15,7 @@ public interface NewShotDetailView {
 
   void initializeNewShotBarPresenter(String idStream);
 
-  void setupNewShotBarDelegate(ShotModel shotModel);
+  void setupNewShotBarDelegate(ShotModel shotModel, StreamModel streamModel);
 
   void shareShot(ShotModel mainShot);
 

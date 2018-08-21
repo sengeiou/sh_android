@@ -132,7 +132,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
   private void renderShotDetail(NewShotDetail shotDetail) {
     view.hideLoading();
     mainShot = shotModelMapper.transform((Shot) shotDetail.getShot());
-    initializeNewShotBarDelegate(mainShot);
+    initializeNewShotBarDelegate(mainShot, streamModelMapper.transform(shotDetail.getStream()));
     List<PrintableModel> mainShot =
         printableModelMapper.mapMainShot(Collections.singletonList(shotDetail.getShot()));
 
@@ -227,9 +227,9 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
     }
   }
 
-  private void initializeNewShotBarDelegate(ShotModel shotModel) {
+  private void initializeNewShotBarDelegate(ShotModel shotModel, StreamModel streamModel) {
     view.initializeNewShotBarPresenter(shotModel.getStreamId());
-    view.setupNewShotBarDelegate(shotModel);
+    view.setupNewShotBarDelegate(shotModel, streamModel);
   }
 
   public void markNiceShot(final ShotModel shotModel) {

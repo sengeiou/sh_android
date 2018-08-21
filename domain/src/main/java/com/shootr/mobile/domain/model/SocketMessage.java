@@ -18,6 +18,7 @@ public class SocketMessage {
   public static final String ERROR = "ERROR";
   public static final String PROMOTED_TIERS = "PROMOTED_TIERS";
   public static final String PARTIAL_UPDATE_ITEM_DATA = "PARTIAL_UPDATE_ITEM_DATA";
+  public static final String PROMOTED_TERMS = "PROMOTED_TERMS";
 
   private String type;
   private int version;

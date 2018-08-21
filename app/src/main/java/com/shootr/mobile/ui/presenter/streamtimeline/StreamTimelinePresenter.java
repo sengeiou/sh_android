@@ -1098,4 +1098,8 @@ public class StreamTimelinePresenter
       view.openPromotedActivationDialog(streamModel);
     }
   }
+
+  public void onAddPromotedPressed() {
+    view.goToNewPromotedShot(streamModel);
+  }
 }
