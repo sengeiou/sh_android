@@ -33,6 +33,7 @@ import com.shootr.mobile.data.entity.socket.PinnedItemsSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.StreamUpdateSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageApiEntity;
 import com.shootr.mobile.service.RuntimeTypeAdapterFactory;
@@ -86,6 +87,8 @@ public class SocketMessageEntityWrapper {
                 SocketMessageApiEntity.SHOT_DETAIL)
             .registerSubtype(ShotUpdateSocketMessageApiEntity.class,
                 SocketMessageApiEntity.SHOT_UPDATE)
+            .registerSubtype(StreamUpdateSocketMessageApiEntity.class,
+                SocketMessageApiEntity.STREAM_UPDATE)
             .registerSubtype(CreatedShotSocketMessageApiEntity.class,
                 SocketMessageApiEntity.CREATED_SHOT)
             .registerSubtype(ErrorSocketMessaggeApiEntity.class, SocketMessageApiEntity.ERROR)
@@ -107,6 +110,7 @@ public class SocketMessageEntityWrapper {
             .registerSubtype(ExternalVideoApiEntity.class, "EXTERNAL_VIDEO")
             .registerSubtype(PromotedReceiptApiEntity.class, "PROMOTED_RECEIPT")
             .registerSubtype(PollEntity.class, "POLL")
+            .registerSubtype(StreamEntity.class, "STREAM")
             .registerSubtype(UserEntity.class, "USER");
 
     return new GsonBuilder() //

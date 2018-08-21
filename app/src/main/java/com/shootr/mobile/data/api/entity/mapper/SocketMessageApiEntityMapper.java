@@ -29,6 +29,8 @@ import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageEntity;
+import com.shootr.mobile.data.entity.socket.StreamUpdateSocketMessageApiEntity;
+import com.shootr.mobile.data.entity.socket.StreamUpdateSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageApiEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageApiEntity;
@@ -172,6 +174,7 @@ public class SocketMessageApiEntityMapper {
           participantsSocketMessageEntity.setVersion(socketMessage.getVersion());
           participantsSocketMessageEntity.setRequestId(socketMessage.getRequestId());
           participantsSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+          participantsSocketMessageEntity.setEventParams(socketMessage.getEventParams());
 
           participantsSocketMessageEntity.setData(
               ((ParticipantsSocketMessageApiEntity) socketMessage).getData());
@@ -273,6 +276,20 @@ public class SocketMessageApiEntityMapper {
           promotedTiersSocketMessageEntity.setData(promotedTiersEntity);
 
           return promotedTiersSocketMessageEntity;
+
+        case SocketMessageApiEntity.STREAM_UPDATE:
+
+          StreamUpdateSocketMessageEntity streamUpdateSocketMessageEntity = new StreamUpdateSocketMessageEntity();
+          streamUpdateSocketMessageEntity.setEventType(socketMessage.getEventType());
+          streamUpdateSocketMessageEntity.setVersion(socketMessage.getVersion());
+          streamUpdateSocketMessageEntity.setRequestId(socketMessage.getRequestId());
+          streamUpdateSocketMessageEntity.setActiveSubscription(socketMessage.isActiveSubscription);
+          streamUpdateSocketMessageEntity.setEventParams(socketMessage.getEventParams());
+
+          streamUpdateSocketMessageEntity.setData(printableItemApiEntityMapper.map(
+              ((StreamUpdateSocketMessageApiEntity) socketMessage).getData()));
+
+          return streamUpdateSocketMessageEntity;
         default:
           break;
       }

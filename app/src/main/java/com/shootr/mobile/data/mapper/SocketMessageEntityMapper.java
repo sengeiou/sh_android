@@ -13,6 +13,7 @@ import com.shootr.mobile.data.entity.socket.ShotDetailSocketMessageEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.socket.ShotUpdateSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.SocketMessageEntity;
+import com.shootr.mobile.data.entity.socket.StreamUpdateSocketMessageEntity;
 import com.shootr.mobile.data.entity.socket.TimelineMessageEntity;
 import com.shootr.mobile.data.entity.socket.UpdateItemSocketMessageEntity;
 import com.shootr.mobile.domain.model.BadgeContent;
@@ -32,6 +33,7 @@ import com.shootr.mobile.domain.model.PromotedTiersSocketMessage;
 import com.shootr.mobile.domain.model.ShotDetailSocketMessage;
 import com.shootr.mobile.domain.model.ShotUpdateSocketMessage;
 import com.shootr.mobile.domain.model.SocketMessage;
+import com.shootr.mobile.domain.model.StreamUpdateSocketMessage;
 import com.shootr.mobile.domain.model.TimelineSocketMessage;
 import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.user.PromotedTiers;
@@ -170,6 +172,7 @@ public class SocketMessageEntityMapper {
           participantsSocketMessage.setVersion(socketMessage.getVersion());
           participantsSocketMessage.setRequestId(socketMessage.getRequestId());
           participantsSocketMessage.setActiveSubscription(socketMessage.isActiveSubscription());
+          participantsSocketMessage.setEventParams(transformParams(socketMessage.getEventParams()));
 
 
           Participants participants = new Participants();
@@ -272,6 +275,20 @@ public class SocketMessageEntityMapper {
           promotedTiersSocketMessage.setData(promotedTiers);
 
           return promotedTiersSocketMessage;
+
+        case SocketMessage.STREAM_UPDATE:
+
+          StreamUpdateSocketMessage streamUpdateSocketMessage = new StreamUpdateSocketMessage();
+          streamUpdateSocketMessage.setEventType(socketMessage.getEventType());
+          streamUpdateSocketMessage.setVersion(socketMessage.getVersion());
+          streamUpdateSocketMessage.setRequestId(socketMessage.getRequestId());
+          streamUpdateSocketMessage.setActiveSubscription(socketMessage.isActiveSubscription());
+          streamUpdateSocketMessage.setEventParams(transformParams(socketMessage.getEventParams()));
+
+          streamUpdateSocketMessage.setData(printableEntityMapper.map(
+              ((StreamUpdateSocketMessageEntity) socketMessage).getData()));
+
+          return streamUpdateSocketMessage;
         default:
           break;
       }

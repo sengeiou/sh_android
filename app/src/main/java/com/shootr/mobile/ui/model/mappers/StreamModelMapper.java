@@ -47,8 +47,11 @@ public class StreamModelMapper {
         streamModel.setCanWrite((stream.canWrite()));
         streamModel.setCanReply((stream.canReply()));
         streamModel.setCanPostPromoted(stream.canPostPromoted());
+        streamModel.setCanTogglePromoted(stream.canTogglePromoted());
+        streamModel.setCanShowPromotedInfo(stream.canShowPromotedInfo());
         streamModel.setShareLink(stream.getShareLink());
         streamModel.setVideoUrl(stream.getVideoUrl());
+        streamModel.setPromotedShotsEnabled(stream.isPromotedShotsEnabled());
         return streamModel;
     }
 

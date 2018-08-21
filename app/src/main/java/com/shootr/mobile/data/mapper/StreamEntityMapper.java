@@ -15,6 +15,8 @@ public class StreamEntityMapper {
   private static final int CAN_H1_ITEM = 4;
   private static final int CAN_H2_ITEM = 8;
   private static final int CAN_SEND_PROMOTED = 16;
+  private static final int CAN_TOGGLE_PROMOTED = 32;
+  private static final int CAN_SHOW_PROMOTED_INFO = 64;
 
   private final UserEntityMapper userEntityMapper;
   private final SessionRepository sessionRepository;
@@ -73,6 +75,7 @@ public class StreamEntityMapper {
     stream.setLastTimeShooted(streamEntity.getLastTimeShooted());
     stream.setShareLink(streamEntity.getShareLink());
     stream.setVideoUrl(streamEntity.getVideoUrl());
+    stream.setPromotedShotsEnabled(streamEntity.getPromotedShotsEnabled());
     return stream;
   }
 
@@ -123,6 +126,7 @@ public class StreamEntityMapper {
     entityTemplate.setLastTimeShooted(stream.getLastTimeShooted());
     entityTemplate.setShareLink(stream.getShareLink());
     entityTemplate.setVideoUrl(stream.getVideoUrl());
+    entityTemplate.setPromotedShotsEnabled(stream.isPromotedShotsEnabled());
     setPermissionsToBinary(stream, entityTemplate);
   }
 
@@ -132,12 +136,16 @@ public class StreamEntityMapper {
     stream.setCanPinItem((permissionsInDecimal & CAN_H1_ITEM) == CAN_H1_ITEM);
     stream.setCanFixItem((permissionsInDecimal & CAN_H2_ITEM) == CAN_H2_ITEM);
     stream.setCanPostPromoted((permissionsInDecimal & CAN_SEND_PROMOTED) == CAN_SEND_PROMOTED);
+    stream.setCanTogglePromoted((permissionsInDecimal & CAN_TOGGLE_PROMOTED) == CAN_TOGGLE_PROMOTED);
+    stream.setCanShowPromotedInfo((permissionsInDecimal & CAN_SHOW_PROMOTED_INFO) == CAN_SHOW_PROMOTED_INFO);
   }
 
   private void setPermissionsToBinary(Stream stream, StreamEntity streamEntity) {
 
     String permissions = "";
 
+    permissions = permissions + (stream.canShowPromotedInfo() ? "1" : "0");
+    permissions = permissions + (stream.canTogglePromoted() ? "1" : "0");
     permissions = permissions + (stream.canPostPromoted() ? "1" : "0");
     permissions = permissions + (stream.canFixItem() ? "1" : "0");
     permissions = permissions + (stream.canPinItem() ? "1" : "0");

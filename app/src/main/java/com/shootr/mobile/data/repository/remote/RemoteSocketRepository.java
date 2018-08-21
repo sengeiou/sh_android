@@ -22,6 +22,7 @@ import com.shootr.mobile.domain.model.ListType;
 import com.shootr.mobile.domain.model.NewItemSocketMessage;
 import com.shootr.mobile.domain.model.Pagination;
 import com.shootr.mobile.domain.model.PartialUpdateItemSocketMessage;
+import com.shootr.mobile.domain.model.ParticipantsSocketMessage;
 import com.shootr.mobile.domain.model.PinnedItemSocketMessage;
 import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
@@ -29,10 +30,12 @@ import com.shootr.mobile.domain.model.PromotedReceipt;
 import com.shootr.mobile.domain.model.PromotedTiersSocketMessage;
 import com.shootr.mobile.domain.model.ShotDetailSocketMessage;
 import com.shootr.mobile.domain.model.SocketMessage;
+import com.shootr.mobile.domain.model.StreamUpdateSocketMessage;
 import com.shootr.mobile.domain.model.TimelineSocketMessage;
 import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.shot.QueuedShot;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Remote;
 import com.shootr.mobile.domain.repository.SocketRepository;
 import com.shootr.mobile.domain.service.QueueRepository;
@@ -229,6 +232,22 @@ public class RemoteSocketRepository implements SocketRepository {
             case SocketMessage.PROMOTED_TIERS:
               promotedTiersCache.putPromotedTiers(
                   ((PromotedTiersSocketMessage) socketMessage).getData());
+              break;
+            case SocketMessage.STREAM_UPDATE:
+              if (socketMessage.getEventParams() != null) {
+                timelineCache.updateStreamForTImeline(socketMessage.getEventParams().getIdStream(),
+                    socketMessage.getEventParams().getFilter(),
+                    (Stream) ((StreamUpdateSocketMessage) socketMessage).getData());
+              }
+              break;
+            case SocketMessage.PARTICIPANTS_UPDATE:
+              if (socketMessage.getEventParams() != null) {
+                timelineCache.updateParticipantsForTImeline(
+                    socketMessage.getEventParams().getIdStream(),
+                    socketMessage.getEventParams().getFilter(),
+                    ((ParticipantsSocketMessage) socketMessage).getData().getTotal(),
+                    ((ParticipantsSocketMessage) socketMessage).getData().getFollowing());
+              }
               break;
             default:
               break;

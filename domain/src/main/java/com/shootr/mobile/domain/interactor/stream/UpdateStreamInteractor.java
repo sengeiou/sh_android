@@ -29,13 +29,14 @@ public class UpdateStreamInteractor implements Interactor {
   private String topic;
   private String idMedia;
   private String videoUrl;
+  private Boolean activatePromoted;
   private Callback callback;
   private ErrorCallback errorCallback;
 
   private boolean notifyTopicMessage;
   private String streamMode;
 
-  private boolean isEditingTopic = false;
+  private boolean editWithhoutValidate = false;
 
   @Inject public UpdateStreamInteractor(InteractorHandler interactorHandler,
       PostExecutionThread postExecutionThread, ExternalStreamRepository remoteStreamRepository) {
@@ -45,13 +46,15 @@ public class UpdateStreamInteractor implements Interactor {
   }
 
   public void updateStream(String idStream, String title, String description, Integer streamMode,
-      String idMedia, String videoUrl, Callback callback, ErrorCallback errorCallback) {
+      String idMedia, String videoUrl, boolean isActivatingPromotedShots, Callback callback,
+      ErrorCallback errorCallback) {
     this.idStream = idStream;
     this.title = title;
     this.description = description;
     this.streamMode = getStreamMode(streamMode);
     this.idMedia = idMedia;
     this.videoUrl = videoUrl;
+    this.activatePromoted = isActivatingPromotedShots;
     this.callback = callback;
     this.errorCallback = errorCallback;
     interactorHandler.execute(this);
@@ -59,7 +62,7 @@ public class UpdateStreamInteractor implements Interactor {
 
   public void updateStreamMessage(String idStream, String topic, Boolean notifyTopicMessage,
       String videoUrl, Callback callback, ErrorCallback errorCallback) {
-    isEditingTopic = true;
+    editWithhoutValidate = true;
     this.idStream = idStream;
     this.topic = topic == null ? "" : topic;
     this.videoUrl = videoUrl;
@@ -69,10 +72,20 @@ public class UpdateStreamInteractor implements Interactor {
     interactorHandler.execute(this);
   }
 
+  public void updatePromotedActivation(String idStream, boolean isActivating, Callback callback,
+      ErrorCallback errorCallback) {
+    editWithhoutValidate = true;
+    this.idStream = idStream;
+    this.activatePromoted = isActivating;
+    this.callback = callback;
+    this.errorCallback = errorCallback;
+    interactorHandler.execute(this);
+  }
+
   @Override public void execute() throws Exception {
     StreamUpdateParameters streamUpdateParameters = streamFromParameters();
 
-    if (isEditingTopic) {
+    if (editWithhoutValidate) {
       sendAndNotify(streamUpdateParameters);
     } else {
       if (validateStream(streamUpdateParameters)) {
@@ -108,6 +121,7 @@ public class UpdateStreamInteractor implements Interactor {
     streamUpdateParameters.setTopic(topic);
     streamUpdateParameters.setVideoUrl(videoUrl);
     streamUpdateParameters.setNotifyMessage(notifyTopicMessage);
+    streamUpdateParameters.setPromotedShotsEnabled(activatePromoted);
 
     return streamUpdateParameters;
   }

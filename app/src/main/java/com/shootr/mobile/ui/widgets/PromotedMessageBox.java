@@ -56,6 +56,9 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
   public static final int MAX_MESSAGE_LENGTH = 5000;
   private static final String USERNAME_FORMAT_REGEX = "^@([-_A-Za-z0-9])*$";
 
+  public static final int PROMOTED_SHOW_INFO = 0;
+  public static final int PROMOTED_ENABLED = 1;
+
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   public static final String SPACE = " ";
 
@@ -83,10 +86,11 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
   private int charCounterColorNormal;
   private boolean isPrivateMessage;
   private OnActionsClick onActionsClick;
-  private boolean canPostPromotedShot = false;
+  private boolean canShowPromotedButton = false;
   private boolean isReply = false;
   private String parentId;
   private boolean isInited = false;
+  private int promotedButtonState;
 
   public PromotedMessageBox(Context context) {
     super(context);
@@ -208,11 +212,11 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
   }
 
   public boolean canPostPromotedShot() {
-    return canPostPromotedShot;
+    return canShowPromotedButton;
   }
 
-  public void setCanPostPromotedShot(boolean canPostPromotedShot) {
-    this.canPostPromotedShot = canPostPromotedShot;
+  public void setCanShowPromotedButton(boolean canShowPromotedButton) {
+    this.canShowPromotedButton = canShowPromotedButton;
   }
 
   public void checkIfWritingMention(TextViewTextChangeEvent onTextChangeEvent) {
@@ -291,7 +295,11 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
   }
 
   @OnClick(R.id.promoted_shot_button) public void promotedButtonClicked() {
-    onActionsClick.onPromotedClick();
+    if (promotedButtonState == PROMOTED_ENABLED) {
+      onActionsClick.onPromotedClick();
+    } else if (promotedButtonState == PROMOTED_SHOW_INFO) {
+      onActionsClick.onPromotedShowInfoClick();
+    }
   }
 
   @OnTextChanged(R.id.shot_bar_text) public void onTextChanged() {
@@ -396,7 +404,7 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
   }
 
   @Override public void showPromotedButton() {
-    if (canPostPromotedShot && promotedButton.getVisibility() == GONE) {
+    if (canShowPromotedButton && promotedButton.getVisibility() == GONE) {
       promotedButton.setVisibility(View.VISIBLE);
       promotedButton.setScaleX(0);
       promotedButton.setScaleY(0);
@@ -448,6 +456,19 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
     newShotBarViewDelegate.hideDraftsButton();
   }
 
+  public int getPromotedButtonState() {
+    return promotedButtonState;
+  }
+
+  public void setPromotedButtonState(int promotedButtonState) {
+    this.promotedButtonState = promotedButtonState;
+    if (promotedButtonState == PROMOTED_SHOW_INFO) {
+      promotedButton.setBackgroundResource(R.drawable.promoted_round_layout_dissabled);
+    } else if (promotedButtonState == PROMOTED_ENABLED) {
+      promotedButton.setBackgroundResource(R.drawable.promoted_round_layout);
+    }
+  }
+
   public interface OnActionsClick {
     void onTopicClick();
 
@@ -462,5 +483,7 @@ public class PromotedMessageBox extends RelativeLayout implements MessageBoxView
     void onCheckInClick();
 
     void onPromotedClick();
+
+    void onPromotedShowInfoClick();
   }
 }

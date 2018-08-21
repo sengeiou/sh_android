@@ -25,6 +25,7 @@ import com.shootr.mobile.domain.model.shot.NewShotDetail;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.PrintableModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
@@ -58,6 +59,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
   private NewShotDetailView view;
   private String idShot;
   private ShotModel mainShot;
+  private StreamModel streamModel;
   private boolean hasBeenPaused = false;
   private boolean showingParents = false;
 
@@ -143,8 +145,9 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
     List<PrintableModel> parents =
         printableModelMapper.mapResponseModel(shotDetail.getParents().getData());
 
+    streamModel = streamModelMapper.transform(shotDetail.getStream());
     view.renderShotDetail(mainShot, promotedItems, subscriberItems, basicItems, parents);
-    view.renderStreamTitle(streamModelMapper.transform(shotDetail.getStream()));
+    view.renderStreamTitle(streamModel);
     view.setReplyUsername(((Shot) shotDetail.getShot()).getUserInfo().getUsername());
 
     if (shotDetail.getParents().getData().size() > 0) {
@@ -168,6 +171,10 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
 
     if (shotDetail.getStream().canPostPromoted()) {
       view.showPromotedButton();
+    } else if (shotDetail.getStream().canShowPromotedInfo()) {
+      view.showPromotedWithInfoState();
+    } else {
+      view.hidePromotedButton();
     }
   }
 
@@ -391,6 +398,12 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
       showingParents = true;
       view.showParents();
       view.renderHideParents();
+    }
+  }
+
+  public void onPromotedActivationButtonClick() {
+    if (streamModel != null) {
+      view.openPromotedActivationDialog(streamModel);
     }
   }
 }

@@ -31,6 +31,7 @@ public class NewStreamPresenterTest {
     public static final String TITLE = "title";
     private static final String STREAM_ID = "streamId";
     private static final String USER_ID = "userId";
+    private static final boolean IS_ACTIVATING_PROMOTED = false;
     public static final String DESCRIPTION = "DESCRIPTION";
     public static final Integer MODE = 0;
     public static final String URL = "URL";
@@ -66,7 +67,7 @@ public class NewStreamPresenterTest {
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         presenter.initialize(newStreamView, STREAM_ID);
 
-        presenter.done(TITLE, DESCRIPTION, MODE, URL);
+        presenter.done(TITLE, DESCRIPTION, MODE, URL, IS_ACTIVATING_PROMOTED);
 
         verify(newStreamView).closeScreenWithResult(anyString());
     }
@@ -75,7 +76,7 @@ public class NewStreamPresenterTest {
         setupCreateStreamInteractorCallbackWithEmptyTopic();
         when(sessionRepository.getCurrentUserId()).thenReturn(USER_ID);
         presenter.initialize(newStreamView, null);
-        presenter.done(TITLE, DESCRIPTION, MODE, URL);
+        presenter.done(TITLE, DESCRIPTION, MODE, URL, IS_ACTIVATING_PROMOTED);
 
         presenter.confirmNotify(TITLE, DESCRIPTION, MODE, true, URL);
 
@@ -94,7 +95,7 @@ public class NewStreamPresenterTest {
     private void setupUpdateStreamInteractorCallbackWithEmptyTopic() {
         doAnswer(new Answer() {
             @Override public Object answer(InvocationOnMock invocation) throws Throwable {
-                ((UpdateStreamInteractor.Callback) invocation.getArguments()[6])
+                ((UpdateStreamInteractor.Callback) invocation.getArguments()[7])
                     .onLoaded(selectedStreamWithNullTopic());
                 return null;
             }
@@ -106,6 +107,7 @@ public class NewStreamPresenterTest {
                 anyInt(),
                 anyString(),
                 anyString(),
+                anyBoolean(),
                 any(UpdateStreamInteractor.Callback.class),
                 any(Interactor.ErrorCallback.class));
     }

@@ -44,10 +44,13 @@ public class Stream implements Searchable, Followable, Validable, PrintableItem 
     private boolean canReply;
     private boolean canPinItem;
     private boolean canFixItem;
+    private boolean canTogglePromoted;
+    private boolean canShowPromotedInfo;
     private long lastTimeShooted;
     private boolean showBadge;
     private String shareLink;
     private String videoUrl;
+    private boolean promotedShotsEnabled;
 
     public Boolean isRemoved() {
         return removed;
@@ -387,6 +390,22 @@ public class Stream implements Searchable, Followable, Validable, PrintableItem 
         this.canFixItem = canFixItem;
     }
 
+    public boolean canTogglePromoted() {
+        return canTogglePromoted;
+    }
+
+    public void setCanTogglePromoted(boolean canTogglePromoted) {
+        this.canTogglePromoted = canTogglePromoted;
+    }
+
+    public boolean canShowPromotedInfo() {
+        return canShowPromotedInfo;
+    }
+
+    public void setCanShowPromotedInfo(boolean canShowPromotedInfo) {
+        this.canShowPromotedInfo = canShowPromotedInfo;
+    }
+
     public long getLastTimeShooted() {
         return lastTimeShooted;
     }
@@ -417,5 +436,13 @@ public class Stream implements Searchable, Followable, Validable, PrintableItem 
 
     public void setVideoUrl(String videoUrl) {
         this.videoUrl = videoUrl;
+    }
+
+    public boolean isPromotedShotsEnabled() {
+        return promotedShotsEnabled;
+    }
+
+    public void setPromotedShotsEnabled(boolean promotedShotsEnabled) {
+        this.promotedShotsEnabled = promotedShotsEnabled;
     }
 }

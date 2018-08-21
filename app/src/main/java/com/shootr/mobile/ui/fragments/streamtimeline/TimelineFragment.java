@@ -97,6 +97,7 @@ import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PollModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.LongPressShotPresenter;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
@@ -111,6 +112,7 @@ import com.shootr.mobile.ui.widgets.AvatarView;
 import com.shootr.mobile.ui.widgets.CustomActionItemBadge;
 import com.shootr.mobile.ui.widgets.PreCachingLayoutManager;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
+import com.shootr.mobile.ui.widgets.PromotedShotActivationInfoDialog;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.Clipboard;
@@ -693,6 +695,10 @@ public class TimelineFragment extends BaseFragment
           @Override public void onPromotedClick() {
             goToNewPromotedShot();
           }
+
+          @Override public void onPromotedShowInfoClick() {
+            timelinePresenter.onPromotedActivationButtonClick();
+          }
         }, false, null, false, null, idStream);
   }
 
@@ -990,7 +996,8 @@ public class TimelineFragment extends BaseFragment
   @Override public void showPromotedButton() {
     if (sessionRepository.isPromotedShotActivated()) {
       if (newShotBarContainer != null) {
-        newShotBarContainer.setCanPostPromotedShot(true);
+        newShotBarContainer.setCanShowPromotedButton(true);
+        newShotBarContainer.setPromotedButtonState(PromotedMessageBox.PROMOTED_ENABLED);
         newShotBarContainer.showPromotedButton();
         promotedAdapter.setShouldShowAddSuperShot(true);
         promotedAdapter.showAddPromoted();
@@ -998,6 +1005,28 @@ public class TimelineFragment extends BaseFragment
     } else {
       hidePromotedButton();
     }
+  }
+
+  @Override public void showPromotedWithInfoState() {
+    if (sessionRepository.isPromotedShotActivated()) {
+      if (newShotBarContainer != null) {
+        newShotBarContainer.setCanShowPromotedButton(true);
+        newShotBarContainer.setPromotedButtonState(PromotedMessageBox.PROMOTED_SHOW_INFO);
+        newShotBarContainer.showPromotedButton();
+        promotedAdapter.setShouldShowAddSuperShot(false);
+        promotedAdapter.hideAddPromoted();
+      }
+    } else {
+      hidePromotedButton();
+    }
+  }
+
+  @Override public void openPromotedActivationDialog(StreamModel streamModel) {
+    Bundle args = new Bundle();
+    args.putSerializable(PromotedShotActivationInfoDialog.STREAM, streamModel);
+    PromotedShotActivationInfoDialog promotedShotInfoDialog = new PromotedShotActivationInfoDialog();
+    promotedShotInfoDialog.setArguments(args);
+    promotedShotInfoDialog.show(getActivity().getFragmentManager(), PromotedShotActivationInfoDialog.TAG);
   }
 
   @Override public void addNewHighlighted(List<PrintableModel> printableModels) {
@@ -1039,9 +1068,10 @@ public class TimelineFragment extends BaseFragment
 
   @Override public void hidePromotedButton() {
     if (newShotBarContainer != null) {
-      newShotBarContainer.setCanPostPromotedShot(false);
+      newShotBarContainer.setCanShowPromotedButton(false);
       newShotBarContainer.hidePromotedButton();
       promotedAdapter.setShouldShowAddSuperShot(false);
+      promotedAdapter.hideAddPromoted();
     }
   }
 

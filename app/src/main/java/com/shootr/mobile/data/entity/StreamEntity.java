@@ -40,6 +40,7 @@ public class StreamEntity extends Synchronized
   private String shareLink;
   private String videoUrl;
   private String resultType;
+  private Boolean promotedShotsEnabled;
 
   public StreamEntity() {
     setResultType(FollowableType.STREAM);
@@ -323,5 +324,13 @@ public class StreamEntity extends Synchronized
 
   @Override public void setResultType(String resultType) {
     this.resultType = resultType;
+  }
+
+  public Boolean getPromotedShotsEnabled() {
+    return promotedShotsEnabled == null ? false : promotedShotsEnabled;
+  }
+
+  public void setPromotedShotsEnabled(Boolean promotedShotsEnabled) {
+    this.promotedShotsEnabled = promotedShotsEnabled;
   }
 }

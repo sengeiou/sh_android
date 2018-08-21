@@ -9,6 +9,7 @@ public class StreamUpdateParameters implements Validable {
   private String photoIdMedia;
   private String readWriteMode;
   private String videoUrl;
+  private Boolean promotedShotsEnabled;
   private boolean notifyPinMessage;
 
   public String getDescription() {
@@ -81,5 +82,13 @@ public class StreamUpdateParameters implements Validable {
 
   public void setVideoUrl(String videoUrl) {
     this.videoUrl = videoUrl;
+  }
+
+  public Boolean getPromotedShotsEnabled() {
+    return promotedShotsEnabled;
+  }
+
+  public void setPromotedShotsEnabled(Boolean promotedShotsEnabled) {
+    this.promotedShotsEnabled = promotedShotsEnabled;
   }
 }

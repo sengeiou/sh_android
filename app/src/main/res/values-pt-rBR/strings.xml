@@ -616,4 +616,9 @@
     <item quantity="zero">%s min</item>
   </plurals>
   <string name="new_promoted_shot_discard_message">Descartar Super Shot?</string>
+  <string name="switch_off">Off</string>
+  <string name="switch_on">On</string>
+  <string name="activate_promoted_shot_first_paragraph">Activate Super Shots and earn money with your stream.</string>
+  <string name="activate_promoted_shot_second_paragraph">Super Shot is a message that stands out amongst the crowd. The more is spent, the longer it stays. When someone buys a Super Shot, a share of the purchase goes to your balance.</string>
+  <string name="activate_promoted_shot_third_paragraph">To activate Super Shots your stream needs 1000 followers or more.</string>
 </resources>

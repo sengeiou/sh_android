@@ -9,6 +9,7 @@ import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.model.poll.Poll;
 import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.repository.Nicest;
 import com.shootr.mobile.domain.repository.poll.InternalPollRepository;
 import com.shootr.mobile.util.MergeUtils;
@@ -39,6 +40,26 @@ public class TimelineCache implements CachedDataSource {
           timelineRepositionCache.getTimelineReposition(idStream, idFilter));
     }
     return timeline;
+  }
+
+  public void updateStreamForTImeline(String idStream, String idFilter, Stream stream) {
+    StreamTimeline timeline = getTimeline(idStream, idFilter);
+
+    if (timeline != null) {
+      timeline.setStream(stream);
+      putTimeline(timeline);
+    }
+  }
+
+  public void updateParticipantsForTImeline(String idStream, String idFilter, int totalParticipants,
+      int followingParticipants) {
+    StreamTimeline timeline = getTimeline(idStream, idFilter);
+
+    if (timeline != null) {
+      timeline.setParticipantsNumber(totalParticipants);
+      timeline.setFollowingNumber(followingParticipants);
+      putTimeline(timeline);
+    }
   }
 
   public void putTimeline(StreamTimeline timeline) {

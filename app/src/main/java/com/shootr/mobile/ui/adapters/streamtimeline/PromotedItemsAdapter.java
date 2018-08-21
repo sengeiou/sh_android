@@ -98,6 +98,10 @@ public class PromotedItemsAdapter extends RecyclerAdapter {
     addPromoted.setItem(true);
   }
 
+  public void hideAddPromoted() {
+    addPromoted.removeItem();
+  }
+
   public void setHighlightedList(List<PrintableModel> highlightedList) {
     highlightedItems.set(highlightedList);
   }

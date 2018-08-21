@@ -14,6 +14,7 @@ public class SocketMessage {
   public static final String SHOT_DETAIL = "SHOT_DETAIL";
   public static final String SHOT_UPDATE = "SHOT_UPDATE";
   public static final String CREATED_SHOT = "CREATED_SHOT";
+  public static final String STREAM_UPDATE = "STREAM_UPDATE";
   public static final String ERROR = "ERROR";
   public static final String PROMOTED_TIERS = "PROMOTED_TIERS";
   public static final String PARTIAL_UPDATE_ITEM_DATA = "PARTIAL_UPDATE_ITEM_DATA";

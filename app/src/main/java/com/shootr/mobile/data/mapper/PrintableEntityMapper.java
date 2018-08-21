@@ -5,6 +5,7 @@ import com.shootr.mobile.data.entity.ExternalVideoEntity;
 import com.shootr.mobile.data.entity.PollEntity;
 import com.shootr.mobile.data.entity.PrintableItemEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
+import com.shootr.mobile.data.entity.StreamEntity;
 import com.shootr.mobile.data.entity.TopicEntity;
 import com.shootr.mobile.data.entity.UserEntity;
 import com.shootr.mobile.domain.model.PrintableItem;
@@ -20,17 +21,20 @@ public class PrintableEntityMapper {
   private final ExternalVideoEntityMapper externalVideoEntityMapper;
   private final PromotedReceiptEntityMapper promotedReceiptEntityMapper;
   private final UserEntityMapper userEntityMapper;
+  private final StreamEntityMapper streamEntityMapper;
 
   @Inject public PrintableEntityMapper(ShotEntityMapper shotEntityMapper,
       TopicEntityMapper topicEntityMapper, PollEntityMapper pollEntityMapper,
       ExternalVideoEntityMapper externalVideoEntityMapper,
-      PromotedReceiptEntityMapper promotedReceiptEntityMapper, UserEntityMapper userEntityMapper) {
+      PromotedReceiptEntityMapper promotedReceiptEntityMapper, UserEntityMapper userEntityMapper,
+      StreamEntityMapper streamEntityMapper) {
     this.shotEntityMapper = shotEntityMapper;
     this.topicEntityMapper = topicEntityMapper;
     this.pollEntityMapper = pollEntityMapper;
     this.externalVideoEntityMapper = externalVideoEntityMapper;
     this.promotedReceiptEntityMapper = promotedReceiptEntityMapper;
     this.userEntityMapper = userEntityMapper;
+    this.streamEntityMapper = streamEntityMapper;
   }
 
   public PrintableItem map(PrintableItemEntity printableItemEntity) {
@@ -56,7 +60,12 @@ public class PrintableEntityMapper {
         .equals(PrintableType.USER)) {
       return userEntityMapper.transform(
           (UserEntity) printableItemEntity);
+    } else if (printableItemEntity != null && printableItemEntity.getResultType()
+        .equals(PrintableType.STREAM)) {
+      return streamEntityMapper.transform(
+          (StreamEntity) printableItemEntity);
     }
+
     return new UnknownPrintableItem();
   }
 

@@ -140,7 +140,7 @@ android {
     debug {
       minifyEnabled false
       //TODO esto es sólo para la historia del billing VOLVER A DESCOMENTAR ESTO
-      //applicationIdSuffix ".debug"
+      applicationIdSuffix ".debug"
       signingConfig signingConfigs.debug
       testCoverageEnabled true
     }

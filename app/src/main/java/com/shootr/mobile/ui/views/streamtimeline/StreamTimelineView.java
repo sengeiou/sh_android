@@ -3,6 +3,7 @@ package com.shootr.mobile.ui.views.streamtimeline;
 import com.shootr.mobile.ui.model.ExternalVideoModel;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,4 +138,8 @@ public interface StreamTimelineView {
   void addNewFollowing(List<PrintableModel> printableModels);
 
   void updateFollowing(PrintableModel printableModel);
+
+  void showPromotedWithInfoState();
+
+  void openPromotedActivationDialog(StreamModel streamModel);
 }

@@ -33,10 +33,13 @@ public class StreamModel implements Serializable, SearchableModel, PrintableMode
     private boolean canPinItem;
     private boolean canFixItem;
     private boolean canPostPromoted;
+    private boolean canTogglePromoted;
+    private boolean canShowPromotedInfo;
     private boolean showBadge;
     private boolean shouldHideStream;
     private String shareLink;
     private String videoUrl;
+    private boolean promotedShotsEnabled;
 
     public Boolean isRemoved() {
         return removed;
@@ -282,6 +285,22 @@ public class StreamModel implements Serializable, SearchableModel, PrintableMode
         this.canPostPromoted = canPostPromoted;
     }
 
+    public boolean canTogglePromoted() {
+        return canTogglePromoted;
+    }
+
+    public void setCanTogglePromoted(boolean canTogglePromoted) {
+        this.canTogglePromoted = canTogglePromoted;
+    }
+
+    public boolean canShowPromotedInfo() {
+        return canShowPromotedInfo;
+    }
+
+    public void setCanShowPromotedInfo(boolean canShowPromotedInfo) {
+        this.canShowPromotedInfo = canShowPromotedInfo;
+    }
+
     public boolean shouldShowBadge() {
         return showBadge;
     }
@@ -328,5 +347,13 @@ public class StreamModel implements Serializable, SearchableModel, PrintableMode
 
     @Override public boolean isDeleted() {
         return false;
+    }
+
+    public boolean isPromotedShotsEnabled() {
+        return promotedShotsEnabled;
+    }
+
+    public void setPromotedShotsEnabled(boolean promotedShotsEnabled) {
+        this.promotedShotsEnabled = promotedShotsEnabled;
     }
 }

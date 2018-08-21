@@ -108,7 +108,23 @@ public class NewStreamPresenter implements Presenter {
       newStreamView.setStreamTitle(preloadedTitle);
     }
     this.currentStreamTopic = streamModel.getTopic();
+    setupSwitch(streamModel);
   }
+
+  private void setupSwitch(StreamModel stream) {
+    if (stream.canTogglePromoted()) {
+      this.newStreamView.showSwitch();
+    } else {
+      this.newStreamView.hideSwitch();
+    }
+
+    if (stream.isPromotedShotsEnabled()) {
+      newStreamView.setOnText();
+    } else {
+      newStreamView.setOffText();
+    }
+  }
+
   //endregion
 
   //region Interaction methods
@@ -118,13 +134,13 @@ public class NewStreamPresenter implements Presenter {
   }
 
   public void done(String streamTitle, String streamDescription, Integer streamMode,
-      String videoUrl) {
+      String videoUrl, boolean isActivatingPromotedShots) {
     newStreamView.hideKeyboard();
     if (isNewStream) {
       this.askNotificationConfirmation();
     } else {
       newStreamView.showLoading();
-      editStream(preloadedStreamId, streamTitle, streamDescription, streamMode, videoUrl);
+      editStream(preloadedStreamId, streamTitle, streamDescription, streamMode, videoUrl, isActivatingPromotedShots);
     }
   }
 
@@ -145,14 +161,14 @@ public class NewStreamPresenter implements Presenter {
   }
 
   private void editStream(String preloadedStreamId, String streamTitle, String streamDescription,
-      Integer streamMode, String videoUrl) {
-    updateStream(preloadedStreamId, streamTitle, streamDescription, streamMode, videoUrl);
+      Integer streamMode, String videoUrl, boolean isActivatingPromotedShots) {
+    updateStream(preloadedStreamId, streamTitle, streamDescription, streamMode, videoUrl, isActivatingPromotedShots);
   }
 
   private void updateStream(String preloadedStreamId, String streamTitle, String streamDescription,
-      Integer streamMode, String videoUrl) {
+      Integer streamMode, String videoUrl, boolean isActivatingPromotedShots) {
     updateStreamInteractor.updateStream(preloadedStreamId, streamTitle, streamDescription,
-        streamMode, newIdMedia, videoUrl, new UpdateStreamInteractor.Callback() {
+        streamMode, newIdMedia, videoUrl, isActivatingPromotedShots, new UpdateStreamInteractor.Callback() {
           @Override public void onLoaded(Stream stream) {
             streamCreated(stream);
             selectStream(stream);

@@ -48,6 +48,9 @@ public class PrintableItemApiEntityMapper {
     } else if (printableItemApiEntity != null && printableItemApiEntity.getResultType()
         .equals(PrintableType.USER)) {
       return (PrintableItemEntity) printableItemApiEntity;
+    } else if (printableItemApiEntity != null && printableItemApiEntity.getResultType()
+        .equals(PrintableType.STREAM)) {
+      return (PrintableItemEntity) printableItemApiEntity;
     }
     return new PrintableItemEntity() {
       @Override public String getResultType() {

@@ -45,11 +45,13 @@ import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
 import com.shootr.mobile.domain.model.SocketMessage;
 import com.shootr.mobile.domain.model.StreamTimeline;
+import com.shootr.mobile.domain.model.StreamUpdateSocketMessage;
 import com.shootr.mobile.domain.model.TimelineSocketMessage;
 import com.shootr.mobile.domain.model.TimelineType;
 import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.shot.ShotType;
+import com.shootr.mobile.domain.model.stream.Stream;
 import com.shootr.mobile.domain.model.stream.StreamSearchResult;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.Poller;
@@ -477,6 +479,7 @@ public class StreamTimelinePresenter
   }
 
   private void setupStreamInfo(StreamModel streamModel) {
+    this.streamModel = streamModel;
     this.canFixItem = streamModel.canFixItem();
     view.setTitle(streamModel.getTitle());
     view.sendAnalythicsEnterTimeline();
@@ -492,9 +495,13 @@ public class StreamTimelinePresenter
 
     if (streamModel.canPostPromoted()) {
       view.showPromotedButton();
+    } else if (streamModel.canShowPromotedInfo()) {
+      view.showPromotedWithInfoState();
     } else {
       view.hidePromotedButton();
     }
+
+
   }
 
   //region streamMessage
@@ -923,9 +930,10 @@ public class StreamTimelinePresenter
       case SocketMessage.PARTICIPANTS_UPDATE:
         ParticipantsSocketMessage participantsSocketMessage =
             (ParticipantsSocketMessage) event.getMessage();
-        if (streamModel != null) {
-          setupConnected(streamModel.getTotalFollowers(),
-              participantsSocketMessage.getData().getTotal());
+        if (idStream.equals(participantsSocketMessage.getEventParams().getIdStream())) {
+          if (streamModel != null) {
+            setupConnected(streamModel.getTotalFollowers(), participantsSocketMessage.getData().getTotal());
+          }
         }
         break;
 
@@ -954,6 +962,15 @@ public class StreamTimelinePresenter
               TimelineType.MAIN)) {
             setupImportantBadge(true);
           }
+        }
+        break;
+
+      case SocketMessage.STREAM_UPDATE:
+        StreamUpdateSocketMessage streamUpdateSocketMessage =
+            (StreamUpdateSocketMessage) event.getMessage();
+        if (idStream.equals(((Stream) streamUpdateSocketMessage.getData()).getId())) {
+          streamModel = streamModelMapper.transform((Stream) streamUpdateSocketMessage.getData());
+          setupStreamInfo(streamModel);
         }
         break;
 
@@ -1074,5 +1091,11 @@ public class StreamTimelinePresenter
         /* no-op */
       }
     });
+  }
+
+  public void onPromotedActivationButtonClick() {
+    if (streamModel != null) {
+      view.openPromotedActivationDialog(streamModel);
+    }
   }
 }

@@ -62,4 +62,10 @@ public interface NewShotDetailView {
   void showReshootMenu();
 
   void showPromotedButton();
+
+  void showPromotedWithInfoState();
+
+  void hidePromotedButton();
+
+  void openPromotedActivationDialog(StreamModel streamModel);
 }

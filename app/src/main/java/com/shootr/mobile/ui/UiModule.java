@@ -60,6 +60,7 @@ import com.shootr.mobile.ui.presenter.DraftsPresenter;
 import com.shootr.mobile.ui.views.EasterEggActivity;
 import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
+import com.shootr.mobile.ui.widgets.PromotedShotActivationInfoDialog;
 import com.shootr.mobile.ui.widgets.PromotedShotInfoDialog;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
@@ -118,7 +119,7 @@ import javax.inject.Singleton;
     GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class,
       PollOptionVotedActivity.class, HiddenPollResultsActivity.class, HistoryActivity.class,
       NewShotDetailActivity.class, PrivacyLawActivity.class, PostPromotedShotActivity.class,
-      PromotedMessageBox.class, PromotedShotInfoDialog.class
+      PromotedMessageBox.class, PromotedShotInfoDialog.class, PromotedShotActivationInfoDialog.class
   },
   complete = false, library = true) public class UiModule {
 

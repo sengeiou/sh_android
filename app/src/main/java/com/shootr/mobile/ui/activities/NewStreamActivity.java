@@ -26,6 +26,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import butterknife.BindString;
 import butterknife.BindView;
@@ -80,6 +81,8 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
   @BindView(R.id.stream_read_write_mode) AppCompatSpinner readWriteModeSpinner;
   @BindView(R.id.cat_avatar) View streamPictureContainer;
   @BindView(R.id.stream_avatar) AvatarView streamPhoto;
+  @BindView(R.id.activation_switch) Switch activationSwitch;
+  @BindView(R.id.switch_container) View switchContainer;
 
   @BindString(R.string.activity_edit_stream_title) String editStreamTitleActionBar;
   @BindString(R.string.activity_new_stream_title) String newStreamTitleActionBar;
@@ -205,7 +208,8 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
       finish();
       return true;
     } else if (item.getItemId() == R.id.menu_done) {
-      presenter.done(getStreamTitle(), getStreamDescription(), getStreamMode(), getVideoUrl());
+      presenter.done(getStreamTitle(), getStreamDescription(), getStreamMode(), getVideoUrl(),
+          activationSwitch.isChecked());
       return true;
     } else {
       return super.onOptionsItemSelected(item);
@@ -371,6 +375,22 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
   @Override public void hideVideoUrlFields() {
     videoUrlView.setVisibility(View.GONE);
     videoUrlErrorView.setVisibility(View.GONE);
+  }
+
+  @Override public void showSwitch() {
+    switchContainer.setVisibility(View.VISIBLE);
+  }
+
+  @Override public void hideSwitch() {
+    switchContainer.setVisibility(View.GONE);
+  }
+
+  @Override public void setOffText() {
+    activationSwitch.setChecked(false);
+  }
+
+  @Override public void setOnText() {
+    activationSwitch.setChecked(true);
   }
 
   @Override public void showLoading() {

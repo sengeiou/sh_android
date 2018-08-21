@@ -46,6 +46,7 @@ import com.shootr.mobile.ui.presenter.NewShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NewShotDetailView;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
+import com.shootr.mobile.ui.widgets.PromotedShotActivationInfoDialog;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.AndroidTimeUtils;
 import com.shootr.mobile.util.BackStackHandler;
@@ -391,6 +392,10 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
                   .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
               startActivity(newShotIntent);
             }
+
+            @Override public void onPromotedShowInfoClick() {
+              detailPresenter.onPromotedActivationButtonClick();
+            }
           }, false, null, true, shotModel.getIdShot(), shotModel.getStreamId());
     }
   }
@@ -549,10 +554,40 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   @Override public void showPromotedButton() {
     if (sessionRepository.isPromotedShotActivated()) {
       if (newShotBar != null) {
-        newShotBar.setCanPostPromotedShot(true);
+        newShotBar.setCanShowPromotedButton(true);
+        newShotBar.setPromotedButtonState(PromotedMessageBox.PROMOTED_ENABLED);
         newShotBar.showPromotedButton();
       }
+    } else {
+      hidePromotedButton();
     }
+  }
+
+  @Override public void showPromotedWithInfoState() {
+    if (sessionRepository.isPromotedShotActivated()) {
+      if (newShotBar != null) {
+        newShotBar.setCanShowPromotedButton(true);
+        newShotBar.setPromotedButtonState(PromotedMessageBox.PROMOTED_SHOW_INFO);
+        newShotBar.showPromotedButton();
+      }
+    } else {
+      hidePromotedButton();
+    }
+  }
+
+  @Override public void hidePromotedButton() {
+    if (newShotBar != null) {
+      newShotBar.setCanShowPromotedButton(false);
+      newShotBar.hidePromotedButton();
+    }
+  }
+
+  @Override public void openPromotedActivationDialog(StreamModel streamModel) {
+    Bundle args = new Bundle();
+    args.putSerializable(PromotedShotActivationInfoDialog.STREAM, streamModel);
+    PromotedShotActivationInfoDialog promotedShotInfoDialog = new PromotedShotActivationInfoDialog();
+    promotedShotInfoDialog.setArguments(args);
+    promotedShotInfoDialog.show(getFragmentManager(), PromotedShotActivationInfoDialog.TAG);
   }
 
   @Override

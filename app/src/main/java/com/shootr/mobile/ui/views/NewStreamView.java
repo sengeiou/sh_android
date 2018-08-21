@@ -42,4 +42,12 @@ public interface NewStreamView extends DataTransferView {
     void showEditPhotoPlaceHolder();
 
     void hideVideoUrlFields();
+
+    void showSwitch();
+
+    void hideSwitch();
+
+    void setOffText();
+
+    void setOnText();
 }
