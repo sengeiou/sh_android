@@ -69,6 +69,7 @@ import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.PostPromotedShotActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.activities.PromotedShotIntroActivity;
 import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -260,17 +261,12 @@ public class TimelineFragment extends BaseFragment
   private int charCounterColorError;
   private int charCounterColorNormal;
   private Integer[] watchNumberCount;
-
   private boolean isFullScreen;
   private YouTubePlayer videoPlayer;
   private boolean videoHasBeenPlayed;
-
   private YouTubePlayerSupportFragment youTubePlayerSupportFragment;
-
   private boolean videoAnimationPlaying = false;
-
   private boolean shouldLoadVideAfterResume = false;
-
   private ExternalVideoModel currentVideoModel;
 
   public static TimelineFragment newInstance(Bundle fragmentArguments) {
@@ -357,7 +353,7 @@ public class TimelineFragment extends BaseFragment
       }
 
       @Override public void onAddPromotedPressed() {
-        goToNewPromotedShot();
+        handlePromotedShotIntro();
       }
 
       @Override public void onUserFollowingClick(UserModel user) {
@@ -376,6 +372,12 @@ public class TimelineFragment extends BaseFragment
         .from(getActivity()) //
         .setStreamData(idStream, streamTitle).build();
     getActivity().startActivity(newShotIntent);
+  }
+
+  private void showIntroSS() {
+    Intent promotedShotIntroIntent =
+        PromotedShotIntroActivity.getIntentForActivity(getActivity(), idStream, streamTitle);
+    startActivity(promotedShotIntroIntent);
   }
 
   private void setupListScrollListeners() {
@@ -693,13 +695,22 @@ public class TimelineFragment extends BaseFragment
           }
 
           @Override public void onPromotedClick() {
-            goToNewPromotedShot();
+            handlePromotedShotIntro();
           }
 
           @Override public void onPromotedShowInfoClick() {
             timelinePresenter.onPromotedActivationButtonClick();
           }
         }, false, null, false, null, idStream);
+  }
+
+  private void handlePromotedShotIntro() {
+    if (!sessionRepository.hasShownIntroPromotedShot()) {
+      showIntroSS();
+      sessionRepository.setShowIntroPromotedShot(true);
+    } else {
+      goToNewPromotedShot();
+    }
   }
 
   @Override public void openNewShotView() {
@@ -844,7 +855,6 @@ public class TimelineFragment extends BaseFragment
       }
     }
   }
-
 
   @Override public void renderPolls(List<PrintableModel> items) {
     if (isAdded()) {
@@ -1222,7 +1232,7 @@ public class TimelineFragment extends BaseFragment
     if (menus.get(LongPressShotPresenter.DISMISS_HIGHLIGHT)) {
       customContextMenu.addAction(R.string.remove_highlight, new Runnable() {
         @Override public void run() {
-         timelinePresenter.onDismissHighlightShot(shotModel, shotModel.getIdUser());
+          timelinePresenter.onDismissHighlightShot(shotModel, shotModel.getIdUser());
         }
       });
     }

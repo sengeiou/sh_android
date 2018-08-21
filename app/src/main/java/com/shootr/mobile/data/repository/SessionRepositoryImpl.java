@@ -14,6 +14,7 @@ import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.LongPreference;
 import com.shootr.mobile.data.prefs.PublicVoteAlertPreference;
 import com.shootr.mobile.data.prefs.SessionToken;
+import com.shootr.mobile.data.prefs.ShowSSIntroPreference;
 import com.shootr.mobile.data.prefs.StringPreference;
 import com.shootr.mobile.data.prefs.TimelineFilterActivated;
 import com.shootr.mobile.data.prefs.TimelineMultipleFilter;
@@ -35,6 +36,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private final StringPreference currentUserIdPreference;
   private final LongPreference cacheTimeKeepAlive;
   private final BooleanPreference timelineFilterPreference;
+  private final BooleanPreference showIntroSSPreference;
   private final StringPreference timelineMultipleFilterPreference;
   private final StringPreference lastTimeFilteredPreference;
   private final BooleanPreference publicVoteAlertPreference;
@@ -53,6 +55,7 @@ public class SessionRepositoryImpl implements SessionRepository {
       @CurrentUserId StringPreference currentUserIdPreference,
       @CacheTimeKeepAlive LongPreference cacheTimeKeepAlive,
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
+      @ShowSSIntroPreference BooleanPreference showIntroSSPreference,
       @TimelineMultipleFilter StringPreference timelineMultipleFilterPreference,
       @LastTimeFiltered StringPreference lastTimeFiltered,
       @PublicVoteAlertPreference BooleanPreference publicVoteAlertPreference,
@@ -65,6 +68,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;
     this.timelineFilterPreference = timelineFilterPreference;
+    this.showIntroSSPreference = showIntroSSPreference;
     this.timelineMultipleFilterPreference = timelineMultipleFilterPreference;
     this.lastTimeFilteredPreference = lastTimeFiltered;
     this.publicVoteAlertPreference = publicVoteAlertPreference;
@@ -128,6 +132,7 @@ public class SessionRepositoryImpl implements SessionRepository {
     landingStreamsLruCache.invalidate();
     bootstrappingPreferences.delete();
     lastStreamVisitCache.invalidate();
+    showIntroSSPreference.delete();
     currentUser = null;
   }
 
@@ -201,6 +206,14 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Override public boolean isPromotedShotActivated() {
     return bootstrappingPreferences.get().isSuperShot();
+  }
+
+  @Override public boolean hasShownIntroPromotedShot() {
+    return showIntroSSPreference.get();
+  }
+
+  @Override public void setShowIntroPromotedShot(boolean hasShownSSIntro) {
+    showIntroSSPreference.set(hasShownSSIntro);
   }
 
   @Override public void resetFilter(String idStream) {

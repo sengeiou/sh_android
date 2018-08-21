@@ -47,6 +47,11 @@ import javax.inject.Singleton;
         return new BooleanPreference(preferences, "timeline_filter", false);
     }
 
+    @Provides @Singleton @ShowSSIntroPreference
+    BooleanPreference provideHasShownSSIntro(SharedPreferences preferences) {
+        return new BooleanPreference(preferences, "ss_intro", false);
+    }
+
     @Provides @Singleton @TimelineMultipleFilter
     StringPreference provideTimelineFilter(SharedPreferences preferences) {
         return new StringPreference(preferences, "new_timeline_filter", TimelineType.MAIN);

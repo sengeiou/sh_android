@@ -359,6 +359,9 @@
         android:name=".ui.activities.PostPromotedShotActivity"
         android:theme="@style/ShootrTheme.NoActionBar.Floating"/>
 
+    <activity
+        android:name=".ui.activities.PromotedShotIntroActivity"
+        android:theme="@style/ShootrTheme.NoActionBar.Floating"/>
 
     <service android:name=".data.background.sockets.WebSocketService"/>
 

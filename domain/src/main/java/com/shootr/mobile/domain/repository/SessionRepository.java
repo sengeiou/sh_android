@@ -57,4 +57,8 @@ public interface SessionRepository {
     boolean isNewShotDetail();
 
     boolean isPromotedShotActivated();
+
+    boolean hasShownIntroPromotedShot();
+
+    void setShowIntroPromotedShot(boolean hasShownSSIntro);
 }

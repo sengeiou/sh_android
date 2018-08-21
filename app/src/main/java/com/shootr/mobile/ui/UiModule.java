@@ -62,6 +62,7 @@ import com.shootr.mobile.ui.widgets.MessageBox;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
 import com.shootr.mobile.ui.widgets.PromotedShotActivationInfoDialog;
 import com.shootr.mobile.ui.widgets.PromotedShotInfoDialog;
+import com.shootr.mobile.ui.activities.PromotedShotIntroActivity;
 import com.shootr.mobile.ui.widgets.WatchersView;
 import com.shootr.mobile.util.IntentFactory;
 import com.shootr.mobile.util.ResourcesDateRangeTextProvider;
@@ -69,74 +70,45 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
 
-@Module(
-  injects = {
+@Module(injects = {
     // Every single activity extending BaseActivity, sadly
-    BaseToolbarActivity.class,
-    LoginSelectionActivity.class,
-    EmailLoginActivity.class,
-    EmailRegistrationActivity.class,
-    PostNewShotActivity.class,
-    ProfileActivity.class,
-    UserFollowsContainerActivity.class,
-    StreamDetailActivity.class,
-    ProfileEditActivity.class,
-    ShotDetailActivity.class,
-    PhotoViewActivity.class,
-    StreamTimelineActivity.class,
-    WatchersView.class,
-    NewStreamActivity.class,
-    StreamMediaActivity.class,
-    UpdateWarningActivity.class,
-    DraftsActivity.class,
-    DraftsPresenter.class,
-    MainTabbedActivity.class,
-    ResetPasswordActivity.class,
-    ListingActivity.class,
-    ActivityTimelineFragment.class,
-    WhaleActivity.class,
-    EmailConfirmationActivity.class,
-    AllShotsActivity.class,
-    SupportActivity.class,
-    ChangePasswordActivity.class,
-    AllParticipantsActivity.class,
-    FindParticipantsActivity.class,
-    WelcomePageActivity.class,
-    ErrorActivity.class,
-    NicersActivity.class,
-    ContributorsActivity.class,
-    FindContributorsActivity.class,
-    PollVoteActivity.class, PollResultsActivity.class,
-    SettingsActivity.class,
-    SearchActivity.class,
-    FindFriendsFragment.class,
-    FindStreamsFragment.class,
-    CropPictureActivity.class,
-    EasterEggActivity.class, PrivateMessageTimelineActivity.class, ChannelListFragment.class,
+    BaseToolbarActivity.class, LoginSelectionActivity.class, EmailLoginActivity.class,
+    EmailRegistrationActivity.class, PostNewShotActivity.class, ProfileActivity.class,
+    UserFollowsContainerActivity.class, StreamDetailActivity.class, ProfileEditActivity.class,
+    ShotDetailActivity.class, PhotoViewActivity.class, StreamTimelineActivity.class,
+    WatchersView.class, NewStreamActivity.class, StreamMediaActivity.class,
+    UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class,
+    MainTabbedActivity.class, ResetPasswordActivity.class, ListingActivity.class,
+    ActivityTimelineFragment.class, WhaleActivity.class, EmailConfirmationActivity.class,
+    AllShotsActivity.class, SupportActivity.class, ChangePasswordActivity.class,
+    AllParticipantsActivity.class, FindParticipantsActivity.class, WelcomePageActivity.class,
+    ErrorActivity.class, NicersActivity.class, ContributorsActivity.class,
+    FindContributorsActivity.class, PollVoteActivity.class, PollResultsActivity.class,
+    SettingsActivity.class, SearchActivity.class, FindFriendsFragment.class,
+    FindStreamsFragment.class, CropPictureActivity.class, EasterEggActivity.class,
+    PrivateMessageTimelineActivity.class, ChannelListFragment.class,
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
-    OnBoardingStreamActivity.class,
-    OnBoardingUserActivity.class,
-    GenericSearchFragment.class, ChannelsContainerFragment.class, ShareStreamActivity.class,
-      PollOptionVotedActivity.class, HiddenPollResultsActivity.class, HistoryActivity.class,
-      NewShotDetailActivity.class, PrivacyLawActivity.class, PostPromotedShotActivity.class,
-      PromotedMessageBox.class, PromotedShotInfoDialog.class, PromotedShotActivationInfoDialog.class
-  },
-  complete = false, library = true) public class UiModule {
+    OnBoardingStreamActivity.class, OnBoardingUserActivity.class, GenericSearchFragment.class,
+    ChannelsContainerFragment.class, ShareStreamActivity.class, PollOptionVotedActivity.class,
+    HiddenPollResultsActivity.class, HistoryActivity.class, NewShotDetailActivity.class,
+    PrivacyLawActivity.class, PostPromotedShotActivity.class, PromotedMessageBox.class,
+    PromotedShotInfoDialog.class, PromotedShotIntroActivity.class, PromotedShotActivationInfoDialog.class
+}, complete = false, library = true) public class UiModule {
 
-    @Provides @Singleton AppContainer provideAppContainer() {
-        return AppContainer.DEFAULT;
-    }
+  @Provides @Singleton AppContainer provideAppContainer() {
+    return AppContainer.DEFAULT;
+  }
 
-    @Provides Poller providePoller() {
-        return new Poller(new Handler());
-    }
+  @Provides Poller providePoller() {
+    return new Poller(new Handler());
+  }
 
-    @Provides DateRangeTextProvider provideDateRangeTextProvider(
+  @Provides DateRangeTextProvider provideDateRangeTextProvider(
       ResourcesDateRangeTextProvider resourcesDateRangeTextProvider) {
-        return resourcesDateRangeTextProvider;
-    }
+    return resourcesDateRangeTextProvider;
+  }
 
-    @Provides @Singleton IntentFactory provideIntentFactory() {
-        return IntentFactory.REAL;
-    }
+  @Provides @Singleton IntentFactory provideIntentFactory() {
+    return IntentFactory.REAL;
+  }
 }
