@@ -39,6 +39,7 @@ public class UserEntity extends Synchronized
   private String shareLink;
   private String resultType;
   private Boolean seen;
+  private Long order;
   private float balance;
 
   public UserEntity() {
@@ -310,5 +311,13 @@ public class UserEntity extends Synchronized
 
   @Override public void setSeen(Boolean seen) {
     this.seen = seen;
+  }
+
+  public Long getOrder() {
+    return order;
+  }
+
+  public void setOrder(Long order) {
+    this.order = order;
   }
 }

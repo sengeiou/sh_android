@@ -60,8 +60,8 @@ public class UserEntityMapper {
     user.setCreatedStreamsCount(userEntity.getCreatedStreamsCount());
     user.setFavoritedStreamsCount(userEntity.getFavoritedStreamsCount());
     user.setSeen(userEntity.getSeen());
+    user.setOrder(userEntity.getOrder());
     user.setBalance(userEntity.getBalance());
-
     return user;
   }
 

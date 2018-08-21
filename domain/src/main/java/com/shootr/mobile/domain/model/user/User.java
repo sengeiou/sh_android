@@ -40,6 +40,7 @@ public class User implements Searchable, Followable, PrintableItem, Seenable {
   private boolean muted;
   private String shareLink;
   private Boolean seen;
+  private Long order;
   private float balance;
 
   public Long getFavoritedStreamsCount() {
@@ -251,7 +252,11 @@ public class User implements Searchable, Followable, PrintableItem, Seenable {
   }
 
   @Override public Long getOrder() {
-    return 0L;
+    return order;
+  }
+
+  public void setOrder(Long order) {
+    this.order = order;
   }
 
   @Override public Date getDeletedData() {

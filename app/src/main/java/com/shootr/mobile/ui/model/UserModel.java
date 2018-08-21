@@ -36,7 +36,9 @@ public class UserModel implements Serializable, Cloneable, SearchableModel, Prin
   private String timelineGroup;
   private Date deleted;
   private Boolean seen;
+  private Long order;
   private float balance;
+
 
   public Long getFavoritedStreamsCount() {
     return favoritedStreamsCount;
@@ -256,7 +258,7 @@ public class UserModel implements Serializable, Cloneable, SearchableModel, Prin
   }
 
   @Override public Long getOrder() {
-    return 0L;
+    return order;
   }
 
   @Override public boolean isDeleted() {
@@ -310,5 +312,9 @@ public class UserModel implements Serializable, Cloneable, SearchableModel, Prin
 
   @Override public int hashCode() {
     return getIdUser() != null ? getIdUser().hashCode() : 0;
+  }
+
+  public void setOrder(Long order) {
+    this.order = order == null ? 0L : order;
   }
 }

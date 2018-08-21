@@ -56,6 +56,7 @@ public class MergeUtils {
       fieldsToModify.add("getDeletedData");
       fieldsToModify.add("getUsername");
       fieldsToModify.add("getPhoto");
+      fieldsToModify.add("getOrder");
     }
 
     return copy(from, to, fieldsToModify);

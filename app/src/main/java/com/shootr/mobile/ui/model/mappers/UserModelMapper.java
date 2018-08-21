@@ -46,6 +46,7 @@ public class UserModelMapper {
         }
         userModel.setDeleted(user.getDeletedData());
         userModel.setSeen(user.getSeen());
+        userModel.setOrder(user.getOrder());
         return userModel;
     }
 
