@@ -32,7 +32,7 @@
   <string name="activity_registration_legal_disclaimer_privacy_policy">Política de privacitat</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condicions d\'ús</string>
   <string name="activity_registration_password_hint">Contrasenya</string>
-  <string name="activity_registration_username_hint">Usuari (nom únic)</string>
+  <string name="activity_registration_username_hint">"@Usuari (nom únic)"</string>
   <string name="activity_started_following_you">et segueix</string>
   <string name="activity_timeline_empty_title">No hi ha activitat</string>
   <string name="added_contributor">Afegit</string>
