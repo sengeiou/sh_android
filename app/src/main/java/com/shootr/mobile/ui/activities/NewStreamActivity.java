@@ -378,7 +378,9 @@ public class NewStreamActivity extends BaseToolbarDecoratedActivity implements N
   }
 
   @Override public void showSwitch() {
-    switchContainer.setVisibility(View.VISIBLE);
+    if (sessionRepository.isPromotedShotActivated()) {
+      switchContainer.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void hideSwitch() {

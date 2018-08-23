@@ -985,7 +985,9 @@ public class ProfileActivity extends BaseActivity
   }
 
   @Override public void showBalance() {
-    balanceContainer.setVisibility(View.VISIBLE);
+    if (sessionRepository.isPromotedShotActivated()) {
+      balanceContainer.setVisibility(View.VISIBLE);
+    }
   }
 
   @Override public void setStreamsCount(Integer streamCount) {
