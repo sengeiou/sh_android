@@ -125,6 +125,7 @@
           android:layout_height="wrap_content"
           android:visibility="gone"
           android:adjustViewBounds="true"
+          android:transitionName="shared_image"
           tools:src="@drawable/sample2"
           tools:visibility="gone"
           />
