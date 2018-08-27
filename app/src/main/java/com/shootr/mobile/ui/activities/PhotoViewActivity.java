@@ -66,16 +66,6 @@ public class PhotoViewActivity extends BaseActivity {
     @Override protected void initializeViews(Bundle savedInstanceState) {
         unbinder = ButterKnife.bind(this);
         setupActionBar();
-        /*imageView.getViewTreeObserver().addOnPreDrawListener(
-            new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    imageView.getViewTreeObserver().removeOnPreDrawListener(this);
-                    supportStartPostponedEnterTransition();
-                    return true;
-                }
-            }
-        );*/
         writePermissionManager.init(this);
 
         attacher = new PhotoViewAttacher(imageView);
