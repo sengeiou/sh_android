@@ -41,7 +41,7 @@ def versionMinor = 62
 def versionRevision = 1
 
 
-def isSnapshot = true
+def isSnapshot = false
 def isPreProduction = false
 def databaseVersion = 73
 

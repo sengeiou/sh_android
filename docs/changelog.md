@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.62.1] - 2018-08-28
+### Fixed
+- Create stream musn't allow activate Super Shots
+
 ## [1.62.0] - 2018-08-28
 ### Fixed
 - Load images preview
