@@ -32,7 +32,7 @@
   <string name="activity_registration_legal_disclaimer_privacy_policy">Política de privacidade</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Condições de uso</string>
   <string name="activity_registration_password_hint">Senha</string>
-  <string name="activity_registration_username_hint">Usuário (nome único)</string>
+  <string name="activity_registration_username_hint">"@Usuário (nome único)"</string>
   <string name="activity_started_following_you">te segue</string>
   <string name="activity_timeline_empty_title">Nenhuma atividade</string>
   <string name="added_contributor">Adicionado</string>

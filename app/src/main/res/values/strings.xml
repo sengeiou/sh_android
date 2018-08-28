@@ -32,7 +32,7 @@
   <string name="activity_registration_legal_disclaimer_privacy_policy">Privacy Policy</string>
   <string name="activity_registration_legal_disclaimer_terms_of_service">Terms of Service</string>
   <string name="activity_registration_password_hint">Password</string>
-  <string name="activity_registration_username_hint">User (unique name)</string>
+  <string name="activity_registration_username_hint">"@User (unique name)"</string>
   <string name="activity_started_following_you">started following you</string>
   <string name="activity_timeline_empty_title">No Activity</string>
   <string name="added_contributor">Added</string>
