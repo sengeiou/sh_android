@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -539,7 +540,9 @@ public class TimelineFragment extends BaseFragment
   private void openImage(View sharedImage, String imageUrl) {
     Intent intent = PhotoViewActivity.getIntentForActivity(getContext(), imageUrl, imageUrl);
     sendImageAnalytics();
-    startActivity(intent);
+    ActivityOptionsCompat options = ActivityOptionsCompat.
+        makeSceneTransitionAnimation(this.getActivity(), sharedImage, "shared_image");
+    startActivity(intent, options.toBundle());
   }
 
   private void openProfileFromUsername(String username) {

@@ -109,12 +109,14 @@ public class GlideImageLoader implements ImageLoader {
   }
 
   @Override public void load(String url, ImageView image, final Callback callback) {
-    glide.load(url).into(new ImageViewTarget<GlideDrawable>(image) {
-      @Override protected void setResource(GlideDrawable resource) {
-        view.setImageDrawable(resource);
-        callback.onLoaded();
-      }
-    });
+    glide.load(url)
+        .diskCacheStrategy(DiskCacheStrategy.ALL)
+        .into(new ImageViewTarget<GlideDrawable>(image) {
+          @Override protected void setResource(GlideDrawable resource) {
+            view.setImageDrawable(resource);
+            callback.onLoaded();
+          }
+        });
   }
 
   @Override public void load(String url, ImageView view) {
