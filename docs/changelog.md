@@ -13,6 +13,21 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.62.0] - 2018-08-28
+### Fixed
+- Load images preview
+- Order users on timeline
+- Kill old Timeline
+- Kill old Shot Detail
+- Change video icons
+
+### Added 
+- Introduction to Super Shots
+- Super Shots Customer Support
+- Super Shots Terms and conditions by stream
+- Super Shots Euro Button 
+- Balance on user profile
+
 ## [1.61.2] - 2018-08-06
 ### Fixed
 - Fixes for Android 4.x
