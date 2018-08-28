@@ -42,10 +42,8 @@ public class NewStreamPresenter implements Presenter {
   private String preloadedStreamId;
   private String currentTitle;
   private boolean notifyCreation;
-  private String currentStreamTopic;
   private String newIdMedia;
   private StreamModel streamModel;
-  private boolean removePhoto;
 
   //region Initialization
   @Inject public NewStreamPresenter(CreateStreamInteractor createStreamInteractor,
@@ -107,12 +105,11 @@ public class NewStreamPresenter implements Presenter {
       currentTitle = preloadedTitle;
       newStreamView.setStreamTitle(preloadedTitle);
     }
-    this.currentStreamTopic = streamModel.getTopic();
     setupSwitch(streamModel);
   }
 
   private void setupSwitch(StreamModel stream) {
-    if (stream.canTogglePromoted()) {
+    if (stream.canTogglePromoted() && !isNewStream) {
       this.newStreamView.showSwitch();
     } else {
       this.newStreamView.hideSwitch();
