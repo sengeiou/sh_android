@@ -197,11 +197,11 @@ public class SessionRepositoryImpl implements SessionRepository {
   }
 
   @Override public boolean isNewTimeline() {
-    return bootstrappingPreferences.get().isTimelineConnection();
+    return true;
   }
 
   @Override public boolean isNewShotDetail() {
-    return bootstrappingPreferences.get().isShotDetailConnection();
+    return true;
   }
 
   @Override public boolean isPromotedShotActivated() {
