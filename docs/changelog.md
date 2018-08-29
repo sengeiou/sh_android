@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.62.2] - 2018-08-29
+### Fixed
+- Quick Hot Fix wrong merge kill old shot detail & timeline
+
 ## [1.62.1] - 2018-08-28
 ### Fixed
 - Create stream musn't allow activate Super Shots
