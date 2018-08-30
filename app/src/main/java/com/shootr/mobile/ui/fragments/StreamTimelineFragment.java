@@ -637,8 +637,7 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }, new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
-        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot,
-            sessionRepository.isNewShotDetail());
+        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
         startActivity(intent);
       }
     }, new OnShotLongClick() {

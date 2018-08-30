@@ -181,7 +181,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private void showInApp(InAppNotificationEvent.Event event) {
 
             InAppNotificationView.with(this)
-                .setIsNewShotDetail(sessionRepository.isNewShotDetail())
                 .setTitle(event.getInAppNotification().getTitle())
                 .setMessage((event.getInAppNotification().getComment()))
                 .setAvatar(event.getInAppNotification().getAvatar())

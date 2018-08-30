@@ -31,7 +31,7 @@ public class InAppNotificationView implements View.OnClickListener {
   private static WeakReference<Activity> contextWeakReference;
   private static ImageLoader imageLoader;
   private static boolean showing = false;
-  private static boolean isNewShotDetail = false;
+  private static boolean isNewShotDetail = true;
 
   private InAppNotificationView(Activity activity) {
     contextWeakReference = new WeakReference<>(activity);
@@ -104,11 +104,6 @@ public class InAppNotificationView implements View.OnClickListener {
 
   public InAppNotificationView setDuration(int duration) {
     InAppNotificationView.duration = duration;
-    return this;
-  }
-
-  public InAppNotificationView setIsNewShotDetail(boolean isNewShotDetail) {
-    InAppNotificationView.isNewShotDetail = isNewShotDetail;
     return this;
   }
 
@@ -204,7 +199,7 @@ public class InAppNotificationView implements View.OnClickListener {
   }
 
   @Override public void onClick(View view) {
-    getContext().startActivity(ShotDetailActivity.getIntentForActivity(getContext(), inAppId, isNewShotDetail));
+    getContext().startActivity(ShotDetailActivity.getIntentForActivity(getContext(), inAppId));
     getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
     getActivityDecorView().removeView(getLayout());
   }

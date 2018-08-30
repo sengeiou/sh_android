@@ -282,8 +282,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   }
 
   private void openShotDetail(ShotModel shot) {
-    Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot,
-        sessionRepository.isNewShotDetail());
+    Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
     startActivity(shotIntent);
   }
 

@@ -493,7 +493,7 @@ public class ProfileActivity extends BaseActivity
 
   private void openShot(ShotModel shot) {
     Intent intent =
-        ShotDetailActivity.getIntentForActivity(this, shot, sessionRepository.isNewShotDetail());
+        ShotDetailActivity.getIntentForActivity(this, shot);
     startActivity(intent);
   }
 

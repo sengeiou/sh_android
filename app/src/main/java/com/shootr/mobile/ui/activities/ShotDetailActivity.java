@@ -126,41 +126,22 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   private int screenHeight;
   private String idUser;
 
-  public static Intent getIntentForActivity(Context context, ShotModel shotModel, boolean isNewShotDetail) {
-    if (isNewShotDetail) {
-      Intent intent = new Intent(context, NewShotDetailActivity.class);
-      intent.putExtra(EXTRA_ID_SHOT, shotModel.getIdShot());
-      return intent;
-    } else {
-      Intent intent = new Intent(context, ShotDetailActivity.class);
-      intent.putExtra(EXTRA_SHOT, shotModel);
-      return intent;
-    }
+  public static Intent getIntentForActivity(Context context, ShotModel shotModel) {
+    Intent intent = new Intent(context, NewShotDetailActivity.class);
+    intent.putExtra(EXTRA_ID_SHOT, shotModel.getIdShot());
+    return intent;
   }
 
-  public static Intent getIntentForActivityFromTimeline(Context context, ShotModel shotModel, boolean isNewShotDetail) {
-    if (isNewShotDetail) {
-      Intent intent = new Intent(context, NewShotDetailActivity.class);
-      intent.putExtra(EXTRA_ID_SHOT, shotModel.getIdShot());
-      return intent;
-    } else {
-      Intent intent = new Intent(context, ShotDetailActivity.class);
-      intent.putExtra(EXTRA_SHOT, shotModel);
-      intent.putExtra(EXTRA_IS_IN_TIMELINE, true);
-      return intent;
-    }
+  public static Intent getIntentForActivityFromTimeline(Context context, ShotModel shotModel) {
+    Intent intent = new Intent(context, NewShotDetailActivity.class);
+    intent.putExtra(EXTRA_ID_SHOT, shotModel.getIdShot());
+    return intent;
   }
 
-  public static Intent getIntentForActivity(Context context, String idShot, boolean isNewShotDetail) {
-    if (isNewShotDetail) {
-      Intent intent = new Intent(context, NewShotDetailActivity.class);
-      intent.putExtra(EXTRA_ID_SHOT, idShot);
-      return intent;
-    } else {
-      Intent intent = new Intent(context, ShotDetailActivity.class);
-      intent.putExtra(EXTRA_ID_SHOT, idShot);
-      return intent;
-    }
+  public static Intent getIntentForActivity(Context context, String idShot) {
+    Intent intent = new Intent(context, NewShotDetailActivity.class);
+    intent.putExtra(EXTRA_ID_SHOT, idShot);
+    return intent;
   }
 
   @Override protected int getLayoutResource() {
@@ -313,7 +294,8 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   private int getScreenHeight() {
     try {
       if (screenHeight == 0) {
-        WindowManager wm = (WindowManager) getBaseContext().getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm =
+            (WindowManager) getBaseContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -358,10 +340,10 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
             onShotUsernameClick(username);
           }
         }, //
-        numberFormatUtil,  new OnParentShownListener() {
+        numberFormatUtil, new OnParentShownListener() {
       @Override public void onShown(Integer parentsNumber, Integer repliesNumber) {
-          detailList.addItemDecoration(new EndOffsetItemDecoration((getScreenHeight() / 2)));
-          linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
+        detailList.addItemDecoration(new EndOffsetItemDecoration((getScreenHeight() / 2)));
+        linearLayoutManager.scrollToPositionWithOffset(parentsNumber, 0);
       }
     }, //
         new OnNiceShotListener() {
@@ -469,7 +451,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           }
 
           @Override public void openEditTopicDialog() {
-                  /* no-op */
+            /* no-op */
           }
 
           @Override public void onCheckIn() {
@@ -509,7 +491,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           }
 
           @Override public void openEditTopicDialog() {
-                /* no-op */
+            /* no-op */
           }
         };
   }
@@ -519,8 +501,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void openShot(ShotModel shotModel) {
-    startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel,
-        sessionRepository.isNewShotDetail()));
+    startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel));
   }
 
   @Override public void goToStreamTimeline(String idStream) {
@@ -615,8 +596,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
           }
         });
 
-    bottomYoutubeVideoPlayer.show(getSupportFragmentManager(),
-        bottomYoutubeVideoPlayer.getTag());
+    bottomYoutubeVideoPlayer.show(getSupportFragmentManager(), bottomYoutubeVideoPlayer.getTag());
   }
 
   @OnClick(R.id.shot_bar_text) public void onReplyClick() {
@@ -691,7 +671,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void showHolderOptions() {
-        /* no-op */
+    /* no-op */
   }
 
   @Override public void showPrivateMessageOptions() {
@@ -703,7 +683,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override public void openEditTopicDialog() {
-        /* no-op */
+    /* no-op */
   }
 
   @Override public void showDraftsButton() {
@@ -750,5 +730,4 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
       }
     }
   }
-
 }

@@ -196,14 +196,6 @@ public class SessionRepositoryImpl implements SessionRepository {
     return bootstrappingPreferences.get().getLogsUrl();
   }
 
-  @Override public boolean isNewTimeline() {
-    return true;
-  }
-
-  @Override public boolean isNewShotDetail() {
-    return true;
-  }
-
   @Override public boolean isPromotedShotActivated() {
     return bootstrappingPreferences.get().isSuperShot();
   }

@@ -526,8 +526,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   private void goToShotDetail(ShotModel shot) {
-    Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot,
-        sessionRepository.isNewShotDetail());
+    Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
     startActivity(intent);
   }
 
