@@ -4,7 +4,7 @@ import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.TimelineItem;
 import com.shootr.mobile.domain.model.stream.Stream;
 
-public class NewShotDetail {
+public class ShotDetail {
 
   private PrintableItem shot;
   private TimelineItem parents;

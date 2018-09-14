@@ -13,7 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.shootr.mobile.R;
-import com.shootr.mobile.ui.activities.NewShotDetailActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.util.ImageLoader;
 import java.lang.ref.WeakReference;
 
@@ -199,7 +199,7 @@ public class InAppNotificationView implements View.OnClickListener {
   }
 
   @Override public void onClick(View view) {
-    getContext().startActivity(NewShotDetailActivity.getIntentForActivity(getContext(), inAppId));
+    getContext().startActivity(ShotDetailActivity.getIntentForActivity(getContext(), inAppId));
     getLayout().startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.hide_in_app));
     getActivityDecorView().removeView(getLayout());
   }

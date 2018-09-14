@@ -19,7 +19,7 @@ import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
 import com.shootr.mobile.ui.activities.HistoryActivity;
 import com.shootr.mobile.ui.activities.ListingActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
-import com.shootr.mobile.ui.activities.NewShotDetailActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.NicersActivity;
 import com.shootr.mobile.ui.activities.OnBoardingStreamActivity;
@@ -92,7 +92,7 @@ import javax.inject.Singleton;
     ChannelsContainerActivity.class, FollowingChannelListFragment.class, MessageBox.class,
     OnBoardingStreamActivity.class, OnBoardingUserActivity.class, GenericSearchFragment.class,
     ChannelsContainerFragment.class, ShareStreamActivity.class, PollOptionVotedActivity.class,
-    HiddenPollResultsActivity.class, HistoryActivity.class, NewShotDetailActivity.class,
+    HiddenPollResultsActivity.class, HistoryActivity.class, ShotDetailActivity.class,
     PrivacyLawActivity.class, PostPromotedShotActivity.class, PromotedMessageBox.class,
     PromotedShotInfoDialog.class, PromotedShotIntroActivity.class, PromotedShotActivationInfoDialog.class,
   SearchStreamToShareFragment.class, SearchToShareActivity.class, PromotedTermsDialog.class

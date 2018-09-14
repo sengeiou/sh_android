@@ -7,7 +7,7 @@ import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.remote.cache.ShotDetailCache;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
-import com.shootr.mobile.domain.model.shot.NewShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
@@ -143,7 +143,7 @@ public class LocalShotRepository implements InternalShotRepository {
     return localShotDataSource.hasNewFilteredShots(idStream, lastTimeFiltered, sessionRepository.getCurrentUserId());
   }
 
-  @Override public NewShotDetail getCachedShotDetail(String idShot) {
+  @Override public ShotDetail getCachedShotDetail(String idShot) {
     return shotDetailCache.getShot(idShot);
   }
 }

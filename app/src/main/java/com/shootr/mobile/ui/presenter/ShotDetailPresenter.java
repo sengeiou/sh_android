@@ -21,7 +21,7 @@ import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.ShotDetailSocketMessage;
 import com.shootr.mobile.domain.model.SocketMessage;
 import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
-import com.shootr.mobile.domain.model.shot.NewShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
@@ -37,7 +37,7 @@ import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver {
+public class ShotDetailPresenter implements Presenter, EventReceived.Receiver {
 
   private final GetNewShotDetailInteractor getNewShotDetailInteractor;
   private final GetCachedShotDetailInteractor getCachedShotDetailInteractor;
@@ -63,7 +63,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
   private boolean hasBeenPaused = false;
   private boolean showingParents = false;
 
-  @Inject public NewShotDetailPresenter(GetNewShotDetailInteractor getNewShotDetailInteractor,
+  @Inject public ShotDetailPresenter(GetNewShotDetailInteractor getNewShotDetailInteractor,
       GetCachedShotDetailInteractor getCachedShotDetailInteractor,
       SubscribeShotDetailInteractor subscribeShotDetailInteractor,
       UnsubscribeShotDetailInteractor unsubscribeShotDetailInteractor, MarkNiceShotInteractor markNiceShotInteractor,
@@ -101,8 +101,8 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
   }
 
   private void getCachedShotDetail() {
-    getCachedShotDetailInteractor.getTimeline(idShot, new Interactor.Callback<NewShotDetail>() {
-      @Override public void onLoaded(NewShotDetail shotDetail) {
+    getCachedShotDetailInteractor.getTimeline(idShot, new Interactor.Callback<ShotDetail>() {
+      @Override public void onLoaded(ShotDetail shotDetail) {
         if (shotDetail != null) {
           renderShotDetail(shotDetail);
         }
@@ -129,7 +129,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
     });
   }
 
-  private void renderShotDetail(NewShotDetail shotDetail) {
+  private void renderShotDetail(ShotDetail shotDetail) {
     view.hideLoading();
     mainShot = shotModelMapper.transform((Shot) shotDetail.getShot());
     initializeNewShotBarDelegate(mainShot, streamModelMapper.transform(shotDetail.getStream()));
@@ -162,7 +162,7 @@ public class NewShotDetailPresenter implements Presenter, EventReceived.Receiver
     }
   }
 
-  private void setupNewShotBox(NewShotDetail shotDetail) {
+  private void setupNewShotBox(ShotDetail shotDetail) {
     if (shotDetail.getStream().canWrite()) {
       view.showNewShotTextBox();
     } else {

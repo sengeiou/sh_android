@@ -61,7 +61,7 @@ import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.FloatingVideoService;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
-import com.shootr.mobile.ui.activities.NewShotDetailActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
@@ -526,7 +526,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   private void goToShotDetail(ShotModel shot) {
-    Intent intent = NewShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
+    Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
     startActivity(intent);
   }
 

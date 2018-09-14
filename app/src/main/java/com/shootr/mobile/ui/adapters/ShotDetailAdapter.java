@@ -36,7 +36,7 @@ import com.shootr.mobile.util.TimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewShotDetailAdapter extends RecyclerAdapter {
+public class ShotDetailAdapter extends RecyclerAdapter {
 
   private final ImageLoader imageLoader;
   private final NumberFormatUtil numberFormatUtil;
@@ -71,7 +71,7 @@ public class NewShotDetailAdapter extends RecyclerAdapter {
   private PayloadProvider<PrintableModel> payloadProvider;
   private List<PrintableModel> parentsList;
 
-  public NewShotDetailAdapter(ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
+  public ShotDetailAdapter(ImageLoader imageLoader, NumberFormatUtil numberFormatUtil,
       OnUsernameClickListener onUsernameClickListener, OnAvatarClickListener avatarClickListener,
       OnVideoClickListener videoClickListener, TimeFormatter timeFormatter, Resources resources,
       OnNiceShotListener onNiceShotListener, OnUrlClickListener onUrlClickListener,

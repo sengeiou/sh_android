@@ -1,6 +1,6 @@
 package com.shootr.mobile.data.entity;
 
-public class NewShotDetailEntity {
+public class ShotDetailEntity {
 
   private PrintableItemEntity item;
   private ItemsEntity parents;

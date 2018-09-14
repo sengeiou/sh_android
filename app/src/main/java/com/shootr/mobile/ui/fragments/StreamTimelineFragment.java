@@ -48,7 +48,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
-import com.shootr.mobile.ui.activities.NewShotDetailActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
@@ -637,7 +637,7 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }, new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
-        Intent intent = NewShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
+        Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
         startActivity(intent);
       }
     }, new OnShotLongClick() {

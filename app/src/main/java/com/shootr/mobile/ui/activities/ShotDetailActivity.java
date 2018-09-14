@@ -21,7 +21,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.dagger.TemporaryFilesDir;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
-import com.shootr.mobile.ui.adapters.NewShotDetailAdapter;
+import com.shootr.mobile.ui.adapters.ShotDetailAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnImageLongClickListener;
@@ -42,7 +42,7 @@ import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
-import com.shootr.mobile.ui.presenter.NewShotDetailPresenter;
+import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
 import com.shootr.mobile.ui.views.NewShotDetailView;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
@@ -66,7 +66,7 @@ import java.util.List;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
+public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     implements NewShotDetailView, NewShotBarView {
 
   public static final String EXTRA_SHOT = "shot";
@@ -106,7 +106,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   @Inject TimeFormatter timeFormatter;
   @Inject NumberFormatUtil numberFormatUtil;
   @Inject AndroidTimeUtils timeUtils;
-  @Inject NewShotDetailPresenter detailPresenter;
+  @Inject ShotDetailPresenter detailPresenter;
   @Inject NewShotBarPresenter newShotBarPresenter;
   @Inject ShareManager shareManager;
   @Inject FeedbackMessage feedbackMessage;
@@ -120,7 +120,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
 
   private PhotoPickerController photoPickerController;
   private NewShotBarViewDelegate newShotBarViewDelegate;
-  private NewShotDetailAdapter detailAdapter;
+  private ShotDetailAdapter detailAdapter;
 
   private MenuItemValueHolder copyShotMenuItem = new MenuItemValueHolder();
   private MenuItemValueHolder reshootMenuItem = new MenuItemValueHolder();
@@ -131,7 +131,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   private ShotModel mainShot;
 
   public static Intent getIntentForActivity(Context context, String idShot) {
-    Intent intent = new Intent(context, NewShotDetailActivity.class);
+    Intent intent = new Intent(context, ShotDetailActivity.class);
     intent.putExtra(EXTRA_ID_SHOT, idShot);
     return intent;
   }
@@ -218,7 +218,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   private void setupAdapter() {
 
     detailAdapter =
-        new NewShotDetailAdapter(imageLoader, numberFormatUtil, new OnUsernameClickListener() {
+        new ShotDetailAdapter(imageLoader, numberFormatUtil, new OnUsernameClickListener() {
           @Override public void onUsernameClick(String username) {
             /* no-op */
           }
@@ -358,7 +358,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
 
             @Override public void onNewShotClick() {
               Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                  .from(NewShotDetailActivity.this) //
+                  .from(ShotDetailActivity.this) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
                   .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
               startActivity(newShotIntent);
@@ -366,7 +366,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
 
             @Override public void onShotWithImageClick(File image) {
               Intent newShotIntent = PostNewShotActivity.IntentBuilder //
-                  .from(NewShotDetailActivity.this) //
+                  .from(ShotDetailActivity.this) //
                   .withImage(image) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
                   .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).build();
@@ -387,7 +387,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
 
             @Override public void onPromotedClick() {
               Intent newShotIntent = PostPromotedShotActivity.IntentBuilder //
-                  .from(NewShotDetailActivity.this) //
+                  .from(ShotDetailActivity.this) //
                   .inReplyTo(shotModel.getIdShot(), shotModel.getUsername()) //
                   .setStreamData(shotModel.getStreamId(), shotModel.getStreamTitle()).setStream(streamModel).build();
               startActivity(newShotIntent);
@@ -452,7 +452,7 @@ public class NewShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   private void openShot(ShotModel shotModel) {
-    startActivity(NewShotDetailActivity.getIntentForActivity(this, shotModel.getIdShot()));
+    startActivity(ShotDetailActivity.getIntentForActivity(this, shotModel.getIdShot()));
   }
 
   private void goToNicers(String idShot) {

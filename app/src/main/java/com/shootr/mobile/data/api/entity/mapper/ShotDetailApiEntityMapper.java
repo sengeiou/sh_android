@@ -2,7 +2,7 @@ package com.shootr.mobile.data.api.entity.mapper;
 
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.ShotDetailApiEntity;
-import com.shootr.mobile.data.entity.NewShotDetailEntity;
+import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.RepliesEntity;
 import javax.inject.Inject;
 
@@ -17,9 +17,9 @@ public class ShotDetailApiEntityMapper {
     this.dataApiEntityMapper = dataApiEntityMapper;
   }
 
-  public NewShotDetailEntity transform(ShotDetailApiEntity shot) {
+  public ShotDetailEntity transform(ShotDetailApiEntity shot) {
 
-    NewShotDetailEntity entity = new NewShotDetailEntity();
+    ShotDetailEntity entity = new ShotDetailEntity();
     RepliesEntity  repliesEntity = new RepliesEntity();
 
     entity.setItem(shotApiEntityMapper.transform((ShotApiEntity) shot.getItem()));

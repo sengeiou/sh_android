@@ -401,7 +401,7 @@ public class AllShotsActivity extends BaseToolbarDecoratedActivity
 
   private void openShot(ShotModel shot) {
     Intent intent =
-        NewShotDetailActivity.getIntentForActivity(this, shot.getIdShot());
+        ShotDetailActivity.getIntentForActivity(this, shot.getIdShot());
     startActivity(intent);
   }
 

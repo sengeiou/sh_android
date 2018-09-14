@@ -9,7 +9,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.CommonNotification;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
-import com.shootr.mobile.ui.activities.NewShotDetailActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.model.ShotModel;
 
 public abstract class AbstractSingleShotNotification extends CommonNotification {
@@ -41,7 +41,7 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
         Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
-        intent.putExtra(NewShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
+        intent.putExtra(ShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
