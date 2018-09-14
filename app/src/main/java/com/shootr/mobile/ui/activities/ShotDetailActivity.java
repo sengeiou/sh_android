@@ -44,7 +44,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.presenter.NewShotBarPresenter;
 import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.views.NewShotBarView;
-import com.shootr.mobile.ui.views.NewShotDetailView;
+import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.ui.widgets.PromotedMessageBox;
 import com.shootr.mobile.ui.widgets.PromotedShotActivationInfoDialog;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -67,7 +67,7 @@ import javax.inject.Inject;
 import timber.log.Timber;
 
 public class ShotDetailActivity extends BaseToolbarDecoratedActivity
-    implements NewShotDetailView, NewShotBarView {
+    implements ShotDetailView, NewShotBarView {
 
   public static final String EXTRA_SHOT = "shot";
   public static final String EXTRA_ID_SHOT = "idShot";

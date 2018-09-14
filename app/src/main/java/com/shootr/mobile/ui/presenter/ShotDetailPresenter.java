@@ -29,7 +29,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.mappers.PrintableModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
 import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
-import com.shootr.mobile.ui.views.NewShotDetailView;
+import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -56,7 +56,7 @@ public class ShotDetailPresenter implements Presenter, EventReceived.Receiver {
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
 
-  private NewShotDetailView view;
+  private ShotDetailView view;
   private String idShot;
   private ShotModel mainShot;
   private StreamModel streamModel;
@@ -92,7 +92,7 @@ public class ShotDetailPresenter implements Presenter, EventReceived.Receiver {
     this.bus = bus;
   }
 
-  public void initialize(NewShotDetailView view, String idShot) {
+  public void initialize(ShotDetailView view, String idShot) {
     this.view = view;
     this.idShot = idShot;
     storeViewCount();

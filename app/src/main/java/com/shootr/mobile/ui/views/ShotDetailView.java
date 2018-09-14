@@ -5,7 +5,7 @@ import com.shootr.mobile.ui.model.ShotModel;
 import com.shootr.mobile.ui.model.StreamModel;
 import java.util.List;
 
-public interface NewShotDetailView {
+public interface ShotDetailView {
 
   void renderShotDetail(List<PrintableModel> mainShot, List<PrintableModel> promotedItem,
       List<PrintableModel> subscribersItem, List<PrintableModel> basicItems,
