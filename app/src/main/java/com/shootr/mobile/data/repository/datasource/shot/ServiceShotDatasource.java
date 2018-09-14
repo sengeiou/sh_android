@@ -2,7 +2,6 @@ package com.shootr.mobile.data.repository.datasource.shot;
 
 import android.support.annotation.NonNull;
 import com.shootr.mobile.data.api.SocketApi;
-import com.shootr.mobile.data.api.entity.CreateAHighlightedShotEntity;
 import com.shootr.mobile.data.api.entity.ProfileShotTimelineApiEntity;
 import com.shootr.mobile.data.api.entity.ShotApiEntity;
 import com.shootr.mobile.data.api.entity.mapper.ProfileShotTimelineApiEntityMapper;
@@ -13,7 +12,6 @@ import com.shootr.mobile.data.api.service.ShotApiService;
 import com.shootr.mobile.data.entity.HighlightedShotApiEntity;
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
-import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.mapper.HighlightedShotEntityMapper;
 import com.shootr.mobile.domain.exception.ServerCommunicationException;
@@ -121,17 +119,6 @@ public class ServiceShotDatasource implements ShotDataSource {
     }
   }
 
-  @Override
-  public List<ShotEntity> getReplies(String shotId, String[] streamTypes, String[] shotTypes) {
-    try {
-      ShotApiEntity shot = shotApiService.getShotWithReplies(shotId, streamTypes, shotTypes);
-      List<ShotApiEntity> replies = shot.getReplies();
-      return shotApiEntityMapper.transform(replies);
-    } catch (IOException | ApiException error) {
-      throw new ServerCommunicationException(error);
-    }
-  }
-
   @Override public List<ShotEntity> getStreamMediaShots(String idStream,
       Long maxTimestamp, String[] streamTypes, String[] shotTypes) {
     try {
@@ -152,37 +139,6 @@ public class ServiceShotDatasource implements ShotDataSource {
       return shotApiEntityMapper.transform(userApiShots);
     } catch (ApiException | IOException error) {
       throw new ServerCommunicationException(error);
-    }
-  }
-
-  @Override
-  public ShotDetailEntity getShotDetail(String idShot, String[] streamTypes, String[] shotTypes)
-      throws ShotNotFoundException {
-    try {
-      if (idShot == null) {
-        throw new ApiException(ErrorInfo.ResourceNotFoundException);
-      }
-      ShotApiEntity shotApiEntity = shotApiService.getShotDetail(idShot, streamTypes, shotTypes);
-
-      ShotEntity shotEntity = shotApiEntityMapper.transform(shotApiEntity);
-      List<ShotEntity> repliesEntities = shotApiEntityMapper.transform(shotApiEntity.getReplies());
-
-      ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
-      shotDetailEntity.setShot(shotEntity);
-      shotDetailEntity.setReplies(repliesEntities);
-      if (shotApiEntity.getParent() != null) {
-        List<ShotEntity> parentEntities = shotApiEntityMapper.transform(shotApiEntity.getThread());
-        shotDetailEntity.setParents(parentEntities);
-      }
-      return shotDetailEntity;
-    } catch (IOException e) {
-      throw new ServerCommunicationException(e);
-    } catch (ApiException e) {
-      if (e.getErrorInfo() == ErrorInfo.ResourceNotFoundException) {
-        throw new ShotNotFoundException(e);
-      } else {
-        throw new ServerCommunicationException(e);
-      }
     }
   }
 
@@ -334,22 +290,6 @@ public class ServiceShotDatasource implements ShotDataSource {
       HighlightedShotEntity highlightedShotEntity) {
     return localHighlightedShot != null && localHighlightedShot.getIdHighlightedShot()
         .equals(highlightedShotEntity.getIdHighlightedShot());
-  }
-
-  @Override public HighlightedShotEntity highlightShot(String idShot) {
-    CreateAHighlightedShotEntity createAHighlightedShotEntity = new CreateAHighlightedShotEntity();
-    createAHighlightedShotEntity.setIdShot(idShot);
-    try {
-      HighlightedShotApiEntity createdhighlightedShotApiEntity =
-          shotApiService.postHighlightedShotEntity(createAHighlightedShotEntity);
-      HighlightedShotEntity highlightedShotEntity =
-          highlightedShotEntityMapper.transform(createdhighlightedShotApiEntity);
-      highlightedShotEntity.setVisible(true);
-      databaseShotDataSource.putHighlightShot(highlightedShotEntity);
-      return highlightedShotEntityMapper.transform(createdhighlightedShotApiEntity);
-    } catch (ApiException | IOException e) {
-      throw new ServerCommunicationException(e);
-    }
   }
 
   @Override public void putHighlightShot(HighlightedShotEntity highlightedShotApiEntity) {

@@ -2,7 +2,6 @@ package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
-import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.repository.datasource.SyncableDataSource;
 import com.shootr.mobile.domain.exception.UserAlreadyCheckInRequestException;
@@ -24,15 +23,11 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
 
   ShotEntity getShot(String shotId, String[] streamTypes, String[] shotTypes);
 
-  List<ShotEntity> getReplies(String shotId, String[] streamTypes, String[] shotTypes);
-
   List<ShotEntity> getStreamMediaShots(String idStream, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes);
 
   List<ShotEntity> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,
       String[] shotTypes);
-
-  ShotDetailEntity getShotDetail(String idShot, String[] streamTypes, String[] shotTypes);
 
   List<ShotEntity> getAllShotsFromUser(String userId, String[] streamTypes, String[] shotTypes);
 
@@ -56,8 +51,6 @@ public interface ShotDataSource extends SyncableDataSource<ShotEntity> {
   void unhideShot(String idShot);
 
   HighlightedShotEntity getHighlightedShot(String idStream);
-
-  HighlightedShotEntity highlightShot(String idShot);
 
   void putHighlightShot(HighlightedShotEntity highlightedShotEntity);
 
