@@ -38,7 +38,6 @@ import com.shootr.mobile.ui.activities.SearchActivity;
 import com.shootr.mobile.ui.activities.SearchToShareActivity;
 import com.shootr.mobile.ui.activities.SettingsActivity;
 import com.shootr.mobile.ui.activities.ShareStreamActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.activities.StreamMediaActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
@@ -78,7 +77,7 @@ import javax.inject.Singleton;
     BaseToolbarActivity.class, LoginSelectionActivity.class, EmailLoginActivity.class,
     EmailRegistrationActivity.class, PostNewShotActivity.class, ProfileActivity.class,
     UserFollowsContainerActivity.class, StreamDetailActivity.class, ProfileEditActivity.class,
-    ShotDetailActivity.class, PhotoViewActivity.class, StreamTimelineActivity.class,
+    PhotoViewActivity.class, StreamTimelineActivity.class,
     WatchersView.class, NewStreamActivity.class, StreamMediaActivity.class,
     UpdateWarningActivity.class, DraftsActivity.class, DraftsPresenter.class,
     MainTabbedActivity.class, ResetPasswordActivity.class, ListingActivity.class,

@@ -11,7 +11,7 @@ import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.mobile.notifications.gcm.PushNotification;
 import com.shootr.mobile.notifications.shot.ShotNotification;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
+import com.shootr.mobile.ui.activities.NewShotDetailActivity;
 import com.shootr.mobile.util.ImageLoader;
 
 public class ShotActivityNotification extends SingleActivityNotification {
@@ -45,7 +45,7 @@ public class ShotActivityNotification extends SingleActivityNotification {
   private PendingIntent getShotNotificationPendingIntent() {
     if (!updateNeeded) {
       Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
-      intent.putExtra(ShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
+      intent.putExtra(NewShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
           PendingIntent.FLAG_CANCEL_CURRENT);
     } else {

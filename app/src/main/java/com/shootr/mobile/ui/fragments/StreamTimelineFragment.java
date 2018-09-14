@@ -48,6 +48,7 @@ import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
+import com.shootr.mobile.ui.activities.NewShotDetailActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
@@ -55,7 +56,6 @@ import com.shootr.mobile.ui.activities.PollResultsActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PostNewShotActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.ShotsTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
@@ -637,7 +637,7 @@ public class StreamTimelineFragment extends BaseFragment
           }
         }, new ShotClickListener() {
       @Override public void onClick(ShotModel shot) {
-        Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot);
+        Intent intent = NewShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
         startActivity(intent);
       }
     }, new OnShotLongClick() {

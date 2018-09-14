@@ -13,10 +13,10 @@ import com.shootr.mobile.notifications.message.MessageNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
+import com.shootr.mobile.ui.activities.NewShotDetailActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.PrivateMessageTimelineFragment;
 import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
@@ -152,8 +152,8 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
   public void openShotDetail(Context context, Intent intent) {
     decrementBadgeCount();
-    String idShot = (String) intent.getExtras().get(ShotDetailActivity.EXTRA_ID_SHOT);
-    startActivityFromIntent(context, ShotDetailActivity.getIntentForActivity(context, idShot)
+    String idShot = (String) intent.getExtras().get(NewShotDetailActivity.EXTRA_ID_SHOT);
+    startActivityFromIntent(context, NewShotDetailActivity.getIntentForActivity(context, idShot)
         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 

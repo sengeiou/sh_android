@@ -34,10 +34,10 @@ import com.shootr.mobile.data.prefs.ActivityShowcase;
 import com.shootr.mobile.data.prefs.BooleanPreference;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.activities.HistoryActivity;
+import com.shootr.mobile.ui.activities.NewShotDetailActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.SearchActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.adapters.ActivityTimelineAdapter;
 import com.shootr.mobile.ui.adapters.listeners.ActivityFavoriteClickListener;
@@ -282,7 +282,7 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
   }
 
   private void openShotDetail(ShotModel shot) {
-    Intent shotIntent = ShotDetailActivity.getIntentForActivity(getActivity(), shot);
+    Intent shotIntent = NewShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
     startActivity(shotIntent);
   }
 

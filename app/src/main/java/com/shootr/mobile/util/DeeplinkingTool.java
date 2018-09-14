@@ -4,9 +4,9 @@ import android.content.Context;
 import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
+import com.shootr.mobile.ui.activities.NewShotDetailActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,13 +78,13 @@ public class DeeplinkingTool implements DeeplinkingNavigator {
       context.startActivity(StreamTimelineActivity.newIntent(context, removeLocale(idStream)));
     } else if (matcherShareShotHttp.find()) {
       String idShot = address.substring(matcherShareShotHttp.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+      context.startActivity(NewShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherShareShotHttps.find()) {
       String idShot = address.substring(matcherShareShotHttps.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+      context.startActivity(NewShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherShareShotShootr.find()) {
       String idShot = address.substring(matcherShareShotShootr.end());
-      context.startActivity(ShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
+      context.startActivity(NewShotDetailActivity.getIntentForActivity(context, removeLocale(idShot)));
     } else if (matcherSharePollHttps.find()) {
       String idPoll = address.substring(matcherSharePollHttps.end());
       context.startActivity(
