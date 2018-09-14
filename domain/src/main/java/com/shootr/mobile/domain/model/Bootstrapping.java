@@ -5,14 +5,12 @@ public class Bootstrapping {
   private Socket socket;
   private boolean timelineConnection;
   private boolean socketConnection;
-  private boolean shotDetailConnection;
   private boolean superShot;
   private String logsUrl;
 
   public Bootstrapping() {
     this.timelineConnection = false;
     this.socketConnection = false;
-    this.shotDetailConnection = false;
     this.superShot = false;
   }
 
@@ -46,14 +44,6 @@ public class Bootstrapping {
 
   public void setLogsUrl(String logsUrl) {
     this.logsUrl = logsUrl;
-  }
-
-  public boolean isShotDetailConnection() {
-    return shotDetailConnection;
-  }
-
-  public void setShotDetailConnection(boolean shotDetailConnection) {
-    this.shotDetailConnection = shotDetailConnection;
   }
 
   public boolean isSuperShot() {
