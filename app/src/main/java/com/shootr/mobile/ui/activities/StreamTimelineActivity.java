@@ -11,7 +11,6 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.base.BaseFragment;
-import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
 import com.shootr.mobile.ui.fragments.streamtimeline.TimelineFragment;
 import com.shootr.mobile.util.BackStackHandler;
 import dagger.ObjectGraph;
@@ -23,17 +22,16 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
     @Inject SessionRepository sessionRepository;
     private Fragment currentFragment;
 
-    public static Intent newIntent(Context context, String streamId, String streamTitle, String authorId) {
+    public static Intent newIntent(Context context, String streamId, String streamTitle) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
-        intent.putExtra(StreamTimelineFragment.EXTRA_ID_USER, authorId);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, streamTitle);
+        intent.putExtra(TimelineFragment.EXTRA_STREAM_ID, streamId);
+        intent.putExtra(TimelineFragment.EXTRA_STREAM_TITLE, streamTitle);
         return intent;
     }
 
     public static Intent newIntent(Context context, String streamId) {
         Intent intent = new Intent(context, StreamTimelineActivity.class);
-        intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, streamId);
+        intent.putExtra(TimelineFragment.EXTRA_STREAM_ID, streamId);
         return intent;
     }
 
@@ -72,14 +70,14 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
                 setupTimelineFragment(fragmentAlreadyAddedBySystem, streamTimelineFragment);
             } else {
                 Bundle fragmentArguments = getIntent().getExtras();
-                StreamTimelineFragment streamTimelineFragment =
-                    StreamTimelineFragment.newInstance(fragmentArguments);
+                TimelineFragment streamTimelineFragment =
+                    TimelineFragment.newInstance(fragmentArguments);
                 setupTimelineFragment(fragmentAlreadyAddedBySystem, streamTimelineFragment);
             }
         } else {
             Bundle fragmentArguments = getIntent().getExtras();
-            StreamTimelineFragment streamTimelineFragment =
-                StreamTimelineFragment.newInstance(fragmentArguments);
+            TimelineFragment streamTimelineFragment =
+                TimelineFragment.newInstance(fragmentArguments);
             setupTimelineFragment(fragmentAlreadyAddedBySystem, streamTimelineFragment);
         }
     }
@@ -88,7 +86,7 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
         if (!fragmentAlreadyAddedBySystem) {
             currentFragment = baseFragment;
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.container, baseFragment, StreamTimelineFragment.TAG);
+            transaction.add(R.id.container, baseFragment, TimelineFragment.TAG);
             transaction.commit();
         }
     }
@@ -122,8 +120,8 @@ public class StreamTimelineActivity extends BaseToolbarDecoratedActivity {
         @NonNull int[] grantResults) {
         if (requestCode == 1) {
             if (grantResults.length > 0) {
-                if (currentFragment instanceof StreamTimelineFragment) {
-                    ((StreamTimelineFragment) currentFragment).pickImage();
+                if (currentFragment instanceof TimelineFragment) {
+                    ((TimelineFragment) currentFragment).pickImage();
                 }
             }
         }

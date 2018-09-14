@@ -38,7 +38,7 @@ public class WakeUpShotActivityViewHolder extends GenericActivityViewHolder {
     itemView.setOnClickListener(new View.OnClickListener() {
       @Override public void onClick(View view) {
         streamTitleClickListener.onStreamTitleClick(activity.getIdStream(),
-            activity.getStreamTitle(), activity.getIdStreamAuthor());
+            activity.getStreamTitle());
       }
     });
 

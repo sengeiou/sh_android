@@ -115,7 +115,7 @@ public class SearchStreamToShareFragment extends BaseFragment
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
-        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
+        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle());
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
@@ -151,7 +151,7 @@ public class SearchStreamToShareFragment extends BaseFragment
   }
 
   @Override
-  public void navigateToStreamTimeline(String idStream, String streamTitle, String authorId) {
+  public void navigateToStreamTimeline(String idStream, String streamTitle) {
     currentIdStream = idStream;
     currentStreamTitle = streamTitle;
     Intent newShotIntent = PostNewShotActivity.IntentBuilder //

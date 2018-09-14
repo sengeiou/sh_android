@@ -159,7 +159,7 @@ public class FollowFragment extends BaseFragment
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
         followPresenter.selectStream(stream);
-        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
+        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle());
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
@@ -180,8 +180,8 @@ public class FollowFragment extends BaseFragment
     userList.setAdapter(adapter);
   }
 
-  private void navigateToStreamTimeline(String idStream, String streamTitle, String authorId) {
-    startActivity(StreamTimelineActivity.newIntent(getContext(), idStream, streamTitle, authorId));
+  private void navigateToStreamTimeline(String idStream, String streamTitle) {
+    startActivity(StreamTimelineActivity.newIntent(getContext(), idStream, streamTitle));
   }
 
   private void unfollowUser(UserModel user) {

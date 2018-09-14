@@ -105,7 +105,7 @@ public class GenericSearchFragment extends BaseFragment
       }
     }, new OnSearchStreamClickListener() {
       @Override public void onStreamClick(StreamModel stream) {
-        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
+        navigateToStreamTimeline(stream.getIdStream(), stream.getTitle());
       }
 
       @Override public void onStreamLongClick(StreamModel stream) {
@@ -286,8 +286,8 @@ public class GenericSearchFragment extends BaseFragment
 
 
   @Override
-  public void navigateToStreamTimeline(String idStream, String streamTitle, String authorId) {
-    startActivity(StreamTimelineActivity.newIntent(getContext(), idStream, streamTitle, authorId));
+  public void navigateToStreamTimeline(String idStream, String streamTitle) {
+    startActivity(StreamTimelineActivity.newIntent(getContext(), idStream, streamTitle));
   }
 
   @Override public void showAddedToFavorites(StreamModel streamModel) {

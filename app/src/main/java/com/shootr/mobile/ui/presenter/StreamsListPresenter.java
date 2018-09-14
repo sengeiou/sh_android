@@ -93,24 +93,11 @@ public class StreamsListPresenter implements Presenter, UnwatchDone.Receiver, St
   }
 
   public void selectStream(StreamModel stream) {
-    selectStream(stream.getIdStream(), stream.getTitle(), stream.getAuthorId());
+    selectStream(stream.getIdStream(), stream.getTitle());
   }
 
-  private void selectStream(final String idStream, String streamTag, String authorId) {
-    streamsListView.navigateToStreamTimeline(idStream, streamTag, authorId);
-  }
-
-  public void unwatchStream() {
-    unwatchStreamInteractor.unwatchStream(new Interactor.CompletedCallback() {
-      @Override public void onCompleted() {
-        loadLandingStreams();
-        removeCurrentWatchingStream();
-      }
-    });
-  }
-
-  private void removeCurrentWatchingStream() {
-    streamsListView.setCurrentWatchingStreamId(null);
+  private void selectStream(final String idStream, String streamTag) {
+    streamsListView.navigateToStreamTimeline(idStream, streamTag);
   }
 
   public void loadLandingStreams() {

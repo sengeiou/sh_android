@@ -10,7 +10,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.notifications.NotificationBuilderFactory;
 import com.shootr.mobile.notifications.gcm.NotificationIntentReceiver;
 import com.shootr.mobile.notifications.gcm.PushNotification;
-import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
+import com.shootr.mobile.ui.fragments.streamtimeline.TimelineFragment;
 import com.shootr.mobile.util.ImageLoader;
 
 public class StreamActivityNotification extends SingleActivityNotification {
@@ -50,10 +50,9 @@ public class StreamActivityNotification extends SingleActivityNotification {
   private PendingIntent getOpenStreamTimelineNotificationPendingIntent() {
     if (!updateNeeded) {
       Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_STREAM);
-      intent.putExtra(StreamTimelineFragment.EXTRA_ID_USER, idStreamHolder);
-      intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_ID, idStream);
-      intent.putExtra(StreamTimelineFragment.EXTRA_STREAM_TITLE, title);
-      intent.putExtra(StreamTimelineFragment.EXTRA_READ_WRITE_MODE, readWriteMode);
+      intent.putExtra(TimelineFragment.EXTRA_STREAM_ID, idStream);
+      intent.putExtra(TimelineFragment.EXTRA_STREAM_TITLE, title);
+
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
           PendingIntent.FLAG_CANCEL_CURRENT);
     } else {

@@ -150,6 +150,7 @@ public class TimelineFragment extends BaseFragment
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   private static final int DRAW_OVER_OTHER_APP_PERMISSION_REQUEST_CODE = 1222;
+  public static final String TAG = "timeline";
 
   private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
 

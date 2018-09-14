@@ -173,8 +173,8 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
         }, //
         new OnStreamTitleClickListener() {
           @Override
-          public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
-            openStream(streamId, streamTitle, authorId);
+          public void onStreamTitleClick(String streamId, String streamTitle) {
+            openStream(streamId, streamTitle);
           }
         }, //
         new OnShotClick() {
@@ -270,9 +270,9 @@ public class ActivityTimelineFragment extends BaseFragment implements ActivityTi
     startActivity(profileIntent);
   }
 
-  protected void openStream(String idStream, String streamTitle, String authorId) {
+  protected void openStream(String idStream, String streamTitle) {
     Intent streamIntent =
-        StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle, authorId);
+        StreamTimelineActivity.newIntent(getActivity(), idStream, streamTitle);
     startActivity(streamIntent);
   }
 

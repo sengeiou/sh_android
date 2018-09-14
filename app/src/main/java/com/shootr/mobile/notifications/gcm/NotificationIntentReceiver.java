@@ -13,13 +13,13 @@ import com.shootr.mobile.notifications.message.MessageNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotificationManager;
 import com.shootr.mobile.ui.activities.ChannelsContainerActivity;
 import com.shootr.mobile.ui.activities.MainTabbedActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.PollVoteActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamTimelineActivity;
 import com.shootr.mobile.ui.fragments.PrivateMessageTimelineFragment;
-import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
+import com.shootr.mobile.ui.fragments.streamtimeline.TimelineFragment;
 import com.shootr.mobile.util.AnalyticsTool;
 import javax.inject.Inject;
 
@@ -142,11 +142,10 @@ public class NotificationIntentReceiver extends BroadcastReceiver {
 
   public void openStream(Context context, Intent intent) {
     decrementBadgeCount();
-    String idStream = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_ID);
-    String idStreamHolder = intent.getExtras().getString(StreamTimelineFragment.EXTRA_ID_USER);
-    String title = intent.getExtras().getString(StreamTimelineFragment.EXTRA_STREAM_TITLE);
+    String idStream = intent.getExtras().getString(TimelineFragment.EXTRA_STREAM_ID);
+    String title = intent.getExtras().getString(TimelineFragment.EXTRA_STREAM_TITLE);
     startActivityFromIntent(context,
-        StreamTimelineActivity.newIntent(context, idStream, title, idStreamHolder)
+        StreamTimelineActivity.newIntent(context, idStream, title)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
   }
 
