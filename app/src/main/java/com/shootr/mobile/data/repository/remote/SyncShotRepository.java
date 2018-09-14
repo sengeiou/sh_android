@@ -2,7 +2,6 @@ package com.shootr.mobile.data.repository.remote;
 
 import com.shootr.mobile.data.api.SocketApi;
 import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
-import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.data.entity.Synchronized;
 import com.shootr.mobile.data.entity.UserEntity;
@@ -20,7 +19,6 @@ import com.shootr.mobile.domain.exception.UserCannotCheckInRequestException;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
 import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.Remote;
@@ -98,11 +96,6 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     return shotEntityMapper.transform(shot);
   }
 
-  @Override public List<Shot> getReplies(String shot, String[] streamTypes, String[] shotTypes) {
-    return shotEntityMapper.transform(
-        remoteShotDataSource.getReplies(shot, streamTypes, shotTypes));
-  }
-
   @Override
   public List<Shot> getMediaByIdStream(String idEvent, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes) {
@@ -117,19 +110,6 @@ public class SyncShotRepository implements ExternalShotRepository, SyncableRepos
     syncTrigger.triggerSync();
     return shotEntityMapper.transform(
         remoteShotDataSource.getShotsFromUser(idUser, limit, streamTypes, shotTypes));
-  }
-
-  @Override
-  public ShotDetail getShotDetail(String idShot, String[] streamTypes, String[] shotTypes) {
-    ShotDetailEntity shotDetail =
-        remoteShotDataSource.getShotDetail(idShot, streamTypes, shotTypes);
-    if (shotDetail.getParents() != null) {
-      localShotDataSource.putShots(shotDetail.getParents(), sessionRepository.getCurrentUserId());
-    }
-    if (shotDetail.getReplies() != null) {
-      localShotDataSource.putShots(shotDetail.getReplies(), sessionRepository.getCurrentUserId());
-    }
-    return shotEntityMapper.transform(shotDetail);
   }
 
   @Override
