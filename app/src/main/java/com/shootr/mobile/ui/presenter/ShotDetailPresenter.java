@@ -406,4 +406,8 @@ public class ShotDetailPresenter implements Presenter, EventReceived.Receiver {
       view.openPromotedActivationDialog(streamModel);
     }
   }
+
+  public String getIdUser() {
+    return mainShot.getIdUser();
+  }
 }

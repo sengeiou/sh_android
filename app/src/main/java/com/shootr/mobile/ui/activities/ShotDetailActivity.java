@@ -127,7 +127,6 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   private MenuItemValueHolder undoReshootMenuItem = new MenuItemValueHolder();
 
   private LinearLayoutManager linearLayoutManager;
-  private String idUser;
   private ShotModel mainShot;
 
   public static Intent getIntentForActivity(Context context, String idShot) {
@@ -137,7 +136,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
   }
 
   @Override protected int getLayoutResource() {
-    return R.layout.activity_new_shot_detail;
+    return R.layout.activity_shot_detail;
   }
 
   @Override protected void setupToolbar(ToolbarDecorator toolbarDecorator) {
@@ -700,7 +699,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setLabelId(analyticsLabelExternalShare);
     builder.setSource(shotDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(idUser);
+    builder.setIdTargetUser(detailPresenter.getIdUser());
     analyticsTool.analyticsSendAction(builder);
   }
 
@@ -711,7 +710,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setLabelId(analyticsLabelShareShot);
     builder.setSource(shotDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(idUser);
+    builder.setIdTargetUser(detailPresenter.getIdUser());
     if (mainShot != null) {
       builder.setTargetUsername(mainShot.getUsername());
       builder.setIdStream(mainShot.getStreamId());
@@ -727,7 +726,7 @@ public class ShotDetailActivity extends BaseToolbarDecoratedActivity
     builder.setLabelId(analyticsLabelOpenVideo);
     builder.setSource(shotDetailSource);
     builder.setUser(sessionRepository.getCurrentUser());
-    builder.setIdTargetUser(idUser);
+    builder.setIdTargetUser(detailPresenter.getIdUser());
     if (mainShot != null) {
       builder.setTargetUsername(mainShot.getUsername());
       builder.setIdStream(mainShot.getStreamId());

@@ -38,8 +38,8 @@ public class WebSocketPresenter {
 
   @Inject public WebSocketPresenter(ConnectSocketInteractor connectSocketInteractor,
       GetSocketInteractor getSocketInteractor, CloseSocketInteractor closeSocketInteractor,
-      SubscribePromotedTiersInteractor subscribePromotedTiersInteractor,
-      LogsCache logsCache, @ApplicationContext Context context) {
+      SubscribePromotedTiersInteractor subscribePromotedTiersInteractor, LogsCache logsCache,
+      @ApplicationContext Context context) {
     this.connectSocketInteractor = connectSocketInteractor;
     this.getSocketInteractor = getSocketInteractor;
     this.closeSocketInteractor = closeSocketInteractor;
@@ -53,8 +53,7 @@ public class WebSocketPresenter {
     getSocketInteractor.getSocket(new Interactor.Callback<Bootstrapping>() {
       @Override public void onLoaded(Bootstrapping bootstrapping) {
         if (bootstrapping != null) {
-          logsCache.putNewLog(handleLogFeatureFlag(bootstrapping.isTimelineConnection(),
-              bootstrapping.isSocketConnection()));
+          logsCache.putNewLog(handleLogFeatureFlag(bootstrapping.isSocketConnection()));
           if (bootstrapping.isSocketConnection() && bootstrapping.getSocket() != null) {
             connectSocket(bootstrapping.getSocket().getAddress());
           } else {
@@ -70,16 +69,12 @@ public class WebSocketPresenter {
     });
   }
 
-  private String handleLogFeatureFlag(boolean hasTimeline, boolean hasSocket) {
+  private String handleLogFeatureFlag(boolean hasSocket) {
     StringBuilder sb = new StringBuilder();
     sb.append(BOOTSTRAP_RECEIVED);
-    if (hasTimeline) {
-      sb.append(TIMELINE);
-      sb.append(" ");
-      if (hasSocket) {
-        sb.append(SOCKET_CONNECTION);
-      }
-    } else if (hasSocket) {
+    sb.append(TIMELINE);
+    sb.append(" ");
+    if (hasSocket) {
       sb.append(SOCKET_CONNECTION);
     } else {
       sb.append(NONE);
