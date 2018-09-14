@@ -48,7 +48,6 @@ import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.presenter.NewMessageBarPresenter;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.presenter.ProfileEditPresenter;
-import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.presenter.StreamDetailPresenter;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
@@ -127,8 +126,6 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileEditPresenter.class,
 
     PostNewShotPresenter.class,
-
-    ShotDetailPresenter.class,
 
     WatchNumberPresenter.class,
 
