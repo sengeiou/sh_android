@@ -205,7 +205,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   }
 
   @Override public boolean isPromotedShotActivated() {
-    return bootstrappingPreferences.get().isSuperShot();
+    return bootstrappingPreferences.get() != null && bootstrappingPreferences.get().isSuperShot();
   }
 
   @Override public boolean hasShownIntroPromotedShot() {
