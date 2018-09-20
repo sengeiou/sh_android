@@ -1,52 +1,45 @@
 package com.shootr.mobile.domain.model.shot;
 
-import java.util.List;
+import com.shootr.mobile.domain.model.PrintableItem;
+import com.shootr.mobile.domain.model.TimelineItem;
+import com.shootr.mobile.domain.model.stream.Stream;
 
 public class ShotDetail {
 
-    private Shot shot;
-    private Shot parentShot;
-    private List<Shot> replies;
-    private List<Nicer> nicers;
-    private List<Shot> parents;
+  private PrintableItem shot;
+  private TimelineItem parents;
+  private Stream stream;
+  private Replies replies;
 
-    public List<Nicer> getNicers() {
-        return nicers;
-    }
+  public PrintableItem getShot() {
+    return shot;
+  }
 
-    public void setNicers(List<Nicer> nicers) {
-        this.nicers = nicers;
-    }
+  public void setShot(PrintableItem shot) {
+    this.shot = shot;
+  }
 
-    public Shot getShot() {
-        return shot;
-    }
+  public TimelineItem getParents() {
+    return parents;
+  }
 
-    public void setShot(Shot shot) {
-        this.shot = shot;
-    }
+  public void setParents(TimelineItem parents) {
+    this.parents = parents;
+  }
 
-    public Shot getParentShot() {
-        return parentShot;
-    }
+  public Stream getStream() {
+    return stream;
+  }
 
-    public void setParentShot(Shot parentShot) {
-        this.parentShot = parentShot;
-    }
+  public void setStream(Stream stream) {
+    this.stream = stream;
+  }
 
-    public List<Shot> getReplies() {
-        return replies;
-    }
+  public Replies getReplies() {
+    return replies;
+  }
 
-    public void setReplies(List<Shot> replies) {
-        this.replies = replies;
-    }
-
-    public List<Shot> getParents() {
-        return parents;
-    }
-
-    public void setParents(List<Shot> parents) {
-        this.parents = parents;
-    }
+  public void setReplies(Replies replies) {
+    this.replies = replies;
+  }
 }

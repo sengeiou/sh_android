@@ -8,14 +8,12 @@ import android.view.View;
 public abstract class StreamTitleBoldSpan extends ClickableSpan
     implements ClickableTextView.PressableSpan, BaseMessagePressableSpan {
 
-  private String idAuthor;
   private String streamId;
   private String streamTitle;
 
-  public StreamTitleBoldSpan(String streamId, String streamTitle, String idAuthor) {
+  public StreamTitleBoldSpan(String streamId, String streamTitle) {
     this.streamId = streamId;
     this.streamTitle = streamTitle;
-    this.idAuthor = idAuthor;
   }
 
   private boolean isPressed = false;
@@ -25,10 +23,10 @@ public abstract class StreamTitleBoldSpan extends ClickableSpan
   }
 
   @Override public void onClick(View widget) {
-    onStreamClick(streamId, streamTitle, idAuthor);
+    onStreamClick(streamId, streamTitle);
   }
 
-  public abstract void onStreamClick(String streamId, String streamTitle, String idAuthor);
+  public abstract void onStreamClick(String streamId, String streamTitle);
 
   @Override public void updateDrawState(TextPaint ds) {
     super.updateDrawState(ds);

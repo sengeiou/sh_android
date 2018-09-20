@@ -137,8 +137,8 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
         }, //
         new OnStreamTitleClickListener() {
           @Override
-          public void onStreamTitleClick(String streamId, String streamTitle, String authorId) {
-            openStream(streamId, streamTitle, authorId);
+          public void onStreamTitleClick(String streamId, String streamTitle) {
+            openStream(streamId, streamTitle);
           }
         }, //
         new OnShotClick() {
@@ -188,9 +188,9 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
     startActivity(profileIntent);
   }
 
-  protected void openStream(String idStream, String streamTitle, String authorId) {
+  protected void openStream(String idStream, String streamTitle) {
     Intent streamIntent =
-        StreamTimelineActivity.newIntent(this, idStream, streamTitle, authorId);
+        StreamTimelineActivity.newIntent(this, idStream, streamTitle);
     startActivity(streamIntent);
   }
 
@@ -201,7 +201,7 @@ public class HistoryActivity extends BaseToolbarDecoratedActivity implements
 
   private void openShotDetail(ShotModel shot) {
     Intent shotIntent =
-        ShotDetailActivity.getIntentForActivity(this, shot, sessionRepository.isNewShotDetail());
+        ShotDetailActivity.getIntentForActivity(this, shot.getIdShot());
     startActivity(shotIntent);
   }
 

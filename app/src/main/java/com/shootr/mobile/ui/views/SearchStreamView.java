@@ -6,7 +6,7 @@ public interface SearchStreamView {
 
   void hideKeyboard();
 
-  void navigateToStreamTimeline(String idStream, String streamTitle, String authorId);
+  void navigateToStreamTimeline(String idStream, String streamTitle);
 
   void showAddedToFavorites(StreamModel streamModel);
 

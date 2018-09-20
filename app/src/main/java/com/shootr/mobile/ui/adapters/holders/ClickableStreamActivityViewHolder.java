@@ -75,7 +75,7 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
       targetAvatar.setOnClickListener(new View.OnClickListener() {
         @Override public void onClick(View v) {
           onStreamTitleClickListener.onStreamTitleClick(activity.getIdStream(),
-              activity.getStreamTitle(), activity.getIdStreamAuthor());
+              activity.getStreamTitle());
         }
       });
     } else {
@@ -85,11 +85,10 @@ public abstract class ClickableStreamActivityViewHolder extends GenericActivityV
 
   @Override protected CharSequence getFormattedUserName(ActivityModel activity) {
     StreamTitleBoldSpan streamTitleSpan =
-        new StreamTitleBoldSpan(activity.getIdStream(), activity.getStreamTitle(),
-            activity.getIdStreamAuthor()) {
+        new StreamTitleBoldSpan(activity.getIdStream(), activity.getStreamTitle()) {
           @Override
-          public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
-            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
+          public void onStreamClick(String streamId, String streamTitle) {
+            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle);
           }
         };
 

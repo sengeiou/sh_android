@@ -1,20 +1,20 @@
 package com.shootr.mobile.data.entity.socket;
 
-import com.shootr.mobile.data.entity.NewShotDetailEntity;
+import com.shootr.mobile.data.entity.ShotDetailEntity;
 
 public class ShotDetailSocketMessageEntity extends SocketMessageEntity {
 
-  private NewShotDetailEntity data;
+  private ShotDetailEntity data;
 
   public ShotDetailSocketMessageEntity() {
     setEventType(SocketMessageApiEntity.SHOT_DETAIL);
   }
 
-  public NewShotDetailEntity getData() {
+  public ShotDetailEntity getData() {
     return data;
   }
 
-  public void setData(NewShotDetailEntity data) {
+  public void setData(ShotDetailEntity data) {
     this.data = data;
   }
 }

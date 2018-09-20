@@ -145,12 +145,11 @@ public class ListingListPresenter implements Presenter {
   }
 
   public void selectStream(StreamResultModel stream) {
-    selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle(),
-        stream.getStreamModel().getAuthorId());
+    selectStream(stream.getStreamModel().getIdStream(), stream.getStreamModel().getTitle());
   }
 
-  private void selectStream(final String idStream, String streamTitle, String authorId) {
-    listingView.navigateToStreamTimeline(idStream, streamTitle, authorId);
+  private void selectStream(final String idStream, String streamTitle) {
+    listingView.navigateToStreamTimeline(idStream, streamTitle);
   }
 
   public void streamCreated(String streamId) {

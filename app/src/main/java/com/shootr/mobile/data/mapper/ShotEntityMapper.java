@@ -1,13 +1,10 @@
 package com.shootr.mobile.data.mapper;
 
 import com.shootr.mobile.data.entity.LocalSynchronized;
-import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.domain.model.shot.BaseMessage;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import javax.inject.Inject;
@@ -171,23 +168,6 @@ public class ShotEntityMapper {
       shotEntity.setReceiptType(shot.getPromotedShotParams().getType());
     }
     return shotEntity;
-  }
-
-  public ShotDetail transform(ShotDetailEntity shotDetailEntity) {
-    if (shotDetailEntity == null) {
-      return null;
-    }
-    ShotDetail shotDetail = new ShotDetail();
-
-    shotDetail.setShot(transform(shotDetailEntity.getShot()));
-    shotDetail.setParentShot(transform(shotDetailEntity.getParentShot()));
-    shotDetail.setReplies(transform(shotDetailEntity.getReplies()));
-    if (shotDetailEntity.getParents() != null) {
-      shotDetail.setParents(transform(shotDetailEntity.getParents()));
-    } else {
-      shotDetail.setParents(Collections.<Shot>emptyList());
-    }
-    return shotDetail;
   }
 
   public List<ShotEntity> transformInEntities(List<Shot> shots) {

@@ -1,51 +1,71 @@
 package com.shootr.mobile.ui.views;
 
+import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
+import com.shootr.mobile.ui.model.StreamModel;
 import java.util.List;
 
 public interface ShotDetailView {
 
-    void renderShot(ShotModel shotModel);
+  void renderShotDetail(List<PrintableModel> mainShot, List<PrintableModel> promotedItem,
+      List<PrintableModel> subscribersItem, List<PrintableModel> basicItems,
+      List<PrintableModel> parents);
 
-    void renderReplies(List<ShotModel> shotModles);
+  void showError(String messageForError);
 
-    void openImage(String imageUrl);
+  void initializeNewShotBarPresenter(String idStream);
 
-    void openProfile(String idUser);
+  void setupNewShotBarDelegate(ShotModel shotModel, StreamModel streamModel);
 
-    void setReplyUsername(String username);
+  void shareShot(ShotModel mainShot);
 
-    void renderParents(List<ShotModel> parentShot);
+  void showChecked();
 
-    void startProfileContainerActivity(String username);
+  void renderStreamTitle(StreamModel streamModel);
 
-    void showError(String errorMessage);
+  void setReplyUsername(String username);
 
-    void showReshoot(boolean mark);
+  void renderShowParents();
 
-    void setupNewShotBarDelegate(ShotModel shotModel);
+  void renderHideParents();
 
-    void initializeNewShotBarPresenter(String streamId);
+  void hideParents();
 
-    void openShot(ShotModel shotModel);
+  void showParents();
 
-    void goToStreamTimeline(String idStream);
+  void updateMainItem(ShotModel shotModel);
 
-    void disableStreamTitle();
+  void updateParent(ShotModel shotModel);
 
-    void enableStreamTitle();
+  void updatePromoted(ShotModel shotModel);
 
-    void shareShot(ShotModel shotModel);
+  void updateSubscribers(ShotModel shotModel);
 
-    void goToNicers(String idShot);
+  void updateOther(ShotModel shotModel);
 
-    void showLoading();
+  void addPromotedShot(ShotModel shotModel);
 
-    void hideLoading();
+  void addSubscriberShot(ShotModel shotModel);
 
-    void showChecked();
+  void addOtherShot(ShotModel shotModel);
 
-    void showReshootMenu();
+  void showLoading();
 
-    void showUndoReshootMenu();
+  void hideLoading();
+
+  void showNewShotTextBox();
+
+  void showViewOnlyTextBox();
+
+  void showUndoReshootMenu();
+
+  void showReshootMenu();
+
+  void showPromotedButton();
+
+  void showPromotedWithInfoState();
+
+  void hidePromotedButton();
+
+  void openPromotedActivationDialog(StreamModel streamModel);
 }

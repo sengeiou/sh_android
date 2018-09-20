@@ -7,10 +7,9 @@ import com.shootr.mobile.data.mapper.ShotEntityMapper;
 import com.shootr.mobile.data.repository.datasource.shot.ShotDataSource;
 import com.shootr.mobile.data.repository.remote.cache.ShotDetailCache;
 import com.shootr.mobile.domain.model.shot.HighlightedShot;
-import com.shootr.mobile.domain.model.shot.NewShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.shot.ProfileShotTimeline;
 import com.shootr.mobile.domain.model.shot.Shot;
-import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
 import com.shootr.mobile.domain.repository.Local;
 import com.shootr.mobile.domain.repository.SessionRepository;
@@ -60,10 +59,6 @@ public class LocalShotRepository implements InternalShotRepository {
     return shotEntityMapper.transform(shot);
   }
 
-  @Override public List<Shot> getReplies(String shot, String[] streamTypes, String[] shotTypes) {
-    return shotEntityMapper.transform(localShotDataSource.getReplies(shot, streamTypes, shotTypes));
-  }
-
   @Override
   public List<Shot> getMediaByIdStream(String idEvent, Long maxTimestamp,
       String[] streamTypes, String[] shotTypes) {
@@ -77,12 +72,6 @@ public class LocalShotRepository implements InternalShotRepository {
       String[] shotTypes) {
     return shotEntityMapper.transform(
         localShotDataSource.getShotsFromUser(idUser, limit, streamTypes, shotTypes));
-  }
-
-  @Override
-  public ShotDetail getShotDetail(String idShot, String[] streamTypes, String[] shotTypes) {
-    return shotEntityMapper.transform(
-        localShotDataSource.getShotDetail(idShot, streamTypes, shotTypes));
   }
 
   @Override
@@ -154,7 +143,7 @@ public class LocalShotRepository implements InternalShotRepository {
     return localShotDataSource.hasNewFilteredShots(idStream, lastTimeFiltered, sessionRepository.getCurrentUserId());
   }
 
-  @Override public NewShotDetail getCachedShotDetail(String idShot) {
+  @Override public ShotDetail getCachedShotDetail(String idShot) {
     return shotDetailCache.getShot(idShot);
   }
 }

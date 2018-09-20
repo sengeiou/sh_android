@@ -27,7 +27,7 @@ import com.shootr.mobile.db.manager.UserManager;
 import com.shootr.mobile.domain.model.QueueElement;
 import com.shootr.mobile.domain.model.StreamTimeline;
 import com.shootr.mobile.domain.model.TimelineReposition;
-import com.shootr.mobile.domain.model.shot.NewShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.stream.LandingStreams;
 import com.shootr.mobile.domain.model.user.PromotedTiers;
 import com.shootr.mobile.domain.model.user.SuggestedPeople;
@@ -48,7 +48,6 @@ import com.shootr.mobile.ui.presenter.MessageBoxPresenter;
 import com.shootr.mobile.ui.presenter.NewMessageBarPresenter;
 import com.shootr.mobile.ui.presenter.PostNewShotPresenter;
 import com.shootr.mobile.ui.presenter.ProfileEditPresenter;
-import com.shootr.mobile.ui.presenter.ShotDetailPresenter;
 import com.shootr.mobile.ui.presenter.StreamDetailPresenter;
 import com.shootr.mobile.ui.presenter.StreamsListPresenter;
 import com.shootr.mobile.ui.presenter.WatchNumberPresenter;
@@ -127,8 +126,6 @@ import static android.content.Context.MODE_PRIVATE;
     ProfileEditPresenter.class,
 
     PostNewShotPresenter.class,
-
-    ShotDetailPresenter.class,
 
     WatchNumberPresenter.class,
 
@@ -402,12 +399,12 @@ import static android.content.Context.MODE_PRIVATE;
         .build();
   }
 
-  @Provides @Singleton DualCache<NewShotDetail> provideNewShotDetailLruCache(
+  @Provides @Singleton DualCache<ShotDetail> provideNewShotDetailLruCache(
       Application application) {
-    CacheSerializer<NewShotDetail> jsonSerializer =
-        new JsonSerializer<>(NewShotDetail.class);
+    CacheSerializer<ShotDetail> jsonSerializer =
+        new JsonSerializer<>(ShotDetail.class);
 
-    return new Builder<NewShotDetail>(SHOT_DETAIL_CACHE,
+    return new Builder<ShotDetail>(SHOT_DETAIL_CACHE,
         BuildConfig.VERSION_CODE).useSerializerInRam(LRU_CACHE_SIZE, jsonSerializer)
         .useSerializerInDisk(TIMELINE_CACHE_SIZE, true, jsonSerializer, application)
         .build();

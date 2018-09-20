@@ -13,7 +13,7 @@ import com.shootr.mobile.R;
 import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.SearchStreamToShareFragment;
-import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
+import com.shootr.mobile.ui.fragments.streamtimeline.TimelineFragment;
 import com.shootr.mobile.ui.model.SearchableModel;
 import com.shootr.mobile.ui.presenter.SearchPresenter;
 import com.shootr.mobile.util.AnalyticsTool;
@@ -179,7 +179,7 @@ public class SearchToShareActivity extends BaseToolbarDecoratedActivity
           || getIntent().getType() != null && getIntent().getType().startsWith("text/plain")) {
         currentFragment = SearchStreamToShareFragment.newInstance(fragmentArguments);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.add(R.id.container, currentFragment, StreamTimelineFragment.TAG);
+        transaction.add(R.id.container, currentFragment, TimelineFragment.TAG);
         transaction.commit();
       } else {
         finish();

@@ -52,10 +52,6 @@ public interface SessionRepository {
 
     void resetMultipleFilter(String idStream);
 
-    boolean isNewTimeline();
-
-    boolean isNewShotDetail();
-
     boolean isPromotedShotActivated();
 
     boolean hasShownIntroPromotedShot();

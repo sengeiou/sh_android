@@ -1,6 +1,6 @@
 package com.shootr.mobile.domain.model;
 
-import com.shootr.mobile.domain.model.shot.NewShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 
 public class ShotDetailSocketMessage extends SocketMessage {
 
@@ -8,13 +8,13 @@ public class ShotDetailSocketMessage extends SocketMessage {
     setEventType(SocketMessage.SHOT_DETAIL);
   }
 
-  private NewShotDetail data;
+  private ShotDetail data;
 
-  public NewShotDetail getData() {
+  public ShotDetail getData() {
     return data;
   }
 
-  public void setData(NewShotDetail data) {
+  public void setData(ShotDetail data) {
     this.data = data;
   }
 }

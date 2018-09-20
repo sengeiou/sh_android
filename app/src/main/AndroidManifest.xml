@@ -117,14 +117,6 @@
           android:value=".ui.activities.ProfileActivity"/>
     </activity>
     <activity
-        android:name=".ui.activities.ShotDetailActivity"
-        android:parentActivityName=".ui.activities.StreamTimelineActivity"
-        android:theme="@style/ShootrTheme.ShotDetail">
-      <meta-data
-          android:name="android.support.PARENT_ACTIVITY"
-          android:value="com.shootr.mobile.ui.activities.StreamTimelineActivity"/>
-    </activity>
-    <activity
         android:name=".ui.activities.PhotoViewActivity"
         android:theme="@style/ShootrTheme.PhotoViewer"/>
     <activity
@@ -351,7 +343,7 @@
         android:name=".ui.activities.HistoryActivity"
         android:label="@string/title_activity_history">
     </activity>
-    <activity android:name=".ui.activities.NewShotDetailActivity"/>
+    <activity android:name=".ui.activities.ShotDetailActivity"/>
     <activity android:name=".ui.activities.registro.PrivacyLawActivity">
     </activity>
 

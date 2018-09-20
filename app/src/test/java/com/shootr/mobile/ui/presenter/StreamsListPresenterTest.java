@@ -80,8 +80,7 @@ public class StreamsListPresenterTest {
   @Test public void shouldNavigateToStreamTimelineWhenStreamSelected() throws Exception {
     presenter.selectStream(selectedStreamModel());
 
-    verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE,
-        STREAM_AUTHOR_ID);
+    verify(streamsListView).navigateToStreamTimeline(SELECTED_STREAM_ID, SELECTED_STREAM_TITLE);
   }
 
   @Test public void shouldNavigateToStreamDetailWhenNewStreamCreated() throws Exception {

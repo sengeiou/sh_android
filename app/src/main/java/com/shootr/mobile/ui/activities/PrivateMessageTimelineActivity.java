@@ -9,7 +9,7 @@ import butterknife.BindString;
 import com.shootr.mobile.R;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.fragments.PrivateMessageTimelineFragment;
-import com.shootr.mobile.ui.fragments.StreamTimelineFragment;
+import com.shootr.mobile.ui.fragments.streamtimeline.TimelineFragment;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.BackStackHandler;
 import dagger.ObjectGraph;
@@ -72,7 +72,7 @@ public class PrivateMessageTimelineActivity extends BaseToolbarDecoratedActivity
           PrivateMessageTimelineFragment.newInstance(fragmentArguments);
 
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-      transaction.add(R.id.container, fragment, StreamTimelineFragment.TAG);
+      transaction.add(R.id.container, fragment, TimelineFragment.TAG);
       transaction.commit();
     }
   }

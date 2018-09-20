@@ -32,11 +32,10 @@ public class NiceShotViewHolder extends ShotActivityViewHolder {
 
   @Override protected CharSequence getTitle(ActivityModel activity) {
     StreamTitleBoldSpan streamTitleSpan =
-        new StreamTitleBoldSpan(activity.getIdStream(), activity.getStreamTitle(),
-            activity.getIdStreamAuthor()) {
+        new StreamTitleBoldSpan(activity.getIdStream(), activity.getStreamTitle()) {
           @Override
-          public void onStreamClick(String streamId, String streamTitle, String idAuthor) {
-            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle, idAuthor);
+          public void onStreamClick(String streamId, String streamTitle) {
+            onStreamTitleClickListener.onStreamTitleClick(streamId, streamTitle);
           }
         };
     return new Truss().pushSpan(new StyleSpan(Typeface.BOLD))

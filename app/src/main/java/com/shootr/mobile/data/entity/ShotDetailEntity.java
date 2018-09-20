@@ -1,43 +1,41 @@
 package com.shootr.mobile.data.entity;
 
-import java.util.List;
-
 public class ShotDetailEntity {
 
-    private ShotEntity shot;
-    private ShotEntity parentShot;
-    private List<ShotEntity> replies;
-    private List<ShotEntity> parents;
+  private PrintableItemEntity item;
+  private ItemsEntity parents;
+  private StreamEntity stream;
+  private RepliesEntity replies;
 
-    public ShotEntity getShot() {
-        return shot;
-    }
+  public PrintableItemEntity getItem() {
+    return item;
+  }
 
-    public void setShot(ShotEntity shot) {
-        this.shot = shot;
-    }
+  public void setItem(PrintableItemEntity item) {
+    this.item = item;
+  }
 
-    public ShotEntity getParentShot() {
-        return parentShot;
-    }
+  public ItemsEntity getParents() {
+    return parents;
+  }
 
-    public void setParentShot(ShotEntity parentShot) {
-        this.parentShot = parentShot;
-    }
+  public void setParents(ItemsEntity parents) {
+    this.parents = parents;
+  }
 
-    public List<ShotEntity> getReplies() {
-        return replies;
-    }
+  public StreamEntity getStream() {
+    return stream;
+  }
 
-    public void setReplies(List<ShotEntity> replies) {
-        this.replies = replies;
-    }
+  public void setStream(StreamEntity stream) {
+    this.stream = stream;
+  }
 
-    public List<ShotEntity> getParents() {
-        return parents;
-    }
+  public RepliesEntity getReplies() {
+    return replies;
+  }
 
-    public void setParents(List<ShotEntity> parents) {
-        this.parents = parents;
-    }
+  public void setReplies(RepliesEntity replies) {
+    this.replies = replies;
+  }
 }

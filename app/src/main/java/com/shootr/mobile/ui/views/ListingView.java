@@ -12,7 +12,7 @@ public interface ListingView extends LoadDataView {
 
     void showContent();
 
-    void navigateToStreamTimeline(String idStream, String tag, String authorId);
+    void navigateToStreamTimeline(String idStream, String tag);
 
     void hideContent();
 

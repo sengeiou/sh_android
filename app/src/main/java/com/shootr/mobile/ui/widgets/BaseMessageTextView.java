@@ -212,7 +212,7 @@ public class BaseMessageTextView extends TextView {
 
   private void openStream(String idStream, String streamTitle) {
     Context context = getContext();
-    Intent streamIntent = StreamTimelineActivity.newIntent(context, idStream, streamTitle, null);
+    Intent streamIntent = StreamTimelineActivity.newIntent(context, idStream, streamTitle);
     context.startActivity(streamIntent);
   }
 

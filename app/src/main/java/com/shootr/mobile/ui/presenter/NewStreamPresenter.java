@@ -70,13 +70,6 @@ public class NewStreamPresenter implements Presenter {
       newStreamView.showEditPhotoPlaceHolder();
     }
     updateDoneButtonStatus();
-    hideVideoUrlFields();
-  }
-
-  private void hideVideoUrlFields() {
-    if (!sessionRepository.isNewTimeline()) {
-      newStreamView.hideVideoUrlFields();
-    }
   }
 
   private void preloadStreamToEdit(String optionalIdStreamToEdit) {

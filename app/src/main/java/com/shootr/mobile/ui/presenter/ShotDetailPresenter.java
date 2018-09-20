@@ -1,34 +1,48 @@
 package com.shootr.mobile.ui.presenter;
 
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.domain.bus.ShotSent;
+import com.shootr.mobile.domain.bus.EventReceived;
 import com.shootr.mobile.domain.exception.ShootrException;
+import com.shootr.mobile.domain.interactor.GetCachedShotDetailInteractor;
+import com.shootr.mobile.domain.interactor.GetNewShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.Interactor;
+import com.shootr.mobile.domain.interactor.SubscribeShotDetailInteractor;
+import com.shootr.mobile.domain.interactor.UnsubscribeShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.CallCtaCheckInInteractor;
 import com.shootr.mobile.domain.interactor.shot.ClickShotLinkEventInteractor;
-import com.shootr.mobile.domain.interactor.shot.GetShotDetailInteractor;
 import com.shootr.mobile.domain.interactor.shot.MarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UndoReshootInteractor;
 import com.shootr.mobile.domain.interactor.shot.UnmarkNiceShotInteractor;
 import com.shootr.mobile.domain.interactor.shot.ViewShotDetailEventInteractor;
-import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.domain.model.ListType;
+import com.shootr.mobile.domain.model.NewItemSocketMessage;
+import com.shootr.mobile.domain.model.PrintableItem;
+import com.shootr.mobile.domain.model.ShotDetailSocketMessage;
+import com.shootr.mobile.domain.model.SocketMessage;
+import com.shootr.mobile.domain.model.UpdateItemSocketMessage;
 import com.shootr.mobile.domain.model.shot.ShotDetail;
-import com.shootr.mobile.ui.model.NicerModel;
+import com.shootr.mobile.domain.model.shot.Shot;
+import com.shootr.mobile.ui.model.PrintableModel;
 import com.shootr.mobile.ui.model.ShotModel;
-import com.shootr.mobile.ui.model.mappers.NicerModelMapper;
+import com.shootr.mobile.ui.model.StreamModel;
+import com.shootr.mobile.ui.model.mappers.PrintableModelMapper;
 import com.shootr.mobile.ui.model.mappers.ShotModelMapper;
+import com.shootr.mobile.ui.model.mappers.StreamModelMapper;
 import com.shootr.mobile.ui.views.ShotDetailView;
 import com.shootr.mobile.util.ErrorMessageFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
 
-public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
+public class ShotDetailPresenter implements Presenter, EventReceived.Receiver {
 
-  private final GetShotDetailInteractor getShotDetailInteractor;
+  private final GetNewShotDetailInteractor getNewShotDetailInteractor;
+  private final GetCachedShotDetailInteractor getCachedShotDetailInteractor;
+  private final SubscribeShotDetailInteractor subscribeShotDetailInteractor;
+  private final UnsubscribeShotDetailInteractor unsubscribeShotDetailInteractor;
   private final MarkNiceShotInteractor markNiceShotInteractor;
   private final UnmarkNiceShotInteractor unmarkNiceShotInteractor;
   private final ReshootInteractor reshootInteractor;
@@ -37,26 +51,33 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
   private final ClickShotLinkEventInteractor clickShotLinkEventInteractor;
   private final CallCtaCheckInInteractor callCtaCheckInInteractor;
   private final ShotModelMapper shotModelMapper;
-  private final NicerModelMapper nicerModelMapper;
+  private final PrintableModelMapper printableModelMapper;
+  private final StreamModelMapper streamModelMapper;
   private final ErrorMessageFactory errorMessageFactory;
   private final Bus bus;
 
-  private ShotDetailView shotDetailView;
-  private ShotModel shotModel;
-  private List<ShotModel> repliesModels;
-  private List<ShotModel> parentsModels;
-  private boolean justSentReply = false;
-  private boolean isNiceBlocked;
+  private ShotDetailView view;
+  private String idShot;
+  private ShotModel mainShot;
+  private StreamModel streamModel;
+  private boolean hasBeenPaused = false;
+  private boolean showingParents = false;
 
-  @Inject public ShotDetailPresenter(GetShotDetailInteractor getShotDetailInteractor,
-      MarkNiceShotInteractor markNiceShotInteractor,
+  @Inject public ShotDetailPresenter(GetNewShotDetailInteractor getNewShotDetailInteractor,
+      GetCachedShotDetailInteractor getCachedShotDetailInteractor,
+      SubscribeShotDetailInteractor subscribeShotDetailInteractor,
+      UnsubscribeShotDetailInteractor unsubscribeShotDetailInteractor, MarkNiceShotInteractor markNiceShotInteractor,
       UnmarkNiceShotInteractor unmarkNiceShotInteractor, ReshootInteractor reshootInteractor,
       UndoReshootInteractor undoReshootInteractor,
       ViewShotDetailEventInteractor viewShotEventInteractor,
       ClickShotLinkEventInteractor clickShotLinkEventInteractor,
       CallCtaCheckInInteractor callCtaCheckInInteractor, ShotModelMapper shotModelMapper,
-      NicerModelMapper nicerModelMapper, @Main Bus bus, ErrorMessageFactory errorMessageFactory) {
-    this.getShotDetailInteractor = getShotDetailInteractor;
+      PrintableModelMapper printableModelMapper, StreamModelMapper streamModelMapper,
+      ErrorMessageFactory errorMessageFactory, @Main Bus bus) {
+    this.getNewShotDetailInteractor = getNewShotDetailInteractor;
+    this.getCachedShotDetailInteractor = getCachedShotDetailInteractor;
+    this.subscribeShotDetailInteractor = subscribeShotDetailInteractor;
+    this.unsubscribeShotDetailInteractor = unsubscribeShotDetailInteractor;
     this.markNiceShotInteractor = markNiceShotInteractor;
     this.unmarkNiceShotInteractor = unmarkNiceShotInteractor;
     this.reshootInteractor = reshootInteractor;
@@ -65,265 +86,227 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
     this.clickShotLinkEventInteractor = clickShotLinkEventInteractor;
     this.callCtaCheckInInteractor = callCtaCheckInInteractor;
     this.shotModelMapper = shotModelMapper;
-    this.nicerModelMapper = nicerModelMapper;
-    this.bus = bus;
+    this.printableModelMapper = printableModelMapper;
+    this.streamModelMapper = streamModelMapper;
     this.errorMessageFactory = errorMessageFactory;
+    this.bus = bus;
   }
 
-  protected void setShotModel(ShotModel shotModel) {
-    this.shotModel = shotModel;
+  public void initialize(ShotDetailView view, String idShot) {
+    this.view = view;
+    this.idShot = idShot;
+    storeViewCount();
+    getCachedShotDetail();
+    view.showLoading();
   }
 
-  protected void setShotDetailView(ShotDetailView shotDetailView) {
-    this.shotDetailView = shotDetailView;
-  }
-
-  public void initialize(ShotDetailView shotDetailView, ShotModel shotModel) {
-    this.setShotDetailView(shotDetailView);
-    this.setShotModel(shotModel);
-    this.loadShotDetail(shotModel, false, true);
-    if (shotModel != null) {
-      this.storeViewCount(shotModel.getIdShot());
-    }
-  }
-
-  public void initialize(final ShotDetailView shotDetailView, String idShot) {
-    this.setShotDetailView(shotDetailView);
-    loadShotDetailFromIdShot(shotDetailView, idShot);
-    this.storeViewCount(idShot);
-  }
-
-  public void loadShotDetailFromIdShot(final ShotDetailView shotDetailView, String idShot) {
-    shotDetailView.showLoading();
-    getShotDetailInteractor.loadShotDetail(idShot, false, new Interactor.Callback<ShotDetail>() {
+  private void getCachedShotDetail() {
+    getCachedShotDetailInteractor.getTimeline(idShot, new Interactor.Callback<ShotDetail>() {
       @Override public void onLoaded(ShotDetail shotDetail) {
-        shotDetailView.hideLoading();
-        ShotModel shotModel = shotModelMapper.transform(shotDetail.getShot());
-        setShotModel(shotModel);
-        onShotDetailLoaded(shotDetail);
-        initializeNewShotBarDelegate(shotModel, shotDetailView);
-      }
-    }, new Interactor.ErrorCallback() {
-      @Override public void onError(ShootrException error) {
-        shotDetailView.hideLoading();
-        shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+        if (shotDetail != null) {
+          renderShotDetail(shotDetail);
+        }
+        subscribeShotDetail();
       }
     });
   }
 
-  private void setShotNicers(List<NicerModel> nicers) {
-    List<String> usernames = new ArrayList<>();
-    if (nicers != null) {
-      for (NicerModel nicer : nicers) {
-        usernames.add(nicer.getUserName());
+  private void subscribeShotDetail() {
+    subscribeShotDetailInteractor.subscribe(idShot, new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean shouldGetShotDetail) {
+        if (shouldGetShotDetail) {
+          getShotDetail();
+        }
+      }
+    });
+  }
+
+  private void getShotDetail() {
+    getNewShotDetailInteractor.getShotDetail(idShot, new Interactor.Callback<Boolean>() {
+      @Override public void onLoaded(Boolean aBoolean) {
+        /* no-op */
+      }
+    });
+  }
+
+  private void renderShotDetail(ShotDetail shotDetail) {
+    view.hideLoading();
+    mainShot = shotModelMapper.transform((Shot) shotDetail.getShot());
+    initializeNewShotBarDelegate(mainShot, streamModelMapper.transform(shotDetail.getStream()));
+    List<PrintableModel> mainShot =
+        printableModelMapper.mapMainShot(Collections.singletonList(shotDetail.getShot()));
+
+    List<PrintableModel> promotedItems =
+        printableModelMapper.mapResponseModel(shotDetail.getReplies().getPromoted().getData());
+    List<PrintableModel> subscriberItems =
+        printableModelMapper.mapResponseModel(shotDetail.getReplies().getSubscribers().getData());
+    List<PrintableModel> basicItems =
+        printableModelMapper.mapResponseModel(shotDetail.getReplies().getBasic().getData());
+    List<PrintableModel> parents =
+        printableModelMapper.mapResponseModel(shotDetail.getParents().getData());
+
+    streamModel = streamModelMapper.transform(shotDetail.getStream());
+    view.renderShotDetail(mainShot, promotedItems, subscriberItems, basicItems, parents);
+    view.renderStreamTitle(streamModel);
+    view.setReplyUsername(((Shot) shotDetail.getShot()).getUserInfo().getUsername());
+
+    if (shotDetail.getParents().getData().size() > 0) {
+      view.renderShowParents();
+    }
+    setupNewShotBox(shotDetail);
+
+    if (((Shot) shotDetail.getShot()).getReshooted()) {
+      view.showUndoReshootMenu();
+    } else {
+      view.showReshootMenu();
+    }
+  }
+
+  private void setupNewShotBox(ShotDetail shotDetail) {
+    if (shotDetail.getStream().canWrite()) {
+      view.showNewShotTextBox();
+    } else {
+      view.showViewOnlyTextBox();
+    }
+
+    if (shotDetail.getStream().canPostPromoted()) {
+      view.showPromotedButton();
+    } else if (shotDetail.getStream().canShowPromotedInfo()) {
+      view.showPromotedWithInfoState();
+    } else {
+      view.hidePromotedButton();
+    }
+  }
+
+  private void addNewItem(PrintableItem newItem, String list) {
+    if (newItem instanceof Shot) {
+      ShotModel shotModel = shotModelMapper.transform((Shot) newItem);
+      shotModel.setTimelineGroup(PrintableModel.REPLY);
+      switch (list) {
+        case ListType.PROMOTED_REPLIES:
+          view.addPromotedShot(shotModel);
+          break;
+        case ListType.SUBSCRIBERS_REPLIES:
+          view.addSubscriberShot(shotModel);
+          break;
+        case ListType.OTHER_REPLIES:
+          view.addOtherShot(shotModel);
+          break;
+        default:
+          break;
       }
     }
-    this.shotModel.setNicers(usernames);
+
   }
 
-  public void initializeNewShotBarDelegate(ShotModel shotModel, ShotDetailView shotDetailView) {
-    shotDetailView.setupNewShotBarDelegate(shotModel);
-    shotDetailView.initializeNewShotBarPresenter(shotModel.getStreamId());
-  }
+  private void updateItem(PrintableItem updatedItem, String list) {
+    if (updatedItem instanceof Shot) {
+      switch (list) {
+        case ListType.ITEM_DETAIL:
+          view.updateMainItem(shotModelMapper.transform((Shot) updatedItem));
+          break;
 
-  private void onRepliesLoaded(List<Shot> replies) {
-    int previousReplyCount = repliesModels != null ? repliesModels.size() : 0;
-    int newReplyCount = replies.size();
-    if (newReplyCount >= previousReplyCount) {
-      repliesModels = shotModelMapper.transform(replies);
-      renderReplies(previousReplyCount, newReplyCount);
-    } else if (repliesModels != null && newReplyCount == 0) {
-      renderReplies(previousReplyCount, newReplyCount);
+        case ListType.PARENTS_DETAIL:
+          view.updateParent(shotModelMapper.transform((Shot) updatedItem));
+          break;
+
+        case ListType.PROMOTED_REPLIES:
+          view.updatePromoted(shotModelMapper.transform((Shot) updatedItem));
+          break;
+
+        case ListType.SUBSCRIBERS_REPLIES:
+          view.updateSubscribers(shotModelMapper.transform((Shot) updatedItem));
+          break;
+
+        case ListType.OTHER_REPLIES:
+          view.updateOther(shotModelMapper.transform((Shot) updatedItem));
+          break;
+        default:
+          break;
+      }
     }
   }
 
-  private void onParentsLoaded(List<Shot> parents) {
-    int previousParentsCount = parentsModels != null ? parentsModels.size() : 0;
-    int newParentCount = parents.size();
-    if (newParentCount >= previousParentsCount) {
-      parentsModels = shotModelMapper.transform(parents);
-      shotDetailView.renderParents(parentsModels);
-    }
+  private void initializeNewShotBarDelegate(ShotModel shotModel, StreamModel streamModel) {
+    view.initializeNewShotBarPresenter(shotModel.getStreamId());
+    view.setupNewShotBarDelegate(shotModel, streamModel);
   }
 
-  private void renderReplies(int previousReplyCount, int newReplyCount) {
-    shotDetailView.renderReplies(repliesModels);
-    if (justSentReply && previousReplyCount < newReplyCount) {
-      justSentReply = false;
-    }
+  public void markNiceShot(final ShotModel shotModel) {
+    markNiceShotInteractor.markNiceShot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        //view.renderNice(shotModel);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        /* no-op */
+      }
+    });
   }
 
-  private void loadShotDetail(ShotModel shotModel, boolean localOnly, boolean showLoading) {
-    if (shotModel != null) {
-      handleShotDetail(shotModel, localOnly, showLoading);
-    } else {
-      shotDetailView.showError(errorMessageFactory.getCommunicationErrorMessage());
-    }
-  }
-
-  private void handleShotDetail(ShotModel shotModel, boolean localOnly, boolean showLoading) {
-    if (showLoading) {
-      shotDetailView.showLoading();
-    }
-    getShotDetailInteractor.loadShotDetail(shotModel.getIdShot(), localOnly,
-        new Interactor.Callback<ShotDetail>() {
-          @Override public void onLoaded(ShotDetail shotDetail) {
-            shotDetailView.hideLoading();
-            onShotDetailLoaded(shotDetail);
-          }
-        }, new Interactor.ErrorCallback() {
-          @Override public void onError(ShootrException error) {
-            shotDetailView.hideLoading();
-            shotDetailView.showError(errorMessageFactory.getMessageForError(error));
-          }
-        });
-  }
-
-  private void onShotDetailLoaded(ShotDetail shotDetail) {
-    setShotModel(shotModelMapper.transform(shotDetail.getShot()));
-    if (shotDetail.getNicers() != null && !shotDetail.getNicers().isEmpty()) {
-      setShotNicers(nicerModelMapper.transform(shotDetail.getNicers()));
-    }
-    if (shotDetail.getShot().getReshooted()) {
-      shotDetailView.showUndoReshootMenu();
-    } else {
-      shotDetailView.showReshootMenu();
-    }
-    shotDetailView.renderShot(shotModel);
-    onRepliesLoaded(shotDetail.getReplies());
-    onParentsLoaded(shotDetail.getParents());
-    shotDetailView.setReplyUsername(shotModel.getUsername());
-    setNiceBlocked(false);
-  }
-
-  public void setupStreamTitle(Boolean isInStreamTimeline) {
-    if (isInStreamTimeline) {
-      shotDetailView.disableStreamTitle();
-    } else {
-      shotDetailView.enableStreamTitle();
-    }
-  }
-
-  public void imageClick(ShotModel shot) {
-    shotDetailView.openImage(shot.getImage().getImageUrl());
-  }
-
-  public void avatarClick(String userId) {
-    shotDetailView.openProfile(userId);
-  }
-
-  public void usernameClick(String username) {
-    goToUserProfile(username);
-  }
-
-  public void markNiceShot(String idShot) {
-    if (!isNiceBlocked) {
-      setNiceBlocked(true);
-      markNiceShotInteractor.markNiceShot(idShot, new Interactor.CompletedCallback() {
-        @Override public void onCompleted() {
-          loadShotDetail(shotModel, true, false);
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-          setNiceBlocked(false);
-        }
-      });
-    }
-  }
-
-  public void unmarkNiceShot(String idShot) {
-    if (!isNiceBlocked) {
-      setNiceBlocked(true);
-      unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
-        @Override public void onCompleted() {
-          loadShotDetail(shotModel, true, false);
-        }
-      }, new Interactor.ErrorCallback() {
-        @Override public void onError(ShootrException error) {
-          setNiceBlocked(false);
-        }
-      });
-    }
-  }
-
-  public void streamTitleClick(final ShotModel shotModel) {
-    shotDetailView.goToStreamTimeline(shotModel.getStreamId());
-  }
-
-  private void startProfileContainerActivity(String username) {
-    shotDetailView.startProfileContainerActivity(username);
-  }
-
-  private void goToUserProfile(String username) {
-    startProfileContainerActivity(username);
-  }
-
-  @Subscribe @Override public void onShotSent(ShotSent.Event event) {
-    justSentReply = true;
-    this.loadShotDetail(shotModel, true, false);
+  public void unmarkNiceShot(final String idShot) {
+    unmarkNiceShotInteractor.unmarkNiceShot(idShot, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        //view.renderUnnice(idShot);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        /* no-op */
+      }
+    });
   }
 
   public void reshoot() {
-    if (shotModel.isReshooted()) {
-      undoReshoot();
-    } else {
-      markReshoot();
+    if (mainShot != null) {
+      reshootInteractor.reshoot(mainShot.getIdShot(), new Interactor.CompletedCallback() {
+        @Override public void onCompleted() {
+          //view.setReshoot(shotModel.getIdShot(), true);
+        }
+      }, new Interactor.ErrorCallback() {
+        @Override public void onError(ShootrException error) {
+          view.showError(errorMessageFactory.getMessageForError(error));
+        }
+      });
     }
   }
 
-  private void markReshoot() {
+  public void undoReshoot() {
+    undoReshootInteractor.undoReshoot(mainShot.getIdShot(), new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
+        //view.setReshoot(shot.getIdShot(), false);
+      }
+    }, new Interactor.ErrorCallback() {
+      @Override public void onError(ShootrException error) {
+        view.showError(errorMessageFactory.getMessageForError(error));
+      }
+    });
+  }
+
+  public void reshoot(final ShotModel shotModel) {
     reshootInteractor.reshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        shotModel.setReshooted(true);
-        shotDetailView.showReshoot(true);
-        shotDetailView.showUndoReshootMenu();
+        //view.setReshoot(shotModel.getIdShot(), true);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+        view.showError(errorMessageFactory.getMessageForError(error));
       }
     });
   }
 
-  private void undoReshoot() {
-    undoReshootInteractor.undoReshoot(shotModel.getIdShot(), new Interactor.CompletedCallback() {
+  public void undoReshoot(final ShotModel shot) {
+    undoReshootInteractor.undoReshoot(shot.getIdShot(), new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
-        shotModel.setReshooted(false);
-        shotDetailView.showReshoot(false);
-        shotDetailView.showReshootMenu();
+        //view.setReshoot(shot.getIdShot(), false);
       }
     }, new Interactor.ErrorCallback() {
       @Override public void onError(ShootrException error) {
-        shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+        view.showError(errorMessageFactory.getMessageForError(error));
       }
     });
   }
 
-  public void shareShot() {
-    shotDetailView.shareShot(shotModel);
-  }
-
-  protected void setNiceBlocked(Boolean blocked) {
-    this.isNiceBlocked = blocked;
-  }
-
-  @Override public void resume() {
-    bus.register(this);
-  }
-
-  @Override public void pause() {
-    bus.unregister(this);
-  }
-
-  public void shotClick(ShotModel shotModel) {
-    shotDetailView.openShot(shotModel);
-  }
-
-  public void openShotNicers(ShotModel shotModel) {
-    shotDetailView.goToNicers(shotModel.getIdShot());
-  }
-
-  private void storeViewCount(String idShot) {
+  private void storeViewCount() {
     viewShotEventInteractor.countViewEvent(idShot, new Interactor.CompletedCallback() {
       @Override public void onCompleted() {
                 /* no-op */
@@ -332,25 +315,99 @@ public class ShotDetailPresenter implements Presenter, ShotSent.Receiver {
   }
 
   public void storeClickCount() {
-    clickShotLinkEventInteractor.countClickLinkEvent(shotModel.getIdShot(),
-        new Interactor.CompletedCallback() {
-          @Override public void onCompleted() {
+    clickShotLinkEventInteractor.countClickLinkEvent(idShot, new Interactor.CompletedCallback() {
+      @Override public void onCompleted() {
                 /* no-op */
-          }
-        });
+      }
+    });
+  }
+
+  public void shareShot() {
+    if (mainShot != null) {
+      view.shareShot(mainShot);
+    }
   }
 
   public void callCheckIn() {
-    if (shotModel != null) {
-      callCtaCheckInInteractor.checkIn(shotModel.getStreamId(), new Interactor.CompletedCallback() {
+    if (mainShot != null) {
+      callCtaCheckInInteractor.checkIn(mainShot.getStreamId(), new Interactor.CompletedCallback() {
         @Override public void onCompleted() {
-          shotDetailView.showChecked();
+          view.showChecked();
         }
       }, new Interactor.ErrorCallback() {
         @Override public void onError(ShootrException error) {
-          shotDetailView.showError(errorMessageFactory.getMessageForError(error));
+          view.showError(errorMessageFactory.getMessageForError(error));
         }
       });
     }
+  }
+
+  @Override public void resume() {
+    bus.register(this);
+    if (hasBeenPaused) {
+      getCachedShotDetail();
+    }
+
+  }
+
+  @Override public void pause() {
+    hasBeenPaused = true;
+    bus.unregister(this);
+  }
+
+  private void unsubscribeShotDetail() {
+
+  }
+
+  @Subscribe @Override public void onEvent(EventReceived.Event event) {
+    switch (event.getMessage().getEventType()) {
+
+      case SocketMessage.SHOT_DETAIL:
+        ShotDetailSocketMessage shotDetailSocketMessage =
+            (ShotDetailSocketMessage) event.getMessage();
+        renderShotDetail(shotDetailSocketMessage.getData());
+        break;
+
+      case SocketMessage.UPDATE_ITEM_DATA:
+        UpdateItemSocketMessage updateItemSocketMessage =
+            (UpdateItemSocketMessage) event.getMessage();
+        if (updateItemSocketMessage.getData().getItem() instanceof Shot) {
+          updateItem(updateItemSocketMessage.getData().getItem(),
+              updateItemSocketMessage.getData().getList());
+        }
+        break;
+
+      case SocketMessage.NEW_ITEM_DATA:
+        NewItemSocketMessage newItemSocketMessage = (NewItemSocketMessage) event.getMessage();
+        if (newItemSocketMessage.getData().getItem() instanceof Shot) {
+          addNewItem(newItemSocketMessage.getData().getItem(),
+              newItemSocketMessage.getData().getList());
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  public void showParentsPressed() {
+    if (showingParents) {
+      showingParents = false;
+      view.hideParents();
+      view.renderShowParents();
+    } else {
+      showingParents = true;
+      view.showParents();
+      view.renderHideParents();
+    }
+  }
+
+  public void onPromotedActivationButtonClick() {
+    if (streamModel != null) {
+      view.openPromotedActivationDialog(streamModel);
+    }
+  }
+
+  public String getIdUser() {
+    return mainShot.getIdUser();
   }
 }

@@ -61,6 +61,7 @@ import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.ui.FloatingVideoService;
 import com.shootr.mobile.ui.ToolbarDecorator;
 import com.shootr.mobile.ui.activities.HiddenPollResultsActivity;
+import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.NewStreamActivity;
 import com.shootr.mobile.ui.activities.PhotoViewActivity;
 import com.shootr.mobile.ui.activities.PollOptionVotedActivity;
@@ -71,7 +72,6 @@ import com.shootr.mobile.ui.activities.PostPromotedShotActivity;
 import com.shootr.mobile.ui.activities.PrivateMessageTimelineActivity;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.PromotedShotIntroActivity;
-import com.shootr.mobile.ui.activities.ShotDetailActivity;
 import com.shootr.mobile.ui.activities.StreamDetailActivity;
 import com.shootr.mobile.ui.adapters.listeners.OnAvatarClickListener;
 import com.shootr.mobile.ui.adapters.listeners.OnCtaClickListener;
@@ -150,6 +150,7 @@ public class TimelineFragment extends BaseFragment
   public static final String EXTRA_STREAM_ID = "streamId";
   public static final String EXTRA_STREAM_TITLE = "streamTitle";
   private static final int DRAW_OVER_OTHER_APP_PERMISSION_REQUEST_CODE = 1222;
+  public static final String TAG = "timeline";
 
   private static final String API = "AIzaSyAamKWr6yMmLmhSsLvWA1cKOBYXPytC6_I";
 
@@ -526,8 +527,7 @@ public class TimelineFragment extends BaseFragment
   }
 
   private void goToShotDetail(ShotModel shot) {
-    Intent intent = ShotDetailActivity.getIntentForActivityFromTimeline(getActivity(), shot,
-        sessionRepository.isNewShotDetail());
+    Intent intent = ShotDetailActivity.getIntentForActivity(getActivity(), shot.getIdShot());
     startActivity(intent);
   }
 

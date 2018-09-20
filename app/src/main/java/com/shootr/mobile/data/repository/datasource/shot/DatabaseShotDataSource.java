@@ -2,12 +2,10 @@ package com.shootr.mobile.data.repository.datasource.shot;
 
 import com.shootr.mobile.data.entity.HighlightedShotEntity;
 import com.shootr.mobile.data.entity.ProfileShotTimelineEntity;
-import com.shootr.mobile.data.entity.ShotDetailEntity;
 import com.shootr.mobile.data.entity.ShotEntity;
 import com.shootr.mobile.db.manager.HighlightedShotManager;
 import com.shootr.mobile.db.manager.ShotManager;
 import com.shootr.mobile.domain.model.stream.StreamTimelineParameters;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 
@@ -47,11 +45,6 @@ public class DatabaseShotDataSource implements ShotDataSource {
     return shotManager.getShotById(shotId);
   }
 
-  @Override
-  public List<ShotEntity> getReplies(String shotId, String[] streamTypes, String[] shotTypes) {
-    return shotManager.getRepliesTo(shotId);
-  }
-
   @Override public List<ShotEntity> getStreamMediaShots(String idStream,
       Long maxTimestamp, String[] streamTypes, String[] shotTypes) {
     return shotManager.getStreamMediaShots(idStream);
@@ -61,43 +54,6 @@ public class DatabaseShotDataSource implements ShotDataSource {
   public List<ShotEntity> getShotsFromUser(String idUser, Integer limit, String[] streamTypes,
       String[] shotTypes) {
     return shotManager.getShotsFromUser(idUser, limit);
-  }
-
-  @Override
-  public ShotDetailEntity getShotDetail(String idShot, String[] streamTypes, String[] shotTypes) {
-    ShotEntity shot = getShot(idShot, streamTypes, shotTypes);
-    if (shot != null) {
-      ShotDetailEntity shotDetailEntity = new ShotDetailEntity();
-      shotDetailEntity.setShot(shot);
-
-      shotDetailEntity.setReplies(getReplies(idShot, streamTypes, shotTypes));
-
-      ArrayList<ShotEntity> parents = new ArrayList<>();
-
-      String parentId = shot.getIdShotParent();
-      if (parentId != null) {
-        shotDetailEntity.setParentShot(getShot(parentId, streamTypes, shotTypes));
-        setupParents(streamTypes, shotTypes, parents, parentId);
-        shotDetailEntity.setParents(parents);
-      }
-
-      return shotDetailEntity;
-    } else {
-      return null;
-    }
-  }
-
-  private void setupParents(String[] streamTypes, String[] shotTypes, ArrayList<ShotEntity> parents,
-      String parentId) {
-    try {
-      while (parentId != null) {
-        ShotEntity shotEntity = getShot(parentId, streamTypes, shotTypes);
-        parents.add(parents.size(), shotEntity);
-        parentId = shotEntity.getIdShotParent();
-      }
-    } catch (Exception error) {
-      /* no-op */
-    }
   }
 
   @Override public List<ShotEntity> getAllShotsFromUser(String userId, String[] streamTypes,
@@ -147,10 +103,6 @@ public class DatabaseShotDataSource implements ShotDataSource {
 
   @Override public HighlightedShotEntity getHighlightedShot(String idStream) {
     return highlightedManager.getHighlightedShotByIdStream(idStream);
-  }
-
-  @Override public HighlightedShotEntity highlightShot(String idShot) {
-    throw new IllegalArgumentException("Should not have local implementation");
   }
 
   @Override public void putHighlightShot(HighlightedShotEntity highlightedShotApiEntity) {

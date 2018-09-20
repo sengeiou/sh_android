@@ -3,7 +3,7 @@ package com.shootr.mobile.data.repository.remote.cache;
 import com.shootr.mobile.domain.model.ListType;
 import com.shootr.mobile.domain.model.PrintableItem;
 import com.shootr.mobile.domain.model.PrintableType;
-import com.shootr.mobile.domain.model.shot.NewShotDetail;
+import com.shootr.mobile.domain.model.shot.ShotDetail;
 import com.shootr.mobile.domain.model.shot.Shot;
 import com.vincentbrison.openlibraries.android.dualcache.DualCache;
 import java.util.ArrayList;
@@ -12,24 +12,24 @@ import javax.inject.Inject;
 public class ShotDetailCache {
 
   private final static String EMPTY = "empty";
-  private final DualCache<NewShotDetail> newShotDetailDualCache;
+  private final DualCache<ShotDetail> newShotDetailDualCache;
 
-  @Inject public ShotDetailCache(DualCache<NewShotDetail> newShotDetailDualCache) {
+  @Inject public ShotDetailCache(DualCache<ShotDetail> newShotDetailDualCache) {
     this.newShotDetailDualCache = newShotDetailDualCache;
   }
 
-  public void putShot(NewShotDetail shotDetail) {
+  public void putShot(ShotDetail shotDetail) {
     newShotDetailDualCache.delete(((Shot) shotDetail.getShot()).getIdShot());
     newShotDetailDualCache.put(((Shot) shotDetail.getShot()).getIdShot(), shotDetail);
   }
 
-  public NewShotDetail getShot(String idShot) {
+  public ShotDetail getShot(String idShot) {
     return newShotDetailDualCache.get(idShot);
   }
 
   public void updateItem(PrintableItem printableItem, String idMainShot, String list) {
     if (printableItem.getResultType().equals(PrintableType.SHOT)) {
-      NewShotDetail shotDetail = getShot(idMainShot);
+      ShotDetail shotDetail = getShot(idMainShot);
       if (shotDetail != null) {
         switch (list) {
           case ListType.ITEM_DETAIL:
@@ -71,7 +71,7 @@ public class ShotDetailCache {
   public void addItemInShotDetail(PrintableItem item, String list) {
     if (item.getResultType().equals(PrintableType.SHOT)) {
       String idShot = ((Shot) item).getParentShotId() == null ? EMPTY : ((Shot) item).getParentShotId();
-      NewShotDetail shotDetail = getShot(idShot);
+      ShotDetail shotDetail = getShot(idShot);
       if (shotDetail != null) {
         switch (list) {
           case ListType.PROMOTED_REPLIES:
