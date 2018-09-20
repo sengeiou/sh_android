@@ -247,26 +247,9 @@ public class WebSocketApiImpl implements SocketApi, SendSocketEventListener {
 
   private void handleOnFailure(Throwable t, ObservableEmitter<SocketMessageApiEntity> emitter) {
     haveHadSomeError = true;
-    try {
-      if (t != null) {
-        if (t.getMessage() != null) {
-          logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + t.getMessage());
-          webSocket.sendClose();
-          subscriptionSocketApiService.clearSubscriptions();
-          if (!emitter.isDisposed()) {
-            try {
-              emitter.onError(new Throwable(t.getMessage()));
-            } catch (Throwable error) {
-              /* no-op */
-            }
-          }
-        }
-      }
-    } catch (Exception e) {
-      /* no-op */
-    } catch (Throwable throwable) {
-      /* no-op */
-    }
+    logsCache.putNewLog(SOCKET_SUBSCRIPTION_ERROR + t.getMessage());
+    subscriptionSocketApiService.clearSubscriptions();
+    webSocket.sendClose();
   }
 
   private void handleNewMessage(SocketMessageApiEntity socketMessage,
