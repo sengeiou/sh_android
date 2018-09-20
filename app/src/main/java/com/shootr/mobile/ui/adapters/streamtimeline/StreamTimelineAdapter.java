@@ -272,18 +272,20 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
   }
 
   public void updateNicestItem(PrintableModel item) {
-    if (item.getTimelineGroup().equals(PrintableModel.ITEMS_GROUP)) {
-      int index = nicestList.indexOf(item);
-      if (index != -1) {
-        if (((ShotModel) item).isDeleted()) {
-          nicestList.remove(index);
+    if (item != null) {
+      if (item.getTimelineGroup().equals(PrintableModel.ITEMS_GROUP)) {
+        int index = nicestList.indexOf(item);
+        if (index != -1) {
+          if (((ShotModel) item).isDeleted()) {
+            nicestList.remove(index);
+          } else {
+            nicestList.set(index, item);
+          }
         } else {
-          nicestList.set(index, item);
+          nicestList.add(item);
         }
-      } else {
-        nicestList.add(item);
+        setNicestShotList(nicestList);
       }
-      setNicestShotList(nicestList);
     }
   }
 
