@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.62.3] - 2018-09-26
+### Fixed
+- Fabric fixes
+
 ## [1.62.2] - 2018-08-29
 ### Fixed
 - Quick Hot Fix wrong merge kill old shot detail & timeline
