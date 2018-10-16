@@ -161,12 +161,11 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
     addDataManager(fixedItemsListManager);
     addDataManager(shotsListManager);
 
-    registerBinder(
-        new BubbleShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
-            onUsernameClickListener, timeUtils, shotTextSpannableBuilder, shotClickListener,
-            onShotLongClick, onOpenShotMenuListener, onLongClickListener, onTouchListener,
-            onImageClickListener, onHideHighlightClickListener, onUrlClickListener,
-            onReshootClickListener, onCtaClickListener, numberFormatUtil));
+    registerBinder(new BubbleShotBinder(imageLoader, avatarClickListener, videoClickListener,
+        onNiceShotListener, onUsernameClickListener, timeUtils, shotTextSpannableBuilder,
+        shotClickListener, onShotLongClick, onOpenShotMenuListener, onLongClickListener,
+        onTouchListener, onImageClickListener, onHideHighlightClickListener, onUrlClickListener,
+        onReshootClickListener, onCtaClickListener, numberFormatUtil));
 
     registerBinder(
         new MyShotBinder(imageLoader, avatarClickListener, videoClickListener, onNiceShotListener,
@@ -205,7 +204,8 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
 
   private boolean isTheSameItem(ShotModel oldItem, ShotModel newItem) {
     return oldItem.getIdShot().equals(newItem.getIdShot())
-        && oldItem.getNiceCount().equals(newItem.getNiceCount())
+        && oldItem.getNiceCount()
+        .equals(newItem.getNiceCount())
         && oldItem.getReplyCount().equals(newItem.getReplyCount())
         && newItem.isReshooted() == oldItem.isReshooted()
         && oldItem.isNiced() == newItem.isNiced();
@@ -273,7 +273,8 @@ public class StreamTimelineAdapter extends RecyclerAdapter {
 
   public void updateNicestItem(PrintableModel item) {
     if (item != null) {
-      if (item.getTimelineGroup().equals(PrintableModel.ITEMS_GROUP)) {
+      if (item.getTimelineGroup() != null && item.getTimelineGroup()
+          .equals(PrintableModel.ITEMS_GROUP)) {
         int index = nicestList.indexOf(item);
         if (index != -1) {
           if (((ShotModel) item).isDeleted()) {
