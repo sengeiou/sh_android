@@ -493,7 +493,9 @@ public class PrivateMessageTimelineFragment extends BaseFragment
   }
 
   @Override public void hideShots() {
-    messageRecycler.setVisibility(View.GONE);
+    if (messageRecycler != null) {
+      messageRecycler.setVisibility(View.GONE);
+    }
   }
 
   @Override public void showShots() {
