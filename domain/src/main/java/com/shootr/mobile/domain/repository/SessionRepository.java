@@ -57,4 +57,8 @@ public interface SessionRepository {
     boolean hasShownIntroPromotedShot();
 
     void setShowIntroPromotedShot(boolean hasShownSSIntro);
+
+    String getFCMToken();
+
+    void setFCMToken(String fcmToken);
 }

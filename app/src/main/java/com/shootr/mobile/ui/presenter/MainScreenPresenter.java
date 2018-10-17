@@ -3,17 +3,18 @@ package com.shootr.mobile.ui.presenter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.safetynet.SafetyNet;
 import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.data.bus.Main;
-import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.repository.remote.cache.LogsCache;
 import com.shootr.mobile.domain.bus.BadgeChanged;
 import com.shootr.mobile.domain.bus.BusPublisher;
+import com.shootr.mobile.data.dagger.ApplicationContext;
 import com.shootr.mobile.domain.bus.ChannelsBadgeChanged;
 import com.shootr.mobile.domain.bus.UnwatchDone;
 import com.shootr.mobile.domain.exception.ShootrException;
@@ -326,18 +327,19 @@ public class MainScreenPresenter implements Presenter, BadgeChanged.Receiver, Un
   }
 
   private void startVerification() {
-
     final byte[] nonce = getRequestNonce();
-    SafetyNet.SafetyNetApi.attest(googleApiClient, nonce)
-        .setResultCallback(new ResultCallback<SafetyNetApi.AttestationResult>() {
-          @Override
-          public void onResult(@NonNull SafetyNetApi.AttestationResult attestationResult) {
-            Status status = attestationResult.getStatus();
-            String jwsResult = null;
-            if (status.isSuccess()) {
-              jwsResult = attestationResult.getJwsResult();
-            }
+    SafetyNet.getClient(context)
+        .attest(nonce, BuildConfig.SafetyNetApiKey)
+        .addOnSuccessListener(new OnSuccessListener<SafetyNetApi.AttestationResponse>() {
+
+          @Override public void onSuccess(SafetyNetApi.AttestationResponse attestationResponse) {
+            String jwsResult = attestationResponse.getJwsResult();
             sendDeviceInfoInteractor.sendDeviceInfo(jwsResult);
+          }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+          @Override public void onFailure(@NonNull Exception e) {
+            sendDeviceInfoInteractor.sendDeviceInfo(null);
           }
         });
   }

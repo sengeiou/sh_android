@@ -49,14 +49,16 @@ public class StreamActivityNotification extends SingleActivityNotification {
 
   private PendingIntent getOpenStreamTimelineNotificationPendingIntent() {
     if (!updateNeeded) {
-      Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_STREAM);
+      Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+          NotificationIntentReceiver.ACTION_OPEN_STREAM);
       intent.putExtra(TimelineFragment.EXTRA_STREAM_ID, idStream);
       intent.putExtra(TimelineFragment.EXTRA_STREAM_TITLE, title);
 
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
           PendingIntent.FLAG_CANCEL_CURRENT);
     } else {
-      Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);
+      Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+          NotificationIntentReceiver.ACTION_NEED_UPDATE);
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
           PendingIntent.FLAG_CANCEL_CURRENT);
     }

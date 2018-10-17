@@ -27,16 +27,15 @@ public abstract class AbstractActivityNotification extends CommonNotification {
     }
 
     protected PendingIntent getOpenActivityNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(),
-          REQUEST_OPEN,
-          new Intent(NotificationIntentReceiver.ACTION_OPEN_ACTIVITY_NOTIFICATION),
-          PendingIntent.FLAG_CANCEL_CURRENT);
+        Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+            NotificationIntentReceiver.ACTION_OPEN_ACTIVITY_NOTIFICATION);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
+            PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     protected PendingIntent getDiscardActivityNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(),
-          REQUEST_DELETE,
-          new Intent(NotificationIntentReceiver.ACTION_DISCARD_ACTIVITY_NOTIFICATION),
-          0);
+        Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+            NotificationIntentReceiver.ACTION_DISCARD_ACTIVITY_NOTIFICATION);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE, intent, 0);
     }
 }

@@ -1,0 +1,130 @@
+{
+  "project_info": {
+    "project_number": "1087349138",
+    "firebase_url": "https://gentle-booking-733.firebaseio.com",
+    "project_id": "gentle-booking-733",
+    "storage_bucket": "gentle-booking-733.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087349138:android:62fe9ae855912d06",
+        "android_client_info": {
+          "package_name": "com.shootr.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087349138-7ghedkuekn05to52vn00620se1f0siku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLPU3siA7LNjUbIXlfa2uQSZBptLIubeM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087349138:android:be84411c72b7ba59",
+        "android_client_info": {
+          "package_name": "com.shootr.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087349138-i8reufjkin6t1g9js37ckobvvt5skcls.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shootr.mobile",
+            "certificate_hash": "f120a7d4300798efcdc5c8485ae4536b6d6aba68"
+          }
+        },
+        {
+          "client_id": "1087349138-7ghedkuekn05to52vn00620se1f0siku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLPU3siA7LNjUbIXlfa2uQSZBptLIubeM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087349138-7ghedkuekn05to52vn00620se1f0siku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087349138:android:7000693d49ac13f4",
+        "android_client_info": {
+          "package_name": "com.shootr.mobile.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1087349138-ojp9mmfs36o4lm535hg0ri3b5hkuttge.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shootr.mobile.debug",
+            "certificate_hash": "621a878fa6390cd0fd271695b3a062346ae57b4f"
+          }
+        },
+        {
+          "client_id": "1087349138-7ghedkuekn05to52vn00620se1f0siku.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLPU3siA7LNjUbIXlfa2uQSZBptLIubeM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1087349138-7ghedkuekn05to52vn00620se1f0siku.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

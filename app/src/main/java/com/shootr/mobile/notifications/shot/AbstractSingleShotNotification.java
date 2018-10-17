@@ -40,21 +40,23 @@ public abstract class AbstractSingleShotNotification extends CommonNotification 
     }
 
     protected PendingIntent getOpenShotNotificationPendingIntent() {
-        Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
+        Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+            NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
         intent.putExtra(ShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
-        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
+            PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     protected PendingIntent getOpenUpdateNeededPendingIntent() {
-        Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);
+        Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+            NotificationIntentReceiver.ACTION_NEED_UPDATE);
         return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent, PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     protected PendingIntent getDiscardShotNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(),
-          REQUEST_DELETE,
-          new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION),
-          0);
+        Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+            NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE, intent, 0);
     }
 
     protected String getShotText(ShotModel shot) {

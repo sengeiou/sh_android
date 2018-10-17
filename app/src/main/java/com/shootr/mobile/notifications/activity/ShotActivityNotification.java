@@ -44,12 +44,14 @@ public class ShotActivityNotification extends SingleActivityNotification {
 
   private PendingIntent getShotNotificationPendingIntent() {
     if (!updateNeeded) {
-      Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
+      Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+          NotificationIntentReceiver.ACTION_OPEN_SHOT_DETAIL);
       intent.putExtra(ShotDetailActivity.EXTRA_ID_SHOT, shotNotification.getIdShot());
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
           PendingIntent.FLAG_CANCEL_CURRENT);
     } else {
-      Intent intent = new Intent(NotificationIntentReceiver.ACTION_NEED_UPDATE);
+      Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+          NotificationIntentReceiver.ACTION_NEED_UPDATE);
       return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
           PendingIntent.FLAG_CANCEL_CURRENT);
     }

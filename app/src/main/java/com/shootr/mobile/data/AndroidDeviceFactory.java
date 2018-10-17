@@ -10,16 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.shootr.mobile.constant.Constants;
 import com.shootr.mobile.data.dagger.ApplicationContext;
-import com.shootr.mobile.domain.exception.GCMNotAvailableException;
 import com.shootr.mobile.domain.model.Device;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.domain.utils.DeviceFactory;
 import com.shootr.mobile.domain.utils.LocaleProvider;
-import com.shootr.mobile.notifications.gcm.GCMConstants;
 import com.shootr.mobile.util.Version;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.inject.Inject;
@@ -27,23 +24,24 @@ import timber.log.Timber;
 
 public class AndroidDeviceFactory implements DeviceFactory {
 
-  private final GoogleCloudMessaging gcm;
   private final Context context;
   private final Version version;
   private final LocaleProvider localeProvider;
+  private final SessionRepository sessionRepository;
 
-  @Inject public AndroidDeviceFactory(GoogleCloudMessaging gcm, @ApplicationContext Context context,
-      Version version, LocaleProvider localeProvider) {
-    this.gcm = gcm;
+
+  @Inject public AndroidDeviceFactory(@ApplicationContext Context context, Version version,
+      LocaleProvider localeProvider, SessionRepository sessionRepository) {
     this.context = context;
     this.version = version;
     this.localeProvider = localeProvider;
+    this.sessionRepository = sessionRepository;
   }
 
   @Override public Device createDevice() {
     Device device = new Device();
     device.setUniqueDevideID(generateUniqueDeviceId());
-    device.setToken(getNewGcmToken());
+    device.setToken(sessionRepository.getFCMToken());
     device.setPlatform(Constants.ANDROID_PLATFORM.intValue());
     device.setOsVer(Build.VERSION.RELEASE);
     device.setModel(Build.MODEL);
@@ -57,9 +55,7 @@ public class AndroidDeviceFactory implements DeviceFactory {
   }
 
   @Override public Device updateDevice(Device device) {
-    if (needsNewGcmToken(device)) {
-      device.setToken(getNewGcmToken());
-    }
+    device.setToken(sessionRepository.getFCMToken());
     device.setUniqueDevideID(generateUniqueDeviceId());
     device.setPlatform(Constants.ANDROID_PLATFORM.intValue());
     device.setOsVer(Build.VERSION.RELEASE);
@@ -81,15 +77,6 @@ public class AndroidDeviceFactory implements DeviceFactory {
     String registeredVersion = device.getAppVer();
     String currentVersion = version.getVersionName();
     return !currentVersion.equals(registeredVersion);
-  }
-
-  private String getNewGcmToken() {
-    try {
-      return gcm.register(GCMConstants.GCM_SENDER_ID);
-    } catch (IOException | NullPointerException e) {
-      Timber.e(e, "Error registering GCM");
-      throw new GCMNotAvailableException(e);
-    }
   }
 
   @Override public String getAdvertisingId() {

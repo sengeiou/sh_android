@@ -1,6 +1,8 @@
 package com.shootr.mobile.notifications;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -23,6 +25,7 @@ public abstract class CommonNotification {
     private NotificationBuilderFactory builderFactory;
     private Resources resources;
     private Context context;
+    private NotificationManager notificationManager;
 
     public CommonNotification(Context context, NotificationBuilderFactory builderFactory) {
         this.context = context;
@@ -31,6 +34,17 @@ public abstract class CommonNotification {
     }
 
     private void setCommonNotificationValues(NotificationCompat.Builder builder) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            NotificationManager notifManager = getManager();
+            NotificationChannel channel = notifManager.getNotificationChannel("canalComunicacion1");
+            if (channel == null) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                channel = new NotificationChannel("canalComunicacion1", "canal1", importance);
+                channel.enableVibration(false);
+            }
+            notifManager.createNotificationChannel(channel);
+        }
+
         int primaryColor = resources.getColor(R.color.primary);
         builder.setSound(getRingtone());
         builder.setPriority(getPriority());
@@ -43,6 +57,8 @@ public abstract class CommonNotification {
         Bitmap largeIcon = getLargeIcon();
         builder.setLargeIcon(shouldRoundIcon() ? transformCircularBitmap(largeIcon) : largeIcon);
         builder.extend(new NotificationCompat.WearableExtender().setBackground(largeIcon));
+        builder.setChannelId("canalComunicacion1");
+
     }
 
     protected abstract CharSequence getTickerText();
@@ -70,7 +86,7 @@ public abstract class CommonNotification {
     }
 
     public int getPriority() {
-        return NotificationCompat.PRIORITY_LOW;
+        return NotificationCompat.PRIORITY_HIGH;
     }
 
     @DrawableRes public int getSmallIcon() {
@@ -105,4 +121,12 @@ public abstract class CommonNotification {
 
         return output;
     }
+
+  private NotificationManager getManager() {
+    if (notificationManager == null) {
+      notificationManager =
+          (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    }
+    return notificationManager;
+  }
 }

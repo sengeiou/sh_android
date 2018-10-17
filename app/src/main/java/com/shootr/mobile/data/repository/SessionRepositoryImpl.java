@@ -9,6 +9,7 @@ import com.shootr.mobile.data.prefs.CurrentUserId;
 import com.shootr.mobile.data.prefs.DeviceId;
 import com.shootr.mobile.data.prefs.DevicePref;
 import com.shootr.mobile.data.prefs.DevicePreferences;
+import com.shootr.mobile.data.prefs.FcmToken;
 import com.shootr.mobile.data.prefs.IntPreference;
 import com.shootr.mobile.data.prefs.LastTimeFiltered;
 import com.shootr.mobile.data.prefs.LongPreference;
@@ -33,6 +34,7 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   private static final int REFRESH_INTERVAL_SECONDS = 10;
   private final StringPreference sessionTokenPreference;
+  private final StringPreference fcmTokenPreference;
   private final StringPreference currentUserIdPreference;
   private final LongPreference cacheTimeKeepAlive;
   private final BooleanPreference timelineFilterPreference;
@@ -52,7 +54,7 @@ public class SessionRepositoryImpl implements SessionRepository {
   private int synchroTime;
 
   @Inject public SessionRepositoryImpl(@SessionToken StringPreference sessionTokenPreference,
-      @CurrentUserId StringPreference currentUserIdPreference,
+      @FcmToken StringPreference fcmTokenPreference, @CurrentUserId StringPreference currentUserIdPreference,
       @CacheTimeKeepAlive LongPreference cacheTimeKeepAlive,
       @TimelineFilterActivated BooleanPreference timelineFilterPreference,
       @ShowSSIntroPreference BooleanPreference showIntroSSPreference,
@@ -65,6 +67,7 @@ public class SessionRepositoryImpl implements SessionRepository {
       AnalyticsTool analyticsTool, DualCache<LandingStreams> landingStreamsLruCache,
       DualCache<Long> lastStreamVisitCache) {
     this.sessionTokenPreference = sessionTokenPreference;
+    this.fcmTokenPreference = fcmTokenPreference;
     this.currentUserIdPreference = currentUserIdPreference;
     this.cacheTimeKeepAlive = cacheTimeKeepAlive;
     this.timelineFilterPreference = timelineFilterPreference;
@@ -206,6 +209,14 @@ public class SessionRepositoryImpl implements SessionRepository {
 
   @Override public void setShowIntroPromotedShot(boolean hasShownSSIntro) {
     showIntroSSPreference.set(hasShownSSIntro);
+  }
+
+  @Override public String getFCMToken() {
+    return fcmTokenPreference.get();
+  }
+
+  @Override public void setFCMToken(String fcmToken) {
+    fcmTokenPreference.set(fcmToken);
   }
 
   @Override public void resetFilter(String idStream) {

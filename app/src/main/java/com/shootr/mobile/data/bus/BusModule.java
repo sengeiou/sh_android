@@ -1,7 +1,7 @@
 package com.shootr.mobile.data.bus;
 
 import com.shootr.mobile.domain.bus.BusPublisher;
-import com.shootr.mobile.notifications.gcm.GCMIntentService;
+import com.shootr.mobile.notifications.gcm.FCMIntentService;
 import com.shootr.mobile.ui.activities.ProfileActivity;
 import com.shootr.mobile.ui.activities.registro.EmailLoginActivity;
 import com.shootr.mobile.ui.activities.registro.EmailRegistrationActivity;
@@ -16,7 +16,7 @@ import javax.inject.Singleton;
 
     ProfileActivity.class,
 
-    GCMIntentService.class,
+    FCMIntentService.class,
   },
   complete = false) public class BusModule {
 

@@ -20,6 +20,10 @@ import javax.inject.Singleton;
         return new StringPreference(preferences, "session_token", null);
     }
 
+    @Provides @Singleton @FcmToken StringPreference provideFcmToken(SharedPreferences preferences) {
+        return new StringPreference(preferences, "fcm_token", null);
+    }
+
     @Provides @Singleton @DeviceId StringPreference provideDeviceId(SharedPreferences preferences) {
         return new StringPreference(preferences, "device_id", null);
     }

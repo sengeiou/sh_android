@@ -1,12 +1,12 @@
 package com.shootr.mobile.notifications.gcm;
 
 import android.app.ActivityManager;
-import android.app.IntentService;
 import android.content.ComponentName;
-import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.shootr.mobile.ShootrApplication;
 import com.shootr.mobile.data.prefs.ActivityBadgeCount;
 import com.shootr.mobile.data.prefs.IntPreference;
@@ -17,6 +17,7 @@ import com.shootr.mobile.domain.model.InAppNotification;
 import com.shootr.mobile.domain.model.activity.ActivityType;
 import com.shootr.mobile.domain.model.shot.ShotType;
 import com.shootr.mobile.domain.model.stream.StreamMode;
+import com.shootr.mobile.domain.repository.SessionRepository;
 import com.shootr.mobile.notifications.activity.ActivityNotificationManager;
 import com.shootr.mobile.notifications.message.MessageNotificationManager;
 import com.shootr.mobile.notifications.shot.ShotNotification;
@@ -26,13 +27,14 @@ import com.shootr.mobile.util.JsonAdapter;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import org.json.JSONException;
 import timber.log.Timber;
 
 import static com.shootr.mobile.domain.utils.Preconditions.checkNotNull;
 
-public class GCMIntentService extends IntentService {
+public class FCMIntentService extends FirebaseMessagingService {
 
   private static final String EXTRA_NOTIFICATION_VALUES = "t";
   private static final String EXTRA_PARAMETERS = "p";
@@ -47,18 +49,22 @@ public class GCMIntentService extends IntentService {
   @Inject JsonAdapter jsonAdapter;
   @Inject @ActivityBadgeCount IntPreference badgeCount;
   @Inject BusPublisher busPublisher;
-
-  public GCMIntentService() {
-    super("GCM Service");
-  }
+  @Inject SessionRepository sessionRepository;
 
   @Override public void onCreate() {
     super.onCreate();
     ShootrApplication.get(this).inject(this);
   }
 
-  @Override protected void onHandleIntent(Intent intent) {
-    Bundle extras = intent.getExtras();
+  @Override public void onNewToken(String token) {
+    super.onNewToken(token);
+    sessionRepository.setFCMToken(token);
+    Log.d("fcm", "tengo un nuevo token: " + token);
+  }
+
+  @Override public void onMessageReceived(RemoteMessage remoteMessage) {
+    Log.d("fcm", "recibo un mennsaje : " + remoteMessage);
+    Map<String, String> extras = remoteMessage.getData();
     Timber.d("Received notification intent: %s", extras.toString());
 
     try {
@@ -96,12 +102,13 @@ public class GCMIntentService extends IntentService {
     }
   }
 
-  private PushNotification buildPushNotificationFromExtras(Bundle extras) throws IOException {
-    String serializedValues = extras.getString(EXTRA_NOTIFICATION_VALUES);
-    String serializedParameters = extras.getString(EXTRA_PARAMETERS);
-    String badgeText = checkNotNull(extras.getString(EXTRA_BADGE_INCREMENT));
+  private PushNotification buildPushNotificationFromExtras(Map<String, String> extras)
+      throws IOException {
+    String serializedValues = extras.get(EXTRA_NOTIFICATION_VALUES);
+    String serializedParameters = extras.get(EXTRA_PARAMETERS);
+    String badgeText = checkNotNull(extras.get(EXTRA_BADGE_INCREMENT));
     Integer badge = Integer.valueOf(badgeText);
-    String silentText = checkNotNull(extras.getString(EXTRA_SILENT));
+    String silentText = checkNotNull(extras.get(EXTRA_SILENT));
     Boolean silent = Boolean.valueOf(silentText);
 
     PushNotification.Parameters parameters =

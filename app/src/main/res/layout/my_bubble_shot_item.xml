@@ -78,7 +78,7 @@
 
       app:layout_constraintBottom_toTopOf="@+id/shot_container"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintRight_toLeftOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
       tools:text="JorgeMartinez"
       />
 
@@ -115,7 +115,7 @@
         android:layout_marginRight="4dp"
         android:background="@drawable/my_bubble_shot_container"
         android:layout_marginLeft="40dp"
-        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shot_user_name"
         >
 
@@ -206,7 +206,7 @@
       android:layout_marginBottom="6dp"
       android:gravity="center"
       android:textColor="#9E9E9E"
-      app:layout_constraintRight_toLeftOf="@+id/shot_nice_button"
+      app:layout_constraintEnd_toStartOf="@+id/shot_nice_button"
       app:layout_constraintBottom_toBottomOf="@id/shot_nice_button"
       android:textSize="12sp"
       tools:text="2"
@@ -230,7 +230,7 @@
       app:srcCompat="@drawable/ic_more_vert_gray"
       android:paddingRight="8dp"
       android:layout_marginTop="6dp"
-      app:layout_constraintRight_toLeftOf="@+id/shot_container"
+      app:layout_constraintEnd_toStartOf="@+id/shot_container"
       app:layout_constraintTop_toTopOf="@+id/shot_container"
       />
 

@@ -27,16 +27,16 @@ public abstract class AbstractMessageNotification extends CommonNotification {
   }
 
   protected PendingIntent getPrivateMessageNotificationPendingIntent() {
-    Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_CHANNEL_LIST);
+    Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+        NotificationIntentReceiver.ACTION_OPEN_CHANNEL_LIST);
     return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
         PendingIntent.FLAG_CANCEL_CURRENT);
   }
 
   protected PendingIntent getDiscardActivityNotificationPendingIntent() {
-    return PendingIntent.getBroadcast(getContext(),
-        REQUEST_DELETE,
-        new Intent(NotificationIntentReceiver.ACTION_DISCARD_PRIVATE_MESSAGE),
-        0);
+    Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+        NotificationIntentReceiver.ACTION_DISCARD_PRIVATE_MESSAGE);
+    return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE, intent, 0);
   }
 }
 

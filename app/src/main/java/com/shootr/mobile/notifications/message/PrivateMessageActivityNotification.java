@@ -67,7 +67,9 @@ public class PrivateMessageActivityNotification extends AbstractMessageNotificat
   }
 
   private PendingIntent getSingleMessageNotificationPendingIntent() {
-    Intent intent = new Intent(NotificationIntentReceiver.ACTION_OPEN_PRIVATE_MESSAGE);
+
+    Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+        NotificationIntentReceiver.ACTION_OPEN_PRIVATE_MESSAGE);
     intent.putExtra(PrivateMessageTimelineFragment.EXTRA_ID_TARGET_USER, idUser);
     return PendingIntent.getBroadcast(getContext(), REQUEST_OPEN, intent,
         PendingIntent.FLAG_CANCEL_CURRENT);

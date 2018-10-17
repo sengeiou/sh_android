@@ -8,7 +8,6 @@ import com.facebook.ads.NativeAdsManager;
 import com.facebook.stetho.okhttp.StethoInterceptor;
 import com.fewlaps.quitnowcache.QNCache;
 import com.fewlaps.quitnowcache.QNCacheBuilder;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.shootr.mobile.BuildConfig;
 import com.shootr.mobile.data.prefs.PreferenceModule;
 import com.shootr.mobile.data.repository.SessionRepositoryImpl;
@@ -38,7 +37,7 @@ import com.shootr.mobile.domain.utils.ImageResizer;
 import com.shootr.mobile.domain.utils.LocaleProvider;
 import com.shootr.mobile.domain.utils.TimeUtils;
 import com.shootr.mobile.interactor.InteractorModule;
-import com.shootr.mobile.notifications.gcm.GCMIntentService;
+import com.shootr.mobile.notifications.gcm.FCMIntentService;
 import com.shootr.mobile.service.ApiModule;
 import com.shootr.mobile.ui.activities.UserFollowsContainerActivity;
 import com.shootr.mobile.ui.base.BaseSignedInActivity;
@@ -119,7 +118,7 @@ import static android.content.Context.MODE_PRIVATE;
 
     UserManager.class, DeviceManager.class,
 
-    GCMIntentService.class,
+    FCMIntentService.class,
 
     LogTreeFactory.class,
 
@@ -235,10 +234,6 @@ import static android.content.Context.MODE_PRIVATE;
     client.interceptors().add(languageHeaderInterceptor);
 
     return client;
-  }
-
-  @Provides @Singleton GoogleCloudMessaging provideGoogleCloudMessaging(Application application) {
-    return GoogleCloudMessaging.getInstance(application);
   }
 
   @Provides @Singleton NativeAdsManager provideNativeAdsManager(Application application) {

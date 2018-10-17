@@ -37,8 +37,9 @@ public abstract class AbstractShotNotification extends CommonNotification {
     }
 
     protected PendingIntent getDiscardShotNotificationPendingIntent() {
-        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE,
-          new Intent(NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION), 0);
+        Intent intent = new Intent(getContext(), NotificationIntentReceiver.class).setAction(
+            NotificationIntentReceiver.ACTION_DISCARD_SHOT_NOTIFICATION);
+        return PendingIntent.getBroadcast(getContext(), REQUEST_DELETE, intent, 0);
     }
 
     protected String getShotText(ShotModel shot) {
