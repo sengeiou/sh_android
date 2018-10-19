@@ -13,6 +13,14 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.62.4] - 2018-10-19
+### Fixed
+- Change pushes services to FCM
+- Fabric crashes
+
+### Removed
+- GCM Push Services
+
 ## [1.62.3] - 2018-09-26
 ### Fixed
 - Fabric fixes
