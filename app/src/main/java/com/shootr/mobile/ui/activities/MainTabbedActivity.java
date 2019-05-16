@@ -33,6 +33,7 @@ import com.shootr.mobile.ui.model.StreamModel;
 import com.shootr.mobile.ui.model.UserModel;
 import com.shootr.mobile.ui.presenter.MainScreenPresenter;
 import com.shootr.mobile.ui.views.MainScreenView;
+import com.shootr.mobile.ui.widgets.ByeByeDialog;
 import com.shootr.mobile.util.AnalyticsTool;
 import com.shootr.mobile.util.CrashReportTool;
 import com.shootr.mobile.util.DeeplinkingNavigator;
@@ -142,6 +143,7 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     });
     loadIntentData();
     handleUpdateVersion();
+    showByeByeDialog();
   }
 
   protected void switchTab(Fragment fragment) {
@@ -319,5 +321,10 @@ public class MainTabbedActivity extends BaseToolbarDecoratedActivity implements 
     if (channelTab != null) {
       channelTab.setBadgeCount(count);
     }
+  }
+
+  private void showByeByeDialog() {
+    final ByeByeDialog byeByeDialog = new ByeByeDialog();
+    byeByeDialog.show(getFragmentManager(), ByeByeDialog.TAG);
   }
 }
