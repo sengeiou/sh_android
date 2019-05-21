@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.63.0] -2019-05-21
+### Added
+- Added new goodbye screen 
+
 ## [1.62.4] - 2018-10-19
 ### Fixed
 - Change pushes services to FCM
