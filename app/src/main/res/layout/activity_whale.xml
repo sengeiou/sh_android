@@ -31,23 +31,27 @@
             android:text="@string/whale_title_default"
             android:textColor="@color/gray_10"
             android:textSize="27sp"
+            android:visibility="gone"
             />
 
         <TextView
             android:id="@+id/whale_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="top|center_horizontal"
-            android:maxWidth="360dp"
-            android:text="@string/whale_message_default"
+            android:gravity="center"
+            android:text="@string/byebye_text"
+            android:layout_marginTop="32dp"
             android:textSize="18sp"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/black"
+
             />
 
         <Button
             android:id="@+id/whale_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="@string/whale_retry_button_text"
             android:textColor="@color/primary_selector"
             />
