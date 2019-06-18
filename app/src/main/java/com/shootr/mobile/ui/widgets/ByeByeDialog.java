@@ -34,13 +34,7 @@ public class ByeByeDialog extends DialogFragment {
 
     TextView bybyeTextView = view.findViewById(R.id.bye_bye_text);
     bybyeTextView.setMovementMethod(LinkMovementMethod.getInstance());
-
-    View acceptButton = view.findViewById(R.id.accept_button);
-    acceptButton.setOnClickListener(new View.OnClickListener() {
-      @Override public void onClick(View v) {
-        dismiss();
-      }
-    });
+    setCancelable(false);
 
     return view;
   }
