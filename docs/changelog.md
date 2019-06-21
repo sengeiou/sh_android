@@ -13,6 +13,10 @@ Etiquetas para el changelog:
 
 ## [Unreleased]
 
+## [1.63.2] -2019-06-21
+### Changed
+- Remove button from bye page
+
 ## [1.63.1] -2019-05-29
 ### Changed
 - Change goodbye message on Whale page
